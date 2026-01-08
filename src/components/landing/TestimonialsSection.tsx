@@ -27,27 +27,27 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-24 bg-gradient-warm relative overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="py-16 sm:py-24 bg-gradient-warm relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             Témoignages
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Ils préservent leur
             <span className="text-secondary"> héritage</span>
           </h2>
         </motion.div>
 
         {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.author}
@@ -57,29 +57,29 @@ const TestimonialsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="relative"
             >
-              <div className="bg-card rounded-3xl p-8 shadow-card hover:shadow-elevated transition-shadow duration-300 h-full">
+              <div className="bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-card hover:shadow-elevated transition-shadow duration-300 h-full">
                 {/* Quote Icon */}
-                <div className="mb-6">
-                  <Quote className="w-10 h-10 text-secondary/30" />
+                <div className="mb-4 sm:mb-6">
+                  <Quote className="w-8 h-8 sm:w-10 sm:h-10 text-secondary/30" />
                 </div>
 
                 {/* Quote Text */}
-                <p className="text-foreground/90 leading-relaxed mb-8 font-medium">
+                <p className="text-sm sm:text-base text-foreground/90 leading-relaxed mb-6 sm:mb-8 font-medium">
                   "{testimonial.quote}"
                 </p>
 
                 {/* Author */}
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center shadow-soft`}>
-                    <span className="text-lg font-bold text-primary-foreground">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center shadow-soft`}>
+                    <span className="text-base sm:text-lg font-bold text-primary-foreground">
                       {testimonial.avatar}
                     </span>
                   </div>
                   <div>
-                    <p className="font-display font-semibold text-foreground">
+                    <p className="font-display font-semibold text-foreground text-sm sm:text-base">
                       {testimonial.author}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {testimonial.role}
                     </p>
                   </div>
