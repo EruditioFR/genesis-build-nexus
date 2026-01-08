@@ -167,6 +167,7 @@ const CapsulesList = () => {
     <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
         user={{
+          id: user.id,
           email: user.email,
           displayName: profile?.display_name || undefined,
           avatarUrl: profile?.avatar_url || undefined,
