@@ -10,110 +10,110 @@
 @layer base {
   :root {
     /* Core brand colors - HSL format */
-    --background: 40 20% 96%;
-    --foreground: 210 10% 15%;
+    --background: 40 15% 97%;
+    --foreground: 220 15% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 10% 15%;
+    --card-foreground: 220 15% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 10% 15%;
+    --popover-foreground: 220 15% 18%;
 
-    /* Bleu nuit profond - #1E3A5F */
-    --primary: 212 52% 25%;
-    --primary-foreground: 40 20% 96%;
+    /* Bleu nuit profond - plus foncé pour meilleur contraste */
+    --primary: 215 50% 23%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Or chaud - #D4AF37 */
-    --secondary: 43 64% 52%;
-    --secondary-foreground: 210 10% 15%;
+    /* Or chaud - plus doux et moins saturé */
+    --secondary: 38 45% 42%;
+    --secondary-foreground: 0 0% 100%;
 
-    /* Terracotta doux - #E67E5C */
-    --accent: 14 73% 63%;
+    /* Terracotta doux - légèrement désaturé */
+    --accent: 16 55% 55%;
     --accent-foreground: 0 0% 100%;
 
-    /* Gris perle - #F5F5F0 */
-    --muted: 60 14% 95%;
-    --muted-foreground: 210 10% 40%;
+    /* Gris perle */
+    --muted: 40 10% 94%;
+    --muted-foreground: 220 10% 45%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 212 52% 25%;
+    --border: 40 12% 85%;
+    --input: 40 12% 85%;
+    --ring: 215 50% 23%;
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
-    --gold: 43 64% 52%;
-    --gold-light: 43 64% 70%;
-    --terracotta: 14 73% 63%;
-    --terracotta-light: 14 73% 85%;
-    --navy: 212 52% 25%;
-    --navy-light: 212 40% 40%;
-    --pearl: 60 14% 95%;
-    --cream: 40 30% 94%;
+    /* Custom tokens - plus doux */
+    --gold: 38 45% 42%;
+    --gold-light: 38 40% 60%;
+    --terracotta: 16 55% 55%;
+    --terracotta-light: 16 45% 75%;
+    --navy: 215 50% 23%;
+    --navy-light: 215 40% 38%;
+    --pearl: 40 10% 96%;
+    --cream: 40 20% 94%;
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(212 52% 25%) 0%, hsl(212 40% 35%) 50%, hsl(14 73% 63% / 0.8) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(43 64% 52%) 0%, hsl(43 64% 62%) 100%);
-    --gradient-warm: linear-gradient(180deg, hsl(40 30% 94%) 0%, hsl(60 14% 95%) 100%);
-    --gradient-navy: linear-gradient(135deg, hsl(212 52% 20%) 0%, hsl(212 52% 30%) 100%);
+    /* Gradients - plus subtils */
+    --gradient-hero: linear-gradient(135deg, hsl(215 50% 23%) 0%, hsl(215 45% 32%) 50%, hsl(16 55% 55% / 0.7) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 45% 42%) 0%, hsl(38 50% 50%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(40 20% 94%) 0%, hsl(40 10% 96%) 100%);
+    --gradient-navy: linear-gradient(135deg, hsl(215 50% 18%) 0%, hsl(215 50% 28%) 100%);
 
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(212 52% 25% / 0.1);
-    --shadow-card: 0 8px 32px -8px hsl(212 52% 25% / 0.15);
-    --shadow-gold: 0 4px 20px -4px hsl(43 64% 52% / 0.4);
-    --shadow-elevated: 0 20px 60px -20px hsl(212 52% 25% / 0.25);
+    /* Shadows - plus subtiles */
+    --shadow-soft: 0 4px 20px -4px hsl(215 50% 23% / 0.08);
+    --shadow-card: 0 8px 32px -8px hsl(215 50% 23% / 0.12);
+    --shadow-gold: 0 4px 20px -4px hsl(38 45% 42% / 0.25);
+    --shadow-elevated: 0 20px 60px -20px hsl(215 50% 23% / 0.18);
 
     /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 210 10% 25%;
-    --sidebar-primary: 212 52% 25%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 43 64% 52%;
-    --sidebar-accent-foreground: 210 10% 15%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 212 52% 25%;
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 220 15% 25%;
+    --sidebar-primary: 215 50% 23%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 38 45% 42%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 40 12% 88%;
+    --sidebar-ring: 215 50% 23%;
   }
 
   .dark {
-    --background: 212 52% 8%;
-    --foreground: 40 20% 96%;
+    --background: 220 20% 10%;
+    --foreground: 40 15% 95%;
 
-    --card: 212 45% 12%;
-    --card-foreground: 40 20% 96%;
+    --card: 220 18% 14%;
+    --card-foreground: 40 15% 95%;
 
-    --popover: 212 45% 12%;
-    --popover-foreground: 40 20% 96%;
+    --popover: 220 18% 14%;
+    --popover-foreground: 40 15% 95%;
 
-    --primary: 43 64% 52%;
-    --primary-foreground: 212 52% 10%;
+    --primary: 38 50% 55%;
+    --primary-foreground: 220 20% 10%;
 
-    --secondary: 212 40% 20%;
-    --secondary-foreground: 40 20% 96%;
+    --secondary: 215 35% 25%;
+    --secondary-foreground: 40 15% 95%;
 
-    --accent: 14 73% 63%;
+    --accent: 16 55% 55%;
     --accent-foreground: 0 0% 100%;
 
-    --muted: 212 40% 15%;
-    --muted-foreground: 40 20% 70%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 40 12% 65%;
 
-    --destructive: 0 62% 45%;
+    --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 212 40% 18%;
-    --input: 212 40% 18%;
-    --ring: 43 64% 52%;
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 38 50% 55%;
 
-    --sidebar-background: 212 52% 10%;
-    --sidebar-foreground: 40 20% 90%;
-    --sidebar-primary: 43 64% 52%;
-    --sidebar-primary-foreground: 212 52% 10%;
-    --sidebar-accent: 212 40% 18%;
-    --sidebar-accent-foreground: 40 20% 90%;
-    --sidebar-border: 212 40% 18%;
-    --sidebar-ring: 43 64% 52%;
+    --sidebar-background: 220 20% 12%;
+    --sidebar-foreground: 40 15% 90%;
+    --sidebar-primary: 38 50% 55%;
+    --sidebar-primary-foreground: 220 20% 10%;
+    --sidebar-accent: 220 15% 20%;
+    --sidebar-accent-foreground: 40 15% 90%;
+    --sidebar-border: 220 15% 22%;
+    --sidebar-ring: 38 50% 55%;
   }
 }
 
@@ -133,7 +133,7 @@
 
 @layer utilities {
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-secondary via-yellow-400 to-secondary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-secondary via-amber-600 to-secondary bg-clip-text text-transparent;
   }
 
   .animate-float {
@@ -150,8 +150,8 @@
   }
 
   @keyframes glow {
-    from { box-shadow: 0 0 20px hsl(43 64% 52% / 0.3); }
-    to { box-shadow: 0 0 30px hsl(43 64% 52% / 0.5); }
+    from { box-shadow: 0 0 15px hsl(38 45% 42% / 0.2); }
+    to { box-shadow: 0 0 25px hsl(38 45% 42% / 0.35); }
   }
 
   @keyframes fadeInUp {
