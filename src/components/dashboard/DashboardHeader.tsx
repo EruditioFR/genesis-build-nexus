@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import GlobalSearch from '@/components/search/GlobalSearch';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface DashboardHeaderProps {
   user: {
@@ -94,6 +95,9 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
 
             {/* Global Search */}
             {user.id && <GlobalSearch userId={user.id} />}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="w-5 h-5 text-muted-foreground" />
