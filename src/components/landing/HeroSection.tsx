@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Play, ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-background.jpg";
 
 const HeroSection = () => {
@@ -74,19 +75,24 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button variant="hero" size="xl" className="group">
-              Commencer gratuitement
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <Button asChild variant="hero" size="xl" className="group">
+              <Link to="/signup">
+                Commencer gratuitement
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
-            <Button 
-              variant="ghost" 
-              size="xl" 
+            <Button
+              asChild
+              variant="ghost"
+              size="xl"
               className="text-primary-foreground hover:bg-primary-foreground/10 group"
             >
-              <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 group-hover:bg-primary-foreground/30 transition-colors">
-                <Play className="w-4 h-4 fill-current" />
-              </div>
-              Voir la démo
+              <a href="#how-it-works">
+                <span className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 group-hover:bg-primary-foreground/30 transition-colors">
+                  <Play className="w-4 h-4 fill-current" />
+                </span>
+                Voir la démo
+              </a>
             </Button>
           </motion.div>
 
