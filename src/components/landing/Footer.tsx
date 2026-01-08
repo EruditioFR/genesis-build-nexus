@@ -46,7 +46,7 @@ const Footer = () => {
               </span>
             </a>
             <p className="text-primary-foreground/70 leading-relaxed mb-6 max-w-xs">
-              Préservez l'extraordinaire de votre vie ordinaire et transmettez votre héritage aux générations futures.
+              Votre histoire mérite de traverser les générations. Transmettez votre héritage aux générations futures.
             </p>
             {/* Social Links */}
             <div className="flex gap-4">
