@@ -32,6 +32,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import MediaGallery from '@/components/capsule/MediaGallery';
+import CommentsSection from '@/components/capsule/CommentsSection';
 import ShareCapsuleDialog from '@/components/circles/ShareCapsuleDialog';
 import { toast } from 'sonner';
 
@@ -396,6 +397,15 @@ const CapsuleDetail = () => {
                 ))}
               </div>
             )}
+          </motion.div>
+
+          {/* Comments Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
+          >
+            <CommentsSection capsuleId={capsule.id} currentUserId={user.id} />
           </motion.div>
         </div>
       </main>
