@@ -61,7 +61,7 @@ const Signup = () => {
         title: 'Compte créé !',
         description: 'Bienvenue sur MemoriaVita',
       });
-      navigate('/dashboard');
+      navigate('/dashboard?welcome=true');
     }
 
     setLoading(false);
