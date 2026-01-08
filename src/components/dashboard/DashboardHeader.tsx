@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays } from 'lucide-react';
+import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import GlobalSearch from '@/components/search/GlobalSearch';
 import ThemeToggle from '@/components/ThemeToggle';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 
 interface DashboardHeaderProps {
   user: {
@@ -26,6 +27,7 @@ interface DashboardHeaderProps {
 
 const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const location = useLocation();
+  const { isAdminOrModerator } = useAdminAuth();
   const initials = user.displayName
     ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase()
     : user.email?.[0].toUpperCase() || 'U';
@@ -73,6 +75,22 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   </Link>
                 );
               })}
+              
+              {/* Admin link - only visible for admins/moderators */}
+              {isAdminOrModerator && (
+                <Link
+                  to="/admin"
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    location.pathname.startsWith('/admin')
+                      ? "bg-primary/10 text-primary"
+                      : "text-primary hover:bg-primary/10"
+                  )}
+                >
+                  <Shield className="w-4 h-4" />
+                  Admin
+                </Link>
+              )}
             </nav>
           </div>
 
@@ -93,6 +111,17 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </Link>
                   </DropdownMenuItem>
                 ))}
+                {isAdminOrModerator && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="cursor-pointer text-primary">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Admin
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -137,6 +166,17 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     Paramètres
                   </Link>
                 </DropdownMenuItem>
+                {isAdminOrModerator && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="cursor-pointer text-primary">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Backoffice
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onSignOut} className="text-destructive cursor-pointer">
                   <LogOut className="w-4 h-4 mr-2" />
