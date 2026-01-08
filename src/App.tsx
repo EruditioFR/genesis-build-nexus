@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import CapsuleCreate from "./pages/CapsuleCreate";
+import CapsuleEdit from "./pages/CapsuleEdit";
 import CapsuleDetail from "./pages/CapsuleDetail";
 import CapsulesList from "./pages/CapsulesList";
 import CirclesPage from "./pages/CirclesPage";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/capsules" element={<CapsulesList />} />
             <Route path="/capsules/new" element={<CapsuleCreate />} />
             <Route path="/capsules/:id" element={<CapsuleDetail />} />
+            <Route path="/capsules/:id/edit" element={<CapsuleEdit />} />
             <Route path="/circles" element={<CirclesPage />} />
             <Route path="/profile" element={<Profile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
