@@ -316,7 +316,8 @@ const CapsulesList = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                  className="group p-5 rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300"
+                  className="group p-5 rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer"
+                  onClick={() => navigate(`/capsules/${capsule.id}`)}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className={`w-10 h-10 rounded-xl ${typeInfo.color} flex items-center justify-center`}>
@@ -324,28 +325,29 @@ const CapsulesList = () => {
                     </div>
                     
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                         <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
                           <Eye className="w-4 h-4" />
                           Voir
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
                           <Edit className="w-4 h-4" />
                           Modifier
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
                           <Share2 className="w-4 h-4" />
                           Partager
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
                           className="gap-2 text-destructive"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setCapsuleToDelete(capsule);
                             setDeleteDialogOpen(true);
                           }}
