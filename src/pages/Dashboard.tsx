@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -10,6 +12,10 @@ import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import AISuggestions from '@/components/dashboard/AISuggestions';
 import QuickActions from '@/components/dashboard/QuickActions';
 
+import type { Database } from '@/integrations/supabase/types';
+
+type CapsuleType = Database['public']['Enums']['capsule_type'];
+
 interface Profile {
   display_name: string | null;
   avatar_url: string | null;
@@ -18,11 +24,41 @@ interface Profile {
   storage_limit_mb: number;
 }
 
+interface CapsuleRow {
+  id: string;
+  title: string;
+  capsule_type: CapsuleType;
+  created_at: string;
+  thumbnail_url: string | null;
+}
+
+interface RecentCapsule {
+  id: string;
+  title: string;
+  type: 'photo' | 'video' | 'text';
+  date: string;
+  thumbnail?: string;
+}
+
+interface Stats {
+  totalCapsules: number;
+  totalMedias: number;
+  sharedCircles: number;
+  upcomingEvents: number;
+}
+
 const Dashboard = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
+  const [stats, setStats] = useState<Stats>({
+    totalCapsules: 0,
+    totalMedias: 0,
+    sharedCircles: 0,
+    upcomingEvents: 0,
+  });
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -31,23 +67,86 @@ const Dashboard = () => {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchDashboardData = async () => {
       if (!user) return;
-      
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb')
-        .eq('user_id', user.id)
-        .maybeSingle();
 
-      if (!error && data) {
-        setProfile(data);
+      try {
+        // Fetch profile
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (profileData) {
+          setProfile(profileData);
+        }
+
+        // Fetch recent capsules (last 5)
+        const { data: capsulesData } = await supabase
+          .from('capsules')
+          .select('id, title, capsule_type, created_at, thumbnail_url')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        if (capsulesData) {
+          const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => ({
+            id: capsule.id,
+            title: capsule.title,
+            type: capsule.capsule_type === 'photo' || capsule.capsule_type === 'video' 
+              ? capsule.capsule_type 
+              : 'text',
+            date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: fr }),
+            thumbnail: capsule.thumbnail_url || undefined,
+          }));
+          setRecentCapsules(formattedCapsules);
+        }
+
+        // Fetch stats - total capsules
+        const { count: capsuleCount } = await supabase
+          .from('capsules')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+
+        // Fetch stats - total medias
+        const { data: userCapsuleIds } = await supabase
+          .from('capsules')
+          .select('id')
+          .eq('user_id', user.id);
+
+        let mediaCount = 0;
+        if (userCapsuleIds && userCapsuleIds.length > 0) {
+          const capsuleIds = userCapsuleIds.map(c => c.id);
+          const { count } = await supabase
+            .from('capsule_medias')
+            .select('*', { count: 'exact', head: true })
+            .in('capsule_id', capsuleIds);
+          mediaCount = count || 0;
+        }
+
+        // Fetch stats - circles owned
+        const { count: circleCount } = await supabase
+          .from('circles')
+          .select('*', { count: 'exact', head: true })
+          .eq('owner_id', user.id);
+
+        setStats({
+          totalCapsules: capsuleCount || 0,
+          totalMedias: mediaCount,
+          sharedCircles: circleCount || 0,
+          upcomingEvents: 0, // TODO: implement events feature
+        });
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setDataLoading(false);
       }
-      setProfileLoading(false);
     };
 
     if (user) {
-      fetchProfile();
+      fetchDashboardData();
     }
   }, [user]);
 
@@ -56,7 +155,7 @@ const Dashboard = () => {
     navigate('/');
   };
 
-  if (loading || profileLoading) {
+  if (loading || dataLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
@@ -71,42 +170,40 @@ const Dashboard = () => {
     return null;
   }
 
-  // Données de démonstration pour les capsules récentes
-  const recentCapsules = [
-    { id: '1', title: 'Vacances en Bretagne 2024', type: 'photo' as const, date: 'Il y a 2 jours' },
-    { id: '2', title: 'Lettre à mes petits-enfants', type: 'text' as const, date: 'Il y a 5 jours' },
-    { id: '3', title: 'Mariage de Sophie', type: 'video' as const, date: 'Il y a 1 semaine' },
-  ];
-
-  // Suggestions IA de démonstration
-  const aiSuggestions = [
-    {
+  // Suggestions IA (dynamiques basées sur les données)
+  const aiSuggestions = [];
+  
+  if (stats.totalCapsules === 0) {
+    aiSuggestions.push({
       id: '1',
       type: 'memory' as const,
-      title: 'Racontez votre premier emploi',
-      description: "C'est un moment important de votre vie que vous pourriez partager avec vos proches.",
-    },
-    {
-      id: '2',
-      type: 'event' as const,
-      title: 'Anniversaire de Paul dans 3 jours',
-      description: 'Pourquoi ne pas créer une capsule spéciale pour cette occasion ?',
-    },
-    {
-      id: '3',
-      type: 'gift' as const,
-      title: 'Complétez votre arbre généalogique',
-      description: 'Ajoutez des photos de vos grands-parents pour enrichir votre histoire familiale.',
-    },
-  ];
+      title: 'Créez votre première capsule',
+      description: 'Commencez par un souvenir simple : une photo de famille ou un court texte.',
+    });
+  } else if (stats.totalCapsules < 5) {
+    aiSuggestions.push({
+      id: '1',
+      type: 'memory' as const,
+      title: 'Racontez un moment marquant',
+      description: 'Votre premier emploi, un voyage inoubliable, ou une rencontre importante.',
+    });
+  }
 
-  // Stats de démonstration
-  const stats = {
-    totalCapsules: 12,
-    totalMedias: 47,
-    sharedCircles: 3,
-    upcomingEvents: 2,
-  };
+  if (stats.sharedCircles === 0) {
+    aiSuggestions.push({
+      id: '2',
+      type: 'gift' as const,
+      title: 'Créez votre premier cercle',
+      description: 'Invitez votre famille ou vos amis proches à partager vos souvenirs.',
+    });
+  }
+
+  aiSuggestions.push({
+    id: '3',
+    type: 'event' as const,
+    title: 'Complétez votre profil',
+    description: 'Ajoutez une photo et votre date de naissance pour personnaliser votre expérience.',
+  });
 
   return (
     <div className="min-h-screen bg-gradient-warm">
@@ -130,7 +227,9 @@ const Dashboard = () => {
             Bonjour{profile?.display_name ? `, ${profile.display_name.split(' ')[0]}` : ''} 👋
           </h1>
           <p className="text-muted-foreground">
-            Continuez à préserver vos souvenirs précieux
+            {stats.totalCapsules === 0 
+              ? 'Commencez à préserver vos souvenirs précieux'
+              : 'Continuez à préserver vos souvenirs précieux'}
           </p>
         </motion.div>
 
