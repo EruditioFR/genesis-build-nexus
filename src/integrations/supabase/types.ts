@@ -154,6 +154,8 @@ export type Database = {
           circle_id: string
           email: string | null
           id: string
+          invitation_expires_at: string | null
+          invitation_token: string | null
           invited_at: string
           name: string | null
           user_id: string | null
@@ -163,6 +165,8 @@ export type Database = {
           circle_id: string
           email?: string | null
           id?: string
+          invitation_expires_at?: string | null
+          invitation_token?: string | null
           invited_at?: string
           name?: string | null
           user_id?: string | null
@@ -172,6 +176,8 @@ export type Database = {
           circle_id?: string
           email?: string | null
           id?: string
+          invitation_expires_at?: string | null
+          invitation_token?: string | null
           invited_at?: string
           name?: string | null
           user_id?: string | null
@@ -250,6 +256,96 @@ export type Database = {
             columns: ["capsule_id"]
             isOneToOne: false
             referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guardians: {
+        Row: {
+          created_at: string
+          guardian_email: string
+          guardian_name: string | null
+          guardian_user_id: string | null
+          id: string
+          updated_at: string
+          user_id: string
+          verification_token: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          guardian_email: string
+          guardian_name?: string | null
+          guardian_user_id?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+          verification_token?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          guardian_email?: string
+          guardian_name?: string | null
+          guardian_user_id?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+          verification_token?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
+      legacy_capsules: {
+        Row: {
+          capsule_id: string
+          created_at: string
+          guardian_id: string | null
+          id: string
+          notify_recipients: string[] | null
+          unlock_date: string | null
+          unlock_type: string
+          unlocked_at: string | null
+          unlocked_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          capsule_id: string
+          created_at?: string
+          guardian_id?: string | null
+          id?: string
+          notify_recipients?: string[] | null
+          unlock_date?: string | null
+          unlock_type: string
+          unlocked_at?: string | null
+          unlocked_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capsule_id?: string
+          created_at?: string
+          guardian_id?: string | null
+          id?: string
+          notify_recipients?: string[] | null
+          unlock_date?: string | null
+          unlock_type?: string
+          unlocked_at?: string | null
+          unlocked_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legacy_capsules_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: true
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legacy_capsules_guardian_id_fkey"
+            columns: ["guardian_id"]
+            isOneToOne: false
+            referencedRelation: "guardians"
             referencedColumns: ["id"]
           },
         ]
