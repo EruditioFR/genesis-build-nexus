@@ -24,9 +24,9 @@ const QuickActions = () => {
       color: 'bg-secondary/10 text-secondary hover:bg-secondary/20',
     },
     {
-      label: 'Événements',
+      label: 'Calendrier',
       icon: Calendar,
-      href: '/events',
+      href: '/calendar',
       color: 'bg-accent/10 text-accent hover:bg-accent/20',
     },
     {
