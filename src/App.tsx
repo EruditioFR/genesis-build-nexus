@@ -13,6 +13,7 @@ import CapsuleCreate from "./pages/CapsuleCreate";
 import CapsuleEdit from "./pages/CapsuleEdit";
 import CapsuleDetail from "./pages/CapsuleDetail";
 import CapsulesList from "./pages/CapsulesList";
+import Timeline from "./pages/Timeline";
 import CirclesPage from "./pages/CirclesPage";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/capsules" element={<CapsulesList />} />
+            <Route path="/timeline" element={<Timeline />} />
             <Route path="/capsules/new" element={<CapsuleCreate />} />
             <Route path="/capsules/:id" element={<CapsuleDetail />} />
             <Route path="/capsules/:id/edit" element={<CapsuleEdit />} />
