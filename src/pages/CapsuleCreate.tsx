@@ -26,6 +26,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
+import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -51,6 +52,7 @@ const CapsuleCreate = () => {
   const navigate = useNavigate();
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
 
@@ -93,22 +95,56 @@ const CapsuleCreate = () => {
     const isValid = await form.trigger();
     if (!isValid) return;
 
+    // Check if media files need uploading
+    const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
+    if (capsuleType !== 'text' && pendingMediaFiles.length > 0) {
+      toast.error('Veuillez d\'abord uploader tous les fichiers médias');
+      return;
+    }
+
     const values = form.getValues();
     setIsSaving(true);
 
     try {
-      const { error } = await supabase.from('capsules').insert({
-        user_id: user!.id,
-        title: values.title,
-        description: values.description || null,
-        content: values.content || null,
-        capsule_type: capsuleType,
-        status: status,
-        tags: tags.length > 0 ? tags : null,
-        published_at: status === 'published' ? new Date().toISOString() : null,
-      });
+      // Create the capsule
+      const { data: capsule, error: capsuleError } = await supabase
+        .from('capsules')
+        .insert({
+          user_id: user!.id,
+          title: values.title,
+          description: values.description || null,
+          content: values.content || null,
+          capsule_type: capsuleType,
+          status: status,
+          tags: tags.length > 0 ? tags : null,
+          published_at: status === 'published' ? new Date().toISOString() : null,
+        })
+        .select('id')
+        .single();
 
-      if (error) throw error;
+      if (capsuleError) throw capsuleError;
+
+      // Add media files to the capsule
+      if (mediaFiles.length > 0 && capsule) {
+        const mediaInserts = mediaFiles
+          .filter(f => f.uploaded && f.url)
+          .map((f, index) => ({
+            capsule_id: capsule.id,
+            file_url: f.url!,
+            file_type: f.file.type,
+            file_name: f.file.name,
+            file_size_bytes: f.file.size,
+            position: index,
+          }));
+
+        if (mediaInserts.length > 0) {
+          const { error: mediaError } = await supabase
+            .from('capsule_medias')
+            .insert(mediaInserts);
+
+          if (mediaError) throw mediaError;
+        }
+      }
 
       toast.success(
         status === 'published' 
@@ -254,17 +290,32 @@ const CapsuleCreate = () => {
                   />
                 )}
 
-                {capsuleType !== 'text' && (
-                  <div className="p-6 rounded-xl border-2 border-dashed border-border bg-muted/30 text-center">
-                    <p className="text-muted-foreground text-sm">
-                      L'upload de médias sera bientôt disponible.<br />
-                      Configurez d'abord le stockage pour ajouter des fichiers.
-                    </p>
-                  </div>
-                )}
               </form>
             </Form>
 
+            {/* Media Upload - shown for non-text types */}
+            {capsuleType !== 'text' && (
+              <div className="p-6 rounded-2xl border border-border bg-card">
+                <Label className="text-base font-medium mb-4 block">
+                  Fichiers médias
+                </Label>
+                <MediaUpload
+                  userId={user.id}
+                  files={mediaFiles}
+                  onFilesChange={setMediaFiles}
+                  maxFiles={capsuleType === 'mixed' ? 20 : 10}
+                  acceptedTypes={
+                    capsuleType === 'photo' 
+                      ? ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+                      : capsuleType === 'video'
+                        ? ['video/mp4', 'video/webm', 'video/quicktime']
+                        : capsuleType === 'audio'
+                          ? ['audio/mpeg', 'audio/wav', 'audio/mp4']
+                          : undefined
+                  }
+                />
+              </div>
+            )}
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
