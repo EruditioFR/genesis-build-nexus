@@ -1,12 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus } from 'lucide-react';
+import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -15,6 +23,7 @@ import type { Database } from '@/integrations/supabase/types';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
+type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
 const capsuleTypeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
   text: { icon: FileText, label: 'Texte', color: 'bg-blue-500' },
@@ -22,6 +31,13 @@ const capsuleTypeConfig: Record<CapsuleType, { icon: typeof FileText; label: str
   video: { icon: Video, label: 'Vidéo', color: 'bg-purple-500' },
   audio: { icon: Music, label: 'Audio', color: 'bg-orange-500' },
   mixed: { icon: Layers, label: 'Mixte', color: 'bg-pink-500' },
+};
+
+const statusConfig: Record<CapsuleStatus, { label: string }> = {
+  draft: { label: 'Brouillon' },
+  published: { label: 'Publié' },
+  scheduled: { label: 'Programmé' },
+  archived: { label: 'Archivé' },
 };
 
 interface GroupedCapsules {
@@ -37,8 +53,56 @@ const Timeline = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
 
+  // Filter states
+  const [selectedTypes, setSelectedTypes] = useState<CapsuleType[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<CapsuleStatus[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  // Extract all unique tags from capsules
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    capsules.forEach((c) => c.tags?.forEach((t) => tags.add(t)));
+    return Array.from(tags).sort();
+  }, [capsules]);
+
+  // Filtered capsules
+  const filteredCapsules = useMemo(() => {
+    return capsules.filter((capsule) => {
+      const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(capsule.capsule_type);
+      const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(capsule.status);
+      const tagMatch = selectedTags.length === 0 || selectedTags.some((t) => capsule.tags?.includes(t));
+      return typeMatch && statusMatch && tagMatch;
+    });
+  }, [capsules, selectedTypes, selectedStatuses, selectedTags]);
+
+  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length;
+
+  const clearAllFilters = () => {
+    setSelectedTypes([]);
+    setSelectedStatuses([]);
+    setSelectedTags([]);
+  };
+
+  const toggleType = (type: CapsuleType) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
+
+  const toggleStatus = (status: CapsuleStatus) => {
+    setSelectedStatuses((prev) =>
+      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
+    );
+  };
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -81,8 +145,8 @@ const Timeline = () => {
     navigate('/');
   };
 
-  // Group capsules by year and month
-  const groupedCapsules = capsules.reduce<GroupedCapsules>((acc, capsule) => {
+  // Group filtered capsules by year and month
+  const groupedCapsules = filteredCapsules.reduce<GroupedCapsules>((acc, capsule) => {
     const date = parseISO(capsule.created_at);
     const year = format(date, 'yyyy');
     const month = format(date, 'MMMM', { locale: fr });
@@ -121,7 +185,7 @@ const Timeline = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="mb-12 text-center"
+          className="mb-8 text-center"
         >
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-gold shadow-gold mb-4">
             <Clock className="w-8 h-8 text-primary-foreground" />
@@ -130,9 +194,122 @@ const Timeline = () => {
             Votre Timeline
           </h1>
           <p className="text-muted-foreground">
-            {capsules.length} capsule{capsules.length !== 1 ? 's' : ''} à travers le temps
+            {filteredCapsules.length} capsule{filteredCapsules.length !== 1 ? 's' : ''}
+            {activeFiltersCount > 0 && ` (sur ${capsules.length})`}
           </p>
         </motion.div>
+
+        {/* Filters */}
+        {capsules.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="mb-8 flex flex-wrap items-center justify-center gap-3"
+          >
+            {/* Type Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Layers className="w-4 h-4" />
+                  Type
+                  {selectedTypes.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5">
+                      {selectedTypes.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48 bg-popover">
+                <DropdownMenuLabel>Type de capsule</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {(Object.keys(capsuleTypeConfig) as CapsuleType[]).map((type) => {
+                  const config = capsuleTypeConfig[type];
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={type}
+                      checked={selectedTypes.includes(type)}
+                      onCheckedChange={() => toggleType(type)}
+                    >
+                      <config.icon className="w-4 h-4 mr-2" />
+                      {config.label}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Status Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Filter className="w-4 h-4" />
+                  Statut
+                  {selectedStatuses.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5">
+                      {selectedStatuses.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48 bg-popover">
+                <DropdownMenuLabel>Statut</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {(Object.keys(statusConfig) as CapsuleStatus[]).map((status) => (
+                  <DropdownMenuCheckboxItem
+                    key={status}
+                    checked={selectedStatuses.includes(status)}
+                    onCheckedChange={() => toggleStatus(status)}
+                  >
+                    {statusConfig[status].label}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Tags Filter */}
+            {allTags.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    Tags
+                    {selectedTags.length > 0 && (
+                      <Badge variant="secondary" className="ml-1 h-5 px-1.5">
+                        {selectedTags.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-48 max-h-64 overflow-y-auto bg-popover">
+                  <DropdownMenuLabel>Tags</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {allTags.map((tag) => (
+                    <DropdownMenuCheckboxItem
+                      key={tag}
+                      checked={selectedTags.includes(tag)}
+                      onCheckedChange={() => toggleTag(tag)}
+                    >
+                      {tag}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {/* Clear filters */}
+            {activeFiltersCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearAllFilters}
+                className="gap-1 text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-4 h-4" />
+                Effacer ({activeFiltersCount})
+              </Button>
+            )}
+          </motion.div>
+        )}
 
         {capsules.length === 0 ? (
           <motion.div
@@ -155,6 +332,30 @@ const Timeline = () => {
             >
               <Plus className="w-4 h-4" />
               Créer une capsule
+            </Button>
+          </motion.div>
+        ) : filteredCapsules.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-16 bg-card rounded-2xl border border-border"
+          >
+            <div className="w-20 h-20 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
+              <Filter className="w-10 h-10 text-muted-foreground" />
+            </div>
+            <h2 className="text-xl font-semibold text-foreground mb-2">
+              Aucune capsule trouvée
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Aucune capsule ne correspond à vos filtres
+            </p>
+            <Button
+              variant="outline"
+              onClick={clearAllFilters}
+              className="gap-2"
+            >
+              <X className="w-4 h-4" />
+              Effacer les filtres
             </Button>
           </motion.div>
         ) : (
