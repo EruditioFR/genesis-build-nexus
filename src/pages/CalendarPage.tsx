@@ -1,9 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, addMonths, subMonths } from "date-fns";
+import { 
+  format, 
+  startOfMonth, 
+  endOfMonth, 
+  startOfWeek, 
+  endOfWeek, 
+  eachDayOfInterval, 
+  isSameDay, 
+  addMonths, 
+  subMonths, 
+  addWeeks, 
+  subWeeks 
+} from "date-fns";
 import { fr } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Image, FileText, Video, Music, Layers } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Image, FileText, Video, Music, Layers, Grid3X3, LayoutList } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -11,7 +23,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import NotificationsBell from "@/components/notifications/NotificationsBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -37,11 +48,12 @@ const capsuleStatusColors: Record<string, string> = {
 export default function CalendarPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateType, setDateType] = useState<"created" | "scheduled">("created");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [viewMode, setViewMode] = useState<"month" | "week">("month");
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -53,15 +65,12 @@ export default function CalendarPage() {
     if (user) {
       fetchCapsules();
     }
-  }, [user, currentMonth]);
+  }, [user, currentDate]);
 
   const fetchCapsules = async () => {
     if (!user) return;
 
     setLoading(true);
-    const start = startOfMonth(currentMonth);
-    const end = endOfMonth(currentMonth);
-
     const { data, error } = await supabase
       .from("capsules")
       .select("*")
@@ -85,17 +94,37 @@ export default function CalendarPage() {
     });
   };
 
-  const days = eachDayOfInterval({
-    start: startOfMonth(currentMonth),
-    end: endOfMonth(currentMonth),
+  // Month view days
+  const monthDays = eachDayOfInterval({
+    start: startOfMonth(currentDate),
+    end: endOfMonth(currentDate),
   });
 
-  const startDayOfWeek = startOfMonth(currentMonth).getDay();
+  // Week view days
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
+  const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
+
+  const startDayOfWeek = startOfMonth(currentDate).getDay();
   const adjustedStartDay = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
 
-  const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
-  const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
-  const goToToday = () => setCurrentMonth(new Date());
+  const prevPeriod = () => {
+    if (viewMode === "month") {
+      setCurrentDate(subMonths(currentDate, 1));
+    } else {
+      setCurrentDate(subWeeks(currentDate, 1));
+    }
+  };
+
+  const nextPeriod = () => {
+    if (viewMode === "month") {
+      setCurrentDate(addMonths(currentDate, 1));
+    } else {
+      setCurrentDate(addWeeks(currentDate, 1));
+    }
+  };
+
+  const goToToday = () => setCurrentDate(new Date());
 
   if (authLoading || loading) {
     return (
@@ -109,6 +138,16 @@ export default function CalendarPage() {
   }
 
   const selectedDateCapsules = selectedDate ? getCapsulesByDate(selectedDate) : [];
+
+  const getHeaderTitle = () => {
+    if (viewMode === "month") {
+      return format(currentDate, "MMMM yyyy", { locale: fr });
+    } else {
+      const weekStartFormatted = format(weekStart, "d MMM", { locale: fr });
+      const weekEndFormatted = format(weekEnd, "d MMM yyyy", { locale: fr });
+      return `${weekStartFormatted} - ${weekEndFormatted}`;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -135,28 +174,46 @@ export default function CalendarPage() {
           {/* Calendar Grid */}
           <Card>
             <CardHeader className="pb-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <Button variant="outline" size="icon" onClick={prevMonth}>
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <CardTitle className="text-xl font-display min-w-[200px] text-center">
-                    {format(currentMonth, "MMMM yyyy", { locale: fr })}
-                  </CardTitle>
-                  <Button variant="outline" size="icon" onClick={nextMonth}>
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={goToToday}>
-                    Aujourd'hui
-                  </Button>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4">
+                    <Button variant="outline" size="icon" onClick={prevPeriod}>
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <CardTitle className="text-lg sm:text-xl font-display min-w-[180px] sm:min-w-[250px] text-center capitalize">
+                      {getHeaderTitle()}
+                    </CardTitle>
+                    <Button variant="outline" size="icon" onClick={nextPeriod}>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={goToToday}>
+                      Aujourd'hui
+                    </Button>
+                  </div>
+                  
+                  {/* View Mode Toggle */}
+                  <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "month" | "week")}>
+                    <TabsList>
+                      <TabsTrigger value="month" className="gap-2">
+                        <Grid3X3 className="h-4 w-4" />
+                        <span className="hidden sm:inline">Mois</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="week" className="gap-2">
+                        <LayoutList className="h-4 w-4" />
+                        <span className="hidden sm:inline">Semaine</span>
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                 </div>
+                
+                {/* Date Type Toggle */}
                 <Tabs value={dateType} onValueChange={(v) => setDateType(v as "created" | "scheduled")}>
-                  <TabsList>
-                    <TabsTrigger value="created" className="gap-2">
+                  <TabsList className="w-full sm:w-auto">
+                    <TabsTrigger value="created" className="gap-2 flex-1 sm:flex-none">
                       <CalendarIcon className="h-4 w-4" />
                       Création
                     </TabsTrigger>
-                    <TabsTrigger value="scheduled" className="gap-2">
+                    <TabsTrigger value="scheduled" className="gap-2 flex-1 sm:flex-none">
                       <Clock className="h-4 w-4" />
                       Programmé
                     </TabsTrigger>
@@ -174,56 +231,122 @@ export default function CalendarPage() {
                 ))}
               </div>
 
-              {/* Calendar days */}
-              <div className="grid grid-cols-7 gap-1">
-                {/* Empty cells for days before the month starts */}
-                {Array.from({ length: adjustedStartDay }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square" />
-                ))}
+              {viewMode === "month" ? (
+                /* Month View */
+                <div className="grid grid-cols-7 gap-1">
+                  {/* Empty cells for days before the month starts */}
+                  {Array.from({ length: adjustedStartDay }).map((_, i) => (
+                    <div key={`empty-${i}`} className="aspect-square" />
+                  ))}
 
-                {days.map((day) => {
-                  const dayCapsules = getCapsulesByDate(day);
-                  const isToday = isSameDay(day, new Date());
-                  const isSelected = selectedDate && isSameDay(day, selectedDate);
+                  {monthDays.map((day) => {
+                    const dayCapsules = getCapsulesByDate(day);
+                    const isToday = isSameDay(day, new Date());
+                    const isSelected = selectedDate && isSameDay(day, selectedDate);
 
-                  return (
-                    <motion.button
-                      key={day.toISOString()}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSelectedDate(day)}
-                      className={`
-                        aspect-square p-1 rounded-lg border transition-colors relative
-                        ${isToday ? "border-primary bg-primary/5" : "border-transparent"}
-                        ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}
-                        ${dayCapsules.length > 0 ? "hover:bg-accent" : "hover:bg-muted/50"}
-                      `}
-                    >
-                      <div className={`text-sm ${isToday ? "font-bold text-primary" : ""}`}>
-                        {format(day, "d")}
-                      </div>
-                      {dayCapsules.length > 0 && (
-                        <div className="absolute bottom-1 left-1 right-1 flex justify-center gap-0.5 flex-wrap">
-                          {dayCapsules.slice(0, 3).map((capsule, i) => (
-                            <div
-                              key={capsule.id}
-                              className={`h-1.5 w-1.5 rounded-full ${
-                                capsule.status === "published" ? "bg-primary" :
-                                capsule.status === "scheduled" ? "bg-amber-500" :
-                                capsule.status === "draft" ? "bg-muted-foreground" :
-                                "bg-secondary-foreground"
-                              }`}
-                            />
-                          ))}
-                          {dayCapsules.length > 3 && (
-                            <span className="text-[10px] text-muted-foreground">+{dayCapsules.length - 3}</span>
-                          )}
+                    return (
+                      <motion.button
+                        key={day.toISOString()}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setSelectedDate(day)}
+                        className={`
+                          aspect-square p-1 rounded-lg border transition-colors relative
+                          ${isToday ? "border-primary bg-primary/5" : "border-transparent"}
+                          ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}
+                          ${dayCapsules.length > 0 ? "hover:bg-accent" : "hover:bg-muted/50"}
+                        `}
+                      >
+                        <div className={`text-sm ${isToday ? "font-bold text-primary" : ""}`}>
+                          {format(day, "d")}
                         </div>
-                      )}
-                    </motion.button>
-                  );
-                })}
-              </div>
+                        {dayCapsules.length > 0 && (
+                          <div className="absolute bottom-1 left-1 right-1 flex justify-center gap-0.5 flex-wrap">
+                            {dayCapsules.slice(0, 3).map((capsule) => (
+                              <div
+                                key={capsule.id}
+                                className={`h-1.5 w-1.5 rounded-full ${
+                                  capsule.status === "published" ? "bg-primary" :
+                                  capsule.status === "scheduled" ? "bg-amber-500" :
+                                  capsule.status === "draft" ? "bg-muted-foreground" :
+                                  "bg-secondary-foreground"
+                                }`}
+                              />
+                            ))}
+                            {dayCapsules.length > 3 && (
+                              <span className="text-[10px] text-muted-foreground">+{dayCapsules.length - 3}</span>
+                            )}
+                          </div>
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* Week View */
+                <div className="grid grid-cols-7 gap-2">
+                  {weekDays.map((day) => {
+                    const dayCapsules = getCapsulesByDate(day);
+                    const isToday = isSameDay(day, new Date());
+                    const isSelected = selectedDate && isSameDay(day, selectedDate);
+
+                    return (
+                      <motion.div
+                        key={day.toISOString()}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex flex-col"
+                      >
+                        <button
+                          onClick={() => setSelectedDate(day)}
+                          className={`
+                            p-2 rounded-lg border transition-colors mb-2
+                            ${isToday ? "border-primary bg-primary/5" : "border-border"}
+                            ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}
+                            hover:bg-accent/50
+                          `}
+                        >
+                          <div className={`text-lg font-semibold ${isToday ? "text-primary" : ""}`}>
+                            {format(day, "d")}
+                          </div>
+                          <div className="text-xs text-muted-foreground capitalize">
+                            {format(day, "MMM", { locale: fr })}
+                          </div>
+                        </button>
+                        
+                        <ScrollArea className="flex-1 max-h-[300px]">
+                          <div className="space-y-1">
+                            {dayCapsules.length === 0 ? (
+                              <p className="text-xs text-muted-foreground text-center py-4">—</p>
+                            ) : (
+                              dayCapsules.map((capsule) => (
+                                <button
+                                  key={capsule.id}
+                                  onClick={() => navigate(`/capsules/${capsule.id}`)}
+                                  className={`
+                                    w-full text-left p-2 rounded text-xs transition-colors
+                                    ${capsule.status === "published" ? "bg-primary/10 hover:bg-primary/20" :
+                                      capsule.status === "scheduled" ? "bg-amber-500/10 hover:bg-amber-500/20" :
+                                      "bg-muted hover:bg-muted/80"}
+                                  `}
+                                >
+                                  <div className="flex items-center gap-1">
+                                    {capsuleTypeIcons[capsule.capsule_type]}
+                                    <span className="truncate font-medium">{capsule.title}</span>
+                                  </div>
+                                  <div className="text-muted-foreground mt-0.5">
+                                    {format(new Date(capsule.created_at), "HH:mm")}
+                                  </div>
+                                </button>
+                              ))
+                            )}
+                          </div>
+                        </ScrollArea>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Legend */}
               <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-border">
@@ -246,7 +369,7 @@ export default function CalendarPage() {
           {/* Selected Date Panel */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-display">
+              <CardTitle className="text-lg font-display capitalize">
                 {selectedDate 
                   ? format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })
                   : "Sélectionnez une date"
