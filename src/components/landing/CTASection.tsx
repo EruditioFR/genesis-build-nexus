@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
@@ -53,9 +54,11 @@ const CTASection = () => {
           </p>
 
           {/* CTA */}
-          <Button variant="hero" size="xl" className="group">
-            Créer ma première capsule
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          <Button asChild variant="hero" size="xl" className="group">
+            <Link to="/signup">
+              Créer ma première capsule
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </Button>
 
           {/* Trust */}

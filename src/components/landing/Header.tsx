@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,16 +35,18 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
             <span className="text-lg font-display font-bold text-secondary-foreground">M</span>
           </div>
-          <span className={`text-xl font-display font-semibold transition-colors duration-300 ${
-            isScrolled ? "text-primary" : "text-primary-foreground"
-          }`}>
+          <span
+            className={`text-xl font-display font-semibold transition-colors duration-300 ${
+              isScrolled ? "text-primary" : "text-primary-foreground"
+            }`}
+          >
             Memoria<span className="text-secondary">Vita</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
@@ -63,15 +66,16 @@ const Header = () => {
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
           <Button
+            asChild
             variant="ghost"
             className={`transition-colors duration-300 ${
               isScrolled ? "text-foreground hover:bg-muted" : "text-primary-foreground hover:bg-primary-foreground/10"
             }`}
           >
-            Se connecter
+            <Link to="/login">Se connecter</Link>
           </Button>
-          <Button variant="hero" size="lg">
-            Commencer gratuitement
+          <Button asChild variant="hero" size="lg">
+            <Link to="/signup">Commencer gratuitement</Link>
           </Button>
         </div>
 
@@ -107,11 +111,11 @@ const Header = () => {
                 </a>
               ))}
               <div className="pt-4 border-t border-border flex flex-col gap-3">
-                <Button variant="outline" className="w-full">
-                  Se connecter
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/login">Se connecter</Link>
                 </Button>
-                <Button variant="hero" className="w-full">
-                  Commencer gratuitement
+                <Button asChild variant="hero" className="w-full">
+                  <Link to="/signup">Commencer gratuitement</Link>
                 </Button>
               </div>
             </nav>

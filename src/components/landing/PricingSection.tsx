@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles, Crown, Building2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const plans = [
   {
@@ -200,11 +201,12 @@ const PricingSection = () => {
 
               {/* CTA Button */}
               <Button
+                asChild
                 variant={plan.popular ? "hero" : plan.variant}
                 size="lg"
                 className="w-full"
               >
-                {plan.cta}
+                <Link to="/signup">{plan.cta}</Link>
               </Button>
             </motion.div>
           ))}
