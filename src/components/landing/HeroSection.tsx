@@ -51,9 +51,9 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-6"
           >
-            Préservez l'extraordinaire
+            Votre histoire mérite
             <br />
-            <span className="text-gradient-gold">de votre vie ordinaire</span>
+            <span className="text-gradient-gold">de traverser les générations</span>
           </motion.h1>
 
           {/* Subtitle */}
