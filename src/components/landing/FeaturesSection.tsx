@@ -59,30 +59,30 @@ const mediaTypes = [
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="py-24 bg-gradient-warm relative overflow-hidden">
+    <section id="features" className="py-16 sm:py-24 bg-gradient-warm relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-50">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-secondary/5 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-secondary/5 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-48 sm:w-80 h-48 sm:h-80 rounded-full bg-accent/5 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             Fonctionnalités
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Tout ce dont vous avez besoin pour
             <span className="text-secondary"> préserver vos souvenirs</span>
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm sm:text-lg text-muted-foreground px-2">
             Une plateforme complète qui combine la simplicité d'utilisation avec des fonctionnalités puissantes pour créer votre héritage numérique.
           </p>
         </motion.div>
@@ -93,20 +93,20 @@ const FeaturesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex justify-center gap-6 md:gap-12 mb-16"
+          className="flex justify-center gap-4 sm:gap-6 md:gap-12 mb-10 sm:mb-16"
         >
           {mediaTypes.map((type, index) => (
-            <div key={type.label} className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-2xl bg-card shadow-card flex items-center justify-center">
-                <type.icon className="w-6 h-6 text-primary" />
+            <div key={type.label} className="flex flex-col items-center gap-1.5 sm:gap-2">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-card shadow-card flex items-center justify-center">
+                <type.icon className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
               </div>
-              <span className="text-sm font-medium text-muted-foreground">{type.label}</span>
+              <span className="text-xs sm:text-sm font-medium text-muted-foreground">{type.label}</span>
             </div>
           ))}
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -116,14 +116,14 @@ const FeaturesSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group"
             >
-              <div className="h-full bg-card rounded-2xl p-8 shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20">
-                <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className="w-7 h-7" />
+              <div className="h-full bg-card rounded-xl sm:rounded-2xl p-5 sm:p-8 shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20">
+                <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl ${feature.color} flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-5 h-5 sm:w-7 sm:h-7" />
                 </div>
-                <h3 className="text-xl font-display font-semibold text-foreground mb-3">
+                <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>

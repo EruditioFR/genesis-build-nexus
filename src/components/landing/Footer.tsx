@@ -33,31 +33,31 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-12">
+      <div className="container mx-auto px-4 sm:px-6 py-10 sm:py-16">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-8 sm:gap-12">
           {/* Brand Column */}
-          <div className="lg:col-span-2">
-            <a href="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-                <span className="text-lg font-display font-bold text-secondary-foreground">M</span>
+          <div className="col-span-2 lg:col-span-2">
+            <a href="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
+                <span className="text-base sm:text-lg font-display font-bold text-secondary-foreground">M</span>
               </div>
-              <span className="text-xl font-display font-semibold">
+              <span className="text-lg sm:text-xl font-display font-semibold">
                 Memoria<span className="text-secondary">Vita</span>
               </span>
             </a>
-            <p className="text-primary-foreground/70 leading-relaxed mb-6 max-w-xs">
+            <p className="text-sm sm:text-base text-primary-foreground/70 leading-relaxed mb-4 sm:mb-6 max-w-xs">
               Votre histoire mérite de traverser les générations. Transmettez votre héritage aux générations futures.
             </p>
             {/* Social Links */}
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               {["facebook", "twitter", "instagram", "linkedin"].map((social) => (
                 <a
                   key={social}
                   href="#"
-                  className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary/20 transition-colors"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary/20 transition-colors"
                 >
                   <span className="sr-only">{social}</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="4" />
                   </svg>
                 </a>
@@ -68,15 +68,15 @@ const Footer = () => {
           {/* Link Columns */}
           {Object.entries(links).map(([category, items]) => (
             <div key={category}>
-              <h4 className="font-display font-semibold text-primary-foreground mb-4 capitalize">
+              <h4 className="font-display font-semibold text-primary-foreground mb-3 sm:mb-4 capitalize text-sm sm:text-base">
                 {category}
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {items.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
+                      className="text-primary-foreground/70 hover:text-secondary transition-colors text-xs sm:text-sm"
                     >
                       {link.label}
                     </a>
@@ -90,13 +90,13 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-primary-foreground/10">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-primary-foreground/60">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <p className="text-xs sm:text-sm text-primary-foreground/60 text-center sm:text-left">
               © {currentYear} MemoriaVita. Tous droits réservés.
             </p>
-            <p className="text-sm text-primary-foreground/60 flex items-center gap-1">
-              Fait avec <Heart className="w-4 h-4 text-accent fill-accent" /> pour préserver vos souvenirs
+            <p className="text-xs sm:text-sm text-primary-foreground/60 flex items-center gap-1">
+              Fait avec <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent fill-accent" /> pour préserver vos souvenirs
             </p>
           </div>
         </div>

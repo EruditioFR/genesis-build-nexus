@@ -43,20 +43,20 @@ const faqs = [
 
 const FAQSection = () => {
   return (
-    <section id="faq" className="py-24 bg-card relative">
-      <div className="container mx-auto px-4">
+    <section id="faq" className="py-16 sm:py-24 bg-card relative">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             FAQ
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Questions
             <span className="text-secondary"> fréquentes</span>
           </h2>
@@ -70,17 +70,17 @@ const FAQSection = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="max-w-3xl mx-auto"
         >
-          <Accordion type="single" collapsible className="space-y-4">
+          <Accordion type="single" collapsible className="space-y-3 sm:space-y-4">
             {faqs.map((faq, index) => (
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="bg-background rounded-2xl border border-border px-6 shadow-soft"
+                className="bg-background rounded-xl sm:rounded-2xl border border-border px-4 sm:px-6 shadow-soft"
               >
-                <AccordionTrigger className="text-left font-display font-semibold text-foreground hover:text-secondary py-6 [&[data-state=open]]:text-secondary">
+                <AccordionTrigger className="text-left font-display font-semibold text-foreground hover:text-secondary py-4 sm:py-6 [&[data-state=open]]:text-secondary text-sm sm:text-base">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
+                <AccordionContent className="text-muted-foreground pb-4 sm:pb-6 leading-relaxed text-sm sm:text-base">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

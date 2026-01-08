@@ -34,23 +34,23 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="py-24 bg-card relative overflow-hidden">
+    <section id="how-it-works" className="py-16 sm:py-24 bg-card relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
       
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-20"
+          className="text-center max-w-3xl mx-auto mb-12 sm:mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             Comment ça marche
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Créez votre héritage en
             <span className="text-secondary"> 4 étapes simples</span>
           </h2>
@@ -61,7 +61,7 @@ const HowItWorksSection = () => {
           {/* Connection Line */}
           <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-20" />
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
@@ -74,19 +74,19 @@ const HowItWorksSection = () => {
                 {/* Step Card */}
                 <div className="text-center">
                   {/* Number & Icon */}
-                  <div className="relative inline-block mb-6">
-                    <div className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated`}>
-                      <step.icon className="w-10 h-10 text-primary-foreground" />
+                  <div className="relative inline-block mb-4 sm:mb-6">
+                    <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated`}>
+                      <step.icon className="w-7 h-7 sm:w-10 sm:h-10 text-primary-foreground" />
                     </div>
-                    <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-card shadow-card flex items-center justify-center text-sm font-bold text-primary">
+                    <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-card shadow-card flex items-center justify-center text-xs sm:text-sm font-bold text-primary">
                       {step.number}
                     </span>
                   </div>
                   
-                  <h3 className="text-xl font-display font-semibold text-foreground mb-3">
+                  <h3 className="text-sm sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-xs sm:text-base text-muted-foreground leading-relaxed hidden sm:block">
                     {step.description}
                   </p>
                 </div>
