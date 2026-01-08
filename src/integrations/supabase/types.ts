@@ -14,6 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
+      capsule_medias: {
+        Row: {
+          capsule_id: string
+          caption: string | null
+          created_at: string
+          file_name: string | null
+          file_size_bytes: number | null
+          file_type: string
+          file_url: string
+          id: string
+          position: number | null
+        }
+        Insert: {
+          capsule_id: string
+          caption?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_size_bytes?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          position?: number | null
+        }
+        Update: {
+          capsule_id?: string
+          caption?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_size_bytes?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          position?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_medias_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      capsule_shares: {
+        Row: {
+          capsule_id: string
+          circle_id: string
+          id: string
+          shared_at: string
+          shared_by: string
+        }
+        Insert: {
+          capsule_id: string
+          circle_id: string
+          id?: string
+          shared_at?: string
+          shared_by: string
+        }
+        Update: {
+          capsule_id?: string
+          circle_id?: string
+          id?: string
+          shared_at?: string
+          shared_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_shares_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capsule_shares_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      capsules: {
+        Row: {
+          capsule_type: Database["public"]["Enums"]["capsule_type"]
+          content: string | null
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          published_at: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["capsule_status"]
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capsule_type?: Database["public"]["Enums"]["capsule_type"]
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["capsule_status"]
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capsule_type?: Database["public"]["Enums"]["capsule_type"]
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["capsule_status"]
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      circle_members: {
+        Row: {
+          accepted_at: string | null
+          circle_id: string
+          email: string | null
+          id: string
+          invited_at: string
+          name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          circle_id: string
+          email?: string | null
+          id?: string
+          invited_at?: string
+          name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          circle_id?: string
+          email?: string | null
+          id?: string
+          invited_at?: string
+          name?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "circle_members_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      circles: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -61,9 +266,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      user_can_view_capsule: {
+        Args: { _capsule_id: string; _user_id: string }
+        Returns: boolean
+      }
+      user_is_circle_member: {
+        Args: { _circle_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
+      capsule_status: "draft" | "published" | "scheduled" | "archived"
+      capsule_type: "text" | "photo" | "video" | "audio" | "mixed"
       subscription_level: "free" | "premium" | "legacy"
     }
     CompositeTypes: {
@@ -192,6 +406,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      capsule_status: ["draft", "published", "scheduled", "archived"],
+      capsule_type: ["text", "photo", "video", "audio", "mixed"],
       subscription_level: ["free", "premium", "legacy"],
     },
   },
