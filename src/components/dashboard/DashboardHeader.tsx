@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, LogOut, User, Settings, Bell, LayoutDashboard, Clock, Users, FolderOpen, Menu } from 'lucide-react';
+import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import GlobalSearch from '@/components/search/GlobalSearch';
 import ThemeToggle from '@/components/ThemeToggle';
+import NotificationsBell from '@/components/notifications/NotificationsBell';
 
 interface DashboardHeaderProps {
   user: {
@@ -99,10 +100,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
             {/* Theme Toggle */}
             <ThemeToggle />
 
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="w-5 h-5 text-muted-foreground" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent rounded-full" />
-            </Button>
+            {/* Notifications */}
+            {user.id && <NotificationsBell userId={user.id} />}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
