@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -11,6 +11,7 @@ import StorageProgress from '@/components/dashboard/StorageProgress';
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import AISuggestions from '@/components/dashboard/AISuggestions';
 import QuickActions from '@/components/dashboard/QuickActions';
+import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -50,6 +51,7 @@ interface Stats {
 const Dashboard = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
   const [stats, setStats] = useState<Stats>({
@@ -59,6 +61,17 @@ const Dashboard = () => {
     upcomingEvents: 0,
   });
   const [dataLoading, setDataLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Check if user just signed up (show onboarding)
+  useEffect(() => {
+    const isNewUser = searchParams.get('welcome') === 'true';
+    const onboardingDismissed = localStorage.getItem('onboarding_dismissed');
+    
+    if (isNewUser || (!onboardingDismissed && stats.totalCapsules === 0)) {
+      setShowOnboarding(true);
+    }
+  }, [searchParams, stats.totalCapsules]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -233,6 +246,21 @@ const Dashboard = () => {
               : 'Continuez à préserver vos souvenirs précieux'}
           </p>
         </motion.div>
+
+        {/* Onboarding Checklist */}
+        {showOnboarding && (
+          <div className="mb-8">
+            <OnboardingChecklist
+              hasProfile={!!(profile?.display_name && profile?.avatar_url)}
+              hasCapsule={stats.totalCapsules > 0}
+              hasCircle={stats.sharedCircles > 0}
+              onDismiss={() => {
+                setShowOnboarding(false);
+                localStorage.setItem('onboarding_dismissed', 'true');
+              }}
+            />
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div className="mb-8">
