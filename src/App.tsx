@@ -21,6 +21,16 @@ import Statistics from "./pages/Statistics";
 import CalendarPage from "./pages/CalendarPage";
 import NotFound from "./pages/NotFound";
 
+// Admin pages
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminCapsules from "./pages/admin/AdminCapsules";
+import AdminComments from "./pages/admin/AdminComments";
+import AdminSubscriptions from "./pages/admin/AdminSubscriptions";
+import AdminRoles from "./pages/admin/AdminRoles";
+import AdminStats from "./pages/admin/AdminStats";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -46,6 +56,18 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/statistics" element={<Statistics />} />
               <Route path="/calendar" element={<CalendarPage />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="capsules" element={<AdminCapsules />} />
+                <Route path="comments" element={<AdminComments />} />
+                <Route path="subscriptions" element={<AdminSubscriptions />} />
+                <Route path="roles" element={<AdminRoles />} />
+                <Route path="stats" element={<AdminStats />} />
+              </Route>
+              
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
