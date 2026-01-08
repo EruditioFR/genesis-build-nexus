@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -34,6 +34,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import MediaGallery from '@/components/capsule/MediaGallery';
 import CommentsSection from '@/components/capsule/CommentsSection';
 import ShareCapsuleDialog from '@/components/circles/ShareCapsuleDialog';
+import { exportCapsuleToPDF, exportCapsuleToZIP } from '@/lib/exportCapsule';
 import { toast } from 'sonner';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -84,6 +85,7 @@ const CapsuleDetail = () => {
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -194,6 +196,34 @@ const CapsuleDetail = () => {
     }
   };
 
+  const handleExportPDF = async () => {
+    if (!capsule) return;
+    setIsExporting(true);
+    try {
+      await exportCapsuleToPDF(capsule, medias, sharedCircles);
+      toast.success('Capsule exportée en PDF');
+    } catch (error) {
+      console.error('Export PDF error:', error);
+      toast.error('Erreur lors de l\'export PDF');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleExportZIP = async () => {
+    if (!capsule) return;
+    setIsExporting(true);
+    try {
+      await exportCapsuleToZIP(capsule, medias, sharedCircles);
+      toast.success('Capsule exportée en ZIP');
+    } catch (error) {
+      console.error('Export ZIP error:', error);
+      toast.error('Erreur lors de l\'export ZIP');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (loading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -262,7 +292,7 @@ const CapsuleDetail = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" disabled={isExporting}>
                   <MoreHorizontal className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -276,6 +306,15 @@ const CapsuleDetail = () => {
                 <DropdownMenuItem className="gap-2" onClick={() => setShareDialogOpen(true)}>
                   <Share2 className="w-4 h-4" />
                   Partager
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                  <FileDown className="w-4 h-4" />
+                  Exporter en PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                  <FolderArchive className="w-4 h-4" />
+                  Exporter en ZIP
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
