@@ -24,10 +24,10 @@ const Footer = () => {
       { label: "Communauté", href: "#" },
     ],
     legal: [
-      { label: "CGU", href: "/cgu", isRoute: true },
-      { label: "CGV", href: "/cgv", isRoute: true },
       { label: "Confidentialité", href: "/privacy", isRoute: true },
+      { label: "CGV", href: "/cgv", isRoute: true },
       { label: "Mentions légales", href: "/mentions-legales", isRoute: true },
+      { label: "RGPD", href: "/privacy", isRoute: true },
     ],
   };
 

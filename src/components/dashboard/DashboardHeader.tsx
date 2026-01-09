@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import GlobalSearch from '@/components/search/GlobalSearch';
-
+import ThemeToggle from '@/components/ThemeToggle';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 
@@ -127,6 +127,9 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
 
             {/* Global Search */}
             {user.id && <GlobalSearch userId={user.id} />}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Notifications */}
             {user.id && <NotificationsBell userId={user.id} />}
