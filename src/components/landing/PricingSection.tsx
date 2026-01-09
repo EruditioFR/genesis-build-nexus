@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Crown, Building2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Check, Sparkles, Crown, Building2, Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { toast } from "sonner";
 
 const plans = [
   {
@@ -41,6 +44,7 @@ const plans = [
     cta: "Essayer Premium",
     variant: "hero" as const,
     popular: true,
+    tier: "premium" as const,
   },
   {
     name: "Héritage",
@@ -59,15 +63,42 @@ const plans = [
       "Support VIP téléphone",
       "Archivage garanti 100 ans",
     ],
-    cta: "Choisir Legacy",
+    cta: "Choisir Héritage",
     variant: "gold" as const,
     popular: false,
+    tier: "heritage" as const,
   },
 ];
 
 const PricingSection = () => {
   const [isYearly, setIsYearly] = useState(true);
+  const [loadingTier, setLoadingTier] = useState<string | null>(null);
+  const { user } = useAuth();
+  const { createCheckout } = useSubscription();
+  const navigate = useNavigate();
 
+  const handleSubscribe = async (plan: typeof plans[0]) => {
+    if (!plan.tier) {
+      // Free plan - just navigate to signup
+      navigate('/signup');
+      return;
+    }
+
+    if (!user) {
+      // Not logged in - redirect to signup with redirect back
+      navigate('/signup');
+      return;
+    }
+
+    setLoadingTier(plan.tier);
+    try {
+      await createCheckout(plan.tier);
+    } catch (error: any) {
+      toast.error(error.message || "Erreur lors de la création du paiement");
+    } finally {
+      setLoadingTier(null);
+    }
+  };
   return (
     <section id="pricing" className="py-16 sm:py-24 bg-background relative overflow-hidden">
       {/* Background */}
@@ -200,14 +231,33 @@ const PricingSection = () => {
               </ul>
 
               {/* CTA Button */}
-              <Button
-                asChild
-                variant={plan.popular ? "hero" : plan.variant}
-                size="default"
-                className="w-full"
-              >
-                <Link to="/signup">{plan.cta}</Link>
-              </Button>
+              {plan.tier ? (
+                <Button
+                  onClick={() => handleSubscribe(plan)}
+                  variant={plan.popular ? "hero" : plan.variant}
+                  size="default"
+                  className="w-full"
+                  disabled={loadingTier === plan.tier}
+                >
+                  {loadingTier === plan.tier ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Chargement...
+                    </>
+                  ) : (
+                    plan.cta
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  asChild
+                  variant={plan.variant}
+                  size="default"
+                  className="w-full"
+                >
+                  <Link to="/signup">{plan.cta}</Link>
+                </Button>
+              )}
             </motion.div>
           ))}
         </div>
