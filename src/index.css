@@ -9,72 +9,72 @@
 
 @layer base {
   :root {
-    /* Core brand colors - HSL format */
-    --background: 40 15% 97%;
-    --foreground: 220 15% 18%;
+    /* Core brand colors - HSL format - Refined Light Mode */
+    --background: 30 15% 98%;
+    --foreground: 220 25% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 18%;
+    --card: 30 10% 99%;
+    --card-foreground: 220 25% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 18%;
+    --popover: 30 10% 99%;
+    --popover-foreground: 220 25% 15%;
 
-    /* Bleu nuit profond - plus foncé pour meilleur contraste */
-    --primary: 215 50% 23%;
-    --primary-foreground: 0 0% 100%;
+    /* Bleu nuit profond - couleur principale élégante */
+    --primary: 215 55% 22%;
+    --primary-foreground: 30 15% 98%;
 
-    /* Or chaud - plus doux et moins saturé */
-    --secondary: 38 45% 42%;
-    --secondary-foreground: 0 0% 100%;
+    /* Bronze/Ambre raffiné - beaucoup moins saturé et plus foncé */
+    --secondary: 30 35% 35%;
+    --secondary-foreground: 30 15% 98%;
 
-    /* Terracotta doux - légèrement désaturé */
-    --accent: 16 55% 55%;
-    --accent-foreground: 0 0% 100%;
+    /* Terracotta subtil - tons terre plus doux */
+    --accent: 20 40% 45%;
+    --accent-foreground: 30 15% 98%;
 
-    /* Gris perle */
-    --muted: 40 10% 94%;
-    --muted-foreground: 220 10% 45%;
+    /* Gris chaud élégant */
+    --muted: 30 8% 93%;
+    --muted-foreground: 220 15% 40%;
 
-    --destructive: 0 72% 50%;
+    --destructive: 0 65% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 12% 85%;
-    --input: 40 12% 85%;
-    --ring: 215 50% 23%;
+    --border: 30 10% 88%;
+    --input: 30 10% 88%;
+    --ring: 215 55% 22%;
 
     --radius: 0.75rem;
 
-    /* Custom tokens - plus doux */
-    --gold: 38 45% 42%;
-    --gold-light: 38 40% 60%;
-    --terracotta: 16 55% 55%;
-    --terracotta-light: 16 45% 75%;
-    --navy: 215 50% 23%;
-    --navy-light: 215 40% 38%;
-    --pearl: 40 10% 96%;
-    --cream: 40 20% 94%;
+    /* Custom tokens - palette raffinée terre/bronze */
+    --gold: 30 35% 35%;
+    --gold-light: 30 30% 50%;
+    --terracotta: 20 40% 45%;
+    --terracotta-light: 20 30% 65%;
+    --navy: 215 55% 22%;
+    --navy-light: 215 45% 35%;
+    --pearl: 30 8% 96%;
+    --cream: 30 15% 95%;
 
-    /* Gradients - plus subtils */
-    --gradient-hero: linear-gradient(135deg, hsl(215 50% 23%) 0%, hsl(215 45% 32%) 50%, hsl(16 55% 55% / 0.7) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(38 45% 42%) 0%, hsl(38 50% 50%) 100%);
-    --gradient-warm: linear-gradient(180deg, hsl(40 20% 94%) 0%, hsl(40 10% 96%) 100%);
-    --gradient-navy: linear-gradient(135deg, hsl(215 50% 18%) 0%, hsl(215 50% 28%) 100%);
+    /* Gradients - tons sophistiqués */
+    --gradient-hero: linear-gradient(135deg, hsl(215 55% 22%) 0%, hsl(215 50% 30%) 50%, hsl(20 40% 45% / 0.6) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(30 35% 35%) 0%, hsl(30 40% 45%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(30 15% 95%) 0%, hsl(30 8% 96%) 100%);
+    --gradient-navy: linear-gradient(135deg, hsl(215 55% 18%) 0%, hsl(215 55% 26%) 100%);
 
-    /* Shadows - plus subtiles */
-    --shadow-soft: 0 4px 20px -4px hsl(215 50% 23% / 0.08);
-    --shadow-card: 0 8px 32px -8px hsl(215 50% 23% / 0.12);
-    --shadow-gold: 0 4px 20px -4px hsl(38 45% 42% / 0.25);
-    --shadow-elevated: 0 20px 60px -20px hsl(215 50% 23% / 0.18);
+    /* Shadows - subtiles et élégantes */
+    --shadow-soft: 0 4px 20px -4px hsl(215 55% 22% / 0.06);
+    --shadow-card: 0 8px 32px -8px hsl(215 55% 22% / 0.10);
+    --shadow-gold: 0 4px 20px -4px hsl(30 35% 35% / 0.20);
+    --shadow-elevated: 0 20px 60px -20px hsl(215 55% 22% / 0.15);
 
     /* Sidebar */
-    --sidebar-background: 0 0% 99%;
-    --sidebar-foreground: 220 15% 25%;
-    --sidebar-primary: 215 50% 23%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 38 45% 42%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 40 12% 88%;
-    --sidebar-ring: 215 50% 23%;
+    --sidebar-background: 30 10% 99%;
+    --sidebar-foreground: 220 20% 22%;
+    --sidebar-primary: 215 55% 22%;
+    --sidebar-primary-foreground: 30 15% 98%;
+    --sidebar-accent: 30 35% 35%;
+    --sidebar-accent-foreground: 30 15% 98%;
+    --sidebar-border: 30 10% 90%;
+    --sidebar-ring: 215 55% 22%;
   }
 
   .dark {
@@ -133,7 +133,7 @@
 
 @layer utilities {
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-secondary via-amber-600 to-secondary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-secondary via-accent to-secondary bg-clip-text text-transparent;
   }
 
   .animate-float {
