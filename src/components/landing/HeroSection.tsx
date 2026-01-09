@@ -4,7 +4,7 @@ import { Play, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-background.jpg";
 const HeroSection = () => {
-  return <section className="relative min-h-screen h-screen flex items-end sm:items-center overflow-hidden">
+  return <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 h-full">
         <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover min-h-screen" />
@@ -32,7 +32,7 @@ const HeroSection = () => {
       }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/20 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 pt-16 sm:pt-32 pb-8 sm:pb-20">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10 pt-20 sm:pt-32 pb-20 sm:pb-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
         <motion.div 
