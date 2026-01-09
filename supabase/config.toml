@@ -1,1 +1,5 @@
 project_id = "fngbrxoblmbukqzzdwxp"
+
+[functions.process-scheduled-capsules]
+verify_jwt = false
+schedule = "*/5 * * * *"
