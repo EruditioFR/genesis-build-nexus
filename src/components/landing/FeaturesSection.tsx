@@ -44,8 +44,8 @@ const features = [
   },
   {
     icon: Download,
-    title: "Export & Impression",
-    description: "Exportez en PDF, commandez un livre physique premium ou téléchargez tous vos médias.",
+    title: "Export & Téléchargement",
+    description: "Exportez vos souvenirs en PDF haute qualité ou téléchargez tous vos médias en un clic.",
     color: "bg-accent/10 text-accent",
   },
 ];

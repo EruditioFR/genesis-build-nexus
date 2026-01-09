@@ -32,10 +32,6 @@ const faqs = [
     answer: "Avec l'offre Legacy, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certaines capsules selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels.",
   },
   {
-    question: "Puis-je commander un livre physique de mes souvenirs ?",
-    answer: "Oui ! Nos offres Premium et Legacy permettent de commander des livres photo professionnels imprimés sur papier de qualité. L'offre Legacy inclut même un livre par an. Parfait pour offrir un cadeau unique à vos proches.",
-  },
-  {
     question: "Y a-t-il une application mobile ?",
     answer: "La plateforme web est entièrement responsive et fonctionne parfaitement sur mobile. Une application native iOS et Android est prévue dans notre roadmap pour permettre l'enregistrement direct et le mode hors-ligne.",
   },
