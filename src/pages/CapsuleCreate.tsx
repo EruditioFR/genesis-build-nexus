@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Send, Sparkles } from 'lucide-react';
+import { ArrowLeft, Save, Send, Sparkles, CalendarClock } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,6 +27,8 @@ import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
 import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
+import ScheduleSelector from '@/components/capsule/ScheduleSelector';
+import LegacySettings from '@/components/capsule/LegacySettings';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -55,6 +57,15 @@ const CapsuleCreate = () => {
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  
+  // Scheduling state
+  const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
+  
+  // Legacy capsule state
+  const [legacyEnabled, setLegacyEnabled] = useState(false);
+  const [legacyUnlockType, setLegacyUnlockType] = useState<'date' | 'guardian'>('date');
+  const [legacyUnlockDate, setLegacyUnlockDate] = useState<Date | null>(null);
+  const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -106,6 +117,18 @@ const CapsuleCreate = () => {
     setIsSaving(true);
 
     try {
+      // Determine the actual status based on scheduling
+      let finalStatus: CapsuleStatus = status;
+      let publishedAt = null;
+      let scheduledAtValue = null;
+      
+      if (status === 'published' && scheduledAt) {
+        finalStatus = 'scheduled';
+        scheduledAtValue = scheduledAt.toISOString();
+      } else if (status === 'published') {
+        publishedAt = new Date().toISOString();
+      }
+
       // Create the capsule
       const { data: capsule, error: capsuleError } = await supabase
         .from('capsules')
@@ -115,14 +138,38 @@ const CapsuleCreate = () => {
           description: values.description || null,
           content: values.content || null,
           capsule_type: capsuleType,
-          status: status,
+          status: finalStatus,
           tags: tags.length > 0 ? tags : null,
-          published_at: status === 'published' ? new Date().toISOString() : null,
+          published_at: publishedAt,
+          scheduled_at: scheduledAtValue,
         })
         .select('id')
         .single();
 
       if (capsuleError) throw capsuleError;
+
+      // Create legacy capsule settings if enabled
+      if (legacyEnabled && capsule) {
+        const legacyData: any = {
+          capsule_id: capsule.id,
+          unlock_type: legacyUnlockType,
+        };
+        
+        if (legacyUnlockType === 'date' && legacyUnlockDate) {
+          legacyData.unlock_date = legacyUnlockDate.toISOString();
+        } else if (legacyUnlockType === 'guardian' && legacyGuardianId) {
+          legacyData.guardian_id = legacyGuardianId;
+        }
+
+        const { error: legacyError } = await supabase
+          .from('legacy_capsules')
+          .insert(legacyData);
+
+        if (legacyError) {
+          console.error('Error creating legacy settings:', legacyError);
+          // Don't throw, just log - the capsule is already created
+        }
+      }
 
       // Add media files to the capsule
       if (mediaFiles.length > 0 && capsule) {
@@ -146,11 +193,13 @@ const CapsuleCreate = () => {
         }
       }
 
-      toast.success(
-        status === 'published' 
-          ? 'Capsule publiée avec succès !' 
-          : 'Brouillon enregistré'
-      );
+      if (finalStatus === 'scheduled') {
+        toast.success('Capsule programmée avec succès !');
+      } else if (status === 'published') {
+        toast.success('Capsule publiée avec succès !');
+      } else {
+        toast.success('Brouillon enregistré');
+      }
       navigate('/dashboard');
     } catch (error: any) {
       toast.error(error.message || 'Erreur lors de la sauvegarde');
@@ -324,6 +373,24 @@ const CapsuleCreate = () => {
               </Label>
               <TagInput tags={tags} onChange={setTags} />
             </div>
+
+            {/* Schedule */}
+            <div className="p-6 rounded-2xl border border-border bg-card">
+              <ScheduleSelector scheduledAt={scheduledAt} onChange={setScheduledAt} />
+            </div>
+
+            {/* Legacy Settings */}
+            <LegacySettings
+              userId={user.id}
+              enabled={legacyEnabled}
+              onEnabledChange={setLegacyEnabled}
+              unlockType={legacyUnlockType}
+              onUnlockTypeChange={setLegacyUnlockType}
+              unlockDate={legacyUnlockDate}
+              onUnlockDateChange={setLegacyUnlockDate}
+              guardianId={legacyGuardianId}
+              onGuardianIdChange={setLegacyGuardianId}
+            />
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3">
