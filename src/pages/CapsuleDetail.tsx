@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -34,6 +34,8 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import MediaGallery from '@/components/capsule/MediaGallery';
 import CommentsSection from '@/components/capsule/CommentsSection';
 import ShareCapsuleDialog from '@/components/circles/ShareCapsuleDialog';
+import StoryViewer from '@/components/story/StoryViewer';
+import { useStoryMode } from '@/hooks/useStoryMode';
 import { exportCapsuleToPDF, exportCapsuleToZIP } from '@/lib/exportCapsule';
 import { toast } from 'sonner';
 
@@ -86,6 +88,9 @@ const CapsuleDetail = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+
+  // Story mode
+  const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -242,7 +247,20 @@ const CapsuleDetail = () => {
   const Icon = typeInfo.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <>
+      {/* Story Viewer Modal */}
+      <AnimatePresence>
+        {storyOpen && storyItems.length > 0 && (
+          <StoryViewer
+            items={storyItems}
+            initialIndex={initialIndex}
+            onClose={closeStory}
+            autoPlay
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
         user={{
           id: user.id,
@@ -368,10 +386,22 @@ const CapsuleDetail = () => {
               transition={{ duration: 0.4, delay: 0.2 }}
               className="p-6 rounded-2xl border border-border bg-card"
             >
-              <h2 className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
-                <Image className="w-4 h-4" />
-                Médias ({medias.length})
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Image className="w-4 h-4" />
+                  Médias ({medias.length})
+                </h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => capsule && openStory([capsule])}
+                  disabled={storyLoading}
+                  className="gap-2"
+                >
+                  <Play className="w-4 h-4" />
+                  {storyLoading ? 'Chargement...' : 'Diaporama'}
+                </Button>
+              </div>
               <MediaGallery medias={medias} />
             </motion.div>
           )}
@@ -480,6 +510,7 @@ const CapsuleDetail = () => {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </>
   );
 };
 
