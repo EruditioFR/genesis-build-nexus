@@ -33,6 +33,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import AvatarUpload from '@/components/profile/AvatarUpload';
+import GuardiansSection from '@/components/profile/GuardiansSection';
 import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -392,6 +393,9 @@ const Profile = () => {
               )}
             </div>
           </motion.div>
+
+          {/* Guardians Section */}
+          <GuardiansSection userId={user.id} />
         </div>
       </main>
     </div>
