@@ -45,7 +45,7 @@ import AdminStats from "./pages/admin/AdminStats";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
+  <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
