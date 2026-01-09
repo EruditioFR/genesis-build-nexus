@@ -172,19 +172,56 @@ Tous vos souvenirs précieux en un seul endroit sécurisé.</motion.p>
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div initial={{
-      opacity: 0
-    }} animate={{
-      opacity: 1,
-      y: [0, 10, 0]
-    }} transition={{
-      duration: 2,
-      delay: 1,
-      repeat: Infinity
-    }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/30 flex items-start justify-center p-2">
-          <div className="w-1 h-2 rounded-full bg-primary-foreground/50" />
-        </div>
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.6, delay: 1 }} 
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <motion.span 
+          className="text-xs text-primary-foreground/60 uppercase tracking-widest font-medium"
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Découvrir
+        </motion.span>
+        <motion.div 
+          className="relative w-7 h-12 rounded-full border-2 border-primary-foreground/50 flex items-start justify-center p-1.5 backdrop-blur-sm bg-primary-foreground/5"
+          animate={{ 
+            boxShadow: [
+              "0 0 0 0 rgba(255,255,255,0)",
+              "0 0 20px 4px rgba(255,255,255,0.15)",
+              "0 0 0 0 rgba(255,255,255,0)"
+            ]
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <motion.div 
+            className="w-1.5 h-3 rounded-full bg-secondary"
+            animate={{ 
+              y: [0, 16, 0],
+              opacity: [1, 0.5, 1]
+            }}
+            transition={{ 
+              duration: 1.5, 
+              repeat: Infinity, 
+              ease: "easeInOut"
+            }}
+          />
+        </motion.div>
+        <motion.div
+          animate={{ y: [0, 4, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <svg 
+            className="w-4 h-4 text-primary-foreground/60" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </motion.div>
       </motion.div>
     </section>;
 };
