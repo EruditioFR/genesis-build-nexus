@@ -25,7 +25,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NotificationsBell from "@/components/notifications/NotificationsBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
-import ThemeToggle from "@/components/ThemeToggle";
+
 import type { Database } from "@/integrations/supabase/types";
 
 type Capsule = Database["public"]["Tables"]["capsules"]["Row"];
@@ -164,7 +164,7 @@ export default function CalendarPage() {
           <div className="flex items-center gap-4">
             {user && <GlobalSearch userId={user.id} />}
             {user && <NotificationsBell userId={user.id} />}
-            <ThemeToggle />
+            
           </div>
         </div>
       </header>
