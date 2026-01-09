@@ -24,6 +24,11 @@ import GuardianVerify from "./pages/GuardianVerify";
 import GuardianDashboard from "./pages/GuardianDashboard";
 import NotFound from "./pages/NotFound";
 
+// Legal pages
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
+import TermsOfSale from "./pages/legal/TermsOfSale";
+import LegalNotice from "./pages/legal/LegalNotice";
+
 // Admin pages
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -62,6 +67,11 @@ const App = () => (
               <Route path="/invite/:token" element={<InviteAccept />} />
               <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
               <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
+              
+              {/* Legal pages */}
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/cgv" element={<TermsOfSale />} />
+              <Route path="/mentions-legales" element={<LegalNotice />} />
               
               {/* Admin routes */}
               <Route path="/admin" element={<AdminLayout />}>
