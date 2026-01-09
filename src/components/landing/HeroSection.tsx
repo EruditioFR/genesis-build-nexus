@@ -4,10 +4,10 @@ import { Play, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-background.jpg";
 const HeroSection = () => {
-  return <section className="relative min-h-screen flex items-center overflow-hidden">
+  return <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
-        <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover" />
+      <div className="absolute inset-0 h-full">
+        <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover min-h-screen" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-transparent to-transparent" />
       </div>
