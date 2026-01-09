@@ -136,13 +136,13 @@ const PricingSection = () => {
           </span>
           <button
             onClick={() => setIsYearly(!isYearly)}
-            className={`relative w-12 sm:w-14 h-6 sm:h-7 rounded-full transition-colors duration-300 flex-shrink-0 ${
+            className={`relative w-11 sm:w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
               isYearly ? "bg-secondary" : "bg-muted"
             }`}
           >
             <span
-              className={`absolute top-0.5 sm:top-1 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
-                isYearly ? "translate-x-6 sm:translate-x-7" : "translate-x-0.5 sm:translate-x-1"
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
+                isYearly ? "translate-x-5 sm:translate-x-6" : "translate-x-0"
               }`}
             />
           </button>
