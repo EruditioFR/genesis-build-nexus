@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -23,10 +24,10 @@ const Footer = () => {
       { label: "Communauté", href: "#" },
     ],
     legal: [
-      { label: "Confidentialité", href: "#" },
-      { label: "CGU", href: "#" },
-      { label: "Cookies", href: "#" },
-      { label: "RGPD", href: "#" },
+      { label: "Confidentialité", href: "/privacy", isRoute: true },
+      { label: "CGV", href: "/cgv", isRoute: true },
+      { label: "Mentions légales", href: "/mentions-legales", isRoute: true },
+      { label: "RGPD", href: "/privacy", isRoute: true },
     ],
   };
 
@@ -74,12 +75,21 @@ const Footer = () => {
               <ul className="space-y-2 sm:space-y-3">
                 {items.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-primary-foreground/70 hover:text-secondary transition-colors text-xs sm:text-sm"
-                    >
-                      {link.label}
-                    </a>
+                    {link.isRoute ? (
+                      <Link
+                        to={link.href}
+                        className="text-primary-foreground/70 hover:text-secondary transition-colors text-xs sm:text-sm"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-primary-foreground/70 hover:text-secondary transition-colors text-xs sm:text-sm"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
