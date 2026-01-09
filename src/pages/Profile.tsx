@@ -30,6 +30,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import AvatarUpload from '@/components/profile/AvatarUpload';
@@ -61,11 +62,12 @@ const subscriptionLabels = {
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
+  const { createCheckout } = useSubscription();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-
+  const [isUpgrading, setIsUpgrading] = useState(false);
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -115,6 +117,17 @@ const Profile = () => {
   const handleAvatarUpdate = (url: string) => {
     if (profile) {
       setProfile({ ...profile, avatar_url: url });
+    }
+  };
+
+  const handleUpgrade = async () => {
+    setIsUpgrading(true);
+    try {
+      await createCheckout('premium');
+    } catch (error: any) {
+      toast.error(error.message || 'Erreur lors de la création de la session de paiement');
+    } finally {
+      setIsUpgrading(false);
     }
   };
 
@@ -387,8 +400,20 @@ const Profile = () => {
               </div>
               
               {profile.subscription_level === 'free' && (
-                <Button variant="outline" size="sm">
-                  Passer Premium
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleUpgrade}
+                  disabled={isUpgrading}
+                >
+                  {isUpgrading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Chargement...
+                    </>
+                  ) : (
+                    'Passer Premium'
+                  )}
                 </Button>
               )}
             </div>
