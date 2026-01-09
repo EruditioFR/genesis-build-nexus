@@ -62,12 +62,13 @@ const subscriptionLabels = {
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
-  const { createCheckout } = useSubscription();
+  const { createCheckout, openCustomerPortal } = useSubscription();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
+  const [isManaging, setIsManaging] = useState(false);
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -128,6 +129,17 @@ const Profile = () => {
       toast.error(error.message || 'Erreur lors de la création de la session de paiement');
     } finally {
       setIsUpgrading(false);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    setIsManaging(true);
+    try {
+      await openCustomerPortal();
+    } catch (error: any) {
+      toast.error(error.message || 'Erreur lors de l\'ouverture du portail de gestion');
+    } finally {
+      setIsManaging(false);
     }
   };
 
@@ -399,7 +411,7 @@ const Profile = () => {
                 </span>
               </div>
               
-              {profile.subscription_level === 'free' && (
+              {profile.subscription_level === 'free' ? (
                 <Button 
                   variant="outline" 
                   size="sm"
@@ -413,6 +425,22 @@ const Profile = () => {
                     </>
                   ) : (
                     'Passer Premium'
+                  )}
+                </Button>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleManageSubscription}
+                  disabled={isManaging}
+                >
+                  {isManaging ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Chargement...
+                    </>
+                  ) : (
+                    'Gérer mon abonnement'
                   )}
                 </Button>
               )}
