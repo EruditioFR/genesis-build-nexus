@@ -62,7 +62,7 @@ const subscriptionLabels = {
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
-  const { createCheckout, openCustomerPortal } = useSubscription();
+  const { createCheckout, openCustomerPortal, subscriptionEnd, tier } = useSubscription();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -401,15 +401,36 @@ const Profile = () => {
               Abonnement
             </h2>
             
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Badge className={subscription.color}>
-                  {subscription.label}
-                </Badge>
-                <span className="text-sm text-muted-foreground">
-                  {profile.storage_used_mb} Mo / {profile.storage_limit_mb} Mo utilisés
-                </span>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Badge className={subscription.color}>
+                    {subscription.label}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    {profile.storage_used_mb} Mo / {profile.storage_limit_mb} Mo utilisés
+                  </span>
+                </div>
               </div>
+              
+              {profile.subscription_level !== 'free' && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-foreground">Prix :</span>
+                    <span>{tier === 'premium' ? '9,99 €/mois' : '19,99 €/mois'}</span>
+                  </div>
+                  {subscriptionEnd && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-foreground">Prochain renouvellement :</span>
+                      <span>{new Date(subscriptionEnd).toLocaleDateString('fr-FR', { 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric' 
+                      })}</span>
+                    </div>
+                  )}
+                </div>
+              )}
               
               {profile.subscription_level === 'free' ? (
                 <Button 
