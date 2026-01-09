@@ -17,7 +17,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import ThemeToggle from "@/components/ThemeToggle";
+
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -109,7 +109,6 @@ export default function AdminLayout() {
             <span className="text-xs text-muted-foreground">
               {isAdmin ? "Administrateur" : "Modérateur"}
             </span>
-            <ThemeToggle />
           </div>
         </div>
       </aside>
@@ -126,7 +125,7 @@ export default function AdminLayout() {
               <ChevronLeft className="h-4 w-4 mr-1" />
               Site
             </Button>
-            <ThemeToggle />
+            
           </div>
         </div>
         {/* Mobile nav */}
