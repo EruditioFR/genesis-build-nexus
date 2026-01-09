@@ -83,17 +83,47 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
     setIsAdding(true);
 
     try {
-      const membersToInsert = pendingEmails.map(member => ({
-        circle_id: circleId,
-        email: member.email,
-        name: member.name || null,
-      }));
+      // Get user session for auth
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Non connecté');
 
-      const { error } = await supabase.from('circle_members').insert(membersToInsert);
+      // Get inviter profile
+      const { data: inviterProfile } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+      
+      const inviterName = inviterProfile?.display_name || session.user.email || 'Un utilisateur';
 
-      if (error) throw error;
+      for (const member of pendingEmails) {
+        // Insert member
+        const { data: insertedMember, error } = await supabase
+          .from('circle_members')
+          .insert({
+            circle_id: circleId,
+            email: member.email,
+            name: member.name || null,
+          })
+          .select('invitation_token')
+          .single();
 
-      toast.success(`${pendingEmails.length} membre(s) invité(s) avec succès !`);
+        if (error) throw error;
+
+        // Send invitation email
+        await supabase.functions.invoke('send-invitation-email', {
+          body: {
+            circleId,
+            circleName,
+            inviterName,
+            memberEmail: member.email,
+            memberName: member.name,
+            invitationToken: insertedMember.invitation_token,
+          },
+        });
+      }
+
+      toast.success(`${pendingEmails.length} invitation(s) envoyée(s) par email !`);
       setPendingEmails([]);
       form.reset();
       onOpenChange(false);
