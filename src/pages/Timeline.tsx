@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X } from 'lucide-react';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -18,6 +18,8 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import StoryViewer from '@/components/story/StoryViewer';
+import { useStoryMode } from '@/hooks/useStoryMode';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -52,6 +54,9 @@ const Timeline = () => {
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+
+  // Story mode
+  const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
 
   // Filter states
   const [selectedTypes, setSelectedTypes] = useState<CapsuleType[]>([]);
@@ -169,7 +174,20 @@ const Timeline = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <>
+      {/* Story Viewer Modal */}
+      <AnimatePresence>
+        {storyOpen && storyItems.length > 0 && (
+          <StoryViewer
+            items={storyItems}
+            initialIndex={initialIndex}
+            onClose={closeStory}
+            autoPlay
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
         user={{
           id: user.id,
@@ -198,6 +216,18 @@ const Timeline = () => {
             {filteredCapsules.length} capsule{filteredCapsules.length !== 1 ? 's' : ''}
             {activeFiltersCount > 0 && ` (sur ${capsules.length})`}
           </p>
+          
+          {/* Story Mode Button */}
+          {filteredCapsules.length > 0 && (
+            <Button
+              onClick={() => openStory(filteredCapsules)}
+              disabled={storyLoading}
+              className="mt-4 gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
+            >
+              <Play className="w-4 h-4" />
+              {storyLoading ? 'Chargement...' : 'Lancer le diaporama'}
+            </Button>
+          )}
         </motion.div>
 
         {/* Filters */}
@@ -421,6 +451,7 @@ const Timeline = () => {
         )}
       </main>
     </div>
+    </>
   );
 };
 
