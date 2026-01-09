@@ -35,16 +35,27 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10 pt-24 sm:pt-32 pb-16 sm:pb-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-        <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6
-        }} className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6 sm:mb-8">
-            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
+        <motion.div 
+          initial={{
+            opacity: 0,
+            y: 20
+          }} 
+          animate={{
+            opacity: 1,
+            y: 0
+          }} 
+          transition={{
+            duration: 0.6
+          }} 
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6 sm:mb-8 animate-pulse"
+          style={{ animationDuration: '3s' }}
+        >
+            <motion.div
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
+            </motion.div>
             <span className="text-xs sm:text-sm font-medium text-primary-foreground">Préservez vos souvenirs pour l'éternité</span>
           </motion.div>
 
