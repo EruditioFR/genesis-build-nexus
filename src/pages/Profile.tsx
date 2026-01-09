@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, User, Calendar, FileText, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, User, Calendar, FileText, Loader2, Shield } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -396,6 +396,33 @@ const Profile = () => {
 
           {/* Guardians Section */}
           <GuardiansSection userId={user.id} />
+
+          {/* Guardian Dashboard Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+            className="p-6 rounded-2xl border border-border bg-card"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-medium">Espace Gardien</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Gérez les capsules héritage qui vous sont confiées
+                  </p>
+                </div>
+              </div>
+              <Button asChild variant="outline">
+                <Link to="/guardian-dashboard">
+                  Accéder
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </main>
     </div>

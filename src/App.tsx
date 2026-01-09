@@ -21,6 +21,7 @@ import Statistics from "./pages/Statistics";
 import CalendarPage from "./pages/CalendarPage";
 import InviteAccept from "./pages/InviteAccept";
 import GuardianVerify from "./pages/GuardianVerify";
+import GuardianDashboard from "./pages/GuardianDashboard";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/invite/:token" element={<InviteAccept />} />
               <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
+              <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
               
               {/* Admin routes */}
               <Route path="/admin" element={<AdminLayout />}>
