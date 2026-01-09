@@ -18,9 +18,9 @@ const Footer = () => {
       { label: "Partenaires", href: "#" },
     ],
     ressources: [
-      { label: "Centre d'aide", href: "#" },
+      { label: "Centre d'aide", href: "/faq", isRoute: true },
+      { label: "FAQ", href: "/faq", isRoute: true },
       { label: "Guides", href: "#" },
-      { label: "API", href: "#" },
       { label: "Communauté", href: "#" },
     ],
     legal: [

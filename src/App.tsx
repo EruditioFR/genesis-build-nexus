@@ -29,6 +29,7 @@ import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfSale from "./pages/legal/TermsOfSale";
 import LegalNotice from "./pages/legal/LegalNotice";
+import FAQ from "./pages/FAQ";
 
 // Admin pages
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -74,6 +75,7 @@ const App = () => (
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/cgv" element={<TermsOfSale />} />
                 <Route path="/mentions-legales" element={<LegalNotice />} />
+                <Route path="/faq" element={<FAQ />} />
                 
                 {/* Admin routes */}
                 <Route path="/admin" element={<AdminLayout />}>
