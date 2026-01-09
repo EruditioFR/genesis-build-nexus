@@ -66,7 +66,7 @@ const plans = [
 ];
 
 const PricingSection = () => {
-  const [isYearly, setIsYearly] = useState(true);
+  const [isYearly, setIsYearly] = useState(false);
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const { user } = useAuth();
   const { createCheckout } = useSubscription();
