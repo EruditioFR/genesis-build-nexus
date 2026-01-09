@@ -21,20 +21,16 @@ const CookieBanner = () => {
     }
   }, []);
 
-  const handleAcceptAll = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ type: "all", date: new Date().toISOString() }));
+  const saveConsent = (type: "all" | "essential") => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ type, date: new Date().toISOString() }));
+    // Dispatch un événement pour notifier les autres composants (notamment Google Analytics)
+    window.dispatchEvent(new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }));
     setShowBanner(false);
   };
 
-  const handleAcceptEssential = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ type: "essential", date: new Date().toISOString() }));
-    setShowBanner(false);
-  };
-
-  const handleReject = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ type: "essential", date: new Date().toISOString() }));
-    setShowBanner(false);
-  };
+  const handleAcceptAll = () => saveConsent("all");
+  const handleAcceptEssential = () => saveConsent("essential");
+  const handleReject = () => saveConsent("essential");
 
   return (
     <AnimatePresence>
