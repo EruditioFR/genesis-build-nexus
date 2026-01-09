@@ -100,20 +100,44 @@ Tous vos souvenirs précieux en un seul endroit sécurisé.</motion.p>
           duration: 0.7,
           delay: 0.3
         }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto">
-              <Link to="/signup">
-                Commencer gratuitement
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full sm:w-auto">
-              <a href="#how-it-works">
-                <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 group-hover:bg-primary-foreground/30 transition-colors">
-                  <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
-                </span>
-                Voir la démo
-              </a>
-            </Button>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="w-full sm:w-auto"
+            >
+              <Button asChild variant="hero" size="lg" className="group w-full">
+                <Link to="/signup">
+                  Commencer gratuitement
+                  <motion.span
+                    className="inline-flex"
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                  >
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  </motion.span>
+                </Link>
+              </Button>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="w-full sm:w-auto"
+            >
+              <Button asChild variant="ghost" size="lg" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full">
+                <a href="#how-it-works">
+                  <motion.span 
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 group-hover:bg-primary-foreground/30 transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                  >
+                    <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
+                  </motion.span>
+                  Voir la démo
+                </a>
+              </Button>
+            </motion.div>
           </motion.div>
 
           {/* Trust indicators */}
