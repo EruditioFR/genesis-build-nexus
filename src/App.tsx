@@ -28,6 +28,7 @@ import NotFound from "./pages/NotFound";
 // Legal pages
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfSale from "./pages/legal/TermsOfSale";
+import TermsOfUse from "./pages/legal/TermsOfUse";
 import LegalNotice from "./pages/legal/LegalNotice";
 import FAQ from "./pages/FAQ";
 
@@ -74,6 +75,7 @@ const App = () => (
                 {/* Legal pages */}
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/cgv" element={<TermsOfSale />} />
+                <Route path="/cgu" element={<TermsOfUse />} />
                 <Route path="/mentions-legales" element={<LegalNotice />} />
                 <Route path="/faq" element={<FAQ />} />
                 
