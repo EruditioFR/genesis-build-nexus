@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play } from 'lucide-react';
+import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play, ChevronUp } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -54,6 +54,7 @@ const Timeline = () => {
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [activeDecade, setActiveDecade] = useState<string | null>(null);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -82,6 +83,51 @@ const Timeline = () => {
       return typeMatch && statusMatch && tagMatch;
     });
   }, [capsules, selectedTypes, selectedStatuses, selectedTags]);
+
+  // Extract decades from filtered capsules
+  const decades = useMemo(() => {
+    const decadeSet = new Set<string>();
+    filteredCapsules.forEach((capsule) => {
+      const year = parseInt(format(parseISO(capsule.created_at), 'yyyy'));
+      const decade = Math.floor(year / 10) * 10;
+      decadeSet.add(decade.toString());
+    });
+    return Array.from(decadeSet).sort((a, b) => parseInt(b) - parseInt(a));
+  }, [filteredCapsules]);
+
+  // Scroll to decade
+  const scrollToDecade = (decade: string) => {
+    const element = document.getElementById(`decade-${decade}`);
+    if (element) {
+      const headerOffset = 140;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  };
+
+  // Track active decade on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const decadeElements = decades.map((d) => ({
+        decade: d,
+        element: document.getElementById(`decade-${d}`),
+      }));
+
+      for (const { decade, element } of decadeElements) {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom > 0) {
+            setActiveDecade(decade);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [decades]);
 
   const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length;
 
@@ -150,18 +196,24 @@ const Timeline = () => {
     navigate('/');
   };
 
-  // Group filtered capsules by year and month
-  const groupedCapsules = filteredCapsules.reduce<GroupedCapsules>((acc, capsule) => {
-    const date = parseISO(capsule.created_at);
-    const year = format(date, 'yyyy');
-    const month = format(date, 'MMMM', { locale: fr });
+  // Group filtered capsules by decade, year and month
+  const groupedByDecade = useMemo(() => {
+    const result: Record<string, GroupedCapsules> = {};
+    
+    filteredCapsules.forEach((capsule) => {
+      const date = parseISO(capsule.created_at);
+      const year = format(date, 'yyyy');
+      const month = format(date, 'MMMM', { locale: fr });
+      const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
 
-    if (!acc[year]) acc[year] = {};
-    if (!acc[year][month]) acc[year][month] = [];
-    acc[year][month].push(capsule);
+      if (!result[decade]) result[decade] = {};
+      if (!result[decade][year]) result[decade][year] = {};
+      if (!result[decade][year][month]) result[decade][year][month] = [];
+      result[decade][year][month].push(capsule);
+    });
 
-    return acc;
-  }, {});
+    return result;
+  }, [filteredCapsules]);
 
   if (authLoading || isLoading) {
     return (
@@ -391,6 +443,34 @@ const Timeline = () => {
           </motion.div>
         ) : (
           <div className="relative">
+            {/* Decade Navigation - Sticky */}
+            {decades.length > 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="sticky top-16 z-20 mb-8 -mx-4 px-4 py-3 bg-background/80 backdrop-blur-lg border-b border-border"
+              >
+                <div className="flex items-center justify-center gap-2 flex-wrap">
+                  <span className="text-xs text-muted-foreground mr-2 font-medium">Décennies:</span>
+                  {decades.map((decade) => (
+                    <Button
+                      key={decade}
+                      variant={activeDecade === decade ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => scrollToDecade(decade)}
+                      className={`text-sm font-medium transition-all ${
+                        activeDecade === decade
+                          ? 'bg-gradient-gold text-primary-foreground shadow-gold'
+                          : 'hover:border-secondary hover:text-secondary'
+                      }`}
+                    >
+                      {decade}s
+                    </Button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
             {/* Animated progress line */}
             <motion.div
               className="absolute left-[23px] sm:left-1/2 sm:-translate-x-[2px] top-0 bottom-0 w-1 bg-gradient-gold origin-top rounded-full"
@@ -400,53 +480,84 @@ const Timeline = () => {
             {/* Static timeline line */}
             <div className="absolute left-[23px] sm:left-1/2 sm:-translate-x-[2px] top-0 bottom-0 w-1 bg-border rounded-full" />
 
-            {Object.entries(groupedCapsules).map(([year, months], yearIndex) => (
-              <div key={year} className="relative">
-                {/* Year marker */}
+            {Object.entries(groupedByDecade)
+              .sort(([a], [b]) => parseInt(b) - parseInt(a))
+              .map(([decade, years]) => (
+              <div key={decade} id={`decade-${decade}`} className="relative">
+                {/* Decade marker */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.4 }}
-                  className="sticky top-20 z-10 flex items-center justify-center mb-8"
+                  className="flex items-center justify-center mb-8 pt-4"
                 >
-                  <div className="px-6 py-2 bg-gradient-gold text-primary-foreground rounded-full font-display font-bold text-lg shadow-gold">
-                    {year}
+                  <div className="px-8 py-3 bg-gradient-to-r from-secondary to-primary text-primary-foreground rounded-full font-display font-bold text-xl shadow-lg">
+                    Années {decade}
                   </div>
                 </motion.div>
 
-                {Object.entries(months).map(([month, monthCapsules], monthIndex) => (
-                  <div key={`${year}-${month}`} className="mb-12">
-                    {/* Month marker */}
+                {Object.entries(years)
+                  .sort(([a], [b]) => parseInt(b) - parseInt(a))
+                  .map(([year, months]) => (
+                  <div key={year} className="relative mb-8">
+                    {/* Year marker */}
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true, margin: "-50px" }}
                       transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3 mb-6 ml-12 sm:ml-0 sm:justify-center"
+                      className="sticky top-32 z-10 flex items-center justify-center mb-6"
                     >
-                      <Calendar className="w-4 h-4 text-secondary" />
-                      <span className="text-sm font-medium text-secondary capitalize">
-                        {month}
-                      </span>
+                      <div className="px-5 py-1.5 bg-card border border-border text-foreground rounded-full font-display font-semibold text-base shadow-sm">
+                        {year}
+                      </div>
                     </motion.div>
 
-                    {/* Capsules */}
-                    <div className="space-y-6">
-                      {monthCapsules.map((capsule, index) => (
-                        <TimelineItem
-                          key={capsule.id}
-                          capsule={capsule}
-                          index={index}
-                          isLeft={index % 2 === 0}
-                          onClick={() => navigate(`/capsules/${capsule.id}`)}
-                        />
-                      ))}
-                    </div>
+                    {Object.entries(months).map(([month, monthCapsules]) => (
+                      <div key={`${year}-${month}`} className="mb-10">
+                        {/* Month marker */}
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.3 }}
+                          className="flex items-center gap-3 mb-6 ml-12 sm:ml-0 sm:justify-center"
+                        >
+                          <Calendar className="w-4 h-4 text-secondary" />
+                          <span className="text-sm font-medium text-secondary capitalize">
+                            {month}
+                          </span>
+                        </motion.div>
+
+                        {/* Capsules */}
+                        <div className="space-y-6">
+                          {monthCapsules.map((capsule, index) => (
+                            <TimelineItem
+                              key={capsule.id}
+                              capsule={capsule}
+                              index={index}
+                              isLeft={index % 2 === 0}
+                              onClick={() => navigate(`/capsules/${capsule.id}`)}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
             ))}
+
+            {/* Scroll to top button */}
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="fixed bottom-6 right-6 z-30 p-3 bg-gradient-gold text-primary-foreground rounded-full shadow-gold hover:opacity-90 transition-opacity"
+            >
+              <ChevronUp className="w-5 h-5" />
+            </motion.button>
           </div>
         )}
       </main>
