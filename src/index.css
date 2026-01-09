@@ -9,75 +9,7 @@
 
 @layer base {
   :root {
-    /* Core brand colors - HSL format - Refined Light Mode */
-    --background: 30 15% 98%;
-    --foreground: 220 25% 15%;
-
-    --card: 30 10% 99%;
-    --card-foreground: 220 25% 15%;
-
-    --popover: 30 10% 99%;
-    --popover-foreground: 220 25% 15%;
-
-    /* Bleu nuit profond - couleur principale élégante */
-    --primary: 215 55% 22%;
-    --primary-foreground: 30 15% 98%;
-
-    /* Bronze/Ambre raffiné - beaucoup moins saturé et plus foncé */
-    --secondary: 30 35% 35%;
-    --secondary-foreground: 30 15% 98%;
-
-    /* Terracotta subtil - tons terre plus doux */
-    --accent: 20 40% 45%;
-    --accent-foreground: 30 15% 98%;
-
-    /* Gris chaud élégant */
-    --muted: 30 8% 93%;
-    --muted-foreground: 220 15% 40%;
-
-    --destructive: 0 65% 48%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 30 10% 88%;
-    --input: 30 10% 88%;
-    --ring: 215 55% 22%;
-
-    --radius: 0.75rem;
-
-    /* Custom tokens - palette raffinée terre/bronze */
-    --gold: 30 35% 35%;
-    --gold-light: 30 30% 50%;
-    --terracotta: 20 40% 45%;
-    --terracotta-light: 20 30% 65%;
-    --navy: 215 55% 22%;
-    --navy-light: 215 45% 35%;
-    --pearl: 30 8% 96%;
-    --cream: 30 15% 95%;
-
-    /* Gradients - tons sophistiqués */
-    --gradient-hero: linear-gradient(135deg, hsl(215 55% 22%) 0%, hsl(215 50% 30%) 50%, hsl(20 40% 45% / 0.6) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(30 35% 35%) 0%, hsl(30 40% 45%) 100%);
-    --gradient-warm: linear-gradient(180deg, hsl(30 15% 95%) 0%, hsl(30 8% 96%) 100%);
-    --gradient-navy: linear-gradient(135deg, hsl(215 55% 18%) 0%, hsl(215 55% 26%) 100%);
-
-    /* Shadows - subtiles et élégantes */
-    --shadow-soft: 0 4px 20px -4px hsl(215 55% 22% / 0.06);
-    --shadow-card: 0 8px 32px -8px hsl(215 55% 22% / 0.10);
-    --shadow-gold: 0 4px 20px -4px hsl(30 35% 35% / 0.20);
-    --shadow-elevated: 0 20px 60px -20px hsl(215 55% 22% / 0.15);
-
-    /* Sidebar */
-    --sidebar-background: 30 10% 99%;
-    --sidebar-foreground: 220 20% 22%;
-    --sidebar-primary: 215 55% 22%;
-    --sidebar-primary-foreground: 30 15% 98%;
-    --sidebar-accent: 30 35% 35%;
-    --sidebar-accent-foreground: 30 15% 98%;
-    --sidebar-border: 30 10% 90%;
-    --sidebar-ring: 215 55% 22%;
-  }
-
-  .dark {
+    /* Dark mode only - Capsule Mémorielle Design System */
     --background: 220 20% 10%;
     --foreground: 40 15% 95%;
 
@@ -106,6 +38,31 @@
     --input: 220 15% 22%;
     --ring: 38 50% 55%;
 
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --gold: 38 50% 55%;
+    --gold-light: 38 45% 65%;
+    --terracotta: 16 55% 55%;
+    --terracotta-light: 16 45% 70%;
+    --navy: 220 20% 10%;
+    --navy-light: 215 35% 25%;
+    --pearl: 220 15% 18%;
+    --cream: 220 18% 14%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 20% 10%) 0%, hsl(215 35% 25%) 50%, hsl(16 55% 55% / 0.5) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 50% 55%) 0%, hsl(38 55% 65%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(220 18% 14%) 0%, hsl(220 15% 18%) 100%);
+    --gradient-navy: linear-gradient(135deg, hsl(220 20% 8%) 0%, hsl(220 20% 15%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 0% / 0.4);
+    --shadow-gold: 0 4px 20px -4px hsl(38 50% 55% / 0.3);
+    --shadow-elevated: 0 20px 60px -20px hsl(0 0% 0% / 0.5);
+
+    /* Sidebar */
     --sidebar-background: 220 20% 12%;
     --sidebar-foreground: 40 15% 90%;
     --sidebar-primary: 38 50% 55%;
@@ -115,6 +72,7 @@
     --sidebar-border: 220 15% 22%;
     --sidebar-ring: 38 50% 55%;
   }
+
 }
 
 @layer base {
