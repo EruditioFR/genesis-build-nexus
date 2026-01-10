@@ -13,7 +13,8 @@ import {
   Users,
   Download,
   X,
-  Map
+  Map,
+  Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,6 +34,7 @@ import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { TreeVisualization } from '@/components/familyTree/TreeVisualization';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
+import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -238,6 +240,12 @@ export default function FamilyTreeViewPage() {
               </div>
 
               <div className="flex items-center gap-2">
+                {/* Search */}
+                <TreeSearchCommand 
+                  persons={persons} 
+                  onPersonSelect={handlePersonClick}
+                />
+
                 {/* View mode selector */}
                 <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
                   <SelectTrigger className="w-[140px] h-8">
@@ -388,6 +396,12 @@ export default function FamilyTreeViewPage() {
               </div>
 
               <div className="flex items-center gap-2">
+                {/* Search */}
+                <TreeSearchCommand 
+                  persons={persons} 
+                  onPersonSelect={handlePersonClick}
+                />
+
                 {/* View mode selector */}
                 <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
                   <SelectTrigger className="w-[140px] h-8">
