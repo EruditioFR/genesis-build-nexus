@@ -135,7 +135,7 @@ const PricingSection = () => {
           </span>
           <button
             onClick={() => setIsYearly(!isYearly)}
-            className={`relative w-11 sm:w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
+            className={`relative w-11 sm:w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 border border-border sm:border-0 ${
               isYearly ? "bg-secondary" : "bg-muted"
             }`}
           >
