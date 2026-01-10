@@ -48,44 +48,49 @@ const HowItWorksSection = () => {
           </h2>
         </motion.div>
 
-        {/* Steps */}
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-20" />
+        {/* Steps - Timeline Layout */}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Vertical Connection Line - Mobile & Desktop */}
+          <div className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent opacity-30 sm:-translate-x-1/2" />
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-            {steps.map((step, index) => <motion.div key={step.number} initial={{
-            opacity: 0,
-            y: 40
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: index * 0.15
-          }} className="relative">
-                {/* Step Card */}
-                <div className="text-center">
-                  {/* Number & Icon */}
-                  <div className="relative inline-block mb-4 sm:mb-6">
-                    <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated`}>
-                      <step.icon className="w-7 h-7 sm:w-10 sm:h-10 text-primary-foreground" />
-                    </div>
-                    <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-card shadow-card flex items-center justify-center text-xs sm:text-sm font-bold text-primary">
-                      {step.number}
-                    </span>
+          <div className="space-y-8 sm:space-y-12">
+            {steps.map((step, index) => (
+              <motion.div 
+                key={step.number} 
+                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                className={`relative flex items-center gap-4 sm:gap-8 ${
+                  index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
+                }`}
+              >
+                {/* Content Card */}
+                <div className={`flex-1 ml-16 sm:ml-0 ${index % 2 === 0 ? 'sm:text-right' : 'sm:text-left'}`}>
+                  <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-card hover:shadow-elevated transition-shadow duration-300">
+                    <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      {step.description}
+                    </p>
                   </div>
-                  
-                  <h3 className="text-base sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed hidden sm:block">
-                    {step.description}
-                  </p>
                 </div>
-              </motion.div>)}
+
+                {/* Center Icon Node */}
+                <div className="absolute left-0 sm:left-1/2 sm:-translate-x-1/2 z-10">
+                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated ring-4 ring-background`}>
+                    <step.icon className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground" />
+                  </div>
+                  <span className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-card shadow-card flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary border border-border">
+                    {step.number}
+                  </span>
+                </div>
+
+                {/* Empty space for alternating layout on desktop */}
+                <div className="hidden sm:block flex-1" />
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
