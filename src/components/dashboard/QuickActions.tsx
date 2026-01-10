@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Plus, Clock, Users, Calendar, Upload } from 'lucide-react';
+import { Plus, Clock, Users, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const QuickActions = () => {
@@ -28,12 +28,6 @@ const QuickActions = () => {
       icon: Calendar,
       href: '/calendar',
       color: 'bg-accent/10 text-accent hover:bg-accent/20',
-    },
-    {
-      label: 'Importer',
-      icon: Upload,
-      href: '/import',
-      color: 'bg-muted text-muted-foreground hover:bg-muted/80',
     },
   ];
 
