@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield } from 'lucide-react';
+import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield, TreeDeciduous } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -75,6 +76,23 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   </Link>
                 );
               })}
+
+              {/* Family Tree link with Premium badge */}
+              <Link
+                to="/family-tree"
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                  location.pathname.startsWith('/family-tree')
+                    ? "bg-secondary/10 text-secondary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                <TreeDeciduous className="w-4 h-4" />
+                <span>Arbre</span>
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-secondary/10 text-secondary border-secondary/30">
+                  Premium
+                </Badge>
+              </Link>
               
               {/* Admin link - only visible for admins/moderators */}
               {isAdminOrModerator && (
@@ -111,6 +129,16 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </Link>
                   </DropdownMenuItem>
                 ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/family-tree" className="cursor-pointer">
+                    <TreeDeciduous className="w-4 h-4 mr-2" />
+                    Arbre Généalogique
+                    <Badge variant="outline" className="ml-auto text-[10px] px-1.5 py-0 h-4 bg-secondary/10 text-secondary border-secondary/30">
+                      Premium
+                    </Badge>
+                  </Link>
+                </DropdownMenuItem>
                 {isAdminOrModerator && (
                   <>
                     <DropdownMenuSeparator />
