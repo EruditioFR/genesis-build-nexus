@@ -14,13 +14,20 @@ import {
   Globe,
   FileText,
   ChevronRight,
-  AlertTriangle
+  AlertTriangle,
+  Check,
+  XCircle,
+  Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,8 +38,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FamilyPerson } from '@/types/familyTree';
+import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { toast } from 'sonner';
 
 interface PersonDetailPanelProps {
   person: FamilyPerson;
@@ -63,6 +79,39 @@ export function PersonDetailPanel({
 }: PersonDetailPanelProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Edit form state
+  const [editData, setEditData] = useState<{
+    first_names: string;
+    last_name: string;
+    maiden_name: string;
+    gender: 'male' | 'female' | 'other' | 'unknown' | '';
+    birth_date: string;
+    birth_place: string;
+    is_alive: boolean;
+    death_date: string;
+    death_place: string;
+    occupation: string;
+    nationality: string;
+    biography: string;
+  }>({
+    first_names: person.first_names,
+    last_name: person.last_name,
+    maiden_name: person.maiden_name || '',
+    gender: person.gender || '',
+    birth_date: person.birth_date || '',
+    birth_place: person.birth_place || '',
+    is_alive: person.is_alive ?? true,
+    death_date: person.death_date || '',
+    death_place: person.death_place || '',
+    occupation: person.occupation || '',
+    nationality: person.nationality || '',
+    biography: person.biography || ''
+  });
+
+  const { updatePerson } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
@@ -84,6 +133,80 @@ export function PersonDetailPanel({
   };
 
   const age = calculateAge();
+
+  const handleStartEdit = () => {
+    setEditData({
+      first_names: person.first_names,
+      last_name: person.last_name,
+      maiden_name: person.maiden_name || '',
+      gender: person.gender || '',
+      birth_date: person.birth_date || '',
+      birth_place: person.birth_place || '',
+      is_alive: person.is_alive ?? true,
+      death_date: person.death_date || '',
+      death_place: person.death_place || '',
+      occupation: person.occupation || '',
+      nationality: person.nationality || '',
+      biography: person.biography || ''
+    });
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditData({
+      first_names: person.first_names,
+      last_name: person.last_name,
+      maiden_name: person.maiden_name || '',
+      gender: person.gender || '',
+      birth_date: person.birth_date || '',
+      birth_place: person.birth_place || '',
+      is_alive: person.is_alive ?? true,
+      death_date: person.death_date || '',
+      death_place: person.death_place || '',
+      occupation: person.occupation || '',
+      nationality: person.nationality || '',
+      biography: person.biography || ''
+    });
+  };
+
+  const handleSave = async () => {
+    if (!editData.first_names.trim() || !editData.last_name.trim()) {
+      toast.error('Le prénom et le nom sont obligatoires');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const success = await updatePerson(person.id, {
+        first_names: editData.first_names.trim(),
+        last_name: editData.last_name.trim(),
+        maiden_name: editData.maiden_name.trim() || null,
+        gender: editData.gender || null,
+        birth_date: editData.birth_date || null,
+        birth_place: editData.birth_place.trim() || null,
+        is_alive: editData.is_alive,
+        death_date: !editData.is_alive ? editData.death_date || null : null,
+        death_place: !editData.is_alive ? editData.death_place.trim() || null : null,
+        occupation: editData.occupation.trim() || null,
+        nationality: editData.nationality.trim() || null,
+        biography: editData.biography.trim() || null
+      });
+
+      if (success) {
+        toast.success('Personne mise à jour avec succès');
+        setIsEditing(false);
+        onUpdate();
+      } else {
+        toast.error('Erreur lors de la mise à jour');
+      }
+    } catch (error) {
+      console.error('Error updating person:', error);
+      toast.error('Erreur lors de la mise à jour');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const RelatedPersonCard = ({ relatedPerson }: { relatedPerson: FamilyPerson }) => (
     <button
@@ -124,24 +247,43 @@ export function PersonDetailPanel({
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-lg font-semibold">
-              {person.first_names} {person.last_name}
-            </h2>
-            {person.maiden_name && person.maiden_name !== person.last_name && (
-              <p className="text-sm text-muted-foreground">
-                née {person.maiden_name}
-              </p>
+            {isEditing ? (
+              <div className="space-y-2">
+                <Input
+                  value={editData.first_names}
+                  onChange={(e) => setEditData(prev => ({ ...prev, first_names: e.target.value }))}
+                  placeholder="Prénom(s)"
+                  className="h-8 text-sm"
+                />
+                <Input
+                  value={editData.last_name}
+                  onChange={(e) => setEditData(prev => ({ ...prev, last_name: e.target.value }))}
+                  placeholder="Nom"
+                  className="h-8 text-sm"
+                />
+              </div>
+            ) : (
+              <>
+                <h2 className="text-lg font-semibold">
+                  {person.first_names} {person.last_name}
+                </h2>
+                {person.maiden_name && person.maiden_name !== person.last_name && (
+                  <p className="text-sm text-muted-foreground">
+                    née {person.maiden_name}
+                  </p>
+                )}
+                <div className="flex items-center gap-2 mt-1">
+                  {!person.is_alive && (
+                    <Badge variant="secondary" className="text-xs">Décédé(e)</Badge>
+                  )}
+                  {age !== null && (
+                    <span className="text-xs text-muted-foreground">
+                      {person.is_alive ? `${age} ans` : `Décédé(e) à ${age} ans`}
+                    </span>
+                  )}
+                </div>
+              </>
             )}
-            <div className="flex items-center gap-2 mt-1">
-              {!person.is_alive && (
-                <Badge variant="secondary" className="text-xs">Décédé(e)</Badge>
-              )}
-              {age !== null && (
-                <span className="text-xs text-muted-foreground">
-                  {person.is_alive ? `${age} ans` : `Décédé(e) à ${age} ans`}
-                </span>
-              )}
-            </div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose}>
@@ -151,18 +293,52 @@ export function PersonDetailPanel({
 
       {/* Action buttons */}
       <div className="p-4 border-b flex gap-2">
-        <Button variant="outline" size="sm" className="flex-1 gap-1">
-          <Edit className="w-3 h-3" />
-          Modifier
-        </Button>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="text-destructive hover:bg-destructive/10"
-          onClick={() => setShowDeleteDialog(true)}
-        >
-          <Trash2 className="w-3 h-3" />
-        </Button>
+        {isEditing ? (
+          <>
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="flex-1 gap-1"
+              onClick={handleSave}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Check className="w-3 h-3" />
+              )}
+              Enregistrer
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleCancelEdit}
+              disabled={isSaving}
+            >
+              <XCircle className="w-3 h-3" />
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 gap-1"
+              onClick={handleStartEdit}
+            >
+              <Edit className="w-3 h-3" />
+              Modifier
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-destructive hover:bg-destructive/10"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Tabs */}
@@ -176,80 +352,211 @@ export function PersonDetailPanel({
         <ScrollArea className="flex-1">
           {/* Overview Tab */}
           <TabsContent value="overview" className="p-4 space-y-4 m-0">
-            {/* Dates */}
-            <div className="space-y-2">
-              {person.birth_date && (
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Naissance</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(person.birth_date)}
-                    </p>
-                  </div>
+            {isEditing ? (
+              // Edit Mode
+              <div className="space-y-4">
+                {/* Gender & Maiden Name */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Genre</Label>
+                  <Select
+                    value={editData.gender}
+                    onValueChange={(value: 'male' | 'female' | 'other' | 'unknown') => setEditData(prev => ({ ...prev, gender: value }))}
+                  >
+                    <SelectTrigger className="h-9">
+                      <SelectValue placeholder="Sélectionner" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Homme</SelectItem>
+                      <SelectItem value="female">Femme</SelectItem>
+                      <SelectItem value="other">Autre</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              )}
-              
-              {person.birth_place && (
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Lieu de naissance</p>
-                    <p className="text-sm text-muted-foreground">{person.birth_place}</p>
-                  </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Nom de naissance</Label>
+                  <Input
+                    value={editData.maiden_name}
+                    onChange={(e) => setEditData(prev => ({ ...prev, maiden_name: e.target.value }))}
+                    placeholder="Nom de jeune fille"
+                    className="h-9"
+                  />
                 </div>
-              )}
 
-              {!person.is_alive && person.death_date && (
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Décès</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(person.death_date)}
-                      {person.death_place && ` à ${person.death_place}`}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <Separator />
-
-            {/* Professional info */}
-            {person.occupation && (
-              <div className="flex items-start gap-3">
-                <Briefcase className="w-4 h-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Profession</p>
-                  <p className="text-sm text-muted-foreground">{person.occupation}</p>
-                </div>
-              </div>
-            )}
-
-            {person.nationality && (
-              <div className="flex items-start gap-3">
-                <Globe className="w-4 h-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Nationalité</p>
-                  <p className="text-sm text-muted-foreground">{person.nationality}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Biography */}
-            {person.biography && (
-              <>
                 <Separator />
-                <div className="flex items-start gap-3">
-                  <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Biographie</p>
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                      {person.biography}
-                    </p>
-                  </div>
+
+                {/* Birth info */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Date de naissance</Label>
+                  <Input
+                    type="date"
+                    value={editData.birth_date}
+                    onChange={(e) => setEditData(prev => ({ ...prev, birth_date: e.target.value }))}
+                    className="h-9"
+                  />
                 </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Lieu de naissance</Label>
+                  <Input
+                    value={editData.birth_place}
+                    onChange={(e) => setEditData(prev => ({ ...prev, birth_place: e.target.value }))}
+                    placeholder="Ville, Pays"
+                    className="h-9"
+                  />
+                </div>
+
+                <Separator />
+
+                {/* Living status */}
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm">En vie</Label>
+                  <Switch
+                    checked={editData.is_alive}
+                    onCheckedChange={(checked) => setEditData(prev => ({ ...prev, is_alive: checked }))}
+                  />
+                </div>
+
+                {/* Death info - only if not alive */}
+                {!editData.is_alive && (
+                  <>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Date de décès</Label>
+                      <Input
+                        type="date"
+                        value={editData.death_date}
+                        onChange={(e) => setEditData(prev => ({ ...prev, death_date: e.target.value }))}
+                        className="h-9"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Lieu de décès</Label>
+                      <Input
+                        value={editData.death_place}
+                        onChange={(e) => setEditData(prev => ({ ...prev, death_place: e.target.value }))}
+                        placeholder="Ville, Pays"
+                        className="h-9"
+                      />
+                    </div>
+                  </>
+                )}
+
+                <Separator />
+
+                {/* Professional info */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Profession</Label>
+                  <Input
+                    value={editData.occupation}
+                    onChange={(e) => setEditData(prev => ({ ...prev, occupation: e.target.value }))}
+                    placeholder="Métier ou profession"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Nationalité</Label>
+                  <Input
+                    value={editData.nationality}
+                    onChange={(e) => setEditData(prev => ({ ...prev, nationality: e.target.value }))}
+                    placeholder="Nationalité"
+                    className="h-9"
+                  />
+                </div>
+
+                <Separator />
+
+                {/* Biography */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Biographie</Label>
+                  <Textarea
+                    value={editData.biography}
+                    onChange={(e) => setEditData(prev => ({ ...prev, biography: e.target.value }))}
+                    placeholder="Informations biographiques..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
+              </div>
+            ) : (
+              // View Mode
+              <>
+                {/* Dates */}
+                <div className="space-y-2">
+                  {person.birth_date && (
+                    <div className="flex items-start gap-3">
+                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">Naissance</p>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDate(person.birth_date)}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {person.birth_place && (
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">Lieu de naissance</p>
+                        <p className="text-sm text-muted-foreground">{person.birth_place}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {!person.is_alive && person.death_date && (
+                    <div className="flex items-start gap-3">
+                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">Décès</p>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDate(person.death_date)}
+                          {person.death_place && ` à ${person.death_place}`}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <Separator />
+
+                {/* Professional info */}
+                {person.occupation && (
+                  <div className="flex items-start gap-3">
+                    <Briefcase className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Profession</p>
+                      <p className="text-sm text-muted-foreground">{person.occupation}</p>
+                    </div>
+                  </div>
+                )}
+
+                {person.nationality && (
+                  <div className="flex items-start gap-3">
+                    <Globe className="w-4 h-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Nationalité</p>
+                      <p className="text-sm text-muted-foreground">{person.nationality}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Biography */}
+                {person.biography && (
+                  <>
+                    <Separator />
+                    <div className="flex items-start gap-3">
+                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">Biographie</p>
+                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                          {person.biography}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </TabsContent>
