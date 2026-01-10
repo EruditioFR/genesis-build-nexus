@@ -41,6 +41,7 @@ interface TreeVisualizationProps {
   rootPersonId?: string;
   viewMode: TreeViewMode;
   selectedPersonId?: string;
+  highlightedPersonId?: string;
   onPersonClick: (person: FamilyPerson) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
@@ -53,6 +54,7 @@ export function TreeVisualization({
   rootPersonId,
   viewMode,
   selectedPersonId,
+  highlightedPersonId,
   onPersonClick,
   onAddPerson,
   onPositionsCalculated,
@@ -432,6 +434,7 @@ export function TreeVisualization({
           <TreePersonCard
             person={pos.person}
             isSelected={selectedPersonId === pos.person.id}
+            isHighlighted={highlightedPersonId === pos.person.id}
             onClick={() => onPersonClick(pos.person)}
             generation={pos.generation}
           />
@@ -453,11 +456,12 @@ export function TreeVisualization({
 interface TreePersonCardProps {
   person: FamilyPerson;
   isSelected: boolean;
+  isHighlighted?: boolean;
   onClick: () => void;
   generation: number;
 }
 
-function TreePersonCard({ person, isSelected, onClick, generation }: TreePersonCardProps) {
+function TreePersonCard({ person, isSelected, isHighlighted, onClick, generation }: TreePersonCardProps) {
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
   
   const getBirthYear = () => {
@@ -480,6 +484,7 @@ function TreePersonCard({ person, isSelected, onClick, generation }: TreePersonC
         isSelected
           ? "border-secondary ring-2 ring-secondary/20 shadow-secondary/20"
           : "border-border hover:border-secondary/50",
+        isHighlighted && "animate-highlight-pulse",
         !person.is_alive && "opacity-80"
       )}
     >

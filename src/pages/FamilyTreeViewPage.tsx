@@ -75,6 +75,7 @@ export default function FamilyTreeViewPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [personPositions, setPersonPositions] = useState<PersonPositionData[]>([]);
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
+  const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
 
   const loadTree = useCallback(async () => {
     if (!treeId) return;
@@ -180,11 +181,18 @@ export default function FamilyTreeViewPage() {
     }
   }, [pendingCenterId, personPositions, centerOnPerson]);
 
-  // Handler for search selection - select and center
+  // Handler for search selection - select, center, and highlight
   const handleSearchSelect = useCallback((person: FamilyPerson) => {
     setSelectedPerson(person);
     setShowDetailPanel(true);
     centerOnPerson(person.id);
+    
+    // Trigger highlight animation
+    setHighlightedPersonId(person.id);
+    // Clear highlight after animation completes
+    setTimeout(() => {
+      setHighlightedPersonId(null);
+    }, 1500);
   }, [centerOnPerson]);
 
   const handleAddPerson = (type: 'parent' | 'child' | 'spouse' | 'sibling', targetPerson?: FamilyPerson) => {
@@ -373,6 +381,7 @@ export default function FamilyTreeViewPage() {
                 rootPersonId={tree?.root_person_id || undefined}
                 viewMode={viewMode}
                 selectedPersonId={selectedPerson?.id}
+                highlightedPersonId={highlightedPersonId || undefined}
                 onPersonClick={handlePersonClick}
                 onAddPerson={handleAddPerson}
                 onPositionsCalculated={setPersonPositions}
@@ -574,6 +583,7 @@ export default function FamilyTreeViewPage() {
                   rootPersonId={tree?.root_person_id || undefined}
                   viewMode={viewMode}
                   selectedPersonId={selectedPerson?.id}
+                  highlightedPersonId={highlightedPersonId || undefined}
                   onPersonClick={handlePersonClick}
                   onAddPerson={handleAddPerson}
                   onPositionsCalculated={setPersonPositions}

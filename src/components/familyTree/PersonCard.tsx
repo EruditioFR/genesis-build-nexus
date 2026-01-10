@@ -15,6 +15,7 @@ interface PersonCardProps {
   person: FamilyPerson;
   onClick: () => void;
   isSelected?: boolean;
+  isHighlighted?: boolean;
   onAddParent?: () => void;
   onAddChild?: () => void;
   onAddSpouse?: () => void;
@@ -25,6 +26,7 @@ export function PersonCard({
   person,
   onClick,
   isSelected,
+  isHighlighted,
   onAddParent,
   onAddChild,
   onAddSpouse,
@@ -63,6 +65,7 @@ export function PersonCard({
             "flex flex-col items-center p-4 min-w-[160px]",
             genderColor,
             isSelected && "ring-2 ring-secondary ring-offset-2",
+            isHighlighted && "animate-highlight-pulse",
             !person.is_alive && "opacity-80"
           )}
         >
