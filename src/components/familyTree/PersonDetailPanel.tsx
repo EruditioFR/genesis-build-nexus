@@ -18,7 +18,8 @@ import {
   Check,
   XCircle,
   Loader2,
-  Link2
+  Link2,
+  Pencil
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -51,6 +52,7 @@ import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
+import { UnionEditDialog } from './UnionEditDialog';
 import { toast } from 'sonner';
 
 interface SpouseWithUnion {
@@ -93,6 +95,7 @@ export function PersonDetailPanel({
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [editingUnion, setEditingUnion] = useState<{ union: FamilyUnion; spouse: FamilyPerson } | null>(null);
 
   // Get spouses with their union info
   const spousesWithUnions: SpouseWithUnion[] = spouses.map(spouse => {
@@ -132,7 +135,7 @@ export function PersonDetailPanel({
     biography: person.biography || ''
   });
 
-  const { updatePerson } = useFamilyTree();
+  const { updatePerson, updateUnion } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
@@ -231,10 +234,12 @@ export function PersonDetailPanel({
 
   const RelatedPersonCard = ({ 
     relatedPerson, 
-    unionInfo 
+    unionInfo,
+    showEditButton = false
   }: { 
     relatedPerson: FamilyPerson;
     unionInfo?: FamilyUnion;
+    showEditButton?: boolean;
   }) => {
     const getUnionLabel = () => {
       if (!unionInfo) return null;
@@ -258,43 +263,76 @@ export function PersonDetailPanel({
       return unionInfo.is_current ? labels[unionInfo.union_type] || 'Conjoint' : 'Ex-conjoint';
     };
 
+    const getUnionDates = () => {
+      if (!unionInfo) return null;
+      const parts: string[] = [];
+      if (unionInfo.start_date) {
+        parts.push(format(new Date(unionInfo.start_date), "dd/MM/yyyy", { locale: fr }));
+      }
+      if (!unionInfo.is_current && unionInfo.end_date) {
+        parts.push(format(new Date(unionInfo.end_date), "dd/MM/yyyy", { locale: fr }));
+      }
+      return parts.length > 0 ? parts.join(' - ') : null;
+    };
+
     const unionLabel = getUnionLabel();
+    const unionDates = getUnionDates();
 
     return (
-      <button
-        onClick={() => onPersonClick(relatedPerson)}
-        className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors w-full text-left"
-      >
-        <Avatar className="w-10 h-10">
-          <AvatarImage src={relatedPerson.profile_photo_url || undefined} />
-          <AvatarFallback className="text-sm">
-            {`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="font-medium text-sm truncate">
-              {relatedPerson.first_names} {relatedPerson.last_name}
-            </p>
-            {unionLabel && (
-              <Badge 
-                variant={unionInfo?.is_current ? "secondary" : "outline"} 
-                className="text-[10px] px-1.5 py-0 h-4"
-              >
-                {unionLabel}
-              </Badge>
-            )}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onPersonClick(relatedPerson)}
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors flex-1 text-left"
+        >
+          <Avatar className="w-10 h-10">
+            <AvatarImage src={relatedPerson.profile_photo_url || undefined} />
+            <AvatarFallback className="text-sm">
+              {`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="font-medium text-sm truncate">
+                {relatedPerson.first_names} {relatedPerson.last_name}
+              </p>
+              {unionLabel && (
+                <Badge 
+                  variant={unionInfo?.is_current ? "secondary" : "outline"} 
+                  className="text-[10px] px-1.5 py-0 h-4"
+                >
+                  {unionLabel}
+                </Badge>
+              )}
+            </div>
+            {unionDates ? (
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                {unionDates}
+              </p>
+            ) : relatedPerson.birth_date ? (
+              <p className="text-xs text-muted-foreground">
+                {new Date(relatedPerson.birth_date).getFullYear()}
+                {!relatedPerson.is_alive && relatedPerson.death_date && 
+                  ` - ${new Date(relatedPerson.death_date).getFullYear()}`}
+              </p>
+            ) : null}
           </div>
-          {relatedPerson.birth_date && (
-            <p className="text-xs text-muted-foreground">
-              {new Date(relatedPerson.birth_date).getFullYear()}
-              {!relatedPerson.is_alive && relatedPerson.death_date && 
-                ` - ${new Date(relatedPerson.death_date).getFullYear()}`}
-            </p>
-          )}
-        </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-      </button>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
+        {showEditButton && unionInfo && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0"
+            onClick={(e) => {
+              e.stopPropagation();
+              setEditingUnion({ union: unionInfo, spouse: relatedPerson });
+            }}
+          >
+            <Pencil className="w-3 h-3" />
+          </Button>
+        )}
+      </div>
     );
   };
 
@@ -677,7 +715,7 @@ export function PersonDetailPanel({
               {spousesWithUnions.length > 0 ? (
                 <div className="space-y-1">
                   {spousesWithUnions.map(({ spouse, union }) => (
-                    <RelatedPersonCard key={spouse.id} relatedPerson={spouse} unionInfo={union} />
+                    <RelatedPersonCard key={spouse.id} relatedPerson={spouse} unionInfo={union} showEditButton />
                   ))}
                 </div>
               ) : (
@@ -739,6 +777,23 @@ export function PersonDetailPanel({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Union edit dialog */}
+      {editingUnion && (
+        <UnionEditDialog
+          open={!!editingUnion}
+          onOpenChange={(open) => !open && setEditingUnion(null)}
+          union={editingUnion.union}
+          spouse={editingUnion.spouse}
+          onSave={async (unionId, updates) => {
+            const success = await updateUnion(unionId, updates);
+            if (success) {
+              onUpdate();
+            }
+            return success;
+          }}
+        />
+      )}
     </div>
   );
 }

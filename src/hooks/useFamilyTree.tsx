@@ -315,6 +315,35 @@ export function useFamilyTree() {
     }
   }, []);
 
+  // Update union
+  const updateUnion = useCallback(async (
+    unionId: string,
+    updates: Partial<FamilyUnion>
+  ): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('family_unions')
+        .update({
+          union_type: updates.union_type,
+          start_date: updates.start_date,
+          start_place: updates.start_place,
+          end_date: updates.end_date,
+          end_reason: updates.end_reason,
+          is_current: updates.is_current,
+          notes: updates.notes
+        })
+        .eq('id', unionId);
+
+      if (error) throw error;
+      toast.success('Union mise à jour');
+      return true;
+    } catch (error) {
+      console.error('Error updating union:', error);
+      toast.error('Erreur lors de la mise à jour de l\'union');
+      return false;
+    }
+  }, []);
+
   // Delete a tree
   const deleteTree = useCallback(async (treeId: string): Promise<boolean> => {
     try {
@@ -378,6 +407,7 @@ export function useFamilyTree() {
     deletePerson,
     addRelationship,
     addUnion,
+    updateUnion,
     deleteTree,
     getTreeStatistics
   };
