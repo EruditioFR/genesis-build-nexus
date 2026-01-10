@@ -96,7 +96,7 @@ const HeroSection = () => {
         }} className="text-4xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
             Votre histoire mérite
             <br />
-            <span className="text-gradient-gold">de traverser les générations</span>
+            <span className="text-primary-foreground">de traverser les générations</span>
           </motion.h1>
 
           {/* Subtitle */}
