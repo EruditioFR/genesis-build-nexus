@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 const Signup = () => {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +28,15 @@ const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (email !== confirmEmail) {
+      toast({
+        variant: 'destructive',
+        title: 'Erreur',
+        description: 'Les adresses email ne correspondent pas',
+      });
+      return;
+    }
 
     if (password !== confirmPassword) {
       toast({
@@ -127,6 +137,27 @@ const Signup = () => {
                   required
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmEmail">Confirmer l'adresse email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  id="confirmEmail"
+                  type="email"
+                  placeholder="vous@exemple.com"
+                  value={confirmEmail}
+                  onChange={(e) => setConfirmEmail(e.target.value)}
+                  className="pl-10 h-12"
+                  required
+                />
+              </div>
+              {confirmEmail && email !== confirmEmail && (
+                <p className="text-sm text-destructive mt-1">
+                  Les adresses email ne correspondent pas
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
