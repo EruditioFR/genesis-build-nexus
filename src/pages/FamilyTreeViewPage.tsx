@@ -218,45 +218,50 @@ export default function FamilyTreeViewPage() {
     setShowAddDialog(true);
   };
 
-  const handlePersonAdded = async (newPerson: FamilyPerson, secondParentId?: string) => {
-    // Add relationship if there's a target
-    if (addRelationTarget && addRelationType) {
-      if (addRelationType === 'parent') {
-        await addRelationship(newPerson.id, addRelationTarget.id);
-      } else if (addRelationType === 'child') {
-        // Find the union between the two parents
-        let unionId: string | null = null;
-        if (secondParentId) {
-          const union = unions.find(u => 
-            (u.person1_id === addRelationTarget.id && u.person2_id === secondParentId) ||
-            (u.person1_id === secondParentId && u.person2_id === addRelationTarget.id)
-          );
-          unionId = union?.id || null;
-        }
-        
-        // Link to first parent (the target) with union reference
-        await addRelationship(addRelationTarget.id, newPerson.id, 'biological', unionId);
-        // Link to second parent if selected with same union reference
-        if (secondParentId) {
-          await addRelationship(secondParentId, newPerson.id, 'biological', unionId);
-        }
-      } else if (addRelationType === 'spouse') {
-        await addUnion(addRelationTarget.id, newPerson.id);
-      } else if (addRelationType === 'sibling') {
-        // For siblings, we need to find the parents and add this person as their child too
-        // Keep the same union_id as the sibling
-        const parentRelations = relationships.filter(r => r.child_id === addRelationTarget.id);
-        for (const rel of parentRelations) {
-          await addRelationship(rel.parent_id, newPerson.id, 'biological', rel.union_id);
+  const handlePersonAdded = useCallback(
+    async (person: FamilyPerson, secondParentId?: string, unionId?: string) => {
+      if (!tree?.id || !person.id) return;
+
+      // Add relationship if there's a target
+      if (addRelationTarget && addRelationType) {
+        if (addRelationType === 'parent') {
+          await addRelationship(person.id, addRelationTarget.id);
+        } else if (addRelationType === 'child') {
+          // Use provided unionId, or find the union between the two parents
+          let finalUnionId: string | null = unionId || null;
+          if (!finalUnionId && secondParentId) {
+            const union = unions.find(u => 
+              (u.person1_id === addRelationTarget.id && u.person2_id === secondParentId) ||
+              (u.person1_id === secondParentId && u.person2_id === addRelationTarget.id)
+            );
+            finalUnionId = union?.id || null;
+          }
+          
+          // Link to first parent (the target) with union reference
+          await addRelationship(addRelationTarget.id, person.id, 'biological', finalUnionId);
+          // Link to second parent if selected with same union reference
+          if (secondParentId) {
+            await addRelationship(secondParentId, person.id, 'biological', finalUnionId);
+          }
+        } else if (addRelationType === 'spouse') {
+          await addUnion(addRelationTarget.id, person.id);
+        } else if (addRelationType === 'sibling') {
+          // For siblings, we need to find the parents and add this person as their child too
+          // Keep the same union_id as the sibling
+          const parentRelations = relationships.filter(r => r.child_id === addRelationTarget.id);
+          for (const rel of parentRelations) {
+            await addRelationship(rel.parent_id, person.id, 'biological', rel.union_id);
+          }
         }
       }
-    }
-    
-    setShowAddDialog(false);
-    setAddRelationType(null);
-    setAddRelationTarget(null);
-    await loadTree();
-  };
+      
+      setShowAddDialog(false);
+      setAddRelationType(null);
+      setAddRelationTarget(null);
+      await loadTree();
+    },
+    [tree?.id, addRelationTarget, addRelationType, unions, relationships, addRelationship, addUnion, loadTree]
+  );
 
   const handleDeletePerson = async (personId: string) => {
     const success = await deletePerson(personId);

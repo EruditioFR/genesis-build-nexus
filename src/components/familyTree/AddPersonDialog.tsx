@@ -35,10 +35,10 @@ interface AddPersonDialogProps {
   treeId: string;
   relationType: 'parent' | 'child' | 'spouse' | 'sibling' | null;
   targetPerson: FamilyPerson | null;
-  onPersonAdded: (person: FamilyPerson, secondParentId?: string) => void;
+  onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string) => void;
   // Pour l'ajout d'enfant: liste des conjoints possibles du parent
   availableSpouses?: FamilyPerson[];
-  // Pour vérifier si c'est une nouvelle union
+  // Pour vérifier les unions existantes
   existingUnions?: FamilyUnion[];
 }
 
@@ -68,8 +68,22 @@ export function AddPersonDialog({
   
   // Second parent selection for child
   const [secondParentId, setSecondParentId] = useState<string>('none');
+  // Union selection when adding a child (in case of multiple unions with same spouse)
+  const [selectedUnionId, setSelectedUnionId] = useState<string>('auto');
   // For new spouse: is this a new union (divorce/remarriage case)?
   const [isNewUnion, setIsNewUnion] = useState(false);
+
+  // Get unions between target person and selected second parent
+  const getUnionsWithSelectedParent = () => {
+    if (!targetPerson || secondParentId === 'none') return [];
+    return existingUnions.filter(
+      u => (u.person1_id === targetPerson.id && u.person2_id === secondParentId) ||
+           (u.person2_id === targetPerson.id && u.person1_id === secondParentId)
+    );
+  };
+
+  const unionsWithSelectedParent = getUnionsWithSelectedParent();
+  const hasMultipleUnions = unionsWithSelectedParent.length > 1;
 
   // Determine if target person already has spouses (for showing new union option)
   const hasExistingSpouses = availableSpouses.length > 0 && relationType === 'spouse';
@@ -80,6 +94,11 @@ export function AddPersonDialog({
       setSecondParentId(availableSpouses[0].id);
     }
   }, [relationType, availableSpouses]);
+
+  // Reset union selection when second parent changes
+  useEffect(() => {
+    setSelectedUnionId('auto');
+  }, [secondParentId]);
 
   const resetForm = () => {
     setFirstName('');
@@ -94,6 +113,7 @@ export function AddPersonDialog({
     setOccupation('');
     setBiography('');
     setSecondParentId('none');
+    setSelectedUnionId('auto');
     setIsNewUnion(false);
   };
 
@@ -118,11 +138,23 @@ export function AddPersonDialog({
     });
 
     if (person) {
-      // Pass the second parent ID for children
+      // Pass the second parent ID and union ID for children
       const selectedSecondParent = relationType === 'child' && secondParentId !== 'none' 
         ? secondParentId 
         : undefined;
-      onPersonAdded(person, selectedSecondParent);
+      
+      // Determine union ID to use
+      let unionIdToUse: string | undefined;
+      if (relationType === 'child' && secondParentId !== 'none') {
+        if (selectedUnionId !== 'auto' && selectedUnionId !== '') {
+          unionIdToUse = selectedUnionId;
+        } else if (unionsWithSelectedParent.length === 1) {
+          // Auto-select if only one union
+          unionIdToUse = unionsWithSelectedParent[0].id;
+        }
+      }
+      
+      onPersonAdded(person, selectedSecondParent, unionIdToUse);
       handleClose();
     }
   };
@@ -321,14 +353,16 @@ export function AddPersonDialog({
 
           {/* Second parent selection for children */}
           {relationType === 'child' && availableSpouses.length > 0 && (
-            <div className="space-y-2 p-3 bg-secondary/5 border border-secondary/20 rounded-lg">
-              <Label className="flex items-center gap-2 text-secondary">
-                <Users className="w-4 h-4" />
-                Second parent
-              </Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                Sélectionnez le second parent de cet enfant (conjoint de {targetPerson?.first_names})
-              </p>
+            <div className="space-y-3 p-3 bg-secondary/5 border border-secondary/20 rounded-lg">
+              <div>
+                <Label className="flex items-center gap-2 text-secondary">
+                  <Users className="w-4 h-4" />
+                  Second parent
+                </Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Sélectionnez le second parent de cet enfant (conjoint de {targetPerson?.first_names})
+                </p>
+              </div>
               <Select value={secondParentId} onValueChange={setSecondParentId}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner le second parent" />
@@ -352,6 +386,49 @@ export function AddPersonDialog({
                   ))}
                 </SelectContent>
               </Select>
+
+              {/* Union selector when multiple unions exist */}
+              {hasMultipleUnions && (
+                <div className="pt-2 border-t border-secondary/20">
+                  <Label className="text-xs text-muted-foreground mb-2 block">
+                    Sélectionnez l'union concernée
+                  </Label>
+                  <Select value={selectedUnionId} onValueChange={setSelectedUnionId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choisir l'union" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto">
+                        <span className="text-muted-foreground">Automatique (plus récente)</span>
+                      </SelectItem>
+                      {unionsWithSelectedParent.map((union, index) => {
+                        const unionTypeLabels: Record<string, string> = {
+                          'marriage': 'Mariage',
+                          'civil_union': 'Union civile',
+                          'partnership': 'Concubinage',
+                          'engagement': 'Fiançailles',
+                          'other': 'Union'
+                        };
+                        const label = unionTypeLabels[union.union_type] || 'Union';
+                        const dateInfo = union.start_date 
+                          ? ` (${format(new Date(union.start_date), 'yyyy')})`
+                          : '';
+                        const endInfo = !union.is_current && union.end_date
+                          ? ` - terminée en ${format(new Date(union.end_date), 'yyyy')}`
+                          : '';
+                        return (
+                          <SelectItem key={union.id} value={union.id}>
+                            {label} {index + 1}{dateInfo}{endInfo}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    Ces personnes ont eu plusieurs unions. Précisez de laquelle est issu l'enfant.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
