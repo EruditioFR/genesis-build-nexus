@@ -210,13 +210,18 @@ export default function FamilyTreeViewPage() {
     setShowAddDialog(true);
   };
 
-  const handlePersonAdded = async (newPerson: FamilyPerson) => {
+  const handlePersonAdded = async (newPerson: FamilyPerson, secondParentId?: string) => {
     // Add relationship if there's a target
     if (addRelationTarget && addRelationType) {
       if (addRelationType === 'parent') {
         await addRelationship(newPerson.id, addRelationTarget.id);
       } else if (addRelationType === 'child') {
+        // Link to first parent (the target)
         await addRelationship(addRelationTarget.id, newPerson.id);
+        // Link to second parent if selected
+        if (secondParentId) {
+          await addRelationship(secondParentId, newPerson.id);
+        }
       } else if (addRelationType === 'spouse') {
         await addUnion(addRelationTarget.id, newPerson.id);
       } else if (addRelationType === 'sibling') {
@@ -666,6 +671,7 @@ export default function FamilyTreeViewPage() {
               parents={getPersonParents(selectedPerson.id)}
               children={getPersonChildren(selectedPerson.id)}
               spouses={getPersonSpouses(selectedPerson.id)}
+              unions={unions}
               onClose={() => setShowDetailPanel(false)}
               onAddParent={() => handleAddPerson('parent', selectedPerson)}
               onAddChild={() => handleAddPerson('child', selectedPerson)}
@@ -688,6 +694,8 @@ export default function FamilyTreeViewPage() {
           relationType={addRelationType}
           targetPerson={addRelationTarget}
           onPersonAdded={handlePersonAdded}
+          availableSpouses={addRelationTarget ? getPersonSpouses(addRelationTarget.id) : []}
+          existingUnions={unions}
         />
 
         {/* Link Person Dialog */}

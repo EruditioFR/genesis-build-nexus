@@ -47,17 +47,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { FamilyPerson } from '@/types/familyTree';
+import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
 import { toast } from 'sonner';
+
+interface SpouseWithUnion {
+  spouse: FamilyPerson;
+  union?: FamilyUnion;
+}
 
 interface PersonDetailPanelProps {
   person: FamilyPerson;
   parents: FamilyPerson[];
   children: FamilyPerson[];
   spouses: FamilyPerson[];
+  unions?: FamilyUnion[];
   onClose: () => void;
   onAddParent: () => void;
   onAddChild: () => void;
@@ -73,6 +79,7 @@ export function PersonDetailPanel({
   parents,
   children,
   spouses,
+  unions = [],
   onClose,
   onAddParent,
   onAddChild,
@@ -86,6 +93,15 @@ export function PersonDetailPanel({
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Get spouses with their union info
+  const spousesWithUnions: SpouseWithUnion[] = spouses.map(spouse => {
+    const union = unions.find(
+      u => (u.person1_id === person.id && u.person2_id === spouse.id) ||
+           (u.person2_id === person.id && u.person1_id === spouse.id)
+    );
+    return { spouse, union };
+  });
   
   // Edit form state
   const [editData, setEditData] = useState<{
@@ -213,32 +229,74 @@ export function PersonDetailPanel({
     }
   };
 
-  const RelatedPersonCard = ({ relatedPerson }: { relatedPerson: FamilyPerson }) => (
-    <button
-      onClick={() => onPersonClick(relatedPerson)}
-      className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors w-full text-left"
-    >
-      <Avatar className="w-10 h-10">
-        <AvatarImage src={relatedPerson.profile_photo_url || undefined} />
-        <AvatarFallback className="text-sm">
-          {`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
-        </AvatarFallback>
-      </Avatar>
-      <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm truncate">
-          {relatedPerson.first_names} {relatedPerson.last_name}
-        </p>
-        {relatedPerson.birth_date && (
-          <p className="text-xs text-muted-foreground">
-            {new Date(relatedPerson.birth_date).getFullYear()}
-            {!relatedPerson.is_alive && relatedPerson.death_date && 
-              ` - ${new Date(relatedPerson.death_date).getFullYear()}`}
-          </p>
-        )}
-      </div>
-      <ChevronRight className="w-4 h-4 text-muted-foreground" />
-    </button>
-  );
+  const RelatedPersonCard = ({ 
+    relatedPerson, 
+    unionInfo 
+  }: { 
+    relatedPerson: FamilyPerson;
+    unionInfo?: FamilyUnion;
+  }) => {
+    const getUnionLabel = () => {
+      if (!unionInfo) return null;
+      const labels: Record<string, string> = {
+        'marriage': 'Mariage',
+        'civil_union': 'Union civile',
+        'partnership': 'Concubinage',
+        'engagement': 'Fiançailles',
+        'other': 'Union'
+      };
+      const endReasons: Record<string, string> = {
+        'death': 'Décès',
+        'divorce': 'Divorce',
+        'separation': 'Séparation',
+        'annulment': 'Annulation'
+      };
+      
+      if (!unionInfo.is_current && unionInfo.end_reason) {
+        return endReasons[unionInfo.end_reason] || 'Terminée';
+      }
+      return unionInfo.is_current ? labels[unionInfo.union_type] || 'Conjoint' : 'Ex-conjoint';
+    };
+
+    const unionLabel = getUnionLabel();
+
+    return (
+      <button
+        onClick={() => onPersonClick(relatedPerson)}
+        className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors w-full text-left"
+      >
+        <Avatar className="w-10 h-10">
+          <AvatarImage src={relatedPerson.profile_photo_url || undefined} />
+          <AvatarFallback className="text-sm">
+            {`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <p className="font-medium text-sm truncate">
+              {relatedPerson.first_names} {relatedPerson.last_name}
+            </p>
+            {unionLabel && (
+              <Badge 
+                variant={unionInfo?.is_current ? "secondary" : "outline"} 
+                className="text-[10px] px-1.5 py-0 h-4"
+              >
+                {unionLabel}
+              </Badge>
+            )}
+          </div>
+          {relatedPerson.birth_date && (
+            <p className="text-xs text-muted-foreground">
+              {new Date(relatedPerson.birth_date).getFullYear()}
+              {!relatedPerson.is_alive && relatedPerson.death_date && 
+                ` - ${new Date(relatedPerson.death_date).getFullYear()}`}
+            </p>
+          )}
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+      </button>
+    );
+  };
 
   return (
     <div className="w-[400px] border-l bg-card flex flex-col h-full">
@@ -616,10 +674,10 @@ export function PersonDetailPanel({
                   Ajouter
                 </Button>
               </div>
-              {spouses.length > 0 ? (
+              {spousesWithUnions.length > 0 ? (
                 <div className="space-y-1">
-                  {spouses.map(spouse => (
-                    <RelatedPersonCard key={spouse.id} relatedPerson={spouse} />
+                  {spousesWithUnions.map(({ spouse, union }) => (
+                    <RelatedPersonCard key={spouse.id} relatedPerson={spouse} unionInfo={union} />
                   ))}
                 </div>
               ) : (

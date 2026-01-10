@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { CalendarIcon, User, Loader2 } from 'lucide-react';
+import { CalendarIcon, User, Loader2, Users } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -17,9 +17,17 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
-import type { FamilyPerson } from '@/types/familyTree';
+import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
 
 interface AddPersonDialogProps {
   open: boolean;
@@ -27,7 +35,11 @@ interface AddPersonDialogProps {
   treeId: string;
   relationType: 'parent' | 'child' | 'spouse' | 'sibling' | null;
   targetPerson: FamilyPerson | null;
-  onPersonAdded: (person: FamilyPerson) => void;
+  onPersonAdded: (person: FamilyPerson, secondParentId?: string) => void;
+  // Pour l'ajout d'enfant: liste des conjoints possibles du parent
+  availableSpouses?: FamilyPerson[];
+  // Pour vérifier si c'est une nouvelle union
+  existingUnions?: FamilyUnion[];
 }
 
 export function AddPersonDialog({
@@ -36,7 +48,9 @@ export function AddPersonDialog({
   treeId,
   relationType,
   targetPerson,
-  onPersonAdded
+  onPersonAdded,
+  availableSpouses = [],
+  existingUnions = []
 }: AddPersonDialogProps) {
   const { addPerson, loading } = useFamilyTree();
   
@@ -51,6 +65,21 @@ export function AddPersonDialog({
   const [deathPlace, setDeathPlace] = useState('');
   const [occupation, setOccupation] = useState('');
   const [biography, setBiography] = useState('');
+  
+  // Second parent selection for child
+  const [secondParentId, setSecondParentId] = useState<string>('none');
+  // For new spouse: is this a new union (divorce/remarriage case)?
+  const [isNewUnion, setIsNewUnion] = useState(false);
+
+  // Determine if target person already has spouses (for showing new union option)
+  const hasExistingSpouses = availableSpouses.length > 0 && relationType === 'spouse';
+
+  useEffect(() => {
+    // Pre-select the first spouse if adding a child
+    if (relationType === 'child' && availableSpouses.length === 1) {
+      setSecondParentId(availableSpouses[0].id);
+    }
+  }, [relationType, availableSpouses]);
 
   const resetForm = () => {
     setFirstName('');
@@ -64,6 +93,8 @@ export function AddPersonDialog({
     setDeathPlace('');
     setOccupation('');
     setBiography('');
+    setSecondParentId('none');
+    setIsNewUnion(false);
   };
 
   const handleClose = () => {
@@ -87,7 +118,11 @@ export function AddPersonDialog({
     });
 
     if (person) {
-      onPersonAdded(person);
+      // Pass the second parent ID for children
+      const selectedSecondParent = relationType === 'child' && secondParentId !== 'none' 
+        ? secondParentId 
+        : undefined;
+      onPersonAdded(person, selectedSecondParent);
       handleClose();
     }
   };
@@ -283,6 +318,57 @@ export function AddPersonDialog({
               onChange={(e) => setOccupation(e.target.value)}
             />
           </div>
+
+          {/* Second parent selection for children */}
+          {relationType === 'child' && availableSpouses.length > 0 && (
+            <div className="space-y-2 p-3 bg-secondary/5 border border-secondary/20 rounded-lg">
+              <Label className="flex items-center gap-2 text-secondary">
+                <Users className="w-4 h-4" />
+                Second parent
+              </Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Sélectionnez le second parent de cet enfant (conjoint de {targetPerson?.first_names})
+              </p>
+              <Select value={secondParentId} onValueChange={setSecondParentId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner le second parent" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">
+                    <span className="text-muted-foreground">Aucun / Inconnu</span>
+                  </SelectItem>
+                  {availableSpouses.map((spouse) => (
+                    <SelectItem key={spouse.id} value={spouse.id}>
+                      <div className="flex items-center gap-2">
+                        <Avatar className="w-5 h-5">
+                          <AvatarImage src={spouse.profile_photo_url || undefined} />
+                          <AvatarFallback className="text-[10px]">
+                            {spouse.first_names[0]}{spouse.last_name[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                        {spouse.first_names} {spouse.last_name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* New union info for spouse (divorce/remarriage) */}
+          {hasExistingSpouses && (
+            <div className="space-y-2 p-3 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-amber-600" />
+                <span className="text-sm font-medium text-amber-700 dark:text-amber-400">
+                  {targetPerson?.first_names} a déjà {availableSpouses.length} conjoint(s)
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Vous pouvez ajouter un nouveau conjoint (remariage, nouvelle union après divorce ou veuvage).
+              </p>
+            </div>
+          )}
 
           {/* Biography */}
           <div className="space-y-2">
