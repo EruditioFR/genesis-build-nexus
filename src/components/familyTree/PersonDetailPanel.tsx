@@ -48,6 +48,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FamilyPerson } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { toast } from 'sonner';
 
 interface PersonDetailPanelProps {
@@ -240,12 +241,16 @@ export function PersonDetailPanel({
       {/* Header */}
       <div className="p-4 border-b flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="w-16 h-16 border-2 border-secondary">
-            <AvatarImage src={person.profile_photo_url || undefined} />
-            <AvatarFallback className="bg-secondary/20 text-secondary text-lg font-medium">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          {isEditing ? (
+            <PersonPhotoUpload person={person} onUpdate={onUpdate} />
+          ) : (
+            <Avatar className="w-16 h-16 border-2 border-secondary">
+              <AvatarImage src={person.profile_photo_url || undefined} />
+              <AvatarFallback className="bg-secondary/20 text-secondary text-lg font-medium">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          )}
           <div>
             {isEditing ? (
               <div className="space-y-2">
