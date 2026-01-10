@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,27 @@ interface StoryViewerProps {
   autoPlayInterval?: number;
 }
 
+// Preload an image and cache it
+const preloadImage = (url: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = reject;
+    img.src = url;
+  });
+};
+
+// Preload a video by fetching headers
+const preloadVideo = (url: string): Promise<void> => {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => resolve();
+    video.onerror = () => resolve(); // Don't fail on video preload errors
+    video.src = url;
+  });
+};
+
 const StoryViewer = ({
   items,
   initialIndex = 0,
@@ -33,8 +54,40 @@ const StoryViewer = ({
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [loadedItems, setLoadedItems] = useState<Set<number>>(new Set([initialIndex]));
+  const preloadedRef = useRef<Set<number>>(new Set());
 
   const currentItem = items[currentIndex];
+
+  // Preload adjacent items (previous, current, next, and next+1)
+  useEffect(() => {
+    const indicesToPreload = [
+      currentIndex - 1,
+      currentIndex,
+      currentIndex + 1,
+      currentIndex + 2,
+    ].filter(i => i >= 0 && i < items.length);
+
+    indicesToPreload.forEach(async (index) => {
+      if (preloadedRef.current.has(index)) return;
+      
+      const item = items[index];
+      if (!item.url) return;
+
+      preloadedRef.current.add(index);
+
+      try {
+        if (item.type === 'image') {
+          await preloadImage(item.url);
+        } else if (item.type === 'video') {
+          await preloadVideo(item.url);
+        }
+        setLoadedItems(prev => new Set([...prev, index]));
+      } catch (error) {
+        console.error(`Failed to preload item ${index}:`, error);
+      }
+    });
+  }, [currentIndex, items]);
 
   const goNext = useCallback(() => {
     if (currentIndex < items.length - 1) {
@@ -110,7 +163,24 @@ const StoryViewer = ({
     };
   }, []);
 
+  const isCurrentLoaded = loadedItems.has(currentIndex) || currentItem.type === 'text' || currentItem.type === 'audio';
+
   const renderMedia = () => {
+    // Show loading state if media not yet preloaded
+    if (!isCurrentLoaded && currentItem.url) {
+      return (
+        <motion.div
+          key={`loading-${currentItem.id}`}
+          className="flex flex-col items-center justify-center gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+          <p className="text-white/60 text-sm">Chargement...</p>
+        </motion.div>
+      );
+    }
+
     switch (currentItem.type) {
       case 'image':
         return (
@@ -123,6 +193,7 @@ const StoryViewer = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.5 }}
+            loading="eager"
           />
         );
       case 'video':
@@ -135,6 +206,7 @@ const StoryViewer = ({
             muted={isMuted}
             controls={false}
             onEnded={goNext}
+            preload="auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -161,6 +233,7 @@ const StoryViewer = ({
               onEnded={goNext}
               className="w-full max-w-md"
               controls
+              preload="auto"
             />
           </motion.div>
         );
