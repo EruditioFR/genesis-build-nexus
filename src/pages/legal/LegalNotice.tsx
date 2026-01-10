@@ -12,7 +12,7 @@ const LegalNotice = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/">

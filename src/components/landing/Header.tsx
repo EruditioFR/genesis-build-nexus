@@ -4,9 +4,15 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+interface HeaderProps {
+  forceSolid?: boolean;
+}
+
+const Header = ({ forceSolid = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const isSolid = forceSolid || isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +34,7 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
+        isSolid
           ? "bg-card/95 backdrop-blur-md shadow-soft py-3"
           : "bg-transparent py-6"
       }`}
@@ -41,7 +47,7 @@ const Header = () => {
           </div>
           <span
             className={`text-xl font-display font-semibold transition-colors duration-300 ${
-              isScrolled ? "text-primary" : "text-primary-foreground"
+              isSolid ? "text-primary" : "text-primary-foreground"
             }`}
           >
             Memoria<span className="text-secondary">Vita</span>
@@ -54,9 +60,9 @@ const Header = () => {
             <a
               key={link.label}
               href={link.href}
-              className={`text-sm font-medium transition-colors duration-300 hover:text-secondary ${
-                isScrolled ? "text-foreground" : "text-primary-foreground/90"
-              }`}
+            className={`text-sm font-medium transition-colors duration-300 hover:text-secondary ${
+              isSolid ? "text-foreground" : "text-primary-foreground/90"
+            }`}
             >
               {link.label}
             </a>
@@ -69,7 +75,7 @@ const Header = () => {
             asChild
             variant="ghost"
             className={`transition-colors duration-300 ${
-              isScrolled ? "text-foreground hover:bg-muted" : "text-primary-foreground hover:bg-primary-foreground/10"
+              isSolid ? "text-foreground hover:bg-muted" : "text-primary-foreground hover:bg-primary-foreground/10"
             }`}
           >
             <Link to="/login">Se connecter</Link>
@@ -83,7 +89,7 @@ const Header = () => {
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className={`md:hidden p-2 transition-colors ${
-            isScrolled ? "text-foreground" : "text-primary-foreground"
+            isSolid ? "text-foreground" : "text-primary-foreground"
           }`}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
