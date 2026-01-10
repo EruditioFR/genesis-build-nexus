@@ -11,7 +11,8 @@ import {
   TreeDeciduous,
   Users,
   Settings,
-  Download
+  Download,
+  RotateCcw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,9 +26,9 @@ import {
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { useAuth } from '@/hooks/useAuth';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
-import { PersonCard } from '@/components/familyTree/PersonCard';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
+import { TreeVisualization } from '@/components/familyTree/TreeVisualization';
 import type { 
   FamilyTree, 
   FamilyPerson, 
@@ -132,11 +133,6 @@ export default function FamilyTreeViewPage() {
     return persons.filter(p => spouseIds.includes(p.id));
   };
 
-  // Build tree structure for rendering
-  const rootPerson = tree?.root_person_id 
-    ? persons.find(p => p.id === tree.root_person_id)
-    : persons[0];
-
   if (loading && !tree) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -231,12 +227,12 @@ export default function FamilyTreeViewPage() {
       {/* Main content area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Tree visualization area */}
-        <div className="flex-1 overflow-auto p-8">
+        <div className="flex-1 overflow-auto p-4 bg-muted/20">
           <motion.div 
             className="min-w-max"
             style={{ 
               transform: `scale(${zoom})`,
-              transformOrigin: 'top center'
+              transformOrigin: 'top left'
             }}
           >
             {persons.length === 0 ? (
@@ -254,24 +250,16 @@ export default function FamilyTreeViewPage() {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-8">
-                {/* Root person and descendants */}
-                {rootPerson && (
-                  <TreeNode
-                    person={rootPerson}
-                    persons={persons}
-                    relationships={relationships}
-                    unions={unions}
-                    viewMode={viewMode}
-                    onPersonClick={handlePersonClick}
-                    onAddPerson={handleAddPerson}
-                    getChildren={getPersonChildren}
-                    getSpouses={getPersonSpouses}
-                    getParents={getPersonParents}
-                    selectedPersonId={selectedPerson?.id}
-                  />
-                )}
-              </div>
+              <TreeVisualization
+                persons={persons}
+                relationships={relationships}
+                unions={unions}
+                rootPersonId={tree?.root_person_id || undefined}
+                viewMode={viewMode}
+                selectedPersonId={selectedPerson?.id}
+                onPersonClick={handlePersonClick}
+                onAddPerson={handleAddPerson}
+              />
             )}
           </motion.div>
         </div>
@@ -305,155 +293,6 @@ export default function FamilyTreeViewPage() {
         targetPerson={addRelationTarget}
         onPersonAdded={handlePersonAdded}
       />
-    </div>
-  );
-}
-
-// Tree Node Component (recursive)
-interface TreeNodeProps {
-  person: FamilyPerson;
-  persons: FamilyPerson[];
-  relationships: ParentChildRelationship[];
-  unions: FamilyUnion[];
-  viewMode: TreeViewMode;
-  onPersonClick: (person: FamilyPerson) => void;
-  onAddPerson: (type: 'parent' | 'child' | 'spouse' | 'sibling', target: FamilyPerson) => void;
-  getChildren: (personId: string) => FamilyPerson[];
-  getSpouses: (personId: string) => FamilyPerson[];
-  getParents: (personId: string) => FamilyPerson[];
-  selectedPersonId?: string;
-  depth?: number;
-}
-
-function TreeNode({ 
-  person, 
-  viewMode,
-  onPersonClick, 
-  onAddPerson,
-  getChildren,
-  getSpouses,
-  getParents,
-  selectedPersonId,
-  depth = 0
-}: TreeNodeProps) {
-  const children = getChildren(person.id);
-  const spouses = getSpouses(person.id);
-  const parents = getParents(person.id);
-
-  // Limit depth to prevent infinite recursion
-  const maxDepth = 5;
-  if (depth > maxDepth) return null;
-
-  return (
-    <div className="flex flex-col items-center">
-      {/* Parents (for ascendant view) */}
-      {viewMode === 'ascendant' && parents.length > 0 && depth < maxDepth && (
-        <div className="flex gap-8 mb-4">
-          {parents.map(parent => (
-            <TreeNode
-              key={parent.id}
-              person={parent}
-              persons={[]}
-              relationships={[]}
-              unions={[]}
-              viewMode={viewMode}
-              onPersonClick={onPersonClick}
-              onAddPerson={onAddPerson}
-              getChildren={getChildren}
-              getSpouses={getSpouses}
-              getParents={getParents}
-              selectedPersonId={selectedPersonId}
-              depth={depth + 1}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Connector line from parents */}
-      {viewMode === 'ascendant' && parents.length > 0 && (
-        <div className="w-0.5 h-6 bg-border" />
-      )}
-
-      {/* Person + Spouses row */}
-      <div className="flex items-center gap-4">
-        {/* Spouses on the left */}
-        {spouses.slice(0, 1).map(spouse => (
-          <div key={spouse.id} className="flex items-center gap-2">
-            <PersonCard
-              person={spouse}
-              onClick={() => onPersonClick(spouse)}
-              isSelected={selectedPersonId === spouse.id}
-              onAddParent={() => onAddPerson('parent', spouse)}
-              onAddChild={() => onAddPerson('child', spouse)}
-              onAddSpouse={() => onAddPerson('spouse', spouse)}
-            />
-            <div className="w-8 h-0.5 bg-accent" /> {/* Union line */}
-          </div>
-        ))}
-
-        {/* Main person */}
-        <PersonCard
-          person={person}
-          onClick={() => onPersonClick(person)}
-          isSelected={selectedPersonId === person.id}
-          onAddParent={() => onAddPerson('parent', person)}
-          onAddChild={() => onAddPerson('child', person)}
-          onAddSpouse={() => onAddPerson('spouse', person)}
-        />
-
-        {/* Spouses on the right */}
-        {spouses.slice(1).map(spouse => (
-          <div key={spouse.id} className="flex items-center gap-2">
-            <div className="w-8 h-0.5 bg-accent" />
-            <PersonCard
-              person={spouse}
-              onClick={() => onPersonClick(spouse)}
-              isSelected={selectedPersonId === spouse.id}
-              onAddParent={() => onAddPerson('parent', spouse)}
-              onAddChild={() => onAddPerson('child', spouse)}
-              onAddSpouse={() => onAddPerson('spouse', spouse)}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Connector line to children */}
-      {viewMode !== 'ascendant' && children.length > 0 && (
-        <div className="w-0.5 h-6 bg-border" />
-      )}
-
-      {/* Children */}
-      {viewMode !== 'ascendant' && children.length > 0 && depth < maxDepth && (
-        <>
-          {/* Horizontal connector */}
-          {children.length > 1 && (
-            <div 
-              className="h-0.5 bg-border" 
-              style={{ width: `${(children.length - 1) * 200}px` }}
-            />
-          )}
-          
-          <div className="flex gap-8 mt-4">
-            {children.map(child => (
-              <TreeNode
-                key={child.id}
-                person={child}
-                persons={[]}
-                relationships={[]}
-                unions={[]}
-                viewMode={viewMode}
-                onPersonClick={onPersonClick}
-                onAddPerson={onAddPerson}
-                getChildren={getChildren}
-                getSpouses={getSpouses}
-                getParents={getParents}
-                selectedPersonId={selectedPersonId}
-                depth={depth + 1}
-              />
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 }
