@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSignedUrls } from '@/lib/signedUrlCache';
+import { toast } from 'sonner';
 
 interface Media {
   id: string;
@@ -20,6 +21,7 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState<string | null>(null);
 
   // Generate signed URLs for all medias with caching
   useEffect(() => {
@@ -51,6 +53,34 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
   }, [medias]);
 
   const getMediaUrl = (media: Media) => signedUrls[media.id] || '';
+
+  const handleDownload = async (media: Media, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const url = getMediaUrl(media);
+    if (!url) return;
+
+    setDownloading(media.id);
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = media.file_name || `media-${media.id}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      
+      toast.success('Téléchargement démarré');
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Erreur lors du téléchargement');
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   const images = medias.filter(m => m.file_type.startsWith('image/'));
   const videos = medias.filter(m => m.file_type.startsWith('video/'));
@@ -116,9 +146,23 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
                       alt={media.file_name || 'Image'}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center">
+                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center gap-2">
                       <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
+                    {/* Download button on hover */}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2 w-8 h-8 bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                      onClick={(e) => handleDownload(media, e)}
+                      disabled={downloading === media.id}
+                    >
+                      {downloading === media.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                    </Button>
                   </motion.div>
                 );
               })}
@@ -145,11 +189,26 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className="rounded-xl overflow-hidden border border-border"
                   >
-                    <video
-                      src={url}
-                      controls
-                      className="w-full aspect-video bg-black"
-                    />
+                    <div className="relative">
+                      <video
+                        src={url}
+                        controls
+                        className="w-full aspect-video bg-black"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-2 right-2 w-8 h-8 bg-black/50 text-white hover:bg-black/70"
+                        onClick={() => handleDownload(media)}
+                        disabled={downloading === media.id}
+                      >
+                        {downloading === media.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Download className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
                     {media.caption && (
                       <p className="p-3 text-sm text-muted-foreground bg-card">
                         {media.caption}
@@ -181,9 +240,24 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className="p-4 rounded-xl border border-border bg-card"
                   >
-                    <p className="text-sm font-medium text-foreground mb-2">
-                      {media.file_name || 'Audio'}
-                    </p>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-sm font-medium text-foreground">
+                        {media.file_name || 'Audio'}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-8 h-8"
+                        onClick={() => handleDownload(media)}
+                        disabled={downloading === media.id}
+                      >
+                        {downloading === media.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Download className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
                     <audio src={url} controls className="w-full" />
                     {media.caption && (
                       <p className="text-sm text-muted-foreground mt-2">
@@ -210,15 +284,33 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
             onKeyDown={handleKeyDown}
             tabIndex={0}
           >
-            {/* Close button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 text-white hover:bg-white/10 z-10"
-              onClick={closeLightbox}
-            >
-              <X className="w-6 h-6" />
-            </Button>
+            {/* Top actions bar */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload(medias[selectedIndex]);
+                }}
+                disabled={downloading === medias[selectedIndex].id}
+              >
+                {downloading === medias[selectedIndex].id ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Download className="w-5 h-5" />
+                )}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={closeLightbox}
+              >
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
 
             {/* Navigation */}
             {selectedIndex > 0 && (
