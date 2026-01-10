@@ -67,24 +67,30 @@ const HowItWorksSection = () => {
               >
                 {/* Content Card */}
                 <div className={`flex-1 ml-16 sm:ml-0 ${index % 2 === 0 ? 'sm:text-right' : 'sm:text-left'}`}>
-                  <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-card hover:shadow-elevated transition-shadow duration-300">
-                    <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-2">
-                      {step.title}
-                    </h3>
+                  <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-card hover:shadow-elevated transition-shadow duration-300 relative">
+                    {/* Big Number on Card */}
+                    <span className={`absolute -top-3 ${index % 2 === 0 ? 'right-4 sm:left-4 sm:right-auto' : 'right-4'} text-4xl sm:text-5xl font-display font-bold text-secondary/20`}>
+                      {step.number}
+                    </span>
+                    <div className={`flex items-center gap-3 mb-2 ${index % 2 === 0 ? 'sm:justify-end' : 'sm:justify-start'}`}>
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center ${index % 2 === 0 ? 'sm:order-2' : ''}`}>
+                        <step.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground">
+                        {step.title}
+                      </h3>
+                    </div>
                     <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                       {step.description}
                     </p>
                   </div>
                 </div>
 
-                {/* Center Icon Node */}
+                {/* Center Timeline Node */}
                 <div className="absolute left-0 sm:left-1/2 sm:-translate-x-1/2 z-10">
-                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated ring-4 ring-background`}>
-                    <step.icon className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground" />
+                  <div className={`w-12 h-12 sm:w-4 sm:h-4 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated ring-4 ring-background`}>
+                    <step.icon className="w-5 h-5 sm:hidden text-primary-foreground" />
                   </div>
-                  <span className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-card shadow-card flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary border border-border">
-                    {step.number}
-                  </span>
                 </div>
 
                 {/* Empty space for alternating layout on desktop */}
