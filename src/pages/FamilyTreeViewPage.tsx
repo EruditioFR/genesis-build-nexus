@@ -712,6 +712,8 @@ export default function FamilyTreeViewPage() {
               children={getPersonChildren(selectedPerson.id)}
               spouses={getPersonSpouses(selectedPerson.id)}
               unions={unions}
+              relationships={relationships}
+              allPersons={persons}
               onClose={() => setShowDetailPanel(false)}
               onAddParent={() => handleAddPerson('parent', selectedPerson)}
               onAddChild={() => handleAddPerson('child', selectedPerson)}
