@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download, Star, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSignedUrls } from '@/lib/signedUrlCache';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Media {
   id: string;
@@ -15,13 +16,18 @@ interface Media {
 
 interface MediaGalleryProps {
   medias: Media[];
+  capsuleId?: string;
+  thumbnailUrl?: string | null;
+  onThumbnailChange?: (url: string | null) => void;
 }
 
-const MediaGallery = ({ medias }: MediaGalleryProps) => {
+const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: MediaGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [settingThumbnail, setSettingThumbnail] = useState<string | null>(null);
+  const [currentThumbnail, setCurrentThumbnail] = useState<string | null>(thumbnailUrl || null);
 
   // Generate signed URLs for all medias with caching
   useEffect(() => {
@@ -52,6 +58,10 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
     generateSignedUrls();
   }, [medias]);
 
+  useEffect(() => {
+    setCurrentThumbnail(thumbnailUrl || null);
+  }, [thumbnailUrl]);
+
   const getMediaUrl = (media: Media) => signedUrls[media.id] || '';
 
   const handleDownload = async (media: Media, e?: React.MouseEvent) => {
@@ -81,6 +91,53 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
       setDownloading(null);
     }
   };
+
+  const handleSetThumbnail = async (media: Media, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!capsuleId) return;
+
+    setSettingThumbnail(media.id);
+    try {
+      const { error } = await supabase
+        .from('capsules')
+        .update({ thumbnail_url: media.file_url })
+        .eq('id', capsuleId);
+
+      if (error) throw error;
+
+      setCurrentThumbnail(media.file_url);
+      onThumbnailChange?.(media.file_url);
+      toast.success('Image à la une définie');
+    } catch (error) {
+      console.error('Error setting thumbnail:', error);
+      toast.error('Erreur lors de la définition de l\'image à la une');
+    } finally {
+      setSettingThumbnail(null);
+    }
+  };
+
+  const handleRemoveThumbnail = async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!capsuleId) return;
+
+    try {
+      const { error } = await supabase
+        .from('capsules')
+        .update({ thumbnail_url: null })
+        .eq('id', capsuleId);
+
+      if (error) throw error;
+
+      setCurrentThumbnail(null);
+      onThumbnailChange?.(null);
+      toast.success('Image à la une retirée');
+    } catch (error) {
+      console.error('Error removing thumbnail:', error);
+      toast.error('Erreur');
+    }
+  };
+
+  const isThumbnail = (media: Media) => currentThumbnail === media.file_url;
 
   const images = medias.filter(m => m.file_type.startsWith('image/'));
   const videos = medias.filter(m => m.file_type.startsWith('video/'));
@@ -131,6 +188,7 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
               {images.map((media, index) => {
                 const url = getMediaUrl(media);
                 if (!url) return null;
+                const isCurrentThumbnail = isThumbnail(media);
                 
                 return (
                   <motion.div
@@ -138,7 +196,9 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="relative aspect-square rounded-xl overflow-hidden cursor-pointer group"
+                    className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group ${
+                      isCurrentThumbnail ? 'ring-2 ring-secondary ring-offset-2' : ''
+                    }`}
                     onClick={() => openLightbox(medias.indexOf(media))}
                   >
                     <img
@@ -149,20 +209,50 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center gap-2">
                       <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    {/* Download button on hover */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-2 right-2 w-8 h-8 bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                      onClick={(e) => handleDownload(media, e)}
-                      disabled={downloading === media.id}
-                    >
-                      {downloading === media.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Download className="w-4 h-4" />
+                    
+                    {/* Thumbnail indicator */}
+                    {isCurrentThumbnail && (
+                      <div className="absolute top-2 left-2 bg-secondary text-secondary-foreground rounded-full p-1">
+                        <Star className="w-3 h-3 fill-current" />
+                      </div>
+                    )}
+                    
+                    {/* Actions on hover */}
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {capsuleId && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={`w-8 h-8 text-white hover:bg-black/70 ${
+                            isCurrentThumbnail ? 'bg-secondary hover:bg-secondary/80' : 'bg-black/50'
+                          }`}
+                          onClick={(e) => isCurrentThumbnail ? handleRemoveThumbnail(e) : handleSetThumbnail(media, e)}
+                          disabled={settingThumbnail === media.id}
+                          title={isCurrentThumbnail ? 'Retirer l\'image à la une' : 'Définir comme image à la une'}
+                        >
+                          {settingThumbnail === media.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : isCurrentThumbnail ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Star className="w-4 h-4" />
+                          )}
+                        </Button>
                       )}
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-8 h-8 bg-black/50 text-white hover:bg-black/70"
+                        onClick={(e) => handleDownload(media, e)}
+                        disabled={downloading === media.id}
+                      >
+                        {downloading === media.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Download className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
                   </motion.div>
                 );
               })}
@@ -286,6 +376,31 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
           >
             {/* Top actions bar */}
             <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              {capsuleId && medias[selectedIndex].file_type.startsWith('image/') && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`text-white hover:bg-white/10 ${
+                    isThumbnail(medias[selectedIndex]) ? 'bg-secondary hover:bg-secondary/80' : ''
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isThumbnail(medias[selectedIndex])) {
+                      handleRemoveThumbnail(e);
+                    } else {
+                      handleSetThumbnail(medias[selectedIndex], e);
+                    }
+                  }}
+                  disabled={settingThumbnail === medias[selectedIndex].id}
+                  title={isThumbnail(medias[selectedIndex]) ? 'Retirer l\'image à la une' : 'Définir comme image à la une'}
+                >
+                  {settingThumbnail === medias[selectedIndex].id ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Star className={`w-5 h-5 ${isThumbnail(medias[selectedIndex]) ? 'fill-current' : ''}`} />
+                  )}
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="icon"
@@ -361,6 +476,12 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
 
               {/* Caption and counter */}
               <div className="text-center mt-4">
+                {isThumbnail(medias[selectedIndex]) && (
+                  <p className="text-secondary text-sm mb-1 flex items-center justify-center gap-1">
+                    <Star className="w-4 h-4 fill-current" />
+                    Image à la une
+                  </p>
+                )}
                 {medias[selectedIndex].caption && (
                   <p className="text-white/80 mb-2">{medias[selectedIndex].caption}</p>
                 )}

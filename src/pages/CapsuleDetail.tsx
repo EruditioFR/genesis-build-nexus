@@ -402,7 +402,12 @@ const CapsuleDetail = () => {
                   {storyLoading ? 'Chargement...' : 'Diaporama'}
                 </Button>
               </div>
-              <MediaGallery medias={medias} />
+              <MediaGallery 
+                medias={medias} 
+                capsuleId={capsule.id}
+                thumbnailUrl={capsule.thumbnail_url}
+                onThumbnailChange={(url) => setCapsule(prev => prev ? { ...prev, thumbnail_url: url } : null)}
+              />
             </motion.div>
           )}
 

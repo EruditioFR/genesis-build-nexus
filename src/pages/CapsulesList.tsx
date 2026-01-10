@@ -40,6 +40,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { toast } from 'sonner';
+import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -317,82 +318,93 @@ const CapsulesList = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                  className="group p-5 rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer"
+                  className="group rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer overflow-hidden"
                   onClick={() => navigate(`/capsules/${capsule.id}`)}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`w-10 h-10 rounded-xl ${typeInfo.color} flex items-center justify-center`}>
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
-                          <Eye className="w-4 h-4" />
-                          Voir
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
-                          <Edit className="w-4 h-4" />
-                          Modifier
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
-                          <Share2 className="w-4 h-4" />
-                          Partager
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="gap-2 text-destructive"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCapsuleToDelete(capsule);
-                            setDeleteDialogOpen(true);
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Supprimer
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
-                  <h3 className="text-lg font-display font-semibold text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-                    {capsule.title}
-                  </h3>
+                  {/* Thumbnail */}
+                  {capsule.thumbnail_url ? (
+                    <CapsuleThumbnail
+                      thumbnailUrl={capsule.thumbnail_url}
+                      fallbackIcon={null}
+                      className="w-full h-32 bg-muted"
+                    />
+                  ) : null}
                   
-                  {capsule.description && (
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {capsule.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="outline" className={statusInfo.color}>
-                      {statusInfo.label}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
-                    </span>
-                  </div>
-
-                  {capsule.tags && capsule.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {capsule.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {capsule.tags.length > 3 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{capsule.tags.length - 3}
-                        </Badge>
-                      )}
+                  <div className="p-5">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl ${typeInfo.color} flex items-center justify-center`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
+                            <Eye className="w-4 h-4" />
+                            Voir
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
+                            <Edit className="w-4 h-4" />
+                            Modifier
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
+                            <Share2 className="w-4 h-4" />
+                            Partager
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            className="gap-2 text-destructive"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCapsuleToDelete(capsule);
+                              setDeleteDialogOpen(true);
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Supprimer
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-                  )}
+
+                    <h3 className="text-lg font-display font-semibold text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+                      {capsule.title}
+                    </h3>
+                    
+                    {capsule.description && (
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {capsule.description}
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge variant="outline" className={statusInfo.color}>
+                        {statusInfo.label}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                      </span>
+                    </div>
+
+                    {capsule.tags && capsule.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {capsule.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs capitalize">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {capsule.tags.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{capsule.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               );
             })}
