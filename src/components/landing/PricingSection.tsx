@@ -31,7 +31,7 @@ const plans = [
     price: { monthly: 9.99, yearly: 99 },
     description: "Pour les créateurs de contenu réguliers",
     features: [
-      "50 GB de stockage",
+      "5 GB de stockage",
       "Tous types de capsules illimités",
       "5 cercles (50 membres total)",
       "Export illimité (PDF)",
