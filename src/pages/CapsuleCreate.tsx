@@ -29,6 +29,7 @@ import CapsulePreview from '@/components/capsule/CapsulePreview';
 import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 import ScheduleSelector from '@/components/capsule/ScheduleSelector';
 import LegacySettings from '@/components/capsule/LegacySettings';
+import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -129,6 +130,21 @@ const CapsuleCreate = () => {
         publishedAt = new Date().toISOString();
       }
 
+      // Generate video thumbnail if applicable
+      let thumbnailUrl: string | null = null;
+      if ((capsuleType === 'video' || capsuleType === 'mixed') && mediaFiles.length > 0) {
+        const videoFile = mediaFiles.find(f => f.file.type.startsWith('video/'));
+        if (videoFile) {
+          try {
+            const thumbnailBlob = await captureVideoThumbnail(videoFile.file);
+            thumbnailUrl = await uploadVideoThumbnail(thumbnailBlob, user!.id, supabase);
+          } catch (err) {
+            console.error('Error generating video thumbnail:', err);
+            // Don't fail the save, just proceed without thumbnail
+          }
+        }
+      }
+
       // Create the capsule
       const { data: capsule, error: capsuleError } = await supabase
         .from('capsules')
@@ -142,6 +158,7 @@ const CapsuleCreate = () => {
           tags: tags.length > 0 ? tags : null,
           published_at: publishedAt,
           scheduled_at: scheduledAtValue,
+          thumbnail_url: thumbnailUrl,
         })
         .select('id')
         .single();
