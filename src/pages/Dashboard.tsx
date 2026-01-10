@@ -9,7 +9,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import StatsCards from '@/components/dashboard/StatsCards';
 import StorageProgress from '@/components/dashboard/StorageProgress';
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
-import AISuggestions from '@/components/dashboard/AISuggestions';
+import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 
@@ -54,6 +54,7 @@ const Dashboard = () => {
   const [searchParams] = useSearchParams();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
+  const [familyPersonsCount, setFamilyPersonsCount] = useState(0);
   const [stats, setStats] = useState<Stats>({
     totalCapsules: 0,
     totalMedias: 0,
@@ -168,6 +169,22 @@ const Dashboard = () => {
           .select('*', { count: 'exact', head: true })
           .eq('owner_id', user.id);
 
+        // Fetch family tree persons count for premium users
+        const { data: treesData } = await supabase
+          .from('family_trees')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1);
+
+        if (treesData && treesData.length > 0) {
+          const { count: personsCount } = await supabase
+            .from('family_persons')
+            .select('*', { count: 'exact', head: true })
+            .eq('tree_id', treesData[0].id);
+          
+          setFamilyPersonsCount(personsCount || 0);
+        }
+
         setStats({
           totalCapsules: capsuleCount || 0,
           totalMedias: mediaCount,
@@ -207,40 +224,7 @@ const Dashboard = () => {
     return null;
   }
 
-  // Suggestions IA (dynamiques basées sur les données)
-  const aiSuggestions = [];
-  
-  if (stats.totalCapsules === 0) {
-    aiSuggestions.push({
-      id: '1',
-      type: 'memory' as const,
-      title: 'Créez votre première capsule',
-      description: 'Commencez par un souvenir simple : une photo de famille ou un court texte.',
-    });
-  } else if (stats.totalCapsules < 5) {
-    aiSuggestions.push({
-      id: '1',
-      type: 'memory' as const,
-      title: 'Racontez un moment marquant',
-      description: 'Votre premier emploi, un voyage inoubliable, ou une rencontre importante.',
-    });
-  }
-
-  if (stats.sharedCircles === 0) {
-    aiSuggestions.push({
-      id: '2',
-      type: 'gift' as const,
-      title: 'Créez votre premier cercle',
-      description: 'Invitez votre famille ou vos amis proches à partager vos souvenirs.',
-    });
-  }
-
-  aiSuggestions.push({
-    id: '3',
-    type: 'event' as const,
-    title: 'Complétez votre profil',
-    description: 'Ajoutez une photo et votre date de naissance pour personnaliser votre expérience.',
-  });
+  const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy';
 
   return (
     <div className="min-h-screen bg-gradient-warm">
@@ -308,13 +292,12 @@ const Dashboard = () => {
             <RecentCapsules capsules={recentCapsules} />
           </div>
 
-          {/* Right Column - 1/3 width */}
-          <div className="lg:col-span-1">
-            <AISuggestions 
-              suggestions={aiSuggestions} 
-              userName={profile?.display_name?.split(' ')[0]}
-            />
-          </div>
+          {/* Right Column - 1/3 width - Premium only */}
+          {isPremium && (
+            <div className="lg:col-span-1">
+              <FamilyTreeCard personsCount={familyPersonsCount} />
+            </div>
+          )}
         </div>
       </main>
     </div>
