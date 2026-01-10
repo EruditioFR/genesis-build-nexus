@@ -14,7 +14,9 @@ import {
   Download,
   X,
   Map,
-  Search
+  Search,
+  Link2,
+  List
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +34,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
+import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
+import { PersonsListSheet } from '@/components/familyTree/PersonsListSheet';
 import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
@@ -65,6 +69,11 @@ export default function FamilyTreeViewPage() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [addRelationType, setAddRelationType] = useState<'parent' | 'child' | 'spouse' | 'sibling' | null>(null);
   const [addRelationTarget, setAddRelationTarget] = useState<FamilyPerson | null>(null);
+
+  // New dialogs state
+  const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [linkSourcePerson, setLinkSourcePerson] = useState<FamilyPerson | null>(null);
+  const [showPersonsList, setShowPersonsList] = useState(false);
 
   // Fullscreen and minimap states
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -234,6 +243,33 @@ export default function FamilyTreeViewPage() {
         setShowDetailPanel(false);
       }
     }
+  };
+
+  // Handle linking existing persons
+  const handleLinkPerson = (person: FamilyPerson) => {
+    setLinkSourcePerson(person);
+    setShowLinkDialog(true);
+  };
+
+  const handleLinkSubmit = async (targetPersonId: string, relationType: 'parent' | 'child' | 'spouse') => {
+    if (!linkSourcePerson) return;
+
+    if (relationType === 'parent') {
+      await addRelationship(targetPersonId, linkSourcePerson.id);
+    } else if (relationType === 'child') {
+      await addRelationship(linkSourcePerson.id, targetPersonId);
+    } else if (relationType === 'spouse') {
+      await addUnion(linkSourcePerson.id, targetPersonId);
+    }
+
+    setShowLinkDialog(false);
+    setLinkSourcePerson(null);
+    await loadTree();
+  };
+
+  // Handle persons list item click
+  const handlePersonsListClick = (person: FamilyPerson) => {
+    handleSearchSelect(person);
   };
 
   const handlePersonClick = (person: FamilyPerson) => {
@@ -537,6 +573,18 @@ export default function FamilyTreeViewPage() {
                   Exporter
                 </Button>
 
+                {/* Persons list button */}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="gap-2"
+                  onClick={() => setShowPersonsList(true)}
+                  disabled={persons.length === 0}
+                >
+                  <List className="w-4 h-4" />
+                  Liste
+                </Button>
+
                 {/* Add person button */}
                 <Button size="sm" className="gap-2" onClick={() => handleAddPerson('child')}>
                   <Plus className="w-4 h-4" />
@@ -622,6 +670,7 @@ export default function FamilyTreeViewPage() {
               onAddParent={() => handleAddPerson('parent', selectedPerson)}
               onAddChild={() => handleAddPerson('child', selectedPerson)}
               onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
+              onLinkPerson={() => handleLinkPerson(selectedPerson)}
               onDelete={() => handleDeletePerson(selectedPerson.id)}
               onPersonClick={(p) => {
                 setSelectedPerson(p);
@@ -639,6 +688,25 @@ export default function FamilyTreeViewPage() {
           relationType={addRelationType}
           targetPerson={addRelationTarget}
           onPersonAdded={handlePersonAdded}
+        />
+
+        {/* Link Person Dialog */}
+        {linkSourcePerson && (
+          <LinkPersonDialog
+            open={showLinkDialog}
+            onOpenChange={setShowLinkDialog}
+            sourcePerson={linkSourcePerson}
+            availablePersons={persons}
+            onLink={handleLinkSubmit}
+          />
+        )}
+
+        {/* Persons List Sheet */}
+        <PersonsListSheet
+          open={showPersonsList}
+          onOpenChange={setShowPersonsList}
+          persons={persons}
+          onPersonClick={handlePersonsListClick}
         />
       </div>
     </>
