@@ -43,10 +43,21 @@ export const useStoryMode = () => {
         if (medias && medias.length > 0) {
           // Add each media as a story item
           for (const media of medias) {
-            // Get signed URL for the media
-            const { data: signedUrlData } = await supabase.storage
+            // Get signed URL for the media - file_url is the path within the bucket
+            // It should NOT include the bucket name prefix
+            let filePath = media.file_url;
+            // Remove bucket prefix if accidentally included
+            if (filePath.startsWith('capsule-medias/')) {
+              filePath = filePath.replace('capsule-medias/', '');
+            }
+            
+            const { data: signedUrlData, error: signedUrlError } = await supabase.storage
               .from('capsule-medias')
-              .createSignedUrl(media.file_url.replace('capsule-medias/', ''), 3600);
+              .createSignedUrl(filePath, 3600);
+
+            if (signedUrlError) {
+              console.error('Error creating signed URL:', signedUrlError, 'for path:', filePath);
+            }
 
             const mediaType = media.file_type.startsWith('image/') 
               ? 'image' 
@@ -59,7 +70,7 @@ export const useStoryMode = () => {
             storyItems.push({
               id: `${capsule.id}-${media.id}`,
               type: mediaType,
-              url: signedUrlData?.signedUrl || media.file_url,
+              url: signedUrlData?.signedUrl,
               title: capsule.title,
               description: media.caption || capsule.description || undefined,
               date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {
