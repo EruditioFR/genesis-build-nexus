@@ -299,12 +299,30 @@ export default function FamilyTreeViewPage() {
     return persons.filter(p => spouseIds.includes(p.id));
   };
 
-  if (loading && !tree) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <TreeDeciduous className="w-12 h-12 mx-auto text-secondary animate-pulse" />
           <p className="text-muted-foreground">Chargement de l'arbre...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!tree) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <DashboardHeader user={user} onSignOut={signOut} />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <TreeDeciduous className="w-12 h-12 mx-auto text-muted-foreground" />
+            <p className="text-muted-foreground">Arbre généalogique introuvable</p>
+            <Button onClick={() => navigate('/family-tree')} className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Retour à mes arbres
+            </Button>
+          </div>
         </div>
       </div>
     );
