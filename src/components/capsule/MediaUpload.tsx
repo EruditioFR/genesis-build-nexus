@@ -123,14 +123,44 @@ const MediaUpload = ({
     const fileExt = mediaFile.file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
-    const { error } = await supabase.storage
-      .from('capsule-medias')
-      .upload(fileName, mediaFile.file);
+    // Use upsert option for better reliability and add retry logic
+    const maxRetries = 3;
+    let lastError: Error | null = null;
 
-    if (error) throw error;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const { error } = await supabase.storage
+          .from('capsule-medias')
+          .upload(fileName, mediaFile.file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
 
-    // For private bucket, we need to get a signed URL or construct the path
-    return fileName;
+        if (error) {
+          // If it's a network error, retry
+          if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+            lastError = new Error(`Erreur réseau (tentative ${attempt}/${maxRetries})`);
+            if (attempt < maxRetries) {
+              await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+              continue;
+            }
+          }
+          throw error;
+        }
+
+        // Success
+        return fileName;
+      } catch (err: any) {
+        lastError = err;
+        if (attempt < maxRetries && (err.message?.includes('Failed to fetch') || err.message?.includes('network'))) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          continue;
+        }
+        break;
+      }
+    }
+
+    throw lastError || new Error('Échec de l\'upload après plusieurs tentatives');
   };
 
   const uploadAllFiles = async () => {
