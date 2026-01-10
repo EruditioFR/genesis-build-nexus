@@ -96,7 +96,7 @@ const HeroSection = () => {
         }} className="text-4xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
             Ne laissez pas vos souvenirs s'effacer,
             <br />
-            <span className="text-secondary">faites-en un trésor familial.</span>
+            <span className="text-secondary border-b-2 border-white pb-1">faites-en un trésor familial.</span>
           </motion.h1>
 
           {/* Subtitle */}
