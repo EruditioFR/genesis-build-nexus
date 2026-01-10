@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { HardDrive, TrendingUp } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface StorageProgressProps {
   usedMb: number;
@@ -43,9 +44,11 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
           </div>
         </div>
         {subscriptionLevel === 'free' && (
-          <Button variant="outline" size="sm" className="gap-2">
-            <TrendingUp className="w-4 h-4" />
-            Passer Premium
+          <Button variant="outline" size="sm" className="gap-2" asChild>
+            <Link to="/premium">
+              <TrendingUp className="w-4 h-4" />
+              Passer Premium
+            </Link>
           </Button>
         )}
       </div>

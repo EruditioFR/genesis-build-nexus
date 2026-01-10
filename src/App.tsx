@@ -20,6 +20,7 @@ import CirclesPage from "./pages/CirclesPage";
 import Profile from "./pages/Profile";
 import Statistics from "./pages/Statistics";
 import CalendarPage from "./pages/CalendarPage";
+import Premium from "./pages/Premium";
 import InviteAccept from "./pages/InviteAccept";
 import GuardianVerify from "./pages/GuardianVerify";
 import GuardianDashboard from "./pages/GuardianDashboard";
@@ -67,6 +68,7 @@ const App = () => (
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/statistics" element={<Statistics />} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/premium" element={<Premium />} />
                 <Route path="/invite/:token" element={<InviteAccept />} />
                 <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
                 <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
