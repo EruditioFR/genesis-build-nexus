@@ -53,7 +53,7 @@ import type {
 export default function FamilyTreeViewPage() {
   const { id: treeId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
   const { fetchTree, addPerson, addRelationship, addUnion, deletePerson, loading } = useFamilyTree();
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
@@ -96,8 +96,16 @@ export default function FamilyTreeViewPage() {
   }, [treeId, fetchTree]);
 
   useEffect(() => {
+    if (authLoading) return;
+
+    // Sur refresh, on attend la restauration de session avant d'appeler le backend.
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     loadTree();
-  }, [loadTree]);
+  }, [authLoading, user, loadTree, navigate]);
 
   // Track scroll position and viewport size for minimap
   useEffect(() => {
@@ -299,7 +307,7 @@ export default function FamilyTreeViewPage() {
     return persons.filter(p => spouseIds.includes(p.id));
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -309,6 +317,9 @@ export default function FamilyTreeViewPage() {
       </div>
     );
   }
+
+  // Si l'utilisateur n'est pas connecté, l'effet ci-dessus redirige vers /login.
+  if (!user) return null;
 
   if (!tree) {
     return (
