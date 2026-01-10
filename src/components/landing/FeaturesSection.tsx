@@ -20,7 +20,7 @@ const features = [
   },
   {
     icon: Clock,
-    title: "Timeline Interactive",
+    title: "Chronologie Interactive",
     description: "Visualisez votre histoire sur une frise chronologique élégante, naviguez par décennies et découvrez le contexte historique.",
     color: "bg-accent/10 text-accent",
   },

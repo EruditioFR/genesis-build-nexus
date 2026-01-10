@@ -262,7 +262,7 @@ const Timeline = () => {
             <Clock className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-display font-bold text-foreground mb-2">
-            Votre Timeline
+            Votre Chronologie
           </h1>
           <p className="text-muted-foreground">
             {filteredCapsules.length} capsule{filteredCapsules.length !== 1 ? 's' : ''}
@@ -404,7 +404,7 @@ const Timeline = () => {
               <Clock className="w-10 h-10 text-muted-foreground" />
             </div>
             <h2 className="text-xl font-semibold text-foreground mb-2">
-              Votre timeline est vide
+              Votre chronologie est vide
             </h2>
             <p className="text-muted-foreground mb-6">
               Créez votre première capsule pour commencer
