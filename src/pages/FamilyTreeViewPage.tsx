@@ -29,6 +29,8 @@ import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { TreeVisualization } from '@/components/familyTree/TreeVisualization';
+import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
+import { toast } from 'sonner';
 import type { 
   FamilyTree, 
   FamilyPerson, 
@@ -213,6 +215,36 @@ export default function FamilyTreeViewPage() {
                   <Home className="w-4 h-4" />
                 </Button>
               </div>
+
+              {/* Export button */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={async () => {
+                  if (tree && persons.length > 0) {
+                    toast.promise(
+                      exportFamilyTreeToPDF({
+                        tree,
+                        persons,
+                        relationships,
+                        unions,
+                        includeDetails: true,
+                        includeTree: true,
+                      }),
+                      {
+                        loading: 'Génération du PDF...',
+                        success: 'PDF exporté avec succès !',
+                        error: 'Erreur lors de l\'export',
+                      }
+                    );
+                  }
+                }}
+                disabled={!tree || persons.length === 0}
+              >
+                <Download className="w-4 h-4" />
+                Exporter
+              </Button>
 
               {/* Add person button */}
               <Button size="sm" className="gap-2" onClick={() => handleAddPerson('child')}>
