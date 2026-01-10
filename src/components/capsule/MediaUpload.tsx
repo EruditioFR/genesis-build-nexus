@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, X, Image, Video, Music, File, Loader2, GripVertical } from 'lucide-react';
+import { Upload, X, Image, Video, Music, Loader2, GripVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface MediaFile {
@@ -14,6 +15,7 @@ export interface MediaFile {
   uploaded: boolean;
   url?: string;
   error?: string;
+  progress?: number;
 }
 
 interface MediaUploadProps {
@@ -119,48 +121,61 @@ const MediaUpload = ({
     onFilesChange(files.filter(f => f.id !== id));
   };
 
-  const uploadFile = async (mediaFile: MediaFile): Promise<string> => {
+  const uploadFileWithProgress = async (
+    mediaFile: MediaFile, 
+    onProgress: (progress: number) => void
+  ): Promise<string> => {
     const fileExt = mediaFile.file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
-    // Use upsert option for better reliability and add retry logic
-    const maxRetries = 3;
-    let lastError: Error | null = null;
+    // Get auth session for the upload
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData?.session?.access_token;
 
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        const { error } = await supabase.storage
-          .from('capsule-medias')
-          .upload(fileName, mediaFile.file, {
-            cacheControl: '3600',
-            upsert: false,
-          });
-
-        if (error) {
-          // If it's a network error, retry
-          if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
-            lastError = new Error(`Erreur réseau (tentative ${attempt}/${maxRetries})`);
-            if (attempt < maxRetries) {
-              await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-              continue;
-            }
-          }
-          throw error;
-        }
-
-        // Success
-        return fileName;
-      } catch (err: any) {
-        lastError = err;
-        if (attempt < maxRetries && (err.message?.includes('Failed to fetch') || err.message?.includes('network'))) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-          continue;
-        }
-        break;
-      }
+    if (!accessToken) {
+      throw new Error('Non authentifié');
     }
 
-    throw lastError || new Error('Échec de l\'upload après plusieurs tentatives');
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const uploadUrl = `${supabaseUrl}/storage/v1/object/capsule-medias/${fileName}`;
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          onProgress(percentComplete);
+        }
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(fileName);
+        } else {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            reject(new Error(response.message || `Erreur ${xhr.status}`));
+          } catch {
+            reject(new Error(`Erreur ${xhr.status}`));
+          }
+        }
+      });
+
+      xhr.addEventListener('error', () => {
+        reject(new Error('Erreur réseau - veuillez réessayer'));
+      });
+
+      xhr.addEventListener('timeout', () => {
+        reject(new Error('Timeout - fichier trop volumineux ou connexion lente'));
+      });
+
+      xhr.open('POST', uploadUrl);
+      xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+      xhr.setRequestHeader('x-upsert', 'false');
+      xhr.timeout = 300000; // 5 minutes timeout for large files
+      xhr.send(mediaFile.file);
+    });
   };
 
   const uploadAllFiles = async () => {
@@ -169,24 +184,32 @@ const MediaUpload = ({
 
     let currentFiles = files.map(f => 
       pendingFiles.find(p => p.id === f.id) 
-        ? { ...f, uploading: true } 
+        ? { ...f, uploading: true, progress: 0 } 
         : f
     );
     onFilesChange(currentFiles);
 
     for (const mediaFile of pendingFiles) {
       try {
-        const url = await uploadFile(mediaFile);
+        const url = await uploadFileWithProgress(mediaFile, (progress) => {
+          currentFiles = currentFiles.map(f => 
+            f.id === mediaFile.id 
+              ? { ...f, progress } 
+              : f
+          );
+          onFilesChange(currentFiles);
+        });
+        
         currentFiles = currentFiles.map(f => 
           f.id === mediaFile.id 
-            ? { ...f, uploading: false, uploaded: true, url } 
+            ? { ...f, uploading: false, uploaded: true, url, progress: 100 } 
             : f
         );
         onFilesChange(currentFiles);
       } catch (error: any) {
         currentFiles = currentFiles.map(f => 
           f.id === mediaFile.id 
-            ? { ...f, uploading: false, error: error.message } 
+            ? { ...f, uploading: false, error: error.message, progress: 0 } 
             : f
         );
         onFilesChange(currentFiles);
@@ -317,11 +340,22 @@ const MediaUpload = ({
                     <p className="text-sm font-medium text-foreground truncate">
                       {mediaFile.file.name}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(mediaFile.file.size)}
-                      {mediaFile.uploaded && <span className="text-green-600 ml-2">✓ Uploadé</span>}
-                      {mediaFile.error && <span className="text-destructive ml-2">{mediaFile.error}</span>}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(mediaFile.file.size)}
+                      </p>
+                      {mediaFile.uploaded && <span className="text-xs text-green-600">✓ Uploadé</span>}
+                      {mediaFile.error && <span className="text-xs text-destructive">{mediaFile.error}</span>}
+                    </div>
+                    {/* Progress bar */}
+                    {mediaFile.uploading && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <Progress value={mediaFile.progress || 0} className="h-1.5 flex-1" />
+                        <span className="text-xs text-muted-foreground min-w-[3ch]">
+                          {mediaFile.progress || 0}%
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Status / Actions */}
