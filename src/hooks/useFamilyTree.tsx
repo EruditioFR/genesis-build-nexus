@@ -264,7 +264,8 @@ export function useFamilyTree() {
   const addRelationship = useCallback(async (
     parentId: string,
     childId: string,
-    type: ParentChildRelationship['relationship_type'] = 'biological'
+    type: ParentChildRelationship['relationship_type'] = 'biological',
+    unionId?: string | null
   ): Promise<boolean> => {
     try {
       const { error } = await supabase
@@ -272,7 +273,8 @@ export function useFamilyTree() {
         .insert({
           parent_id: parentId,
           child_id: childId,
-          relationship_type: type
+          relationship_type: type,
+          union_id: unionId || null
         });
 
       if (error) throw error;
