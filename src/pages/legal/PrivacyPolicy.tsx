@@ -1,11 +1,19 @@
+import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/landing/Header";
+import Footer from "@/components/landing/Footer";
 
 const PrivacyPolicy = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <Header />
+      <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -122,6 +130,7 @@ const PrivacyPolicy = () => {
           </section>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
