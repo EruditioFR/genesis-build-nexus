@@ -35,7 +35,6 @@ const plans = [
       "Tous types de capsules illimités",
       "5 cercles (50 membres total)",
       "Export illimité (PDF)",
-      "100 suggestions + 2h transcription/mois",
       "Chronologie avancée + thèmes premium",
       "Sans publicité",
     ],
