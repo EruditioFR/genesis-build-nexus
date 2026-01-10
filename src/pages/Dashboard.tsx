@@ -36,7 +36,7 @@ interface CapsuleRow {
 interface RecentCapsule {
   id: string;
   title: string;
-  type: 'photo' | 'video' | 'text';
+  type: 'photo' | 'video' | 'text' | 'audio' | 'mixed';
   date: string;
   thumbnail?: string;
 }
@@ -107,9 +107,7 @@ const Dashboard = () => {
           const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => ({
             id: capsule.id,
             title: capsule.title,
-            type: capsule.capsule_type === 'photo' || capsule.capsule_type === 'video' 
-              ? capsule.capsule_type 
-              : 'text',
+            type: capsule.capsule_type,
             date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: fr }),
             thumbnail: capsule.thumbnail_url || undefined,
           }));

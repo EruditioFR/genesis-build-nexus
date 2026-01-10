@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
-import { Clock, Image, Video, FileText, Plus, ArrowRight } from 'lucide-react';
+import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 
 interface Capsule {
   id: string;
   title: string;
-  type: 'photo' | 'video' | 'text';
+  type: 'photo' | 'video' | 'text' | 'audio' | 'mixed';
   date: string;
   thumbnail?: string;
 }
@@ -20,6 +21,8 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
     switch (type) {
       case 'photo': return Image;
       case 'video': return Video;
+      case 'audio': return Music;
+      case 'mixed': return Layers;
       case 'text': return FileText;
     }
   };
@@ -28,6 +31,8 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
     switch (type) {
       case 'photo': return 'Photo';
       case 'video': return 'Vidéo';
+      case 'audio': return 'Audio';
+      case 'mixed': return 'Mixte';
       case 'text': return 'Texte';
     }
   };
@@ -83,17 +88,15 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="flex items-center gap-4 p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer group"
               >
-                {capsule.thumbnail ? (
-                  <img 
-                    src={capsule.thumbnail} 
-                    alt={capsule.title}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-secondary" />
-                  </div>
-                )}
+                <CapsuleThumbnail
+                  thumbnailUrl={capsule.thumbnail}
+                  fallbackIcon={
+                    <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-secondary" />
+                    </div>
+                  }
+                  className="w-12 h-12 rounded-lg"
+                />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground truncate group-hover:text-primary transition-colors">
                     {capsule.title}
