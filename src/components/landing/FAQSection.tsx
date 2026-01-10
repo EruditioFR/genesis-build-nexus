@@ -24,10 +24,6 @@ const faqs = [
     answer: "Vos données ne sont jamais supprimées automatiquement. Si vous passez de Premium à Gratuit, vous conservez l'accès en lecture à tout votre contenu. Seules les fonctionnalités avancées sont désactivées. Vous pouvez toujours exporter vos données à tout moment.",
   },
   {
-    question: "L'assistant IA peut-il écrire pour moi ?",
-    answer: "L'IA est là pour vous accompagner, pas vous remplacer. Elle suggère des questions pour enrichir vos récits, améliore votre texte, transcrit vos enregistrements audio et peut même générer des illustrations. Mais chaque mot de votre histoire reste authentiquement le vôtre.",
-  },
-  {
     question: "Comment fonctionne le legs posthume ?",
     answer: "Avec l'offre Legacy, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certaines capsules selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels.",
   },
