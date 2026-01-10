@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { getSignedUrls } from '@/lib/signedUrlCache';
 
 interface Capsule {
   id: string;
@@ -65,30 +66,14 @@ export const useStoryMode = () => {
         }
       }
 
-      // Generate all signed URLs in parallel
-      const signedUrlPromises = mediaWithCapsules.map(async ({ media }) => {
-        let filePath = media.file_url;
-        if (filePath.startsWith('capsule-medias/')) {
-          filePath = filePath.replace('capsule-medias/', '');
-        }
-        
-        const { data, error } = await supabase.storage
-          .from('capsule-medias')
-          .createSignedUrl(filePath, 3600);
-        
-        if (error) {
-          console.error('Error creating signed URL:', error, 'for path:', filePath);
-          return null;
-        }
-        return data?.signedUrl;
-      });
-
-      const signedUrls = await Promise.all(signedUrlPromises);
+      // Generate all signed URLs with caching
+      const filePaths = mediaWithCapsules.map(({ media }) => media.file_url);
+      const signedUrlsMap = await getSignedUrls('capsule-medias', filePaths);
 
       // Build story items with signed URLs
       const storyItems: StoryItem[] = [];
 
-      mediaWithCapsules.forEach(({ media, capsule }, index) => {
+      mediaWithCapsules.forEach(({ media, capsule }) => {
         const mediaType = media.file_type.startsWith('image/') 
           ? 'image' 
           : media.file_type.startsWith('video/') 
@@ -100,7 +85,7 @@ export const useStoryMode = () => {
         storyItems.push({
           id: `${capsule.id}-${media.id}`,
           type: mediaType,
-          url: signedUrls[index] || undefined,
+          url: signedUrlsMap[media.file_url] || undefined,
           title: capsule.title,
           description: media.caption || capsule.description || undefined,
           date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {

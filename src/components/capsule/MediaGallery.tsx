@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { getSignedUrls } from '@/lib/signedUrlCache';
 
 interface Media {
   id: string;
@@ -21,7 +21,7 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
-  // Generate signed URLs for all medias
+  // Generate signed URLs for all medias with caching
   useEffect(() => {
     const generateSignedUrls = async () => {
       if (medias.length === 0) {
@@ -30,38 +30,20 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
       }
 
       setLoading(true);
-      const urlPromises = medias.map(async (media) => {
-        let filePath = media.file_url;
-        // Remove bucket prefix if present
-        if (filePath.startsWith('capsule-medias/')) {
-          filePath = filePath.replace('capsule-medias/', '');
-        }
-
-        try {
-          const { data, error } = await supabase.storage
-            .from('capsule-medias')
-            .createSignedUrl(filePath, 3600); // 1 hour expiry
-
-          if (error) {
-            console.error('Error creating signed URL:', error, 'for path:', filePath);
-            return { id: media.id, url: null };
-          }
-          return { id: media.id, url: data?.signedUrl || null };
-        } catch (err) {
-          console.error('Failed to create signed URL:', err);
-          return { id: media.id, url: null };
-        }
-      });
-
-      const results = await Promise.all(urlPromises);
-      const urlMap: Record<string, string> = {};
-      results.forEach((result) => {
-        if (result.url) {
-          urlMap[result.id] = result.url;
+      
+      const filePaths = medias.map(m => m.file_url);
+      const urlsMap = await getSignedUrls('capsule-medias', filePaths);
+      
+      // Map URLs by media ID
+      const urlMapById: Record<string, string> = {};
+      medias.forEach((media) => {
+        const url = urlsMap[media.file_url];
+        if (url) {
+          urlMapById[media.id] = url;
         }
       });
       
-      setSignedUrls(urlMap);
+      setSignedUrls(urlMapById);
       setLoading(false);
     };
 
