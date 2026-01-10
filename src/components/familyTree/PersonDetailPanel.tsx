@@ -48,7 +48,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
+import type { FamilyPerson, FamilyUnion, ParentChildRelationship } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
@@ -58,6 +58,7 @@ import { toast } from 'sonner';
 interface SpouseWithUnion {
   spouse: FamilyPerson;
   union?: FamilyUnion;
+  commonChildren: FamilyPerson[];
 }
 
 interface PersonDetailPanelProps {
@@ -66,6 +67,8 @@ interface PersonDetailPanelProps {
   children: FamilyPerson[];
   spouses: FamilyPerson[];
   unions?: FamilyUnion[];
+  relationships?: ParentChildRelationship[];
+  allPersons?: FamilyPerson[];
   onClose: () => void;
   onAddParent: () => void;
   onAddChild: () => void;
@@ -82,6 +85,8 @@ export function PersonDetailPanel({
   children,
   spouses,
   unions = [],
+  relationships = [],
+  allPersons = [],
   onClose,
   onAddParent,
   onAddChild,
@@ -97,13 +102,37 @@ export function PersonDetailPanel({
   const [isSaving, setIsSaving] = useState(false);
   const [editingUnion, setEditingUnion] = useState<{ union: FamilyUnion; spouse: FamilyPerson } | null>(null);
 
-  // Get spouses with their union info
+  // Get spouses with their union info and common children
   const spousesWithUnions: SpouseWithUnion[] = spouses.map(spouse => {
     const union = unions.find(
       u => (u.person1_id === person.id && u.person2_id === spouse.id) ||
            (u.person2_id === person.id && u.person1_id === spouse.id)
     );
-    return { spouse, union };
+    
+    // Find common children: children linked to both person and spouse
+    // Either via union_id or by checking parent relationships
+    let commonChildren: FamilyPerson[] = [];
+    if (union) {
+      // Get children linked to this union
+      const childIdsFromUnion = relationships
+        .filter(r => r.union_id === union.id)
+        .map(r => r.child_id);
+      commonChildren = allPersons.filter(p => childIdsFromUnion.includes(p.id));
+    }
+    
+    // Fallback: if no union_id, find children that have both as parents
+    if (commonChildren.length === 0) {
+      const personChildIds = relationships
+        .filter(r => r.parent_id === person.id)
+        .map(r => r.child_id);
+      const spouseChildIds = relationships
+        .filter(r => r.parent_id === spouse.id)
+        .map(r => r.child_id);
+      const commonChildIds = personChildIds.filter(id => spouseChildIds.includes(id));
+      commonChildren = allPersons.filter(p => commonChildIds.includes(p.id));
+    }
+    
+    return { spouse, union, commonChildren };
   });
   
   // Edit form state
@@ -703,7 +732,7 @@ export function PersonDetailPanel({
 
             <Separator />
 
-            {/* Spouses */}
+            {/* Spouses with common children */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Conjoint(s)</h4>
@@ -713,9 +742,41 @@ export function PersonDetailPanel({
                 </Button>
               </div>
               {spousesWithUnions.length > 0 ? (
-                <div className="space-y-1">
-                  {spousesWithUnions.map(({ spouse, union }) => (
-                    <RelatedPersonCard key={spouse.id} relatedPerson={spouse} unionInfo={union} showEditButton />
+                <div className="space-y-3">
+                  {spousesWithUnions.map(({ spouse, union, commonChildren }) => (
+                    <div key={spouse.id} className="space-y-1">
+                      <RelatedPersonCard relatedPerson={spouse} unionInfo={union} showEditButton />
+                      {commonChildren.length > 0 && (
+                        <div className="ml-6 pl-3 border-l-2 border-muted space-y-1">
+                          <p className="text-xs text-muted-foreground flex items-center gap-1 py-1">
+                            <Baby className="w-3 h-3" />
+                            Enfants communs ({commonChildren.length})
+                          </p>
+                          {commonChildren.map(child => (
+                            <button
+                              key={child.id}
+                              onClick={() => onPersonClick(child)}
+                              className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
+                            >
+                              <Avatar className="w-6 h-6">
+                                <AvatarImage src={child.profile_photo_url || undefined} />
+                                <AvatarFallback className="text-[10px]">
+                                  {`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="text-xs truncate">
+                                {child.first_names} {child.last_name}
+                              </span>
+                              {child.birth_date && (
+                                <span className="text-[10px] text-muted-foreground ml-auto">
+                                  {new Date(child.birth_date).getFullYear()}
+                                </span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               ) : (
