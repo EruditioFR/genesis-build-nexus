@@ -257,20 +257,20 @@ const StoryViewer = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white hover:bg-white/10 w-12 h-12"
+          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 text-white bg-black/30 hover:bg-white/20 backdrop-blur-sm w-14 h-14 md:w-20 md:h-20 rounded-full border border-white/20 transition-all duration-200 hover:scale-110"
           onClick={goPrev}
         >
-          <ChevronLeft className="w-8 h-8" />
+          <ChevronLeft className="w-8 h-8 md:w-12 md:h-12" />
         </Button>
       )}
       {currentIndex < items.length - 1 && (
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white hover:bg-white/10 w-12 h-12"
+          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 text-white bg-black/30 hover:bg-white/20 backdrop-blur-sm w-14 h-14 md:w-20 md:h-20 rounded-full border border-white/20 transition-all duration-200 hover:scale-110"
           onClick={goNext}
         >
-          <ChevronRight className="w-8 h-8" />
+          <ChevronRight className="w-8 h-8 md:w-12 md:h-12" />
         </Button>
       )}
 
