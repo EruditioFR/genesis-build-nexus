@@ -17,7 +17,8 @@ import {
   AlertTriangle,
   Check,
   XCircle,
-  Loader2
+  Loader2,
+  Link2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -61,6 +62,7 @@ interface PersonDetailPanelProps {
   onAddParent: () => void;
   onAddChild: () => void;
   onAddSpouse: () => void;
+  onLinkPerson?: () => void;
   onDelete: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
@@ -75,6 +77,7 @@ export function PersonDetailPanel({
   onAddParent,
   onAddChild,
   onAddSpouse,
+  onLinkPerson,
   onDelete,
   onPersonClick,
   onUpdate
@@ -569,6 +572,19 @@ export function PersonDetailPanel({
 
           {/* Relations Tab */}
           <TabsContent value="relations" className="p-4 space-y-4 m-0">
+            {/* Link existing person button */}
+            {onLinkPerson && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onLinkPerson} 
+                className="w-full gap-2"
+              >
+                <Link2 className="w-4 h-4" />
+                Lier à une personne existante
+              </Button>
+            )}
+
             {/* Parents */}
             <div>
               <div className="flex items-center justify-between mb-2">
