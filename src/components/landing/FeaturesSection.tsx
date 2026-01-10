@@ -4,7 +4,6 @@ import {
   Clock, 
   Users, 
   Shield, 
-  Sparkles, 
   Download,
   Image,
   Video,
@@ -35,12 +34,6 @@ const features = [
     title: "Sécurité & Héritage",
     description: "Vos données sont chiffrées et sauvegardées. Programmez la transmission de votre héritage numérique.",
     color: "bg-terracotta/10 text-terracotta",
-  },
-  {
-    icon: Sparkles,
-    title: "Assistant IA",
-    description: "Laissez notre IA vous guider avec des suggestions d'écriture, transcription audio et génération d'images.",
-    color: "bg-secondary/10 text-secondary",
   },
   {
     icon: Download,
