@@ -122,20 +122,46 @@ const Dashboard = () => {
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id);
 
-        // Fetch stats - total medias
+        // Fetch stats - total medias and calculate actual storage used
         const { data: userCapsuleIds } = await supabase
           .from('capsules')
           .select('id')
           .eq('user_id', user.id);
 
         let mediaCount = 0;
+        let actualStorageUsedBytes = 0;
+        
         if (userCapsuleIds && userCapsuleIds.length > 0) {
           const capsuleIds = userCapsuleIds.map(c => c.id);
-          const { count } = await supabase
+          
+          // Get media count and total size
+          const { data: mediasData, count } = await supabase
             .from('capsule_medias')
-            .select('*', { count: 'exact', head: true })
+            .select('file_size_bytes', { count: 'exact' })
             .in('capsule_id', capsuleIds);
+          
           mediaCount = count || 0;
+          
+          // Calculate actual storage from file sizes
+          if (mediasData) {
+            actualStorageUsedBytes = mediasData.reduce((total, media) => {
+              return total + (media.file_size_bytes || 0);
+            }, 0);
+          }
+        }
+        
+        // Convert bytes to MB for storage display
+        const actualStorageUsedMb = Math.round((actualStorageUsedBytes / (1024 * 1024)) * 100) / 100;
+        
+        // Update profile with actual storage if different
+        if (profileData && Math.abs(actualStorageUsedMb - (profileData.storage_used_mb || 0)) > 0.01) {
+          await supabase
+            .from('profiles')
+            .update({ storage_used_mb: actualStorageUsedMb })
+            .eq('user_id', user.id);
+          
+          // Update local profile state with actual value
+          setProfile(prev => prev ? { ...prev, storage_used_mb: actualStorageUsedMb } : prev);
         }
 
         // Fetch stats - circles owned
