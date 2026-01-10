@@ -49,6 +49,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FamilyPerson } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
+import { PersonCapsulesList } from './PersonCapsuleLink';
 import { toast } from 'sonner';
 
 interface PersonDetailPanelProps {
@@ -635,14 +636,7 @@ export function PersonDetailPanel({
 
           {/* Capsules Tab */}
           <TabsContent value="capsules" className="p-4 m-0">
-            <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">
-                Les capsules liées à cette personne apparaîtront ici.
-              </p>
-              <Button variant="outline" size="sm" className="mt-4">
-                Lier une capsule
-              </Button>
-            </div>
+            <PersonCapsulesList person={person} onUpdate={onUpdate} />
           </TabsContent>
         </ScrollArea>
       </Tabs>
