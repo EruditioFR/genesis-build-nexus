@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Media {
   id: string;
@@ -17,6 +18,57 @@ interface MediaGalleryProps {
 
 const MediaGallery = ({ medias }: MediaGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+
+  // Generate signed URLs for all medias
+  useEffect(() => {
+    const generateSignedUrls = async () => {
+      if (medias.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const urlPromises = medias.map(async (media) => {
+        let filePath = media.file_url;
+        // Remove bucket prefix if present
+        if (filePath.startsWith('capsule-medias/')) {
+          filePath = filePath.replace('capsule-medias/', '');
+        }
+
+        try {
+          const { data, error } = await supabase.storage
+            .from('capsule-medias')
+            .createSignedUrl(filePath, 3600); // 1 hour expiry
+
+          if (error) {
+            console.error('Error creating signed URL:', error, 'for path:', filePath);
+            return { id: media.id, url: null };
+          }
+          return { id: media.id, url: data?.signedUrl || null };
+        } catch (err) {
+          console.error('Failed to create signed URL:', err);
+          return { id: media.id, url: null };
+        }
+      });
+
+      const results = await Promise.all(urlPromises);
+      const urlMap: Record<string, string> = {};
+      results.forEach((result) => {
+        if (result.url) {
+          urlMap[result.id] = result.url;
+        }
+      });
+      
+      setSignedUrls(urlMap);
+      setLoading(false);
+    };
+
+    generateSignedUrls();
+  }, [medias]);
+
+  const getMediaUrl = (media: Media) => signedUrls[media.id] || '';
 
   const images = medias.filter(m => m.file_type.startsWith('image/'));
   const videos = medias.filter(m => m.file_type.startsWith('video/'));
@@ -45,6 +97,15 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
 
   if (medias.length === 0) return null;
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Chargement des médias...</span>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="space-y-6">
@@ -55,25 +116,30 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
               Photos ({images.length})
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {images.map((media, index) => (
-                <motion.div
-                  key={media.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="relative aspect-square rounded-xl overflow-hidden cursor-pointer group"
-                  onClick={() => openLightbox(medias.indexOf(media))}
-                >
-                  <img
-                    src={media.file_url}
-                    alt={media.file_name || 'Image'}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center">
-                    <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </motion.div>
-              ))}
+              {images.map((media, index) => {
+                const url = getMediaUrl(media);
+                if (!url) return null;
+                
+                return (
+                  <motion.div
+                    key={media.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="relative aspect-square rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => openLightbox(medias.indexOf(media))}
+                  >
+                    <img
+                      src={url}
+                      alt={media.file_name || 'Image'}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center">
+                      <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -85,26 +151,31 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
               Vidéos ({videos.length})
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {videos.map((media, index) => (
-                <motion.div
-                  key={media.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="rounded-xl overflow-hidden border border-border"
-                >
-                  <video
-                    src={media.file_url}
-                    controls
-                    className="w-full aspect-video bg-black"
-                  />
-                  {media.caption && (
-                    <p className="p-3 text-sm text-muted-foreground bg-card">
-                      {media.caption}
-                    </p>
-                  )}
-                </motion.div>
-              ))}
+              {videos.map((media, index) => {
+                const url = getMediaUrl(media);
+                if (!url) return null;
+                
+                return (
+                  <motion.div
+                    key={media.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="rounded-xl overflow-hidden border border-border"
+                  >
+                    <video
+                      src={url}
+                      controls
+                      className="w-full aspect-video bg-black"
+                    />
+                    {media.caption && (
+                      <p className="p-3 text-sm text-muted-foreground bg-card">
+                        {media.caption}
+                      </p>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -116,25 +187,30 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
               Audio ({audios.length})
             </h3>
             <div className="space-y-3">
-              {audios.map((media, index) => (
-                <motion.div
-                  key={media.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="p-4 rounded-xl border border-border bg-card"
-                >
-                  <p className="text-sm font-medium text-foreground mb-2">
-                    {media.file_name || 'Audio'}
-                  </p>
-                  <audio src={media.file_url} controls className="w-full" />
-                  {media.caption && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {media.caption}
+              {audios.map((media, index) => {
+                const url = getMediaUrl(media);
+                if (!url) return null;
+                
+                return (
+                  <motion.div
+                    key={media.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-4 rounded-xl border border-border bg-card"
+                  >
+                    <p className="text-sm font-medium text-foreground mb-2">
+                      {media.file_name || 'Audio'}
                     </p>
-                  )}
-                </motion.div>
-              ))}
+                    <audio src={url} controls className="w-full" />
+                    {media.caption && (
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {media.caption}
+                      </p>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -196,13 +272,13 @@ const MediaGallery = ({ medias }: MediaGalleryProps) => {
             >
               {medias[selectedIndex].file_type.startsWith('image/') ? (
                 <img
-                  src={medias[selectedIndex].file_url}
+                  src={getMediaUrl(medias[selectedIndex])}
                   alt={medias[selectedIndex].file_name || 'Image'}
                   className="max-w-full max-h-[85vh] object-contain rounded-lg"
                 />
               ) : medias[selectedIndex].file_type.startsWith('video/') ? (
                 <video
-                  src={medias[selectedIndex].file_url}
+                  src={getMediaUrl(medias[selectedIndex])}
                   controls
                   autoPlay
                   className="max-w-full max-h-[85vh] rounded-lg"
