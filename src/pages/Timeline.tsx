@@ -355,7 +355,7 @@ const Timeline = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2">
-                    Tags
+                    Mots-clés
                     {selectedTags.length > 0 && (
                       <Badge variant="secondary" className="ml-1 h-5 px-1.5">
                         {selectedTags.length}
@@ -364,7 +364,7 @@ const Timeline = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="center" className="w-48 max-h-64 overflow-y-auto bg-popover">
-                  <DropdownMenuLabel>Tags</DropdownMenuLabel>
+                  <DropdownMenuLabel>Mots-clés</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {allTags.map((tag) => (
                     <DropdownMenuCheckboxItem
