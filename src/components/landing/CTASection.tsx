@@ -41,14 +41,14 @@ const CTASection = () => {
           </motion.div>
 
           {/* Title */}
-          <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-4 sm:mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-4 sm:mb-6 leading-tight">
             Vos souvenirs méritent
             <br />
             <span className="text-gradient-gold">d'être préservés</span>
           </h2>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2">
+          <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2">
             Commencez dès aujourd'hui à construire l'héritage que vous laisserez aux générations futures. 
             Gratuit, sans engagement.
           </p>
@@ -62,7 +62,7 @@ const CTASection = () => {
           </Button>
 
           {/* Trust */}
-          <p className="mt-6 sm:mt-8 text-xs sm:text-sm text-primary-foreground/60 px-4">
+          <p className="mt-6 sm:mt-8 text-sm text-primary-foreground/60 px-4">
             Inscription gratuite • Aucune carte bancaire requise • Vos données restent privées
           </p>
         </motion.div>

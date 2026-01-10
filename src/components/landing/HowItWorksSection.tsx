@@ -43,8 +43,8 @@ const HowItWorksSection = () => {
       }} transition={{
         duration: 0.6
       }} className="text-center max-w-3xl mx-auto mb-12 sm:mb-20">
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-3 sm:mb-4">Comment ça marche ?</span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre héritage<br /><span className="text-secondary">en 4 étapes simples</span>
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-3 sm:mb-4">Comment ça marche ?</span>
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre héritage<br /><span className="text-secondary">en 4 étapes simples</span>
           </h2>
         </motion.div>
 
@@ -78,10 +78,10 @@ const HowItWorksSection = () => {
                     </span>
                   </div>
                   
-                  <h3 className="text-sm sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
+                  <h3 className="text-base sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-xs sm:text-base text-muted-foreground leading-relaxed hidden sm:block">
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed hidden sm:block">
                     {step.description}
                   </p>
                 </div>

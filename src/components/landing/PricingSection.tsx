@@ -111,14 +111,14 @@ const PricingSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-3 sm:mb-4">
             Tarifs
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Un plan pour chaque
             <span className="text-secondary"> histoire</span>
           </h2>
-          <p className="text-sm sm:text-lg text-muted-foreground px-2">
+          <p className="text-base sm:text-lg text-muted-foreground px-2">
             Commencez gratuitement et évoluez selon vos besoins. Pas de frais cachés.
           </p>
         </motion.div>
@@ -131,7 +131,7 @@ const PricingSection = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12"
         >
-          <span className={`text-xs sm:text-sm font-medium ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+          <span className={`text-sm font-medium ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
             Mensuel
           </span>
           <button
@@ -146,10 +146,10 @@ const PricingSection = () => {
               }`}
             />
           </button>
-          <span className={`text-xs sm:text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+          <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
             Annuel
           </span>
-          <span className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10 text-accent text-[10px] sm:text-xs font-medium">
+          <span className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
             -17%
           </span>
         </motion.div>
@@ -172,7 +172,7 @@ const PricingSection = () => {
               {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2">
-                  <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs sm:text-sm font-semibold shadow-gold whitespace-nowrap">
+                  <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
                     Le plus populaire
                   </span>
                 </div>
@@ -190,7 +190,7 @@ const PricingSection = () => {
                 }`}>
                   {plan.name}
                 </h3>
-                <p className={`text-xs sm:text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                <p className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                   {plan.description}
                 </p>
               </div>
@@ -203,7 +203,7 @@ const PricingSection = () => {
                   }`}>
                     {isYearly ? plan.price.yearly : plan.price.monthly}€
                   </span>
-                  <span className={`text-xs sm:text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                  <span className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                     /{isYearly ? "an" : "mois"}
                   </span>
                 </div>
@@ -216,7 +216,7 @@ const PricingSection = () => {
                     <Check className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${
                       plan.popular ? "text-secondary" : "text-secondary"
                     }`} />
-                    <span className={`text-xs sm:text-sm ${
+                    <span className={`text-sm ${
                       plan.popular ? "text-primary-foreground/90" : "text-muted-foreground"
                     }`}>
                       {feature}

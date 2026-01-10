@@ -49,10 +49,10 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-3 sm:mb-4">
             FAQ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Questions
             <span className="text-secondary"> fréquentes</span>
           </h2>
@@ -73,10 +73,10 @@ const FAQSection = () => {
                 value={`item-${index}`}
                 className="bg-background rounded-xl sm:rounded-2xl border border-border px-4 sm:px-6 shadow-soft"
               >
-                <AccordionTrigger className="text-left font-display font-semibold text-foreground hover:text-secondary py-4 sm:py-6 [&[data-state=open]]:text-secondary text-sm sm:text-base">
+                <AccordionTrigger className="text-left font-display font-semibold text-foreground hover:text-secondary py-4 sm:py-6 [&[data-state=open]]:text-secondary text-base">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-4 sm:pb-6 leading-relaxed text-sm sm:text-base">
+                <AccordionContent className="text-muted-foreground pb-4 sm:pb-6 leading-relaxed text-base">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

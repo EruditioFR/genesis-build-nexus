@@ -75,14 +75,14 @@ const FeaturesSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 sm:mb-4">
             Fonctionnalités
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Tout ce dont vous avez besoin pour
             <span className="text-secondary"> préserver vos souvenirs</span>
           </h2>
-          <p className="text-sm sm:text-lg text-muted-foreground px-2">
+          <p className="text-base sm:text-lg text-muted-foreground px-2">
             Une plateforme complète qui combine la simplicité d'utilisation avec des fonctionnalités puissantes pour créer votre héritage numérique.
           </p>
         </motion.div>
@@ -100,7 +100,7 @@ const FeaturesSection = () => {
               <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-card shadow-card flex items-center justify-center">
                 <type.icon className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-muted-foreground">{type.label}</span>
+              <span className="text-sm font-medium text-muted-foreground">{type.label}</span>
             </div>
           ))}
         </motion.div>
@@ -123,7 +123,7 @@ const FeaturesSection = () => {
                 <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-2 sm:mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-base text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>

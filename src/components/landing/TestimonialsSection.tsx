@@ -37,10 +37,10 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 sm:mb-4">
             Témoignages
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Ils préservent leur
             <span className="text-secondary"> héritage</span>
           </h2>
@@ -64,7 +64,7 @@ const TestimonialsSection = () => {
                 </div>
 
                 {/* Quote Text */}
-                <p className="text-sm sm:text-base text-foreground/90 leading-relaxed mb-6 sm:mb-8 font-medium">
+                <p className="text-base sm:text-base text-foreground/90 leading-relaxed mb-6 sm:mb-8 font-medium">
                   "{testimonial.quote}"
                 </p>
 
@@ -76,10 +76,10 @@ const TestimonialsSection = () => {
                     </span>
                   </div>
                   <div>
-                    <p className="font-display font-semibold text-foreground text-sm sm:text-base">
+                    <p className="font-display font-semibold text-foreground text-base sm:text-base">
                       {testimonial.author}
                     </p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {testimonial.role}
                     </p>
                   </div>
