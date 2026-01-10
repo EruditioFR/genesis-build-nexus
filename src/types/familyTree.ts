@@ -50,6 +50,7 @@ export interface ParentChildRelationship {
   id: string;
   parent_id: string;
   child_id: string;
+  union_id?: string | null;
   relationship_type: 'biological' | 'adopted' | 'step' | 'foster';
   birth_order?: number | null;
   created_at: string;

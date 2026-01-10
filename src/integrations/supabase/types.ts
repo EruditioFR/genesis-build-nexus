@@ -304,6 +304,7 @@ export type Database = {
           id: string
           parent_id: string
           relationship_type: string | null
+          union_id: string | null
         }
         Insert: {
           birth_order?: number | null
@@ -312,6 +313,7 @@ export type Database = {
           id?: string
           parent_id: string
           relationship_type?: string | null
+          union_id?: string | null
         }
         Update: {
           birth_order?: number | null
@@ -320,6 +322,7 @@ export type Database = {
           id?: string
           parent_id?: string
           relationship_type?: string | null
+          union_id?: string | null
         }
         Relationships: [
           {
@@ -334,6 +337,13 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_parent_child_union_id_fkey"
+            columns: ["union_id"]
+            isOneToOne: false
+            referencedRelation: "family_unions"
             referencedColumns: ["id"]
           },
         ]

@@ -224,19 +224,30 @@ export default function FamilyTreeViewPage() {
       if (addRelationType === 'parent') {
         await addRelationship(newPerson.id, addRelationTarget.id);
       } else if (addRelationType === 'child') {
-        // Link to first parent (the target)
-        await addRelationship(addRelationTarget.id, newPerson.id);
-        // Link to second parent if selected
+        // Find the union between the two parents
+        let unionId: string | null = null;
         if (secondParentId) {
-          await addRelationship(secondParentId, newPerson.id);
+          const union = unions.find(u => 
+            (u.person1_id === addRelationTarget.id && u.person2_id === secondParentId) ||
+            (u.person1_id === secondParentId && u.person2_id === addRelationTarget.id)
+          );
+          unionId = union?.id || null;
+        }
+        
+        // Link to first parent (the target) with union reference
+        await addRelationship(addRelationTarget.id, newPerson.id, 'biological', unionId);
+        // Link to second parent if selected with same union reference
+        if (secondParentId) {
+          await addRelationship(secondParentId, newPerson.id, 'biological', unionId);
         }
       } else if (addRelationType === 'spouse') {
         await addUnion(addRelationTarget.id, newPerson.id);
       } else if (addRelationType === 'sibling') {
         // For siblings, we need to find the parents and add this person as their child too
+        // Keep the same union_id as the sibling
         const parentRelations = relationships.filter(r => r.child_id === addRelationTarget.id);
         for (const rel of parentRelations) {
-          await addRelationship(rel.parent_id, newPerson.id);
+          await addRelationship(rel.parent_id, newPerson.id, 'biological', rel.union_id);
         }
       }
     }
