@@ -12,7 +12,7 @@ const QuickActions = () => {
       primary: true,
     },
     {
-      label: 'Ma timeline',
+      label: 'Ma chronologie',
       icon: Clock,
       href: '/timeline',
       color: 'bg-primary/10 text-primary hover:bg-primary/20',

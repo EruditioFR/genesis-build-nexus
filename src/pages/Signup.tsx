@@ -257,7 +257,7 @@ const Signup = () => {
             <div className="space-y-4">
               {[
                 'Capsules mémorielles illimitées',
-                'Timeline interactive familiale',
+                'Chronologie interactive familiale',
                 'Partage sécurisé avec vos proches',
                 'Assistant IA pour vos récits',
               ].map((feature) => (

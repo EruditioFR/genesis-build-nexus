@@ -35,7 +35,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const navLinks = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/capsules', label: 'Capsules', icon: FolderOpen },
-    { to: '/timeline', label: 'Timeline', icon: Clock },
+    { to: '/timeline', label: 'Chronologie', icon: Clock },
     { to: '/calendar', label: 'Calendrier', icon: CalendarDays },
     { to: '/circles', label: 'Cercles', icon: Users },
     { to: '/statistics', label: 'Stats', icon: BarChart3 },
