@@ -53,7 +53,13 @@ import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
 import { UnionEditDialog } from './UnionEditDialog';
+import { RelationshipEditDialog } from './RelationshipEditDialog';
 import { toast } from 'sonner';
+
+interface ParentWithRelationship {
+  parent: FamilyPerson;
+  relationship?: ParentChildRelationship;
+}
 
 interface SpouseWithUnion {
   spouse: FamilyPerson;
@@ -101,6 +107,15 @@ export function PersonDetailPanel({
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editingUnion, setEditingUnion] = useState<{ union: FamilyUnion; spouse: FamilyPerson } | null>(null);
+  const [editingRelationship, setEditingRelationship] = useState<{ relationship: ParentChildRelationship; parent: FamilyPerson } | null>(null);
+
+  // Get parents with their relationship info
+  const parentsWithRelationships: ParentWithRelationship[] = parents.map(parent => {
+    const relationship = relationships.find(
+      r => r.parent_id === parent.id && r.child_id === person.id
+    );
+    return { parent, relationship };
+  });
 
   // Get spouses with their union info and common children
   const spousesWithUnions: SpouseWithUnion[] = spouses.map(spouse => {
@@ -164,7 +179,7 @@ export function PersonDetailPanel({
     biography: person.biography || ''
   });
 
-  const { updatePerson, updateUnion } = useFamilyTree();
+  const { updatePerson, updateUnion, updateRelationship } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
@@ -264,11 +279,17 @@ export function PersonDetailPanel({
   const RelatedPersonCard = ({ 
     relatedPerson, 
     unionInfo,
-    showEditButton = false
+    relationshipInfo,
+    showEditButton = false,
+    showRelationshipEditButton = false,
+    onEditRelationship
   }: { 
     relatedPerson: FamilyPerson;
     unionInfo?: FamilyUnion;
+    relationshipInfo?: ParentChildRelationship;
     showEditButton?: boolean;
+    showRelationshipEditButton?: boolean;
+    onEditRelationship?: () => void;
   }) => {
     const getUnionLabel = () => {
       if (!unionInfo) return null;
@@ -292,6 +313,17 @@ export function PersonDetailPanel({
       return unionInfo.is_current ? labels[unionInfo.union_type] || 'Conjoint' : 'Ex-conjoint';
     };
 
+    const getRelationshipLabel = () => {
+      if (!relationshipInfo) return null;
+      const labels: Record<string, string> = {
+        'biological': 'Biologique',
+        'adopted': 'Adopté(e)',
+        'step': 'Beau-parent',
+        'foster': 'Famille d\'accueil'
+      };
+      return labels[relationshipInfo.relationship_type] || null;
+    };
+
     const getUnionDates = () => {
       if (!unionInfo) return null;
       const parts: string[] = [];
@@ -305,6 +337,7 @@ export function PersonDetailPanel({
     };
 
     const unionLabel = getUnionLabel();
+    const relationshipLabel = getRelationshipLabel();
     const unionDates = getUnionDates();
 
     return (
@@ -332,6 +365,14 @@ export function PersonDetailPanel({
                   {unionLabel}
                 </Badge>
               )}
+              {relationshipLabel && relationshipInfo?.relationship_type !== 'biological' && (
+                <Badge 
+                  variant="outline" 
+                  className="text-[10px] px-1.5 py-0 h-4"
+                >
+                  {relationshipLabel}
+                </Badge>
+              )}
             </div>
             {unionDates ? (
               <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -356,6 +397,19 @@ export function PersonDetailPanel({
             onClick={(e) => {
               e.stopPropagation();
               setEditingUnion({ union: unionInfo, spouse: relatedPerson });
+            }}
+          >
+            <Pencil className="w-3 h-3" />
+          </Button>
+        )}
+        {showRelationshipEditButton && relationshipInfo && onEditRelationship && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditRelationship();
             }}
           >
             <Pencil className="w-3 h-3" />
@@ -719,10 +773,20 @@ export function PersonDetailPanel({
                   Ajouter
                 </Button>
               </div>
-              {parents.length > 0 ? (
+              {parentsWithRelationships.length > 0 ? (
                 <div className="space-y-1">
-                  {parents.map(parent => (
-                    <RelatedPersonCard key={parent.id} relatedPerson={parent} />
+                  {parentsWithRelationships.map(({ parent, relationship }) => (
+                    <RelatedPersonCard 
+                      key={parent.id} 
+                      relatedPerson={parent}
+                      relationshipInfo={relationship}
+                      showRelationshipEditButton={!!relationship}
+                      onEditRelationship={() => {
+                        if (relationship) {
+                          setEditingRelationship({ relationship, parent });
+                        }
+                      }}
+                    />
                   ))}
                 </div>
               ) : (
@@ -848,6 +912,24 @@ export function PersonDetailPanel({
           spouse={editingUnion.spouse}
           onSave={async (unionId, updates) => {
             const success = await updateUnion(unionId, updates);
+            if (success) {
+              onUpdate();
+            }
+            return success;
+          }}
+        />
+      )}
+
+      {/* Relationship edit dialog */}
+      {editingRelationship && (
+        <RelationshipEditDialog
+          open={!!editingRelationship}
+          onOpenChange={(open) => !open && setEditingRelationship(null)}
+          relationship={editingRelationship.relationship}
+          parent={editingRelationship.parent}
+          child={person}
+          onSave={async (relationshipId, updates) => {
+            const success = await updateRelationship(relationshipId, updates);
             if (success) {
               onUpdate();
             }
