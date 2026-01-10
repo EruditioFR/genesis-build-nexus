@@ -14,7 +14,7 @@ const plans = [
     price: { monthly: 0, yearly: 0 },
     description: "Parfait pour commencer à préserver vos souvenirs",
     features: [
-      "2 GB de stockage",
+      "500 Mo de stockage",
       "Capsules texte illimitées",
       "1 cercle de partage (5 membres)",
       "Export PDF basique (1x/mois)",
@@ -50,7 +50,7 @@ const plans = [
     price: { monthly: 24.99, yearly: 249 },
     description: "Pour les familles multigénérationnelles",
     features: [
-      "500 GB de stockage",
+      "50 GB de stockage",
       "Tout Premium inclus",
       "5 profils familiaux inclus",
       "Système de legs posthume",
