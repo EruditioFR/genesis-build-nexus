@@ -58,6 +58,42 @@ export type Database = {
           },
         ]
       }
+      capsule_person_links: {
+        Row: {
+          capsule_id: string
+          created_at: string
+          id: string
+          person_id: string
+        }
+        Insert: {
+          capsule_id: string
+          created_at?: string
+          id?: string
+          person_id: string
+        }
+        Update: {
+          capsule_id?: string
+          created_at?: string
+          id?: string
+          person_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_person_links_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capsule_person_links_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capsule_shares: {
         Row: {
           capsule_id: string
@@ -256,6 +292,303 @@ export type Database = {
             columns: ["capsule_id"]
             isOneToOne: false
             referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_parent_child: {
+        Row: {
+          birth_order: number | null
+          child_id: string
+          created_at: string
+          id: string
+          parent_id: string
+          relationship_type: string | null
+        }
+        Insert: {
+          birth_order?: number | null
+          child_id: string
+          created_at?: string
+          id?: string
+          parent_id: string
+          relationship_type?: string | null
+        }
+        Update: {
+          birth_order?: number | null
+          child_id?: string
+          created_at?: string
+          id?: string
+          parent_id?: string
+          relationship_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_parent_child_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_parent_child_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_person_media: {
+        Row: {
+          caption: string | null
+          created_at: string
+          date_taken: string | null
+          display_order: number | null
+          file_size_bytes: number | null
+          file_url: string
+          id: string
+          is_profile_photo: boolean | null
+          media_type: string | null
+          person_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          date_taken?: string | null
+          display_order?: number | null
+          file_size_bytes?: number | null
+          file_url: string
+          id?: string
+          is_profile_photo?: boolean | null
+          media_type?: string | null
+          person_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          date_taken?: string | null
+          display_order?: number | null
+          file_size_bytes?: number | null
+          file_url?: string
+          id?: string
+          is_profile_photo?: boolean | null
+          media_type?: string | null
+          person_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_person_media_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_persons: {
+        Row: {
+          biography: string | null
+          birth_date: string | null
+          birth_date_precision: string | null
+          birth_place: string | null
+          birth_place_lat: number | null
+          birth_place_lng: number | null
+          burial_date: string | null
+          burial_place: string | null
+          created_at: string
+          created_by: string | null
+          death_date: string | null
+          death_date_precision: string | null
+          death_place: string | null
+          death_place_lat: number | null
+          death_place_lng: number | null
+          first_names: string
+          gender: string | null
+          id: string
+          is_alive: boolean | null
+          last_name: string
+          maiden_name: string | null
+          nationality: string | null
+          occupation: string | null
+          privacy_level: string | null
+          profile_photo_url: string | null
+          residences: Json | null
+          tree_id: string
+          updated_at: string
+        }
+        Insert: {
+          biography?: string | null
+          birth_date?: string | null
+          birth_date_precision?: string | null
+          birth_place?: string | null
+          birth_place_lat?: number | null
+          birth_place_lng?: number | null
+          burial_date?: string | null
+          burial_place?: string | null
+          created_at?: string
+          created_by?: string | null
+          death_date?: string | null
+          death_date_precision?: string | null
+          death_place?: string | null
+          death_place_lat?: number | null
+          death_place_lng?: number | null
+          first_names: string
+          gender?: string | null
+          id?: string
+          is_alive?: boolean | null
+          last_name: string
+          maiden_name?: string | null
+          nationality?: string | null
+          occupation?: string | null
+          privacy_level?: string | null
+          profile_photo_url?: string | null
+          residences?: Json | null
+          tree_id: string
+          updated_at?: string
+        }
+        Update: {
+          biography?: string | null
+          birth_date?: string | null
+          birth_date_precision?: string | null
+          birth_place?: string | null
+          birth_place_lat?: number | null
+          birth_place_lng?: number | null
+          burial_date?: string | null
+          burial_place?: string | null
+          created_at?: string
+          created_by?: string | null
+          death_date?: string | null
+          death_date_precision?: string | null
+          death_place?: string | null
+          death_place_lat?: number | null
+          death_place_lng?: number | null
+          first_names?: string
+          gender?: string | null
+          id?: string
+          is_alive?: boolean | null
+          last_name?: string
+          maiden_name?: string | null
+          nationality?: string | null
+          occupation?: string | null
+          privacy_level?: string | null
+          profile_photo_url?: string | null
+          residences?: Json | null
+          tree_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_persons_tree_id_fkey"
+            columns: ["tree_id"]
+            isOneToOne: false
+            referencedRelation: "family_trees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_trees: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          root_person_id: string | null
+          settings: Json | null
+          updated_at: string
+          user_id: string
+          visibility: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          root_person_id?: string | null
+          settings?: Json | null
+          updated_at?: string
+          user_id: string
+          visibility?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          root_person_id?: string | null
+          settings?: Json | null
+          updated_at?: string
+          user_id?: string
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_root_person"
+            columns: ["root_person_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_unions: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          end_reason: string | null
+          id: string
+          is_current: boolean | null
+          notes: string | null
+          person1_id: string
+          person2_id: string
+          start_date: string | null
+          start_place: string | null
+          union_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          end_reason?: string | null
+          id?: string
+          is_current?: boolean | null
+          notes?: string | null
+          person1_id: string
+          person2_id: string
+          start_date?: string | null
+          start_place?: string | null
+          union_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          end_reason?: string | null
+          id?: string
+          is_current?: boolean | null
+          notes?: string | null
+          person1_id?: string
+          person2_id?: string
+          start_date?: string | null
+          start_place?: string | null
+          union_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_unions_person1_id_fkey"
+            columns: ["person1_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_unions_person2_id_fkey"
+            columns: ["person2_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
             referencedColumns: ["id"]
           },
         ]
