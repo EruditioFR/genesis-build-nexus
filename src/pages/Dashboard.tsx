@@ -10,6 +10,7 @@ import StatsCards from '@/components/dashboard/StatsCards';
 import StorageProgress from '@/components/dashboard/StorageProgress';
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
+import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 
@@ -292,12 +293,14 @@ const Dashboard = () => {
             <RecentCapsules capsules={recentCapsules} />
           </div>
 
-          {/* Right Column - 1/3 width - Premium only */}
-          {isPremium && (
-            <div className="lg:col-span-1">
+          {/* Right Column - 1/3 width */}
+          <div className="lg:col-span-1">
+            {isPremium ? (
               <FamilyTreeCard personsCount={familyPersonsCount} />
-            </div>
-          )}
+            ) : (
+              <PremiumPromoCard />
+            )}
+          </div>
         </div>
       </main>
     </div>
