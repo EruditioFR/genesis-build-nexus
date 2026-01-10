@@ -75,7 +75,6 @@ export default function FamilyTreePage() {
       <div className="min-h-screen bg-background">
         <DashboardHeader 
           user={user} 
-          profile={null} 
           onSignOut={signOut} 
         />
         <div className="max-w-4xl mx-auto px-4 py-16">
@@ -114,7 +113,6 @@ export default function FamilyTreePage() {
     <div className="min-h-screen bg-background">
       <DashboardHeader 
         user={user} 
-        profile={null} 
         onSignOut={signOut} 
       />
       
