@@ -32,7 +32,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
-import { TreeVisualization } from '@/components/familyTree/TreeVisualization';
+import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
@@ -73,6 +73,8 @@ export default function FamilyTreeViewPage() {
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const [contentSize, setContentSize] = useState({ width: 800, height: 600 });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [personPositions, setPersonPositions] = useState<PersonPositionData[]>([]);
+  const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
 
   const loadTree = useCallback(async () => {
     if (!treeId) return;
@@ -143,6 +145,47 @@ export default function FamilyTreeViewPage() {
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
+
+  // Center on person when positions are available
+  const centerOnPerson = useCallback((personId: string) => {
+    const container = scrollContainerRef.current;
+    if (!container || personPositions.length === 0) {
+      // Positions not yet available, set pending
+      setPendingCenterId(personId);
+      return;
+    }
+
+    const position = personPositions.find(p => p.personId === personId);
+    if (!position) return;
+
+    // Calculate scroll position to center the person
+    const cardWidth = 160;
+    const cardHeight = 80;
+    const scrollX = (position.x + cardWidth / 2) * zoom - container.clientWidth / 2;
+    const scrollY = (position.y + cardHeight / 2) * zoom - container.clientHeight / 2;
+
+    container.scrollTo({
+      left: Math.max(0, scrollX),
+      top: Math.max(0, scrollY),
+      behavior: 'smooth',
+    });
+
+    setPendingCenterId(null);
+  }, [personPositions, zoom]);
+
+  // Handle pending center request when positions become available
+  useEffect(() => {
+    if (pendingCenterId && personPositions.length > 0) {
+      centerOnPerson(pendingCenterId);
+    }
+  }, [pendingCenterId, personPositions, centerOnPerson]);
+
+  // Handler for search selection - select and center
+  const handleSearchSelect = useCallback((person: FamilyPerson) => {
+    setSelectedPerson(person);
+    setShowDetailPanel(true);
+    centerOnPerson(person.id);
+  }, [centerOnPerson]);
 
   const handleAddPerson = (type: 'parent' | 'child' | 'spouse' | 'sibling', targetPerson?: FamilyPerson) => {
     setAddRelationType(type);
@@ -243,7 +286,7 @@ export default function FamilyTreeViewPage() {
                 {/* Search */}
                 <TreeSearchCommand 
                   persons={persons} 
-                  onPersonSelect={handlePersonClick}
+                  onPersonSelect={handleSearchSelect}
                 />
 
                 {/* View mode selector */}
@@ -332,6 +375,7 @@ export default function FamilyTreeViewPage() {
                 selectedPersonId={selectedPerson?.id}
                 onPersonClick={handlePersonClick}
                 onAddPerson={handleAddPerson}
+                onPositionsCalculated={setPersonPositions}
               />
             </motion.div>
 
@@ -399,7 +443,7 @@ export default function FamilyTreeViewPage() {
                 {/* Search */}
                 <TreeSearchCommand 
                   persons={persons} 
-                  onPersonSelect={handlePersonClick}
+                  onPersonSelect={handleSearchSelect}
                 />
 
                 {/* View mode selector */}
@@ -532,6 +576,7 @@ export default function FamilyTreeViewPage() {
                   selectedPersonId={selectedPerson?.id}
                   onPersonClick={handlePersonClick}
                   onAddPerson={handleAddPerson}
+                  onPositionsCalculated={setPersonPositions}
                 />
               )}
             </motion.div>

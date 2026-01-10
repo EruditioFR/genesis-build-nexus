@@ -28,6 +28,12 @@ interface Connection {
   toPersonId: string;
 }
 
+export interface PersonPositionData {
+  personId: string;
+  x: number;
+  y: number;
+}
+
 interface TreeVisualizationProps {
   persons: FamilyPerson[];
   relationships: ParentChildRelationship[];
@@ -37,6 +43,7 @@ interface TreeVisualizationProps {
   selectedPersonId?: string;
   onPersonClick: (person: FamilyPerson) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
+  onPositionsCalculated?: (positions: PersonPositionData[]) => void;
 }
 
 export function TreeVisualization({
@@ -48,6 +55,7 @@ export function TreeVisualization({
   selectedPersonId,
   onPersonClick,
   onAddPerson,
+  onPositionsCalculated,
 }: TreeVisualizationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -302,6 +310,18 @@ export function TreeVisualization({
   // Calculate offset to center the tree
   const offsetX = 50 - bounds.minX;
   const offsetY = 50 - bounds.minY;
+
+  // Report positions with offset applied
+  useEffect(() => {
+    if (onPositionsCalculated && positions.length > 0) {
+      const positionsData: PersonPositionData[] = positions.map(pos => ({
+        personId: pos.person.id,
+        x: pos.x + offsetX,
+        y: pos.y + offsetY,
+      }));
+      onPositionsCalculated(positionsData);
+    }
+  }, [positions, offsetX, offsetY, onPositionsCalculated]);
 
   return (
     <div 
