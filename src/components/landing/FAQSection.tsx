@@ -9,7 +9,7 @@ import {
 const faqs = [
   {
     question: "Qu'est-ce qu'une capsule mémorielle ?",
-    answer: "Une capsule mémorielle est un conteneur numérique sécurisé qui préserve vos souvenirs sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures.",
+    answer: "Une capsule mémorielle est un conteneur numérique sécurisé qui préserve vos souvenirs sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures. Chaque capsule est privée et accessible uniquement aux personnes que vous autorisez.",
   },
   {
     question: "Mes données sont-elles sécurisées ?",
