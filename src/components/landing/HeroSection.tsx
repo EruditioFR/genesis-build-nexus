@@ -1,19 +1,40 @@
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 import heroBackground from "@/assets/hero-background.jpg";
+
 const HeroSection = () => {
-  return <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 h-full">
-        <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover min-h-screen" />
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+  
+  // Parallax effect: background moves slower than scroll
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const floatingElementsY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  return <section ref={sectionRef} className="relative min-h-screen h-screen flex items-center overflow-hidden">
+      {/* Background Image with Overlay - Parallax */}
+      <motion.div 
+        className="absolute inset-0 h-[130%] -top-[15%]"
+        style={{ y: backgroundY, scale: backgroundScale }}
+      >
+        <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-transparent to-transparent" />
-      </div>
+      </motion.div>
 
-      {/* Floating Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating Elements - Parallax */}
+      <motion.div 
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ y: floatingElementsY }}
+      >
         <motion.div animate={{
         y: [0, -20, 0],
         rotate: [0, 5, 0]
@@ -30,9 +51,12 @@ const HeroSection = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/20 blur-3xl" />
-      </div>
+      </motion.div>
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 pt-20 sm:pt-32 pb-20 sm:pb-20">
+      <motion.div 
+        className="container mx-auto px-4 sm:px-6 relative z-10 pt-20 sm:pt-32 pb-20 sm:pb-20"
+        style={{ opacity: contentOpacity }}
+      >
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
         <motion.div 
@@ -169,7 +193,7 @@ Tous vos souvenirs précieux en un seul endroit sécurisé.</motion.p>
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll Indicator */}
       <motion.div initial={{
