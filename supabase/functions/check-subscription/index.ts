@@ -66,11 +66,46 @@ serve(async (req) => {
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
-      limit: 1,
+      limit: 10,
     });
 
+    logStep("Subscriptions query result", { count: subscriptions.data.length });
+
     if (subscriptions.data.length === 0) {
-      logStep("No active subscription");
+      // Also check for trialing subscriptions
+      const trialingSubscriptions = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "trialing",
+        limit: 1,
+      });
+
+      if (trialingSubscriptions.data.length === 0) {
+        logStep("No active or trialing subscription");
+        return new Response(JSON.stringify({ 
+          subscribed: false,
+          tier: "free",
+          subscription_end: null 
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        });
+      }
+      
+      // Use trialing subscription
+      subscriptions.data = trialingSubscriptions.data;
+    }
+
+    const subscription = subscriptions.data[0];
+    logStep("Processing subscription", { 
+      id: subscription.id, 
+      status: subscription.status,
+      current_period_end: subscription.current_period_end,
+      items: subscription.items?.data?.length 
+    });
+
+    const priceItem = subscription.items?.data?.[0];
+    if (!priceItem) {
+      logStep("No price item found in subscription");
       return new Response(JSON.stringify({ 
         subscribed: false,
         tier: "free",
@@ -81,12 +116,21 @@ serve(async (req) => {
       });
     }
 
-    const subscription = subscriptions.data[0];
-    const productId = subscription.items.data[0].price.product as string;
+    const productId = typeof priceItem.price.product === 'string' 
+      ? priceItem.price.product 
+      : priceItem.price.product?.id || '';
+    
+    logStep("Product ID found", { productId });
+    
     const tier = PRODUCT_TO_TIER[productId] || "premium";
-    const subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+    
+    // Safely handle the subscription end date
+    let subscriptionEnd: string | null = null;
+    if (subscription.current_period_end && typeof subscription.current_period_end === 'number') {
+      subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+    }
 
-    logStep("Active subscription found", { tier, subscriptionEnd });
+    logStep("Active subscription found", { tier, subscriptionEnd, productId });
 
     // Update the user's profile with the subscription level
     const subscriptionLevel = tier === "heritage" ? "legacy" : tier;
