@@ -3,7 +3,7 @@ import { Quote } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "J'ai pu préserver toutes les histoires de ma grand-mère avant qu'il ne soit trop tard. Mes petits-enfants découvriront son incroyable parcours.",
+    quote: "J'ai pu préserver toutes les histoires de ma grand-mère. Mes petits-enfants découvriront son incroyable parcours.",
     author: "Marie D.",
     role: "Retraitée, 68 ans",
     avatar: "M",
