@@ -22,6 +22,7 @@ import Statistics from "./pages/Statistics";
 import CalendarPage from "./pages/CalendarPage";
 import Premium from "./pages/Premium";
 import FamilyTreePage from "./pages/FamilyTreePage";
+import FamilyTreeViewPage from "./pages/FamilyTreeViewPage";
 import InviteAccept from "./pages/InviteAccept";
 import GuardianVerify from "./pages/GuardianVerify";
 import GuardianDashboard from "./pages/GuardianDashboard";
@@ -71,6 +72,7 @@ const App = () => (
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/premium" element={<Premium />} />
                 <Route path="/family-tree" element={<FamilyTreePage />} />
+                <Route path="/family-tree/:id" element={<FamilyTreeViewPage />} />
                 <Route path="/invite/:token" element={<InviteAccept />} />
                 <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
                 <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
