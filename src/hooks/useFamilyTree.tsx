@@ -287,6 +287,31 @@ export function useFamilyTree() {
     }
   }, []);
 
+  // Update parent-child relationship
+  const updateRelationship = useCallback(async (
+    relationshipId: string,
+    updates: Partial<ParentChildRelationship>
+  ): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('family_parent_child')
+        .update({
+          relationship_type: updates.relationship_type,
+          birth_order: updates.birth_order,
+          union_id: updates.union_id
+        })
+        .eq('id', relationshipId);
+
+      if (error) throw error;
+      toast.success('Relation mise à jour');
+      return true;
+    } catch (error) {
+      console.error('Error updating relationship:', error);
+      toast.error('Erreur lors de la mise à jour de la relation');
+      return false;
+    }
+  }, []);
+
   // Add union
   const addUnion = useCallback(async (
     person1Id: string,
@@ -406,6 +431,7 @@ export function useFamilyTree() {
     updatePerson,
     deletePerson,
     addRelationship,
+    updateRelationship,
     addUnion,
     updateUnion,
     deleteTree,
