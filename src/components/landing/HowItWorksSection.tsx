@@ -44,7 +44,7 @@ const HowItWorksSection = () => {
         duration: 0.6
       }} className="text-center max-w-3xl mx-auto mb-12 sm:mb-20">
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-3 sm:mb-4">Comment ça marche ?</span>
-          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre héritage<br /><span className="text-secondary">en 4 étapes simples</span>
+          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre capsule mémorielle<br /><span className="text-secondary">en 4 étapes simples</span>
           </h2>
         </motion.div>
 
