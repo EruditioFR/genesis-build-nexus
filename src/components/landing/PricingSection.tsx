@@ -114,7 +114,7 @@ const PricingSection = () => {
           </span>
           <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
             Un accompagnement pour chaque
-            <span className="text-secondary"> situation</span>
+            <span className="text-secondary"> histoire de vie</span>
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground px-2">
             Commencez gratuitement et évoluez selon vos besoins. Pas de frais cachés.
