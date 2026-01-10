@@ -109,9 +109,7 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.2
-        }} className="text-lg sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">Créez votre capsule mémorielle et transmettez votre héritage aux générations futures.
-Textes, photos, vidéos, enregistrements sonores....
-Tous vos souvenirs précieux en un seul endroit sécurisé.</motion.p>
+        }} className="text-lg sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">Ne laissez pas vos souvenirs s'effacer, faites-en un trésor familial.</motion.p>
 
           {/* CTA Buttons */}
           <motion.div initial={{
