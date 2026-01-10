@@ -56,7 +56,6 @@ const plans = [
       "Système de legs posthume",
       "Arbre généalogique interactif",
       "Support VIP téléphone",
-      "Archivage garanti 100 ans",
     ],
     cta: "Choisir Héritage",
     variant: "gold" as const,
