@@ -53,7 +53,6 @@ const plans = [
       "50 GB de stockage",
       "Tout Premium inclus",
       "5 profils familiaux inclus",
-      "Système de legs posthume",
       "Arbre généalogique interactif",
       "Support VIP téléphone",
     ],
