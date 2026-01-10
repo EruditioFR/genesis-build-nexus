@@ -94,9 +94,9 @@ const HeroSection = () => {
           duration: 0.7,
           delay: 0.1
         }} className="text-4xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
-            Votre histoire mérite
+            Ne laissez pas vos souvenirs s'effacer,
             <br />
-            <span className="text-primary-foreground">de traverser les générations</span>
+            <span className="text-primary-foreground">faites-en un trésor familial.</span>
           </motion.h1>
 
           {/* Subtitle */}
