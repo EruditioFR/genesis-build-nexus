@@ -436,17 +436,11 @@ const Profile = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={handleUpgrade}
-                  disabled={isUpgrading}
+                  asChild
                 >
-                  {isUpgrading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      Chargement...
-                    </>
-                  ) : (
-                    'Passer Premium'
-                  )}
+                  <Link to="/premium">
+                    Passer Premium
+                  </Link>
                 </Button>
               ) : (
                 <Button 
