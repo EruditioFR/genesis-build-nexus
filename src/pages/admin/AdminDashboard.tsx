@@ -34,14 +34,21 @@ export default function AdminDashboard() {
       profilesResult,
       capsulesResult,
       commentsResult,
+      mediasResult,
     ] = await Promise.all([
       supabase.from("profiles").select("*"),
       supabase.from("capsules").select("*"),
       supabase.from("comments").select("id", { count: "exact", head: true }),
+      supabase.from("capsule_medias").select("file_size_bytes"),
     ]);
 
     const profiles = profilesResult.data || [];
     const capsules = capsulesResult.data || [];
+    const medias = mediasResult.data || [];
+
+    // Calculate real storage from media files
+    const totalStorageBytes = medias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
+    const totalStorageMb = totalStorageBytes / (1024 * 1024);
 
     // Calculate date for recent signups (last 7 days)
     const weekAgo = new Date();
@@ -55,7 +62,7 @@ export default function AdminDashboard() {
       publishedCapsules: capsules.filter((c) => c.status === "published").length,
       draftCapsules: capsules.filter((c) => c.status === "draft").length,
       totalComments: commentsResult.count || 0,
-      totalStorageUsed: profiles.reduce((acc, p) => acc + (p.storage_used_mb || 0), 0),
+      totalStorageUsed: totalStorageMb,
       recentSignups: profiles.filter((p) => new Date(p.created_at) > weekAgo).length,
       premiumUsers: profiles.filter((p) => p.subscription_level === "premium").length,
     };
