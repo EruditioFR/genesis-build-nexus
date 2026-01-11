@@ -38,6 +38,9 @@ import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
 import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
+import CategorySelector from '@/components/capsule/CategorySelector';
+import CategoryBadge from '@/components/capsule/CategoryBadge';
+import { useCategories, type Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -71,6 +74,7 @@ const CapsuleEdit = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
+  const { categories, createCustomCategory } = useCategories();
   
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
@@ -80,6 +84,8 @@ const CapsuleEdit = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
+  const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -138,6 +144,19 @@ const CapsuleEdit = () => {
 
         if (media) {
           setExistingMedia(media);
+        }
+
+        // Fetch existing categories
+        const { data: capsuleCats } = await supabase
+          .from('capsule_categories')
+          .select('*')
+          .eq('capsule_id', id);
+
+        if (capsuleCats) {
+          const primary = capsuleCats.find(c => c.is_primary);
+          const secondary = capsuleCats.filter(c => !c.is_primary);
+          if (primary) setPrimaryCategory(primary.category_id);
+          setSecondaryCategories(secondary.map(c => c.category_id));
         }
       } catch (error: any) {
         toast.error('Erreur lors du chargement de la capsule');
@@ -238,6 +257,32 @@ const CapsuleEdit = () => {
         }
       }
 
+      // Update categories
+      if (primaryCategory) {
+        // Delete existing categories
+        await supabase
+          .from('capsule_categories')
+          .delete()
+          .eq('capsule_id', id!);
+
+        // Insert new categories
+        const categoryInserts = [
+          { capsule_id: id!, category_id: primaryCategory, is_primary: true }
+        ];
+        
+        secondaryCategories.forEach(catId => {
+          if (catId !== primaryCategory) {
+            categoryInserts.push({ capsule_id: id!, category_id: catId, is_primary: false });
+          }
+        });
+
+        const { error: catError } = await supabase
+          .from('capsule_categories')
+          .insert(categoryInserts);
+
+        if (catError) throw catError;
+      }
+
       toast.success(
         status === 'published' 
           ? 'Capsule publiée avec succès !' 
@@ -321,6 +366,18 @@ const CapsuleEdit = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
+            {/* Category selector */}
+            <div className="p-6 rounded-2xl border border-border bg-card">
+              <CategorySelector
+                categories={categories}
+                primaryCategory={primaryCategory}
+                secondaryCategories={secondaryCategories}
+                onPrimaryChange={setPrimaryCategory}
+                onSecondaryChange={setSecondaryCategories}
+                onCreateCustom={user ? (name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color) : undefined}
+              />
+            </div>
+
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
