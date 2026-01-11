@@ -34,7 +34,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
     : user.email?.[0].toUpperCase() || 'U';
 
   const navLinks = [
-    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/dashboard', label: 'Synthèse', icon: LayoutDashboard },
     { to: '/capsules', label: 'Capsules', icon: FolderOpen },
     { to: '/timeline', label: 'Chronologie', icon: Clock },
     { to: '/calendar', label: 'Calendrier', icon: CalendarDays },
