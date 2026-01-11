@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      capsule_categories: {
+        Row: {
+          capsule_id: string
+          category_id: string
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+        }
+        Insert: {
+          capsule_id: string
+          category_id: string
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+        }
+        Update: {
+          capsule_id?: string
+          category_id?: string
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_categories_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capsule_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capsule_medias: {
         Row: {
           capsule_id: string
@@ -181,6 +220,54 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          color: string
+          created_at: string | null
+          description_long: string | null
+          description_short: string
+          icon: string
+          id: string
+          is_active: boolean | null
+          is_standard: boolean | null
+          name_fr: string
+          order_index: number
+          slug: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          color: string
+          created_at?: string | null
+          description_long?: string | null
+          description_short: string
+          icon: string
+          id?: string
+          is_active?: boolean | null
+          is_standard?: boolean | null
+          name_fr: string
+          order_index: number
+          slug: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          color?: string
+          created_at?: string | null
+          description_long?: string | null
+          description_short?: string
+          icon?: string
+          id?: string
+          is_active?: boolean | null
+          is_standard?: boolean | null
+          name_fr?: string
+          order_index?: number
+          slug?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -779,6 +866,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sub_categories: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          order_index: number | null
+          slug: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          order_index?: number | null
+          slug: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          order_index?: number | null
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
