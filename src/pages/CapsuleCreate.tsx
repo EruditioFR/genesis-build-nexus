@@ -64,7 +64,6 @@ const CapsuleCreate = () => {
   
   // Category state
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
-  const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   
   // Scheduling state
@@ -220,7 +219,7 @@ const CapsuleCreate = () => {
 
       // Add categories to the capsule
       if (primaryCategory && capsule) {
-        await setCapsuleCategories(capsule.id, primaryCategory, secondaryCategories);
+        await setCapsuleCategories(capsule.id, primaryCategory, []);
         
         // Add sub-categories if any selected
         if (selectedSubCategories.length > 0) {
@@ -308,15 +307,13 @@ const CapsuleCreate = () => {
           >
             {/* Category selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
-              <CategorySelector
+            <CategorySelector
                 categories={categories}
                 primaryCategory={primaryCategory}
-                secondaryCategories={secondaryCategories}
                 onPrimaryChange={(catId) => {
                   setPrimaryCategory(catId);
                   setSelectedSubCategories([]);
                 }}
-                onSecondaryChange={setSecondaryCategories}
                 onCreateCustom={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
                 subCategories={subCategories}
                 selectedSubCategories={selectedSubCategories}

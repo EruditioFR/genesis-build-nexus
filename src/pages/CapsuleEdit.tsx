@@ -85,7 +85,6 @@ const CapsuleEdit = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
-  const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
 
   const form = useForm<CapsuleFormValues>({
@@ -155,9 +154,7 @@ const CapsuleEdit = () => {
 
         if (capsuleCats) {
           const primary = capsuleCats.find(c => c.is_primary);
-          const secondary = capsuleCats.filter(c => !c.is_primary);
           if (primary) setPrimaryCategory(primary.category_id);
-          setSecondaryCategories(secondary.map(c => c.category_id));
         }
 
         // Fetch existing sub-categories
@@ -276,20 +273,10 @@ const CapsuleEdit = () => {
           .delete()
           .eq('capsule_id', id!);
 
-        // Insert new categories
-        const categoryInserts = [
-          { capsule_id: id!, category_id: primaryCategory, is_primary: true }
-        ];
-        
-        secondaryCategories.forEach(catId => {
-          if (catId !== primaryCategory) {
-            categoryInserts.push({ capsule_id: id!, category_id: catId, is_primary: false });
-          }
-        });
-
+        // Insert primary category only
         const { error: catError } = await supabase
           .from('capsule_categories')
-          .insert(categoryInserts);
+          .insert([{ capsule_id: id!, category_id: primaryCategory, is_primary: true }]);
 
         if (catError) throw catError;
 
@@ -382,15 +369,13 @@ const CapsuleEdit = () => {
           >
             {/* Category selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
-              <CategorySelector
+            <CategorySelector
                 categories={categories}
                 primaryCategory={primaryCategory}
-                secondaryCategories={secondaryCategories}
                 onPrimaryChange={(catId) => {
                   setPrimaryCategory(catId);
                   setSelectedSubCategories([]);
                 }}
-                onSecondaryChange={setSecondaryCategories}
                 onCreateCustom={user ? (name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color) : undefined}
                 subCategories={subCategories}
                 selectedSubCategories={selectedSubCategories}
