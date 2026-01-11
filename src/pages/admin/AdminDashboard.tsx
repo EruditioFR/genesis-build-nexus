@@ -4,6 +4,17 @@ import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTria
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { format, subDays, eachDayOfInterval } from "date-fns";
+import { fr } from "date-fns/locale";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 interface Stats {
   totalUsers: number;
@@ -18,8 +29,14 @@ interface Stats {
   premiumUsers: number;
 }
 
+interface StorageDataPoint {
+  date: string;
+  storage: number;
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [storageHistory, setStorageHistory] = useState<StorageDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,7 +56,7 @@ export default function AdminDashboard() {
       supabase.from("profiles").select("*"),
       supabase.from("capsules").select("*"),
       supabase.from("comments").select("id", { count: "exact", head: true }),
-      supabase.from("capsule_medias").select("file_size_bytes"),
+      supabase.from("capsule_medias").select("file_size_bytes, created_at"),
     ]);
 
     const profiles = profilesResult.data || [];
@@ -49,6 +66,26 @@ export default function AdminDashboard() {
     // Calculate real storage from media files
     const totalStorageBytes = medias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
     const totalStorageMb = totalStorageBytes / (1024 * 1024);
+
+    // Calculate storage history (last 30 days)
+    const dateRange = eachDayOfInterval({
+      start: subDays(new Date(), 30),
+      end: new Date()
+    });
+
+    const history: StorageDataPoint[] = dateRange.map(date => {
+      const dateStr = format(date, "yyyy-MM-dd");
+      const cumulativeBytes = medias
+        .filter(m => m.created_at && format(new Date(m.created_at), "yyyy-MM-dd") <= dateStr)
+        .reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
+      
+      return {
+        date: format(date, "d MMM", { locale: fr }),
+        storage: cumulativeBytes / (1024 * 1024)
+      };
+    });
+
+    setStorageHistory(history);
 
     // Calculate date for recent signups (last 7 days)
     const weekAgo = new Date();
@@ -182,6 +219,62 @@ export default function AdminDashboard() {
           </motion.div>
         ))}
       </div>
+
+      {/* Storage Evolution Chart */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.4 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <HardDrive className="h-5 w-5 text-orange-500" />
+              Évolution du stockage (30 derniers jours)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {storageHistory.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={storageHistory}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis 
+                    dataKey="date" 
+                    tick={{ fontSize: 12 }}
+                    className="text-muted-foreground"
+                  />
+                  <YAxis 
+                    tickFormatter={(value) => `${value.toFixed(0)} MB`}
+                    tick={{ fontSize: 12 }}
+                    className="text-muted-foreground"
+                  />
+                  <Tooltip 
+                    formatter={(value: number) => [`${value.toFixed(2)} MB`, "Stockage"]}
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
+                    labelStyle={{ color: "hsl(var(--foreground))" }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="storage"
+                    name="Stockage"
+                    stroke="#F97316"
+                    fill="rgba(249, 115, 22, 0.2)"
+                    strokeWidth={2}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                Aucune donnée de stockage disponible
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Quick alerts */}
       {stats.suspendedUsers > 0 && (
