@@ -34,6 +34,14 @@ export interface CapsuleCategory {
   category?: Category;
 }
 
+export interface CapsuleSubCategory {
+  id: string;
+  capsule_id: string;
+  sub_category_id: string;
+  created_at: string;
+  sub_category?: SubCategory;
+}
+
 export const useCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
@@ -178,6 +186,57 @@ export const useCategories = () => {
     return categories.find(cat => cat.slug === slug);
   }, [categories]);
 
+  const getCapsuleSubCategories = useCallback(async (capsuleId: string): Promise<CapsuleSubCategory[]> => {
+    const { data, error } = await supabase
+      .from('capsule_sub_categories')
+      .select(`
+        *,
+        sub_category:sub_categories(*)
+      `)
+      .eq('capsule_id', capsuleId);
+
+    if (error) {
+      console.error('Error fetching capsule sub-categories:', error);
+      return [];
+    }
+
+    return (data || []).map(item => ({
+      ...item,
+      sub_category: item.sub_category as SubCategory
+    }));
+  }, []);
+
+  const setCapsuleSubCategories = useCallback(async (
+    capsuleId: string,
+    subCategoryIds: string[]
+  ): Promise<boolean> => {
+    try {
+      // Delete existing sub-categories
+      await supabase
+        .from('capsule_sub_categories')
+        .delete()
+        .eq('capsule_id', capsuleId);
+
+      if (subCategoryIds.length === 0) return true;
+
+      // Insert new sub-categories (max 3)
+      const inserts = subCategoryIds.slice(0, 3).map(subCategoryId => ({
+        capsule_id: capsuleId,
+        sub_category_id: subCategoryId,
+      }));
+
+      const { error } = await supabase
+        .from('capsule_sub_categories')
+        .insert(inserts);
+
+      if (error) throw error;
+      return true;
+    } catch (err: any) {
+      console.error('Error setting capsule sub-categories:', err);
+      return false;
+    }
+  }, []);
+
   return {
     categories,
     subCategories,
@@ -189,5 +248,7 @@ export const useCategories = () => {
     createCustomCategory,
     getSubCategoriesForCategory,
     getCategoryBySlug,
+    getCapsuleSubCategories,
+    setCapsuleSubCategories,
   };
 };

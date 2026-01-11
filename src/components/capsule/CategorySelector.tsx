@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import type { Category } from '@/hooks/useCategories';
+import type { Category, SubCategory } from '@/hooks/useCategories';
 
 interface CategorySelectorProps {
   categories: Category[];
@@ -30,6 +30,10 @@ interface CategorySelectorProps {
   onSecondaryChange: (categoryIds: string[]) => void;
   onCreateCustom?: (name: string, description: string, icon: string, color: string) => Promise<Category | null>;
   disabled?: boolean;
+  // Sub-category props
+  subCategories?: SubCategory[];
+  selectedSubCategories?: string[];
+  onSubCategoryChange?: (subCategoryIds: string[]) => void;
 }
 
 const CategorySelector = ({
@@ -40,12 +44,34 @@ const CategorySelector = ({
   onSecondaryChange,
   onCreateCustom,
   disabled = false,
+  subCategories = [],
+  selectedSubCategories = [],
+  onSubCategoryChange,
 }: CategorySelectorProps) => {
   const [showSecondary, setShowSecondary] = useState(false);
+  const [showSubCategories, setShowSubCategories] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+
+  // Get available sub-categories for the primary category
+  const availableSubCategories = primaryCategory
+    ? subCategories.filter(sub => sub.category_id === primaryCategory)
+    : [];
+
+  // Reset sub-categories when primary category changes
+  useEffect(() => {
+    if (onSubCategoryChange && selectedSubCategories.length > 0) {
+      // Check if any selected sub-categories belong to the new primary category
+      const validSubCategories = selectedSubCategories.filter(subId =>
+        availableSubCategories.some(sub => sub.id === subId)
+      );
+      if (validSubCategories.length !== selectedSubCategories.length) {
+        onSubCategoryChange(validSubCategories);
+      }
+    }
+  }, [primaryCategory]);
 
   const handlePrimarySelect = (categoryId: string) => {
     if (disabled) return;
@@ -53,6 +79,10 @@ const CategorySelector = ({
     // Remove from secondary if was there
     if (secondaryCategories.includes(categoryId)) {
       onSecondaryChange(secondaryCategories.filter(id => id !== categoryId));
+    }
+    // Reset sub-categories when primary changes
+    if (onSubCategoryChange && selectedSubCategories.length > 0) {
+      onSubCategoryChange([]);
     }
   };
 
@@ -66,6 +96,18 @@ const CategorySelector = ({
       onSecondaryChange([...secondaryCategories, categoryId]);
     } else {
       toast.info('Maximum 2 catégories secondaires');
+    }
+  };
+
+  const handleSubCategoryToggle = (subCategoryId: string) => {
+    if (disabled || !onSubCategoryChange) return;
+    
+    if (selectedSubCategories.includes(subCategoryId)) {
+      onSubCategoryChange(selectedSubCategories.filter(id => id !== subCategoryId));
+    } else if (selectedSubCategories.length < 3) {
+      onSubCategoryChange([...selectedSubCategories, subCategoryId]);
+    } else {
+      toast.info('Maximum 3 sous-catégories');
     }
   };
 
@@ -258,6 +300,59 @@ const CategorySelector = ({
         </div>
       )}
 
+      {/* Sub-Categories (when available) */}
+      {primaryCategory && availableSubCategories.length > 0 && onSubCategoryChange && (
+        <div className="border-t border-border pt-4">
+          <button
+            type="button"
+            onClick={() => setShowSubCategories(!showSubCategories)}
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronDown className={`w-4 h-4 transition-transform ${showSubCategories ? 'rotate-180' : ''}`} />
+            Affiner avec des sous-catégories (optionnel)
+            {selectedSubCategories.length > 0 && (
+              <Badge variant="secondary" className="ml-2">
+                {selectedSubCategories.length}/3
+              </Badge>
+            )}
+          </button>
+
+          <AnimatePresence>
+            {showSubCategories && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Ajoutez jusqu'à 3 sous-catégories pour affiner le classement
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {availableSubCategories.map((subCategory) => {
+                      const isSelected = selectedSubCategories.includes(subCategory.id);
+                      return (
+                        <Badge
+                          key={subCategory.id}
+                          variant={isSelected ? 'default' : 'outline'}
+                          className={`cursor-pointer px-3 py-1.5 gap-2 transition-all ${disabled ? 'opacity-50' : ''}`}
+                          onClick={() => handleSubCategoryToggle(subCategory.id)}
+                        >
+                          {subCategory.name}
+                          {isSelected && <Check className="w-3 h-3" />}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
       {/* Selected categories summary */}
       {primaryCategory && (
         <div className="bg-muted/30 rounded-lg p-3">
@@ -275,6 +370,18 @@ const CategorySelector = ({
                   {category.id === primaryCategory && (
                     <span className="text-xs opacity-70">(principale)</span>
                   )}
+                </Badge>
+              ))}
+            {/* Show selected sub-categories */}
+            {selectedSubCategories.length > 0 && subCategories
+              .filter(sub => selectedSubCategories.includes(sub.id))
+              .map((subCategory) => (
+                <Badge 
+                  key={subCategory.id} 
+                  variant="outline"
+                  className="gap-1.5 text-xs"
+                >
+                  {subCategory.name}
                 </Badge>
               ))}
           </div>
