@@ -14,6 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 interface Stats {
@@ -25,6 +26,8 @@ interface Stats {
   draftCapsules: number;
   totalComments: number;
   totalStorageUsed: number;
+  capsuleStorageMb: number;
+  familyStorageMb: number;
   recentSignups: number;
   premiumUsers: number;
 }
@@ -32,6 +35,8 @@ interface Stats {
 interface StorageDataPoint {
   date: string;
   storage: number;
+  capsuleStorage: number;
+  familyStorage: number;
 }
 
 export default function AdminDashboard() {
@@ -51,21 +56,28 @@ export default function AdminDashboard() {
       profilesResult,
       capsulesResult,
       commentsResult,
-      mediasResult,
+      capsuleMediasResult,
+      familyMediasResult,
     ] = await Promise.all([
       supabase.from("profiles").select("*"),
       supabase.from("capsules").select("*"),
       supabase.from("comments").select("id", { count: "exact", head: true }),
       supabase.from("capsule_medias").select("file_size_bytes, created_at"),
+      supabase.from("family_person_media").select("file_size_bytes, created_at"),
     ]);
 
     const profiles = profilesResult.data || [];
     const capsules = capsulesResult.data || [];
-    const medias = mediasResult.data || [];
+    const capsuleMedias = capsuleMediasResult.data || [];
+    const familyMedias = familyMediasResult.data || [];
 
     // Calculate real storage from media files
-    const totalStorageBytes = medias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
+    const capsuleStorageBytes = capsuleMedias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
+    const familyStorageBytes = familyMedias.reduce((acc, m) => acc + (Number(m.file_size_bytes) || 0), 0);
+    const totalStorageBytes = capsuleStorageBytes + familyStorageBytes;
     const totalStorageMb = totalStorageBytes / (1024 * 1024);
+    const capsuleStorageMb = capsuleStorageBytes / (1024 * 1024);
+    const familyStorageMb = familyStorageBytes / (1024 * 1024);
 
     // Calculate storage history (last 30 days)
     const dateRange = eachDayOfInterval({
@@ -75,13 +87,20 @@ export default function AdminDashboard() {
 
     const history: StorageDataPoint[] = dateRange.map(date => {
       const dateStr = format(date, "yyyy-MM-dd");
-      const cumulativeBytes = medias
+      
+      const capsuleCumulativeBytes = capsuleMedias
         .filter(m => m.created_at && format(new Date(m.created_at), "yyyy-MM-dd") <= dateStr)
         .reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
       
+      const familyCumulativeBytes = familyMedias
+        .filter(m => m.created_at && format(new Date(m.created_at), "yyyy-MM-dd") <= dateStr)
+        .reduce((acc, m) => acc + (Number(m.file_size_bytes) || 0), 0);
+      
       return {
         date: format(date, "d MMM", { locale: fr }),
-        storage: cumulativeBytes / (1024 * 1024)
+        storage: (capsuleCumulativeBytes + familyCumulativeBytes) / (1024 * 1024),
+        capsuleStorage: capsuleCumulativeBytes / (1024 * 1024),
+        familyStorage: familyCumulativeBytes / (1024 * 1024)
       };
     });
 
@@ -100,6 +119,8 @@ export default function AdminDashboard() {
       draftCapsules: capsules.filter((c) => c.status === "draft").length,
       totalComments: commentsResult.count || 0,
       totalStorageUsed: totalStorageMb,
+      capsuleStorageMb,
+      familyStorageMb,
       recentSignups: profiles.filter((p) => new Date(p.created_at) > weekAgo).length,
       premiumUsers: profiles.filter((p) => p.subscription_level === "premium").length,
     };
@@ -151,10 +172,10 @@ export default function AdminDashboard() {
       color: "text-purple-500",
     },
     {
-      title: "Stockage",
-      value: `${(stats.totalStorageUsed / 1024).toFixed(1)} GB`,
+      title: "Stockage Total",
+      value: `${(stats.totalStorageUsed / 1024).toFixed(2)} GB`,
       icon: HardDrive,
-      description: "Utilisé",
+      description: `Capsules: ${stats.capsuleStorageMb.toFixed(0)} MB · Arbres: ${stats.familyStorageMb.toFixed(0)} MB`,
       color: "text-orange-500",
     },
     {
@@ -249,7 +270,10 @@ export default function AdminDashboard() {
                     className="text-muted-foreground"
                   />
                   <Tooltip 
-                    formatter={(value: number) => [`${value.toFixed(2)} MB`, "Stockage"]}
+                    formatter={(value: number, name: string) => {
+                      const label = name === "capsuleStorage" ? "Capsules" : name === "familyStorage" ? "Arbres généalogiques" : "Total";
+                      return [`${value.toFixed(2)} MB`, label];
+                    }}
                     contentStyle={{
                       backgroundColor: "hsl(var(--card))",
                       border: "1px solid hsl(var(--border))",
@@ -257,13 +281,30 @@ export default function AdminDashboard() {
                     }}
                     labelStyle={{ color: "hsl(var(--foreground))" }}
                   />
+                  <Legend 
+                    formatter={(value) => {
+                      if (value === "capsuleStorage") return "Capsules";
+                      if (value === "familyStorage") return "Arbres généalogiques";
+                      return value;
+                    }}
+                  />
                   <Area
                     type="monotone"
-                    dataKey="storage"
-                    name="Stockage"
+                    dataKey="capsuleStorage"
+                    name="capsuleStorage"
                     stroke="#F97316"
-                    fill="rgba(249, 115, 22, 0.2)"
+                    fill="rgba(249, 115, 22, 0.3)"
                     strokeWidth={2}
+                    stackId="1"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="familyStorage"
+                    name="familyStorage"
+                    stroke="#22C55E"
+                    fill="rgba(34, 197, 94, 0.3)"
+                    strokeWidth={2}
+                    stackId="1"
                   />
                 </AreaChart>
               </ResponsiveContainer>
