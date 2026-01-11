@@ -39,7 +39,8 @@ import { useStoryMode } from '@/hooks/useStoryMode';
 import { exportCapsuleToPDF, exportCapsuleToZIP } from '@/lib/exportCapsule';
 import { toast } from 'sonner';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
-import type { Category, CapsuleCategory } from '@/hooks/useCategories';
+import SubCategoryBadge from '@/components/capsule/SubCategoryBadge';
+import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -59,6 +60,11 @@ interface SharedCircle {
   id: string;
   name: string;
   color: string | null;
+}
+
+interface CapsuleSubCategoryWithData {
+  id: string;
+  sub_category: SubCategory;
 }
 
 const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
@@ -85,8 +91,10 @@ const CapsuleDetail = () => {
   const [medias, setMedias] = useState<Media[]>([]);
   const [sharedCircles, setSharedCircles] = useState<SharedCircle[]>([]);
   const [capsuleCategories, setCapsuleCategories] = useState<CapsuleCategory[]>([]);
+  const [capsuleSubCategories, setCapsuleSubCategories] = useState<CapsuleSubCategoryWithData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -167,6 +175,22 @@ const CapsuleDetail = () => {
         setCapsuleCategories(categoriesData.map(item => ({
           ...item,
           category: item.category as Category
+        })));
+      }
+
+      // Fetch capsule sub-categories
+      const { data: subCategoriesData } = await supabase
+        .from('capsule_sub_categories')
+        .select(`
+          id,
+          sub_category:sub_categories(*)
+        `)
+        .eq('capsule_id', id);
+
+      if (subCategoriesData) {
+        setCapsuleSubCategories(subCategoriesData.map(item => ({
+          id: item.id,
+          sub_category: item.sub_category as SubCategory
         })));
       }
 
@@ -324,6 +348,13 @@ const CapsuleDetail = () => {
                       key={cc.id} 
                       category={cc.category} 
                       isPrimary={cc.is_primary}
+                      size="sm"
+                    />
+                  ))}
+                  {capsuleSubCategories.map((csc) => csc.sub_category && (
+                    <SubCategoryBadge 
+                      key={csc.id} 
+                      subCategory={csc.sub_category} 
                       size="sm"
                     />
                   ))}

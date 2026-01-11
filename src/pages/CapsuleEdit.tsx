@@ -74,7 +74,7 @@ const CapsuleEdit = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
-  const { categories, createCustomCategory } = useCategories();
+  const { categories, subCategories, createCustomCategory, getCapsuleSubCategories, setCapsuleSubCategories } = useCategories();
   
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
@@ -86,6 +86,7 @@ const CapsuleEdit = () => {
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
   const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -157,6 +158,16 @@ const CapsuleEdit = () => {
           const secondary = capsuleCats.filter(c => !c.is_primary);
           if (primary) setPrimaryCategory(primary.category_id);
           setSecondaryCategories(secondary.map(c => c.category_id));
+        }
+
+        // Fetch existing sub-categories
+        const { data: capsuleSubCats } = await supabase
+          .from('capsule_sub_categories')
+          .select('sub_category_id')
+          .eq('capsule_id', id);
+
+        if (capsuleSubCats) {
+          setSelectedSubCategories(capsuleSubCats.map(c => c.sub_category_id));
         }
       } catch (error: any) {
         toast.error('Erreur lors du chargement de la capsule');
@@ -281,6 +292,9 @@ const CapsuleEdit = () => {
           .insert(categoryInserts);
 
         if (catError) throw catError;
+
+        // Update sub-categories
+        await setCapsuleSubCategories(id!, selectedSubCategories);
       }
 
       toast.success(
@@ -372,9 +386,15 @@ const CapsuleEdit = () => {
                 categories={categories}
                 primaryCategory={primaryCategory}
                 secondaryCategories={secondaryCategories}
-                onPrimaryChange={setPrimaryCategory}
+                onPrimaryChange={(catId) => {
+                  setPrimaryCategory(catId);
+                  setSelectedSubCategories([]);
+                }}
                 onSecondaryChange={setSecondaryCategories}
                 onCreateCustom={user ? (name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color) : undefined}
+                subCategories={subCategories}
+                selectedSubCategories={selectedSubCategories}
+                onSubCategoryChange={setSelectedSubCategories}
               />
             </div>
 

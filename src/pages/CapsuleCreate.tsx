@@ -55,7 +55,7 @@ type CapsuleFormValues = z.infer<typeof capsuleSchema>;
 const CapsuleCreate = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const { categories, setCapsuleCategories, createCustomCategory } = useCategories();
+  const { categories, subCategories, setCapsuleCategories, setCapsuleSubCategories, createCustomCategory, getSubCategoriesForCategory } = useCategories();
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
@@ -65,6 +65,7 @@ const CapsuleCreate = () => {
   // Category state
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
   const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   
   // Scheduling state
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
@@ -220,6 +221,11 @@ const CapsuleCreate = () => {
       // Add categories to the capsule
       if (primaryCategory && capsule) {
         await setCapsuleCategories(capsule.id, primaryCategory, secondaryCategories);
+        
+        // Add sub-categories if any selected
+        if (selectedSubCategories.length > 0) {
+          await setCapsuleSubCategories(capsule.id, selectedSubCategories);
+        }
       }
 
       if (finalStatus === 'scheduled') {
@@ -306,9 +312,15 @@ const CapsuleCreate = () => {
                 categories={categories}
                 primaryCategory={primaryCategory}
                 secondaryCategories={secondaryCategories}
-                onPrimaryChange={setPrimaryCategory}
+                onPrimaryChange={(catId) => {
+                  setPrimaryCategory(catId);
+                  setSelectedSubCategories([]);
+                }}
                 onSecondaryChange={setSecondaryCategories}
                 onCreateCustom={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
+                subCategories={subCategories}
+                selectedSubCategories={selectedSubCategories}
+                onSubCategoryChange={setSelectedSubCategories}
               />
             </div>
 

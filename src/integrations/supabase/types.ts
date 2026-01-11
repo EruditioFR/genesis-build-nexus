@@ -172,6 +172,42 @@ export type Database = {
           },
         ]
       }
+      capsule_sub_categories: {
+        Row: {
+          capsule_id: string
+          created_at: string | null
+          id: string
+          sub_category_id: string
+        }
+        Insert: {
+          capsule_id: string
+          created_at?: string | null
+          id?: string
+          sub_category_id: string
+        }
+        Update: {
+          capsule_id?: string
+          created_at?: string | null
+          id?: string
+          sub_category_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_sub_categories_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capsule_sub_categories_sub_category_id_fkey"
+            columns: ["sub_category_id"]
+            isOneToOne: false
+            referencedRelation: "sub_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capsules: {
         Row: {
           capsule_type: Database["public"]["Enums"]["capsule_type"]
