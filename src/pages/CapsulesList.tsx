@@ -42,7 +42,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { toast } from 'sonner';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
-import type { Category } from '@/hooks/useCategories';
+import { useCategories, type Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -68,6 +68,7 @@ const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
 const CapsulesList = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const { categories } = useCategories();
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
@@ -77,6 +78,7 @@ const CapsulesList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<CapsuleType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<CapsuleStatus | 'all'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   
   // Delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -174,8 +176,10 @@ const CapsulesList = () => {
     
     const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
     const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
+    const matchesCategory = categoryFilter === 'all' || 
+      (capsuleCategories[capsule.id]?.id === categoryFilter);
     
-    return matchesSearch && matchesType && matchesStatus;
+    return matchesSearch && matchesType && matchesStatus && matchesCategory;
   });
 
   if (loading || isLoading) {
@@ -289,6 +293,23 @@ const CapsulesList = () => {
                   <SelectItem value="published">Publiée</SelectItem>
                   <SelectItem value="scheduled">Programmée</SelectItem>
                   <SelectItem value="archived">Archivée</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Catégorie" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes catégories</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      <span className="flex items-center gap-2">
+                        <span>{category.icon}</span>
+                        <span>{category.name_fr}</span>
+                      </span>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
