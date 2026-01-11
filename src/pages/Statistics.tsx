@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   BarChart3, TrendingUp, PieChart, Calendar, FolderOpen,
-  Image, Video, Music, FileText, Layers, Users, MessageCircle
+  Image, Video, Music, FileText, Layers, Users, MessageCircle, Folder
 } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar, PieChart as RePieChart, Pie, Cell,
@@ -17,11 +17,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import { useCategories, type Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
+
+interface CategoryStats {
+  categoryId: string;
+  count: number;
+}
 
 const typeConfig: Record<CapsuleType, { label: string; color: string; icon: typeof FileText }> = {
   text: { label: 'Texte', color: '#3B82F6', icon: FileText },
@@ -34,6 +40,7 @@ const typeConfig: Record<CapsuleType, { label: string; color: string; icon: type
 const Statistics = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
+  const { categories } = useCategories();
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   
@@ -42,6 +49,7 @@ const Statistics = () => {
   const [totalComments, setTotalComments] = useState(0);
   const [totalCircles, setTotalCircles] = useState(0);
   const [totalShares, setTotalShares] = useState(0);
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -54,13 +62,14 @@ const Statistics = () => {
       if (!user) return;
 
       try {
-        const [profileRes, capsulesRes, mediasRes, commentsRes, circlesRes, sharesRes] = await Promise.all([
+        const [profileRes, capsulesRes, mediasRes, commentsRes, circlesRes, sharesRes, capsuleCategoriesRes] = await Promise.all([
           supabase.from('profiles').select('display_name, avatar_url').eq('user_id', user.id).maybeSingle(),
           supabase.from('capsules').select('*').eq('user_id', user.id),
           supabase.from('capsule_medias').select('id, capsule_id'),
           supabase.from('comments').select('id, capsule_id'),
           supabase.from('circles').select('id').eq('owner_id', user.id),
           supabase.from('capsule_shares').select('id, capsule_id'),
+          supabase.from('capsule_categories').select('capsule_id, category_id, is_primary'),
         ]);
 
         if (profileRes.data) setProfile(profileRes.data);
@@ -84,6 +93,23 @@ const Statistics = () => {
         if (sharesRes.data && capsulesRes.data) {
           const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
           setTotalShares(sharesRes.data.filter(s => capsuleIds.has(s.capsule_id)).length);
+        }
+
+        // Count capsules by category (only primary categories)
+        if (capsuleCategoriesRes.data && capsulesRes.data) {
+          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
+          const userCapsuleCategories = capsuleCategoriesRes.data.filter(
+            cc => capsuleIds.has(cc.capsule_id) && cc.is_primary
+          );
+          
+          const catCounts: Record<string, number> = {};
+          userCapsuleCategories.forEach(cc => {
+            catCounts[cc.category_id] = (catCounts[cc.category_id] || 0) + 1;
+          });
+          
+          setCategoryStats(
+            Object.entries(catCounts).map(([categoryId, count]) => ({ categoryId, count }))
+          );
         }
       } catch (error) {
         console.error('Error fetching statistics:', error);
@@ -134,6 +160,21 @@ const Statistics = () => {
     { name: 'Programmées', value: capsules.filter(c => c.status === 'scheduled').length, color: '#3B82F6' },
     { name: 'Archivées', value: capsules.filter(c => c.status === 'archived').length, color: '#9CA3AF' },
   ].filter(item => item.value > 0);
+
+  // Capsules by category
+  const capsulesByCategory = categoryStats
+    .map(stat => {
+      const category = categories.find(c => c.id === stat.categoryId);
+      if (!category) return null;
+      return {
+        name: category.name_fr,
+        value: stat.count,
+        color: category.color,
+        icon: category.icon,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .sort((a, b) => b.value - a.value);
 
   // Tags frequency
   const tagCounts: Record<string, number> = {};
@@ -422,6 +463,61 @@ const Statistics = () => {
                     ) : (
                       <div className="h-full flex items-center justify-center text-muted-foreground">
                         Aucune donnée
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Category distribution chart */}
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Folder className="w-5 h-5 text-secondary" />
+                    Par catégorie
+                  </CardTitle>
+                  <CardDescription>
+                    Distribution de vos capsules par catégorie principale
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]">
+                    {capsulesByCategory.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={capsulesByCategory} layout="vertical">
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
+                          <YAxis 
+                            type="category" 
+                            dataKey="name" 
+                            stroke="hsl(var(--muted-foreground))" 
+                            fontSize={12} 
+                            width={120}
+                            tickFormatter={(value, index) => {
+                              const item = capsulesByCategory[index];
+                              return item ? `${item.icon} ${value}` : value;
+                            }}
+                          />
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: 'hsl(var(--popover))',
+                              border: '1px solid hsl(var(--border))',
+                              borderRadius: '8px',
+                            }}
+                            formatter={(value: number) => [`${value} capsule${value > 1 ? 's' : ''}`, 'Nombre']}
+                          />
+                          <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                            {capsulesByCategory.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
+                        <Folder className="w-12 h-12 opacity-30" />
+                        <p>Aucune capsule catégorisée</p>
+                        <p className="text-sm">Assignez des catégories à vos capsules pour voir les statistiques</p>
                       </div>
                     )}
                   </div>
