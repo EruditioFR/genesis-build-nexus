@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,8 @@ import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { exportCapsuleToPDF, exportCapsuleToZIP } from '@/lib/exportCapsule';
 import { toast } from 'sonner';
+import CategoryBadge from '@/components/capsule/CategoryBadge';
+import type { Category, CapsuleCategory } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -82,6 +84,7 @@ const CapsuleDetail = () => {
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [medias, setMedias] = useState<Media[]>([]);
   const [sharedCircles, setSharedCircles] = useState<SharedCircle[]>([]);
+  const [capsuleCategories, setCapsuleCategories] = useState<CapsuleCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
 
@@ -149,6 +152,22 @@ const CapsuleDetail = () => {
           .in('id', circleIds);
 
         if (circlesData) setSharedCircles(circlesData);
+      }
+
+      // Fetch capsule categories
+      const { data: categoriesData } = await supabase
+        .from('capsule_categories')
+        .select(`
+          *,
+          category:categories(*)
+        `)
+        .eq('capsule_id', id);
+
+      if (categoriesData) {
+        setCapsuleCategories(categoriesData.map(item => ({
+          ...item,
+          category: item.category as Category
+        })));
       }
 
       setIsLoading(false);
@@ -300,6 +319,14 @@ const CapsuleDetail = () => {
                 </h1>
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
+                  {capsuleCategories.map((cc) => cc.category && (
+                    <CategoryBadge 
+                      key={cc.id} 
+                      category={cc.category} 
+                      isPrimary={cc.is_primary}
+                      size="sm"
+                    />
+                  ))}
                   <span className="text-sm text-muted-foreground flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
                     {format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
