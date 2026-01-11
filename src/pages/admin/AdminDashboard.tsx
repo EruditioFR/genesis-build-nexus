@@ -4,6 +4,7 @@ import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTria
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { format, subDays, eachDayOfInterval } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
@@ -15,6 +16,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  BarChart,
+  Bar,
 } from "recharts";
 
 interface Stats {
@@ -39,9 +42,19 @@ interface StorageDataPoint {
   familyStorage: number;
 }
 
+interface UserStorageData {
+  userId: string;
+  displayName: string;
+  storageMb: number;
+  capsuleStorageMb: number;
+  familyStorageMb: number;
+  storageLimitMb: number;
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [storageHistory, setStorageHistory] = useState<StorageDataPoint[]>([]);
+  const [userStorage, setUserStorage] = useState<UserStorageData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,18 +71,72 @@ export default function AdminDashboard() {
       commentsResult,
       capsuleMediasResult,
       familyMediasResult,
+      familyTreesResult,
+      familyPersonsResult,
     ] = await Promise.all([
       supabase.from("profiles").select("*"),
       supabase.from("capsules").select("*"),
       supabase.from("comments").select("id", { count: "exact", head: true }),
-      supabase.from("capsule_medias").select("file_size_bytes, created_at"),
-      supabase.from("family_person_media").select("file_size_bytes, created_at"),
+      supabase.from("capsule_medias").select("file_size_bytes, created_at, capsule_id"),
+      supabase.from("family_person_media").select("file_size_bytes, created_at, person_id"),
+      supabase.from("family_trees").select("id, user_id"),
+      supabase.from("family_persons").select("id, tree_id"),
     ]);
 
     const profiles = profilesResult.data || [];
     const capsules = capsulesResult.data || [];
     const capsuleMedias = capsuleMediasResult.data || [];
     const familyMedias = familyMediasResult.data || [];
+    const familyTrees = familyTreesResult.data || [];
+    const familyPersons = familyPersonsResult.data || [];
+
+    // Create lookup maps for user association
+    const capsuleToUser = new Map(capsules.map(c => [c.id, c.user_id]));
+    const personToTree = new Map(familyPersons.map(p => [p.id, p.tree_id]));
+    const treeToUser = new Map(familyTrees.map(t => [t.id, t.user_id]));
+
+    // Calculate storage per user
+    const userStorageMap = new Map<string, { capsule: number; family: number }>();
+    
+    // Add capsule media storage per user
+    capsuleMedias.forEach(media => {
+      const userId = capsuleToUser.get(media.capsule_id);
+      if (userId) {
+        const current = userStorageMap.get(userId) || { capsule: 0, family: 0 };
+        current.capsule += media.file_size_bytes || 0;
+        userStorageMap.set(userId, current);
+      }
+    });
+
+    // Add family media storage per user
+    familyMedias.forEach(media => {
+      const treeId = personToTree.get(media.person_id);
+      const userId = treeId ? treeToUser.get(treeId) : null;
+      if (userId) {
+        const current = userStorageMap.get(userId) || { capsule: 0, family: 0 };
+        current.family += Number(media.file_size_bytes) || 0;
+        userStorageMap.set(userId, current);
+      }
+    });
+
+    // Build user storage data with profile info
+    const userStorageData: UserStorageData[] = profiles
+      .map(profile => {
+        const storage = userStorageMap.get(profile.user_id) || { capsule: 0, family: 0 };
+        return {
+          userId: profile.user_id,
+          displayName: profile.display_name || "Utilisateur",
+          storageMb: (storage.capsule + storage.family) / (1024 * 1024),
+          capsuleStorageMb: storage.capsule / (1024 * 1024),
+          familyStorageMb: storage.family / (1024 * 1024),
+          storageLimitMb: profile.storage_limit_mb || 500,
+        };
+      })
+      .filter(u => u.storageMb > 0)
+      .sort((a, b) => b.storageMb - a.storageMb)
+      .slice(0, 10);
+
+    setUserStorage(userStorageData);
 
     // Calculate real storage from media files
     const capsuleStorageBytes = capsuleMedias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
@@ -311,6 +378,75 @@ export default function AdminDashboard() {
             ) : (
               <div className="h-[300px] flex items-center justify-center text-muted-foreground">
                 Aucune donnée de stockage disponible
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Storage per User */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.5 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-500" />
+              Stockage par utilisateur (Top 10)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {userStorage.length > 0 ? (
+              <div className="space-y-4">
+                {userStorage.map((user, index) => {
+                  const usagePercent = Math.min((user.storageMb / user.storageLimitMb) * 100, 100);
+                  const isNearLimit = usagePercent >= 80;
+                  return (
+                    <div key={user.userId} className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="text-muted-foreground w-5">{index + 1}.</span>
+                          <span className="font-medium truncate max-w-[200px]">{user.displayName}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
+                            {user.storageMb.toFixed(1)} MB
+                          </span>
+                          <span className="text-muted-foreground text-xs">
+                            / {user.storageLimitMb} MB
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Progress 
+                          value={usagePercent} 
+                          className={`h-2 flex-1 ${isNearLimit ? "[&>div]:bg-amber-500" : ""}`}
+                        />
+                        <div className="text-xs text-muted-foreground w-24 text-right">
+                          <span className="text-orange-500">{user.capsuleStorageMb.toFixed(1)}</span>
+                          {" / "}
+                          <span className="text-green-500">{user.familyStorageMb.toFixed(1)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded bg-orange-500" />
+                    <span>Capsules</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded bg-green-500" />
+                    <span>Arbres</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-[200px] flex items-center justify-center text-muted-foreground">
+                Aucune donnée de stockage par utilisateur
               </div>
             )}
           </CardContent>
