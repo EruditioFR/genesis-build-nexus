@@ -29,6 +29,8 @@ import CapsulePreview from '@/components/capsule/CapsulePreview';
 import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 import ScheduleSelector from '@/components/capsule/ScheduleSelector';
 import LegacySettings from '@/components/capsule/LegacySettings';
+import CategorySelector from '@/components/capsule/CategorySelector';
+import { useCategories } from '@/hooks/useCategories';
 import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -53,11 +55,16 @@ type CapsuleFormValues = z.infer<typeof capsuleSchema>;
 const CapsuleCreate = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const { categories, setCapsuleCategories, createCustomCategory } = useCategories();
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  
+  // Category state
+  const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
+  const [secondaryCategories, setSecondaryCategories] = useState<string[]>([]);
   
   // Scheduling state
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
@@ -210,6 +217,11 @@ const CapsuleCreate = () => {
         }
       }
 
+      // Add categories to the capsule
+      if (primaryCategory && capsule) {
+        await setCapsuleCategories(capsule.id, primaryCategory, secondaryCategories);
+      }
+
       if (finalStatus === 'scheduled') {
         toast.success('Capsule programmée avec succès !');
       } else if (status === 'published') {
@@ -288,6 +300,18 @@ const CapsuleCreate = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
+            {/* Category selector */}
+            <div className="p-6 rounded-2xl border border-border bg-card">
+              <CategorySelector
+                categories={categories}
+                primaryCategory={primaryCategory}
+                secondaryCategories={secondaryCategories}
+                onPrimaryChange={setPrimaryCategory}
+                onSecondaryChange={setSecondaryCategories}
+                onCreateCustom={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
+              />
+            </div>
+
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">

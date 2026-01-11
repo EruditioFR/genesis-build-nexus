@@ -26,6 +26,8 @@ import FamilyTreeViewPage from "./pages/FamilyTreeViewPage";
 import InviteAccept from "./pages/InviteAccept";
 import GuardianVerify from "./pages/GuardianVerify";
 import GuardianDashboard from "./pages/GuardianDashboard";
+import CategoriesPage from "./pages/CategoriesPage";
+import CategoryDetailPage from "./pages/CategoryDetailPage";
 import NotFound from "./pages/NotFound";
 
 // Legal pages
@@ -76,6 +78,8 @@ const App = () => (
                 <Route path="/invite/:token" element={<InviteAccept />} />
                 <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
                 <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
+                <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/categories/:slug" element={<CategoryDetailPage />} />
                 
                 {/* Legal pages */}
                 <Route path="/privacy" element={<PrivacyPolicy />} />
