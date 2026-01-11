@@ -25,9 +25,7 @@ import type { Category, SubCategory } from '@/hooks/useCategories';
 interface CategorySelectorProps {
   categories: Category[];
   primaryCategory: string | null;
-  secondaryCategories: string[];
   onPrimaryChange: (categoryId: string) => void;
-  onSecondaryChange: (categoryIds: string[]) => void;
   onCreateCustom?: (name: string, description: string, icon: string, color: string) => Promise<Category | null>;
   disabled?: boolean;
   // Sub-category props
@@ -39,16 +37,13 @@ interface CategorySelectorProps {
 const CategorySelector = ({
   categories,
   primaryCategory,
-  secondaryCategories,
   onPrimaryChange,
-  onSecondaryChange,
   onCreateCustom,
   disabled = false,
   subCategories = [],
   selectedSubCategories = [],
   onSubCategoryChange,
 }: CategorySelectorProps) => {
-  const [showSecondary, setShowSecondary] = useState(false);
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -76,26 +71,9 @@ const CategorySelector = ({
   const handlePrimarySelect = (categoryId: string) => {
     if (disabled) return;
     onPrimaryChange(categoryId);
-    // Remove from secondary if was there
-    if (secondaryCategories.includes(categoryId)) {
-      onSecondaryChange(secondaryCategories.filter(id => id !== categoryId));
-    }
     // Reset sub-categories when primary changes
     if (onSubCategoryChange && selectedSubCategories.length > 0) {
       onSubCategoryChange([]);
-    }
-  };
-
-  const handleSecondaryToggle = (categoryId: string) => {
-    if (disabled) return;
-    if (categoryId === primaryCategory) return; // Can't be both primary and secondary
-    
-    if (secondaryCategories.includes(categoryId)) {
-      onSecondaryChange(secondaryCategories.filter(id => id !== categoryId));
-    } else if (secondaryCategories.length < 2) {
-      onSecondaryChange([...secondaryCategories, categoryId]);
-    } else {
-      toast.info('Maximum 2 catégories secondaires');
     }
   };
 
@@ -244,62 +222,6 @@ const CategorySelector = ({
         )}
       </div>
 
-      {/* Secondary Categories (collapsible) */}
-      {primaryCategory && (
-        <div className="border-t border-border pt-4">
-          <button
-            type="button"
-            onClick={() => setShowSecondary(!showSecondary)}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ChevronDown className={`w-4 h-4 transition-transform ${showSecondary ? 'rotate-180' : ''}`} />
-            Ajouter des catégories secondaires (optionnel)
-            {secondaryCategories.length > 0 && (
-              <Badge variant="secondary" className="ml-2">
-                {secondaryCategories.length}/2
-              </Badge>
-            )}
-          </button>
-
-          <AnimatePresence>
-            {showSecondary && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
-              >
-                <div className="pt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Ajoutez jusqu'à 2 catégories secondaires pour enrichir le classement
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {categories
-                      .filter(c => c.id !== primaryCategory)
-                      .map((category) => {
-                        const isSelected = secondaryCategories.includes(category.id);
-                        return (
-                          <Badge
-                            key={category.id}
-                            variant={isSelected ? 'default' : 'outline'}
-                            className={`cursor-pointer px-3 py-1.5 gap-2 transition-all ${disabled ? 'opacity-50' : ''}`}
-                            onClick={() => handleSecondaryToggle(category.id)}
-                          >
-                            <span>{category.icon}</span>
-                            {category.name_fr}
-                            {isSelected && <Check className="w-3 h-3" />}
-                          </Badge>
-                        );
-                      })}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
-
       {/* Sub-Categories (when available) */}
       {primaryCategory && availableSubCategories.length > 0 && onSubCategoryChange && (
         <div className="border-t border-border pt-4">
@@ -359,7 +281,7 @@ const CategorySelector = ({
           <p className="text-xs text-muted-foreground mb-2">Catégories sélectionnées :</p>
           <div className="flex flex-wrap gap-2">
             {categories
-              .filter(c => c.id === primaryCategory || secondaryCategories.includes(c.id))
+              .filter(c => c.id === primaryCategory)
               .map((category) => (
                 <Badge 
                   key={category.id} 
@@ -367,9 +289,6 @@ const CategorySelector = ({
                   className="gap-1.5"
                 >
                   {category.icon} {category.name_fr}
-                  {category.id === primaryCategory && (
-                    <span className="text-xs opacity-70">(principale)</span>
-                  )}
                 </Badge>
               ))}
             {/* Show selected sub-categories */}
