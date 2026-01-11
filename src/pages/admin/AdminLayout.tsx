@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navItems = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin", label: "Synthèse", icon: LayoutDashboard, exact: true },
   { to: "/admin/users", label: "Utilisateurs", icon: Users },
   { to: "/admin/capsules", label: "Capsules", icon: FileText },
   { to: "/admin/comments", label: "Commentaires", icon: MessageSquare },
