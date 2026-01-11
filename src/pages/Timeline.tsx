@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play, ChevronUp } from 'lucide-react';
+import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play, ChevronUp, Folder } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -21,7 +21,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
-import type { Category } from '@/hooks/useCategories';
+import { useCategories, type Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -53,6 +53,7 @@ interface GroupedCapsules {
 const Timeline = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
+  const { categories } = useCategories();
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
@@ -66,6 +67,7 @@ const Timeline = () => {
   const [selectedTypes, setSelectedTypes] = useState<CapsuleType[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CapsuleStatus[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -83,9 +85,11 @@ const Timeline = () => {
       const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(capsule.capsule_type);
       const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(capsule.status);
       const tagMatch = selectedTags.length === 0 || selectedTags.some((t) => capsule.tags?.includes(t));
-      return typeMatch && statusMatch && tagMatch;
+      const categoryMatch = selectedCategories.length === 0 || 
+        (capsuleCategories[capsule.id] && selectedCategories.includes(capsuleCategories[capsule.id].id));
+      return typeMatch && statusMatch && tagMatch && categoryMatch;
     });
-  }, [capsules, selectedTypes, selectedStatuses, selectedTags]);
+  }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategories, capsuleCategories]);
 
   // Extract decades from filtered capsules
   const decades = useMemo(() => {
@@ -132,12 +136,13 @@ const Timeline = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [decades]);
 
-  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length;
+  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategories.length;
 
   const clearAllFilters = () => {
     setSelectedTypes([]);
     setSelectedStatuses([]);
     setSelectedTags([]);
+    setSelectedCategories([]);
   };
 
   const toggleType = (type: CapsuleType) => {
@@ -155,6 +160,12 @@ const Timeline = () => {
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(categoryId) ? prev.filter((c) => c !== categoryId) : [...prev, categoryId]
     );
   };
 
@@ -402,6 +413,37 @@ const Timeline = () => {
                       onCheckedChange={() => toggleTag(tag)}
                     >
                       {tag}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {/* Category Filter */}
+            {categories.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Folder className="w-4 h-4" />
+                    Catégorie
+                    {selectedCategories.length > 0 && (
+                      <Badge variant="secondary" className="ml-1 h-5 px-1.5">
+                        {selectedCategories.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-56 max-h-64 overflow-y-auto bg-popover">
+                  <DropdownMenuLabel>Catégorie</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {categories.map((category) => (
+                    <DropdownMenuCheckboxItem
+                      key={category.id}
+                      checked={selectedCategories.includes(category.id)}
+                      onCheckedChange={() => toggleCategory(category.id)}
+                    >
+                      <span className="mr-2">{category.icon}</span>
+                      {category.name_fr}
                     </DropdownMenuCheckboxItem>
                   ))}
                 </DropdownMenuContent>
