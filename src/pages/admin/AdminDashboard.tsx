@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTriangle } from "lucide-react";
+import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTriangle, Cloud } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +50,21 @@ interface UserStorageData {
   familyStorageMb: number;
   storageLimitMb: number;
 }
+
+// Limite de stockage Lovable Cloud (1 GB pour le plan gratuit)
+const LOVABLE_CLOUD_STORAGE_LIMIT_MB = 1024;
+
+const getQuotaColor = (percentage: number) => {
+  if (percentage >= 80) return "text-destructive";
+  if (percentage >= 60) return "text-amber-500";
+  return "text-green-500";
+};
+
+const getProgressColor = (percentage: number) => {
+  if (percentage >= 80) return "[&>div]:bg-destructive";
+  if (percentage >= 60) return "[&>div]:bg-amber-500";
+  return "[&>div]:bg-green-500";
+};
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -283,6 +298,98 @@ export default function AdminDashboard() {
           Dernière mise à jour: {new Date().toLocaleTimeString("fr-FR")}
         </Badge>
       </div>
+
+      {/* Alerte critique si quota > 90% */}
+      {(() => {
+        const quotaPercentage = (stats.totalStorageUsed / LOVABLE_CLOUD_STORAGE_LIMIT_MB) * 100;
+        if (quotaPercentage >= 90) {
+          return (
+            <Card className="border-destructive bg-destructive/10">
+              <CardContent className="pt-6 flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
+                <div>
+                  <p className="font-medium text-destructive">Quota de stockage critique</p>
+                  <p className="text-sm text-muted-foreground">
+                    Vous avez utilisé {quotaPercentage.toFixed(1)}% de votre quota Lovable Cloud.
+                    Envisagez de passer à un plan supérieur.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        }
+        return null;
+      })()}
+
+      {/* Carte Quota Lovable Cloud */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Cloud className="h-5 w-5 text-primary" />
+              Quota Lovable Cloud
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {(() => {
+              const usedMb = stats.totalStorageUsed;
+              const percentage = (usedMb / LOVABLE_CLOUD_STORAGE_LIMIT_MB) * 100;
+              const remainingMb = Math.max(0, LOVABLE_CLOUD_STORAGE_LIMIT_MB - usedMb);
+              
+              return (
+                <div className="space-y-4">
+                  {/* Pourcentage principal */}
+                  <div className="text-center">
+                    <span className={`text-4xl font-bold ${getQuotaColor(percentage)}`}>
+                      {percentage.toFixed(1)}%
+                    </span>
+                    <p className="text-muted-foreground text-sm">utilisé</p>
+                  </div>
+                  
+                  {/* Barre de progression */}
+                  <Progress 
+                    value={Math.min(percentage, 100)} 
+                    className={`h-4 ${getProgressColor(percentage)}`}
+                  />
+                  
+                  {/* Détails */}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">
+                      {usedMb.toFixed(0)} MB utilisés
+                    </span>
+                    <span className="text-muted-foreground">
+                      {remainingMb.toFixed(0)} MB disponibles
+                    </span>
+                  </div>
+                  
+                  {/* Répartition */}
+                  <div className="grid grid-cols-2 gap-4 text-sm pt-2 border-t">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded bg-orange-500" />
+                      <span className="text-muted-foreground">Capsules:</span>
+                      <span className="font-medium">{stats.capsuleStorageMb.toFixed(0)} MB</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded bg-green-500" />
+                      <span className="text-muted-foreground">Arbres:</span>
+                      <span className="font-medium">{stats.familyStorageMb.toFixed(0)} MB</span>
+                    </div>
+                  </div>
+
+                  {/* Info limite */}
+                  <p className="text-xs text-muted-foreground text-center pt-2">
+                    Limite: {(LOVABLE_CLOUD_STORAGE_LIMIT_MB / 1024).toFixed(0)} GB (plan gratuit)
+                  </p>
+                </div>
+              );
+            })()}
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat, index) => (
