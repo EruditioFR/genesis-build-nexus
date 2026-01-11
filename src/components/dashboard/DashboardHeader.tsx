@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield, TreeDeciduous } from 'lucide-react';
+import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield, TreeDeciduous, Folder } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -36,6 +36,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const navLinks = [
     { to: '/dashboard', label: 'Synthèse', icon: LayoutDashboard },
     { to: '/capsules', label: 'Capsules', icon: FolderOpen },
+    { to: '/categories', label: 'Catégories', icon: Folder },
     { to: '/timeline', label: 'Chronologie', icon: Clock },
     { to: '/calendar', label: 'Calendrier', icon: CalendarDays },
     { to: '/circles', label: 'Cercles', icon: Users },
