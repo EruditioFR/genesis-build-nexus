@@ -20,6 +20,8 @@ import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
+import CategoryBadge from '@/components/capsule/CategoryBadge';
+import type { Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -55,6 +57,7 @@ const Timeline = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [activeDecade, setActiveDecade] = useState<string | null>(null);
+  const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -179,7 +182,33 @@ const Timeline = () => {
             .maybeSingle(),
         ]);
 
-        if (capsulesRes.data) setCapsules(capsulesRes.data);
+        if (capsulesRes.data) {
+          setCapsules(capsulesRes.data);
+          
+          // Fetch categories for all capsules
+          if (capsulesRes.data.length > 0) {
+            const capsuleIds = capsulesRes.data.map(c => c.id);
+            const { data: categoriesData } = await supabase
+              .from('capsule_categories')
+              .select(`
+                capsule_id,
+                is_primary,
+                category:categories(*)
+              `)
+              .in('capsule_id', capsuleIds)
+              .eq('is_primary', true);
+
+            if (categoriesData) {
+              const categoryMap: Record<string, Category> = {};
+              (categoriesData as any[]).forEach((item) => {
+                if (item.category) {
+                  categoryMap[item.capsule_id] = item.category;
+                }
+              });
+              setCapsuleCategories(categoryMap);
+            }
+          }
+        }
         if (profileRes.data) setProfile(profileRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -539,6 +568,7 @@ const Timeline = () => {
                               index={index}
                               isLeft={index % 2 === 0}
                               onClick={() => navigate(`/capsules/${capsule.id}`)}
+                              category={capsuleCategories[capsule.id]}
                             />
                           ))}
                         </div>
@@ -571,11 +601,13 @@ const TimelineItem = ({
   index,
   isLeft,
   onClick,
+  category,
 }: {
   capsule: Capsule;
   index: number;
   isLeft: boolean;
   onClick: () => void;
+  category?: Category;
 }) => {
   const config = capsuleTypeConfig[capsule.capsule_type];
   const Icon = config.icon;
@@ -634,8 +666,11 @@ const TimelineItem = ({
             </p>
           )}
 
-          {/* Tags & Status */}
+          {/* Tags, Category & Status */}
           <div className="flex flex-wrap items-center gap-2">
+            {category && (
+              <CategoryBadge category={category} size="sm" />
+            )}
             <Badge
               variant={capsule.status === 'published' ? 'default' : 'secondary'}
               className="text-xs"

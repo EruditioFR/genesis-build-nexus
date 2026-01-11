@@ -41,6 +41,8 @@ import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { toast } from 'sonner';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
+import CategoryBadge from '@/components/capsule/CategoryBadge';
+import type { Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -69,6 +71,7 @@ const CapsulesList = () => {
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
   
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -107,6 +110,30 @@ const CapsulesList = () => {
 
       if (!error && capsulesData) {
         setCapsules(capsulesData);
+        
+        // Fetch categories for all capsules
+        if (capsulesData.length > 0) {
+          const capsuleIds = capsulesData.map(c => c.id);
+          const { data: categoriesData } = await supabase
+            .from('capsule_categories')
+            .select(`
+              capsule_id,
+              is_primary,
+              category:categories(*)
+            `)
+            .in('capsule_id', capsuleIds)
+            .eq('is_primary', true);
+
+          if (categoriesData) {
+            const categoryMap: Record<string, Category> = {};
+            (categoriesData as any[]).forEach((item) => {
+              if (item.category) {
+                categoryMap[item.capsule_id] = item.category;
+              }
+            });
+            setCapsuleCategories(categoryMap);
+          }
+        }
       }
       setIsLoading(false);
     };
@@ -385,6 +412,12 @@ const CapsulesList = () => {
                       <Badge variant="outline" className={statusInfo.color}>
                         {statusInfo.label}
                       </Badge>
+                      {capsuleCategories[capsule.id] && (
+                        <CategoryBadge 
+                          category={capsuleCategories[capsule.id]} 
+                          size="sm"
+                        />
+                      )}
                       <span className="text-xs text-muted-foreground">
                         {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
                       </span>

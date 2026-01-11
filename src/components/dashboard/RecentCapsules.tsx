@@ -1,8 +1,12 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
+import CategoryBadge from '@/components/capsule/CategoryBadge';
+import { supabase } from '@/integrations/supabase/client';
+import type { Category } from '@/hooks/useCategories';
 
 interface Capsule {
   id: string;
@@ -16,7 +20,44 @@ interface RecentCapsulesProps {
   capsules: Capsule[];
 }
 
+interface CapsuleCategoryData {
+  capsule_id: string;
+  is_primary: boolean;
+  category: Category;
+}
+
 const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
+  const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (capsules.length === 0) return;
+      
+      const capsuleIds = capsules.map(c => c.id);
+      const { data } = await supabase
+        .from('capsule_categories')
+        .select(`
+          capsule_id,
+          is_primary,
+          category:categories(*)
+        `)
+        .in('capsule_id', capsuleIds)
+        .eq('is_primary', true);
+
+      if (data) {
+        const categoryMap: Record<string, Category> = {};
+        (data as unknown as CapsuleCategoryData[]).forEach((item) => {
+          if (item.category) {
+            categoryMap[item.capsule_id] = item.category;
+          }
+        });
+        setCapsuleCategories(categoryMap);
+      }
+    };
+
+    fetchCategories();
+  }, [capsules]);
+
   const getTypeIcon = (type: Capsule['type']) => {
     switch (type) {
       case 'photo': return Image;
@@ -101,9 +142,18 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                   <p className="font-medium text-foreground truncate group-hover:text-primary transition-colors">
                     {capsule.title}
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    {getTypeLabel(capsule.type)} • {capsule.date}
-                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <p className="text-sm text-muted-foreground">
+                      {getTypeLabel(capsule.type)} • {capsule.date}
+                    </p>
+                    {capsuleCategories[capsule.id] && (
+                      <CategoryBadge 
+                        category={capsuleCategories[capsule.id]} 
+                        size="sm" 
+                        showIcon={true}
+                      />
+                    )}
+                  </div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.div>
