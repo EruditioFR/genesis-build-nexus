@@ -40,14 +40,14 @@ const LegalNotice = () => {
               1. Éditeur du site
             </h2>
             <div className="text-muted-foreground leading-relaxed space-y-2">
-              <p><strong>Nom de la société :</strong> MemoriaVita SAS</p>
+              <p><strong>Nom de la société :</strong> La Ligne du Temps SAS</p>
               <p><strong>Forme juridique :</strong> Société par Actions Simplifiée</p>
               <p><strong>Capital social :</strong> [À compléter] €</p>
               <p><strong>Siège social :</strong> [Adresse à compléter]</p>
               <p><strong>RCS :</strong> [Numéro RCS à compléter]</p>
               <p><strong>SIRET :</strong> [Numéro SIRET à compléter]</p>
               <p><strong>Numéro de TVA intracommunautaire :</strong> [À compléter]</p>
-              <p><strong>Email :</strong> contact@memoriavita.com</p>
+              <p><strong>Email :</strong> contact@lalignedutemps.com</p>
               <p><strong>Téléphone :</strong> [À compléter]</p>
             </div>
           </section>
@@ -203,10 +203,10 @@ const LegalNotice = () => {
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">5. Propriété intellectuelle</h2>
             <p className="text-muted-foreground leading-relaxed">
               L'ensemble du contenu de ce site (textes, images, vidéos, logos, icônes, sons, logiciels, 
-              etc.) est la propriété exclusive de MemoriaVita ou de ses partenaires. Toute reproduction, 
+              etc.) est la propriété exclusive de La Ligne du Temps ou de ses partenaires. Toute reproduction, 
               représentation, modification, publication, transmission, dénaturation, totale ou partielle 
               du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce 
-              soit est interdite sans autorisation écrite préalable de MemoriaVita.
+              soit est interdite sans autorisation écrite préalable de La Ligne du Temps.
             </p>
           </section>
 
@@ -228,7 +228,7 @@ const LegalNotice = () => {
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="font-semibold text-foreground mb-2">Délégué à la Protection des Données (DPO)</p>
-              <p className="text-muted-foreground">Email : <a href="mailto:dpo@memoriavita.com" className="text-primary hover:underline">dpo@memoriavita.com</a></p>
+              <p className="text-muted-foreground">Email : <a href="mailto:dpo@lalignedutemps.com" className="text-primary hover:underline">dpo@lalignedutemps.com</a></p>
               <p className="text-muted-foreground mt-2">
                 <strong>Autorité de contrôle :</strong> CNIL - Commission Nationale de l'Informatique et des Libertés
               </p>
@@ -256,7 +256,7 @@ const LegalNotice = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">8. Liens hypertextes</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Ce site peut contenir des liens vers d'autres sites web. MemoriaVita n'est pas responsable 
+              Ce site peut contenir des liens vers d'autres sites web. La Ligne du Temps n'est pas responsable 
               du contenu de ces sites externes et ne peut être tenu responsable des dommages résultant 
               de leur utilisation.
             </p>
@@ -275,7 +275,7 @@ const LegalNotice = () => {
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">10. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
               Pour toute question concernant ces mentions légales, vous pouvez nous contacter à : 
-              <a href="mailto:contact@memoriavita.com" className="text-primary hover:underline ml-1">contact@memoriavita.com</a>
+              <a href="mailto:contact@lalignedutemps.com" className="text-primary hover:underline ml-1">contact@lalignedutemps.com</a>
             </p>
           </section>
 

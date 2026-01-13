@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const COOKIE_CONSENT_KEY = "memoria-vita-cookie-consent";
+const COOKIE_CONSENT_KEY = "lalignedutemps-cookie-consent";
 
 type ConsentType = "all" | "essential" | null;
 

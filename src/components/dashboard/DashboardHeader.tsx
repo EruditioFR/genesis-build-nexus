@@ -50,10 +50,10 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold transition-transform group-hover:scale-105">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
+                <Clock className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-display font-bold text-primary hidden sm:block">
-                MemoriaVita
+                La Ligne du Temps
               </span>
             </Link>
 

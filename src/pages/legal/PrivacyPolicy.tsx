@@ -43,15 +43,15 @@ const PrivacyPolicy = () => {
               1. Introduction
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              MemoriaVita s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité 
+              La Ligne du Temps s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité 
               explique comment nous collectons, utilisons, stockons et protégeons vos données personnelles 
               conformément au Règlement Général sur la Protection des Données (RGPD) du 27 avril 2016 et à la 
               loi Informatique et Libertés du 6 janvier 1978 modifiée.
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-muted-foreground">
-                <strong>Responsable du traitement :</strong> MemoriaVita SAS<br />
-                <strong>Email :</strong> <a href="mailto:privacy@memoriavita.com" className="text-primary hover:underline">privacy@memoriavita.com</a>
+                <strong>Responsable du traitement :</strong> La Ligne du Temps SAS<br />
+                <strong>Email :</strong> <a href="mailto:privacy@lalignedutemps.com" className="text-primary hover:underline">privacy@lalignedutemps.com</a>
               </p>
             </div>
           </section>
@@ -177,7 +177,7 @@ const PrivacyPolicy = () => {
             </ul>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="text-muted-foreground">
-                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@memoriavita.com" className="text-primary hover:underline">privacy@memoriavita.com</a>
+                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@lalignedutemps.com" className="text-primary hover:underline">privacy@lalignedutemps.com</a>
               </p>
               <p className="text-muted-foreground text-sm mt-2">
                 Nous répondrons à votre demande dans un délai d'un mois conformément au RGPD.
@@ -301,7 +301,7 @@ const PrivacyPolicy = () => {
 
               <p className="text-muted-foreground text-sm">
                 Vous pouvez demander une copie des garanties appropriées en nous contactant à{" "}
-                <a href="mailto:privacy@memoriavita.com" className="text-primary hover:underline">privacy@memoriavita.com</a>
+                <a href="mailto:privacy@lalignedutemps.com" className="text-primary hover:underline">privacy@lalignedutemps.com</a>
               </p>
             </div>
           </section>
@@ -366,9 +366,9 @@ const PrivacyPolicy = () => {
               Pour toute question concernant cette politique ou vos données personnelles, contactez-nous :
             </p>
             <ul className="list-none pl-0 text-muted-foreground space-y-1 mt-4">
-              <li>• Email général : <a href="mailto:contact@memoriavita.com" className="text-primary hover:underline">contact@memoriavita.com</a></li>
-              <li>• Questions de confidentialité : <a href="mailto:privacy@memoriavita.com" className="text-primary hover:underline">privacy@memoriavita.com</a></li>
-              <li>• Délégué à la Protection des Données : <a href="mailto:dpo@memoriavita.com" className="text-primary hover:underline">dpo@memoriavita.com</a></li>
+              <li>• Email général : <a href="mailto:contact@lalignedutemps.com" className="text-primary hover:underline">contact@lalignedutemps.com</a></li>
+              <li>• Questions de confidentialité : <a href="mailto:privacy@lalignedutemps.com" className="text-primary hover:underline">privacy@lalignedutemps.com</a></li>
+              <li>• Délégué à la Protection des Données : <a href="mailto:dpo@lalignedutemps.com" className="text-primary hover:underline">dpo@lalignedutemps.com</a></li>
             </ul>
           </section>
         </div>
