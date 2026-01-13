@@ -40,10 +40,10 @@ const Footer = () => {
           <div className="col-span-2 lg:col-span-2">
             <a href="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-                <span className="text-base sm:text-lg font-display font-bold text-secondary-foreground">M</span>
+                <span className="text-base sm:text-lg font-display font-bold text-secondary-foreground">L</span>
               </div>
               <span className="text-lg sm:text-xl font-display font-semibold">
-                Memoria<span className="text-secondary">Vita</span>
+                La Ligne <span className="text-secondary">du Temps</span>
               </span>
             </a>
             <p className="text-sm sm:text-base text-primary-foreground/70 leading-relaxed mb-4 sm:mb-6 max-w-xs">
@@ -103,7 +103,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             <p className="text-xs sm:text-sm text-primary-foreground/60 text-center sm:text-left">
-              © {currentYear} MemoriaVita. Tous droits réservés.
+              © {currentYear} La Ligne du Temps. Tous droits réservés.
             </p>
             <p className="text-xs sm:text-sm text-primary-foreground/60 flex items-center gap-1">
               Fait avec <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent fill-accent" /> pour préserver vos souvenirs

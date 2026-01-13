@@ -69,14 +69,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-            <span className="text-lg font-display font-bold text-secondary-foreground">M</span>
+            <span className="text-lg font-display font-bold text-secondary-foreground">L</span>
           </div>
           <span
             className={`text-xl font-display font-semibold transition-colors duration-300 ${
               isSolid ? "text-primary" : "text-primary-foreground"
             }`}
           >
-            Memoria<span className="text-secondary">Vita</span>
+            La Ligne <span className="text-secondary">du Temps</span>
           </span>
         </Link>
 

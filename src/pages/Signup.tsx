@@ -69,7 +69,7 @@ const Signup = () => {
     } else {
       toast({
         title: 'Compte créé !',
-        description: 'Bienvenue sur MemoriaVita',
+        description: 'Bienvenue sur La Ligne du Temps',
       });
       navigate('/dashboard?welcome=true');
     }
@@ -93,7 +93,7 @@ const Signup = () => {
               <Sparkles className="w-6 h-6 text-primary" />
             </div>
             <span className="text-xl font-display font-bold text-primary">
-              MemoriaVita
+              La Ligne du Temps
             </span>
           </Link>
 
@@ -269,7 +269,7 @@ const Signup = () => {
                 <Sparkles className="w-7 h-7 text-white" />
               </div>
               <span className="text-2xl font-display font-bold text-white">
-                MemoriaVita
+                La Ligne du Temps
               </span>
             </Link>
 

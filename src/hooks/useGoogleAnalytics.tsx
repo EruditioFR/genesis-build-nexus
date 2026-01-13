@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
-const COOKIE_CONSENT_KEY = "memoria-vita-cookie-consent";
+const COOKIE_CONSENT_KEY = "lalignedutemps-cookie-consent";
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
 // Déclarations pour TypeScript

@@ -107,7 +107,7 @@ const OnboardingChecklist = ({
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-display font-semibold text-foreground mb-1">
-              {allCompleted ? '🎉 Félicitations !' : 'Bienvenue sur MemoriaVita !'}
+              {allCompleted ? '🎉 Félicitations !' : 'Bienvenue sur La Ligne du Temps !'}
             </h3>
             <p className="text-sm text-muted-foreground">
               {allCompleted
