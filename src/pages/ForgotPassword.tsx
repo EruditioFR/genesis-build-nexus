@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, ArrowLeft, Sparkles, CheckCircle } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import logo from '@/assets/logo.png';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -46,9 +47,7 @@ const ForgotPassword = () => {
         <div className="bg-card rounded-2xl shadow-card p-8 border border-border">
           {/* Logo */}
           <Link to="/" className="flex items-center justify-center space-x-2 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Sparkles className="w-7 h-7 text-primary" />
-            </div>
+            <img src={logo} alt="Family Garden" className="w-12 h-12 object-contain" />
             <span className="text-2xl font-display font-bold text-primary">
               Family Garden
             </span>

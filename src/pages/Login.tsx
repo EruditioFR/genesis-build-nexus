@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import logo from '@/assets/logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -56,9 +57,7 @@ const Login = () => {
             transition={{ duration: 0.8 }}
           >
             <Link to="/" className="flex items-center space-x-3 mb-12">
-              <div className="w-12 h-12 rounded-xl bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
-                <Sparkles className="w-7 h-7 text-secondary" />
-              </div>
+              <img src={logo} alt="Family Garden" className="w-12 h-12 object-contain" />
               <span className="text-2xl font-display font-bold text-primary-foreground">
                 Family Garden
               </span>
@@ -99,9 +98,7 @@ const Login = () => {
         >
           {/* Mobile logo */}
           <Link to="/" className="flex lg:hidden items-center space-x-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-primary" />
-            </div>
+            <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
             <span className="text-xl font-display font-bold text-primary">
               Family Garden
             </span>
