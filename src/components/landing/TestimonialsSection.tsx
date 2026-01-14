@@ -10,7 +10,7 @@ const testimonials = [
     gradient: "from-secondary to-gold-light",
   },
   {
-    quote: "En tant qu'entrepreneur, documenter mon parcours était essentiel. La Ligne du Temps m'offre une plateforme élégante pour inspirer les futures générations.",
+    quote: "En tant qu'entrepreneur, documenter mon parcours était essentiel. MemoryVitae m'offre une plateforme élégante pour inspirer les futures générations.",
     author: "David L.",
     role: "Entrepreneur, 45 ans",
     avatar: "D",

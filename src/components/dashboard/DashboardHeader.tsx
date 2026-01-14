@@ -53,7 +53,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 <Clock className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-display font-bold text-primary hidden sm:block">
-                La Ligne du Temps
+                MemoryVitae
               </span>
             </Link>
 
