@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield, TreeDeciduous, Folder } from 'lucide-react';
+import { LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, CalendarDays, Shield, TreeDeciduous, Folder } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,7 @@ import GlobalSearch from '@/components/search/GlobalSearch';
 import ThemeToggle from '@/components/ThemeToggle';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import logo from '@/assets/logo.png';
 
 interface DashboardHeaderProps {
   user: {
@@ -49,9 +50,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold transition-transform group-hover:scale-105">
-                <Clock className="w-5 h-5 text-primary-foreground" />
-              </div>
+              <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
               <span className="text-xl font-display font-bold text-primary hidden sm:block">
                 Family Garden
               </span>

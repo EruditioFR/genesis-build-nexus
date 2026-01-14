@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -39,9 +40,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="col-span-2 lg:col-span-2">
             <a href="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-                <span className="text-base sm:text-lg font-display font-bold text-secondary-foreground">F</span>
-              </div>
+              <img src={logo} alt="Family Garden" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               <span className="text-lg sm:text-xl font-display font-semibold">
                 Family<span className="text-secondary">Garden</span>
               </span>

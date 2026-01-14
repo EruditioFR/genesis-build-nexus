@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import logo from "@/assets/logo.png";
 
 interface HeaderProps {
   forceSolid?: boolean;
@@ -68,9 +69,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-            <span className="text-lg font-display font-bold text-secondary-foreground">F</span>
-          </div>
+          <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
           <span
             className={`text-xl font-display font-semibold transition-colors duration-300 ${
               isSolid ? "text-primary" : "text-primary-foreground"
