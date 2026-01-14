@@ -60,7 +60,7 @@ const Login = () => {
                 <Sparkles className="w-7 h-7 text-secondary" />
               </div>
               <span className="text-2xl font-display font-bold text-primary-foreground">
-                La Ligne du Temps
+                MemoryVitae
               </span>
             </Link>
 
@@ -103,7 +103,7 @@ const Login = () => {
               <Sparkles className="w-6 h-6 text-primary" />
             </div>
             <span className="text-xl font-display font-bold text-primary">
-              La Ligne du Temps
+              MemoryVitae
             </span>
           </Link>
 

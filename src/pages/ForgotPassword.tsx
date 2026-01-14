@@ -50,7 +50,7 @@ const ForgotPassword = () => {
               <Sparkles className="w-7 h-7 text-primary" />
             </div>
             <span className="text-2xl font-display font-bold text-primary">
-              La Ligne du Temps
+              MemoryVitae
             </span>
           </Link>
 
@@ -137,7 +137,7 @@ const ForgotPassword = () => {
         <div className="mt-8 text-center text-sm text-muted-foreground">
           <p>
             Besoin d'aide ?{' '}
-            <a href="mailto:support@lalignedutemps.com" className="text-secondary hover:text-secondary/80">
+            <a href="mailto:support@memoryvitae.com" className="text-secondary hover:text-secondary/80">
               Contactez le support
             </a>
           </p>
