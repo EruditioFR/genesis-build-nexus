@@ -34,7 +34,7 @@ const TermsOfSale = () => {
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">1. Objet</h2>
             <p className="text-muted-foreground leading-relaxed">
               Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles 
-              entre MemoryVitae et ses utilisateurs pour la souscription aux services payants proposés
+              entre Family Garden et ses utilisateurs pour la souscription aux services payants proposés
               sur la plateforme.
             </p>
           </section>
@@ -42,7 +42,7 @@ const TermsOfSale = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">2. Services proposés</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              MemoryVitae propose les abonnements suivants :
+              Family Garden propose les abonnements suivants :
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li><strong>Gratuit :</strong> Accès limité aux fonctionnalités de base</li>
@@ -102,7 +102,7 @@ const TermsOfSale = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">7. Responsabilité</h2>
             <p className="text-muted-foreground leading-relaxed">
-              MemoryVitae s'engage à fournir les services avec diligence. Nous ne pouvons être tenus 
+              Family Garden s'engage à fournir les services avec diligence. Nous ne pouvons être tenus 
               responsables des interruptions de service indépendantes de notre volonté, ni des dommages
               indirects liés à l'utilisation de nos services.
             </p>
@@ -136,7 +136,7 @@ const TermsOfSale = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">11. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Pour toute question relative aux CGV, contactez-nous à : contact@memoryvitae.com
+              Pour toute question relative aux CGV, contactez-nous à : contact@familygarden.com
             </p>
           </section>
         </div>

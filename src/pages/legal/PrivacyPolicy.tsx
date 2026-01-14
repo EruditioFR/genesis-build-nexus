@@ -43,15 +43,15 @@ const PrivacyPolicy = () => {
               1. Introduction
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              MemoryVitae s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité 
+              Family Garden s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité 
               explique comment nous collectons, utilisons, stockons et protégeons vos données personnelles 
               conformément au Règlement Général sur la Protection des Données (RGPD) du 27 avril 2016 et à la
               loi Informatique et Libertés du 6 janvier 1978 modifiée.
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-muted-foreground">
-                <strong>Responsable du traitement :</strong> MemoryVitae SAS<br />
-                <strong>Email :</strong> <a href="mailto:privacy@memoryvitae.com" className="text-primary hover:underline">privacy@memoryvitae.com</a>
+                <strong>Responsable du traitement :</strong> Family Garden SAS<br />
+                <strong>Email :</strong> <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
               </p>
             </div>
           </section>
@@ -177,7 +177,7 @@ const PrivacyPolicy = () => {
             </ul>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="text-muted-foreground">
-                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@memoryvitae.com" className="text-primary hover:underline">privacy@memoryvitae.com</a>
+                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
               </p>
               <p className="text-muted-foreground text-sm mt-2">
                 Nous répondrons à votre demande dans un délai d'un mois conformément au RGPD.
@@ -301,7 +301,7 @@ const PrivacyPolicy = () => {
 
               <p className="text-muted-foreground text-sm">
                 Vous pouvez demander une copie des garanties appropriées en nous contactant à{" "}
-                <a href="mailto:privacy@memoryvitae.com" className="text-primary hover:underline">privacy@memoryvitae.com</a>
+                <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
               </p>
             </div>
           </section>

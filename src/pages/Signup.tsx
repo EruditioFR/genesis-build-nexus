@@ -69,7 +69,7 @@ const Signup = () => {
     } else {
       toast({
         title: 'Compte créé !',
-        description: 'Bienvenue sur MemoryVitae',
+        description: 'Bienvenue sur Family Garden',
       });
       navigate('/dashboard?welcome=true');
     }
@@ -93,7 +93,7 @@ const Signup = () => {
               <Sparkles className="w-6 h-6 text-primary" />
             </div>
             <span className="text-xl font-display font-bold text-primary">
-              MemoryVitae
+              Family Garden
             </span>
           </Link>
 
@@ -269,7 +269,7 @@ const Signup = () => {
                 <Sparkles className="w-7 h-7 text-white" />
               </div>
               <span className="text-2xl font-display font-bold text-white">
-                MemoryVitae
+                Family Garden
               </span>
             </Link>
 

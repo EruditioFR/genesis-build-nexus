@@ -49,7 +49,7 @@ import AdminStats from "./pages/admin/AdminStats";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="memoryvitae-theme">
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="familygarden-theme">
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
