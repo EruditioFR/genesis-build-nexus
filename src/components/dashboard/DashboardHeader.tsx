@@ -52,7 +52,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
             <Link to="/" className="flex items-center space-x-3 group">
               <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
               <span className="text-xl font-display font-bold text-primary-foreground hidden sm:block">
-                Family Garden
+                Family<span className="text-secondary">Garden</span>
               </span>
             </Link>
 
