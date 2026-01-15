@@ -45,13 +45,13 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   ];
 
   return (
-    <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b border-white/10 bg-[#1a1a2e]/85 backdrop-blur-xl shadow-lg shadow-black/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center space-x-3 group">
               <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
-              <span className="text-xl font-display font-bold text-primary hidden sm:block">
+              <span className="text-xl font-display font-bold text-primary-foreground hidden sm:block">
                 Family Garden
               </span>
             </Link>
@@ -67,8 +67,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-secondary/10 text-secondary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        ? "bg-secondary/20 text-secondary"
+                        : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10"
                     )}
                   >
                     <link.icon className="w-4 h-4" />
@@ -83,8 +83,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                   location.pathname.startsWith('/family-tree')
-                    ? "bg-secondary/10 text-secondary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? "bg-secondary/20 text-secondary"
+                    : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10"
                 )}
               >
                 <TreeDeciduous className="w-4 h-4" />
@@ -101,7 +101,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                     location.pathname.startsWith('/admin')
-                      ? "bg-primary/10 text-primary"
+                      ? "bg-primary/20 text-primary"
                       : "text-primary hover:bg-primary/10"
                   )}
                 >
@@ -171,7 +171,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium text-foreground hidden sm:block max-w-[150px] truncate">
+                  <span className="text-sm font-medium text-primary-foreground hidden sm:block max-w-[150px] truncate">
                     {user.displayName || user.email}
                   </span>
                 </Button>
