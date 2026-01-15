@@ -83,80 +83,81 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="p-6 rounded-2xl border border-border bg-card"
+      className="p-4 md:p-6 rounded-2xl border border-border bg-card"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 md:mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Clock className="w-5 h-5 text-primary" />
+          <div className="w-12 h-12 md:w-10 md:h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Clock className="w-6 h-6 md:w-5 md:h-5 text-primary" />
           </div>
-          <h3 className="text-lg font-display font-semibold text-foreground">
+          <h3 className="text-lg md:text-lg font-display font-semibold text-foreground">
             Dernières capsules
           </h3>
         </div>
         <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" asChild>
           <Link to="/capsules">
-            Voir tout
-            <ArrowRight className="w-4 h-4" />
+            <span className="hidden sm:inline">Voir tout</span>
+            <ArrowRight className="w-5 h-5 md:w-4 md:h-4" />
           </Link>
         </Button>
       </div>
 
       {capsules.length === 0 ? (
         <div className="text-center py-8">
-          <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
-            <Clock className="w-8 h-8 text-muted-foreground" />
+          <div className="w-20 h-20 md:w-16 md:h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
+            <Clock className="w-10 h-10 md:w-8 md:h-8 text-muted-foreground" />
           </div>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 text-base">
             Vous n'avez pas encore créé de capsule
           </p>
-          <Button className="gap-2" asChild>
+          <Button className="gap-2" size="mobile" asChild>
             <Link to="/capsules/new">
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               Créer ma première capsule
             </Link>
           </Button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           {capsules.map((capsule, index) => {
             const Icon = getTypeIcon(capsule.type);
             return (
-              <motion.div
-                key={capsule.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer group"
-              >
-                <CapsuleThumbnail
-                  thumbnailUrl={capsule.thumbnail}
-                  fallbackIcon={
-                    <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-secondary" />
-                    </div>
-                  }
-                  className="w-12 h-12 rounded-lg"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground truncate group-hover:text-primary transition-colors">
-                    {capsule.title}
-                  </p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <p className="text-sm text-muted-foreground">
-                      {getTypeLabel(capsule.type)} • {capsule.date}
+              <Link to={`/capsules/${capsule.id}`} key={capsule.id}>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="flex items-center gap-3 md:gap-4 p-3 md:p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer group active:bg-muted"
+                >
+                  <CapsuleThumbnail
+                    thumbnailUrl={capsule.thumbnail}
+                    fallbackIcon={
+                      <div className="w-14 h-14 md:w-12 md:h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+                        <Icon className="w-6 h-6 md:w-5 md:h-5 text-secondary" />
+                      </div>
+                    }
+                    className="w-14 h-14 md:w-12 md:h-12 rounded-lg"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold md:font-medium text-foreground truncate group-hover:text-primary transition-colors text-base">
+                      {capsule.title}
                     </p>
-                    {capsuleCategories[capsule.id] && (
-                      <CategoryBadge 
-                        category={capsuleCategories[capsule.id]} 
-                        size="sm" 
-                        showIcon={true}
-                      />
-                    )}
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm text-muted-foreground">
+                        {getTypeLabel(capsule.type)} • {capsule.date}
+                      </p>
+                      {capsuleCategories[capsule.id] && (
+                        <CategoryBadge 
+                          category={capsuleCategories[capsule.id]} 
+                          size="sm" 
+                          showIcon={true}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
+                  <ArrowRight className="w-5 h-5 md:w-4 md:h-4 text-muted-foreground opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+              </Link>
             );
           })}
         </div>

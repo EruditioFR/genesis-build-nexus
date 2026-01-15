@@ -93,9 +93,9 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.1
-        }} className="text-4xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
+        }} className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
             Ne laissez pas vos souvenirs s'effacer,
-            <br />
+            <br className="hidden sm:block" />
             <span className="text-primary-foreground">faites-en un trésor familial.</span>
           </motion.h1>
 
@@ -123,14 +123,14 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.3
-        }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        }} className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-4">
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="w-full sm:w-auto"
             >
-              <Button asChild variant="hero" size="lg" className="group w-full">
+              <Button asChild variant="hero" size="xl" className="group w-full min-h-[56px] text-lg">
                 <Link to="/signup">
                   Commencer gratuitement
                   <motion.span
@@ -138,7 +138,7 @@ const HeroSection = () => {
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
                   </motion.span>
                 </Link>
               </Button>
@@ -149,14 +149,14 @@ const HeroSection = () => {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="w-full sm:w-auto"
             >
-              <Button asChild variant="ghost" size="lg" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full">
+              <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[56px] text-lg">
                 <a href="#how-it-works">
                   <motion.span 
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 group-hover:bg-primary-foreground/30 transition-colors"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-3 group-hover:bg-primary-foreground/30 transition-colors"
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                   </motion.span>
                   Voir la démo
                 </a>
@@ -172,24 +172,24 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.5
-        }} className="mt-6 sm:mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-primary-foreground/60 px-2">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        }} className="mt-8 sm:mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-primary-foreground/70 px-2">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span className="text-sm">Données sécurisées</span>
+              <span className="text-base font-medium">Données sécurisées</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-sm">Préservation à long terme</span>
+              <span className="text-base font-medium">Préservation à long terme</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <span className="text-sm">Partage familial</span>
+              <span className="text-base font-medium">Partage familial</span>
             </div>
           </motion.div>
         </div>

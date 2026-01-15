@@ -163,7 +163,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Enhanced for seniors */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -172,61 +172,62 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-card shadow-elevated"
           >
-            <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-foreground font-medium py-2 hover:text-secondary transition-colors"
+                  className="text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
                 >
                   {link.label}
                 </a>
               ))}
-              <div className="pt-4 border-t border-border flex flex-col gap-3">
+              <div className="pt-4 mt-2 border-t border-border flex flex-col gap-3">
                 {user ? (
                   <>
-                    <div className="flex items-center gap-3 py-2">
-                      <Avatar className="h-10 w-10">
+                    <div className="flex items-center gap-4 py-3 px-4 bg-muted/50 rounded-xl">
+                      <Avatar className="h-12 w-12">
                         <AvatarImage src={profile?.avatar_url || undefined} />
-                        <AvatarFallback className="bg-primary text-primary-foreground">
+                        <AvatarFallback className="bg-primary text-primary-foreground text-lg">
                           {getInitials()}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="font-medium">
+                      <span className="font-semibold text-lg">
                         {profile?.display_name || user.email?.split('@')[0]}
                       </span>
                     </div>
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
                       <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                        <LayoutDashboard className="h-4 w-4 mr-2" />
+                        <LayoutDashboard className="h-6 w-6 mr-3" />
                         Tableau de bord
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
                       <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                        <User className="h-4 w-4 mr-2" />
+                        <User className="h-6 w-6 mr-3" />
                         Mon profil
                       </Link>
                     </Button>
                     <Button 
                       variant="destructive" 
-                      className="w-full"
+                      size="mobileLg"
+                      className="w-full justify-start"
                       onClick={() => {
                         handleSignOut();
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      <LogOut className="h-4 w-4 mr-2" />
+                      <LogOut className="h-6 w-6 mr-3" />
                       Se déconnecter
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full">
                       <Link to="/login">Se connecter</Link>
                     </Button>
-                    <Button asChild variant="hero" className="w-full">
+                    <Button asChild variant="mobilePrimary" size="mobileLg" className="w-full">
                       <Link to="/signup">Commencer gratuitement</Link>
                     </Button>
                   </>

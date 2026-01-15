@@ -13,6 +13,7 @@ import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -228,7 +229,7 @@ const Dashboard = () => {
   const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy';
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -239,17 +240,17 @@ const Dashboard = () => {
         onSignOut={handleSignOut}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8"
+          className="mb-6 md:mb-8"
         >
-          <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
             Bonjour{profile?.display_name ? `, ${profile.display_name.split(' ')[0]}` : ''} 👋
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-base">
             {stats.totalCapsules === 0 
               ? 'Commencez à préserver vos souvenirs précieux'
               : 'Continuez à préserver vos souvenirs précieux'}
@@ -258,7 +259,7 @@ const Dashboard = () => {
 
         {/* Onboarding Checklist */}
         {showOnboarding && (
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <OnboardingChecklist
               hasProfile={!!(profile?.display_name && profile?.avatar_url)}
               hasCapsule={stats.totalCapsules > 0}
@@ -272,19 +273,19 @@ const Dashboard = () => {
         )}
 
         {/* Quick Actions */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <QuickActions />
         </div>
 
         {/* Stats Cards */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <StatsCards stats={stats} />
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left Column - 2/3 width */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             <StorageProgress
               usedMb={profile?.storage_used_mb || 0}
               limitMb={profile?.storage_limit_mb || 500}
@@ -303,6 +304,9 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 };
