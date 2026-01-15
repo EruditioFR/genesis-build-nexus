@@ -170,8 +170,8 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="w-5 h-5 text-muted-foreground" />
+        <Button variant="ghost" size="icon" className="relative text-primary-foreground hover:bg-white/10">
+          <Bell className="w-5 h-5" />
           <AnimatePresence>
             {unreadCount > 0 && (
               <motion.span

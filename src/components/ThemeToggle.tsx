@@ -21,7 +21,7 @@ const ThemeToggle = () => {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="w-9 h-9">
+      <Button variant="ghost" size="icon" className="w-9 h-9 text-primary-foreground hover:bg-white/10">
         <Sun className="w-4 h-4" />
       </Button>
     );
@@ -30,7 +30,7 @@ const ThemeToggle = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-9 h-9">
+        <Button variant="ghost" size="icon" className="w-9 h-9 text-primary-foreground hover:bg-white/10">
           {theme === 'dark' ? (
             <Moon className="w-4 h-4" />
           ) : theme === 'light' ? (
