@@ -24,13 +24,21 @@ const buttonVariants = cva(
         accent: "bg-accent text-accent-foreground font-medium hover:bg-accent/90 hover:shadow-soft transition-all duration-300",
         // Navy button
         navy: "bg-gradient-navy text-primary-foreground font-medium hover:shadow-elevated transition-all duration-300",
+        // Mobile-optimized buttons for seniors
+        mobilePrimary: "min-h-[52px] text-lg font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-gold rounded-xl px-6",
+        mobileSecondary: "min-h-[48px] text-base font-medium bg-muted text-foreground hover:bg-muted/80 rounded-xl px-5",
+        mobileGhost: "min-h-[48px] text-base font-medium hover:bg-muted/50 rounded-xl px-4",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-lg px-8",
         xl: "h-14 rounded-xl px-10 text-base",
+        // Mobile sizes
+        mobile: "h-12 rounded-xl px-6 text-base",
+        mobileLg: "h-14 rounded-xl px-8 text-lg",
         icon: "h-10 w-10",
+        iconLg: "h-12 w-12",
       },
     },
     defaultVariants: {
