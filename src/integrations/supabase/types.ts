@@ -215,6 +215,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          memory_date: string | null
           metadata: Json | null
           published_at: string | null
           scheduled_at: string | null
@@ -231,6 +232,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          memory_date?: string | null
           metadata?: Json | null
           published_at?: string | null
           scheduled_at?: string | null
@@ -247,6 +249,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          memory_date?: string | null
           metadata?: Json | null
           published_at?: string | null
           scheduled_at?: string | null

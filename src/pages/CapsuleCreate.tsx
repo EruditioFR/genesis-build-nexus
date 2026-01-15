@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Send, Sparkles, CalendarClock } from 'lucide-react';
+import { ArrowLeft, Save, Send, Sparkles, CalendarClock, CalendarHeart } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +34,9 @@ import LegacySettings from '@/components/capsule/LegacySettings';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import { useCategories } from '@/hooks/useCategories';
 import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -65,6 +70,9 @@ const CapsuleCreate = () => {
   // Category state
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
+  
+  // Memory date state (when the memory actually happened)
+  const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   
   // Scheduling state
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
@@ -166,6 +174,7 @@ const CapsuleCreate = () => {
           published_at: publishedAt,
           scheduled_at: scheduledAtValue,
           thumbnail_url: thumbnailUrl,
+          memory_date: memoryDate ? format(memoryDate, 'yyyy-MM-dd') : null,
         })
         .select('id')
         .single();
@@ -416,6 +425,51 @@ const CapsuleCreate = () => {
                 />
               </div>
             )}
+            {/* Memory Date */}
+            <div className="p-6 rounded-2xl border border-border bg-card">
+              <Label className="text-base font-medium mb-4 block">
+                <CalendarHeart className="w-4 h-4 inline-block mr-2" />
+                Date du souvenir
+              </Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Quand ce souvenir a-t-il eu lieu ?
+              </p>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !memoryDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarHeart className="mr-2 h-4 w-4" />
+                    {memoryDate ? format(memoryDate, "PPP", { locale: fr }) : "Sélectionner une date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={memoryDate || undefined}
+                    onSelect={(date) => setMemoryDate(date || null)}
+                    disabled={(date) => date > new Date()}
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+              {memoryDate && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mt-2 text-muted-foreground"
+                  onClick={() => setMemoryDate(null)}
+                >
+                  Effacer la date
+                </Button>
+              )}
+            </div>
+
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
