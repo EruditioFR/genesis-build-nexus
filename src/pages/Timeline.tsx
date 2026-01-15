@@ -668,7 +668,8 @@ const TimelineItem = ({
 }) => {
   const config = capsuleTypeConfig[capsule.capsule_type];
   const Icon = config.icon;
-  const date = parseISO(capsule.created_at);
+  const memoryDate = capsule.memory_date ? parseISO(capsule.memory_date) : null;
+  const createdDate = parseISO(capsule.created_at);
 
   return (
     <motion.div
@@ -709,8 +710,16 @@ const TimelineItem = ({
               <h3 className="font-semibold text-foreground truncate group-hover:text-secondary transition-colors">
                 {capsule.title}
               </h3>
-              <p className="text-xs text-muted-foreground">
-                {format(date, 'd MMMM yyyy, HH:mm', { locale: fr })}
+              {/* Memory date (primary) */}
+              {memoryDate && (
+                <p className="text-xs text-secondary font-medium flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {format(memoryDate, 'd MMMM yyyy', { locale: fr })}
+                </p>
+              )}
+              {/* Created date (secondary or primary if no memory date) */}
+              <p className={`text-xs ${memoryDate ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
+                {memoryDate ? 'Créé le ' : ''}{format(createdDate, 'd MMMM yyyy', { locale: fr })}
               </p>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-secondary group-hover:translate-x-1 transition-all flex-shrink-0" />
