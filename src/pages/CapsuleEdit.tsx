@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Send, Edit3, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Send, Edit3, Trash2, CalendarHeart } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { format, parseISO } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +43,9 @@ import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -86,6 +91,7 @@ const CapsuleEdit = () => {
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
+  const [memoryDate, setMemoryDate] = useState<Date | null>(null);
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -134,6 +140,11 @@ const CapsuleEdit = () => {
         });
         setCapsuleType(capsule.capsule_type);
         setTags(capsule.tags || []);
+        
+        // Set memory date if exists
+        if (capsule.memory_date) {
+          setMemoryDate(parseISO(capsule.memory_date));
+        }
 
         // Fetch existing media
         const { data: media } = await supabase
@@ -227,6 +238,7 @@ const CapsuleEdit = () => {
           status: status,
           tags: tags.length > 0 ? tags : null,
           published_at: status === 'published' ? new Date().toISOString() : null,
+          memory_date: memoryDate ? format(memoryDate, 'yyyy-MM-dd') : null,
         })
         .eq('id', id);
 
@@ -496,6 +508,51 @@ const CapsuleEdit = () => {
                 />
               </div>
             )}
+
+            {/* Memory Date */}
+            <div className="p-6 rounded-2xl border border-border bg-card">
+              <Label className="text-base font-medium mb-4 block">
+                <CalendarHeart className="w-4 h-4 inline-block mr-2" />
+                Date du souvenir
+              </Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Quand ce souvenir a-t-il eu lieu ?
+              </p>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !memoryDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarHeart className="mr-2 h-4 w-4" />
+                    {memoryDate ? format(memoryDate, "PPP", { locale: fr }) : "Sélectionner une date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={memoryDate || undefined}
+                    onSelect={(date) => setMemoryDate(date || null)}
+                    disabled={(date) => date > new Date()}
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+              {memoryDate && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mt-2 text-muted-foreground"
+                  onClick={() => setMemoryDate(null)}
+                >
+                  Effacer la date
+                </Button>
+              )}
+            </div>
 
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
