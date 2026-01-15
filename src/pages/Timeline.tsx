@@ -29,6 +29,14 @@ type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
+// Helper to get the relevant date for timeline (memory_date if available, otherwise created_at)
+const getCapsuleDate = (capsule: Capsule): Date => {
+  if (capsule.memory_date) {
+    return parseISO(capsule.memory_date);
+  }
+  return parseISO(capsule.created_at);
+};
+
 const capsuleTypeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
   text: { icon: FileText, label: 'Texte', color: 'bg-blue-500' },
   photo: { icon: Image, label: 'Photo', color: 'bg-emerald-500' },
@@ -95,7 +103,8 @@ const Timeline = () => {
   const decades = useMemo(() => {
     const decadeSet = new Set<string>();
     filteredCapsules.forEach((capsule) => {
-      const year = parseInt(format(parseISO(capsule.created_at), 'yyyy'));
+      const date = getCapsuleDate(capsule);
+      const year = parseInt(format(date, 'yyyy'));
       const decade = Math.floor(year / 10) * 10;
       decadeSet.add(decade.toString());
     });
@@ -194,7 +203,13 @@ const Timeline = () => {
         ]);
 
         if (capsulesRes.data) {
-          setCapsules(capsulesRes.data);
+          // Sort capsules by memory_date (or created_at as fallback), most recent first
+          const sortedCapsules = [...capsulesRes.data].sort((a, b) => {
+            const dateA = getCapsuleDate(a);
+            const dateB = getCapsuleDate(b);
+            return dateB.getTime() - dateA.getTime();
+          });
+          setCapsules(sortedCapsules);
           
           // Fetch categories for all capsules
           if (capsulesRes.data.length > 0) {
@@ -241,7 +256,7 @@ const Timeline = () => {
     const result: Record<string, GroupedCapsules> = {};
     
     filteredCapsules.forEach((capsule) => {
-      const date = parseISO(capsule.created_at);
+      const date = getCapsuleDate(capsule);
       const year = format(date, 'yyyy');
       const month = format(date, 'MMMM', { locale: fr });
       const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
