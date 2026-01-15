@@ -60,10 +60,10 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-white/10 ${
         isSolid
-          ? "bg-[#1a1a2e]/95 backdrop-blur-md shadow-soft py-3"
-          : "bg-[#1a1a2e] py-6"
+          ? "bg-[#1a1a2e]/85 backdrop-blur-xl shadow-lg shadow-black/20 py-3"
+          : "bg-[#1a1a2e]/70 backdrop-blur-md py-6"
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
