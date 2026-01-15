@@ -32,11 +32,13 @@ import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 import ScheduleSelector from '@/components/capsule/ScheduleSelector';
 import LegacySettings from '@/components/capsule/LegacySettings';
 import CategorySelector from '@/components/capsule/CategorySelector';
+import MobileCapsuleWizard from '@/components/capsule/MobileCapsuleWizard';
 import { useCategories } from '@/hooks/useCategories';
 import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -60,6 +62,7 @@ type CapsuleFormValues = z.infer<typeof capsuleSchema>;
 const CapsuleCreate = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const { categories, subCategories, setCapsuleCategories, setCapsuleSubCategories, createCustomCategory, getSubCategoriesForCategory } = useCategories();
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
   const [tags, setTags] = useState<string[]>([]);
@@ -261,6 +264,41 @@ const CapsuleCreate = () => {
 
   if (!user) return null;
 
+  // Mobile wizard version
+  if (isMobile) {
+    return (
+      <MobileCapsuleWizard
+        userId={user.id}
+        title={form.watch('title') || ''}
+        onTitleChange={(value) => form.setValue('title', value)}
+        description={form.watch('description') || ''}
+        onDescriptionChange={(value) => form.setValue('description', value)}
+        content={form.watch('content') || ''}
+        onContentChange={(value) => form.setValue('content', value)}
+        capsuleType={capsuleType}
+        onCapsuleTypeChange={setCapsuleType}
+        categories={categories}
+        subCategories={subCategories}
+        primaryCategory={primaryCategory}
+        onPrimaryCategoryChange={setPrimaryCategory}
+        selectedSubCategories={selectedSubCategories}
+        onSubCategoriesChange={setSelectedSubCategories}
+        onCreateCustomCategory={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
+        mediaFiles={mediaFiles}
+        onMediaFilesChange={setMediaFiles}
+        tags={tags}
+        onTagsChange={setTags}
+        memoryDate={memoryDate}
+        onMemoryDateChange={setMemoryDate}
+        isSaving={isSaving}
+        onSaveDraft={() => saveCapsule('draft')}
+        onPublish={() => saveCapsule('published')}
+        onBack={() => navigate('/dashboard')}
+      />
+    );
+  }
+
+  // Desktop version
   return (
     <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
