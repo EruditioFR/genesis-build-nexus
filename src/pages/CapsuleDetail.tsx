@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -358,9 +358,17 @@ const CapsuleDetail = () => {
                       size="sm"
                     />
                   ))}
-                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                  {/* Memory date (primary) */}
+                  {capsule.memory_date && (
+                    <span className="text-sm text-secondary font-medium flex items-center gap-1">
+                      <CalendarHeart className="w-3.5 h-3.5" />
+                      {format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })}
+                    </span>
+                  )}
+                  {/* Created date */}
+                  <span className={`text-sm flex items-center gap-1 ${capsule.memory_date ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
                     <Calendar className="w-3.5 h-3.5" />
-                    {format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
+                    {capsule.memory_date ? 'Créé le ' : ''}{format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
                   </span>
                 </div>
               </div>
