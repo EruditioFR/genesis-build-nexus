@@ -170,11 +170,11 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
         variant="outline"
         size="sm"
         onClick={() => setOpen(true)}
-        className="gap-2 text-muted-foreground hover:text-foreground hidden sm:flex"
+        className="gap-2 text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 border-white/20 hidden sm:flex"
       >
         <Search className="w-4 h-4" />
         <span>Rechercher...</span>
-        <kbd className="pointer-events-none ml-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        <kbd className="pointer-events-none ml-2 hidden h-5 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
@@ -184,7 +184,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
         variant="ghost"
         size="icon"
         onClick={() => setOpen(true)}
-        className="sm:hidden"
+        className="sm:hidden text-primary-foreground hover:bg-white/10"
       >
         <Search className="w-5 h-5" />
       </Button>

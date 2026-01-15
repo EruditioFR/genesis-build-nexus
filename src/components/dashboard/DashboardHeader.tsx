@@ -116,7 +116,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
             {/* Mobile navigation menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className="md:hidden text-primary-foreground hover:bg-white/10">
                   <Menu className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -164,7 +164,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 px-2">
+                <Button variant="ghost" className="flex items-center gap-2 px-2 hover:bg-white/10">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={user.avatarUrl} alt={user.displayName || 'Avatar'} />
                     <AvatarFallback className="bg-secondary/20 text-secondary text-sm font-medium">
