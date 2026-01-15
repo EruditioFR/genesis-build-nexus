@@ -54,8 +54,10 @@ const handler = async (req: Request): Promise<Response> => {
     const appUrl = Deno.env.get("APP_URL") || "https://fngbrxoblmbukqzzdwxp.lovable.app";
     const inviteLink = `${appUrl}/invite/${invitationToken}`;
 
+    const logoUrl = `${appUrl}/logo.png`;
+
     const emailResponse = await resend.emails.send({
-      from: "MemoryCapsule <onboarding@resend.dev>",
+      from: "FamilyGarden <onboarding@resend.dev>",
       to: [memberEmail],
       subject: `${inviterName} vous invite à rejoindre le cercle "${circleName}"`,
       html: `
@@ -69,6 +71,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="max-width: 560px; margin: 0 auto; background-color: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden;">
             
             <div style="background: linear-gradient(135deg, #C9A86C 0%, #B8956A 100%); padding: 32px; text-align: center;">
+              <img src="${logoUrl}" alt="FamilyGarden" style="width: 60px; height: 60px; margin-bottom: 16px;" />
               <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">
                 ✨ Invitation à rejoindre un cercle
               </h1>
@@ -81,7 +84,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <p style="font-size: 16px; color: #2D3748; line-height: 1.6; margin: 0 0 24px;">
                 <strong>${inviterName}</strong> vous invite à rejoindre le cercle 
-                <strong style="color: #C9A86C;">"${circleName}"</strong> sur MemoryCapsule.
+                <strong style="color: #C9A86C;">"${circleName}"</strong> sur FamilyGarden.
               </p>
               
               <p style="font-size: 14px; color: #718096; line-height: 1.6; margin: 0 0 32px;">
@@ -104,8 +107,9 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <div style="background-color: #f8f5f0; padding: 20px; text-align: center; border-top: 1px solid #E2E8F0;">
+              <img src="${logoUrl}" alt="FamilyGarden" style="width: 32px; height: 32px; margin-bottom: 8px;" />
               <p style="font-size: 12px; color: #718096; margin: 0;">
-                MemoryCapsule - Préservez vos souvenirs précieux
+                FamilyGarden - Préservez vos souvenirs précieux
               </p>
             </div>
           </div>
