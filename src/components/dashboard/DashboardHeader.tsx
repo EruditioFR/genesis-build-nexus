@@ -51,7 +51,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center space-x-3 group">
               <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
-              <span className="text-lg sm:text-xl font-display font-bold text-primary-foreground">
+              <span className="text-xl sm:text-xl font-display font-bold text-primary-foreground">
                 Family<span className="text-secondary">Garden</span>
               </span>
             </Link>
@@ -120,21 +120,21 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   <Menu className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48 md:hidden">
+              <DropdownMenuContent align="start" className="w-48 md:hidden text-base">
                 {navLinks.map((link) => (
-                  <DropdownMenuItem key={link.to} asChild>
+                  <DropdownMenuItem key={link.to} asChild className="text-base">
                     <Link to={link.to} className="cursor-pointer">
-                      <link.icon className="w-4 h-4 mr-2" />
+                      <link.icon className="w-5 h-5 mr-2" />
                       {link.label}
                     </Link>
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="text-base">
                   <Link to="/family-tree" className="cursor-pointer">
-                    <TreeDeciduous className="w-4 h-4 mr-2" />
+                    <TreeDeciduous className="w-5 h-5 mr-2" />
                     Arbre Généalogique
-                    <Badge variant="outline" className="ml-auto text-[10px] px-1.5 py-0 h-4 bg-secondary/10 text-secondary border-secondary/30">
+                    <Badge variant="outline" className="ml-auto text-xs px-1.5 py-0 h-5 bg-secondary/10 text-secondary border-secondary/30">
                       Premium
                     </Badge>
                   </Link>
@@ -142,9 +142,9 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 {isAdminOrModerator && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild className="text-base">
                       <Link to="/admin" className="cursor-pointer text-primary">
-                        <Shield className="w-4 h-4 mr-2" />
+                        <Shield className="w-5 h-5 mr-2" />
                         Admin
                       </Link>
                     </DropdownMenuItem>
