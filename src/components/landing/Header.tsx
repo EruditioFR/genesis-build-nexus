@@ -71,7 +71,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
           <span
-            className={`text-xl font-display font-semibold transition-colors duration-300 ${
+            className={`text-xl font-display font-semibold transition-colors duration-300 hidden sm:inline ${
+              isSolid ? "text-primary" : "text-primary-foreground"
+            }`}
+          >
+            Family<span className="text-secondary">Garden</span>
+          </span>
+          <span
+            className={`text-lg font-display font-semibold transition-colors duration-300 sm:hidden ${
               isSolid ? "text-primary" : "text-primary-foreground"
             }`}
           >
