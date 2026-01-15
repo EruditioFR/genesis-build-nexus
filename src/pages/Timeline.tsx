@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play, ChevronUp, Folder } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
+import { Clock, Calendar, Image, Video, Music, FileText, Layers, ChevronRight, Plus, Filter, X, Play, ChevronUp, Folder, CalendarRange } from 'lucide-react';
+import { format, parseISO, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -76,6 +78,8 @@ const Timeline = () => {
   const [selectedStatuses, setSelectedStatuses] = useState<CapsuleStatus[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
+  const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
 
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -95,9 +99,15 @@ const Timeline = () => {
       const tagMatch = selectedTags.length === 0 || selectedTags.some((t) => capsule.tags?.includes(t));
       const categoryMatch = selectedCategories.length === 0 || 
         (capsuleCategories[capsule.id] && selectedCategories.includes(capsuleCategories[capsule.id].id));
-      return typeMatch && statusMatch && tagMatch && categoryMatch;
+      
+      // Date range filter on memory_date (or created_at as fallback)
+      const capsuleDate = getCapsuleDate(capsule);
+      const dateFromMatch = !dateFrom || !isBefore(capsuleDate, startOfDay(dateFrom));
+      const dateToMatch = !dateTo || !isAfter(capsuleDate, endOfDay(dateTo));
+      
+      return typeMatch && statusMatch && tagMatch && categoryMatch && dateFromMatch && dateToMatch;
     });
-  }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategories, capsuleCategories]);
+  }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategories, capsuleCategories, dateFrom, dateTo]);
 
   // Extract decades from filtered capsules
   const decades = useMemo(() => {
@@ -145,13 +155,15 @@ const Timeline = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [decades]);
 
-  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategories.length;
+  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategories.length + (dateFrom ? 1 : 0) + (dateTo ? 1 : 0);
 
   const clearAllFilters = () => {
     setSelectedTypes([]);
     setSelectedStatuses([]);
     setSelectedTags([]);
     setSelectedCategories([]);
+    setDateFrom(undefined);
+    setDateTo(undefined);
   };
 
   const toggleType = (type: CapsuleType) => {
@@ -464,6 +476,78 @@ const Timeline = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
+
+            {/* Date Range Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <CalendarRange className="w-4 h-4" />
+                  Période
+                  {(dateFrom || dateTo) && (
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5">
+                      {(dateFrom ? 1 : 0) + (dateTo ? 1 : 0)}
+                    </Badge>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-4" align="center">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">Du</p>
+                    <CalendarComponent
+                      mode="single"
+                      selected={dateFrom}
+                      onSelect={setDateFrom}
+                      disabled={(date) => dateTo ? isAfter(date, dateTo) : false}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                    {dateFrom && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                          {format(dateFrom, 'd MMMM yyyy', { locale: fr })}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setDateFrom(undefined)}
+                          className="h-6 px-2 text-xs"
+                        >
+                          <X className="w-3 h-3 mr-1" />
+                          Effacer
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="border-t border-border pt-4 space-y-2">
+                    <p className="text-sm font-medium text-foreground">Au</p>
+                    <CalendarComponent
+                      mode="single"
+                      selected={dateTo}
+                      onSelect={setDateTo}
+                      disabled={(date) => dateFrom ? isBefore(date, dateFrom) : false}
+                      className="pointer-events-auto"
+                    />
+                    {dateTo && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                          {format(dateTo, 'd MMMM yyyy', { locale: fr })}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setDateTo(undefined)}
+                          className="h-6 px-2 text-xs"
+                        >
+                          <X className="w-3 h-3 mr-1" />
+                          Effacer
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {/* Clear filters */}
             {activeFiltersCount > 0 && (
