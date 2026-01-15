@@ -29,6 +29,7 @@ import { CreateTreeDialog } from '@/components/familyTree/CreateTreeDialog';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import type { FamilyTree } from '@/types/familyTree';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 export default function FamilyTreePage() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export default function FamilyTreePage() {
   // Premium gate
   if (!isPremium) {
     return (
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-24 md:pb-0">
         <DashboardHeader 
           user={user} 
           onSignOut={signOut} 
@@ -104,13 +105,15 @@ export default function FamilyTreePage() {
               </Button>
             </div>
           </motion.div>
+
+          <MobileBottomNav />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-24 md:pb-0">
       <DashboardHeader 
         user={user} 
         onSignOut={signOut} 
@@ -279,6 +282,8 @@ export default function FamilyTreePage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <MobileBottomNav />
     </div>
   );
 }

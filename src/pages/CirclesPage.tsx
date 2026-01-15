@@ -34,6 +34,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import { toast } from 'sonner';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 interface Circle {
   id: string;
@@ -204,7 +205,7 @@ const CirclesPage = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -500,6 +501,8 @@ const CirclesPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <MobileBottomNav />
     </div>
   );
 };

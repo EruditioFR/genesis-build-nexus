@@ -43,6 +43,7 @@ import SubCategoryBadge from '@/components/capsule/SubCategoryBadge';
 import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
@@ -303,7 +304,7 @@ const CapsuleDetail = () => {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gradient-warm">
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -580,6 +581,8 @@ const CapsuleDetail = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <MobileBottomNav />
     </div>
     </>
   );
