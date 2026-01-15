@@ -27,6 +27,7 @@ import NotificationsBell from "@/components/notifications/NotificationsBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { Database } from "@/integrations/supabase/types";
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Capsule = Database["public"]["Tables"]["capsules"]["Row"];
 
@@ -150,7 +151,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-24 md:pb-0">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -445,6 +446,8 @@ export default function CalendarPage() {
           </Card>
         </div>
       </main>
+
+      <MobileBottomNav />
     </div>
   );
 }

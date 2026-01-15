@@ -59,14 +59,14 @@ const ForgotPassword = () => {
                 <h2 className="text-2xl font-display font-bold text-foreground mb-2">
                   Mot de passe oublié ?
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-base">
                   Pas de panique ! Entrez votre email et nous vous enverrons un lien de réinitialisation.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Adresse email</Label>
+                  <Label htmlFor="email" className="text-base">Adresse email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input

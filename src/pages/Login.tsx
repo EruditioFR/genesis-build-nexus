@@ -105,17 +105,17 @@ const Login = () => {
           </Link>
 
           <div className="mb-8">
-            <h2 className="text-3xl font-display font-bold text-foreground mb-2">
+            <h2 className="text-3xl md:text-3xl font-display font-bold text-foreground mb-2">
               Connexion
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-base md:text-base">
               Entrez vos identifiants pour accéder à votre espace
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Adresse email</Label>
+              <Label htmlFor="email" className="text-base">Adresse email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -132,7 +132,7 @@ const Login = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Mot de passe</Label>
+                <Label htmlFor="password" className="text-base">Mot de passe</Label>
                 <Link 
                   to="/forgot-password" 
                   className="text-sm text-secondary hover:text-secondary/80 transition-colors"
@@ -173,7 +173,7 @@ const Login = () => {
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-base">
               Pas encore de compte ?{' '}
               <Link to="/signup" className="text-secondary font-medium hover:text-secondary/80 transition-colors">
                 Créer un compte
@@ -183,7 +183,7 @@ const Login = () => {
 
           {/* Trust indicators */}
           <div className="mt-12 pt-8 border-t border-border">
-            <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+            <div className="flex items-center justify-center gap-4 md:gap-6 text-sm text-muted-foreground flex-wrap">
               <div className="flex items-center gap-1">
                 <Lock className="w-3 h-3" />
                 <span>Sécurisé SSL</span>

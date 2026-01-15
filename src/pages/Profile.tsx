@@ -38,6 +38,7 @@ import GuardiansSection from '@/components/profile/GuardiansSection';
 import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -191,7 +192,7 @@ const Profile = () => {
   const subscription = subscriptionLabels[profile.subscription_level];
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -493,6 +494,8 @@ const Profile = () => {
           </motion.div>
         </div>
       </main>
+
+      <MobileBottomNav />
     </div>
   );
 };

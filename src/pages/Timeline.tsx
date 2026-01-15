@@ -26,6 +26,7 @@ import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
 
 import type { Database } from '@/integrations/supabase/types';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
@@ -306,7 +307,7 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gradient-warm">
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -725,13 +726,15 @@ const Timeline = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="fixed bottom-6 right-6 z-30 p-3 bg-gradient-gold text-primary-foreground rounded-full shadow-gold hover:opacity-90 transition-opacity"
+              className="fixed bottom-24 md:bottom-6 right-6 z-30 p-3 bg-gradient-gold text-primary-foreground rounded-full shadow-gold hover:opacity-90 transition-opacity"
             >
               <ChevronUp className="w-5 h-5" />
             </motion.button>
           </div>
         )}
       </main>
+
+      <MobileBottomNav />
     </div>
     </>
   );

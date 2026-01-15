@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { toast } from 'sonner';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 const Premium = () => {
   const { user } = useAuth();
@@ -120,7 +121,7 @@ const Premium = () => {
   const isPremium = tier === 'premium' || tier === 'heritage';
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -382,6 +383,8 @@ const Premium = () => {
           </motion.div>
         )}
       </main>
+
+      <MobileBottomNav />
     </div>
   );
 };

@@ -100,14 +100,14 @@ const Signup = () => {
             <h2 className="text-3xl font-display font-bold text-foreground mb-2">
               Créer un compte
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-base">
               Commencez à préserver vos souvenirs dès aujourd'hui
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="displayName">Votre nom</Label>
+              <Label htmlFor="displayName" className="text-base">Votre nom</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -123,7 +123,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Adresse email</Label>
+              <Label htmlFor="email" className="text-base">Adresse email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -139,7 +139,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmEmail">Confirmer l'adresse email</Label>
+              <Label htmlFor="confirmEmail" className="text-base">Confirmer l'adresse email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -160,7 +160,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-base">Mot de passe</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -199,7 +199,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+              <Label htmlFor="confirmPassword" className="text-base">Confirmer le mot de passe</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -242,7 +242,7 @@ const Signup = () => {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-base">
               Déjà un compte ?{' '}
               <Link to="/login" className="text-secondary font-medium hover:text-secondary/80 transition-colors">
                 Se connecter
