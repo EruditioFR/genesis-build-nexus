@@ -51,7 +51,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center space-x-3 group">
               <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
-              <span className="text-xl font-display font-bold text-primary-foreground hidden sm:block">
+              <span className="text-lg sm:text-xl font-display font-bold text-primary-foreground">
                 Family<span className="text-secondary">Garden</span>
               </span>
             </Link>
