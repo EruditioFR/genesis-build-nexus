@@ -62,8 +62,8 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isSolid
-          ? "bg-card/95 backdrop-blur-md shadow-soft py-3"
-          : "bg-transparent py-6"
+          ? "bg-[#1a1a2e]/95 backdrop-blur-md shadow-soft py-3"
+          : "bg-[#1a1a2e] py-6"
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -71,16 +71,12 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
           <span
-            className={`text-xl font-display font-semibold transition-colors duration-300 hidden sm:inline ${
-              isSolid ? "text-primary" : "text-primary-foreground"
-            }`}
+            className="text-xl font-display font-semibold transition-colors duration-300 hidden sm:inline text-primary-foreground"
           >
             Family<span className="text-secondary">Garden</span>
           </span>
           <span
-            className={`text-lg font-display font-semibold transition-colors duration-300 sm:hidden ${
-              isSolid ? "text-primary" : "text-primary-foreground"
-            }`}
+            className="text-lg font-display font-semibold transition-colors duration-300 sm:hidden text-primary-foreground"
           >
             Family<span className="text-secondary">Garden</span>
           </span>
@@ -92,9 +88,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
             <a
               key={link.label}
               href={link.href}
-            className={`text-sm font-medium transition-colors duration-300 hover:text-secondary ${
-              isSolid ? "text-foreground" : "text-primary-foreground/90"
-            }`}
+              className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
             >
               {link.label}
             </a>
@@ -108,9 +102,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  className={`flex items-center gap-2 ${
-                    isSolid ? "hover:bg-muted" : "hover:bg-primary-foreground/10"
-                  }`}
+                  className="flex items-center gap-2 hover:bg-primary-foreground/10"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={profile?.avatar_url || undefined} />
@@ -118,9 +110,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className={`text-sm font-medium ${
-                    isSolid ? "text-foreground" : "text-primary-foreground"
-                  }`}>
+                  <span className="text-sm font-medium text-primary-foreground">
                     {profile?.display_name || user.email?.split('@')[0]}
                   </span>
                 </Button>
@@ -153,9 +143,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
               <Button
                 asChild
                 variant="ghost"
-                className={`transition-colors duration-300 ${
-                  isSolid ? "text-foreground hover:bg-muted" : "text-primary-foreground hover:bg-primary-foreground/10"
-                }`}
+                className="transition-colors duration-300 text-primary-foreground hover:bg-primary-foreground/10"
               >
                 <Link to="/login">Se connecter</Link>
               </Button>
@@ -169,9 +157,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className={`md:hidden p-2 transition-colors ${
-            isSolid ? "text-foreground" : "text-primary-foreground"
-          }`}
+          className="md:hidden p-2 transition-colors text-primary-foreground"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
