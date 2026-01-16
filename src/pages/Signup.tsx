@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import logo from '@/assets/logo.png';
+import heroBackground from '@/assets/hero-background.jpg';
 
 const Signup = () => {
   const [displayName, setDisplayName] = useState('');
@@ -253,8 +254,9 @@ const Signup = () => {
       </div>
 
       {/* Right Panel - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden" style={{ backgroundColor: 'rgb(26 26 46 / 0.85)' }}>
-        <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-10 bg-cover bg-center" />
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <img src={heroBackground} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgb(26 26 46 / 0.85)' }} />
         
         <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16">
           <motion.div
