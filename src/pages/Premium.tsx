@@ -46,34 +46,16 @@ const Premium = () => {
       icon: Sparkles,
     },
     {
-      feature: 'Capsules photo/vidéo/audio',
+      feature: 'Capsules photo',
       free: 'Limitées (selon stockage)',
-      premium: 'Illimitées',
+      premium: 'Incluses',
       icon: Zap,
     },
     {
-      feature: 'Cercles de partage',
-      free: '1 cercle (5 membres)',
-      premium: '5 cercles (50 membres)',
-      icon: Users,
-    },
-    {
-      feature: 'Export PDF',
-      free: '1x par mois',
-      premium: 'Illimité',
-      icon: Download,
-    },
-    {
-      feature: 'Suggestions IA',
-      free: '10 par mois',
-      premium: 'Illimitées',
-      icon: Sparkles,
-    },
-    {
-      feature: 'Thèmes premium',
+      feature: 'Partage de souvenirs',
       free: false,
-      premium: true,
-      icon: Palette,
+      premium: '1 personne de votre choix',
+      icon: Users,
     },
     {
       feature: 'Chronologie avancée',
@@ -87,12 +69,6 @@ const Premium = () => {
       premium: true,
       icon: Shield,
     },
-    {
-      feature: 'Support prioritaire',
-      free: false,
-      premium: true,
-      icon: Users,
-    },
   ];
 
   const benefits = [
@@ -102,19 +78,19 @@ const Premium = () => {
       icon: HardDrive,
     },
     {
-      title: 'Partage étendu',
-      description: 'Créez jusqu\'à 5 cercles et invitez jusqu\'à 50 membres au total.',
-      icon: Users,
-    },
-    {
-      title: 'IA illimitée',
-      description: 'Profitez de suggestions personnalisées sans limite pour enrichir vos capsules.',
+      title: 'Texte et photos',
+      description: 'Créez des capsules au format texte et photo pour capturer vos plus beaux moments.',
       icon: Sparkles,
     },
     {
-      title: 'Export illimité',
-      description: 'Exportez vos capsules en PDF autant de fois que vous le souhaitez.',
-      icon: Download,
+      title: 'Partagez vos souvenirs',
+      description: 'Partagez vos capsules avec 1 personne de votre choix.',
+      icon: Users,
+    },
+    {
+      title: 'Sans publicité',
+      description: 'Profitez d\'une expérience sans interruption publicitaire.',
+      icon: Shield,
     },
   ];
 
