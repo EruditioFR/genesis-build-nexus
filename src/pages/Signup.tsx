@@ -286,6 +286,7 @@ const Signup = () => {
             <div className="space-y-4">
               {[
                 'Création de capsules mémorielles texte, photo, vidéo et audio',
+                'Arbre généalogique interactif',
                 'Chronologie interactive familiale',
                 'Partage sécurisé avec vos proches',
                 'Assistant IA pour vos récits',
