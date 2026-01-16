@@ -307,7 +307,7 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0 overflow-x-hidden">
       <DashboardHeader
         user={{
           id: user.id,
@@ -318,7 +318,7 @@ const Timeline = () => {
         onSignOut={handleSignOut}
       />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 overflow-hidden">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -356,12 +356,12 @@ const Timeline = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="mb-8 flex flex-wrap items-center justify-center gap-3"
+            className="mb-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
           >
             {/* Type Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
                   <Layers className="w-4 h-4" />
                   Type
                   {selectedTypes.length > 0 && (
@@ -393,7 +393,7 @@ const Timeline = () => {
             {/* Status Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
                   <Filter className="w-4 h-4" />
                   Statut
                   {selectedStatuses.length > 0 && (
@@ -422,7 +422,7 @@ const Timeline = () => {
             {allTags.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
+                  <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
                     Mots-clés
                     {selectedTags.length > 0 && (
                       <Badge variant="secondary" className="ml-1 h-5 px-1.5">
@@ -451,7 +451,7 @@ const Timeline = () => {
             {categories.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
+                  <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
                     <Folder className="w-4 h-4" />
                     Catégorie
                     {selectedCategories.length > 0 && (
@@ -481,7 +481,7 @@ const Timeline = () => {
             {/* Date Range Filter */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
                   <CalendarRange className="w-4 h-4" />
                   Période
                   {(dateFrom || dateTo) && (
@@ -613,13 +613,13 @@ const Timeline = () => {
             </Button>
           </motion.div>
         ) : (
-          <div className="relative">
+          <div className="relative overflow-hidden">
             {/* Decade Navigation - Sticky */}
             {decades.length > 1 && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sticky top-16 z-20 mb-8 -mx-4 px-4 py-3 bg-background/80 backdrop-blur-lg border-b border-border"
+                className="sticky top-16 z-20 mb-8 py-3 bg-background/80 backdrop-blur-lg border-b border-border"
               >
                 <div className="flex items-center justify-center gap-2 flex-wrap">
                   <span className="text-xs text-muted-foreground mr-2 font-medium">Décennies:</span>
@@ -783,7 +783,7 @@ const TimelineItem = ({
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         onClick={onClick}
-        className={`flex-1 sm:w-[calc(50%-2rem)] cursor-pointer group ${
+        className={`flex-1 min-w-0 sm:w-[calc(50%-2rem)] cursor-pointer group ${
           isLeft ? 'sm:pr-8' : 'sm:pl-8'
         }`}
       >
@@ -820,7 +820,7 @@ const TimelineItem = ({
           )}
 
           {/* Tags, Category & Status */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {category && (
               <CategoryBadge category={category} size="sm" />
             )}
