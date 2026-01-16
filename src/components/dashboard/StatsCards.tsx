@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, Image, Users, Calendar, TrendingUp } from 'lucide-react';
+import { Clock, Image, Users, Calendar } from 'lucide-react';
 
 interface StatsCardsProps {
   stats: {
@@ -11,69 +11,61 @@ interface StatsCardsProps {
 }
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
-  const cards = [
+  const items = [
     {
-      label: 'Capsules créées',
+      label: 'Capsules',
       value: stats.totalCapsules,
       icon: Clock,
-      solidBg: 'bg-violet-600',
+      color: 'text-violet-600',
+      bgColor: 'bg-violet-100',
     },
     {
-      label: 'Médias stockés',
+      label: 'Médias',
       value: stats.totalMedias,
       icon: Image,
-      solidBg: 'bg-amber-500',
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-100',
     },
     {
-      label: 'Cercles partagés',
+      label: 'Cercles',
       value: stats.sharedCircles,
       icon: Users,
-      solidBg: 'bg-rose-500',
+      color: 'text-rose-600',
+      bgColor: 'bg-rose-100',
     },
     {
       label: 'Événements',
       value: stats.upcomingEvents,
       icon: Calendar,
-      solidBg: 'bg-emerald-500',
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-100',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      {cards.map((card, index) => (
-        <motion.div
-          key={card.label}
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: index * 0.1 }}
-          whileHover={{ scale: 1.02, y: -2 }}
-          className={`relative p-5 md:p-6 rounded-2xl ${card.solidBg} shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-default`}
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="flex items-center justify-between gap-2 sm:gap-4 py-4 px-3 sm:px-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-[#1a1a2e]/10"
+    >
+      {items.map((item, index) => (
+        <div 
+          key={item.label} 
+          className="flex flex-col items-center text-center flex-1"
         >
-          {/* Decorative elements */}
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 group-hover:scale-110 transition-transform duration-500" />
-          <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-white/10 group-hover:scale-110 transition-transform duration-500" />
-          
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <card.icon className="w-6 h-6 text-white" />
-              </div>
-              {card.value > 0 && (
-                <div className="flex items-center gap-1 text-white/70 text-xs font-medium">
-                  <TrendingUp className="w-3 h-3" />
-                  <span>Actif</span>
-                </div>
-              )}
-            </div>
-            
-            <p className="text-4xl md:text-3xl font-display font-bold text-white mb-1 group-hover:scale-105 transition-transform duration-300 origin-left">
-              {card.value}
-            </p>
-            <p className="text-sm text-white/80 font-medium">{card.label}</p>
+          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bgColor} flex items-center justify-center mb-2`}>
+            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`} />
           </div>
-        </motion.div>
+          <p className="text-2xl sm:text-3xl font-bold text-[#1a1a2e]">
+            {item.value}
+          </p>
+          <p className="text-xs sm:text-sm text-[#1a1a2e]/60 font-medium">
+            {item.label}
+          </p>
+        </div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
