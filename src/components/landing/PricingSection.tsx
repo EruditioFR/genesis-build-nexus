@@ -160,7 +160,7 @@ const PricingSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex-1 ${
+              className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex-1 flex flex-col ${
                 plan.popular
                   ? "bg-primary text-primary-foreground shadow-elevated lg:scale-105 z-10 order-first lg:order-none"
                   : "bg-card shadow-card border border-border"
@@ -207,7 +207,7 @@ const PricingSection = () => {
               </div>
 
               {/* Features */}
-              <ul className="space-y-2 sm:space-y-4 mb-6 sm:mb-8">
+              <ul className="space-y-2 sm:space-y-4 mb-6 sm:mb-8 flex-1">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2 sm:gap-3">
                     <Check className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${
