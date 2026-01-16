@@ -253,9 +253,8 @@ const Signup = () => {
       </div>
 
       {/* Right Panel - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-bl from-accent via-accent/90 to-primary overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden" style={{ backgroundColor: 'rgb(26 26 46 / 0.85)' }}>
         <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-10 bg-cover bg-center" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/50" />
         
         <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16">
           <motion.div
