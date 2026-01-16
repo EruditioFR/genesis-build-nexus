@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Upload, Layers, Share2, Heart } from "lucide-react";
+import capsuleIcon from "@/assets/capsule-icon.png";
 const steps = [{
   number: "01",
   icon: Upload,
@@ -57,8 +58,8 @@ const HowItWorksSection = () => {
           className="max-w-3xl mx-auto mb-12 sm:mb-20"
         >
           <div className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-2xl p-6 sm:p-8 border border-border/50">
-            <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-3 flex items-center gap-2">
-              <span className="text-2xl">💊</span>
+            <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-3 flex items-center gap-3">
+              <img src={capsuleIcon} alt="Capsule mémorielle" className="w-8 h-8 sm:w-10 sm:h-10" />
               Qu'est-ce qu'une capsule mémorielle ?
             </h3>
             <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
