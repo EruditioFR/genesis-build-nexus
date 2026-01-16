@@ -92,10 +92,10 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.1
-        }} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
+        }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">Ne laissez pas vos</span>
             <span className="block">souvenirs s'effacer,</span>
-            <span className="block mt-1 sm:mt-2">faites-en un trésor familial.</span>
+            <span className="block mt-2 sm:mt-3 text-secondary">faites-en un trésor familial.</span>
           </motion.h1>
 
           {/* Subtitle */}
