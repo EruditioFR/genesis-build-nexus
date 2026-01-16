@@ -42,10 +42,31 @@ const HowItWorksSection = () => {
         once: true
       }} transition={{
         duration: 0.6
-      }} className="text-center max-w-3xl mx-auto mb-12 sm:mb-20">
+      }} className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-3 sm:mb-4">Comment ça marche ?</span>
           <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre capsule mémorielle<br /><span className="text-secondary">en 4 étapes simples</span>
           </h2>
+        </motion.div>
+
+        {/* What is a memory capsule explanation */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="max-w-3xl mx-auto mb-12 sm:mb-20"
+        >
+          <div className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-2xl p-6 sm:p-8 border border-border/50">
+            <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span className="text-2xl">💊</span>
+              Qu'est-ce qu'une capsule mémorielle ?
+            </h3>
+            <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+              Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : 
+              photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver 
+              et transmettre votre histoire familiale aux générations futures.
+            </p>
+          </div>
         </motion.div>
 
         {/* Steps - Timeline Layout */}
