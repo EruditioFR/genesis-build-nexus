@@ -40,9 +40,9 @@ const Premium = () => {
       icon: HardDrive,
     },
     {
-      feature: 'Capsules texte et photo',
-      free: 'Incluses',
-      premium: 'Incluses',
+      feature: 'Capsules texte, photo, vidéo et audio',
+      free: 'Texte et photo uniquement',
+      premium: 'Tous formats inclus',
       icon: Sparkles,
     },
     {
@@ -72,8 +72,8 @@ const Premium = () => {
       icon: HardDrive,
     },
     {
-      title: 'Texte et photos',
-      description: 'Créez des capsules au format texte et photo pour capturer vos plus beaux moments.',
+      title: 'Tous les formats',
+      description: 'Créez des capsules au format texte, photo, vidéo et audio pour capturer vos plus beaux moments.',
       icon: Sparkles,
     },
     {

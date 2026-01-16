@@ -30,7 +30,7 @@ const plans = [
     description: "Pour les créateurs de contenu réguliers",
     features: [
       "5 Go de stockage",
-      "Capsules au format texte et photo",
+      "Capsules au format texte, photo, vidéo et audio",
       "1 partage de souvenirs à la personne de votre choix",
       "Chronologie avancée",
       "Sans publicité",
