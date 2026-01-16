@@ -35,20 +35,20 @@ const Premium = () => {
   const comparisonFeatures = [
     {
       feature: 'Espace de stockage',
-      free: '500 Mo',
+      free: '250 Mo',
       premium: '5 Go',
       icon: HardDrive,
     },
     {
-      feature: 'Capsules texte',
-      free: 'Illimitées',
-      premium: 'Illimitées',
+      feature: 'Capsules texte et photo',
+      free: 'Incluses',
+      premium: 'Incluses',
       icon: Sparkles,
     },
     {
-      feature: 'Capsules photo',
-      free: 'Limitées (selon stockage)',
-      premium: 'Incluses',
+      feature: 'Chronologie',
+      free: 'Basique',
+      premium: 'Avancée',
       icon: Zap,
     },
     {
@@ -58,23 +58,17 @@ const Premium = () => {
       icon: Users,
     },
     {
-      feature: 'Chronologie avancée',
-      free: false,
-      premium: true,
-      icon: Zap,
-    },
-    {
-      feature: 'Sans publicité',
-      free: false,
-      premium: true,
+      feature: 'Publicité',
+      free: 'Avec publicité',
+      premium: 'Sans publicité',
       icon: Shield,
     },
   ];
 
   const benefits = [
     {
-      title: '10x plus de stockage',
-      description: 'Passez de 500 Mo à 5 Go pour stocker tous vos souvenirs précieux.',
+      title: '20x plus de stockage',
+      description: 'Passez de 250 Mo à 5 Go pour stocker tous vos souvenirs précieux.',
       icon: HardDrive,
     },
     {
