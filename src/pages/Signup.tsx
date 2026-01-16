@@ -285,7 +285,7 @@ const Signup = () => {
             {/* Features list */}
             <div className="space-y-4">
               {[
-                'Capsules mémorielles illimitées',
+                'Créez vos capsules mémorielles',
                 'Chronologie interactive familiale',
                 'Partage sécurisé avec vos proches',
                 'Assistant IA pour vos récits',
