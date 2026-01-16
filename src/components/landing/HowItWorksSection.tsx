@@ -42,12 +42,11 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="py-20 sm:py-32 bg-gradient-to-b from-background via-card to-background relative overflow-hidden">
+    <section id="how-it-works" className="py-20 sm:py-32 bg-[#f5f0e8] relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/3 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/8 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -64,20 +63,16 @@ const HowItWorksSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border border-border/50 text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-semibold mb-6"
           >
-            <Sparkles className="w-4 h-4 text-secondary" />
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Comment ça marche ?
-            </span>
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-primary">Comment ça marche ?</span>
           </motion.span>
           
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-6 leading-tight">
             Créez votre capsule mémorielle
             <br />
-            <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              en 4 étapes simples
-            </span>
+            <span className="text-secondary">en 4 étapes simples</span>
           </h2>
         </motion.div>
 
@@ -89,21 +84,20 @@ const HowItWorksSection = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="max-w-3xl mx-auto mb-16 sm:mb-24"
         >
-          <div className="relative bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-8 sm:p-10 border border-border/50 shadow-elevated overflow-hidden">
+          <div className="relative bg-white rounded-3xl p-8 sm:p-10 border border-primary/10 shadow-lg overflow-hidden">
             {/* Decorative gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-secondary/10 to-transparent rounded-bl-full" />
             
             <div className="relative">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary-foreground" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-display font-bold text-foreground">
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-[#1a1a2e]">
                   Qu'est-ce qu'une capsule mémorielle ?
                 </h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed text-base sm:text-lg pl-0 sm:pl-13">
+              <p className="text-[#1a1a2e]/80 leading-relaxed text-base sm:text-lg">
                 Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : 
                 photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver 
                 et transmettre votre histoire familiale aux générations futures.
@@ -123,12 +117,12 @@ const HowItWorksSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative h-full bg-card rounded-3xl p-6 sm:p-8 border border-border/50 shadow-card hover:shadow-elevated transition-all duration-500 hover:border-border hover:-translate-y-1 overflow-hidden">
+              <div className="relative h-full bg-white rounded-3xl p-6 sm:p-8 border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-1 overflow-hidden">
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 ${step.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                 
                 {/* Step number watermark */}
-                <div className="absolute -top-4 -right-4 text-[120px] font-display font-bold text-muted/5 select-none pointer-events-none group-hover:text-muted/10 transition-colors duration-500">
+                <div className="absolute -top-4 -right-4 text-[120px] font-display font-bold text-primary/5 select-none pointer-events-none group-hover:text-primary/10 transition-colors duration-500">
                   {step.number}
                 </div>
 
@@ -140,7 +134,7 @@ const HowItWorksSection = () => {
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}
                     >
-                      <step.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary-foreground" />
+                      <step.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                     </motion.div>
                     <div className={`text-sm font-bold ${step.accentColor} uppercase tracking-wider`}>
                       Étape {step.number}
@@ -148,10 +142,10 @@ const HowItWorksSection = () => {
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-3 group-hover:text-foreground transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-display font-bold text-[#1a1a2e] mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                  <p className="text-[#1a1a2e]/70 leading-relaxed text-base sm:text-base">
                     {step.description}
                   </p>
 
