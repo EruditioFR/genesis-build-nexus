@@ -80,22 +80,25 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Mobile Header - Dark background */}
+      <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-2">
+          <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
+          <span className="text-xl font-display font-bold text-white">
+            Family<span className="text-secondary">Garden</span>
+          </span>
+        </Link>
+      </div>
+
       {/* Left Panel - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12 bg-background">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-5 py-8 sm:px-6 sm:py-12 bg-background">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          {/* Mobile logo */}
-          <Link to="/" className="flex lg:hidden items-center space-x-2 mb-8">
-            <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
-            <span className="text-xl font-display font-bold text-primary">
-              Family Garden
-            </span>
-          </Link>
 
           <div className="mb-8">
             <h2 className="text-3xl font-display font-bold text-foreground mb-2">
