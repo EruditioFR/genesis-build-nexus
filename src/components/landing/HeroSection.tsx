@@ -19,20 +19,20 @@ const HeroSection = () => {
   const floatingElementsY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  return <section ref={sectionRef} className="relative min-h-screen h-screen flex items-center overflow-hidden">
+  return <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay - Parallax */}
       <motion.div 
         className="absolute inset-0 h-[130%] -top-[15%]"
         style={{ y: backgroundY, scale: backgroundScale }}
       >
         <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent" />
       </motion.div>
 
-      {/* Floating Elements - Parallax */}
+      {/* Floating Elements - Parallax - Hidden on mobile for cleaner look */}
       <motion.div 
-        className="absolute inset-0 overflow-hidden pointer-events-none"
+        className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block"
         style={{ y: floatingElementsY }}
       >
         <motion.div animate={{
@@ -54,7 +54,7 @@ const HeroSection = () => {
       </motion.div>
 
       <motion.div 
-        className="container mx-auto px-4 sm:px-6 relative z-10 pt-20 sm:pt-32 pb-20 sm:pb-20"
+        className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20"
         style={{ opacity: contentOpacity }}
       >
         <div className="max-w-4xl mx-auto text-center">
@@ -71,8 +71,7 @@ const HeroSection = () => {
           transition={{
             duration: 0.6
           }} 
-          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6 sm:mb-8 animate-pulse"
-          style={{ animationDuration: '3s' }}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/30 mb-5 sm:mb-8"
         >
             <motion.div
               animate={{ rotate: [0, 15, -15, 0] }}
@@ -80,7 +79,7 @@ const HeroSection = () => {
             >
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
             </motion.div>
-            <span className="text-sm font-medium text-primary-foreground">Préservez vos souvenirs pour l'éternité</span>
+            <span className="text-xs sm:text-sm font-medium text-primary-foreground">Préservez vos souvenirs pour l'éternité</span>
           </motion.div>
 
           {/* Main Title */}
@@ -93,10 +92,10 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.1
-        }} className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
-            Ne laissez pas vos souvenirs s'effacer,
-            <br className="hidden sm:block" />
-            <span className="text-primary-foreground">faites-en un trésor familial.</span>
+        }} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4 sm:mb-6">
+            <span className="block">Ne laissez pas vos</span>
+            <span className="block">souvenirs s'effacer,</span>
+            <span className="block mt-1 sm:mt-2">faites-en un trésor familial.</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -109,9 +108,9 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.2
-        }} className="text-lg sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">Créez votre capsule mémorielle et transmettez votre héritage aux générations futures.
-                Textes, photos, vidéos, enregistrements sonores....
-                Tous vos souvenirs précieux en un seul endroit sécurisé.</motion.p>
+        }} className="text-sm sm:text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
+            Créez votre capsule mémorielle et transmettez votre héritage aux générations futures. Textes, photos, vidéos... Tous vos souvenirs en un seul endroit sécurisé.
+          </motion.p>
 
           {/* CTA Buttons */}
           <motion.div initial={{
@@ -123,14 +122,14 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.3
-        }} className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-4">
+        }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="w-full sm:w-auto"
             >
-              <Button asChild variant="hero" size="xl" className="group w-full min-h-[56px] text-lg">
+              <Button asChild variant="hero" size="xl" className="group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <Link to="/signup">
                   Commencer gratuitement
                   <motion.span
@@ -149,10 +148,10 @@ const HeroSection = () => {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="w-full sm:w-auto"
             >
-              <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[56px] text-lg">
+              <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <a href="#how-it-works">
                   <motion.span 
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-3 group-hover:bg-primary-foreground/30 transition-colors"
+                    className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors"
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
@@ -164,7 +163,7 @@ const HeroSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Trust indicators */}
+          {/* Trust indicators - Simplified on mobile */}
           <motion.div initial={{
           opacity: 0
         }} animate={{
@@ -172,30 +171,30 @@ const HeroSection = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.5
-        }} className="mt-8 sm:mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-primary-foreground/70 px-2">
-            <div className="flex items-center gap-3">
-              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        }} className="mt-6 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span className="text-base font-medium">Données sécurisées</span>
+              <span className="text-sm sm:text-base font-medium">Sécurisé</span>
             </div>
-            <div className="flex items-center gap-3">
-              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="hidden sm:flex items-center gap-3">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span className="text-base font-medium">Préservation à long terme</span>
             </div>
-            <div className="flex items-center gap-3">
-              <svg className="w-6 h-6 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <span className="text-base font-medium">Partage familial</span>
+              <span className="text-sm sm:text-base font-medium">Partage familial</span>
             </div>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Hidden on mobile */}
       <motion.div initial={{
       opacity: 0
     }} animate={{
@@ -205,7 +204,7 @@ const HeroSection = () => {
       duration: 2,
       delay: 1,
       repeat: Infinity
-    }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
+    }} className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block">
         <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/30 flex items-start justify-center p-2">
           <div className="w-1 h-2 rounded-full bg-primary-foreground/50" />
         </div>
