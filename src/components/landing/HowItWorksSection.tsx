@@ -1,119 +1,194 @@
 import { motion } from "framer-motion";
-import { Upload, Layers, Share2, Heart } from "lucide-react";
-const steps = [{
-  number: "01",
-  icon: Upload,
-  title: "Créez votre compte",
-  description: "Inscrivez-vous gratuitement et commencez à documenter votre histoire en quelques minutes.",
-  color: "from-primary to-navy-light"
-}, {
-  number: "02",
-  icon: Layers,
-  title: "Ajoutez vos souvenirs",
-  description: "Uploadez photos, vidéos, enregistrements audio et rédigez vos histoires avec notre éditeur intuitif.",
-  color: "from-secondary to-gold-light"
-}, {
-  number: "03",
-  icon: Share2,
-  title: "Organisez et partagez",
-  description: "Structurez vos capsules en chapitres de vie et invitez votre famille à contribuer.",
-  color: "from-accent to-terracotta-light"
-}, {
-  number: "04",
-  icon: Heart,
-  title: "Préservez pour l'éternité",
-  description: "Vos souvenirs sont sécurisés et prêts à être transmis aux générations futures.",
-  color: "from-primary to-secondary"
-}];
+import { Upload, Layers, Share2, Heart, Sparkles } from "lucide-react";
+
+const steps = [
+  {
+    number: "01",
+    icon: Upload,
+    title: "Créez votre compte",
+    description: "Inscrivez-vous gratuitement et commencez à documenter votre histoire en quelques minutes.",
+    color: "from-primary to-primary/70",
+    bgColor: "bg-primary/10",
+    accentColor: "text-primary"
+  },
+  {
+    number: "02",
+    icon: Layers,
+    title: "Ajoutez vos souvenirs",
+    description: "Uploadez photos, vidéos, enregistrements audio et rédigez vos histoires avec notre éditeur intuitif.",
+    color: "from-secondary to-secondary/70",
+    bgColor: "bg-secondary/10",
+    accentColor: "text-secondary"
+  },
+  {
+    number: "03",
+    icon: Share2,
+    title: "Organisez et partagez",
+    description: "Structurez vos capsules en chapitres de vie et invitez votre famille à contribuer.",
+    color: "from-accent to-accent/70",
+    bgColor: "bg-accent/10",
+    accentColor: "text-accent"
+  },
+  {
+    number: "04",
+    icon: Heart,
+    title: "Préservez pour l'éternité",
+    description: "Vos souvenirs sont sécurisés et prêts à être transmis aux générations futures.",
+    color: "from-primary via-secondary to-accent",
+    bgColor: "bg-gradient-to-br from-primary/10 to-secondary/10",
+    accentColor: "text-primary"
+  }
+];
+
 const HowItWorksSection = () => {
-  return <section id="how-it-works" className="py-16 sm:py-24 bg-card relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
-      
-      <div className="container mx-auto px-4 sm:px-6">
+  return (
+    <section id="how-it-works" className="py-20 sm:py-32 bg-gradient-to-b from-background via-card to-background relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/3 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
-        <motion.div initial={{
-        opacity: 0,
-        y: 30
-      }} whileInView={{
-        opacity: 1,
-        y: 0
-      }} viewport={{
-        once: true
-      }} transition={{
-        duration: 0.6
-      }} className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-3 sm:mb-4">Comment ça marche ?</span>
-          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">Créez votre capsule mémorielle<br /><span className="text-secondary">en 4 étapes simples</span>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-16 sm:mb-20"
+        >
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border border-border/50 text-sm font-medium mb-6"
+          >
+            <Sparkles className="w-4 h-4 text-secondary" />
+            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Comment ça marche ?
+            </span>
+          </motion.span>
+          
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6 leading-tight">
+            Créez votre capsule mémorielle
+            <br />
+            <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
+              en 4 étapes simples
+            </span>
           </h2>
         </motion.div>
 
         {/* What is a memory capsule explanation */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="max-w-3xl mx-auto mb-12 sm:mb-20"
+          className="max-w-3xl mx-auto mb-16 sm:mb-24"
         >
-          <div className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-2xl p-6 sm:p-8 border border-border/50">
-            <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-3">
-              Qu'est-ce qu'une capsule mémorielle ?
-            </h3>
-            <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-              Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : 
-              photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver 
-              et transmettre votre histoire familiale aux générations futures.
-            </p>
+          <div className="relative bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-8 sm:p-10 border border-border/50 shadow-elevated overflow-hidden">
+            {/* Decorative gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-secondary/10 to-transparent rounded-bl-full" />
+            
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-foreground">
+                  Qu'est-ce qu'une capsule mémorielle ?
+                </h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed text-base sm:text-lg pl-0 sm:pl-13">
+                Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : 
+                photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver 
+                et transmettre votre histoire familiale aux générations futures.
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* Steps - Timeline Layout */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Connection Line - Mobile & Desktop */}
-          <div className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent opacity-30 sm:-translate-x-1/2" />
-          
-          <div className="space-y-8 sm:space-y-12">
-            {steps.map((step, index) => (
-              <motion.div 
-                key={step.number} 
-                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className={`relative flex items-center gap-4 sm:gap-8 ${
-                  index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
-                }`}
-              >
-                {/* Content Card */}
-                <div className={`flex-1 ml-16 sm:ml-0 ${index % 2 === 0 ? 'sm:text-right' : 'sm:text-left'}`}>
-                  <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-card hover:shadow-elevated transition-shadow duration-300">
-                    <h3 className="text-lg sm:text-xl font-display font-semibold text-foreground mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
+        {/* Steps - Modern Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+          {steps.map((step, index) => (
+            <motion.div
+              key={step.number}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group"
+            >
+              <div className="relative h-full bg-card rounded-3xl p-6 sm:p-8 border border-border/50 shadow-card hover:shadow-elevated transition-all duration-500 hover:border-border hover:-translate-y-1 overflow-hidden">
+                {/* Background gradient on hover */}
+                <div className={`absolute inset-0 ${step.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                {/* Step number watermark */}
+                <div className="absolute -top-4 -right-4 text-[120px] font-display font-bold text-muted/5 select-none pointer-events-none group-hover:text-muted/10 transition-colors duration-500">
+                  {step.number}
                 </div>
 
-                {/* Center Icon Node */}
-                <div className="absolute left-0 sm:left-1/2 sm:-translate-x-1/2 z-10">
-                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-elevated ring-4 ring-background`}>
-                    <step.icon className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground" />
+                <div className="relative">
+                  {/* Icon and number row */}
+                  <div className="flex items-center gap-4 mb-5">
+                    <motion.div
+                      whileHover={{ scale: 1.05, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}
+                    >
+                      <step.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary-foreground" />
+                    </motion.div>
+                    <div className={`text-sm font-bold ${step.accentColor} uppercase tracking-wider`}>
+                      Étape {step.number}
+                    </div>
                   </div>
-                  <span className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-card shadow-card flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary border border-border">
-                    {step.number}
-                  </span>
-                </div>
 
-                {/* Empty space for alternating layout on desktop */}
-                <div className="hidden sm:block flex-1" />
-              </motion.div>
-            ))}
-          </div>
+                  {/* Content */}
+                  <h3 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-3 group-hover:text-foreground transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                    {step.description}
+                  </p>
+
+                  {/* Progress indicator */}
+                  <div className="mt-6 flex items-center gap-2">
+                    {[1, 2, 3, 4].map((dot) => (
+                      <div
+                        key={dot}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          dot <= index + 1
+                            ? `bg-gradient-to-r ${step.color} w-8`
+                            : "bg-muted/30 w-4"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Connection lines between cards (desktop only) */}
+        <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none">
+          <svg className="w-full h-full opacity-20" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="hsl(var(--primary))" />
+                <stop offset="50%" stopColor="hsl(var(--secondary))" />
+                <stop offset="100%" stopColor="hsl(var(--accent))" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HowItWorksSection;
