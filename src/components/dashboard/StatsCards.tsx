@@ -16,29 +16,25 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
       label: 'Capsules créées',
       value: stats.totalCapsules,
       icon: Clock,
-      bgColor: 'bg-primary',
-      gradient: 'from-primary to-primary/90',
+      solidBg: 'bg-violet-600',
     },
     {
       label: 'Médias stockés',
       value: stats.totalMedias,
       icon: Image,
-      bgColor: 'bg-secondary',
-      gradient: 'from-secondary to-amber-500',
+      solidBg: 'bg-amber-500',
     },
     {
       label: 'Cercles partagés',
       value: stats.sharedCircles,
       icon: Users,
-      bgColor: 'bg-accent',
-      gradient: 'from-accent to-rose-400',
+      solidBg: 'bg-rose-500',
     },
     {
       label: 'Événements',
       value: stats.upcomingEvents,
       icon: Calendar,
-      bgColor: 'bg-emerald-500',
-      gradient: 'from-emerald-500 to-emerald-400',
+      solidBg: 'bg-emerald-500',
     },
   ];
 
@@ -51,7 +47,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
           whileHover={{ scale: 1.02, y: -2 }}
-          className={`relative p-5 md:p-6 rounded-2xl ${card.bgColor} bg-gradient-to-br ${card.gradient} shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-default`}
+          className={`relative p-5 md:p-6 rounded-2xl ${card.solidBg} shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-default`}
         >
           {/* Decorative elements */}
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 group-hover:scale-110 transition-transform duration-500" />
