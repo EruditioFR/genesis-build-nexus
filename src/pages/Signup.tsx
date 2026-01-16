@@ -100,86 +100,86 @@ const Signup = () => {
           className="w-full max-w-md"
         >
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-display font-bold text-foreground mb-2">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#1a1a2e] mb-2">
               Créer un compte
             </h2>
-            <p className="text-muted-foreground text-base">
+            <p className="text-[#1a1a2e]/70 text-base">
               Commencez à préserver vos souvenirs dès aujourd'hui
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="displayName" className="text-base">Votre nom</Label>
+              <Label htmlFor="displayName" className="text-base font-semibold text-[#1a1a2e]">Votre nom</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="displayName"
                   type="text"
                   placeholder="Jean Dupont"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-base">Adresse email</Label>
+              <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">Adresse email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="vous@exemple.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmEmail" className="text-base">Confirmer l'adresse email</Label>
+              <Label htmlFor="confirmEmail" className="text-base font-semibold text-[#1a1a2e]">Confirmer l'adresse email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="confirmEmail"
                   type="email"
                   placeholder="vous@exemple.com"
                   value={confirmEmail}
                   onChange={(e) => setConfirmEmail(e.target.value)}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
                   required
                 />
               </div>
               {confirmEmail && email !== confirmEmail && (
-                <p className="text-sm text-destructive mt-1">
+                <p className="text-sm text-destructive font-medium mt-1">
                   Les adresses email ne correspondent pas
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-base">Mot de passe</Label>
+              <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">Mot de passe</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12"
+                  className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1a1a2e]/50 hover:text-[#1a1a2e] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -189,12 +189,12 @@ const Signup = () => {
               <div className="mt-3 space-y-1.5">
                 {passwordRequirements.map((req) => (
                   <div key={req.label} className="flex items-center gap-2 text-sm">
-                    <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-colors ${
-                      req.met ? 'bg-green-500' : 'bg-muted'
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${
+                      req.met ? 'bg-green-600' : 'bg-[#1a1a2e]/20'
                     }`}>
                       {req.met && <Check className="w-3 h-3 text-white" />}
                     </div>
-                    <span className={req.met ? 'text-foreground' : 'text-muted-foreground'}>
+                    <span className={req.met ? 'text-[#1a1a2e] font-medium' : 'text-[#1a1a2e]/60'}>
                       {req.label}
                     </span>
                   </div>
@@ -203,21 +203,21 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-base">Confirmer le mot de passe</Label>
+              <Label htmlFor="confirmPassword" className="text-base font-semibold text-[#1a1a2e]">Confirmer le mot de passe</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="confirmPassword"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
                   required
                 />
               </div>
               {confirmPassword && password !== confirmPassword && (
-                <p className="text-sm text-destructive mt-1">
+                <p className="text-sm text-destructive font-medium mt-1">
                   Les mots de passe ne correspondent pas
                 </p>
               )}
@@ -234,21 +234,21 @@ const Signup = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-muted-foreground">
+          <div className="mt-5 text-center text-sm text-[#1a1a2e]/70">
             En créant un compte, vous acceptez nos{' '}
-            <Link to="/terms" className="text-secondary hover:text-secondary/80">
+            <Link to="/terms" className="text-secondary font-medium hover:text-secondary/80">
               Conditions d'utilisation
             </Link>{' '}
             et notre{' '}
-            <Link to="/privacy" className="text-secondary hover:text-secondary/80">
+            <Link to="/privacy" className="text-secondary font-medium hover:text-secondary/80">
               Politique de confidentialité
             </Link>
           </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-muted-foreground text-base">
+          <div className="mt-5 text-center">
+            <p className="text-[#1a1a2e]/80 text-base">
               Déjà un compte ?{' '}
-              <Link to="/login" className="text-secondary font-medium hover:text-secondary/80 transition-colors">
+              <Link to="/login" className="text-secondary font-semibold hover:text-secondary/80 transition-colors">
                 Se connecter
               </Link>
             </p>
