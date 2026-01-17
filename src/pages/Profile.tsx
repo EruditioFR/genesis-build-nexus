@@ -70,6 +70,7 @@ const Profile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isManaging, setIsManaging] = useState(false);
+  const [realStorageUsedMb, setRealStorageUsedMb] = useState<number>(0);
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -89,6 +90,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       if (!user) return;
 
+      // Fetch profile data
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -103,6 +105,26 @@ const Profile = () => {
           birth_date: data.birth_date ? new Date(data.birth_date) : null,
         });
       }
+
+      // Fetch real storage usage from capsule_medias
+      const { data: capsules } = await supabase
+        .from('capsules')
+        .select('id')
+        .eq('user_id', user.id);
+
+      if (capsules && capsules.length > 0) {
+        const capsuleIds = capsules.map(c => c.id);
+        const { data: mediaData } = await supabase
+          .from('capsule_medias')
+          .select('file_size_bytes')
+          .in('capsule_id', capsuleIds);
+
+        if (mediaData) {
+          const totalBytes = mediaData.reduce((sum, m) => sum + (m.file_size_bytes || 0), 0);
+          setRealStorageUsedMb(totalBytes / (1024 * 1024));
+        }
+      }
+
       setProfileLoading(false);
     };
 
@@ -409,7 +431,7 @@ const Profile = () => {
                     {subscription.label}
                   </Badge>
                   <span className="text-sm text-muted-foreground">
-                    {profile.storage_used_mb} Mo / {profile.storage_limit_mb} Mo utilisés
+                    {realStorageUsedMb.toFixed(1)} Mo / {profile.storage_limit_mb} Mo utilisés
                   </span>
                 </div>
               </div>
