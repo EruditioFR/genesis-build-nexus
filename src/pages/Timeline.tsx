@@ -654,14 +654,18 @@ const Timeline = () => {
             {Object.entries(groupedByDecade)
               .sort(([a], [b]) => parseInt(b) - parseInt(a))
               .map(([decade, years]) => (
-              <div key={decade} id={`decade-${decade}`} className="relative">
+              <div 
+                key={decade} 
+                id={`decade-${decade}`} 
+                className={`relative decade-bg-${decade} rounded-3xl mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem] px-4 sm:px-6 lg:px-8 py-6 mb-8 transition-colors duration-500`}
+              >
                 {/* Decade marker */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.4 }}
-                  className="flex items-center justify-center mb-8 pt-4"
+                  className="flex items-center justify-center mb-8"
                 >
                   <div className="px-8 py-3 bg-gradient-to-r from-secondary to-primary text-primary-foreground rounded-full font-display font-bold text-xl shadow-lg">
                     Années {decade}
