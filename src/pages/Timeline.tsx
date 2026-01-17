@@ -619,17 +619,17 @@ const Timeline = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sticky top-16 z-20 mb-8 py-3 bg-background/80 backdrop-blur-lg border-b border-border"
+                className="sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 bg-background/95 backdrop-blur-lg border-b border-border shadow-sm"
               >
-                <div className="flex items-center justify-center gap-2 flex-wrap">
-                  <span className="text-xs text-muted-foreground mr-2 font-medium">Décennies:</span>
+                <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+                  <span className="text-xs text-muted-foreground mr-1 sm:mr-2 font-medium hidden sm:inline">Décennies:</span>
                   {decades.map((decade) => (
                     <Button
                       key={decade}
                       variant={activeDecade === decade ? "default" : "outline"}
                       size="sm"
                       onClick={() => scrollToDecade(decade)}
-                      className={`text-sm font-medium transition-all ${
+                      className={`text-xs sm:text-sm font-medium transition-all h-7 sm:h-8 px-2 sm:px-3 ${
                         activeDecade === decade
                           ? 'bg-gradient-gold text-primary-foreground shadow-gold'
                           : 'hover:border-secondary hover:text-secondary'
