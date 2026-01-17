@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, User, Calendar, FileText, Loader2, Shield } from 'lucide-react';
+import { ArrowLeft, Save, User, Calendar, FileText, Loader2, Shield, Receipt, Download, ExternalLink } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,7 +30,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription } from '@/hooks/useSubscription';
+import { useSubscription, Invoice } from '@/hooks/useSubscription';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import AvatarUpload from '@/components/profile/AvatarUpload';
@@ -63,7 +63,7 @@ const subscriptionLabels = {
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
-  const { createCheckout, openCustomerPortal, subscriptionEnd, tier } = useSubscription();
+  const { createCheckout, openCustomerPortal, subscriptionEnd, tier, invoices, invoicesLoading, fetchInvoices } = useSubscription();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -484,6 +484,103 @@ const Profile = () => {
               )}
             </div>
           </motion.div>
+
+          {/* Invoices Section */}
+          {profile.subscription_level !== 'free' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+              className="p-6 rounded-2xl border border-border bg-card"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Receipt className="w-5 h-5 text-primary" />
+                  </div>
+                  <h2 className="text-lg font-display font-semibold text-foreground">
+                    Mes factures
+                  </h2>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={fetchInvoices}
+                  disabled={invoicesLoading}
+                >
+                  {invoicesLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    'Charger les factures'
+                  )}
+                </Button>
+              </div>
+
+              {invoices.length === 0 && !invoicesLoading ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Cliquez sur "Charger les factures" pour voir vos factures
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {invoices.map((invoice) => (
+                    <div
+                      key={invoice.id}
+                      className="flex items-center justify-between p-4 rounded-lg bg-muted/50 border border-border"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-sm">
+                            Facture {invoice.number || invoice.id.slice(-8)}
+                          </span>
+                          <Badge 
+                            variant={invoice.status === 'paid' ? 'default' : 'secondary'}
+                            className={invoice.status === 'paid' ? 'bg-green-500/20 text-green-600 border-green-500/30' : ''}
+                          >
+                            {invoice.status === 'paid' ? 'Payée' : invoice.status === 'open' ? 'En attente' : invoice.status}
+                          </Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(invoice.created * 1000).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                          {' • '}
+                          {(invoice.amount_paid / 100).toFixed(2)} {invoice.currency.toUpperCase()}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 ml-4">
+                        {invoice.invoice_pdf && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="h-8 w-8"
+                          >
+                            <a href={invoice.invoice_pdf} target="_blank" rel="noopener noreferrer" title="Télécharger PDF">
+                              <Download className="w-4 h-4" />
+                            </a>
+                          </Button>
+                        )}
+                        {invoice.hosted_invoice_url && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="h-8 w-8"
+                          >
+                            <a href={invoice.hosted_invoice_url} target="_blank" rel="noopener noreferrer" title="Voir en ligne">
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Guardians Section */}
           <GuardiansSection userId={user.id} />
