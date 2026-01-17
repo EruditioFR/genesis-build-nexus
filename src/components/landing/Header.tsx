@@ -69,7 +69,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-3">
-          <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain" />
+          <img 
+            src={logo} 
+            alt="Family Garden" 
+            className="w-10 h-10 object-contain" 
+            width="40" 
+            height="40"
+            loading="eager"
+          />
           <span
             className="text-xl font-display font-semibold transition-colors duration-300 hidden sm:inline text-primary-foreground"
           >
