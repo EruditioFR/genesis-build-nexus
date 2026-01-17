@@ -25,7 +25,14 @@ const HeroSection = () => {
         className="absolute inset-0 h-[130%] -top-[15%]"
         style={{ y: backgroundY, scale: backgroundScale }}
       >
-        <img src={heroBackground} alt="Souvenirs de famille" className="w-full h-full object-cover" />
+        <img 
+          src={heroBackground} 
+          alt="Souvenirs de famille" 
+          className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent" />
       </motion.div>
