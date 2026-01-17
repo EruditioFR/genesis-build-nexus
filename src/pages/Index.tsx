@@ -1,16 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import HowItWorksSection from "@/components/landing/HowItWorksSection";
-import PricingSection from "@/components/landing/PricingSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
-import FAQSection from "@/components/landing/FAQSection";
-import CTASection from "@/components/landing/CTASection";
-import Footer from "@/components/landing/Footer";
-import CookieBanner from "@/components/CookieBanner";
+
+// Lazy load below-the-fold components to improve LCP
+const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
+const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSection"));
+const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
+const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
+const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
+const CTASection = lazy(() => import("@/components/landing/CTASection"));
+const Footer = lazy(() => import("@/components/landing/Footer"));
+const CookieBanner = lazy(() => import("@/components/CookieBanner"));
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -41,15 +43,19 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <TestimonialsSection />
-        <PricingSection />
-        <FAQSection />
-        <CTASection />
+        <Suspense fallback={<div className="min-h-[50vh]" />}>
+          <FeaturesSection />
+          <HowItWorksSection />
+          <TestimonialsSection />
+          <PricingSection />
+          <FAQSection />
+          <CTASection />
+        </Suspense>
       </main>
-      <Footer />
-      <CookieBanner />
+      <Suspense fallback={null}>
+        <Footer />
+        <CookieBanner />
+      </Suspense>
     </div>
   );
 };
