@@ -220,6 +220,189 @@
   .delay-500 { animation-delay: 500ms; }
 }
 
+/* Decade-themed backgrounds for Timeline */
+.decade-bg-1940,
+.decade-bg-1950 {
+  /* Sépia vintage - Photos noir et blanc, vieux films */
+  background: linear-gradient(135deg, 
+    hsl(35 40% 95%) 0%, 
+    hsl(30 30% 90%) 50%,
+    hsl(25 25% 88%) 100%);
+  position: relative;
+}
+.decade-bg-1940::before,
+.decade-bg-1950::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a08060' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-1960 {
+  /* Flower Power - Peace & Love, couleurs psychédéliques */
+  background: linear-gradient(135deg, 
+    hsl(45 60% 95%) 0%, 
+    hsl(340 40% 93%) 50%,
+    hsl(180 35% 92%) 100%);
+  position: relative;
+}
+.decade-bg-1960::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23e879a9' fill-opacity='0.1'%3E%3Cpath d='M40 20c-5.5 0-10 4.5-10 10 0-5.5-4.5-10-10-10 5.5 0 10-4.5 10-10 0 5.5 4.5 10 10 10zm0 40c-5.5 0-10 4.5-10 10 0-5.5-4.5-10-10-10 5.5 0 10-4.5 10-10 0 5.5 4.5 10 10 10z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-1970 {
+  /* Disco Era - Boule à facettes, couleurs chaudes */
+  background: linear-gradient(135deg, 
+    hsl(30 50% 93%) 0%, 
+    hsl(45 55% 91%) 50%,
+    hsl(15 45% 92%) 100%);
+  position: relative;
+}
+.decade-bg-1970::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23d4a574' fill-opacity='0.12'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-1980 {
+  /* Néon & Synthwave - Miami Vice, couleurs électriques */
+  background: linear-gradient(135deg, 
+    hsl(280 45% 95%) 0%, 
+    hsl(190 50% 93%) 50%,
+    hsl(320 40% 94%) 100%);
+  position: relative;
+}
+.decade-bg-1980::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23a855f7' fill-opacity='0.08'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-1990 {
+  /* Grunge & Pop - Cassettes, couleurs vives contrastées */
+  background: linear-gradient(135deg, 
+    hsl(200 45% 94%) 0%, 
+    hsl(160 40% 93%) 50%,
+    hsl(50 50% 94%) 100%);
+  position: relative;
+}
+.decade-bg-1990::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='26' viewBox='0 0 52 26'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322d3ee' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-2000 {
+  /* Y2K & Digital - Argent métallique, futurisme */
+  background: linear-gradient(135deg, 
+    hsl(220 30% 96%) 0%, 
+    hsl(240 25% 94%) 50%,
+    hsl(200 35% 95%) 100%);
+  position: relative;
+}
+.decade-bg-2000::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cg fill='%236366f1' fill-opacity='0.08'%3E%3Ccircle cx='3' cy='3' r='2'/%3E%3Ccircle cx='13' cy='13' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-2010 {
+  /* Social Media Era - Flat design, dégradés Instagram */
+  background: linear-gradient(135deg, 
+    hsl(340 50% 96%) 0%, 
+    hsl(280 40% 95%) 50%,
+    hsl(30 55% 95%) 100%);
+  position: relative;
+}
+.decade-bg-2010::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23f472b6' fill-opacity='0.06'%3E%3Cpath d='M30 30c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm20 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.decade-bg-2020 {
+  /* Modern Era - Minimalisme, vert nature, bien-être */
+  background: linear-gradient(135deg, 
+    hsl(160 40% 96%) 0%, 
+    hsl(180 35% 95%) 50%,
+    hsl(140 45% 95%) 100%);
+  position: relative;
+}
+.decade-bg-2020::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%2334d399' fill-opacity='0.08'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM0 72h40v4H0v-4zm0-8h31v4H0v-4zm20-16h20v4H20v-4zM0 56h40v4H0v-4zm63-25a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM53 41a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-30 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-28-8a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zM56 5a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zm-3 46a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM21 0l5 20H16l5-20zm43 64v-4h-4v4h-4v4h4v4h4v-4h4v-4h-4zM36 13h4v4h-4v-4zm4 4h4v4h-4v-4zm-4 4h4v4h-4v-4zm8-8h4v4h-4v-4z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Dark mode adjustments for decade backgrounds */
+.dark .decade-bg-1940,
+.dark .decade-bg-1950 {
+  background: linear-gradient(135deg, 
+    hsl(35 15% 15%) 0%, 
+    hsl(30 10% 12%) 100%);
+}
+.dark .decade-bg-1960 {
+  background: linear-gradient(135deg, 
+    hsl(45 20% 14%) 0%, 
+    hsl(340 15% 13%) 100%);
+}
+.dark .decade-bg-1970 {
+  background: linear-gradient(135deg, 
+    hsl(30 20% 14%) 0%, 
+    hsl(15 15% 12%) 100%);
+}
+.dark .decade-bg-1980 {
+  background: linear-gradient(135deg, 
+    hsl(280 20% 14%) 0%, 
+    hsl(320 15% 12%) 100%);
+}
+.dark .decade-bg-1990 {
+  background: linear-gradient(135deg, 
+    hsl(200 20% 13%) 0%, 
+    hsl(160 15% 12%) 100%);
+}
+.dark .decade-bg-2000 {
+  background: linear-gradient(135deg, 
+    hsl(220 15% 13%) 0%, 
+    hsl(240 12% 11%) 100%);
+}
+.dark .decade-bg-2010 {
+  background: linear-gradient(135deg, 
+    hsl(340 20% 13%) 0%, 
+    hsl(280 15% 12%) 100%);
+}
+.dark .decade-bg-2020 {
+  background: linear-gradient(135deg, 
+    hsl(160 15% 12%) 0%, 
+    hsl(140 12% 11%) 100%);
+}
+
 /* Mobile-specific styles for seniors */
 @media (max-width: 768px) {
   html {
