@@ -30,7 +30,13 @@
       body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:#faf9f7}
       #root{min-height:100vh}
       .font-display{font-family:'Playfair Display',Georgia,serif}
+      /* Preload font-face definitions to avoid FOUT */
+      @font-face{font-family:Inter;font-style:normal;font-display:swap;font-weight:400;src:local('Inter Regular'),local('Inter-Regular')}
+      @font-face{font-family:'Playfair Display';font-style:normal;font-display:swap;font-weight:600;src:local('Playfair Display SemiBold'),local('PlayfairDisplay-SemiBold')}
     </style>
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fngbrxoblmbukqzzdwxp.supabase.co" />
   </head>
 
   <body>
