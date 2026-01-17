@@ -19,6 +19,9 @@
     <!-- Preconnect to speed up font loading -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
+    <!-- Preload hero background image for faster LCP -->
+    <link rel="preload" as="image" href="/src/assets/hero-background.jpg" fetchpriority="high" />
+    
     <!-- Critical CSS inline for faster FCP -->
     <style>
       /* Critical above-the-fold styles */
