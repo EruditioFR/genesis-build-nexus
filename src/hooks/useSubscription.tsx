@@ -2,6 +2,19 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
+export interface Invoice {
+  id: string;
+  number: string | null;
+  amount_paid: number;
+  currency: string;
+  status: string | null;
+  created: number;
+  period_start: number;
+  period_end: number;
+  invoice_pdf: string | null;
+  hosted_invoice_url: string | null;
+}
+
 interface SubscriptionState {
   subscribed: boolean;
   tier: 'free' | 'premium' | 'heritage';
@@ -19,6 +32,8 @@ export const useSubscription = () => {
     loading: true,
     error: null,
   });
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [invoicesLoading, setInvoicesLoading] = useState(false);
 
   const checkSubscription = useCallback(async () => {
     if (!user) {
@@ -47,6 +62,27 @@ export const useSubscription = () => {
         loading: false,
         error: error.message,
       }));
+    }
+  }, [user]);
+
+  const fetchInvoices = useCallback(async () => {
+    if (!user) {
+      setInvoices([]);
+      return;
+    }
+
+    setInvoicesLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('list-invoices');
+
+      if (error) throw error;
+
+      setInvoices(data.invoices || []);
+    } catch (error: any) {
+      console.error('Error fetching invoices:', error);
+    } finally {
+      setInvoicesLoading(false);
     }
   }, [user]);
 
@@ -88,8 +124,11 @@ export const useSubscription = () => {
 
   return {
     ...state,
+    invoices,
+    invoicesLoading,
     checkSubscription,
     createCheckout,
     openCustomerPortal,
+    fetchInvoices,
   };
 };
