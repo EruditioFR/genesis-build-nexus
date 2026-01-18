@@ -91,7 +91,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
             <Clock className="w-6 h-6 md:w-5 md:h-5 text-primary" />
           </div>
           <h3 className="text-lg md:text-lg font-display font-semibold text-foreground">
-            Dernières capsules
+            Derniers souvenirs
           </h3>
         </div>
         <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" asChild>
@@ -108,12 +108,12 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
             <Clock className="w-10 h-10 md:w-8 md:h-8 text-muted-foreground" />
           </div>
           <p className="text-muted-foreground mb-4 text-base">
-            Vous n'avez pas encore créé de capsule
+            Vous n'avez pas encore ajouté de souvenir
           </p>
           <Button className="gap-2" size="mobile" asChild>
             <Link to="/capsules/new">
               <Plus className="w-5 h-5" />
-              Créer ma première capsule
+              Ajouter mon premier souvenir
             </Link>
           </Button>
         </div>

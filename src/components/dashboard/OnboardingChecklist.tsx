@@ -40,7 +40,7 @@ const OnboardingChecklist = ({
     },
     {
       id: 'capsule',
-      title: 'Créez votre première capsule',
+      title: 'Ajoutez votre premier souvenir',
       description: 'Commencez à préserver vos souvenirs',
       icon: Plus,
       href: '/capsules/new',

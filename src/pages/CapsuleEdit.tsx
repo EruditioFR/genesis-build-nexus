@@ -129,7 +129,7 @@ const CapsuleEdit = () => {
 
         if (capsuleError) throw capsuleError;
         if (!capsule) {
-          toast.error('Capsule non trouvée');
+          toast.error('Souvenir non trouvé');
           navigate('/capsules');
           return;
         }
@@ -180,7 +180,7 @@ const CapsuleEdit = () => {
           setSelectedSubCategories(capsuleSubCats.map(c => c.sub_category_id));
         }
       } catch (error: any) {
-        toast.error('Erreur lors du chargement de la capsule');
+        toast.error('Erreur lors du chargement du souvenir');
         navigate('/capsules');
       } finally {
         setIsLoading(false);
@@ -300,7 +300,7 @@ const CapsuleEdit = () => {
 
       toast.success(
         status === 'published' 
-          ? 'Capsule publiée avec succès !' 
+          ? 'Souvenir publié avec succès !' 
           : 'Modifications enregistrées'
       );
       navigate(`/capsules/${id}`);
@@ -355,7 +355,7 @@ const CapsuleEdit = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à la capsule
+            Retour au souvenir
           </Button>
           
           <div className="flex items-center gap-3">
@@ -364,7 +364,7 @@ const CapsuleEdit = () => {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Modifier la capsule
+                Modifier le souvenir
               </h1>
               <p className="text-muted-foreground text-sm">
                 Mettez à jour votre souvenir
@@ -400,7 +400,7 @@ const CapsuleEdit = () => {
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
-                Type de capsule
+                Type de souvenir
               </Label>
               <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
             </div>

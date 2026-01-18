@@ -131,7 +131,7 @@ const CapsuleDetail = () => {
         .maybeSingle();
 
       if (capsuleError || !capsuleData) {
-        toast.error('Capsule introuvable');
+        toast.error('Souvenir introuvable');
         navigate('/capsules');
         return;
       }
@@ -217,7 +217,7 @@ const CapsuleDetail = () => {
     if (error) {
       toast.error('Erreur lors de la suppression');
     } else {
-      toast.success('Capsule supprimée');
+      toast.success('Souvenir supprimé');
       navigate('/capsules');
     }
 
@@ -250,7 +250,7 @@ const CapsuleDetail = () => {
     setIsExporting(true);
     try {
       await exportCapsuleToPDF(capsule, medias, sharedCircles);
-      toast.success('Capsule exportée en PDF');
+      toast.success('Souvenir exporté en PDF');
     } catch (error) {
       console.error('Export PDF error:', error);
       toast.error('Erreur lors de l\'export PDF');
@@ -264,7 +264,7 @@ const CapsuleDetail = () => {
     setIsExporting(true);
     try {
       await exportCapsuleToZIP(capsule, medias, sharedCircles);
-      toast.success('Capsule exportée en ZIP');
+      toast.success('Souvenir exporté en ZIP');
     } catch (error) {
       console.error('Export ZIP error:', error);
       toast.error('Erreur lors de l\'export ZIP');
@@ -278,7 +278,7 @@ const CapsuleDetail = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement de la capsule...</p>
+          <p className="text-muted-foreground">Chargement du souvenir...</p>
         </div>
       </div>
     );
@@ -330,7 +330,7 @@ const CapsuleDetail = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux capsules
+            Retour aux souvenirs
           </Button>
 
           <div className="flex items-start justify-between gap-4">

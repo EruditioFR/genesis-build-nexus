@@ -7,8 +7,8 @@ const MobileBottomNav = () => {
 
   const navItems = [
     { to: '/dashboard', icon: Home, label: 'Accueil' },
-    { to: '/capsules', icon: FolderOpen, label: 'Capsules' },
-    { to: '/capsules/new', icon: Plus, label: 'Créer', isAction: true },
+    { to: '/capsules', icon: FolderOpen, label: 'Souvenirs' },
+    { to: '/capsules/new', icon: Plus, label: 'Ajouter', isAction: true },
     { to: '/timeline', icon: Clock, label: 'Chrono' },
     { to: '/profile', icon: User, label: 'Profil' },
   ];

@@ -13,7 +13,7 @@ interface StatsCardsProps {
 const StatsCards = ({ stats }: StatsCardsProps) => {
   const items = [
     {
-      label: 'Capsules',
+      label: 'Souvenirs',
       value: stats.totalCapsules,
       icon: Clock,
       color: 'text-violet-600',
