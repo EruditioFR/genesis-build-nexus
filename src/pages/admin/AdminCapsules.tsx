@@ -117,7 +117,7 @@ export default function AdminCapsules() {
     if (error) {
       toast.error("Erreur lors de la suppression");
     } else {
-      toast.success("Capsule supprimée");
+      toast.success("Souvenir supprimé");
       fetchCapsules();
     }
 
@@ -141,7 +141,7 @@ export default function AdminCapsules() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-display font-bold">Gestion des capsules</h1>
+        <h1 className="text-2xl font-display font-bold">Gestion des souvenirs</h1>
         <div className="flex gap-2">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[140px]">
@@ -170,7 +170,7 @@ export default function AdminCapsules() {
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            {filteredCapsules.length} capsule(s)
+            {filteredCapsules.length} souvenir(s)
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -198,7 +198,7 @@ export default function AdminCapsules() {
                 ) : filteredCapsules.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      Aucune capsule trouvée
+                      Aucun souvenir trouvé
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -271,9 +271,9 @@ export default function AdminCapsules() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer la capsule ?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer le souvenir ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. La capsule et tous ses médias seront définitivement supprimés.
+              Cette action est irréversible. Le souvenir et tous ses médias seront définitivement supprimés.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
