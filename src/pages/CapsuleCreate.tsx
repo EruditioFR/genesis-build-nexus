@@ -240,9 +240,9 @@ const CapsuleCreate = () => {
       }
 
       if (finalStatus === 'scheduled') {
-        toast.success('Capsule programmée avec succès !');
+        toast.success('Souvenir programmé avec succès !');
       } else if (status === 'published') {
-        toast.success('Capsule publiée avec succès !');
+        toast.success('Souvenir publié avec succès !');
       } else {
         toast.success('Brouillon enregistré');
       }
@@ -335,7 +335,7 @@ const CapsuleCreate = () => {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Créer une capsule
+                Ajouter un souvenir
               </h1>
               <p className="text-muted-foreground text-sm">
                 Préservez un souvenir précieux
@@ -371,7 +371,7 @@ const CapsuleCreate = () => {
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
-                Type de capsule
+                Type de souvenir
               </Label>
               <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
             </div>

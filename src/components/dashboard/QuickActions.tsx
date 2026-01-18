@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 const QuickActions = () => {
   const actions = [
     {
-      label: 'Nouvelle capsule',
-      description: 'Créer un souvenir',
+      label: 'Nouveau souvenir',
+      description: 'Ajouter un souvenir',
       icon: Plus,
       href: '/capsules/new',
       gradient: 'from-secondary via-secondary to-amber-400',

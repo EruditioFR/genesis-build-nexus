@@ -161,7 +161,7 @@ const CapsulesList = () => {
       toast.error('Erreur lors de la suppression');
     } else {
       setCapsules(prev => prev.filter(c => c.id !== capsuleToDelete.id));
-      toast.success('Capsule supprimée');
+      toast.success('Souvenir supprimé');
     }
     
     setDeleteDialogOpen(false);
@@ -188,7 +188,7 @@ const CapsulesList = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement des capsules...</p>
+          <p className="text-muted-foreground">Chargement des souvenirs...</p>
         </div>
       </div>
     );
@@ -233,10 +233,10 @@ const CapsulesList = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-display font-bold text-foreground">
-                  Mes capsules
+                  Mes souvenirs
                 </h1>
                 <p className="text-muted-foreground text-sm">
-                  {capsules.length} capsule{capsules.length !== 1 ? 's' : ''} au total
+                  {capsules.length} souvenir{capsules.length !== 1 ? 's' : ''} au total
                 </p>
               </div>
             </div>
@@ -244,7 +244,7 @@ const CapsulesList = () => {
             <Button asChild className="gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold">
               <Link to="/capsules/new">
                 <Plus className="w-4 h-4" />
-                Nouvelle capsule
+                Nouveau souvenir
               </Link>
             </Button>
           </div>
@@ -331,7 +331,7 @@ const CapsulesList = () => {
             {capsules.length === 0 ? (
               <>
                 <h2 className="text-xl font-display font-semibold text-foreground mb-2">
-                  Aucune capsule créée
+                  Aucun souvenir ajouté
                 </h2>
                 <p className="text-muted-foreground mb-6">
                   Commencez à préserver vos souvenirs dès maintenant
@@ -339,7 +339,7 @@ const CapsulesList = () => {
                 <Button asChild className="gap-2">
                   <Link to="/capsules/new">
                     <Plus className="w-4 h-4" />
-                    Créer ma première capsule
+                    Ajouter mon premier souvenir
                   </Link>
                 </Button>
               </>

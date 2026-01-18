@@ -182,10 +182,10 @@ const MobileCapsuleWizard = ({
                 <Sparkles className="w-8 h-8 text-primary-foreground" />
               </div>
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Type de capsule
+                Type de souvenir
               </h2>
               <p className="text-muted-foreground">
-                Quel type de souvenir souhaitez-vous créer ?
+                Quel type de souvenir souhaitez-vous ajouter ?
               </p>
             </div>
             
@@ -204,7 +204,7 @@ const MobileCapsuleWizard = ({
                 Informations
               </h2>
               <p className="text-muted-foreground">
-                Donnez un titre à votre capsule
+                Donnez un titre à votre souvenir
               </p>
             </div>
 
@@ -226,7 +226,7 @@ const MobileCapsuleWizard = ({
                   Description
                 </Label>
                 <Textarea
-                  placeholder="Décrivez brièvement cette capsule..."
+                  placeholder="Décrivez brièvement ce souvenir..."
                   className="min-h-[120px] text-base px-4 py-3"
                   value={description}
                   onChange={(e) => onDescriptionChange(e.target.value)}
@@ -474,7 +474,7 @@ const MobileCapsuleWizard = ({
                 disabled={isSaving}
               >
                 <Send className="w-6 h-6" />
-                Publier la capsule
+                Publier le souvenir
               </Button>
               <Button
                 variant="mobileSecondary"

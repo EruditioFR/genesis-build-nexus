@@ -37,7 +37,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
         <div className="w-8 h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
           <Clock className="w-4 h-4 text-primary-foreground" />
         </div>
-        <h3 className="text-sm font-medium text-muted-foreground">Aperçu de la capsule</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">Aperçu du souvenir</h3>
       </div>
 
       {!hasContent ? (

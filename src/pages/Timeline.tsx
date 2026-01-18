@@ -333,7 +333,7 @@ const Timeline = () => {
             Votre Chronologie
           </h1>
           <p className="text-muted-foreground">
-            {filteredCapsules.length} capsule{filteredCapsules.length !== 1 ? 's' : ''}
+            {filteredCapsules.length} souvenir{filteredCapsules.length !== 1 ? 's' : ''}
             {activeFiltersCount > 0 && ` (sur ${capsules.length})`}
           </p>
           
@@ -372,7 +372,7 @@ const Timeline = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-48 bg-popover">
-                <DropdownMenuLabel>Type de capsule</DropdownMenuLabel>
+                <DropdownMenuLabel>Type de souvenir</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {(Object.keys(capsuleTypeConfig) as CapsuleType[]).map((type) => {
                   const config = capsuleTypeConfig[type];
