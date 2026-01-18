@@ -27,7 +27,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
       bgColor: 'bg-amber-100',
     },
     {
-      label: 'Cercles',
+      label: 'Partages',
       value: stats.sharedCircles,
       icon: Users,
       color: 'text-rose-600',
