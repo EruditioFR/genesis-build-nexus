@@ -13,8 +13,8 @@ import {
 const features = [
   {
     icon: BookOpen,
-    title: "Capsules Mémorielles",
-    description: "Créez des capsules riches combinant textes, photos, vidéos et audio pour raconter chaque moment important de votre vie.",
+    title: "Racontez vos souvenirs",
+    description: "Créez des souvenirs riches combinant textes, photos, vidéos et audio pour raconter chaque moment important de votre vie.",
     color: "bg-secondary text-white",
   },
   {
