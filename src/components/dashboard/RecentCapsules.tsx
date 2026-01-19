@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
+import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, HelpCircle, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
@@ -16,6 +16,7 @@ interface Capsule {
   thumbnail?: string;
   content?: string;
   firstMediaUrl?: string;
+  firstVideoUrl?: string;
 }
 
 interface RecentCapsulesProps {
@@ -210,13 +211,38 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                     <div className="relative rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1">
                       {/* Thumbnail - Dynamic content based on type */}
                       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                        {/* Display logic: thumbnail > firstMedia > text preview > placeholder */}
+                        {/* Display logic: thumbnail > video preview > firstMedia > text preview > placeholder */}
                         {capsule.thumbnail ? (
                           <CapsuleThumbnail
                             thumbnailUrl={capsule.thumbnail}
                             fallbackIcon={null}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
+                        ) : capsule.firstVideoUrl ? (
+                          <div className="relative w-full h-full">
+                            <video 
+                              src={capsule.firstVideoUrl} 
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              muted
+                              preload="metadata"
+                              onMouseEnter={(e) => {
+                                const video = e.currentTarget;
+                                video.currentTime = 0;
+                                video.play().catch(() => {});
+                              }}
+                              onMouseLeave={(e) => {
+                                const video = e.currentTarget;
+                                video.pause();
+                                video.currentTime = 0;
+                              }}
+                            />
+                            {/* Play button overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                              <div className="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                                <Play className="w-6 h-6 text-white fill-white ml-1" />
+                              </div>
+                            </div>
+                          </div>
                         ) : capsule.firstMediaUrl ? (
                           <CapsuleThumbnail
                             thumbnailUrl={capsule.firstMediaUrl}
