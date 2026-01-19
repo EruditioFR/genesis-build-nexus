@@ -33,6 +33,12 @@ interface CapsuleRow {
   capsule_type: CapsuleType;
   created_at: string;
   thumbnail_url: string | null;
+  content: string | null;
+}
+
+interface MediaRow {
+  file_url: string;
+  file_type: string;
 }
 
 interface RecentCapsule {
@@ -41,6 +47,8 @@ interface RecentCapsule {
   type: 'photo' | 'video' | 'text' | 'audio' | 'mixed';
   date: string;
   thumbnail?: string;
+  content?: string;
+  firstMediaUrl?: string;
 }
 
 interface Stats {
@@ -98,21 +106,41 @@ const Dashboard = () => {
           setProfile(profileData);
         }
 
-        // Fetch recent capsules (last 5)
+        // Fetch recent capsules (last 5) with content
         const { data: capsulesData } = await supabase
           .from('capsules')
-          .select('id, title, capsule_type, created_at, thumbnail_url')
+          .select('id, title, capsule_type, created_at, thumbnail_url, content')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(5);
 
         if (capsulesData) {
+          // Get first media for each capsule
+          const capsuleIds = capsulesData.map((c: CapsuleRow) => c.id);
+          const { data: mediasData } = await supabase
+            .from('capsule_medias')
+            .select('capsule_id, file_url, file_type')
+            .in('capsule_id', capsuleIds)
+            .order('position', { ascending: true });
+
+          // Build a map of first image per capsule
+          const firstImageMap: Record<string, string> = {};
+          if (mediasData) {
+            mediasData.forEach((media: MediaRow & { capsule_id: string }) => {
+              if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
+                firstImageMap[media.capsule_id] = media.file_url;
+              }
+            });
+          }
+
           const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => ({
             id: capsule.id,
             title: capsule.title,
             type: capsule.capsule_type,
             date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: fr }),
             thumbnail: capsule.thumbnail_url || undefined,
+            content: capsule.content || undefined,
+            firstMediaUrl: firstImageMap[capsule.id] || undefined,
           }));
           setRecentCapsules(formattedCapsules);
         }

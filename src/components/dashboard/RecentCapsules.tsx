@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
@@ -14,6 +14,8 @@ interface Capsule {
   type: 'photo' | 'video' | 'text' | 'audio' | 'mixed';
   date: string;
   thumbnail?: string;
+  content?: string;
+  firstMediaUrl?: string;
 }
 
 interface RecentCapsulesProps {
@@ -206,17 +208,33 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                   >
                     {/* Card */}
                     <div className="relative rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1">
-                      {/* Thumbnail */}
+                      {/* Thumbnail - Dynamic content based on type */}
                       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                        <CapsuleThumbnail
-                          thumbnailUrl={capsule.thumbnail}
-                          fallbackIcon={
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-                              <Icon className="w-12 h-12 text-muted-foreground/50" />
-                            </div>
-                          }
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
+                        {/* Display logic: thumbnail > firstMedia > text preview > placeholder */}
+                        {capsule.thumbnail ? (
+                          <CapsuleThumbnail
+                            thumbnailUrl={capsule.thumbnail}
+                            fallbackIcon={null}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : capsule.firstMediaUrl ? (
+                          <CapsuleThumbnail
+                            thumbnailUrl={capsule.firstMediaUrl}
+                            fallbackIcon={null}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : capsule.type === 'text' && capsule.content ? (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 p-4">
+                            <p className="text-sm text-amber-800 dark:text-amber-200 line-clamp-4 text-center italic leading-relaxed font-serif">
+                              "{capsule.content.slice(0, 120)}{capsule.content.length > 120 ? '...' : ''}"
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 gap-2">
+                            <HelpCircle className="w-12 h-12 text-muted-foreground/40" strokeWidth={1.5} />
+                            <span className="text-xs text-muted-foreground/60 font-medium">Aucun contenu</span>
+                          </div>
+                        )}
                         
                         {/* Type badge overlay */}
                         <div className="absolute top-3 left-3">
