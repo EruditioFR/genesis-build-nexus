@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Plus, Clock, Users, Calendar, ArrowRight, Sparkles } from 'lucide-react';
+import { Plus, Clock, Users, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const QuickActions = () => {
@@ -27,14 +27,6 @@ const QuickActions = () => {
       icon: Users,
       href: '/circles',
       gradient: 'from-violet-500 to-purple-500',
-      iconBg: 'bg-white/20',
-    },
-    {
-      label: 'Calendrier',
-      description: 'Dates importantes',
-      icon: Calendar,
-      href: '/calendar',
-      gradient: 'from-accent to-rose-400',
       iconBg: 'bg-white/20',
     },
   ];
