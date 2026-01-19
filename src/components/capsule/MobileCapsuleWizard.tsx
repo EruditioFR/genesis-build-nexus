@@ -375,7 +375,7 @@ const MobileCapsuleWizard = ({
             <div className="p-4 rounded-2xl border border-border bg-card">
               <Label className="text-lg font-semibold mb-4 block">
                 <Tag className="w-5 h-5 inline-block mr-2" />
-                Tags
+                Mots-clés
               </Label>
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
@@ -464,7 +464,7 @@ const MobileCapsuleWizard = ({
               {/* Tags */}
               {tags.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Tags</p>
+                  <p className="text-sm text-muted-foreground mb-2">Mots-clés</p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((tag) => (
                       <span 
