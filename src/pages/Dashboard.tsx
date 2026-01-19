@@ -49,6 +49,7 @@ interface RecentCapsule {
   thumbnail?: string;
   content?: string;
   firstMediaUrl?: string;
+  firstVideoUrl?: string;
 }
 
 interface Stats {
@@ -123,12 +124,16 @@ const Dashboard = () => {
             .in('capsule_id', capsuleIds)
             .order('position', { ascending: true });
 
-          // Build a map of first image per capsule
+          // Build maps of first image and first video per capsule
           const firstImageMap: Record<string, string> = {};
+          const firstVideoMap: Record<string, string> = {};
           if (mediasData) {
             mediasData.forEach((media: MediaRow & { capsule_id: string }) => {
               if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
                 firstImageMap[media.capsule_id] = media.file_url;
+              }
+              if (!firstVideoMap[media.capsule_id] && media.file_type.startsWith('video/')) {
+                firstVideoMap[media.capsule_id] = media.file_url;
               }
             });
           }
@@ -141,6 +146,7 @@ const Dashboard = () => {
             thumbnail: capsule.thumbnail_url || undefined,
             content: capsule.content || undefined,
             firstMediaUrl: firstImageMap[capsule.id] || undefined,
+            firstVideoUrl: firstVideoMap[capsule.id] || undefined,
           }));
           setRecentCapsules(formattedCapsules);
         }
