@@ -64,7 +64,7 @@ const QuickActions = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               
               <div className={`w-10 h-10 rounded-xl ${action.iconBg} backdrop-blur-sm flex items-center justify-center`}>
-                <action.icon className="w-5 h-5" strokeWidth={2.5} />
+                <action.icon className="w-5 h-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12" strokeWidth={2.5} />
               </div>
               <div className="flex flex-col">
                 <span className="font-semibold">{action.label}</span>
@@ -98,7 +98,7 @@ const QuickActions = () => {
               <div className="absolute -bottom-2 -left-2 w-12 h-12 rounded-full bg-white/5" />
               
               <div className={`relative w-14 h-14 rounded-2xl ${action.iconBg} backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                <action.icon className="w-7 h-7" strokeWidth={2} />
+                <action.icon className="w-7 h-7 transition-all duration-300 group-hover:rotate-12" strokeWidth={2} />
                 {action.primary && (
                   <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white flex items-center justify-center">
                     <Sparkles className="w-2.5 h-2.5 text-secondary" />
