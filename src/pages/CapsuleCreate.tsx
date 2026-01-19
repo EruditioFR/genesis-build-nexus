@@ -326,7 +326,7 @@ const CapsuleCreate = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour au tableau de bord
+            Retour à l'accueil
           </Button>
           
           <div className="flex items-center gap-3">

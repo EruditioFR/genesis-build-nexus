@@ -126,7 +126,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 <DropdownMenuItem asChild>
                   <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer">
                     <LayoutDashboard className="h-4 w-4" />
-                    Tableau de bord
+                    Accueil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -207,7 +207,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
                       <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                         <LayoutDashboard className="h-6 w-6 mr-3" />
-                        Tableau de bord
+                        Accueil
                       </Link>
                     </Button>
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
