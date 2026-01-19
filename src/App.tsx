@@ -24,7 +24,7 @@ const Timeline = lazy(() => import("./pages/Timeline"));
 const CirclesPage = lazy(() => import("./pages/CirclesPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Statistics = lazy(() => import("./pages/Statistics"));
-const CalendarPage = lazy(() => import("./pages/CalendarPage"));
+
 const Premium = lazy(() => import("./pages/Premium"));
 const FamilyTreePage = lazy(() => import("./pages/FamilyTreePage"));
 const FamilyTreeViewPage = lazy(() => import("./pages/FamilyTreeViewPage"));
@@ -85,7 +85,7 @@ const App = () => (
                   <Route path="/circles" element={<CirclesPage />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/statistics" element={<Statistics />} />
-                  <Route path="/calendar" element={<CalendarPage />} />
+                  
                   <Route path="/premium" element={<Premium />} />
                   <Route path="/family-tree" element={<FamilyTreePage />} />
                   <Route path="/family-tree/:id" element={<FamilyTreeViewPage />} />
