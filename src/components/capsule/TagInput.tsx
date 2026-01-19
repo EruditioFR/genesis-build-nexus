@@ -16,7 +16,7 @@ const suggestedTags = [
   'Voyage', 'Fêtes', 'Souvenirs', 'Héritage', 'Traditions'
 ];
 
-const TagInput = ({ tags, onChange, placeholder = 'Ajouter un tag...', maxTags = 10 }: TagInputProps) => {
+const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxTags = 10 }: TagInputProps) => {
   const [inputValue, setInputValue] = useState('');
 
   const addTag = (tag: string) => {
@@ -96,7 +96,7 @@ const TagInput = ({ tags, onChange, placeholder = 'Ajouter un tag...', maxTags =
       )}
       
       <p className="text-xs text-muted-foreground">
-        {tags.length}/{maxTags} tags • Appuyez sur Entrée pour ajouter
+        {tags.length}/{maxTags} mots-clés • Appuyez sur Entrée pour ajouter
       </p>
     </div>
   );

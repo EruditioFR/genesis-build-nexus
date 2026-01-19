@@ -488,7 +488,7 @@ const CapsuleDetail = () => {
             >
               <h2 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                 <Tag className="w-4 h-4" />
-                Tags
+                Mots-clés
               </h2>
               <div className="flex flex-wrap gap-2">
                 {capsule.tags.map((tag) => (

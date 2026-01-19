@@ -87,7 +87,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
             <div className="pt-2 border-t border-border">
               <div className="flex items-center gap-1.5 mb-2">
                 <Tag className="w-3.5 h-3.5 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Tags</span>
+                <span className="text-xs text-muted-foreground">Mots-clés</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag) => (

@@ -559,7 +559,7 @@ const CapsuleEdit = () => {
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
-                Tags
+                Mots-clés
               </Label>
               <TagInput tags={tags} onChange={setTags} />
             </div>
