@@ -22,7 +22,7 @@ const QuickActions = () => {
       iconBg: 'bg-white/20',
     },
     {
-      label: 'Mes cercles',
+      label: 'Mes partages',
       description: 'Famille & amis',
       icon: Users,
       href: '/circles',
