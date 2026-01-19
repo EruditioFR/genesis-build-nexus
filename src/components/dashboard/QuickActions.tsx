@@ -9,7 +9,7 @@ const QuickActions = () => {
       description: 'Ajouter un souvenir',
       icon: Plus,
       href: '/capsules/new',
-      gradient: 'from-secondary via-secondary to-amber-400',
+      gradient: 'from-secondary to-secondary/80',
       iconBg: 'bg-white/20',
       primary: true,
     },
@@ -18,7 +18,7 @@ const QuickActions = () => {
       description: 'Parcourir le temps',
       icon: Clock,
       href: '/timeline',
-      gradient: 'from-primary/90 to-primary',
+      gradient: 'from-primary to-primary/80',
       iconBg: 'bg-white/20',
     },
     {
@@ -26,7 +26,7 @@ const QuickActions = () => {
       description: 'Famille & amis',
       icon: Users,
       href: '/circles',
-      gradient: 'from-violet-500 to-purple-500',
+      gradient: 'from-accent to-accent/80',
       iconBg: 'bg-white/20',
     },
     {
@@ -34,7 +34,7 @@ const QuickActions = () => {
       description: 'Ma famille',
       icon: TreeDeciduous,
       href: '/family-tree',
-      gradient: 'from-emerald-600/90 to-emerald-700',
+      gradient: 'from-muted-foreground/90 to-muted-foreground/70',
       iconBg: 'bg-white/20',
     },
   ];
