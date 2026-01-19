@@ -34,7 +34,7 @@ const QuickActions = () => {
       description: 'Ma famille',
       icon: TreeDeciduous,
       href: '/family-tree',
-      gradient: 'from-emerald-500 to-green-500',
+      gradient: 'from-emerald-600/90 to-emerald-700',
       iconBg: 'bg-white/20',
     },
   ];
