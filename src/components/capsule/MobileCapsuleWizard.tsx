@@ -112,7 +112,21 @@ const MobileCapsuleWizard = ({
 }: MobileCapsuleWizardProps) => {
   const [currentStep, setCurrentStep] = useState(0);
 
-  const progress = ((currentStep + 1) / STEPS.length) * 100;
+  // For text capsules, we skip the media step, so we have 4 steps instead of 5
+  const effectiveSteps = capsuleType === 'text' ? STEPS.filter(s => s.id !== 'media') : STEPS;
+  
+  // Calculate current step number for display (accounting for skipped steps)
+  const getDisplayStepNumber = () => {
+    if (capsuleType === 'text') {
+      // For text: step 0=1, step 1=2, step 3=3, step 4=4
+      if (currentStep <= 1) return currentStep + 1;
+      if (currentStep === 3) return 3;
+      if (currentStep === 4) return 4;
+    }
+    return currentStep + 1;
+  };
+
+  const progress = (getDisplayStepNumber() / effectiveSteps.length) * 100;
 
   const canGoNext = () => {
     switch (currentStep) {
@@ -510,7 +524,7 @@ const MobileCapsuleWizard = ({
             </span>
           </button>
           <span className="text-white font-semibold text-base">
-            Étape {currentStep + 1}/{STEPS.length}
+            Étape {getDisplayStepNumber()}/{effectiveSteps.length}
           </span>
         </div>
         
