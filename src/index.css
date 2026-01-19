@@ -115,6 +115,102 @@
     --sidebar-border: 220 15% 22%;
     --sidebar-ring: 38 50% 55%;
   }
+
+  /* High Contrast Mode - Optimized for visually impaired users */
+  .high-contrast {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 220 100% 30%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 100% 40%;
+    --secondary-foreground: 0 0% 0%;
+
+    --accent: 0 100% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 20%;
+
+    --destructive: 0 100% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 220 100% 30%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 220 100% 30%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 220 100% 30%;
+  }
+
+  .high-contrast.dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 180 100% 50%;
+    --secondary-foreground: 0 0% 0%;
+
+    --accent: 300 100% 60%;
+    --accent-foreground: 0 0% 0%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 80%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 0%;
+
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 60 100% 50%;
+
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 60 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100%;
+    --sidebar-ring: 60 100% 50%;
+  }
+
+  /* High contrast typography enhancements */
+  .high-contrast body {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .high-contrast button,
+  .high-contrast a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .high-contrast *:focus-visible {
+    outline: 3px solid currentColor !important;
+    outline-offset: 3px !important;
+  }
 }
 
 @layer base {
