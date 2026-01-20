@@ -333,7 +333,9 @@ export default function FamilyTreePage() {
   };
 
   const handleGedcomImport = async (gedcomData: GedcomParseResult, skipIds: string[] = []) => {
-    if (!tree?.id) return;
+    if (!tree?.id) {
+      throw new Error('Aucun arbre sélectionné');
+    }
     
     // Filter out skipped persons
     const filteredData: GedcomParseResult = {
@@ -342,10 +344,20 @@ export default function FamilyTreePage() {
     };
     
     const result = await importFromGedcom(tree.id, filteredData);
-    if (result.success) {
-      await loadTree();
-      setShowGedcomImport(false);
+    
+    if (!result.success) {
+      throw new Error(result.errorMessage || 'Erreur lors de l\'import');
     }
+    
+    // Partial success: some persons imported, some failed
+    if (result.failedCount && result.failedCount > 0) {
+      toast.warning(`Import partiel: ${result.personsCreated} personne(s) importée(s), ${result.failedCount} en échec`);
+    } else if (result.personsCreated > 0) {
+      toast.success(`${result.personsCreated} personne(s) et ${result.relationsCreated} relation(s) importée(s)`);
+    }
+    
+    await loadTree();
+    setShowGedcomImport(false);
   };
 
   const handleMergePerson = (person: FamilyPerson) => {
