@@ -100,6 +100,7 @@ const CapsuleDetail = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -200,6 +201,21 @@ const CapsuleDetail = () => {
 
     if (user && id) fetchData();
   }, [user, id, navigate]);
+
+  // Load hero image URL
+  useEffect(() => {
+    const loadHeroImage = async () => {
+      const heroMedia = medias.find(m => m.file_type.startsWith('image/'));
+      if (heroMedia) {
+        const { getSignedUrl } = await import('@/lib/signedUrlCache');
+        const url = await getSignedUrl('capsule-medias', heroMedia.file_url, 3600);
+        setHeroImageUrl(url);
+      } else {
+        setHeroImageUrl(null);
+      }
+    };
+    loadHeroImage();
+  }, [medias]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -324,18 +340,6 @@ const CapsuleDetail = () => {
 
   // Get hero image from medias (first image)
   const heroImage = medias.find(m => m.file_type.startsWith('image/'));
-  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadHeroImage = async () => {
-      if (heroImage) {
-        const { getSignedUrl } = await import('@/lib/signedUrlCache');
-        const url = await getSignedUrl('capsule-medias', heroImage.file_url, 3600);
-        setHeroImageUrl(url);
-      }
-    };
-    loadHeroImage();
-  }, [heroImage]);
 
   return (
     <>
