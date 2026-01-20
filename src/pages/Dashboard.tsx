@@ -280,6 +280,7 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-6 md:mb-8"
+          data-tour="welcome"
         >
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
             Bonjour{profile?.display_name ? `, ${profile.display_name.split(' ')[0]}` : ''} 👋

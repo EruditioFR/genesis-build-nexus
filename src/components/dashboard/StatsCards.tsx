@@ -48,6 +48,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className="flex items-center justify-between gap-2 sm:gap-4 py-4 px-3 sm:px-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-[#1a1a2e]/10"
+      data-tour="stats"
     >
       {items.map((item, index) => (
         <div 
