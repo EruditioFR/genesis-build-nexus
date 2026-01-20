@@ -255,7 +255,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         </p>
                       </div>
                       <Link
-                        to="/capsule/new"
+                        to="/capsules/new"
                         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
                       >
                         <Plus className="w-4 h-4" />
