@@ -35,8 +35,8 @@ const plans: PlanInfo[] = [
   {
     id: 'premium',
     name: 'Premium',
-    storageMb: 5120,
-    storageLabel: '5 Go',
+    storageMb: 10240,
+    storageLabel: '10 Go',
     price: '9,99€/mois',
     color: 'bg-secondary',
     features: ['Tous types de médias', 'Chronologie avancée', '1 cercle de partage'],

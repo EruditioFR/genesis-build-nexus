@@ -39,8 +39,8 @@ interface Profile {
 
 const subscriptionLevels = [
   { value: "free", label: "Gratuit", storage: 500, color: "bg-muted" },
-  { value: "premium", label: "Premium", storage: 5000, color: "bg-primary" },
-  { value: "legacy", label: "Legacy", storage: 2000, color: "bg-secondary" },
+  { value: "premium", label: "Premium", storage: 10240, color: "bg-primary" },
+  { value: "legacy", label: "Legacy", storage: 51200, color: "bg-secondary" },
 ];
 
 export default function AdminSubscriptions() {
