@@ -329,10 +329,16 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
-  const handleGedcomImport = async (gedcomData: GedcomParseResult) => {
+  const handleGedcomImport = async (gedcomData: GedcomParseResult, skipIds: string[] = []) => {
     if (!tree?.id) return;
     
-    const result = await importFromGedcom(tree.id, gedcomData);
+    // Filter out skipped persons
+    const filteredData: GedcomParseResult = {
+      ...gedcomData,
+      individuals: gedcomData.individuals.filter(ind => !skipIds.includes(ind.id)),
+    };
+    
+    const result = await importFromGedcom(tree.id, filteredData);
     if (result.success) {
       await loadTree();
       setShowGedcomImport(false);
@@ -755,7 +761,7 @@ export default function FamilyTreePage() {
         open={showGedcomImport}
         onOpenChange={setShowGedcomImport}
         onImport={handleGedcomImport}
-        existingPersonsCount={persons.length}
+        existingPersons={persons}
       />
     </div>
   );
