@@ -111,6 +111,9 @@ export function TreeVisualization({
       const spouses = getPersonSpouses(person.id);
       const children = getPersonChildren(person.id);
       
+      // Filter spouses that will actually be positioned (not already placed)
+      const spousesToPosition = spouses.filter(spouse => !visitedDescendants.has(spouse.id));
+      
       // Calculate width needed for children
       let childrenTotalWidth = 0;
       const childPositions: { centerX: number; width: number }[] = [];
@@ -126,8 +129,8 @@ export function TreeVisualization({
         childrenTotalWidth += (children.length - 1) * HORIZONTAL_GAP;
       }
 
-      // Calculate unit width (person + spouses)
-      const unitWidth = CARD_WIDTH + spouses.length * (CARD_WIDTH + SPOUSE_GAP);
+      // Calculate unit width (person + spouses that will be positioned)
+      const unitWidth = CARD_WIDTH + spousesToPosition.length * (CARD_WIDTH + SPOUSE_GAP);
 
       // Final width is max of unit width and children width
       const totalWidth = Math.max(unitWidth, childrenTotalWidth);
@@ -149,8 +152,7 @@ export function TreeVisualization({
       let unionCenterX = centerX + CARD_WIDTH / 2; // Default: center of person
       let firstSpousePositioned = false;
       
-      // Filter out spouses that are already positioned (to avoid overlap)
-      const spousesToPosition = spouses.filter(spouse => !positionsMap.has(spouse.id));
+      // Use spousesToPosition already calculated above
       
       for (const spouse of spousesToPosition) {
         positionsMap.set(spouse.id, {
