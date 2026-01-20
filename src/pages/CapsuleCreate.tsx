@@ -35,9 +35,11 @@ import CategorySelector from '@/components/capsule/CategorySelector';
 import MobileCapsuleWizard from '@/components/capsule/MobileCapsuleWizard';
 import { useCategories } from '@/hooks/useCategories';
 import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import MemoryDateSelector, { 
+  type MemoryDateValue, 
+  memoryDateToStorage,
+  formatMemoryDate 
+} from '@/components/capsule/MemoryDateSelector';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -75,7 +77,7 @@ const CapsuleCreate = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   
   // Memory date state (when the memory actually happened)
-  const [memoryDate, setMemoryDate] = useState<Date | null>(null);
+  const [memoryDate, setMemoryDate] = useState<MemoryDateValue | null>(null);
   
   // Scheduling state
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
@@ -163,6 +165,9 @@ const CapsuleCreate = () => {
         }
       }
 
+      // Prepare memory date storage values
+      const memoryDateStorage = memoryDateToStorage(memoryDate);
+
       // Create the capsule
       const { data: capsule, error: capsuleError } = await supabase
         .from('capsules')
@@ -177,8 +182,10 @@ const CapsuleCreate = () => {
           published_at: publishedAt,
           scheduled_at: scheduledAtValue,
           thumbnail_url: thumbnailUrl,
-          memory_date: memoryDate ? format(memoryDate, 'yyyy-MM-dd') : null,
-        })
+          memory_date: memoryDateStorage.memory_date,
+          memory_date_precision: memoryDateStorage.memory_date_precision,
+          memory_date_year_end: memoryDateStorage.memory_date_year_end,
+        } as any)
         .select('id')
         .single();
 
@@ -470,42 +477,12 @@ const CapsuleCreate = () => {
                 Date du souvenir
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Quand ce souvenir a-t-il eu lieu ?
+                Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.
               </p>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !memoryDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarHeart className="mr-2 h-4 w-4" />
-                    {memoryDate ? format(memoryDate, "PPP", { locale: fr }) : "Sélectionner une date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={memoryDate || undefined}
-                    onSelect={(date) => setMemoryDate(date || null)}
-                    disabled={(date) => date > new Date()}
-                    initialFocus
-                    className="pointer-events-auto"
-                  />
-                </PopoverContent>
-              </Popover>
-              {memoryDate && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="mt-2 text-muted-foreground"
-                  onClick={() => setMemoryDate(null)}
-                >
-                  Effacer la date
-                </Button>
-              )}
+              <MemoryDateSelector
+                value={memoryDate}
+                onChange={setMemoryDate}
+              />
             </div>
 
             {/* Tags */}

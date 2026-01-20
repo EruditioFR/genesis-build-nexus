@@ -216,6 +216,8 @@ export type Database = {
           description: string | null
           id: string
           memory_date: string | null
+          memory_date_precision: string | null
+          memory_date_year_end: number | null
           metadata: Json | null
           published_at: string | null
           scheduled_at: string | null
@@ -233,6 +235,8 @@ export type Database = {
           description?: string | null
           id?: string
           memory_date?: string | null
+          memory_date_precision?: string | null
+          memory_date_year_end?: number | null
           metadata?: Json | null
           published_at?: string | null
           scheduled_at?: string | null
@@ -250,6 +254,8 @@ export type Database = {
           description?: string | null
           id?: string
           memory_date?: string | null
+          memory_date_precision?: string | null
+          memory_date_year_end?: number | null
           metadata?: Json | null
           published_at?: string | null
           scheduled_at?: string | null
