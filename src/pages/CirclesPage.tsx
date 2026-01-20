@@ -471,6 +471,7 @@ const CirclesPage = () => {
         onOpenChange={setCreateDialogOpen}
         userId={user.id}
         onCircleCreated={fetchCircles}
+        currentCircleCount={circles.length}
       />
 
       {selectedCircle && (
@@ -483,6 +484,7 @@ const CirclesPage = () => {
             fetchMembers(selectedCircle.id);
             fetchCircles();
           }}
+          currentMemberCount={members.length}
         />
       )}
 
