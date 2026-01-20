@@ -29,6 +29,13 @@ interface SharedCircleData {
   name: string;
 }
 
+interface CommentExportData {
+  id: string;
+  content: string;
+  created_at: string;
+  user_name: string | null;
+}
+
 export async function exportCapsuleToPDF(
   capsule: CapsuleExportData,
   medias: MediaExportData[],
@@ -142,9 +149,128 @@ export async function exportCapsuleToPDF(
 export async function exportCapsuleToZIP(
   capsule: CapsuleExportData,
   medias: MediaExportData[],
-  sharedCircles: SharedCircleData[]
+  sharedCircles: SharedCircleData[],
+  comments: CommentExportData[] = []
 ): Promise<void> {
   const zip = new JSZip();
+
+  // Generate PDF with all text content
+  const pdf = new jsPDF();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 20;
+
+  const addPdfText = (text: string, fontSize: number, isBold = false, color: [number, number, number] = [0, 0, 0]) => {
+    pdf.setFontSize(fontSize);
+    pdf.setFont('helvetica', isBold ? 'bold' : 'normal');
+    pdf.setTextColor(...color);
+    const lines = pdf.splitTextToSize(text, contentWidth);
+    
+    lines.forEach((line: string) => {
+      if (y > 270) {
+        pdf.addPage();
+        y = 20;
+      }
+      pdf.text(line, margin, y);
+      y += fontSize * 0.5;
+    });
+    y += 5;
+  };
+
+  // Title
+  addPdfText(capsule.title, 24, true, [30, 58, 95]);
+  y += 5;
+
+  // Metadata
+  const formattedDate = format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr });
+  const typeLabels: Record<string, string> = {
+    text: 'Texte',
+    photo: 'Photo',
+    video: 'Vidéo',
+    audio: 'Audio',
+    mixed: 'Mixte',
+  };
+  const statusLabels: Record<string, string> = {
+    draft: 'Brouillon',
+    published: 'Publiée',
+    scheduled: 'Programmée',
+    archived: 'Archivée',
+  };
+
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(100, 100, 100);
+  pdf.text(`Type: ${typeLabels[capsule.capsule_type] || capsule.capsule_type} • Statut: ${statusLabels[capsule.status] || capsule.status} • Créée le ${formattedDate}`, margin, y);
+  y += 15;
+
+  // Separator
+  pdf.setDrawColor(200, 200, 200);
+  pdf.line(margin, y, pageWidth - margin, y);
+  y += 15;
+
+  // Description
+  if (capsule.description) {
+    addPdfText('Description', 14, true);
+    addPdfText(capsule.description, 11);
+    y += 10;
+  }
+
+  // Content
+  if (capsule.content) {
+    addPdfText('Contenu', 14, true);
+    addPdfText(capsule.content, 11);
+    y += 10;
+  }
+
+  // Tags
+  if (capsule.tags && capsule.tags.length > 0) {
+    addPdfText('Mots-clés', 14, true);
+    addPdfText(capsule.tags.join(', '), 11);
+    y += 10;
+  }
+
+  // Shared circles
+  if (sharedCircles.length > 0) {
+    addPdfText('Partagé avec', 14, true);
+    addPdfText(sharedCircles.map(c => c.name).join(', '), 11);
+    y += 10;
+  }
+
+  // Comments section
+  if (comments.length > 0) {
+    addPdfText('Commentaires', 14, true);
+    y += 5;
+    comments.forEach((comment) => {
+      const commentDate = format(new Date(comment.created_at), 'd MMM yyyy à HH:mm', { locale: fr });
+      const author = comment.user_name || 'Anonyme';
+      addPdfText(`${author} - ${commentDate}`, 10, true, [80, 80, 80]);
+      addPdfText(comment.content, 10);
+      y += 5;
+    });
+  }
+
+  // Medias info
+  if (medias.length > 0) {
+    addPdfText('Médias', 14, true);
+    medias.forEach((media, index) => {
+      const mediaInfo = `${index + 1}. ${media.file_name || 'Fichier'} (${media.file_type})${media.caption ? ` - ${media.caption}` : ''}`;
+      addPdfText(mediaInfo, 10);
+    });
+  }
+
+  // Footer
+  pdf.setFontSize(8);
+  pdf.setTextColor(150, 150, 150);
+  pdf.text(
+    `Exporté depuis TimeCapsule le ${format(new Date(), 'd MMMM yyyy à HH:mm', { locale: fr })}`,
+    margin,
+    285
+  );
+
+  // Add PDF to ZIP
+  const pdfBlob = pdf.output('blob');
+  zip.file('souvenir.pdf', pdfBlob);
 
   // Add capsule metadata as JSON
   const metadata = {
@@ -158,6 +284,11 @@ export async function exportCapsuleToZIP(
     created_at: capsule.created_at,
     updated_at: capsule.updated_at,
     shared_with: sharedCircles.map(c => c.name),
+    comments: comments.map(c => ({
+      content: c.content,
+      author: c.user_name,
+      date: c.created_at,
+    })),
     medias: medias.map(m => ({
       file_name: m.file_name,
       file_type: m.file_type,

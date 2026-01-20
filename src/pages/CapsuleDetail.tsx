@@ -263,7 +263,39 @@ const CapsuleDetail = () => {
     if (!capsule) return;
     setIsExporting(true);
     try {
-      await exportCapsuleToZIP(capsule, medias, sharedCircles);
+      // Fetch comments for export
+      const { data: commentsData } = await supabase
+        .from('comments')
+        .select('id, content, created_at, user_id')
+        .eq('capsule_id', capsule.id)
+        .order('created_at', { ascending: true });
+
+      // Fetch user profiles for comment authors
+      let commentsWithNames: Array<{
+        id: string;
+        content: string;
+        created_at: string;
+        user_name: string | null;
+      }> = [];
+
+      if (commentsData && commentsData.length > 0) {
+        const userIds = [...new Set(commentsData.map(c => c.user_id))];
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select('user_id, display_name')
+          .in('user_id', userIds);
+
+        const profilesMap = new Map(profilesData?.map(p => [p.user_id, p.display_name]) || []);
+
+        commentsWithNames = commentsData.map(c => ({
+          id: c.id,
+          content: c.content,
+          created_at: c.created_at,
+          user_name: profilesMap.get(c.user_id) || null,
+        }));
+      }
+
+      await exportCapsuleToZIP(capsule, medias, sharedCircles, commentsWithNames);
       toast.success('Souvenir exporté en ZIP');
     } catch (error) {
       console.error('Export ZIP error:', error);
