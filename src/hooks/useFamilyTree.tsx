@@ -439,7 +439,8 @@ export function useFamilyTree() {
 
       // Create all individuals first
       for (const individual of gedcomData.individuals) {
-        const isAlive = !individual.deathDate;
+        // Person is alive only if no death date AND not marked as deceased (DEAT Y)
+        const isAlive = !individual.deathDate && !individual.isDeceased;
 
         const { data: person, error } = await supabase
           .from('family_persons')
