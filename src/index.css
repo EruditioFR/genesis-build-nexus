@@ -77,44 +77,6 @@
     --sidebar-ring: 215 50% 23%;
   }
 
-  .dark {
-    --background: 220 20% 10%;
-    --foreground: 40 15% 95%;
-
-    --card: 220 18% 14%;
-    --card-foreground: 40 15% 95%;
-
-    --popover: 220 18% 14%;
-    --popover-foreground: 40 15% 95%;
-
-    --primary: 38 50% 55%;
-    --primary-foreground: 220 20% 10%;
-
-    --secondary: 215 35% 25%;
-    --secondary-foreground: 40 15% 95%;
-
-    --accent: 16 55% 55%;
-    --accent-foreground: 0 0% 100%;
-
-    --muted: 220 15% 18%;
-    --muted-foreground: 40 12% 65%;
-
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 15% 22%;
-    --input: 220 15% 22%;
-    --ring: 38 50% 55%;
-
-    --sidebar-background: 220 20% 12%;
-    --sidebar-foreground: 40 15% 90%;
-    --sidebar-primary: 38 50% 55%;
-    --sidebar-primary-foreground: 220 20% 10%;
-    --sidebar-accent: 220 15% 20%;
-    --sidebar-accent-foreground: 40 15% 90%;
-    --sidebar-border: 220 15% 22%;
-    --sidebar-ring: 38 50% 55%;
-  }
 
   /* High Contrast Mode - Optimized for visually impaired users */
   .high-contrast {
@@ -156,44 +118,6 @@
     --sidebar-ring: 220 100% 30%;
   }
 
-  .high-contrast.dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 60 100% 50%;
-    --primary-foreground: 0 0% 0%;
-
-    --secondary: 180 100% 50%;
-    --secondary-foreground: 0 0% 0%;
-
-    --accent: 300 100% 60%;
-    --accent-foreground: 0 0% 0%;
-
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 80%;
-
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 0%;
-
-    --border: 0 0% 100%;
-    --input: 0 0% 100%;
-    --ring: 60 100% 50%;
-
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 60 100% 50%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 100%;
-    --sidebar-ring: 60 100% 50%;
-  }
 
   /* High contrast typography enhancements */
   .high-contrast body {
@@ -454,49 +378,6 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%2334d399' fill-opacity='0.08'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM0 72h40v4H0v-4zm0-8h31v4H0v-4zm20-16h20v4H20v-4zM0 56h40v4H0v-4zm63-25a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM53 41a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-30 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-28-8a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zM56 5a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zm-3 46a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM21 0l5 20H16l5-20zm43 64v-4h-4v4h-4v4h4v4h4v-4h4v-4h-4zM36 13h4v4h-4v-4zm4 4h4v4h-4v-4zm-4 4h4v4h-4v-4zm8-8h4v4h-4v-4z'/%3E%3C/g%3E%3C/svg%3E");
   pointer-events: none;
   border-radius: inherit;
-}
-
-/* Dark mode adjustments for decade backgrounds */
-.dark .decade-bg-1940,
-.dark .decade-bg-1950 {
-  background: linear-gradient(135deg, 
-    hsl(35 15% 15%) 0%, 
-    hsl(30 10% 12%) 100%);
-}
-.dark .decade-bg-1960 {
-  background: linear-gradient(135deg, 
-    hsl(45 20% 14%) 0%, 
-    hsl(340 15% 13%) 100%);
-}
-.dark .decade-bg-1970 {
-  background: linear-gradient(135deg, 
-    hsl(30 20% 14%) 0%, 
-    hsl(15 15% 12%) 100%);
-}
-.dark .decade-bg-1980 {
-  background: linear-gradient(135deg, 
-    hsl(280 20% 14%) 0%, 
-    hsl(320 15% 12%) 100%);
-}
-.dark .decade-bg-1990 {
-  background: linear-gradient(135deg, 
-    hsl(200 20% 13%) 0%, 
-    hsl(160 15% 12%) 100%);
-}
-.dark .decade-bg-2000 {
-  background: linear-gradient(135deg, 
-    hsl(220 15% 13%) 0%, 
-    hsl(240 12% 11%) 100%);
-}
-.dark .decade-bg-2010 {
-  background: linear-gradient(135deg, 
-    hsl(340 20% 13%) 0%, 
-    hsl(280 15% 12%) 100%);
-}
-.dark .decade-bg-2020 {
-  background: linear-gradient(135deg, 
-    hsl(160 15% 12%) 0%, 
-    hsl(140 12% 11%) 100%);
 }
 
 /* Mobile-specific styles for seniors */
