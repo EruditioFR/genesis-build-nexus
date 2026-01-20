@@ -27,7 +27,6 @@ const Statistics = lazy(() => import("./pages/Statistics"));
 
 const Premium = lazy(() => import("./pages/Premium"));
 const FamilyTreePage = lazy(() => import("./pages/FamilyTreePage"));
-const FamilyTreeViewPage = lazy(() => import("./pages/FamilyTreeViewPage"));
 const InviteAccept = lazy(() => import("./pages/InviteAccept"));
 const GuardianVerify = lazy(() => import("./pages/GuardianVerify"));
 const GuardianDashboard = lazy(() => import("./pages/GuardianDashboard"));
@@ -88,7 +87,6 @@ const App = () => (
                   
                   <Route path="/premium" element={<Premium />} />
                   <Route path="/family-tree" element={<FamilyTreePage />} />
-                  <Route path="/family-tree/:id" element={<FamilyTreeViewPage />} />
                   <Route path="/invite/:token" element={<InviteAccept />} />
                   <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
                   <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
