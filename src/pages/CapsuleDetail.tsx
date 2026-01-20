@@ -322,6 +322,21 @@ const CapsuleDetail = () => {
   const statusInfo = statusConfig[capsule.status];
   const Icon = typeInfo.icon;
 
+  // Get hero image from medias (first image)
+  const heroImage = medias.find(m => m.file_type.startsWith('image/'));
+  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadHeroImage = async () => {
+      if (heroImage) {
+        const { getSignedUrl } = await import('@/lib/signedUrlCache');
+        const url = await getSignedUrl('capsule-medias', heroImage.file_url, 3600);
+        setHeroImageUrl(url);
+      }
+    };
+    loadHeroImage();
+  }, [heroImage]);
+
   return (
     <>
       {/* Story Viewer Modal */}
@@ -336,261 +351,426 @@ const CapsuleDetail = () => {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
-        user={{
-          id: user.id,
-          email: user.email,
-          displayName: profile?.display_name || undefined,
-          avatarUrl: profile?.avatar_url || undefined,
-        }}
-        onSignOut={handleSignOut}
-      />
+      <div className="min-h-screen bg-background pb-24 md:pb-0">
+        <DashboardHeader
+          user={{
+            id: user.id,
+            email: user.email,
+            displayName: profile?.display_name || undefined,
+            avatarUrl: profile?.avatar_url || undefined,
+          }}
+          onSignOut={handleSignOut}
+        />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/capsules')}
-            className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Retour aux souvenirs
-          </Button>
+        {/* Hero Section with Image */}
+        <div className="relative">
+          {heroImageUrl ? (
+            <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+              <img
+                src={heroImageUrl}
+                alt={capsule.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              
+              {/* Back button on hero */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/capsules')}
+                className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </Button>
 
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className={`w-14 h-14 rounded-xl ${typeInfo.color} flex items-center justify-center flex-shrink-0`}>
-                <Icon className="w-7 h-7" />
+              {/* Actions on hero */}
+              <div className="absolute top-4 right-4 flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShareDialogOpen(true)}
+                  className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                >
+                  <Share2 className="w-4 h-4" />
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      disabled={isExporting}
+                      className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                    >
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild className="gap-2">
+                      <Link to={`/capsules/${capsule.id}/edit`}>
+                        <Edit className="w-4 h-4" />
+                        Modifier
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                      <FileDown className="w-4 h-4" />
+                      Exporter en PDF
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                      <FolderArchive className="w-4 h-4" />
+                      Exporter en ZIP
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="gap-2 text-destructive"
+                      onClick={() => setDeleteDialogOpen(true)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Supprimer
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground">
-                  {capsule.title}
-                </h1>
-                {/* Memory date - prominent display */}
-                {capsule.memory_date && (
-                  <p className="text-lg text-secondary font-medium flex items-center gap-2 mt-1 mb-3">
-                    <CalendarHeart className="w-5 h-5" />
-                    {capsule.memory_date_precision === 'year' ? (
-                      format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
-                    ) : capsule.memory_date_precision === 'month' ? (
-                      format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
-                    ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
-                      `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
-                    ) : (
-                      format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+
+              {/* Title overlay on hero */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                <div className="max-w-4xl mx-auto">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                      <Badge className={`${statusInfo.color} backdrop-blur-sm`}>{statusInfo.label}</Badge>
+                      {capsuleCategories.map((cc) => cc.category && (
+                        <CategoryBadge 
+                          key={cc.id} 
+                          category={cc.category} 
+                          isPrimary={cc.is_primary}
+                          size="sm"
+                        />
+                      ))}
+                    </div>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-2 drop-shadow-lg">
+                      {capsule.title}
+                    </h1>
+                    {capsule.memory_date && (
+                      <p className="text-lg text-white/90 font-medium flex items-center gap-2">
+                        <CalendarHeart className="w-5 h-5" />
+                        {capsule.memory_date_precision === 'year' ? (
+                          format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
+                        ) : capsule.memory_date_precision === 'month' ? (
+                          format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
+                        ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
+                          `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
+                        ) : (
+                          format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+                        )}
+                      </p>
                     )}
-                  </p>
-                )}
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
-                  {capsuleCategories.map((cc) => cc.category && (
-                    <CategoryBadge 
-                      key={cc.id} 
-                      category={cc.category} 
-                      isPrimary={cc.is_primary}
-                      size="sm"
-                    />
-                  ))}
-                  {capsuleSubCategories.map((csc) => csc.sub_category && (
-                    <SubCategoryBadge 
-                      key={csc.id} 
-                      subCategory={csc.sub_category} 
-                      size="sm"
-                    />
-                  ))}
-                  {/* Created date - secondary */}
-                  <span className="text-sm flex items-center gap-1 text-muted-foreground">
-                    <Calendar className="w-3.5 h-3.5" />
-                    Créé le {format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
-                  </span>
+                  </motion.div>
                 </div>
               </div>
             </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" disabled={isExporting}>
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild className="gap-2">
-                  <Link to={`/capsules/${capsule.id}/edit`}>
-                    <Edit className="w-4 h-4" />
-                    Modifier
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="gap-2" onClick={() => setShareDialogOpen(true)}>
-                  <Share2 className="w-4 h-4" />
-                  Partager
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
-                  <FileDown className="w-4 h-4" />
-                  Exporter en PDF
-                </DropdownMenuItem>
-                <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
-                  <FolderArchive className="w-4 h-4" />
-                  Exporter en ZIP
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="gap-2 text-destructive"
-                  onClick={() => setDeleteDialogOpen(true)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Supprimer
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </motion.div>
-
-        <div className="space-y-6">
-          {/* Description */}
-          {capsule.description && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="p-6 rounded-2xl border border-border bg-card"
-            >
-              <p className="text-foreground">{capsule.description}</p>
-            </motion.div>
-          )}
-
-          {/* Content (for text capsules) */}
-          {capsule.content && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-              className="p-6 rounded-2xl border border-border bg-card"
-            >
-              <h2 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                Contenu
-              </h2>
-              <div className="prose prose-sm max-w-none">
-                <p className="text-foreground whitespace-pre-wrap">{capsule.content}</p>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Media Gallery */}
-          {medias.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="p-6 rounded-2xl border border-border bg-card"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                  <Image className="w-4 h-4" />
-                  Médias ({medias.length})
-                </h2>
+          ) : (
+            /* Fallback header without image */
+            <div className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 pt-4 pb-8 px-4">
+              <div className="max-w-4xl mx-auto">
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  onClick={() => capsule && openStory([capsule])}
-                  disabled={storyLoading}
-                  className="gap-2"
+                  onClick={() => navigate('/capsules')}
+                  className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Play className="w-4 h-4" />
-                  {storyLoading ? 'Chargement...' : 'Diaporama'}
+                  <ArrowLeft className="w-4 h-4" />
+                  Retour aux souvenirs
                 </Button>
-              </div>
-              <MediaGallery 
-                medias={medias} 
-                capsuleId={capsule.id}
-                thumbnailUrl={capsule.thumbnail_url}
-                onThumbnailChange={(url) => setCapsule(prev => prev ? { ...prev, thumbnail_url: url } : null)}
-              />
-            </motion.div>
-          )}
 
-          {/* Tags */}
-          {capsule.tags && capsule.tags.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.25 }}
-              className="p-6 rounded-2xl border border-border bg-card"
-            >
-              <h2 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                Mots-clés
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {capsule.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="capitalize">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </motion.div>
-          )}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="flex items-start justify-between gap-4"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`w-14 h-14 rounded-xl ${typeInfo.color} flex items-center justify-center flex-shrink-0`}>
+                      <Icon className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground">
+                        {capsule.title}
+                      </h1>
+                      {capsule.memory_date && (
+                        <p className="text-lg text-secondary font-medium flex items-center gap-2 mt-1 mb-3">
+                          <CalendarHeart className="w-5 h-5" />
+                          {capsule.memory_date_precision === 'year' ? (
+                            format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
+                          ) : capsule.memory_date_precision === 'month' ? (
+                            format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
+                          ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
+                            `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
+                          ) : (
+                            format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+                          )}
+                        </p>
+                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
+                        {capsuleCategories.map((cc) => cc.category && (
+                          <CategoryBadge 
+                            key={cc.id} 
+                            category={cc.category} 
+                            isPrimary={cc.is_primary}
+                            size="sm"
+                          />
+                        ))}
+                        {capsuleSubCategories.map((csc) => csc.sub_category && (
+                          <SubCategoryBadge 
+                            key={csc.id} 
+                            subCategory={csc.sub_category} 
+                            size="sm"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Shared with */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="p-6 rounded-2xl border border-border bg-card"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                Partagé avec
-              </h2>
-              <Button variant="outline" size="sm" onClick={() => setShareDialogOpen(true)} className="gap-2">
-                <Share2 className="w-4 h-4" />
-                Gérer le partage
-              </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setShareDialogOpen(true)}
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" disabled={isExporting}>
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild className="gap-2">
+                          <Link to={`/capsules/${capsule.id}/edit`}>
+                            <Edit className="w-4 h-4" />
+                            Modifier
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                          <FileDown className="w-4 h-4" />
+                          Exporter en PDF
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                          <FolderArchive className="w-4 h-4" />
+                          Exporter en ZIP
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="gap-2 text-destructive"
+                          onClick={() => setDeleteDialogOpen(true)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Supprimer
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Main Content */}
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Main Column */}
+            <div className="md:col-span-2 space-y-6">
+              {/* Description */}
+              {capsule.description && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="prose prose-lg max-w-none"
+                >
+                  <p className="text-foreground text-lg leading-relaxed">{capsule.description}</p>
+                </motion.div>
+              )}
+
+              {/* Content (for text capsules) */}
+              {capsule.content && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15 }}
+                  className="p-6 rounded-2xl bg-muted/50 border-l-4 border-secondary"
+                >
+                  <p className="text-foreground whitespace-pre-wrap leading-relaxed">{capsule.content}</p>
+                </motion.div>
+              )}
+
+              {/* Media Gallery */}
+              {medias.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      <Image className="w-5 h-5 text-secondary" />
+                      Médias
+                      <span className="text-sm font-normal text-muted-foreground">({medias.length})</span>
+                    </h2>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => capsule && openStory([capsule])}
+                      disabled={storyLoading}
+                      className="gap-2"
+                    >
+                      <Play className="w-4 h-4" />
+                      {storyLoading ? 'Chargement...' : 'Diaporama'}
+                    </Button>
+                  </div>
+                  <MediaGallery 
+                    medias={medias} 
+                    capsuleId={capsule.id}
+                    thumbnailUrl={capsule.thumbnail_url}
+                    onThumbnailChange={(url) => setCapsule(prev => prev ? { ...prev, thumbnail_url: url } : null)}
+                  />
+                </motion.div>
+              )}
+
+              {/* Comments Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.35 }}
+              >
+                <CommentsSection capsuleId={capsule.id} currentUserId={user.id} />
+              </motion.div>
             </div>
 
-            {sharedCircles.length === 0 ? (
-              <p className="text-muted-foreground text-sm">
-                Cette capsule n'est partagée avec aucun cercle.
-              </p>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {sharedCircles.map((circle) => (
-                  <Badge
-                    key={circle.id}
-                    variant="outline"
-                    className="gap-1.5"
-                  >
-                    <div
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: circle.color || '#1E3A5F' }}
-                    />
-                    {circle.name}
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </motion.div>
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Quick Info Card */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="p-5 rounded-2xl border border-border bg-card"
+              >
+                <div className="space-y-4">
+                  {/* Type */}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg ${typeInfo.color} flex items-center justify-center`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Type</p>
+                      <p className="font-medium text-foreground">{typeInfo.label}</p>
+                    </div>
+                  </div>
 
-          {/* Comments Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
-          >
-            <CommentsSection capsuleId={capsule.id} currentUserId={user.id} />
-          </motion.div>
-        </div>
-      </main>
+                  {/* Created date */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Créé le</p>
+                      <p className="font-medium text-foreground">
+                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Sub-categories */}
+                  {capsuleSubCategories.length > 0 && (
+                    <div className="pt-3 border-t border-border">
+                      <p className="text-xs text-muted-foreground mb-2">Sous-catégories</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {capsuleSubCategories.map((csc) => csc.sub_category && (
+                          <SubCategoryBadge 
+                            key={csc.id} 
+                            subCategory={csc.sub_category} 
+                            size="sm"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* Tags */}
+              {capsule.tags && capsule.tags.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.25 }}
+                  className="p-5 rounded-2xl border border-border bg-card"
+                >
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                    <Tag className="w-4 h-4" />
+                    Mots-clés
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {capsule.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="capitalize">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Shared with */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="p-5 rounded-2xl border border-border bg-card"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Partagé avec
+                  </h3>
+                  <Button variant="ghost" size="sm" onClick={() => setShareDialogOpen(true)} className="h-7 px-2 text-xs">
+                    Gérer
+                  </Button>
+                </div>
+
+                {sharedCircles.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">
+                    Aucun partage
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {sharedCircles.map((circle) => (
+                      <Badge
+                        key={circle.id}
+                        variant="outline"
+                        className="gap-1.5"
+                      >
+                        <div
+                          className="w-2.5 h-2.5 rounded-full"
+                          style={{ backgroundColor: circle.color || '#1E3A5F' }}
+                        />
+                        {circle.name}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </div>
+        </main>
 
       {/* Share Dialog */}
       <ShareCapsuleDialog
