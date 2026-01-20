@@ -28,7 +28,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
-import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
+import MediaUpload, { type MediaFile, type UploadResult } from '@/components/capsule/MediaUpload';
 import ScheduleSelector from '@/components/capsule/ScheduleSelector';
 import LegacySettings from '@/components/capsule/LegacySettings';
 import CategorySelector from '@/components/capsule/CategorySelector';
@@ -91,7 +91,7 @@ const CapsuleCreate = () => {
   const [mediaError, setMediaError] = useState(false);
   
   // Reference to the upload function from MediaUpload component
-  const uploadAllFilesRef = useRef<() => Promise<boolean>>();
+  const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
 
   // Get prompt from URL if present
   const promptFromUrl = searchParams.get('prompt');
@@ -138,20 +138,26 @@ const CapsuleCreate = () => {
     // Reset media error state
     setMediaError(false);
 
+    // Keep track of uploaded files (will be updated after upload)
+    let uploadedMediaFiles = mediaFiles;
+
     // Check if media files need uploading for non-text capsules
     const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
     if (capsuleType !== 'text' && pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
       setIsSaving(true);
       
-      // Upload all files
-      const uploadSuccess = await uploadAllFilesRef.current();
+      // Upload all files and get the updated files with URLs
+      const uploadResult = await uploadAllFilesRef.current();
       
-      if (!uploadSuccess) {
+      if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
         toast.error('Erreur lors de l\'upload des fichiers. Veuillez corriger les erreurs et réessayer.');
         return;
       }
+      
+      // Use the files returned from upload (with URLs)
+      uploadedMediaFiles = uploadResult.files;
     }
 
     const values = form.getValues();
@@ -234,9 +240,9 @@ const CapsuleCreate = () => {
         }
       }
 
-      // Add media files to the capsule
-      if (mediaFiles.length > 0 && capsule) {
-        const mediaInserts = mediaFiles
+      // Add media files to the capsule (use uploadedMediaFiles which has the URLs)
+      if (uploadedMediaFiles.length > 0 && capsule) {
+        const mediaInserts = uploadedMediaFiles
           .filter(f => f.uploaded && f.url)
           .map((f, index) => ({
             capsule_id: capsule.id,

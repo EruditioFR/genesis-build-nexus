@@ -75,7 +75,7 @@ interface MobileCapsuleWizardProps {
   onPublish: () => void;
   onBack: () => void;
   // Upload function ref
-  onUploadAllRef?: (uploadFn: () => Promise<boolean>) => void;
+  onUploadAllRef?: (uploadFn: () => Promise<import('./MediaUpload').UploadResult>) => void;
 }
 
 const STEPS = [
