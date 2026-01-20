@@ -149,34 +149,46 @@ export function TreeVisualization({
       let unionCenterX = centerX + CARD_WIDTH / 2; // Default: center of person
       let firstSpousePositioned = false;
       
-      for (const spouse of spouses) {
-        if (!positionsMap.has(spouse.id)) {
-          positionsMap.set(spouse.id, {
-            person: spouse,
-            x: spouseX,
-            y: generation * (CARD_HEIGHT + VERTICAL_GAP),
-            generation,
-            spouses: [],
-          });
+      // Filter out spouses that are already positioned (to avoid overlap)
+      const spousesToPosition = spouses.filter(spouse => !positionsMap.has(spouse.id));
+      
+      for (const spouse of spousesToPosition) {
+        positionsMap.set(spouse.id, {
+          person: spouse,
+          x: spouseX,
+          y: generation * (CARD_HEIGHT + VERTICAL_GAP),
+          generation,
+          spouses: [],
+        });
 
-          // Spouse connection
-          allConnections.push({
-            type: 'spouse',
-            from: { x: centerX + CARD_WIDTH, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
-            to: { x: spouseX, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
-            fromPersonId: person.id,
-            toPersonId: spouse.id,
-          });
-          
-          // Calculate union center (midpoint between centers of person and first spouse cards)
-          if (!firstSpousePositioned) {
-            const personCenterX = centerX + CARD_WIDTH / 2;
-            const spouseCenterX = spouseX + CARD_WIDTH / 2;
-            unionCenterX = (personCenterX + spouseCenterX) / 2;
-            firstSpousePositioned = true;
-          }
+        // Spouse connection
+        allConnections.push({
+          type: 'spouse',
+          from: { x: centerX + CARD_WIDTH, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
+          to: { x: spouseX, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
+          fromPersonId: person.id,
+          toPersonId: spouse.id,
+        });
+        
+        // Calculate union center (midpoint between centers of person and first spouse cards)
+        if (!firstSpousePositioned) {
+          const personCenterX = centerX + CARD_WIDTH / 2;
+          const spouseCenterX = spouseX + CARD_WIDTH / 2;
+          unionCenterX = (personCenterX + spouseCenterX) / 2;
+          firstSpousePositioned = true;
         }
+        
         spouseX += CARD_WIDTH + SPOUSE_GAP;
+      }
+      
+      // If spouse already positioned, still calculate union center for child connections
+      if (!firstSpousePositioned && spouses.length > 0) {
+        const existingSpousePos = positionsMap.get(spouses[0].id);
+        if (existingSpousePos) {
+          const personCenterX = centerX + CARD_WIDTH / 2;
+          const spouseCenterX = existingSpousePos.x + CARD_WIDTH / 2;
+          unionCenterX = (personCenterX + spouseCenterX) / 2;
+        }
       }
 
       // Update child positions to be centered under union point (between both parents)
