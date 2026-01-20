@@ -19,7 +19,8 @@ import {
   XCircle,
   Loader2,
   Link2,
-  Pencil
+  Pencil,
+  GitMerge
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -80,6 +81,7 @@ interface PersonDetailPanelProps {
   onAddChild: () => void;
   onAddSpouse: () => void;
   onLinkPerson?: () => void;
+  onMergePerson?: () => void;
   onDelete: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
@@ -98,6 +100,7 @@ export function PersonDetailPanel({
   onAddChild,
   onAddSpouse,
   onLinkPerson,
+  onMergePerson,
   onDelete,
   onPersonClick,
   onUpdate
@@ -751,18 +754,31 @@ export function PersonDetailPanel({
 
           {/* Relations Tab */}
           <TabsContent value="relations" className="p-4 space-y-4 m-0">
-            {/* Link existing person button */}
-            {onLinkPerson && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onLinkPerson} 
-                className="w-full gap-2"
-              >
-                <Link2 className="w-4 h-4" />
-                Lier à une personne existante
-              </Button>
-            )}
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              {onLinkPerson && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onLinkPerson} 
+                  className="flex-1 gap-2"
+                >
+                  <Link2 className="w-4 h-4" />
+                  Lier
+                </Button>
+              )}
+              {onMergePerson && allPersons.length > 1 && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onMergePerson} 
+                  className="flex-1 gap-2"
+                >
+                  <GitMerge className="w-4 h-4" />
+                  Fusionner
+                </Button>
+              )}
+            </div>
 
             {/* Parents */}
             <div>

@@ -547,6 +547,123 @@ export function useFamilyTree() {
     }
   }, [user]);
 
+  // Merge two persons (keep one, delete the other, transfer relationships)
+  const mergePersons = useCallback(async (
+    keepPersonId: string,
+    mergePersonId: string,
+    fieldsToMerge: string[]
+  ): Promise<boolean> => {
+    if (!user) return false;
+
+    setLoading(true);
+    try {
+      // Get the person to merge data from
+      const { data: mergePerson, error: fetchError } = await supabase
+        .from('family_persons')
+        .select('*')
+        .eq('id', mergePersonId)
+        .single();
+
+      if (fetchError || !mergePerson) {
+        throw new Error('Could not fetch person to merge');
+      }
+
+      // Update the keep person with selected fields from merge person
+      if (fieldsToMerge.length > 0) {
+        const updates: Record<string, unknown> = {};
+        fieldsToMerge.forEach((field) => {
+          if (field in mergePerson) {
+            updates[field] = mergePerson[field as keyof typeof mergePerson];
+          }
+        });
+
+        if (Object.keys(updates).length > 0) {
+          const { error: updateError } = await supabase
+            .from('family_persons')
+            .update(updates)
+            .eq('id', keepPersonId);
+
+          if (updateError) {
+            console.error('Error updating person with merged fields:', updateError);
+          }
+        }
+      }
+
+      // Transfer parent-child relationships where merge person is parent
+      const { error: parentRelError } = await supabase
+        .from('family_parent_child')
+        .update({ parent_id: keepPersonId })
+        .eq('parent_id', mergePersonId);
+
+      if (parentRelError) {
+        console.error('Error transferring parent relationships:', parentRelError);
+      }
+
+      // Transfer parent-child relationships where merge person is child
+      const { error: childRelError } = await supabase
+        .from('family_parent_child')
+        .update({ child_id: keepPersonId })
+        .eq('child_id', mergePersonId);
+
+      if (childRelError) {
+        console.error('Error transferring child relationships:', childRelError);
+      }
+
+      // Transfer unions where merge person is person1
+      const { error: union1Error } = await supabase
+        .from('family_unions')
+        .update({ person1_id: keepPersonId })
+        .eq('person1_id', mergePersonId);
+
+      if (union1Error) {
+        console.error('Error transferring unions (person1):', union1Error);
+      }
+
+      // Transfer unions where merge person is person2
+      const { error: union2Error } = await supabase
+        .from('family_unions')
+        .update({ person2_id: keepPersonId })
+        .eq('person2_id', mergePersonId);
+
+      if (union2Error) {
+        console.error('Error transferring unions (person2):', union2Error);
+      }
+
+      // Transfer capsule links
+      const { error: capsuleLinkError } = await supabase
+        .from('capsule_person_links')
+        .update({ person_id: keepPersonId })
+        .eq('person_id', mergePersonId);
+
+      if (capsuleLinkError) {
+        console.error('Error transferring capsule links:', capsuleLinkError);
+      }
+
+      // Delete duplicate relationships that may have been created
+      // (e.g., if both persons were already linked to the same person)
+      // This is handled by unique constraints in the database
+
+      // Finally, delete the merged person
+      const { error: deleteError } = await supabase
+        .from('family_persons')
+        .delete()
+        .eq('id', mergePersonId);
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      toast.success('Personnes fusionnées avec succès');
+      return true;
+    } catch (error) {
+      console.error('Error merging persons:', error);
+      toast.error('Erreur lors de la fusion des personnes');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
   return {
     loading,
     fetchTrees,
@@ -561,6 +678,7 @@ export function useFamilyTree() {
     updateUnion,
     deleteTree,
     getTreeStatistics,
-    importFromGedcom
+    importFromGedcom,
+    mergePersons
   };
 }
