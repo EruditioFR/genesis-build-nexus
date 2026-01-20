@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
@@ -103,6 +103,12 @@ const CapsuleDetail = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
+
+  // Parallax effect for hero image
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroScale = useTransform(scrollY, [0, 500], [1, 1.1]);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -377,14 +383,19 @@ const CapsuleDetail = () => {
           onSignOut={handleSignOut}
         />
 
-        {/* Hero Section with Image */}
-        <div className="relative">
+        {/* Hero Section with Image and Parallax Effect */}
+        <div className="relative" ref={heroRef}>
           {heroImageUrl ? (
             <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-              <img
+              <motion.img
                 src={heroImageUrl}
                 alt={capsule.title}
                 className="w-full h-full object-cover"
+                style={{ 
+                  y: heroY, 
+                  scale: heroScale,
+                  transformOrigin: 'center center'
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
               
