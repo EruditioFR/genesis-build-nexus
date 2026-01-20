@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import JSZip from 'jszip';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { getSignedUrl } from './signedUrlCache';
 
 interface CapsuleExportData {
   id: string;
@@ -208,12 +209,22 @@ export async function exportCapsuleToZIP(
     for (let i = 0; i < medias.length; i++) {
       const media = medias[i];
       try {
-        const response = await fetch(media.file_url);
+        // Generate signed URL for the media file
+        const signedUrl = await getSignedUrl('capsule-medias', media.file_url, 3600);
+        
+        if (!signedUrl) {
+          console.error(`Failed to get signed URL for: ${media.file_url}`);
+          continue;
+        }
+        
+        const response = await fetch(signedUrl);
         if (response.ok) {
           const blob = await response.blob();
           const extension = media.file_type.split('/')[1] || 'bin';
           const fileName = media.file_name || `media-${i + 1}.${extension}`;
           mediasFolder?.file(fileName, blob);
+        } else {
+          console.error(`Failed to fetch media: ${response.status} ${response.statusText}`);
         }
       } catch (error) {
         console.error(`Failed to download media: ${media.file_url}`, error);
