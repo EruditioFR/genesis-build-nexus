@@ -45,7 +45,7 @@ const OnboardingChecklist = ({
       title: 'Créez votre premier souvenir',
       description: 'Commencez à préserver vos souvenirs précieux',
       icon: Plus,
-      href: '/capsule/create',
+      href: '/capsules/new',
       completed: hasCapsule,
     },
     {

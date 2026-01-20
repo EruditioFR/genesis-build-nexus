@@ -182,7 +182,7 @@ const MemoryPrompts = ({ className, showAll = false }: MemoryPromptsProps) => {
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
               <Link
-                to={`/capsule/create?prompt=${encodeURIComponent(prompt.title)}`}
+                to={`/capsules/new?prompt=${encodeURIComponent(prompt.title)}`}
                 className="group flex items-start gap-4 p-4 rounded-xl bg-card border border-border hover:border-secondary/50 hover:shadow-card transition-all duration-300"
               >
                 <div
@@ -212,7 +212,7 @@ const MemoryPrompts = ({ className, showAll = false }: MemoryPromptsProps) => {
       {!showAll && (
         <div className="mt-4 text-center">
           <Link
-            to="/capsule/create"
+            to="/capsules/new"
             className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:text-secondary/80 transition-colors"
           >
             <Sparkles className="w-4 h-4" />
