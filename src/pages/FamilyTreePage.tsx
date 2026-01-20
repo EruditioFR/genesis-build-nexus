@@ -37,7 +37,7 @@ import {
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription } from '@/hooks/useSubscription';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
@@ -64,7 +64,7 @@ import type { GedcomParseResult } from '@/lib/gedcomParser';
 export default function FamilyTreePage() {
   const navigate = useNavigate();
   const { user, signOut, loading: authLoading } = useAuth();
-  const { subscribed, tier, loading: subLoading } = useSubscription();
+  const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
   const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
@@ -99,11 +99,11 @@ export default function FamilyTreePage() {
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
 
-  const isPremium = subscribed && (tier === 'premium' || tier === 'heritage');
+  const canAccessFamilyTree = limits.canAccessFamilyTree;
 
   // Initialize: fetch or create the single tree
   const initializeTree = useCallback(async () => {
-    if (!user || !isPremium) return;
+    if (!user || !canAccessFamilyTree) return;
     
     setIsInitializing(true);
     try {
@@ -133,15 +133,15 @@ export default function FamilyTreePage() {
     } finally {
       setIsInitializing(false);
     }
-  }, [user, isPremium, fetchTrees, fetchTree, createTree]);
+  }, [user, canAccessFamilyTree, fetchTrees, fetchTree, createTree]);
 
   useEffect(() => {
-    if (!authLoading && !subLoading && user && isPremium) {
+    if (!authLoading && !subLoading && user && canAccessFamilyTree) {
       initializeTree();
     } else if (!authLoading && !subLoading) {
       setIsInitializing(false);
     }
-  }, [authLoading, subLoading, user, isPremium, initializeTree]);
+  }, [authLoading, subLoading, user, canAccessFamilyTree, initializeTree]);
 
   const loadTree = useCallback(async () => {
     if (!tree?.id) return;
@@ -414,8 +414,9 @@ export default function FamilyTreePage() {
     );
   }
 
-  // Premium gate
-  if (!isPremium) {
+  // Heritage gate - Family tree is only for Heritage subscribers
+  if (!canAccessFamilyTree) {
+    const isPremiumUser = tier === 'premium';
     return (
       <div className="min-h-screen bg-background pb-24 md:pb-0">
         <DashboardHeader user={user} onSignOut={signOut} />
@@ -431,12 +432,17 @@ export default function FamilyTreePage() {
             <h1 className="text-3xl font-display font-bold">Arbre Généalogique</h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
               Créez et explorez l'histoire de votre famille avec notre module d'arbre généalogique interactif. 
-              Cette fonctionnalité est réservée aux abonnés Premium.
+              Cette fonctionnalité est réservée aux abonnés <strong>Héritage</strong>.
             </p>
+            {isPremiumUser && (
+              <p className="text-sm text-muted-foreground">
+                Vous avez actuellement le forfait Premium. Passez au forfait Héritage pour accéder à l'arbre généalogique.
+              </p>
+            )}
             <div className="pt-4">
-              <Button size="lg" onClick={() => navigate('/premium')} className="gap-2">
+              <Button size="lg" onClick={() => navigate('/premium?tier=heritage')} className="gap-2">
                 <TreeDeciduous className="w-5 h-5" />
-                Passer Premium pour débloquer
+                {isPremiumUser ? 'Passer au forfait Héritage' : 'Découvrir le forfait Héritage'}
               </Button>
             </div>
           </motion.div>
