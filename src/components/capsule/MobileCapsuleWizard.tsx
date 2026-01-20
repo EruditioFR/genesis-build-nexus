@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
@@ -74,6 +74,8 @@ interface MobileCapsuleWizardProps {
   onSaveDraft: () => void;
   onPublish: () => void;
   onBack: () => void;
+  // Upload function ref
+  onUploadAllRef?: (uploadFn: () => Promise<boolean>) => void;
 }
 
 const STEPS = [
@@ -111,8 +113,10 @@ const MobileCapsuleWizard = ({
   onSaveDraft,
   onPublish,
   onBack,
+  onUploadAllRef,
 }: MobileCapsuleWizardProps) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [mediaError, setMediaError] = useState(false);
 
   // For text capsules, we skip the media step, so we have 4 steps instead of 5
   const effectiveSteps = capsuleType === 'text' ? STEPS.filter(s => s.id !== 'media') : STEPS;
@@ -138,7 +142,7 @@ const MobileCapsuleWizard = ({
         return title.trim().length > 0;
       case 2: // Media
         if (capsuleType === 'text') return true;
-        return mediaFiles.length > 0 && mediaFiles.every(f => f.uploaded);
+        return mediaFiles.length > 0; // Remove check for uploaded status - upload happens on publish
       case 3: // Details
         return true;
       case 4: // Review
@@ -281,10 +285,19 @@ const MobileCapsuleWizard = ({
               </p>
             </div>
 
+            {mediaError && (
+              <p className="text-sm text-destructive text-center mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
+                Certains fichiers n'ont pas pu être uploadés. Veuillez les supprimer ou réessayer.
+              </p>
+            )}
+
             <MediaUpload
               userId={userId}
               files={mediaFiles}
-              onFilesChange={onMediaFilesChange}
+              onFilesChange={(files) => {
+                onMediaFilesChange(files);
+                if (mediaError) setMediaError(false);
+              }}
               maxFiles={capsuleType === 'mixed' ? 20 : 10}
               showAudioRecorder={capsuleType === 'audio' || capsuleType === 'mixed'}
               acceptedTypes={
@@ -296,6 +309,7 @@ const MobileCapsuleWizard = ({
                       ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
                       : undefined
               }
+              onUploadAll={onUploadAllRef}
             />
           </div>
         );

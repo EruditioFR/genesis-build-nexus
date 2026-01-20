@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Send, Edit3, Trash2, CalendarHeart } from 'lucide-react';
@@ -94,6 +94,10 @@ const CapsuleEdit = () => {
   const [primaryCategory, setPrimaryCategory] = useState<string | null>(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
+  const [mediaError, setMediaError] = useState(false);
+  
+  // Reference to the upload function from MediaUpload component
+  const uploadAllFilesRef = useRef<() => Promise<boolean>>();
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -218,11 +222,23 @@ const CapsuleEdit = () => {
     const isValid = await form.trigger();
     if (!isValid) return;
 
+    // Reset media error state
+    setMediaError(false);
+
     // Check if new media files need uploading
     const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
-    if (capsuleType !== 'text' && pendingMediaFiles.length > 0) {
-      toast.error('Veuillez d\'abord uploader tous les fichiers médias');
-      return;
+    if (capsuleType !== 'text' && pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
+      setIsSaving(true);
+      
+      // Upload all files
+      const uploadSuccess = await uploadAllFilesRef.current();
+      
+      if (!uploadSuccess) {
+        setIsSaving(false);
+        setMediaError(true);
+        toast.error('Erreur lors de l\'upload des fichiers. Veuillez corriger les erreurs et réessayer.');
+        return;
+      }
     }
 
     const values = form.getValues();
@@ -489,14 +505,26 @@ const CapsuleEdit = () => {
 
             {/* New Media Upload */}
             {capsuleType !== 'text' && (
-              <div className="p-6 rounded-2xl border border-border bg-card">
+              <div 
+                className={`p-6 rounded-2xl border bg-card transition-all ${
+                  mediaError ? 'border-destructive ring-2 ring-destructive/20' : 'border-border'
+                }`}
+              >
                 <Label className="text-base font-medium mb-4 block">
                   Ajouter des fichiers
                 </Label>
+                {mediaError && (
+                  <p className="text-sm text-destructive mb-4">
+                    Certains fichiers n'ont pas pu être uploadés. Veuillez les supprimer ou réessayer.
+                  </p>
+                )}
                 <MediaUpload
                   userId={user.id}
                   files={mediaFiles}
-                  onFilesChange={setMediaFiles}
+                  onFilesChange={(files) => {
+                    setMediaFiles(files);
+                    if (mediaError) setMediaError(false);
+                  }}
                   maxFiles={capsuleType === 'mixed' ? 20 - existingMedia.length : 10 - existingMedia.length}
                   acceptedTypes={
                     capsuleType === 'photo' 
@@ -507,6 +535,9 @@ const CapsuleEdit = () => {
                           ? ['audio/mpeg', 'audio/wav', 'audio/mp4']
                           : undefined
                   }
+                  onUploadAll={(uploadFn) => {
+                    uploadAllFilesRef.current = uploadFn;
+                  }}
                 />
               </div>
             )}
