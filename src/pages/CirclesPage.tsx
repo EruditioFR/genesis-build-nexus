@@ -33,6 +33,7 @@ import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
+import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
 import { toast } from 'sonner';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
@@ -265,6 +266,11 @@ const CirclesPage = () => {
             className="lg:col-span-1 space-y-3"
             data-tour="circles-list"
           >
+            {/* Limits indicator */}
+            <CircleLimitsIndicator 
+              currentCircles={circles.length}
+              currentMembersInSelectedCircle={selectedCircle ? members.length : undefined}
+            />
             {circles.length === 0 ? (
               <div className="p-8 rounded-2xl border border-border bg-card text-center">
                 <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
