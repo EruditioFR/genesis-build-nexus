@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Send, Sparkles, CalendarClock, CalendarHeart } from 'lucide-react';
 import { z } from 'zod';
@@ -64,6 +64,7 @@ type CapsuleFormValues = z.infer<typeof capsuleSchema>;
 const CapsuleCreate = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
   const { categories, subCategories, setCapsuleCategories, setCapsuleSubCategories, createCustomCategory, getSubCategoriesForCategory } = useCategories();
   const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
@@ -88,10 +89,13 @@ const CapsuleCreate = () => {
   const [legacyUnlockDate, setLegacyUnlockDate] = useState<Date | null>(null);
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
 
+  // Get prompt from URL if present
+  const promptFromUrl = searchParams.get('prompt');
+
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
     defaultValues: {
-      title: '',
+      title: promptFromUrl || '',
       description: '',
       content: '',
     },

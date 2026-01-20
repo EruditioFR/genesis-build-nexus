@@ -14,6 +14,7 @@ import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -334,6 +335,15 @@ const Dashboard = () => {
         <div className="mb-6 md:mb-8">
           <StatsCards stats={stats} />
         </div>
+
+        {/* Memory Prompts - for users without capsules and not showing onboarding */}
+        {stats.totalCapsules === 0 && !showOnboarding && (
+          <div className="mb-6 md:mb-8">
+            <div className="p-6 rounded-2xl bg-card border border-border">
+              <MemoryPrompts />
+            </div>
+          </div>
+        )}
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
