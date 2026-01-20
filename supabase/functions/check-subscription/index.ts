@@ -10,6 +10,7 @@ const corsHeaders = {
 const PRODUCT_TO_TIER: Record<string, string> = {
   "prod_TkzBr0QmFuD1zC": "premium",
   "prod_TkzBi3KYGrCDkh": "heritage",
+  "prod_TpSkLunxzpbl1E": "heritage",
 };
 
 const logStep = (step: string, details?: any) => {
