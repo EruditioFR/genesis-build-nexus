@@ -40,7 +40,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
           <div>
             <h3 className="text-lg font-display font-semibold text-foreground">Espace de stockage</h3>
             <p className="text-sm text-muted-foreground">
-              Abonnement {subscriptionLabels[subscriptionLevel]}
+              Visualisez l'espace que vous utilisez
             </p>
           </div>
         </div>
@@ -71,12 +71,17 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
 
         {isNearLimit && !isAtLimit && (
           <p className="text-sm text-accent">
-            ⚠️ Votre espace de stockage est presque plein
+            ⚠️ Votre espace est presque plein. Passez au forfait supérieur pour plus d'espace !
           </p>
         )}
         {isAtLimit && (
           <p className="text-sm text-destructive">
-            🚨 Espace de stockage épuisé. Passez à Premium pour continuer.
+            🚨 Espace épuisé ! Passez au forfait supérieur pour continuer à préserver vos souvenirs.
+          </p>
+        )}
+        {!isNearLimit && subscriptionLevel === 'free' && (
+          <p className="text-sm text-muted-foreground">
+            Vous manquez d'espace ? <Link to="/premium" className="text-secondary hover:underline font-medium">Passez au forfait supérieur !</Link>
           </p>
         )}
       </div>
