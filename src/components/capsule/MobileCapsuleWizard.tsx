@@ -24,14 +24,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Calendar as CalendarComponent } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
 import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
 import CategorySelector from '@/components/capsule/CategorySelector';
+import MemoryDateSelector, { 
+  type MemoryDateValue, 
+  formatMemoryDate 
+} from '@/components/capsule/MemoryDateSelector';
 
 import type { Database } from '@/integrations/supabase/types';
 import type { Category, SubCategory } from '@/hooks/useCategories';
@@ -65,8 +67,8 @@ interface MobileCapsuleWizardProps {
   tags: string[];
   onTagsChange: (tags: string[]) => void;
   // Memory date
-  memoryDate: Date | null;
-  onMemoryDateChange: (date: Date | null) => void;
+  memoryDate: MemoryDateValue | null;
+  onMemoryDateChange: (date: MemoryDateValue | null) => void;
   // Actions
   isSaving: boolean;
   onSaveDraft: () => void;
@@ -332,43 +334,12 @@ const MobileCapsuleWizard = ({
                 Date du souvenir
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Quand ce souvenir a-t-il eu lieu ?
+                Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.
               </p>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="mobile"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !memoryDate && "text-muted-foreground"
-                    )}
-                  >
-                    <Calendar className="mr-3 h-5 w-5" />
-                    {memoryDate ? format(memoryDate, "PPP", { locale: fr }) : "Sélectionner une date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <CalendarComponent
-                    mode="single"
-                    selected={memoryDate || undefined}
-                    onSelect={(date) => onMemoryDateChange(date || null)}
-                    disabled={(date) => date > new Date()}
-                    initialFocus
-                    className="pointer-events-auto"
-                  />
-                </PopoverContent>
-              </Popover>
-              {memoryDate && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="mt-2 text-muted-foreground"
-                  onClick={() => onMemoryDateChange(null)}
-                >
-                  Effacer la date
-                </Button>
-              )}
+              <MemoryDateSelector
+                value={memoryDate}
+                onChange={onMemoryDateChange}
+              />
             </div>
 
             {/* Tags */}
@@ -456,7 +427,7 @@ const MobileCapsuleWizard = ({
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Date du souvenir</p>
-                    <p className="font-medium">{format(memoryDate, "PPP", { locale: fr })}</p>
+                    <p className="font-medium">{formatMemoryDate(memoryDate)}</p>
                   </div>
                 </div>
               )}
