@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -44,6 +44,7 @@ import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategori
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import HeaderImageSelector from '@/components/capsule/HeaderImageSelector';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
@@ -101,6 +102,7 @@ const CapsuleDetail = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+  const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -202,12 +204,21 @@ const CapsuleDetail = () => {
     if (user && id) fetchData();
   }, [user, id, navigate]);
 
-  // Load hero image URL
+  // Load hero image URL - prioritize thumbnail_url, then first image
   useEffect(() => {
     const loadHeroImage = async () => {
+      const { getSignedUrl } = await import('@/lib/signedUrlCache');
+      
+      // First try thumbnail_url (manually selected header)
+      if (capsule?.thumbnail_url) {
+        const url = await getSignedUrl('capsule-medias', capsule.thumbnail_url, 3600);
+        setHeroImageUrl(url);
+        return;
+      }
+      
+      // Fallback to first image in medias
       const heroMedia = medias.find(m => m.file_type.startsWith('image/'));
       if (heroMedia) {
-        const { getSignedUrl } = await import('@/lib/signedUrlCache');
         const url = await getSignedUrl('capsule-medias', heroMedia.file_url, 3600);
         setHeroImageUrl(url);
       } else {
@@ -215,7 +226,7 @@ const CapsuleDetail = () => {
       }
     };
     loadHeroImage();
-  }, [medias]);
+  }, [medias, capsule?.thumbnail_url]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -393,6 +404,15 @@ const CapsuleDetail = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  onClick={() => setHeaderSelectorOpen(true)}
+                  className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                  title="Changer l'image d'en-tête"
+                >
+                  <ImagePlus className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShareDialogOpen(true)}
                   className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
                 >
@@ -541,6 +561,14 @@ const CapsuleDetail = () => {
                   </div>
 
                   <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setHeaderSelectorOpen(true)}
+                      title="Ajouter une image d'en-tête"
+                    >
+                      <ImagePlus className="w-4 h-4" />
+                    </Button>
                     <Button
                       variant="outline"
                       size="icon"
@@ -805,6 +833,18 @@ const CapsuleDetail = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Header Image Selector */}
+      <HeaderImageSelector
+        open={headerSelectorOpen}
+        onOpenChange={setHeaderSelectorOpen}
+        capsuleId={capsule.id}
+        medias={medias}
+        currentHeaderUrl={capsule.thumbnail_url}
+        onHeaderChange={(url) => {
+          setCapsule(prev => prev ? { ...prev, thumbnail_url: url } : null);
+        }}
+      />
 
       <MobileBottomNav />
     </div>
