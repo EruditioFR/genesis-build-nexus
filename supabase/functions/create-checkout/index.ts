@@ -10,12 +10,20 @@ const corsHeaders = {
 // Subscription tiers with their Stripe price IDs
 const SUBSCRIPTION_TIERS = {
   premium: {
-    price_id: "price_1SnTCvRc375UxOm0bA7Hk2bm",
-    product_id: "prod_TkzBr0QmFuD1zC",
+    monthly: {
+      price_id: "price_1SnTCvRc375UxOm0bA7Hk2bm",
+      product_id: "prod_TkzBr0QmFuD1zC",
+    },
   },
   heritage: {
-    price_id: "price_1SrnowRc375UxOm0JYq9Dm0V",
-    product_id: "prod_TpSkLunxzpbl1E",
+    monthly: {
+      price_id: "price_1SrnowRc375UxOm0JYq9Dm0V",
+      product_id: "prod_TpSkLunxzpbl1E",
+    },
+    yearly: {
+      price_id: "price_1SrntuRc375UxOm0Eb4nUPT5",
+      product_id: "prod_TpSpdTcwfI91FM",
+    },
   },
 };
 
@@ -37,13 +45,16 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { tier } = await req.json();
+    const { tier, billing = "monthly" } = await req.json();
     if (!tier || !SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS]) {
       throw new Error("Invalid subscription tier");
     }
 
-    const selectedTier = SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS];
-    logStep("Selected tier", { tier, priceId: selectedTier.price_id });
+    const tierConfig = SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS];
+    const billingPeriod = billing === "yearly" && "yearly" in tierConfig ? "yearly" : "monthly";
+    const selectedPrice = tierConfig[billingPeriod as keyof typeof tierConfig];
+    
+    logStep("Selected tier", { tier, billing: billingPeriod, priceId: selectedPrice.price_id });
 
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
@@ -71,7 +82,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [
         {
-          price: selectedTier.price_id,
+          price: selectedPrice.price_id,
           quantity: 1,
         },
       ],
@@ -81,6 +92,7 @@ serve(async (req) => {
       metadata: {
         user_id: user.id,
         tier: tier,
+        billing: billingPeriod,
       },
     });
 

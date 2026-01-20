@@ -29,7 +29,8 @@ const Premium = () => {
 
     setIsLoading(selectedTier);
     try {
-      await createCheckout(selectedTier);
+      const billing = isYearly ? 'yearly' : 'monthly';
+      await createCheckout(selectedTier, billing);
     } catch (error: any) {
       toast.error(error.message || 'Erreur lors de la création du paiement');
     } finally {
@@ -133,7 +134,7 @@ const Premium = () => {
           </span>
           {isYearly && (
             <Badge variant="outline" className="border-secondary text-secondary">
-              -17%
+              2 mois gratuits
             </Badge>
           )}
         </motion.div>
