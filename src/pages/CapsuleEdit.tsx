@@ -39,7 +39,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
-import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
+import MediaUpload, { type MediaFile, type UploadResult } from '@/components/capsule/MediaUpload';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
@@ -97,7 +97,7 @@ const CapsuleEdit = () => {
   const [mediaError, setMediaError] = useState(false);
   
   // Reference to the upload function from MediaUpload component
-  const uploadAllFilesRef = useRef<() => Promise<boolean>>();
+  const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -225,20 +225,26 @@ const CapsuleEdit = () => {
     // Reset media error state
     setMediaError(false);
 
+    // Keep track of uploaded files (will be updated after upload)
+    let uploadedMediaFiles = mediaFiles;
+
     // Check if new media files need uploading
     const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
     if (capsuleType !== 'text' && pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
       setIsSaving(true);
       
-      // Upload all files
-      const uploadSuccess = await uploadAllFilesRef.current();
+      // Upload all files and get the updated files with URLs
+      const uploadResult = await uploadAllFilesRef.current();
       
-      if (!uploadSuccess) {
+      if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
         toast.error('Erreur lors de l\'upload des fichiers. Veuillez corriger les erreurs et réessayer.');
         return;
       }
+      
+      // Use the files returned from upload (with URLs)
+      uploadedMediaFiles = uploadResult.files;
     }
 
     const values = form.getValues();
@@ -272,10 +278,10 @@ const CapsuleEdit = () => {
         if (deleteError) throw deleteError;
       }
 
-      // Add new media files
-      if (mediaFiles.length > 0) {
+      // Add new media files (use uploadedMediaFiles which has the URLs)
+      if (uploadedMediaFiles.length > 0) {
         const existingCount = existingMedia.length;
-        const mediaInserts = mediaFiles
+        const mediaInserts = uploadedMediaFiles
           .filter(f => f.uploaded && f.url)
           .map((f, index) => ({
             capsule_id: id!,

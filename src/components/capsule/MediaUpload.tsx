@@ -19,6 +19,11 @@ export interface MediaFile {
   progress?: number;
 }
 
+export interface UploadResult {
+  success: boolean;
+  files: MediaFile[];
+}
+
 interface MediaUploadProps {
   userId: string;
   files: MediaFile[];
@@ -27,7 +32,7 @@ interface MediaUploadProps {
   maxSizeMb?: number;
   acceptedTypes?: string[];
   showAudioRecorder?: boolean;
-  onUploadAll?: (uploadFn: () => Promise<boolean>) => void;
+  onUploadAll?: (uploadFn: () => Promise<UploadResult>) => void;
 }
 
 const defaultAcceptedTypes = [
@@ -68,7 +73,13 @@ const MediaUpload = ({
 }: MediaUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [showRecorder, setShowRecorder] = useState(false);
-  const uploadFnRef = useRef<() => Promise<boolean>>();
+  
+  // Keep a ref to always have access to current files
+  const filesRef = useRef(files);
+  filesRef.current = files;
+  
+  const onFilesChangeRef = useRef(onFilesChange);
+  onFilesChangeRef.current = onFilesChange;
 
   const handleRecordingComplete = useCallback((blob: Blob, fileName: string) => {
     const file = new File([blob], fileName, { type: blob.type });
@@ -200,55 +211,58 @@ const MediaUpload = ({
     });
   }, [userId]);
 
-  const uploadAllFiles = useCallback(async (): Promise<boolean> => {
-    const pendingFiles = files.filter(f => !f.uploaded && !f.uploading);
-    if (pendingFiles.length === 0) return true;
+  const uploadAllFiles = useCallback(async (): Promise<UploadResult> => {
+    // Use ref to get current files
+    const currentFiles = filesRef.current;
+    const pendingFiles = currentFiles.filter(f => !f.uploaded && !f.uploading);
+    if (pendingFiles.length === 0) {
+      return { success: true, files: currentFiles };
+    }
 
-    let currentFiles = files.map(f => 
+    let updatedFiles = currentFiles.map(f => 
       pendingFiles.find(p => p.id === f.id) 
         ? { ...f, uploading: true, progress: 0, error: undefined } 
         : f
     );
-    onFilesChange(currentFiles);
+    onFilesChangeRef.current(updatedFiles);
 
     let hasError = false;
 
     for (const mediaFile of pendingFiles) {
       try {
         const url = await uploadFileWithProgress(mediaFile, (progress) => {
-          currentFiles = currentFiles.map(f => 
+          updatedFiles = updatedFiles.map(f => 
             f.id === mediaFile.id 
               ? { ...f, progress } 
               : f
           );
-          onFilesChange(currentFiles);
+          onFilesChangeRef.current(updatedFiles);
         });
         
-        currentFiles = currentFiles.map(f => 
+        updatedFiles = updatedFiles.map(f => 
           f.id === mediaFile.id 
             ? { ...f, uploading: false, uploaded: true, url, progress: 100 } 
             : f
         );
-        onFilesChange(currentFiles);
+        onFilesChangeRef.current(updatedFiles);
       } catch (error: any) {
         hasError = true;
-        currentFiles = currentFiles.map(f => 
+        updatedFiles = updatedFiles.map(f => 
           f.id === mediaFile.id 
             ? { ...f, uploading: false, error: error.message, progress: 0 } 
             : f
         );
-        onFilesChange(currentFiles);
+        onFilesChangeRef.current(updatedFiles);
       }
     }
 
-    return !hasError;
-  }, [files, onFilesChange, uploadFileWithProgress]);
+    return { success: !hasError, files: updatedFiles };
+  }, [uploadFileWithProgress]);
 
   // Register the upload function with the parent component
   useEffect(() => {
-    uploadFnRef.current = uploadAllFiles;
     if (onUploadAll) {
-      onUploadAll(() => uploadFnRef.current!());
+      onUploadAll(uploadAllFiles);
     }
   }, [onUploadAll, uploadAllFiles]);
 
