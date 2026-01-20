@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, AlertCircle, CheckCircle2, Users, Heart, Loader2, UserCheck, UserPlus, SkipForward } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion animations for Android compatibility
 import {
   Dialog,
   DialogContent,
@@ -98,7 +98,9 @@ export function GedcomImportDialog({
       }
 
       setParseResult(result);
+      console.log('[GEDCOM] Setting step to preview');
       setStep('preview');
+      console.log('[GEDCOM] Step set to preview, parseResult set');
     } catch (err) {
       console.error('[GEDCOM] Error parsing:', err);
       setError('Erreur lors de la lecture du fichier. Vérifiez le format.');
@@ -228,16 +230,9 @@ export function GedcomImportDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <AnimatePresence mode="wait">
-          {/* Upload Step */}
-          {step === 'upload' && (
-            <motion.div
-              key="upload"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-4"
-            >
+        {/* Upload Step */}
+        {step === 'upload' && (
+          <div className="space-y-4">
               <div
                 {...getRootProps()}
                 className={`
@@ -291,18 +286,12 @@ export function GedcomImportDialog({
                   <li>Export depuis Ancestry, MyHeritage, Geneanet, Gramps, etc.</li>
                 </ul>
               </div>
-            </motion.div>
-          )}
+          </div>
+        )}
 
-          {/* Preview Step */}
-          {step === 'preview' && parseResult && (
-            <motion.div
-              key="preview"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-4"
-            >
+        {/* Preview Step */}
+        {step === 'preview' && parseResult && (
+          <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
                 <FileText className="w-5 h-5 text-secondary" />
                 <div className="flex-1">
@@ -359,18 +348,12 @@ export function GedcomImportDialog({
                   {existingPersons.length > 0 ? 'Vérifier les doublons' : 'Importer'}
                 </Button>
               </div>
-            </motion.div>
-          )}
+          </div>
+        )}
 
-          {/* Duplicates Review Step */}
-          {step === 'duplicates' && (
-            <motion.div
-              key="duplicates"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-4"
-            >
+        {/* Duplicates Review Step */}
+        {step === 'duplicates' && (
+          <div className="space-y-4">
               <Alert>
                 <UserCheck className="h-4 w-4" />
                 <AlertTitle>{duplicateMatches.length} doublon(s) potentiel(s) détecté(s)</AlertTitle>
@@ -446,18 +429,12 @@ export function GedcomImportDialog({
                   </Button>
                 </div>
               </div>
-            </motion.div>
-          )}
+          </div>
+        )}
 
-          {/* Importing Step */}
-          {step === 'importing' && (
-            <motion.div
-              key="importing"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-6 py-8"
-            >
+        {/* Importing Step */}
+        {step === 'importing' && (
+          <div className="space-y-6 py-8">
               <div className="text-center">
                 <Loader2 className="w-12 h-12 mx-auto text-secondary animate-spin mb-4" />
                 <p className="font-medium">Import en cours...</p>
@@ -466,18 +443,12 @@ export function GedcomImportDialog({
                 </p>
               </div>
               <Progress value={progress} className="h-2" />
-            </motion.div>
-          )}
+          </div>
+        )}
 
-          {/* Complete Step */}
-          {step === 'complete' && parseResult && (
-            <motion.div
-              key="complete"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-6 py-8"
-            >
+        {/* Complete Step */}
+        {step === 'complete' && parseResult && (
+          <div className="space-y-6 py-8">
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
                   <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
@@ -492,9 +463,8 @@ export function GedcomImportDialog({
               <Button onClick={handleClose} className="w-full">
                 Voir mon arbre
               </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
