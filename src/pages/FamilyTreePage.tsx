@@ -13,7 +13,9 @@ import {
   Upload,
   Map,
   Lock,
-  List
+  List,
+  FileText,
+  FileDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,6 +47,7 @@ import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
+import { downloadGedcom } from '@/lib/gedcomExporter';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import type { 
@@ -572,14 +581,29 @@ export default function FamilyTreePage() {
                     <Maximize2 className="w-4 h-4" />
                   </Button>
 
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
-                    title="Exporter en PDF"
-                  >
-                    <Download className="w-4 h-4" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon" title="Exporter">
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem 
+                        onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
+                        className="gap-2"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Exporter en PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
+                        className="gap-2"
+                      >
+                        <FileDown className="w-4 h-4" />
+                        Exporter en GEDCOM
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   <Button 
                     variant="outline" 
