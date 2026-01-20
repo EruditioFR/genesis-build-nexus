@@ -182,7 +182,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
+      className="sticky top-0 z-50 w-full bg-sidebar backdrop-blur-md border-b border-sidebar-border shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
