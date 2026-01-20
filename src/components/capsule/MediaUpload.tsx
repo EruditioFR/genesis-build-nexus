@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, X, Image, Video, Music, Loader2, GripVertical } from 'lucide-react';
+import { Upload, X, Image, Video, Music, Loader2, GripVertical, Mic } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
+import { AudioRecorder } from './AudioRecorder';
 
 export interface MediaFile {
   id: string;
@@ -25,6 +26,7 @@ interface MediaUploadProps {
   maxFiles?: number;
   maxSizeMb?: number;
   acceptedTypes?: string[];
+  showAudioRecorder?: boolean;
 }
 
 const defaultAcceptedTypes = [
@@ -60,8 +62,25 @@ const MediaUpload = ({
   maxFiles = 10,
   maxSizeMb = 100,
   acceptedTypes = defaultAcceptedTypes,
+  showAudioRecorder = false,
 }: MediaUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [showRecorder, setShowRecorder] = useState(false);
+
+  const handleRecordingComplete = useCallback((blob: Blob, fileName: string) => {
+    const file = new File([blob], fileName, { type: blob.type });
+    const mediaFile: MediaFile = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      file,
+      preview: '',
+      type: 'audio',
+      uploading: false,
+      uploaded: false,
+    };
+    onFilesChange([...files, mediaFile]);
+    setShowRecorder(false);
+    toast.success('Enregistrement ajouté !');
+  }, [files, onFilesChange]);
 
   const createPreview = (file: File): string => {
     if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
@@ -246,43 +265,89 @@ const MediaUpload = ({
 
   return (
     <div className="space-y-4">
-      {/* Drop Zone */}
-      <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        className={`relative p-8 rounded-xl border-2 border-dashed transition-all duration-200 ${
-          isDragging
-            ? 'border-secondary bg-secondary/10'
-            : 'border-border bg-muted/30 hover:border-secondary/50 hover:bg-muted/50'
-        } ${files.length >= maxFiles ? 'opacity-50 pointer-events-none' : ''}`}
-      >
-        <input
-          type="file"
-          multiple
-          accept={acceptedTypes.join(',')}
-          onChange={handleFileInput}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          disabled={files.length >= maxFiles}
-        />
-
-        <div className="text-center">
-          <div className={`w-14 h-14 rounded-xl mx-auto mb-4 flex items-center justify-center transition-colors ${
-            isDragging ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground'
-          }`}>
-            <Upload className="w-7 h-7" />
-          </div>
-          <p className="text-foreground font-medium mb-1">
-            {isDragging ? 'Déposez vos fichiers ici' : 'Glissez-déposez vos fichiers'}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            ou cliquez pour sélectionner • Max {maxFiles} fichiers, {maxSizeMb} Mo chacun
-          </p>
-          <p className="text-xs text-muted-foreground mt-2">
-            Images, vidéos et audio supportés
-          </p>
+      {/* Audio Recorder Section */}
+      {showAudioRecorder && (
+        <div className="space-y-3">
+          {!showRecorder ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowRecorder(true)}
+              className="w-full gap-2 h-14 text-base border-primary/30 hover:border-primary hover:bg-primary/5"
+              disabled={files.length >= maxFiles}
+            >
+              <Mic className="w-5 h-5 text-primary" />
+              Enregistrer un message vocal
+            </Button>
+          ) : (
+            <div className="space-y-3">
+              <AudioRecorder
+                onRecordingComplete={handleRecordingComplete}
+                maxDurationSeconds={300}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setShowRecorder(false)}
+                className="w-full text-muted-foreground"
+              >
+                Annuler l'enregistrement
+              </Button>
+            </div>
+          )}
+          
+          {!showRecorder && (
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border" />
+              </div>
+              <span className="relative bg-background px-3 text-sm text-muted-foreground">
+                ou importez un fichier
+              </span>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {/* Drop Zone */}
+      {(!showAudioRecorder || !showRecorder) && (
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`relative p-8 rounded-xl border-2 border-dashed transition-all duration-200 ${
+            isDragging
+              ? 'border-secondary bg-secondary/10'
+              : 'border-border bg-muted/30 hover:border-secondary/50 hover:bg-muted/50'
+          } ${files.length >= maxFiles ? 'opacity-50 pointer-events-none' : ''}`}
+        >
+          <input
+            type="file"
+            multiple
+            accept={acceptedTypes.join(',')}
+            onChange={handleFileInput}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            disabled={files.length >= maxFiles}
+          />
+
+          <div className="text-center">
+            <div className={`w-14 h-14 rounded-xl mx-auto mb-4 flex items-center justify-center transition-colors ${
+              isDragging ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground'
+            }`}>
+              <Upload className="w-7 h-7" />
+            </div>
+            <p className="text-foreground font-medium mb-1">
+              {isDragging ? 'Déposez vos fichiers ici' : 'Glissez-déposez vos fichiers'}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              ou cliquez pour sélectionner • Max {maxFiles} fichiers, {maxSizeMb} Mo chacun
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              {showAudioRecorder ? 'Fichiers audio supportés' : 'Images, vidéos et audio supportés'}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* File List */}
       <AnimatePresence mode="popLayout">

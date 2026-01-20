@@ -286,13 +286,14 @@ const MobileCapsuleWizard = ({
               files={mediaFiles}
               onFilesChange={onMediaFilesChange}
               maxFiles={capsuleType === 'mixed' ? 20 : 10}
+              showAudioRecorder={capsuleType === 'audio' || capsuleType === 'mixed'}
               acceptedTypes={
                 capsuleType === 'photo' 
                   ? ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
                   : capsuleType === 'video'
                     ? ['video/mp4', 'video/webm', 'video/quicktime']
                     : capsuleType === 'audio'
-                      ? ['audio/mpeg', 'audio/wav', 'audio/mp4']
+                      ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
                       : undefined
               }
             />
