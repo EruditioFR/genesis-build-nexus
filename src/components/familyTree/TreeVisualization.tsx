@@ -119,19 +119,20 @@ export function TreeVisualization({
         visitedDescendants.add(spouse.id);
       }
       
-      // Calculate width needed for children
+      // Calculate width needed for children (skip already visited ones - they're positioned as spouses)
       let childrenTotalWidth = 0;
       const childPositions: { centerX: number; width: number }[] = [];
+      const childrenToProcess = children.filter(child => !visitedDescendants.has(child.id));
 
-      if (children.length > 0) {
+      if (childrenToProcess.length > 0) {
         let currentX = xOffset;
-        for (const child of children) {
+        for (const child of childrenToProcess) {
           const childResult = buildDescendantsTree(child, generation + 1, currentX);
           childPositions.push(childResult);
           childrenTotalWidth += childResult.width;
           currentX += childResult.width + HORIZONTAL_GAP;
         }
-        childrenTotalWidth += (children.length - 1) * HORIZONTAL_GAP;
+        childrenTotalWidth += (childrenToProcess.length - 1) * HORIZONTAL_GAP;
       }
 
       // Calculate unit width (person + spouses that will be positioned)
@@ -199,13 +200,13 @@ export function TreeVisualization({
       }
 
       // Update child positions to be centered under union point (between both parents)
-      if (children.length > 0) {
-        const childrenSpan = childPositions.reduce((sum, cp) => sum + cp.width, 0) + (children.length - 1) * HORIZONTAL_GAP;
+      if (childrenToProcess.length > 0) {
+        const childrenSpan = childPositions.reduce((sum, cp) => sum + cp.width, 0) + (childrenToProcess.length - 1) * HORIZONTAL_GAP;
         const childrenStartX = unionCenterX - childrenSpan / 2;
 
         let currentChildX = childrenStartX;
-        for (let i = 0; i < children.length; i++) {
-          const child = children[i];
+        for (let i = 0; i < childrenToProcess.length; i++) {
+          const child = childrenToProcess[i];
           const childPos = positionsMap.get(child.id);
           if (childPos) {
             const shiftX = currentChildX - (childPos.x - CARD_WIDTH / 2);
