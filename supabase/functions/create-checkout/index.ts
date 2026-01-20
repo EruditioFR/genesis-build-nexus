@@ -14,8 +14,8 @@ const SUBSCRIPTION_TIERS = {
     product_id: "prod_TkzBr0QmFuD1zC",
   },
   heritage: {
-    price_id: "price_1SnTDFRc375UxOm0l9dDyELw", 
-    product_id: "prod_TkzBi3KYGrCDkh",
+    price_id: "price_1SrnowRc375UxOm0JYq9Dm0V",
+    product_id: "prod_TpSkLunxzpbl1E",
   },
 };
 
