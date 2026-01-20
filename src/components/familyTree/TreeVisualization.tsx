@@ -262,6 +262,37 @@ export function TreeVisualization({
         });
       }
 
+      // Create spouse connection between parents if both exist
+      if (parents.length >= 2) {
+        const parent1Pos = positionsMap.get(parents[0].id);
+        const parent2Pos = positionsMap.get(parents[1].id);
+        
+        if (parent1Pos && parent2Pos) {
+          // Check if spouse connection doesn't already exist
+          const spouseConnectionExists = allConnections.some(
+            conn => conn.type === 'spouse' && 
+            ((conn.fromPersonId === parents[0].id && conn.toPersonId === parents[1].id) ||
+             (conn.fromPersonId === parents[1].id && conn.toPersonId === parents[0].id))
+          );
+          
+          if (!spouseConnectionExists) {
+            // Determine which parent is on the left
+            const leftParent = parent1Pos.x < parent2Pos.x ? parent1Pos : parent2Pos;
+            const rightParent = parent1Pos.x < parent2Pos.x ? parent2Pos : parent1Pos;
+            const leftParentId = parent1Pos.x < parent2Pos.x ? parents[0].id : parents[1].id;
+            const rightParentId = parent1Pos.x < parent2Pos.x ? parents[1].id : parents[0].id;
+            
+            allConnections.push({
+              type: 'spouse',
+              from: { x: leftParent.x + CARD_WIDTH, y: leftParent.y + CARD_HEIGHT / 2 },
+              to: { x: rightParent.x, y: rightParent.y + CARD_HEIGHT / 2 },
+              fromPersonId: leftParentId,
+              toPersonId: rightParentId,
+            });
+          }
+        }
+      }
+
       // Create connection to parents - connect to union point if both parents exist
       if (parents.length >= 2) {
         const parent1Pos = positionsMap.get(parents[0].id);
