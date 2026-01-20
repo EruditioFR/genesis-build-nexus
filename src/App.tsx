@@ -61,7 +61,7 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="familygarden-theme">
+  <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" disableTransitionOnChange storageKey="familygarden-theme">
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
