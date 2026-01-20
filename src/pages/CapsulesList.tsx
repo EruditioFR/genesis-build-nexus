@@ -41,6 +41,7 @@ import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { toast } from 'sonner';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
+import VideoPreviewCard from '@/components/capsule/VideoPreviewCard';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
 
@@ -53,6 +54,7 @@ type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
 interface CapsuleWithMedia extends Capsule {
   firstMediaUrl?: string;
+  firstVideoUrl?: string;
 }
 
 const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
@@ -125,20 +127,25 @@ const CapsulesList = () => {
           .in('capsule_id', capsuleIds)
           .order('position', { ascending: true });
 
-        // Build map of first image per capsule
+        // Build map of first image and first video per capsule
         const firstImageMap: Record<string, string> = {};
+        const firstVideoMap: Record<string, string> = {};
         if (mediasData) {
           mediasData.forEach((media: { capsule_id: string; file_url: string; file_type: string }) => {
             if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
               firstImageMap[media.capsule_id] = media.file_url;
             }
+            if (!firstVideoMap[media.capsule_id] && media.file_type.startsWith('video/')) {
+              firstVideoMap[media.capsule_id] = media.file_url;
+            }
           });
         }
 
-        // Merge first media URL into capsules
+        // Merge first media URLs into capsules
         const capsulesWithMedia: CapsuleWithMedia[] = capsulesData.map(capsule => ({
           ...capsule,
           firstMediaUrl: firstImageMap[capsule.id],
+          firstVideoUrl: firstVideoMap[capsule.id],
         }));
         setCapsules(capsulesWithMedia);
         
@@ -397,14 +404,20 @@ const CapsulesList = () => {
                   className="group rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer overflow-hidden"
                   onClick={() => navigate(`/capsules/${capsule.id}`)}
                 >
-                  {/* Thumbnail - Display thumbnail, first media, or nothing */}
-                  {(capsule.thumbnail_url || capsule.firstMediaUrl) && (
+                  {/* Thumbnail - Display video preview for video type, or image for others */}
+                  {capsule.capsule_type === 'video' && capsule.firstVideoUrl ? (
+                    <VideoPreviewCard
+                      videoUrl={capsule.firstVideoUrl}
+                      thumbnailUrl={capsule.thumbnail_url || capsule.firstMediaUrl}
+                      className="w-full h-48 bg-muted"
+                    />
+                  ) : (capsule.thumbnail_url || capsule.firstMediaUrl) ? (
                     <CapsuleThumbnail
                       thumbnailUrl={capsule.thumbnail_url || capsule.firstMediaUrl || ''}
                       fallbackIcon={null}
                       className="w-full h-48 bg-muted"
                     />
-                  )}
+                  ) : null}
                   
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
