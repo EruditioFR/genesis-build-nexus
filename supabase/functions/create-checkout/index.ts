@@ -14,6 +14,10 @@ const SUBSCRIPTION_TIERS = {
       price_id: "price_1SnTCvRc375UxOm0bA7Hk2bm",
       product_id: "prod_TkzBr0QmFuD1zC",
     },
+    yearly: {
+      price_id: "price_1Sro1vRc375UxOm0XL72JSNl",
+      product_id: "prod_TpSxAm8b0GrQU4",
+    },
   },
   heritage: {
     monthly: {
