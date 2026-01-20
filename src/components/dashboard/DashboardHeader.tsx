@@ -182,7 +182,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-50 w-full bg-sidebar backdrop-blur-md border-b border-sidebar-border shadow-sm"
+      className="sticky top-0 z-50 w-full bg-[hsl(215_50%_18%)] backdrop-blur-md border-b border-[hsl(215_50%_25%)] shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
@@ -200,7 +200,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
               height="36"
               loading="eager"
             />
-            <span className="text-lg font-display font-semibold text-foreground hidden sm:inline">
+            <span className="text-lg font-display font-semibold text-white hidden sm:inline">
               Family<span className="text-secondary">Garden</span>
             </span>
           </Link>
@@ -215,10 +215,10 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   data-tour="nav-dashboard"
                   className={cn(
                     'inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
-                    'hover:bg-muted hover:text-foreground',
+                    'hover:bg-white/10 hover:text-white',
                     isActive('/dashboard')
-                      ? 'bg-muted text-foreground'
-                      : 'text-muted-foreground'
+                      ? 'bg-white/15 text-white'
+                      : 'text-white/80'
                   )}
                 >
                   <Home className="w-4 h-4 mr-2" />
@@ -231,12 +231,12 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 <NavigationMenuTrigger
                   data-tour="nav-capsules"
                   className={cn(
-                    'h-10 rounded-lg bg-transparent',
+                    'h-10 rounded-lg bg-transparent text-white/80 hover:bg-white/10 hover:text-white data-[state=open]:bg-white/15',
                     isActivePrefix('/capsule') ||
                       isActive('/categories') ||
                       isActive('/timeline')
-                      ? 'text-foreground bg-muted'
-                      : 'text-muted-foreground'
+                      ? 'text-white bg-white/15'
+                      : ''
                   )}
                 >
                   <BookOpen className="w-4 h-4 mr-2" />
@@ -303,10 +303,10 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 <NavigationMenuTrigger
                   data-tour="nav-circles"
                   className={cn(
-                    'h-10 rounded-lg bg-transparent',
+                    'h-10 rounded-lg bg-transparent text-white/80 hover:bg-white/10 hover:text-white data-[state=open]:bg-white/15',
                     isActivePrefix('/family-tree') || isActive('/circles')
-                      ? 'text-foreground bg-muted'
-                      : 'text-muted-foreground'
+                      ? 'text-white bg-white/15'
+                      : ''
                   )}
                 >
                   <Users className="w-4 h-4 mr-2" />
@@ -401,10 +401,10 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     to="/admin"
                     className={cn(
                       'inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
-                      'hover:bg-muted hover:text-foreground',
+                      'hover:bg-white/10 hover:text-white',
                       isActivePrefix('/admin')
-                        ? 'bg-muted text-foreground'
-                        : 'text-muted-foreground'
+                        ? 'bg-white/15 text-white'
+                        : 'text-white/80'
                     )}
                   >
                     <Shield className="w-4 h-4 mr-2" />
@@ -436,16 +436,16 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="flex items-center gap-2 pl-2 pr-3 hover:bg-muted"
+                  className="flex items-center gap-2 pl-2 pr-3 hover:bg-white/10 text-white"
                   data-tour="user-menu"
                 >
-                  <Avatar className="h-8 w-8 ring-2 ring-border">
+                  <Avatar className="h-8 w-8 ring-2 ring-white/20">
                     <AvatarImage src={user.avatarUrl} alt={user.displayName || 'Avatar'} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
+                    <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-medium">
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline text-sm font-medium text-foreground max-w-24 truncate">
+                  <span className="hidden sm:inline text-sm font-medium text-white max-w-24 truncate">
                     {user.displayName || user.email?.split('@')[0]}
                   </span>
                 </Button>
