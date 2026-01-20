@@ -36,7 +36,7 @@ const Premium = () => {
     {
       feature: 'Espace de stockage',
       free: '250 Mo',
-      premium: '5 Go',
+      premium: '10 Go',
       icon: HardDrive,
     },
     {
@@ -67,8 +67,8 @@ const Premium = () => {
 
   const benefits = [
     {
-      title: '20x plus de stockage',
-      description: 'Passez de 250 Mo à 5 Go pour stocker tous vos souvenirs précieux.',
+      title: '40x plus de stockage',
+      description: 'Passez de 250 Mo à 10 Go pour stocker tous vos souvenirs précieux.',
       icon: HardDrive,
     },
     {

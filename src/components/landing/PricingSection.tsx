@@ -29,7 +29,7 @@ const plans = [
     price: { monthly: 9.99, yearly: 99 },
     description: "Pour les créateurs de contenu réguliers",
     features: [
-      "5 Go de stockage",
+      "10 Go de stockage",
       "Capsules au format texte, photo, vidéo et audio",
       "1 partage de souvenirs à la personne de votre choix",
       "Chronologie avancée",
