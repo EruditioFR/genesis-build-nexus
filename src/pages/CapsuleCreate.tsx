@@ -360,7 +360,7 @@ const CapsuleCreate = () => {
             className="lg:col-span-2 space-y-6"
           >
             {/* Category selector */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
+            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-category">
             <CategorySelector
                 categories={categories}
                 primaryCategory={primaryCategory}
@@ -376,7 +376,7 @@ const CapsuleCreate = () => {
             </div>
 
             {/* Type selector */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
+            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-type">
               <Label className="text-base font-medium mb-4 block">
                 Type de souvenir
               </Label>
@@ -385,7 +385,7 @@ const CapsuleCreate = () => {
 
             {/* Main form */}
             <Form {...form}>
-              <form className="p-6 rounded-2xl border border-border bg-card space-y-6">
+              <form className="p-6 rounded-2xl border border-border bg-card space-y-6" data-tour="capsule-title">
                 <FormField
                   control={form.control}
                   name="title"
@@ -449,7 +449,7 @@ const CapsuleCreate = () => {
 
             {/* Media Upload - shown for non-text types */}
             {capsuleType !== 'text' && (
-              <div className="p-6 rounded-2xl border border-border bg-card">
+              <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-media">
                 <Label className="text-base font-medium mb-4 block">
                   Fichiers médias
                 </Label>
@@ -471,7 +471,7 @@ const CapsuleCreate = () => {
               </div>
             )}
             {/* Memory Date */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
+            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-date">
               <Label className="text-base font-medium mb-4 block">
                 <CalendarHeart className="w-4 h-4 inline-block mr-2" />
                 Date du souvenir
@@ -486,7 +486,7 @@ const CapsuleCreate = () => {
             </div>
 
             {/* Tags */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
+            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-tags">
               <Label className="text-base font-medium mb-4 block">
                 Mots-clés
               </Label>
@@ -512,7 +512,7 @@ const CapsuleCreate = () => {
             />
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3" data-tour="capsule-actions">
               <Button
                 variant="outline"
                 size="lg"
