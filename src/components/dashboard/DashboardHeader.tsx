@@ -1,7 +1,23 @@
-import { Link, useLocation } from 'react-router-dom';
-import { LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, Shield, TreeDeciduous, Folder, HelpCircle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  BookOpen,
+  Users,
+  GitBranch,
+  BarChart3,
+  Clock,
+  Crown,
+  LogOut,
+  User,
+  HelpCircle,
+  Shield,
+  FolderOpen,
+  Home,
+  Plus,
+  Sparkles,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,180 +25,495 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import GlobalSearch from '@/components/search/GlobalSearch';
 import ThemeToggle from '@/components/ThemeToggle';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
+import GlobalSearch from '@/components/search/GlobalSearch';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
+import { useSubscription } from '@/hooks/useSubscription';
 import logo from '@/assets/logo.png';
+import React from 'react';
 
 interface DashboardHeaderProps {
   user: {
+    id?: string;
     email?: string;
     displayName?: string;
     avatarUrl?: string;
-    id?: string;
   };
   onSignOut: () => void;
 }
 
-const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
-  const location = useLocation();
-  const { isAdminOrModerator } = useAdminAuth();
-  const { startTour } = useOnboardingTour();
-  const initials = user.displayName
-    ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase()
-    : user.email?.[0].toUpperCase() || 'U';
+// Feature card for visual mega menu
+const FeatureCard = ({
+  to,
+  icon: Icon,
+  title,
+  description,
+  gradient,
+  badge,
+  onClick,
+}: {
+  to: string;
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  gradient: string;
+  badge?: string;
+  onClick?: () => void;
+}) => {
+  const content = (
+    <>
+      <div
+        className={cn(
+          'absolute inset-0 opacity-5 transition-opacity group-hover:opacity-15 rounded-xl',
+          gradient
+        )}
+      />
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-3">
+          <div
+            className={cn(
+              'flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg',
+              gradient,
+              'text-white shadow-md'
+            )}
+          >
+            <Icon className="h-5 w-5" />
+          </div>
+          {badge && (
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/20">
+              {badge}
+            </span>
+          )}
+        </div>
+        <h3 className="font-semibold text-foreground mb-1 text-sm group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+          {description}
+        </p>
+      </div>
+    </>
+  );
 
-  const navLinks = [
-    { to: '/dashboard', label: 'Synthèse', icon: LayoutDashboard, tourId: 'nav-dashboard' },
-    { to: '/capsules', label: 'Capsules', icon: FolderOpen, tourId: 'nav-capsules' },
-    { to: '/categories', label: 'Catégories', icon: Folder, tourId: 'nav-categories' },
-    { to: '/timeline', label: 'Chronologie', icon: Clock, tourId: 'nav-timeline' },
-    { to: '/circles', label: 'Cercles', icon: Users, tourId: 'nav-circles' },
-    { to: '/statistics', label: 'Stats', icon: BarChart3, tourId: 'nav-stats' },
-  ];
+  if (onClick) {
+    return (
+      <button
+        onClick={onClick}
+        className="group relative flex flex-col text-left rounded-xl p-4 transition-all hover:bg-muted/50 overflow-hidden w-full"
+      >
+        {content}
+      </button>
+    );
+  }
 
   return (
-    <header className="border-b border-white/10 bg-[#1a1a2e]/85 backdrop-blur-xl shadow-lg shadow-black/20 sticky top-0 z-50">
+    <Link
+      to={to}
+      className="group relative flex flex-col rounded-xl p-4 transition-all hover:bg-muted/50 overflow-hidden"
+    >
+      {content}
+    </Link>
+  );
+};
+
+// Quick action button in mega menu
+const QuickActionItem = ({
+  to,
+  icon: Icon,
+  label,
+  color,
+}: {
+  to: string;
+  icon: React.ElementType;
+  label: string;
+  color: string;
+}) => (
+  <Link
+    to={to}
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/70 transition-colors group"
+  >
+    <div className={cn('p-2 rounded-lg', color)}>
+      <Icon className="w-4 h-4 text-white" />
+    </div>
+    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+      {label}
+    </span>
+  </Link>
+);
+
+const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isAdminOrModerator } = useAdminAuth();
+  const { startTour } = useOnboardingTour();
+  const { tier } = useSubscription();
+
+  const isPremium = tier === 'premium' || tier === 'heritage';
+
+  const getInitials = () => {
+    if (user.displayName) {
+      return user.displayName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (user.email) {
+      return user.email[0].toUpperCase();
+    }
+    return 'U';
+  };
+
+  const isActive = (path: string) => location.pathname === path;
+  const isActivePrefix = (prefix: string) => location.pathname.startsWith(prefix);
+
+  return (
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <img src={logo} alt="Family Garden" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
-              <span className="text-xl sm:text-xl font-display font-bold text-primary-foreground">
-                Family<span className="text-secondary">Garden</span>
-              </span>
-            </Link>
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-3 shrink-0"
+            data-tour="dashboard"
+          >
+            <img
+              src={logo}
+              alt="Family Garden"
+              className="w-9 h-9 object-contain"
+              width="36"
+              height="36"
+              loading="eager"
+            />
+            <span className="text-lg font-display font-semibold text-foreground hidden sm:inline">
+              Family<span className="text-secondary">Garden</span>
+            </span>
+          </Link>
 
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.to || 
-                  (link.to !== '/dashboard' && location.pathname.startsWith(link.to));
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    data-tour={link.tourId}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-secondary/20 text-secondary"
-                        : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10"
-                    )}
-                  >
-                    <link.icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                );
-              })}
-
-              {/* Family Tree link with Premium badge */}
-              <Link
-                to="/family-tree"
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                  location.pathname.startsWith('/family-tree')
-                    ? "bg-secondary/20 text-secondary"
-                    : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10"
-                )}
-              >
-                <TreeDeciduous className="w-4 h-4" />
-                <span>Arbre</span>
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-secondary/10 text-secondary border-secondary/30">
-                  Premium
-                </Badge>
-              </Link>
-              
-              {/* Admin link - only visible for admins/moderators */}
-              {isAdminOrModerator && (
+          {/* Desktop Navigation - Mega Menu */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList className="gap-1">
+              {/* Accueil */}
+              <NavigationMenuItem>
                 <Link
-                  to="/admin"
+                  to="/dashboard"
+                  data-tour="nav-dashboard"
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    location.pathname.startsWith('/admin')
-                      ? "bg-primary/20 text-primary"
-                      : "text-primary hover:bg-primary/10"
+                    'inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+                    'hover:bg-muted hover:text-foreground',
+                    isActive('/dashboard')
+                      ? 'bg-muted text-foreground'
+                      : 'text-muted-foreground'
                   )}
                 >
-                  <Shield className="w-4 h-4" />
-                  Admin
+                  <Home className="w-4 h-4 mr-2" />
+                  Accueil
                 </Link>
-              )}
-            </nav>
-          </div>
+              </NavigationMenuItem>
 
-          <div className="flex items-center gap-2">
-            {/* Global Search */}
-            {user.id && <div data-tour="search"><GlobalSearch userId={user.id} /></div>}
+              {/* Souvenirs - Mega Menu */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  data-tour="nav-capsules"
+                  className={cn(
+                    'h-10 rounded-lg bg-transparent',
+                    isActivePrefix('/capsule') ||
+                      isActive('/categories') ||
+                      isActive('/timeline')
+                      ? 'text-foreground bg-muted'
+                      : 'text-muted-foreground'
+                  )}
+                >
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Souvenirs
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-[650px] p-5">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+                      <div>
+                        <h3 className="text-base font-semibold text-foreground">
+                          Vos souvenirs
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          Préservez et organisez vos moments précieux
+                        </p>
+                      </div>
+                      <Link
+                        to="/capsule/create"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Nouveau souvenir
+                      </Link>
+                    </div>
+
+                    {/* Features Grid */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <FeatureCard
+                        to="/capsules"
+                        icon={BookOpen}
+                        title="Tous les souvenirs"
+                        description="Explorez et gérez votre collection complète de souvenirs"
+                        gradient="bg-gradient-to-br from-primary to-primary/70"
+                      />
+                      <FeatureCard
+                        to="/categories"
+                        icon={FolderOpen}
+                        title="Catégories"
+                        description="Organisez vos souvenirs par thèmes personnalisés"
+                        gradient="bg-gradient-to-br from-accent to-accent/70"
+                      />
+                      <FeatureCard
+                        to="/timeline"
+                        icon={Clock}
+                        title="Chronologie"
+                        description="Visualisez votre histoire dans le temps de manière interactive"
+                        gradient="bg-gradient-to-br from-emerald-600 to-emerald-500"
+                      />
+                      <FeatureCard
+                        to="/statistics"
+                        icon={BarChart3}
+                        title="Statistiques"
+                        description="Analysez vos habitudes et votre utilisation de l'application"
+                        gradient="bg-gradient-to-br from-violet-600 to-violet-500"
+                      />
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Famille - Mega Menu */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  data-tour="nav-circles"
+                  className={cn(
+                    'h-10 rounded-lg bg-transparent',
+                    isActivePrefix('/family-tree') || isActive('/circles')
+                      ? 'text-foreground bg-muted'
+                      : 'text-muted-foreground'
+                  )}
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Famille
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-[550px] p-5">
+                    {/* Header */}
+                    <div className="mb-4 pb-3 border-b border-border">
+                      <h3 className="text-base font-semibold text-foreground">
+                        Votre famille
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Connectez vos proches et préservez votre héritage familial
+                      </p>
+                    </div>
+
+                    {/* Features Grid */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <FeatureCard
+                        to="/circles"
+                        icon={Users}
+                        title="Cercles de partage"
+                        description="Créez des groupes pour partager vos souvenirs avec vos proches"
+                        gradient="bg-gradient-to-br from-secondary to-secondary/70"
+                      />
+                      
+                      {isPremium ? (
+                        <FeatureCard
+                          to="/family-tree"
+                          icon={GitBranch}
+                          title="Arbre généalogique"
+                          description="Visualisez et enrichissez votre histoire familiale"
+                          gradient="bg-gradient-to-br from-primary to-primary/70"
+                          badge="Premium"
+                        />
+                      ) : (
+                        <div className="relative">
+                          <FeatureCard
+                            to="/premium"
+                            icon={GitBranch}
+                            title="Arbre généalogique"
+                            description="Passez Premium pour débloquer cette fonctionnalité exclusive"
+                            gradient="bg-gradient-to-br from-muted-foreground/50 to-muted-foreground/30"
+                            badge="Premium"
+                          />
+                          <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
+                            <Link
+                              to="/premium"
+                              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors shadow-lg"
+                            >
+                              <Crown className="w-4 h-4" />
+                              Débloquer
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Premium CTA for non-premium users */}
+                    {!isPremium && (
+                      <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-secondary/20">
+                            <Sparkles className="w-5 h-5 text-secondary" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-foreground">
+                              Passez à Premium
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Débloquez l'arbre généalogique et plus d'espace de stockage
+                            </p>
+                          </div>
+                          <Link
+                            to="/premium"
+                            className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
+                          >
+                            Découvrir
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Admin (conditionnel) */}
+              {isAdminOrModerator && (
+                <NavigationMenuItem>
+                  <Link
+                    to="/admin"
+                    className={cn(
+                      'inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+                      'hover:bg-muted hover:text-foreground',
+                      isActivePrefix('/admin')
+                        ? 'bg-muted text-foreground'
+                        : 'text-muted-foreground'
+                    )}
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
+                    Admin
+                  </Link>
+                </NavigationMenuItem>
+              )}
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Search */}
+            <div className="hidden md:block" data-tour="search">
+              {user.id && <GlobalSearch userId={user.id} />}
+            </div>
 
             {/* Theme Toggle */}
             <ThemeToggle />
 
             {/* Notifications */}
-            {user.id && <div data-tour="notifications"><NotificationsBell userId={user.id} /></div>}
+            <div data-tour="notifications">
+              {user.id && <NotificationsBell userId={user.id} />}
+            </div>
 
+            {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 px-2 hover:bg-white/10" data-tour="user-menu">
-                  <Avatar className="w-8 h-8">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 pl-2 pr-3 hover:bg-muted"
+                  data-tour="user-menu"
+                >
+                  <Avatar className="h-8 w-8 ring-2 ring-border">
                     <AvatarImage src={user.avatarUrl} alt={user.displayName || 'Avatar'} />
-                    <AvatarFallback className="bg-secondary/20 text-secondary text-sm font-medium">
-                      {initials}
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
+                      {getInitials()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium text-primary-foreground hidden sm:block max-w-[150px] truncate">
-                    {user.displayName || user.email}
+                  <span className="hidden sm:inline text-sm font-medium text-foreground max-w-24 truncate">
+                    {user.displayName || user.email?.split('@')[0]}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <div className="px-2 py-1.5">
-                  <p className="text-sm font-medium">{user.displayName || 'Utilisateur'}</p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                <div className="px-3 py-2 border-b border-border">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {user.displayName || 'Utilisateur'}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
                 </div>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/profile" className="cursor-pointer">
-                    <User className="w-4 h-4 mr-2" />
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 cursor-pointer"
+                  >
+                    <User className="h-4 w-4" />
                     Mon profil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings" className="cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Paramètres
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={startTour} className="cursor-pointer">
-                  <HelpCircle className="w-4 h-4 mr-2" />
+                {!isPremium && (
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/premium"
+                      className="flex items-center gap-3 cursor-pointer text-secondary"
+                    >
+                      <Crown className="h-4 w-4" />
+                      Passer Premium
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  onClick={startTour}
+                  className="flex items-center gap-3 cursor-pointer"
+                >
+                  <HelpCircle className="h-4 w-4" />
                   Visite guidée
                 </DropdownMenuItem>
                 {isAdminOrModerator && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/admin" className="cursor-pointer text-primary">
-                        <Shield className="w-4 h-4 mr-2" />
+                      <Link
+                        to="/admin"
+                        className="flex items-center gap-3 cursor-pointer text-primary"
+                      >
+                        <Shield className="h-4 w-4" />
                         Backoffice
                       </Link>
                     </DropdownMenuItem>
                   </>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onSignOut} className="text-destructive cursor-pointer">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Déconnexion
+                <DropdownMenuItem
+                  onClick={onSignOut}
+                  className="flex items-center gap-3 cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Se déconnecter
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 
