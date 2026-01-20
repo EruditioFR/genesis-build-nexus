@@ -10,6 +10,7 @@ import {
   Minimize2,
   TreeDeciduous,
   Download,
+  Upload,
   Map,
   Lock,
   List
@@ -36,6 +37,7 @@ import { PersonsListSheet } from '@/components/familyTree/PersonsListSheet';
 import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
+import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -46,12 +48,13 @@ import type {
   FamilyUnion,
   TreeViewMode 
 } from '@/types/familyTree';
+import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export default function FamilyTreePage() {
   const navigate = useNavigate();
   const { user, signOut, loading: authLoading } = useAuth();
   const { subscribed, tier, loading: subLoading } = useSubscription();
-  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, loading } = useFamilyTree();
+  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, loading } = useFamilyTree();
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
   const [persons, setPersons] = useState<FamilyPerson[]>([]);
@@ -71,6 +74,7 @@ export default function FamilyTreePage() {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkSourcePerson, setLinkSourcePerson] = useState<FamilyPerson | null>(null);
   const [showPersonsList, setShowPersonsList] = useState(false);
+  const [showGedcomImport, setShowGedcomImport] = useState(false);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
@@ -314,6 +318,16 @@ export default function FamilyTreePage() {
   const handlePersonClick = (person: FamilyPerson) => {
     setSelectedPerson(person);
     setShowDetailPanel(true);
+  };
+
+  const handleGedcomImport = async (gedcomData: GedcomParseResult) => {
+    if (!tree?.id) return;
+    
+    const result = await importFromGedcom(tree.id, gedcomData);
+    if (result.success) {
+      await loadTree();
+      setShowGedcomImport(false);
+    }
   };
 
   const getPersonParents = (personId: string): FamilyPerson[] => {
@@ -562,8 +576,18 @@ export default function FamilyTreePage() {
                     variant="outline" 
                     size="icon"
                     onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
+                    title="Exporter en PDF"
                   >
                     <Download className="w-4 h-4" />
+                  </Button>
+
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setShowGedcomImport(true)}
+                    title="Importer GEDCOM"
+                  >
+                    <Upload className="w-4 h-4" />
                   </Button>
 
                   <Button onClick={() => handleAddPerson('child')} className="gap-2">
@@ -588,12 +612,18 @@ export default function FamilyTreePage() {
                     <TreeDeciduous className="w-16 h-16 mx-auto text-muted-foreground/50" />
                     <h3 className="text-lg font-medium">Votre arbre est vide</h3>
                     <p className="text-muted-foreground max-w-md">
-                      Commencez par ajouter la première personne de votre arbre généalogique.
+                      Commencez par ajouter la première personne ou importez un arbre existant.
                     </p>
-                    <Button onClick={() => handleAddPerson('child')} className="gap-2">
-                      <Plus className="w-4 h-4" />
-                      Ajouter la première personne
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button onClick={() => handleAddPerson('child')} className="gap-2">
+                        <Plus className="w-4 h-4" />
+                        Ajouter une personne
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowGedcomImport(true)} className="gap-2">
+                        <Upload className="w-4 h-4" />
+                        Importer GEDCOM
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -695,6 +725,13 @@ export default function FamilyTreePage() {
         onOpenChange={setShowPersonsList}
         persons={persons}
         onPersonClick={handlePersonsListClick}
+      />
+
+      <GedcomImportDialog
+        open={showGedcomImport}
+        onOpenChange={setShowGedcomImport}
+        onImport={handleGedcomImport}
+        existingPersonsCount={persons.length}
       />
     </div>
   );

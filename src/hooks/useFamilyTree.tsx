@@ -9,6 +9,7 @@ import type {
   FamilyUnion,
   TreeStatistics 
 } from '@/types/familyTree';
+import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export function useFamilyTree() {
   const { user } = useAuth();
@@ -422,6 +423,130 @@ export function useFamilyTree() {
     }
   }, []);
 
+  // Import from GEDCOM
+  const importFromGedcom = useCallback(async (
+    treeId: string,
+    gedcomData: GedcomParseResult
+  ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number }> => {
+    if (!user) return { success: false, personsCreated: 0, relationsCreated: 0 };
+
+    setLoading(true);
+    try {
+      // Map GEDCOM IDs to database IDs
+      const gedcomToDbId: Record<string, string> = {};
+      let personsCreated = 0;
+      let relationsCreated = 0;
+
+      // Create all individuals first
+      for (const individual of gedcomData.individuals) {
+        const isAlive = !individual.deathDate;
+
+        const { data: person, error } = await supabase
+          .from('family_persons')
+          .insert({
+            tree_id: treeId,
+            first_names: individual.firstName || 'Inconnu',
+            last_name: individual.lastName || '',
+            maiden_name: individual.maidenName,
+            gender: individual.gender,
+            birth_date: individual.birthDate,
+            birth_place: individual.birthPlace,
+            death_date: individual.deathDate,
+            death_place: individual.deathPlace,
+            occupation: individual.occupation,
+            biography: individual.notes,
+            is_alive: isAlive,
+            created_by: user.id,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error creating person:', error);
+          continue;
+        }
+
+        if (person) {
+          gedcomToDbId[individual.id] = person.id;
+          personsCreated++;
+        }
+      }
+
+      // Create unions (marriages) and parent-child relationships
+      for (const family of gedcomData.families) {
+        const husband = family.husbandId ? gedcomToDbId[family.husbandId] : undefined;
+        const wife = family.wifeId ? gedcomToDbId[family.wifeId] : undefined;
+        let unionId: string | null = null;
+
+        // Create union between spouses if both exist
+        if (husband && wife) {
+          const { data: union, error: unionError } = await supabase
+            .from('family_unions')
+            .insert({
+              person1_id: husband,
+              person2_id: wife,
+              union_type: 'marriage',
+              start_date: family.marriageDate,
+              start_place: family.marriagePlace,
+              end_date: family.divorceDate,
+              end_reason: family.divorceDate ? 'divorce' : null,
+              is_current: !family.divorceDate,
+            })
+            .select()
+            .single();
+
+          if (!unionError && union) {
+            unionId = union.id;
+            relationsCreated++;
+          }
+        }
+
+        // Create parent-child relationships
+        for (const childGedcomId of family.childrenIds) {
+          const childDbId = gedcomToDbId[childGedcomId];
+          if (!childDbId) continue;
+
+          // Link to father
+          if (husband) {
+            const { error } = await supabase
+              .from('family_parent_child')
+              .insert({
+                parent_id: husband,
+                child_id: childDbId,
+                relationship_type: 'biological',
+                union_id: unionId,
+              });
+
+            if (!error) relationsCreated++;
+          }
+
+          // Link to mother
+          if (wife) {
+            const { error } = await supabase
+              .from('family_parent_child')
+              .insert({
+                parent_id: wife,
+                child_id: childDbId,
+                relationship_type: 'biological',
+                union_id: unionId,
+              });
+
+            if (!error) relationsCreated++;
+          }
+        }
+      }
+
+      toast.success(`Import réussi : ${personsCreated} personnes importées`);
+      return { success: true, personsCreated, relationsCreated };
+    } catch (error) {
+      console.error('Error importing GEDCOM:', error);
+      toast.error('Erreur lors de l\'import GEDCOM');
+      return { success: false, personsCreated: 0, relationsCreated: 0 };
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
   return {
     loading,
     fetchTrees,
@@ -435,6 +560,7 @@ export function useFamilyTree() {
     addUnion,
     updateUnion,
     deleteTree,
-    getTreeStatistics
+    getTreeStatistics,
+    importFromGedcom
   };
 }
