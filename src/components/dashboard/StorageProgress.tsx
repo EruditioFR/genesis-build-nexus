@@ -87,7 +87,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
         </div>
         {subscriptionLevel !== 'legacy' && (
           <Button variant="outline" size="sm" className="gap-2" asChild>
-            <Link to="/premium">
+            <Link to={subscriptionLevel === 'free' ? '/premium' : '/premium?tier=heritage'}>
               <TrendingUp className="w-4 h-4" />
               {subscriptionLevel === 'free' ? 'Passer Premium' : 'Passer Héritage'}
             </Link>
@@ -269,7 +269,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
                         </div>
                       ) : isUpgrade ? (
                         <Button size="sm" className="w-full" variant={plan.id === 'legacy' ? 'default' : 'secondary'} asChild>
-                          <Link to="/premium">
+                          <Link to={plan.id === 'legacy' ? '/premium?tier=heritage' : '/premium'}>
                             Choisir
                           </Link>
                         </Button>
