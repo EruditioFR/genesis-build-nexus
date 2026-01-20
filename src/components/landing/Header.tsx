@@ -83,7 +83,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
             Family<span className="text-secondary">Garden</span>
           </span>
           <span
-            className="text-lg font-display font-semibold transition-colors duration-300 sm:hidden text-primary-foreground"
+            className="text-lg font-display font-semibold transition-colors duration-300 sm:hidden text-white"
           >
             Family<span className="text-secondary">Garden</span>
           </span>
