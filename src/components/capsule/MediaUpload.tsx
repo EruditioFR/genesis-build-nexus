@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, X, Image, Video, Music, Loader2, GripVertical, Mic } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,6 +27,7 @@ interface MediaUploadProps {
   maxSizeMb?: number;
   acceptedTypes?: string[];
   showAudioRecorder?: boolean;
+  onUploadAll?: (uploadFn: () => Promise<boolean>) => void;
 }
 
 const defaultAcceptedTypes = [
@@ -63,9 +64,11 @@ const MediaUpload = ({
   maxSizeMb = 100,
   acceptedTypes = defaultAcceptedTypes,
   showAudioRecorder = false,
+  onUploadAll,
 }: MediaUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [showRecorder, setShowRecorder] = useState(false);
+  const uploadFnRef = useRef<() => Promise<boolean>>();
 
   const handleRecordingComplete = useCallback((blob: Blob, fileName: string) => {
     const file = new File([blob], fileName, { type: blob.type });
@@ -140,7 +143,7 @@ const MediaUpload = ({
     onFilesChange(files.filter(f => f.id !== id));
   };
 
-  const uploadFileWithProgress = async (
+  const uploadFileWithProgress = useCallback(async (
     mediaFile: MediaFile, 
     onProgress: (progress: number) => void
   ): Promise<string> => {
@@ -195,18 +198,20 @@ const MediaUpload = ({
       xhr.timeout = 300000; // 5 minutes timeout for large files
       xhr.send(mediaFile.file);
     });
-  };
+  }, [userId]);
 
-  const uploadAllFiles = async () => {
+  const uploadAllFiles = useCallback(async (): Promise<boolean> => {
     const pendingFiles = files.filter(f => !f.uploaded && !f.uploading);
-    if (pendingFiles.length === 0) return;
+    if (pendingFiles.length === 0) return true;
 
     let currentFiles = files.map(f => 
       pendingFiles.find(p => p.id === f.id) 
-        ? { ...f, uploading: true, progress: 0 } 
+        ? { ...f, uploading: true, progress: 0, error: undefined } 
         : f
     );
     onFilesChange(currentFiles);
+
+    let hasError = false;
 
     for (const mediaFile of pendingFiles) {
       try {
@@ -226,16 +231,26 @@ const MediaUpload = ({
         );
         onFilesChange(currentFiles);
       } catch (error: any) {
+        hasError = true;
         currentFiles = currentFiles.map(f => 
           f.id === mediaFile.id 
             ? { ...f, uploading: false, error: error.message, progress: 0 } 
             : f
         );
         onFilesChange(currentFiles);
-        toast.error(`Erreur upload: ${mediaFile.file.name}`);
       }
     }
-  };
+
+    return !hasError;
+  }, [files, onFilesChange, uploadFileWithProgress]);
+
+  // Register the upload function with the parent component
+  useEffect(() => {
+    uploadFnRef.current = uploadAllFiles;
+    if (onUploadAll) {
+      onUploadAll(() => uploadFnRef.current!());
+    }
+  }, [onUploadAll, uploadAllFiles]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -446,32 +461,11 @@ const MediaUpload = ({
         )}
       </AnimatePresence>
 
-      {/* Upload Button */}
-      {files.length > 0 && pendingCount > 0 && (
-        <div className="flex items-center justify-between pt-2">
-          <p className="text-sm text-muted-foreground">
-            {pendingCount} fichier(s) en attente d'upload
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={uploadAllFiles}
-            disabled={uploadingCount > 0}
-            className="gap-2"
-          >
-            {uploadingCount > 0 ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Upload en cours...
-              </>
-            ) : (
-              <>
-                <Upload className="w-4 h-4" />
-                Uploader maintenant
-              </>
-            )}
-          </Button>
+      {/* Upload status info */}
+      {files.length > 0 && uploadingCount > 0 && (
+        <div className="flex items-center gap-2 pt-2 text-sm text-muted-foreground">
+          <Loader2 className="w-4 h-4 animate-spin text-secondary" />
+          <span>Upload en cours...</span>
         </div>
       )}
 
