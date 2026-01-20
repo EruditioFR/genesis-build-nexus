@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { parseGedcom, isValidGedcomFile, type GedcomParseResult, type GedcomIndividual } from '@/lib/gedcomParser';
 import { detectDuplicates, type DuplicateMatch, type MergeDecision } from '@/lib/duplicateDetection';
 import type { FamilyPerson } from '@/types/familyTree';
@@ -48,6 +49,7 @@ export function GedcomImportDialog({
   const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>([]);
   const [decisions, setDecisions] = useState<Record<string, MergeDecision>>({});
   const [importStats, setImportStats] = useState({ created: 0, skipped: 0 });
+  const [directImport, setDirectImport] = useState(false);
 
   const handleReset = () => {
     setStep('upload');
@@ -98,6 +100,35 @@ export function GedcomImportDialog({
       }
 
       setParseResult(result);
+
+      // Mode test: import direct sans vérification de doublons (utile sur Android)
+      if (directImport) {
+        console.log('[GEDCOM] Direct import enabled -> starting import');
+        setStep('importing');
+        setProgress(0);
+        setError(null);
+
+        try {
+          const progressInterval = setInterval(() => {
+            setProgress((prev) => Math.min(prev + 10, 90));
+          }, 200);
+
+          await onImport(result, []);
+
+          clearInterval(progressInterval);
+          setProgress(100);
+          setImportStats({ created: result.individuals.length, skipped: 0 });
+          setStep('complete');
+        } catch (err) {
+          console.error('[GEDCOM] Direct import error:', err);
+          const errorMessage = err instanceof Error ? err.message : 'Erreur lors de l\'import. Veuillez réessayer.';
+          setError(errorMessage);
+          setStep('preview');
+        }
+
+        return;
+      }
+
       console.log('[GEDCOM] Setting step to preview');
       setStep('preview');
       console.log('[GEDCOM] Step set to preview, parseResult set');
@@ -105,7 +136,7 @@ export function GedcomImportDialog({
       console.error('[GEDCOM] Error parsing:', err);
       setError('Erreur lors de la lecture du fichier. Vérifiez le format.');
     }
-  }, []);
+  }, [directImport, onImport]);
 
   const onDropRejected = useCallback((fileRejections: Array<{ file: File; errors: readonly { message: string }[] }>) => {
     console.log('[GEDCOM] onDropRejected called:', fileRejections);
@@ -260,6 +291,14 @@ export function GedcomImportDialog({
                 )}
               </div>
 
+              <div className="flex items-center justify-between gap-4 rounded-lg border bg-card p-3">
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium">Import direct (test Android)</p>
+                  <p className="text-xs text-muted-foreground">Ignore la détection de doublons et lance l'import dès la sélection.</p>
+                </div>
+                <Switch checked={directImport} onCheckedChange={setDirectImport} />
+              </div>
+
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
@@ -268,13 +307,23 @@ export function GedcomImportDialog({
                 </Alert>
               )}
 
-              {existingPersons.length > 0 && (
+              {existingPersons.length > 0 && !directImport && (
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Arbre existant</AlertTitle>
                   <AlertDescription>
                     Votre arbre contient déjà {existingPersons.length} personne(s). 
                     Les doublons potentiels seront détectés avant l'import.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {existingPersons.length > 0 && directImport && (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Mode test activé</AlertTitle>
+                  <AlertDescription>
+                    La détection de doublons est ignorée pour ce test.
                   </AlertDescription>
                 </Alert>
               )}
