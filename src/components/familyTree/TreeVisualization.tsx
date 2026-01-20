@@ -114,6 +114,11 @@ export function TreeVisualization({
       // Filter spouses that will actually be positioned (not already placed)
       const spousesToPosition = spouses.filter(spouse => !visitedDescendants.has(spouse.id));
       
+      // Mark spouses as visited BEFORE processing children to prevent them from being counted again
+      for (const spouse of spousesToPosition) {
+        visitedDescendants.add(spouse.id);
+      }
+      
       // Calculate width needed for children
       let childrenTotalWidth = 0;
       const childPositions: { centerX: number; width: number }[] = [];
