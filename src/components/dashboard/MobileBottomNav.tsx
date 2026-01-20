@@ -1,69 +1,159 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FolderOpen, Plus, Clock, User } from 'lucide-react';
+import { Home, FolderOpen, Plus, Clock, User, HelpCircle, Users, Settings, LogOut, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useOnboardingTour } from '@/hooks/useOnboardingTour';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 const MobileBottomNav = () => {
   const location = useLocation();
+  const { startTour } = useOnboardingTour();
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const navItems = [
     { to: '/dashboard', icon: Home, label: 'Accueil' },
     { to: '/capsules', icon: FolderOpen, label: 'Souvenirs' },
     { to: '/capsules/new', icon: Plus, label: 'Ajouter', isAction: true },
     { to: '/timeline', icon: Clock, label: 'Chrono' },
-    { to: '/profile', icon: User, label: 'Profil' },
+    { to: '/profile', icon: User, label: 'Profil', openSheet: true },
   ];
 
+  const handleStartTour = () => {
+    setSheetOpen(false);
+    // Small delay to let sheet close
+    setTimeout(() => {
+      startTour();
+    }, 300);
+  };
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1a1a2e] border-t border-white/10 safe-area-inset-bottom">
-      <div className="flex items-center justify-around h-20 px-2">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.to || 
-            (item.to !== '/dashboard' && item.to !== '/capsules/new' && location.pathname.startsWith(item.to));
-          
-          if (item.isAction) {
+    <>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1a1a2e] border-t border-white/10 safe-area-inset-bottom">
+        <div className="flex items-center justify-around h-20 px-2">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.to || 
+              (item.to !== '/dashboard' && item.to !== '/capsules/new' && location.pathname.startsWith(item.to));
+            
+            if (item.isAction) {
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="flex flex-col items-center justify-center -mt-6"
+                >
+                  <div className="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
+                    <item.icon className="w-7 h-7 text-primary-foreground" strokeWidth={2.5} />
+                  </div>
+                  <span className="text-xs font-semibold text-secondary mt-1">{item.label}</span>
+                </Link>
+              );
+            }
+
+            if (item.openSheet) {
+              return (
+                <Sheet key={item.to} open={sheetOpen} onOpenChange={setSheetOpen}>
+                  <SheetTrigger asChild>
+                    <button
+                      className={cn(
+                        "flex flex-col items-center justify-center min-w-[60px] min-h-[60px] rounded-xl transition-colors",
+                        isActive
+                          ? "text-secondary"
+                          : "text-white/60"
+                      )}
+                    >
+                      <item.icon 
+                        className={cn(
+                          "w-7 h-7 mb-1",
+                          isActive && "text-secondary"
+                        )} 
+                        strokeWidth={isActive ? 2.5 : 2} 
+                      />
+                      <span className={cn(
+                        "text-xs font-medium",
+                        isActive ? "text-secondary font-semibold" : "text-white/60"
+                      )}>
+                        {item.label}
+                      </span>
+                    </button>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="rounded-t-3xl pb-8">
+                    <SheetHeader className="mb-4">
+                      <SheetTitle>Mon compte</SheetTitle>
+                    </SheetHeader>
+                    
+                    <div className="space-y-2">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 h-14 text-base"
+                        asChild
+                        onClick={() => setSheetOpen(false)}
+                      >
+                        <Link to="/profile">
+                          <User className="w-5 h-5" />
+                          Mon profil
+                        </Link>
+                      </Button>
+                      
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 h-14 text-base"
+                        asChild
+                        onClick={() => setSheetOpen(false)}
+                      >
+                        <Link to="/circles">
+                          <Users className="w-5 h-5" />
+                          Mes cercles
+                        </Link>
+                      </Button>
+                      
+                      <Separator className="my-2" />
+                      
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 h-14 text-base text-secondary"
+                        onClick={handleStartTour}
+                      >
+                        <HelpCircle className="w-5 h-5" />
+                        Visite guidée
+                      </Button>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              );
+            }
+
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className="flex flex-col items-center justify-center -mt-6"
+                className={cn(
+                  "flex flex-col items-center justify-center min-w-[60px] min-h-[60px] rounded-xl transition-colors",
+                  isActive
+                    ? "text-secondary"
+                    : "text-white/60"
+                )}
               >
-                <div className="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-                  <item.icon className="w-7 h-7 text-primary-foreground" strokeWidth={2.5} />
-                </div>
-                <span className="text-xs font-semibold text-secondary mt-1">{item.label}</span>
+                <item.icon 
+                  className={cn(
+                    "w-7 h-7 mb-1",
+                    isActive && "text-secondary"
+                  )} 
+                  strokeWidth={isActive ? 2.5 : 2} 
+                />
+                <span className={cn(
+                  "text-xs font-medium",
+                  isActive ? "text-secondary font-semibold" : "text-white/60"
+                )}>
+                  {item.label}
+                </span>
               </Link>
             );
-          }
-
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={cn(
-                "flex flex-col items-center justify-center min-w-[60px] min-h-[60px] rounded-xl transition-colors",
-                isActive
-                  ? "text-secondary"
-                  : "text-white/60"
-              )}
-            >
-              <item.icon 
-                className={cn(
-                  "w-7 h-7 mb-1",
-                  isActive && "text-secondary"
-                )} 
-                strokeWidth={isActive ? 2.5 : 2} 
-              />
-              <span className={cn(
-                "text-xs font-medium",
-                isActive ? "text-secondary font-semibold" : "text-white/60"
-              )}>
-                {item.label}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+          })}
+        </div>
+      </nav>
+    </>
   );
 };
 
