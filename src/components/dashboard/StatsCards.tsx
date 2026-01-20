@@ -50,7 +50,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
             {item.value}
           </p>
           <p className="text-xs sm:text-sm text-[#1a1a2e]/60 font-medium">
-            {item.value === 1 ? item.singular : item.plural}
+            {item.value <= 1 ? item.singular : item.plural}
           </p>
         </div>
       ))}
