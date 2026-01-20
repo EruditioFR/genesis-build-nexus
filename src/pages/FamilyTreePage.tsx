@@ -593,9 +593,11 @@ export default function FamilyTreePage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
+                  <div data-tour="tree-search">
+                    <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
+                  </div>
 
-                  <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2">
+                  <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2" data-tour="tree-persons-list">
                     <List className="w-4 h-4" />
                     <span className="hidden sm:inline">Liste</span>
                   </Button>
@@ -604,7 +606,7 @@ export default function FamilyTreePage() {
                   {persons.length > 0 && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="gap-2">
+                        <Button variant="outline" size="sm" className="gap-2" data-tour="tree-center">
                           <Focus className="w-4 h-4" />
                           <span className="hidden sm:inline">Centrer sur...</span>
                         </Button>
@@ -628,18 +630,20 @@ export default function FamilyTreePage() {
                     </DropdownMenu>
                   )}
 
-                  <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="descendant">Vue descendante</SelectItem>
-                      <SelectItem value="ascendant">Vue ascendante</SelectItem>
-                      <SelectItem value="hourglass">Vue sablier</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div data-tour="tree-view-mode">
+                    <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
+                      <SelectTrigger className="w-[140px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="descendant">Vue descendante</SelectItem>
+                        <SelectItem value="ascendant">Vue ascendante</SelectItem>
+                        <SelectItem value="hourglass">Vue sablier</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                  <div className="hidden sm:flex items-center gap-1 border rounded-lg p-1">
+                  <div className="hidden sm:flex items-center gap-1 border rounded-lg p-1" data-tour="tree-zoom">
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(Math.max(0.3, zoom - 0.1))}>
                       <ZoomOut className="w-4 h-4" />
                     </Button>
@@ -656,40 +660,42 @@ export default function FamilyTreePage() {
                     <Maximize2 className="w-4 h-4" />
                   </Button>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="icon" title="Exporter">
-                        <Download className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem 
-                        onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
-                        className="gap-2"
-                      >
-                        <FileText className="w-4 h-4" />
-                        Exporter en PDF
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
-                        className="gap-2"
-                      >
-                        <FileDown className="w-4 h-4" />
-                        Exporter en GEDCOM
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div data-tour="tree-import-export" className="flex items-center gap-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" title="Exporter">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem 
+                          onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
+                          className="gap-2"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Exporter en PDF
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
+                          className="gap-2"
+                        >
+                          <FileDown className="w-4 h-4" />
+                          Exporter en GEDCOM
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => setShowGedcomImport(true)}
-                    title="Importer GEDCOM"
-                  >
-                    <Upload className="w-4 h-4" />
-                  </Button>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => setShowGedcomImport(true)}
+                      title="Importer GEDCOM"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </Button>
+                  </div>
 
-                  <Button onClick={() => handleAddPerson('child')} className="gap-2">
+                  <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
                     <Plus className="w-4 h-4" />
                     <span className="hidden sm:inline">Ajouter</span>
                   </Button>
@@ -704,6 +710,7 @@ export default function FamilyTreePage() {
             <div 
               ref={scrollContainerRef}
               className="flex-1 overflow-auto bg-muted/20 relative"
+              data-tour="tree-visualization"
             >
               {persons.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
@@ -746,15 +753,17 @@ export default function FamilyTreePage() {
               )}
 
               {showMinimap && persons.length > 3 && (
-                <TreeMinimap
-                  persons={persons}
-                  relationships={relationships}
-                  unions={unions}
-                  selectedPersonId={selectedPerson?.id}
-                  viewportRect={{ ...scrollPosition, width: viewportSize.width / zoom, height: viewportSize.height / zoom }}
-                  contentBounds={contentSize}
-                  onViewportChange={handleMinimapNavigation}
-                />
+                <div data-tour="tree-minimap">
+                  <TreeMinimap
+                    persons={persons}
+                    relationships={relationships}
+                    unions={unions}
+                    selectedPersonId={selectedPerson?.id}
+                    viewportRect={{ ...scrollPosition, width: viewportSize.width / zoom, height: viewportSize.height / zoom }}
+                    contentBounds={contentSize}
+                    onViewportChange={handleMinimapNavigation}
+                  />
+                </div>
               )}
             </div>
 

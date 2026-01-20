@@ -234,7 +234,7 @@ const CirclesPage = () => {
             Retour à l'accueil
           </Button>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-tour="circles-header">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center">
                 <Users className="w-6 h-6 text-secondary" />
@@ -249,7 +249,7 @@ const CirclesPage = () => {
               </div>
             </div>
 
-            <Button onClick={() => setCreateDialogOpen(true)} className="gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold">
+            <Button onClick={() => setCreateDialogOpen(true)} className="gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold" data-tour="circles-create">
               <Plus className="w-4 h-4" />
               Nouveau cercle
             </Button>
@@ -263,6 +263,7 @@ const CirclesPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
             className="lg:col-span-1 space-y-3"
+            data-tour="circles-list"
           >
             {circles.length === 0 ? (
               <div className="p-8 rounded-2xl border border-border bg-card text-center">
@@ -356,7 +357,7 @@ const CirclesPage = () => {
             className="lg:col-span-2"
           >
             {selectedCircle ? (
-              <div className="p-6 rounded-2xl border border-border bg-card">
+              <div className="p-6 rounded-2xl border border-border bg-card" data-tour="circles-details">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div
@@ -375,7 +376,7 @@ const CirclesPage = () => {
                     </div>
                   </div>
 
-                  <Button onClick={() => setAddMemberDialogOpen(true)} className="gap-2">
+                  <Button onClick={() => setAddMemberDialogOpen(true)} className="gap-2" data-tour="circles-invite">
                     <UserPlus className="w-4 h-4" />
                     Inviter
                   </Button>
