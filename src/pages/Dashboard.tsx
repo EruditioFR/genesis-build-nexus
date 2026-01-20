@@ -14,6 +14,7 @@ import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -63,6 +64,7 @@ const Dashboard = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { startTour, isTourCompleted } = useOnboardingTour();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
   const [familyPersonsCount, setFamilyPersonsCount] = useState(0);
@@ -74,8 +76,9 @@ const Dashboard = () => {
   });
   const [dataLoading, setDataLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [tourTriggered, setTourTriggered] = useState(false);
 
-  // Check if user just signed up (show onboarding)
+  // Check if user just signed up (show onboarding checklist)
   useEffect(() => {
     const isNewUser = searchParams.get('welcome') === 'true';
     const onboardingDismissed = localStorage.getItem('onboarding_dismissed');
@@ -84,6 +87,21 @@ const Dashboard = () => {
       setShowOnboarding(true);
     }
   }, [searchParams, stats.totalCapsules]);
+
+  // Auto-start tour for new users
+  useEffect(() => {
+    const isNewUser = searchParams.get('welcome') === 'true';
+    
+    // Only trigger tour once, when data is loaded, for new users who haven't completed the tour
+    if (!dataLoading && !tourTriggered && isNewUser && !isTourCompleted()) {
+      setTourTriggered(true);
+      // Small delay to ensure DOM elements are rendered
+      const timer = setTimeout(() => {
+        startTour();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [dataLoading, tourTriggered, searchParams, isTourCompleted, startTour]);
 
   useEffect(() => {
     if (!loading && !user) {
