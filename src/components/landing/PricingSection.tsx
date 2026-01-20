@@ -43,7 +43,7 @@ const plans = [
   {
     name: "Héritage",
     icon: Building2,
-    price: { monthly: 24.99, yearly: 249 },
+    price: { monthly: 19.99, yearly: 199 },
     description: "Pour les familles multigénérationnelles",
     features: [
       "50 Go de stockage",
