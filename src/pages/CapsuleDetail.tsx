@@ -371,9 +371,24 @@ const CapsuleDetail = () => {
                 <Icon className="w-7 h-7" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground mb-2">
+                <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground">
                   {capsule.title}
                 </h1>
+                {/* Memory date - prominent display */}
+                {capsule.memory_date && (
+                  <p className="text-lg text-secondary font-medium flex items-center gap-2 mt-1 mb-3">
+                    <CalendarHeart className="w-5 h-5" />
+                    {capsule.memory_date_precision === 'year' ? (
+                      format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
+                    ) : capsule.memory_date_precision === 'month' ? (
+                      format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
+                    ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
+                      `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
+                    ) : (
+                      format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+                    )}
+                  </p>
+                )}
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
                   {capsuleCategories.map((cc) => cc.category && (
@@ -391,17 +406,10 @@ const CapsuleDetail = () => {
                       size="sm"
                     />
                   ))}
-                  {/* Memory date (primary) */}
-                  {capsule.memory_date && (
-                    <span className="text-sm text-secondary font-medium flex items-center gap-1">
-                      <CalendarHeart className="w-3.5 h-3.5" />
-                      {format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })}
-                    </span>
-                  )}
-                  {/* Created date */}
-                  <span className={`text-sm flex items-center gap-1 ${capsule.memory_date ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
+                  {/* Created date - secondary */}
+                  <span className="text-sm flex items-center gap-1 text-muted-foreground">
                     <Calendar className="w-3.5 h-3.5" />
-                    {capsule.memory_date ? 'Créé le ' : ''}{format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
+                    Créé le {format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}
                   </span>
                 </div>
               </div>
