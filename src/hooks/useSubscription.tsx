@@ -90,10 +90,10 @@ export const useSubscription = () => {
     checkSubscription();
   }, [checkSubscription]);
 
-  const createCheckout = async (tier: 'premium' | 'heritage') => {
+  const createCheckout = async (tier: 'premium' | 'heritage', billing: 'monthly' | 'yearly' = 'monthly') => {
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier },
+        body: { tier, billing },
       });
 
       if (error) throw error;
