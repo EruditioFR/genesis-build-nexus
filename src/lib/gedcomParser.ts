@@ -13,6 +13,7 @@ export interface GedcomIndividual {
   deathPlace?: string;
   occupation?: string;
   notes?: string;
+  isDeceased?: boolean; // True if DEAT Y or death date exists
 }
 
 export interface GedcomFamily {
@@ -111,10 +112,20 @@ function parseGedcomDate(dateStr: string): string | undefined {
 function parseName(nameValue: string): { firstName: string; lastName: string; maidenName?: string } {
   // GEDCOM name format: "FirstName /LastName/"
   // May also include maiden name: "FirstName /LastName/ (née MaidenName)"
+  // Some files have multiple first names separated by commas: "Jean-Baptiste, Robert, Maurice /Béjot/"
   
   const match = nameValue.match(/^([^/]*)\s*\/([^/]*)\//);
   if (match) {
-    const [, firstName, lastName] = match;
+    let [, firstName, lastName] = match;
+    
+    // Clean up multiple first names separated by commas - keep them but normalize spacing
+    if (firstName) {
+      firstName = firstName
+        .split(',')
+        .map(n => n.trim())
+        .filter(n => n)
+        .join(' ');
+    }
     
     // Check for maiden name in parentheses or after the main name
     const maidenMatch = nameValue.match(/\((?:née|nee|born)\s+([^)]+)\)/i);
@@ -202,9 +213,20 @@ export function parseGedcom(content: string): GedcomParseResult {
             currentIndividual.gender = value === 'M' ? 'male' : value === 'F' ? 'female' : 'unknown';
             break;
           case 'BIRT':
+            // Will have sub-tags (DATE, PLAC) with actual values
+            break;
           case 'DEAT':
+            // DEAT Y means deceased without specific date
+            if (value === 'Y') {
+              currentIndividual.isDeceased = true;
+            }
+            // May also have sub-tags (DATE, PLAC) with actual values
+            break;
           case 'OCCU':
-            // These will have sub-tags with actual values
+            // Occupation can be directly on the OCCU line or in sub-tags
+            if (value) {
+              currentIndividual.occupation = value;
+            }
             break;
           case 'NOTE':
             currentIndividual.notes = value;
