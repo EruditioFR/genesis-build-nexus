@@ -74,8 +74,16 @@ export default function HeaderImageSelector({
 
     setIsUploading(true);
     try {
+      // Get current user for RLS-compliant path
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Vous devez être connecté');
+        return;
+      }
+
       const fileExt = file.name.split('.').pop();
-      const fileName = `${capsuleId}/header-${Date.now()}.${fileExt}`;
+      // Use user_id as first path segment to comply with storage RLS policies
+      const fileName = `${user.id}/${capsuleId}-header-${Date.now()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('capsule-medias')
