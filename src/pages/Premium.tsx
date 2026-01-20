@@ -274,7 +274,7 @@ const Premium = () => {
                 <span className={`text-5xl font-display font-bold ${
                   highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
                 }`}>
-                  {isYearly ? '249' : '24,99'}€
+                  {isYearly ? '199' : '19,99'}€
                 </span>
                 <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
                   /{isYearly ? 'an' : 'mois'}
@@ -282,7 +282,7 @@ const Premium = () => {
               </div>
               {isYearly && (
                 <p className={`text-sm mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                  soit 20,75€/mois
+                  soit 16,58€/mois
                 </p>
               )}
             </div>
