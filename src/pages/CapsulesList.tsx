@@ -51,6 +51,10 @@ type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
+interface CapsuleWithMedia extends Capsule {
+  firstMediaUrl?: string;
+}
+
 const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
   text: { icon: FileText, label: 'Texte', color: 'bg-primary/10 text-primary' },
   photo: { icon: Image, label: 'Photo', color: 'bg-secondary/10 text-secondary' },
@@ -70,7 +74,7 @@ const CapsulesList = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { categories } = useCategories();
-  const [capsules, setCapsules] = useState<Capsule[]>([]);
+  const [capsules, setCapsules] = useState<CapsuleWithMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
@@ -112,11 +116,34 @@ const CapsulesList = () => {
         .order('created_at', { ascending: false });
 
       if (!error && capsulesData) {
-        setCapsules(capsulesData);
+        const capsuleIds = capsulesData.map(c => c.id);
+        
+        // Fetch first media for each capsule (for photo display)
+        const { data: mediasData } = await supabase
+          .from('capsule_medias')
+          .select('capsule_id, file_url, file_type')
+          .in('capsule_id', capsuleIds)
+          .order('position', { ascending: true });
+
+        // Build map of first image per capsule
+        const firstImageMap: Record<string, string> = {};
+        if (mediasData) {
+          mediasData.forEach((media: { capsule_id: string; file_url: string; file_type: string }) => {
+            if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
+              firstImageMap[media.capsule_id] = media.file_url;
+            }
+          });
+        }
+
+        // Merge first media URL into capsules
+        const capsulesWithMedia: CapsuleWithMedia[] = capsulesData.map(capsule => ({
+          ...capsule,
+          firstMediaUrl: firstImageMap[capsule.id],
+        }));
+        setCapsules(capsulesWithMedia);
         
         // Fetch categories for all capsules
         if (capsulesData.length > 0) {
-          const capsuleIds = capsulesData.map(c => c.id);
           const { data: categoriesData } = await supabase
             .from('capsule_categories')
             .select(`
@@ -370,14 +397,14 @@ const CapsulesList = () => {
                   className="group rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer overflow-hidden"
                   onClick={() => navigate(`/capsules/${capsule.id}`)}
                 >
-                  {/* Thumbnail */}
-                  {capsule.thumbnail_url ? (
+                  {/* Thumbnail - Display thumbnail, first media, or nothing */}
+                  {(capsule.thumbnail_url || capsule.firstMediaUrl) && (
                     <CapsuleThumbnail
-                      thumbnailUrl={capsule.thumbnail_url}
+                      thumbnailUrl={capsule.thumbnail_url || capsule.firstMediaUrl || ''}
                       fallbackIcon={null}
                       className="w-full h-48 bg-muted"
                     />
-                  ) : null}
+                  )}
                   
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
