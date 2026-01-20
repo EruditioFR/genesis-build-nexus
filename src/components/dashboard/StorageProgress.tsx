@@ -30,6 +30,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
       className="p-6 rounded-2xl border border-border bg-card"
+      data-tour="storage"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, Shield, TreeDeciduous, Folder } from 'lucide-react';
+import { LogOut, User, Settings, LayoutDashboard, Clock, Users, FolderOpen, Menu, BarChart3, Shield, TreeDeciduous, Folder, HelpCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,7 @@ import GlobalSearch from '@/components/search/GlobalSearch';
 import ThemeToggle from '@/components/ThemeToggle';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import logo from '@/assets/logo.png';
 
 interface DashboardHeaderProps {
@@ -30,18 +31,18 @@ interface DashboardHeaderProps {
 const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const location = useLocation();
   const { isAdminOrModerator } = useAdminAuth();
+  const { startTour } = useOnboardingTour();
   const initials = user.displayName
     ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase()
     : user.email?.[0].toUpperCase() || 'U';
 
   const navLinks = [
-    { to: '/dashboard', label: 'Synthèse', icon: LayoutDashboard },
-    { to: '/capsules', label: 'Capsules', icon: FolderOpen },
-    { to: '/categories', label: 'Catégories', icon: Folder },
-    { to: '/timeline', label: 'Chronologie', icon: Clock },
-    
-    { to: '/circles', label: 'Cercles', icon: Users },
-    { to: '/statistics', label: 'Stats', icon: BarChart3 },
+    { to: '/dashboard', label: 'Synthèse', icon: LayoutDashboard, tourId: 'nav-dashboard' },
+    { to: '/capsules', label: 'Capsules', icon: FolderOpen, tourId: 'nav-capsules' },
+    { to: '/categories', label: 'Catégories', icon: Folder, tourId: 'nav-categories' },
+    { to: '/timeline', label: 'Chronologie', icon: Clock, tourId: 'nav-timeline' },
+    { to: '/circles', label: 'Cercles', icon: Users, tourId: 'nav-circles' },
+    { to: '/statistics', label: 'Stats', icon: BarChart3, tourId: 'nav-stats' },
   ];
 
   return (
@@ -64,6 +65,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   <Link
                     key={link.to}
                     to={link.to}
+                    data-tour={link.tourId}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                       isActive
@@ -114,17 +116,17 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
 
           <div className="flex items-center gap-2">
             {/* Global Search */}
-            {user.id && <GlobalSearch userId={user.id} />}
+            {user.id && <div data-tour="search"><GlobalSearch userId={user.id} /></div>}
 
             {/* Theme Toggle */}
             <ThemeToggle />
 
             {/* Notifications */}
-            {user.id && <NotificationsBell userId={user.id} />}
+            {user.id && <div data-tour="notifications"><NotificationsBell userId={user.id} /></div>}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 px-2 hover:bg-white/10">
+                <Button variant="ghost" className="flex items-center gap-2 px-2 hover:bg-white/10" data-tour="user-menu">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={user.avatarUrl} alt={user.displayName || 'Avatar'} />
                     <AvatarFallback className="bg-secondary/20 text-secondary text-sm font-medium">
@@ -153,6 +155,11 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     <Settings className="w-4 h-4 mr-2" />
                     Paramètres
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={startTour} className="cursor-pointer">
+                  <HelpCircle className="w-4 h-4 mr-2" />
+                  Visite guidée
                 </DropdownMenuItem>
                 {isAdminOrModerator && (
                   <>

@@ -132,6 +132,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
       className="relative"
+      data-tour="recent-capsules"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4 px-1">
