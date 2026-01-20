@@ -61,14 +61,28 @@ export function GedcomImportDialog({
   };
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    console.log('[GEDCOM] onDrop called with', acceptedFiles.length, 'files');
     const file = acceptedFiles[0];
-    if (!file) return;
+    if (!file) {
+      console.log('[GEDCOM] No file received');
+      return;
+    }
+
+    console.log('[GEDCOM] Processing file:', file.name, 'type:', file.type, 'size:', file.size);
+
+    // Vérification manuelle de l'extension
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext !== 'ged' && ext !== 'gedcom') {
+      setError('Veuillez sélectionner un fichier .ged ou .gedcom');
+      return;
+    }
 
     setFileName(file.name);
     setError(null);
 
     try {
       const content = await file.text();
+      console.log('[GEDCOM] File content length:', content.length);
       
       if (!isValidGedcomFile(content)) {
         setError('Ce fichier ne semble pas être un fichier GEDCOM valide.');
@@ -76,6 +90,7 @@ export function GedcomImportDialog({
       }
 
       const result = parseGedcom(content);
+      console.log('[GEDCOM] Parsed result:', result.individuals.length, 'individuals,', result.families.length, 'families');
 
       if (result.errors.length > 0 && result.individuals.length === 0) {
         setError(result.errors.join('\n'));
@@ -85,17 +100,24 @@ export function GedcomImportDialog({
       setParseResult(result);
       setStep('preview');
     } catch (err) {
-      console.error('Error parsing GEDCOM:', err);
+      console.error('[GEDCOM] Error parsing:', err);
       setError('Erreur lors de la lecture du fichier. Vérifiez le format.');
+    }
+  }, []);
+
+  const onDropRejected = useCallback((fileRejections: Array<{ file: File; errors: readonly { message: string }[] }>) => {
+    console.log('[GEDCOM] onDropRejected called:', fileRejections);
+    const rejection = fileRejections[0];
+    if (rejection) {
+      const errorMessages = rejection.errors.map(e => e.message).join(', ');
+      setError(`Fichier refusé : ${errorMessages}. Essayez un fichier .ged ou .gedcom.`);
     }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'text/plain': ['.ged', '.gedcom'],
-      'application/x-gedcom': ['.ged', '.gedcom'],
-    },
+    onDropRejected,
+    // Pas de filtre MIME strict - on valide manuellement l'extension
     maxFiles: 1,
     maxSize: 10 * 1024 * 1024,
   });
