@@ -427,8 +427,8 @@ export function useFamilyTree() {
   const importFromGedcom = useCallback(async (
     treeId: string,
     gedcomData: GedcomParseResult
-  ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number }> => {
-    if (!user) return { success: false, personsCreated: 0, relationsCreated: 0 };
+  ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number; failedCount?: number; errorMessage?: string }> => {
+    if (!user) return { success: false, personsCreated: 0, relationsCreated: 0, errorMessage: 'Utilisateur non connecté' };
 
     setLoading(true);
     try {
@@ -436,6 +436,8 @@ export function useFamilyTree() {
       const gedcomToDbId: Record<string, string> = {};
       let personsCreated = 0;
       let relationsCreated = 0;
+      let failedCount = 0;
+      const insertErrors: Array<{ name: string; error: string }> = [];
 
       // Create all individuals first
       for (const individual of gedcomData.individuals) {
@@ -451,19 +453,29 @@ export function useFamilyTree() {
             maiden_name: individual.maidenName,
             gender: individual.gender,
             birth_date: individual.birthDate,
+            birth_date_precision: 'exact',
             birth_place: individual.birthPlace,
             death_date: individual.deathDate,
+            death_date_precision: individual.deathDate ? 'exact' : undefined,
             death_place: individual.deathPlace,
             occupation: individual.occupation,
             biography: individual.notes,
             is_alive: isAlive,
+            privacy_level: 'private',
             created_by: user.id,
           })
           .select()
           .single();
 
         if (error) {
-          console.error('Error creating person:', error);
+          console.error('Error creating person:', individual.firstName, individual.lastName, error);
+          failedCount++;
+          if (insertErrors.length < 3) {
+            insertErrors.push({
+              name: `${individual.firstName || ''} ${individual.lastName || ''}`.trim() || 'Sans nom',
+              error: error.message,
+            });
+          }
           continue;
         }
 
@@ -471,6 +483,22 @@ export function useFamilyTree() {
           gedcomToDbId[individual.id] = person.id;
           personsCreated++;
         }
+      }
+
+      // Check if all insertions failed
+      if (personsCreated === 0 && gedcomData.individuals.length > 0) {
+        const errorDetails = insertErrors.length > 0 
+          ? `Exemples d'erreurs: ${insertErrors.map(e => `${e.name}: ${e.error}`).join('; ')}`
+          : 'Erreur inconnue lors de l\'insertion';
+        
+        setLoading(false);
+        return { 
+          success: false, 
+          personsCreated: 0, 
+          relationsCreated: 0,
+          failedCount,
+          errorMessage: `Aucune personne n'a pu être importée (${failedCount} échec(s)). ${errorDetails}`,
+        };
       }
 
       // Create unions (marriages) and parent-child relationships

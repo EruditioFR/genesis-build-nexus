@@ -141,6 +141,7 @@ export function GedcomImportDialog({
 
     setStep('importing');
     setProgress(0);
+    setError(null);
 
     try {
       // Get list of IDs to skip
@@ -163,7 +164,8 @@ export function GedcomImportDialog({
       setStep('complete');
     } catch (err) {
       console.error('Import error:', err);
-      setError('Erreur lors de l\'import. Veuillez réessayer.');
+      const errorMessage = err instanceof Error ? err.message : 'Erreur lors de l\'import. Veuillez réessayer.';
+      setError(errorMessage);
       setStep('preview');
     }
   };
