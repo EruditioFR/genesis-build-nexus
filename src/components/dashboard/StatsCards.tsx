@@ -12,19 +12,23 @@ interface StatsCardsProps {
 const StatsCards = ({ stats }: StatsCardsProps) => {
   const items = [
     {
-      label: 'Souvenirs',
+      singular: 'Souvenir',
+      plural: 'Souvenirs',
       value: stats.totalCapsules,
     },
     {
-      label: 'Médias',
+      singular: 'Média',
+      plural: 'Médias',
       value: stats.totalMedias,
     },
     {
-      label: 'Partages',
+      singular: 'Partage',
+      plural: 'Partages',
       value: stats.sharedCircles,
     },
     {
-      label: 'Événements',
+      singular: 'Événement',
+      plural: 'Événements',
       value: stats.upcomingEvents,
     },
   ];
@@ -39,14 +43,14 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
     >
       {items.map((item) => (
         <div 
-          key={item.label} 
+          key={item.singular} 
           className="flex flex-col items-center text-center flex-1"
         >
           <p className="text-2xl sm:text-3xl font-bold text-[#1a1a2e]">
             {item.value}
           </p>
           <p className="text-xs sm:text-sm text-[#1a1a2e]/60 font-medium">
-            {item.label}
+            {item.value === 1 ? item.singular : item.plural}
           </p>
         </div>
       ))}
