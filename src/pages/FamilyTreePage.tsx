@@ -46,6 +46,7 @@ import { TreeVisualization, type PersonPositionData } from '@/components/familyT
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
+import { MergePersonsDialog } from '@/components/familyTree/MergePersonsDialog';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { downloadGedcom } from '@/lib/gedcomExporter';
 import { toast } from 'sonner';
@@ -63,7 +64,7 @@ export default function FamilyTreePage() {
   const navigate = useNavigate();
   const { user, signOut, loading: authLoading } = useAuth();
   const { subscribed, tier, loading: subLoading } = useSubscription();
-  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, loading } = useFamilyTree();
+  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
   const [persons, setPersons] = useState<FamilyPerson[]>([]);
@@ -84,6 +85,8 @@ export default function FamilyTreePage() {
   const [linkSourcePerson, setLinkSourcePerson] = useState<FamilyPerson | null>(null);
   const [showPersonsList, setShowPersonsList] = useState(false);
   const [showGedcomImport, setShowGedcomImport] = useState(false);
+  const [showMergeDialog, setShowMergeDialog] = useState(false);
+  const [mergeSourcePerson, setMergeSourcePerson] = useState<FamilyPerson | null>(null);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
@@ -345,6 +348,30 @@ export default function FamilyTreePage() {
     }
   };
 
+  const handleMergePerson = (person: FamilyPerson) => {
+    setMergeSourcePerson(person);
+    setShowMergeDialog(true);
+  };
+
+  const handleMergeSubmit = async (keepPersonId: string, mergePersonId: string, fieldsToMerge: string[]) => {
+    const success = await mergePersons(keepPersonId, mergePersonId, fieldsToMerge);
+    if (success) {
+      // If we merged the selected person, select the kept person
+      if (selectedPerson?.id === mergePersonId) {
+        const keptPerson = persons.find(p => p.id === keepPersonId);
+        if (keptPerson) {
+          setSelectedPerson(keptPerson);
+        } else {
+          setSelectedPerson(null);
+          setShowDetailPanel(false);
+        }
+      }
+      setShowMergeDialog(false);
+      setMergeSourcePerson(null);
+      await loadTree();
+    }
+  };
+
   const getPersonParents = (personId: string): FamilyPerson[] => {
     const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
     return persons.filter(p => parentIds.includes(p.id));
@@ -519,6 +546,7 @@ export default function FamilyTreePage() {
                   onAddChild={() => handleAddPerson('child', selectedPerson)}
                   onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
                   onLinkPerson={() => handleLinkPerson(selectedPerson)}
+                  onMergePerson={() => handleMergePerson(selectedPerson)}
                   onDelete={() => handleDeletePerson(selectedPerson.id)}
                   onUpdate={loadTree}
                   onPersonClick={handleSearchSelect}
@@ -712,6 +740,7 @@ export default function FamilyTreePage() {
                       onAddChild={() => handleAddPerson('child', selectedPerson)}
                       onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
                       onLinkPerson={() => handleLinkPerson(selectedPerson)}
+                      onMergePerson={() => handleMergePerson(selectedPerson)}
                       onDelete={() => handleDeletePerson(selectedPerson.id)}
                       onUpdate={loadTree}
                       onPersonClick={handleSearchSelect}
@@ -763,6 +792,16 @@ export default function FamilyTreePage() {
         onImport={handleGedcomImport}
         existingPersons={persons}
       />
+
+      {mergeSourcePerson && (
+        <MergePersonsDialog
+          open={showMergeDialog}
+          onOpenChange={setShowMergeDialog}
+          persons={persons}
+          initialPerson={mergeSourcePerson}
+          onMerge={handleMergeSubmit}
+        />
+      )}
     </div>
   );
 }
