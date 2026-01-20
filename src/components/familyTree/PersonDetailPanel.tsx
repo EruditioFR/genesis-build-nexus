@@ -20,7 +20,8 @@ import {
   Loader2,
   Link2,
   Pencil,
-  GitMerge
+  GitMerge,
+  Focus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -82,6 +83,7 @@ interface PersonDetailPanelProps {
   onAddSpouse: () => void;
   onLinkPerson?: () => void;
   onMergePerson?: () => void;
+  onCenterOnPerson?: () => void;
   onDelete: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
@@ -101,6 +103,7 @@ export function PersonDetailPanel({
   onAddSpouse,
   onLinkPerson,
   onMergePerson,
+  onCenterOnPerson,
   onDelete,
   onPersonClick,
   onUpdate
@@ -520,6 +523,16 @@ export function PersonDetailPanel({
               <Edit className="w-3 h-3" />
               Modifier
             </Button>
+            {onCenterOnPerson && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={onCenterOnPerson}
+                title="Centrer l'arbre sur cette personne"
+              >
+                <Focus className="w-3 h-3" />
+              </Button>
+            )}
             <Button 
               variant="outline" 
               size="sm" 

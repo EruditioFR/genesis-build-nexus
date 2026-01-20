@@ -15,7 +15,8 @@ import {
   Lock,
   List,
   FileText,
-  FileDown
+  FileDown,
+  Focus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -599,6 +600,34 @@ export default function FamilyTreePage() {
                     <span className="hidden sm:inline">Liste</span>
                   </Button>
 
+                  {/* Centrer sur... dropdown */}
+                  {persons.length > 0 && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <Focus className="w-4 h-4" />
+                          <span className="hidden sm:inline">Centrer sur...</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
+                        {persons.slice(0, 50).map((p) => (
+                          <DropdownMenuItem 
+                            key={p.id} 
+                            onClick={() => handleSearchSelect(p)}
+                            className="gap-2"
+                          >
+                            {p.first_names} {p.last_name}
+                          </DropdownMenuItem>
+                        ))}
+                        {persons.length > 50 && (
+                          <DropdownMenuItem disabled className="text-muted-foreground text-xs">
+                            ... et {persons.length - 50} autres (utilisez la recherche)
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+
                   <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
                     <SelectTrigger className="w-[140px]">
                       <SelectValue />
@@ -753,6 +782,7 @@ export default function FamilyTreePage() {
                       onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
                       onLinkPerson={() => handleLinkPerson(selectedPerson)}
                       onMergePerson={() => handleMergePerson(selectedPerson)}
+                      onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
                       onDelete={() => handleDeletePerson(selectedPerson.id)}
                       onUpdate={loadTree}
                       onPersonClick={handleSearchSelect}
