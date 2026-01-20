@@ -375,7 +375,7 @@ const CapsulesList = () => {
                     <CapsuleThumbnail
                       thumbnailUrl={capsule.thumbnail_url}
                       fallbackIcon={null}
-                      className="w-full h-32 bg-muted"
+                      className="w-full h-48 bg-muted"
                     />
                   ) : null}
                   
