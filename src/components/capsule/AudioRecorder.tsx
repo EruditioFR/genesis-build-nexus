@@ -16,6 +16,81 @@ const formatTime = (seconds: number): string => {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
+// Waveform visualization component
+const AudioWaveform: React.FC<{
+  analyser: AnalyserNode | null;
+  isActive: boolean;
+  isPaused: boolean;
+}> = ({ analyser, isActive, isPaused }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    if (!analyser || !canvasRef.current || !isActive) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const draw = () => {
+      if (!isActive || isPaused) {
+        animationRef.current = requestAnimationFrame(draw);
+        return;
+      }
+
+      analyser.getByteFrequencyData(dataArray);
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw waveform bars
+      const barCount = 40;
+      const barWidth = canvas.width / barCount - 2;
+      const step = Math.floor(bufferLength / barCount);
+
+      for (let i = 0; i < barCount; i++) {
+        const value = dataArray[i * step];
+        const percent = value / 255;
+        const barHeight = Math.max(4, percent * canvas.height * 0.8);
+        
+        const x = i * (barWidth + 2);
+        const y = (canvas.height - barHeight) / 2;
+
+        // Gradient color based on intensity
+        const hue = 340 + percent * 20; // Red-ish hue
+        ctx.fillStyle = `hsla(${hue}, 70%, ${50 + percent * 20}%, ${0.6 + percent * 0.4})`;
+        
+        // Draw rounded bar
+        ctx.beginPath();
+        ctx.roundRect(x, y, barWidth, barHeight, 2);
+        ctx.fill();
+      }
+
+      animationRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [analyser, isActive, isPaused]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={280}
+      height={60}
+      className="mx-auto rounded-lg"
+    />
+  );
+};
+
 export const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onRecordingComplete,
   maxDurationSeconds = 300, // 5 minutes par défaut
@@ -30,12 +105,14 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -44,6 +121,9 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (recordedUrl) URL.revokeObjectURL(recordedUrl);
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
       }
     };
   }, [recordedUrl]);
@@ -55,6 +135,15 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+
+      // Set up audio analyser for waveform visualization
+      const audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyserNode = audioContext.createAnalyser();
+      analyserNode.fftSize = 256;
+      source.connect(analyserNode);
+      setAnalyser(analyserNode);
 
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
@@ -76,6 +165,13 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
         
         setRecordedBlob(blob);
         setRecordedUrl(url);
+        setAnalyser(null);
+        
+        // Close audio context
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+          audioContextRef.current = null;
+        }
         
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
@@ -268,6 +364,15 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
                     <span className="text-sm font-medium">
                       {isPaused ? 'En pause' : 'Enregistrement...'}
                     </span>
+                  </div>
+
+                  {/* Waveform visualization */}
+                  <div className="py-2">
+                    <AudioWaveform 
+                      analyser={analyser} 
+                      isActive={isRecording} 
+                      isPaused={isPaused} 
+                    />
                   </div>
 
                   {/* Timer */}
