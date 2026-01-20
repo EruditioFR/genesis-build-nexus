@@ -6,8 +6,8 @@ export interface FamilyTree {
   name: string;
   description?: string | null;
   root_person_id?: string | null;
-  visibility: 'private' | 'family' | 'public';
-  settings: Record<string, unknown>;
+  visibility?: 'private' | 'family' | 'public' | null;
+  settings?: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
   // Computed fields
