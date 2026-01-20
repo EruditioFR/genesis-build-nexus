@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, AlertCircle, CheckCircle2, Users, Heart, Loader2, UserCheck, UserPlus, SkipForward } from 'lucide-react';
+import { Upload, FileText, AlertCircle, CheckCircle2, Users, Heart, Loader2, UserCheck, UserPlus, SkipForward, Zap } from 'lucide-react';
 // Removed framer-motion animations for Android compatibility
 import {
   Dialog,
@@ -340,12 +340,27 @@ export function GedcomImportDialog({
                 </Alert>
               )}
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={handleReset} className="flex-1">
-                  Annuler
-                </Button>
-                <Button onClick={handleCheckDuplicates} className="flex-1">
-                  {existingPersons.length > 0 ? 'Vérifier les doublons' : 'Importer'}
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-3">
+                  <Button variant="outline" onClick={handleReset} className="flex-1">
+                    Annuler
+                  </Button>
+                  <Button onClick={handleCheckDuplicates} className="flex-1">
+                    {existingPersons.length > 0 ? 'Vérifier les doublons' : 'Importer'}
+                  </Button>
+                </div>
+                
+                {/* Import direct - sans détection de doublons */}
+                <Button 
+                  variant="secondary" 
+                  onClick={() => {
+                    console.log('[GEDCOM] Direct import clicked');
+                    handleImport();
+                  }}
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <Zap className="w-4 h-4" />
+                  Import direct (ignorer doublons)
                 </Button>
               </div>
           </div>
