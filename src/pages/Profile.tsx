@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, User, Calendar, FileText, Loader2, Shield, Receipt, Download, ExternalLink } from 'lucide-react';
 import { z } from 'zod';
@@ -63,8 +63,9 @@ const subscriptionLabels = {
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
-  const { createCheckout, openCustomerPortal, subscriptionEnd, tier, invoices, invoicesLoading, fetchInvoices } = useSubscription();
+  const { createCheckout, openCustomerPortal, subscriptionEnd, tier, invoices, invoicesLoading, fetchInvoices, checkSubscription } = useSubscription();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -86,52 +87,69 @@ const Profile = () => {
     }
   }, [user, loading, navigate]);
 
+  // Fetch profile data
+  const fetchProfile = useCallback(async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (!error && data) {
+      setProfile(data);
+      form.reset({
+        display_name: data.display_name || '',
+        bio: data.bio || '',
+        birth_date: data.birth_date ? new Date(data.birth_date) : null,
+      });
+    }
+
+    // Fetch real storage usage from capsule_medias
+    const { data: capsules } = await supabase
+      .from('capsules')
+      .select('id')
+      .eq('user_id', user.id);
+
+    if (capsules && capsules.length > 0) {
+      const capsuleIds = capsules.map(c => c.id);
+      const { data: mediaData } = await supabase
+        .from('capsule_medias')
+        .select('file_size_bytes')
+        .in('capsule_id', capsuleIds);
+
+      if (mediaData) {
+        const totalBytes = mediaData.reduce((sum, m) => sum + (m.file_size_bytes || 0), 0);
+        setRealStorageUsedMb(totalBytes / (1024 * 1024));
+      }
+    }
+
+    setProfileLoading(false);
+  }, [user, form]);
+
+  // Detect subscription success from URL params
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user) return;
+    const subscriptionStatus = searchParams.get('subscription');
+    
+    if (subscriptionStatus === 'success' && user) {
+      // Refresh subscription status
+      checkSubscription();
+      // Refresh profile to get updated storage limits
+      fetchProfile();
+      // Show success notification
+      toast.success('🎉 Abonnement activé avec succès !');
+      // Clean URL
+      searchParams.delete('subscription');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams, user, checkSubscription, fetchProfile]);
 
-      // Fetch profile data
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (!error && data) {
-        setProfile(data);
-        form.reset({
-          display_name: data.display_name || '',
-          bio: data.bio || '',
-          birth_date: data.birth_date ? new Date(data.birth_date) : null,
-        });
-      }
-
-      // Fetch real storage usage from capsule_medias
-      const { data: capsules } = await supabase
-        .from('capsules')
-        .select('id')
-        .eq('user_id', user.id);
-
-      if (capsules && capsules.length > 0) {
-        const capsuleIds = capsules.map(c => c.id);
-        const { data: mediaData } = await supabase
-          .from('capsule_medias')
-          .select('file_size_bytes')
-          .in('capsule_id', capsuleIds);
-
-        if (mediaData) {
-          const totalBytes = mediaData.reduce((sum, m) => sum + (m.file_size_bytes || 0), 0);
-          setRealStorageUsedMb(totalBytes / (1024 * 1024));
-        }
-      }
-
-      setProfileLoading(false);
-    };
-
+  useEffect(() => {
     if (user) {
       fetchProfile();
     }
-  }, [user, form]);
+  }, [user, fetchProfile]);
 
   const handleSignOut = async () => {
     await signOut();

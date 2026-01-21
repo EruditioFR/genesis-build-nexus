@@ -88,6 +88,13 @@ export const useSubscription = () => {
 
   useEffect(() => {
     checkSubscription();
+    
+    // Refresh subscription status every 60 seconds
+    const interval = setInterval(() => {
+      checkSubscription();
+    }, 60000);
+    
+    return () => clearInterval(interval);
   }, [checkSubscription]);
 
   const createCheckout = async (tier: 'premium' | 'heritage', billing: 'monthly' | 'yearly' = 'monthly') => {
