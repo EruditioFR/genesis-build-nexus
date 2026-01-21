@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -138,6 +138,34 @@ const Signup = () => {
     setLoading(false);
   };
 
+  const tutorialSteps = [
+    {
+      icon: BookOpen,
+      title: "1. Créez vos capsules",
+      description: "Enregistrez vos souvenirs sous forme de texte, photos, vidéos ou audio. Chaque capsule préserve un moment précieux."
+    },
+    {
+      icon: Users,
+      title: "2. Construisez votre arbre",
+      description: "Créez votre arbre généalogique interactif et reliez vos souvenirs aux membres de votre famille."
+    },
+    {
+      icon: Clock,
+      title: "3. Explorez votre histoire",
+      description: "Naviguez dans votre chronologie familiale et redécouvrez vos moments à travers le temps."
+    },
+    {
+      icon: Share2,
+      title: "4. Partagez en toute sécurité",
+      description: "Créez des cercles privés pour partager vos souvenirs uniquement avec vos proches."
+    },
+    {
+      icon: Sparkles,
+      title: "5. L'IA vous accompagne",
+      description: "Notre assistant vous aide à rédiger et enrichir vos récits pour des souvenirs encore plus vivants."
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Mobile Header - Dark background */}
@@ -150,10 +178,79 @@ const Signup = () => {
         </Link>
       </div>
 
-      {/* Left Panel - Form */}
+      {/* Left Panel - Tutorial "Comment ça marche ?" */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <img src={heroBackground} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgb(26 26 46 / 0.88)' }} />
+        
+        <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Link to="/" className="flex items-center space-x-3 mb-10">
+              <img src={logo} alt="Family Garden" className="w-12 h-12 object-contain" />
+              <span className="text-2xl font-display font-bold text-white">
+                Family Garden
+              </span>
+            </Link>
+
+            <h1 className="text-3xl lg:text-4xl font-display font-bold text-white mb-3 leading-tight">
+              Comment ça marche ?
+            </h1>
+            
+            <p className="text-lg text-white/80 max-w-md mb-8">
+              Préservez votre héritage familial en quelques étapes simples
+            </p>
+
+            {/* Tutorial steps */}
+            <div className="space-y-5">
+              {tutorialSteps.map((step, index) => (
+                <motion.div 
+                  key={step.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                  className="flex gap-4 items-start"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                    <step.icon className="w-5 h-5 text-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold mb-1">{step.title}</h3>
+                    <p className="text-white/70 text-sm leading-relaxed">{step.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Trust indicators */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mt-10 pt-8 border-t border-white/10"
+            >
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-secondary" />
+                  <span className="text-white/70 text-sm">100% sécurisé</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-secondary" />
+                  <span className="text-white/70 text-sm">Gratuit pour commencer</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Right Panel - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-5 py-8 sm:px-6 sm:py-12 bg-background">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
@@ -309,7 +406,7 @@ const Signup = () => {
               variant="hero" 
               size="xl" 
               className="w-full mt-6"
-              disabled={loading}
+              disabled={loading || emailExists}
             >
               {loading ? 'Création en cours...' : 'Créer mon compte'}
             </Button>
@@ -335,56 +432,6 @@ const Signup = () => {
             </p>
           </div>
         </motion.div>
-      </div>
-
-      {/* Right Panel - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img src={heroBackground} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgb(26 26 46 / 0.85)' }} />
-        
-        <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Link to="/" className="flex items-center space-x-3 mb-12">
-              <img src={logo} alt="Family Garden" className="w-12 h-12 object-contain" />
-              <span className="text-2xl font-display font-bold text-white">
-                Family Garden
-              </span>
-            </Link>
-
-            <h1 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6 leading-tight">
-              Préservez vos
-              <br />
-              <span className="text-secondary">moments précieux</span>
-            </h1>
-            
-            <p className="text-lg text-white/90 max-w-md mb-8">
-              Créez un héritage numérique pour les générations futures. 
-              Vos souvenirs méritent d'être préservés.
-            </p>
-
-            {/* Features list */}
-            <div className="space-y-4">
-              {[
-                'Création de capsules mémorielles texte, photo, vidéo et audio',
-                'Arbre généalogique interactif',
-                'Chronologie interactive familiale',
-                'Partage sécurisé avec vos proches',
-                'Assistant IA pour vos récits',
-              ].map((feature) => (
-                <div key={feature} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-secondary/30 flex items-center justify-center">
-                    <Check className="w-4 h-4 text-secondary" />
-                  </div>
-                  <span className="text-white/90">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
       </div>
     </div>
   );
