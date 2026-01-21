@@ -41,6 +41,7 @@ import MemoryDateSelector, {
   formatMemoryDate 
 } from '@/components/capsule/MemoryDateSelector';
 import { useIsMobile } from '@/hooks/use-mobile';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -336,6 +337,8 @@ const CapsuleCreate = () => {
 
   // Desktop version
   return (
+    <>
+      <NoIndex />
     <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
         user={{
@@ -602,6 +605,7 @@ const CapsuleCreate = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 

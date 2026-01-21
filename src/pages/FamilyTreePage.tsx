@@ -52,6 +52,7 @@ import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { downloadGedcom } from '@/lib/gedcomExporter';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import NoIndex from '@/components/seo/NoIndex';
 import type { 
   FamilyTree, 
   FamilyPerson, 

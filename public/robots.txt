@@ -12,3 +12,20 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Pages privées - ne pas indexer
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /invite/
+Disallow: /guardian/
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://www.familygarden.fr/sitemap.xml

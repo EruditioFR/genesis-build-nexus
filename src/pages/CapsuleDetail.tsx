@@ -41,6 +41,7 @@ import { toast } from 'sonner';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import SubCategoryBadge from '@/components/capsule/SubCategoryBadge';
 import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategories';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -360,6 +361,7 @@ const CapsuleDetail = () => {
 
   return (
     <>
+      <NoIndex />
       {/* Story Viewer Modal */}
       <AnimatePresence>
         {storyOpen && storyItems.length > 0 && (

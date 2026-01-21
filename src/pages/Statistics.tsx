@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { useCategories, type Category } from '@/hooks/useCategories';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -200,7 +201,9 @@ const Statistics = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -618,6 +621,7 @@ const Statistics = () => {
 
       <MobileBottomNav />
     </div>
+    </>
   );
 };
 

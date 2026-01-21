@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
+import NoIndex from "@/components/seo/NoIndex";
 
 const navItems = [
   { to: "/admin", label: "Synthèse", icon: LayoutDashboard, exact: true },
@@ -61,7 +62,9 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside className="w-64 border-r border-border bg-card hidden lg:flex flex-col">
         <div className="p-4 border-b border-border">
@@ -172,5 +175,6 @@ export default function AdminLayout() {
         </motion.div>
       </main>
     </div>
+    </>
   );
 }
