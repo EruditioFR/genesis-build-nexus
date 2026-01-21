@@ -44,14 +44,47 @@ export const useSubscription = () => {
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
+      // First check Stripe
       const { data, error } = await supabase.functions.invoke('check-subscription');
 
       if (error) throw error;
 
+      // If Stripe has subscription info, use it
+      if (data.subscribed && data.tier) {
+        setState({
+          subscribed: data.subscribed,
+          tier: data.tier || 'free',
+          subscriptionEnd: data.subscription_end,
+          loading: false,
+          error: null,
+        });
+        return;
+      }
+
+      // Fallback: check subscription_level from profiles table
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('subscription_level')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profileData?.subscription_level && profileData.subscription_level !== 'free') {
+        const tier = profileData.subscription_level === 'legacy' ? 'heritage' : profileData.subscription_level as 'free' | 'premium' | 'heritage';
+        setState({
+          subscribed: true,
+          tier,
+          subscriptionEnd: null,
+          loading: false,
+          error: null,
+        });
+        return;
+      }
+
+      // No subscription found
       setState({
-        subscribed: data.subscribed,
-        tier: data.tier || 'free',
-        subscriptionEnd: data.subscription_end,
+        subscribed: false,
+        tier: 'free',
+        subscriptionEnd: null,
         loading: false,
         error: null,
       });
