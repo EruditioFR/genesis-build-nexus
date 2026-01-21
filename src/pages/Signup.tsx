@@ -63,10 +63,21 @@ const Signup = () => {
     const { error } = await signUp(email, password, displayName);
 
     if (error) {
+      // Check for existing email error
+      const isEmailExists = 
+        error.message?.toLowerCase().includes('already registered') ||
+        error.message?.toLowerCase().includes('already been registered') ||
+        error.message?.toLowerCase().includes('user already exists') ||
+        error.message?.toLowerCase().includes('email already') ||
+        error.message?.toLowerCase().includes('duplicate') ||
+        error.message?.toLowerCase().includes('already in use');
+
       toast({
         variant: 'destructive',
-        title: 'Erreur d\'inscription',
-        description: error.message,
+        title: isEmailExists ? 'Email déjà utilisé' : 'Erreur d\'inscription',
+        description: isEmailExists 
+          ? 'Cette adresse email est déjà associée à un compte. Veuillez vous connecter ou utiliser une autre adresse.'
+          : error.message,
       });
     } else {
       toast({
