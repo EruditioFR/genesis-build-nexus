@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, FileText, Image, Video, Music, Layers, ChevronRight, Clock, Eye } from 'lucide-react';
+import { ArrowLeft, Calendar, FileText, Image, Video, Music, Layers, ChevronRight, Clock, Eye, Play } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { 
@@ -30,11 +30,18 @@ const capsuleTypeConfig: Record<CapsuleType, {
   mixed: { icon: Layers, label: 'Mixte', color: 'bg-pink-500' },
 };
 
+interface CapsuleMedia {
+  id: string;
+  file_url: string;
+  file_type: string;
+}
+
 interface YearModalProps {
   year: string | null;
   decade: string | null;
   capsules: Capsule[];
   capsuleCategories: Record<string, Category>;
+  capsuleMedias: Record<string, CapsuleMedia | null>;
   onClose: () => void;
   onBackToDecade: () => void;
   onCapsuleClick: (id: string) => void;
@@ -44,7 +51,8 @@ const YearModal = ({
   year, 
   decade,
   capsules, 
-  capsuleCategories, 
+  capsuleCategories,
+  capsuleMedias,
   onClose, 
   onBackToDecade,
   onCapsuleClick 
@@ -94,6 +102,8 @@ const YearModal = ({
                     const memoryDate = capsule.memory_date ? parseISO(capsule.memory_date) : null;
                     const createdDate = parseISO(capsule.created_at);
                     const category = capsuleCategories[capsule.id];
+                    const media = capsuleMedias[capsule.id];
+                    const isVideo = media?.file_type?.startsWith('video/');
 
                     return (
                       <motion.button
@@ -102,13 +112,28 @@ const YearModal = ({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: (monthIndex * 0.1) + (index * 0.03) }}
                         onClick={() => onCapsuleClick(capsule.id)}
-                        className="w-full text-left p-4 rounded-xl bg-card border border-border hover:border-secondary/50 hover:shadow-md transition-all group"
+                        className="w-full text-left p-3 rounded-xl bg-card border border-border hover:border-secondary/50 hover:shadow-md transition-all group"
                       >
                         <div className="flex items-start gap-3">
-                          {/* Icône type */}
-                          <div className={`w-10 h-10 rounded-xl ${config.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                            <Icon className="w-5 h-5 text-white" />
-                          </div>
+                          {/* Vignette ou icône */}
+                          {media ? (
+                            <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
+                              <img 
+                                src={media.file_url} 
+                                alt="" 
+                                className="w-full h-full object-cover"
+                              />
+                              {isVideo && (
+                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                                  <Play className="w-5 h-5 text-white fill-white" />
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className={`w-14 h-14 rounded-xl ${config.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                              <Icon className="w-6 h-6 text-white" />
+                            </div>
+                          )}
 
                           {/* Contenu */}
                           <div className="flex-1 min-w-0">
@@ -117,28 +142,21 @@ const YearModal = ({
                             </h4>
                             
                             {/* Dates */}
-                            <div className="flex flex-col gap-0.5 mt-1">
+                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                               {memoryDate && (
                                 <p className="text-xs text-secondary flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
-                                  {format(memoryDate, 'd MMMM', { locale: fr })}
+                                  {format(memoryDate, 'd MMM', { locale: fr })}
                                 </p>
                               )}
                               <p className={`text-xs flex items-center gap-1 ${memoryDate ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
                                 <Clock className="w-3 h-3" />
-                                {memoryDate ? 'Créé le ' : ''}{format(createdDate, 'd MMM', { locale: fr })}
+                                {format(createdDate, 'd MMM', { locale: fr })}
                               </p>
                             </div>
 
-                            {/* Description */}
-                            {capsule.description && (
-                              <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
-                                {capsule.description}
-                              </p>
-                            )}
-
                             {/* Badges */}
-                            <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                            <div className="flex flex-wrap items-center gap-1 mt-2">
                               {category && (
                                 <CategoryBadge category={category} size="sm" />
                               )}
@@ -158,7 +176,7 @@ const YearModal = ({
                           </div>
 
                           {/* Flèche */}
-                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-secondary group-hover:translate-x-1 transition-all flex-shrink-0 mt-2" />
+                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-secondary group-hover:translate-x-1 transition-all flex-shrink-0 mt-4" />
                         </div>
                       </motion.button>
                     );

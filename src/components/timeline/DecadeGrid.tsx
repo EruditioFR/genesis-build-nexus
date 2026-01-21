@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { 
   Camera, Radio, Disc3, Sparkles, 
-  Tv, Smartphone, Leaf, Music2, ChevronRight
+  Tv, Smartphone, Leaf, Music2, ChevronRight, ImageIcon
 } from 'lucide-react';
 
 interface DecadeGridProps {
   decades: string[];
   decadeCounts: Record<string, number>;
+  decadeThumbnails: Record<string, string[]>; // decade -> array of thumbnail URLs
   onDecadeClick: (decade: string) => void;
 }
 
@@ -93,13 +94,14 @@ const getDecadeConfig = (decade: string) => {
   };
 };
 
-const DecadeGrid = ({ decades, decadeCounts, onDecadeClick }: DecadeGridProps) => {
+const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: DecadeGridProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {decades.map((decade, index) => {
         const config = getDecadeConfig(decade);
         const Icon = config.icon;
         const count = decadeCounts[decade] || 0;
+        const thumbnails = decadeThumbnails[decade] || [];
 
         return (
           <motion.button
@@ -110,33 +112,68 @@ const DecadeGrid = ({ decades, decadeCounts, onDecadeClick }: DecadeGridProps) =
             whileHover={{ scale: 1.02, y: -4 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onDecadeClick(decade)}
-            className={`relative overflow-hidden rounded-2xl p-5 sm:p-6 text-left bg-gradient-to-br ${config.gradient} text-white shadow-lg hover:shadow-xl transition-shadow group`}
+            className="relative overflow-hidden rounded-2xl text-left shadow-lg hover:shadow-xl transition-shadow group"
           >
-            {/* Fond décoratif */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+            {/* Fond avec vignettes ou gradient */}
+            {thumbnails.length > 0 ? (
+              <div className="absolute inset-0">
+                {/* Grille de miniatures en fond */}
+                <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
+                  {thumbnails.slice(0, 4).map((url, i) => (
+                    <div key={i} className="relative overflow-hidden">
+                      <img 
+                        src={url} 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                  {/* Remplir les cases vides */}
+                  {Array.from({ length: Math.max(0, 4 - thumbnails.length) }).map((_, i) => (
+                    <div key={`empty-${i}`} className={`bg-gradient-to-br ${config.gradient}`} />
+                  ))}
+                </div>
+                {/* Overlay gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30`} />
+              </div>
+            ) : (
+              <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient}`}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+              </div>
+            )}
             
             {/* Contenu */}
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <Icon className="w-6 h-6" />
+            <div className="relative z-10 p-5 sm:p-6 text-white min-h-[180px] flex flex-col">
+              <div className="flex items-start justify-between mb-auto">
+                <div className={`w-11 h-11 rounded-xl ${thumbnails.length > 0 ? 'bg-white/20' : 'bg-white/20'} backdrop-blur-sm flex items-center justify-center`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-                <span className="text-3xl">{config.emoji}</span>
+                <span className="text-2xl">{config.emoji}</span>
               </div>
               
-              <h3 className="font-display font-bold text-xl sm:text-2xl mb-1">
-                Années {decade}
-              </h3>
-              <p className="text-white/80 text-sm mb-3">
-                {config.description}
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium">
-                  {count} souvenir{count > 1 ? 's' : ''}
-                </span>
-                <ChevronRight className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              <div className="mt-4">
+                <h3 className="font-display font-bold text-xl sm:text-2xl mb-1">
+                  Années {decade}
+                </h3>
+                <p className="text-white/80 text-sm mb-3">
+                  {config.description}
+                </p>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium">
+                      {count} souvenir{count > 1 ? 's' : ''}
+                    </span>
+                    {thumbnails.length > 0 && (
+                      <span className="flex items-center gap-1 text-xs text-white/70">
+                        <ImageIcon className="w-3 h-3" />
+                        {thumbnails.length > 4 ? '4+' : thumbnails.length}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </div>
               </div>
             </div>
           </motion.button>

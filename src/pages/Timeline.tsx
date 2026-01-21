@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Filter, X, Folder, CalendarRange, FileText, Image, Video, Music, Play } from 'lucide-react';
+import { Layers, Filter, X, Folder, CalendarRange, FileText, Image, Video, Music } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -35,6 +35,13 @@ type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
+interface CapsuleMedia {
+  id: string;
+  file_url: string;
+  file_type: string;
+  capsule_id: string;
+}
+
 // Helper to get the relevant date for timeline
 const getCapsuleDate = (capsule: Capsule): Date => {
   if (capsule.memory_date) {
@@ -66,6 +73,8 @@ const Timeline = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
+  const [capsuleMedias, setCapsuleMedias] = useState<Record<string, CapsuleMedia | null>>({});
+  const [allMedias, setAllMedias] = useState<CapsuleMedia[]>([]);
 
   // Modal states
   const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
@@ -78,7 +87,7 @@ const Timeline = () => {
   const [selectedTypes, setSelectedTypes] = useState<CapsuleType[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CapsuleStatus[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategoriesFilter, setSelectedCategoriesFilter] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
   const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
 
@@ -95,8 +104,8 @@ const Timeline = () => {
       const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(capsule.capsule_type);
       const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(capsule.status);
       const tagMatch = selectedTags.length === 0 || selectedTags.some((t) => capsule.tags?.includes(t));
-      const categoryMatch = selectedCategories.length === 0 || 
-        (capsuleCategories[capsule.id] && selectedCategories.includes(capsuleCategories[capsule.id].id));
+      const categoryMatch = selectedCategoriesFilter.length === 0 || 
+        (capsuleCategories[capsule.id] && selectedCategoriesFilter.includes(capsuleCategories[capsule.id].id));
       
       const capsuleDate = getCapsuleDate(capsule);
       const dateFromMatch = !dateFrom || !isBefore(capsuleDate, startOfDay(dateFrom));
@@ -104,35 +113,63 @@ const Timeline = () => {
       
       return typeMatch && statusMatch && tagMatch && categoryMatch && dateFromMatch && dateToMatch;
     });
-  }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategories, capsuleCategories, dateFrom, dateTo]);
+  }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategoriesFilter, capsuleCategories, dateFrom, dateTo]);
 
-  // Extract decades with counts
-  const { decades, decadeCounts } = useMemo(() => {
+  // Extract decades with counts and thumbnails
+  const { decades, decadeCounts, decadeThumbnails } = useMemo(() => {
     const counts: Record<string, number> = {};
+    const thumbnails: Record<string, string[]> = {};
+    
     filteredCapsules.forEach((capsule) => {
       const date = getCapsuleDate(capsule);
       const year = parseInt(format(date, 'yyyy'));
       const decade = (Math.floor(year / 10) * 10).toString();
       counts[decade] = (counts[decade] || 0) + 1;
+      
+      // Collect thumbnails for this decade
+      const media = capsuleMedias[capsule.id];
+      if (media && (media.file_type.startsWith('image/') || media.file_type.startsWith('video/'))) {
+        if (!thumbnails[decade]) thumbnails[decade] = [];
+        if (thumbnails[decade].length < 4) {
+          thumbnails[decade].push(media.file_url);
+        }
+      }
     });
+    
     const sortedDecades = Object.keys(counts).sort((a, b) => parseInt(b) - parseInt(a));
-    return { decades: sortedDecades, decadeCounts: counts };
-  }, [filteredCapsules]);
+    return { decades: sortedDecades, decadeCounts: counts, decadeThumbnails: thumbnails };
+  }, [filteredCapsules, capsuleMedias]);
 
-  // Get years for selected decade
+  // Get years for selected decade with thumbnails
   const yearsForDecade = useMemo(() => {
     if (!selectedDecade) return {};
-    const years: Record<string, number> = {};
+    const years: Record<string, { count: number; thumbnails: string[]; hasVideo: boolean }> = {};
+    
     filteredCapsules.forEach((capsule) => {
       const date = getCapsuleDate(capsule);
       const year = format(date, 'yyyy');
       const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
+      
       if (decade === selectedDecade) {
-        years[year] = (years[year] || 0) + 1;
+        if (!years[year]) {
+          years[year] = { count: 0, thumbnails: [], hasVideo: false };
+        }
+        years[year].count++;
+        
+        const media = capsuleMedias[capsule.id];
+        if (media) {
+          if (media.file_type.startsWith('video/')) {
+            years[year].hasVideo = true;
+          }
+          if ((media.file_type.startsWith('image/') || media.file_type.startsWith('video/')) && years[year].thumbnails.length < 2) {
+            years[year].thumbnails.push(media.file_url);
+          }
+        }
       }
     });
+    
     return years;
-  }, [filteredCapsules, selectedDecade]);
+  }, [filteredCapsules, selectedDecade, capsuleMedias]);
 
   // Get capsules for selected year
   const capsulesForYear = useMemo(() => {
@@ -147,13 +184,13 @@ const Timeline = () => {
     });
   }, [filteredCapsules, selectedYear]);
 
-  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategories.length + (dateFrom ? 1 : 0) + (dateTo ? 1 : 0);
+  const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategoriesFilter.length + (dateFrom ? 1 : 0) + (dateTo ? 1 : 0);
 
   const clearAllFilters = () => {
     setSelectedTypes([]);
     setSelectedStatuses([]);
     setSelectedTags([]);
-    setSelectedCategories([]);
+    setSelectedCategoriesFilter([]);
     setDateFrom(undefined);
     setDateTo(undefined);
   };
@@ -177,7 +214,7 @@ const Timeline = () => {
   };
 
   const toggleCategory = (categoryId: string) => {
-    setSelectedCategories((prev) =>
+    setSelectedCategoriesFilter((prev) =>
       prev.includes(categoryId) ? prev.filter((c) => c !== categoryId) : [...prev, categoryId]
     );
   };
@@ -216,24 +253,69 @@ const Timeline = () => {
           
           if (capsulesRes.data.length > 0) {
             const capsuleIds = capsulesRes.data.map(c => c.id);
-            const { data: categoriesData } = await supabase
-              .from('capsule_categories')
-              .select(`
-                capsule_id,
-                is_primary,
-                category:categories(*)
-              `)
-              .in('capsule_id', capsuleIds)
-              .eq('is_primary', true);
+            
+            // Fetch categories and medias in parallel
+            const [categoriesRes, mediasRes] = await Promise.all([
+              supabase
+                .from('capsule_categories')
+                .select(`
+                  capsule_id,
+                  is_primary,
+                  category:categories(*)
+                `)
+                .in('capsule_id', capsuleIds)
+                .eq('is_primary', true),
+              supabase
+                .from('capsule_medias')
+                .select('id, capsule_id, file_url, file_type')
+                .in('capsule_id', capsuleIds)
+                .order('position', { ascending: true })
+            ]);
 
-            if (categoriesData) {
+            if (categoriesRes.data) {
               const categoryMap: Record<string, Category> = {};
-              (categoriesData as any[]).forEach((item) => {
+              (categoriesRes.data as any[]).forEach((item) => {
                 if (item.category) {
                   categoryMap[item.capsule_id] = item.category;
                 }
               });
               setCapsuleCategories(categoryMap);
+            }
+
+            if (mediasRes.data) {
+              // Get signed URLs for all medias
+              const mediasWithUrls: CapsuleMedia[] = [];
+              const mediaMap: Record<string, CapsuleMedia | null> = {};
+              
+              for (const media of mediasRes.data) {
+                const isImage = media.file_type.startsWith('image/');
+                const isVideo = media.file_type.startsWith('video/');
+                
+                if (isImage || isVideo) {
+                  // Get signed URL
+                  const { data: signedData } = await supabase.storage
+                    .from('capsule-medias')
+                    .createSignedUrl(media.file_url, 3600);
+                  
+                  if (signedData?.signedUrl) {
+                    const mediaWithUrl: CapsuleMedia = {
+                      id: media.id,
+                      capsule_id: media.capsule_id,
+                      file_url: signedData.signedUrl,
+                      file_type: media.file_type
+                    };
+                    mediasWithUrls.push(mediaWithUrl);
+                    
+                    // Only keep first media per capsule for thumbnails
+                    if (!mediaMap[media.capsule_id]) {
+                      mediaMap[media.capsule_id] = mediaWithUrl;
+                    }
+                  }
+                }
+              }
+              
+              setAllMedias(mediasWithUrls);
+              setCapsuleMedias(mediaMap);
             }
           }
         }
@@ -294,6 +376,7 @@ const Timeline = () => {
         decade={selectedDecade}
         capsules={capsulesForYear}
         capsuleCategories={capsuleCategories}
+        capsuleMedias={capsuleMedias}
         onClose={() => {
           setSelectedYear(null);
           setSelectedDecade(null);
@@ -429,9 +512,9 @@ const Timeline = () => {
                     <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
                       <Folder className="w-4 h-4" />
                       <span className="hidden xs:inline">Catégorie</span>
-                      {selectedCategories.length > 0 && (
+                      {selectedCategoriesFilter.length > 0 && (
                         <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                          {selectedCategories.length}
+                          {selectedCategoriesFilter.length}
                         </Badge>
                       )}
                     </Button>
@@ -442,7 +525,7 @@ const Timeline = () => {
                     {categories.map((category) => (
                       <DropdownMenuCheckboxItem
                         key={category.id}
-                        checked={selectedCategories.includes(category.id)}
+                        checked={selectedCategoriesFilter.includes(category.id)}
                         onCheckedChange={() => toggleCategory(category.id)}
                       >
                         <span className="mr-2">{category.icon}</span>
@@ -549,6 +632,7 @@ const Timeline = () => {
             <DecadeGrid
               decades={decades}
               decadeCounts={decadeCounts}
+              decadeThumbnails={decadeThumbnails}
               onDecadeClick={setSelectedDecade}
             />
           )}
