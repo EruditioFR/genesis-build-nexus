@@ -7,12 +7,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// PRODUCTION product IDs mapping
 const PRODUCT_TO_TIER: Record<string, string> = {
-  "prod_TkzBr0QmFuD1zC": "premium",
-  "prod_TpSxAm8b0GrQU4": "premium", // Annual premium plan
-  "prod_TkzBi3KYGrCDkh": "heritage",
-  "prod_TpSkLunxzpbl1E": "heritage",
-  "prod_TpSpdTcwfI91FM": "heritage", // Annual heritage plan
+  "prod_TpfCfW2XoivaMo": "premium",      // Premium mensuel
+  "prod_TpfDVWEiQyAskK": "premium",      // Premium annuel
+  "prod_TpfDHDc4suNNpU": "heritage",     // Héritage mensuel
+  "prod_TpfEpqH8Z3zaDh": "heritage",     // Héritage annuel
 };
 
 const logStep = (step: string, details?: any) => {
