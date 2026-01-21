@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, Check } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.jpg';
 
@@ -18,9 +19,47 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Debounced email check
+  const checkEmailExists = useCallback(async (emailToCheck: string) => {
+    if (!emailToCheck || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailToCheck)) {
+      setEmailExists(false);
+      return;
+    }
+
+    setCheckingEmail(true);
+    try {
+      const { data, error } = await supabase.rpc('check_email_exists', {
+        email_to_check: emailToCheck
+      });
+      
+      if (!error) {
+        setEmailExists(data === true);
+      }
+    } catch (err) {
+      console.error('Error checking email:', err);
+    } finally {
+      setCheckingEmail(false);
+    }
+  }, []);
+
+  // Debounce email check
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (email) {
+        checkEmailExists(email);
+      } else {
+        setEmailExists(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [email, checkEmailExists]);
 
   const passwordRequirements = [
     { label: 'Au moins 8 caractères', met: password.length >= 8 },
@@ -30,6 +69,15 @@ const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (emailExists) {
+      toast({
+        variant: 'destructive',
+        title: 'Email déjà utilisé',
+        description: 'Cette adresse email est déjà associée à un compte.',
+      });
+      return;
+    }
 
     if (email !== confirmEmail) {
       toast({
@@ -147,10 +195,32 @@ const Signup = () => {
                   placeholder="vous@exemple.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
+                  className={`pl-10 pr-10 h-12 bg-white border-2 text-[#1a1a2e] placeholder:text-[#1a1a2e]/40 ${
+                    emailExists 
+                      ? 'border-destructive focus:border-destructive' 
+                      : 'border-[#1a1a2e]/20 focus:border-primary'
+                  }`}
                   required
                 />
+                {checkingEmail && (
+                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50 animate-spin" />
+                )}
+                {!checkingEmail && emailExists && (
+                  <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-destructive" />
+                )}
+                {!checkingEmail && email && !emailExists && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+                  <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />
+                )}
               </div>
+              {emailExists && (
+                <p className="text-sm text-destructive font-medium mt-1 flex items-center gap-1.5">
+                  <AlertCircle className="w-4 h-4" />
+                  Cette adresse email est déjà utilisée.{' '}
+                  <Link to="/login" className="underline hover:no-underline">
+                    Se connecter ?
+                  </Link>
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
