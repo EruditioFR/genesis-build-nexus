@@ -54,9 +54,21 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
                 onClick={() => onYearClick(year)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-secondary/50 hover:bg-secondary/5 transition-all group"
               >
-                {/* Vignettes */}
+                {/* Vignettes - adapté au nombre d'images */}
                 <div className="flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden bg-muted">
-                  {data.thumbnails.length > 0 ? (
+                  {data.thumbnails.length === 0 ? (
+                    <div className="w-full h-full bg-secondary/10 flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-secondary/50" />
+                    </div>
+                  ) : data.thumbnails.length === 1 ? (
+                    // 1 image : pleine largeur
+                    <img 
+                      src={data.thumbnails[0]} 
+                      alt="" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    // 2+ images : grille 2 colonnes
                     <div className="w-full h-full grid grid-cols-2 gap-px">
                       {data.thumbnails.slice(0, 2).map((url, i) => (
                         <div key={i} className="relative overflow-hidden bg-muted">
@@ -67,15 +79,6 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
                           />
                         </div>
                       ))}
-                      {data.thumbnails.length === 1 && (
-                        <div className="bg-secondary/10 flex items-center justify-center">
-                          <ImageIcon className="w-3 h-3 text-secondary/50" />
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="w-full h-full bg-secondary/10 flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-secondary/50" />
                     </div>
                   )}
                 </div>
