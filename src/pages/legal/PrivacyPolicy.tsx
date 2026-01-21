@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-muted-foreground">
                 <strong>Responsable du traitement :</strong> Family Garden SAS<br />
-                <strong>Email :</strong> <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
+                <strong>Email :</strong> <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
           </section>
@@ -177,7 +177,7 @@ const PrivacyPolicy = () => {
             </ul>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="text-muted-foreground">
-                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
+                Pour exercer ces droits, contactez-nous à : <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
               <p className="text-muted-foreground text-sm mt-2">
                 Nous répondrons à votre demande dans un délai d'un mois conformément au RGPD.
@@ -301,7 +301,7 @@ const PrivacyPolicy = () => {
 
               <p className="text-muted-foreground text-sm">
                 Vous pouvez demander une copie des garanties appropriées en nous contactant à{" "}
-                <a href="mailto:privacy@familygarden.com" className="text-primary hover:underline">privacy@familygarden.com</a>
+                <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
           </section>
@@ -366,9 +366,9 @@ const PrivacyPolicy = () => {
               Pour toute question concernant cette politique ou vos données personnelles, contactez-nous :
             </p>
             <ul className="list-none pl-0 text-muted-foreground space-y-1 mt-4">
-              <li>• Email général : <a href="mailto:contact@lalignedutemps.com" className="text-primary hover:underline">contact@lalignedutemps.com</a></li>
-              <li>• Questions de confidentialité : <a href="mailto:privacy@lalignedutemps.com" className="text-primary hover:underline">privacy@lalignedutemps.com</a></li>
-              <li>• Délégué à la Protection des Données : <a href="mailto:dpo@lalignedutemps.com" className="text-primary hover:underline">dpo@lalignedutemps.com</a></li>
+              <li>• Email général : <a href="mailto:contact@familygarden.fr" className="text-primary hover:underline">contact@familygarden.fr</a></li>
+              <li>• Questions de confidentialité : <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a></li>
+              <li>• Délégué à la Protection des Données : <a href="mailto:dpo@familygarden.fr" className="text-primary hover:underline">dpo@familygarden.fr</a></li>
             </ul>
           </section>
         </div>

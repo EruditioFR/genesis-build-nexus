@@ -47,7 +47,7 @@ const LegalNotice = () => {
               <p><strong>RCS :</strong> [Numéro RCS à compléter]</p>
               <p><strong>SIRET :</strong> [Numéro SIRET à compléter]</p>
               <p><strong>Numéro de TVA intracommunautaire :</strong> [À compléter]</p>
-              <p><strong>Email :</strong> contact@familygarden.com</p>
+              <p><strong>Email :</strong> contact@familygarden.fr</p>
               <p><strong>Téléphone :</strong> [À compléter]</p>
             </div>
           </section>
@@ -228,7 +228,7 @@ const LegalNotice = () => {
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="font-semibold text-foreground mb-2">Délégué à la Protection des Données (DPO)</p>
-              <p className="text-muted-foreground">Email : <a href="mailto:dpo@familygarden.com" className="text-primary hover:underline">dpo@familygarden.com</a></p>
+              <p className="text-muted-foreground">Email : <a href="mailto:dpo@familygarden.fr" className="text-primary hover:underline">dpo@familygarden.fr</a></p>
               <p className="text-muted-foreground mt-2">
                 <strong>Autorité de contrôle :</strong> CNIL - Commission Nationale de l'Informatique et des Libertés
               </p>
@@ -275,7 +275,7 @@ const LegalNotice = () => {
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">10. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
               Pour toute question concernant ces mentions légales, vous pouvez nous contacter à : 
-              <a href="mailto:contact@familygarden.com" className="text-primary hover:underline ml-1">contact@familygarden.com</a>
+              <a href="mailto:contact@familygarden.fr" className="text-primary hover:underline ml-1">contact@familygarden.fr</a>
             </p>
           </section>
 

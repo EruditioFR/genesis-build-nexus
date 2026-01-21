@@ -136,7 +136,7 @@ const TermsOfSale = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">11. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Pour toute question relative aux CGV, contactez-nous à : contact@familygarden.com
+              Pour toute question relative aux CGV, contactez-nous à : contact@familygarden.fr
             </p>
           </section>
         </div>
