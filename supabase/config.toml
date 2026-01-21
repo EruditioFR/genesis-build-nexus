@@ -3,3 +3,9 @@ project_id = "fngbrxoblmbukqzzdwxp"
 [functions.process-scheduled-capsules]
 verify_jwt = false
 schedule = "*/5 * * * *"
+
+[functions.get-invitation]
+verify_jwt = false
+
+[functions.accept-invitation]
+verify_jwt = false

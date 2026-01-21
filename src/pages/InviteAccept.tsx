@@ -9,6 +9,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
+interface InvitationData {
+  id: string;
+  circle_id: string;
+  email: string;
+  name: string | null;
+  circle_name: string;
+  circle_color: string;
+  inviter_name: string;
+  expired: boolean;
+  already_accepted: boolean;
+}
+
 const InviteAccept = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
@@ -16,17 +28,7 @@ const InviteAccept = () => {
   
   const [loading, setLoading] = useState(true);
   const [accepting, setAccepting] = useState(false);
-  const [invitation, setInvitation] = useState<{
-    id: string;
-    circle_id: string;
-    email: string;
-    name: string | null;
-    circle_name: string;
-    circle_color: string;
-    inviter_name: string;
-    expired: boolean;
-    already_accepted: boolean;
-  } | null>(null);
+  const [invitation, setInvitation] = useState<InvitationData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,59 +40,31 @@ const InviteAccept = () => {
       }
 
       try {
-        // Fetch invitation details
-        const { data: member, error: memberError } = await supabase
-          .from('circle_members')
-          .select(`
-            id,
-            circle_id,
-            email,
-            name,
-            invitation_expires_at,
-            accepted_at,
-            circles (
-              name,
-              color,
-              owner_id
-            )
-          `)
-          .eq('invitation_token', token)
-          .maybeSingle();
+        // Use edge function to fetch invitation (bypasses RLS)
+        const { data, error: fetchError } = await supabase.functions.invoke('get-invitation', {
+          body: { token },
+        });
 
-        if (memberError) throw memberError;
+        if (fetchError) {
+          console.error('Error fetching invitation:', fetchError);
+          setError("Erreur lors de la récupération de l'invitation");
+          setLoading(false);
+          return;
+        }
 
-        if (!member) {
+        if (data.error === 'not_found') {
           setError("Cette invitation n'existe pas ou a été annulée");
           setLoading(false);
           return;
         }
 
-        // Check if expired
-        const expired = member.invitation_expires_at 
-          ? new Date(member.invitation_expires_at) < new Date() 
-          : false;
+        if (data.error) {
+          setError(data.message || "Erreur inconnue");
+          setLoading(false);
+          return;
+        }
 
-        // Check if already accepted
-        const already_accepted = !!member.accepted_at;
-
-        // Get inviter name
-        const { data: ownerProfile } = await supabase
-          .from('profiles')
-          .select('display_name')
-          .eq('user_id', (member.circles as any).owner_id)
-          .maybeSingle();
-
-        setInvitation({
-          id: member.id,
-          circle_id: member.circle_id,
-          email: member.email || '',
-          name: member.name,
-          circle_name: (member.circles as any).name,
-          circle_color: (member.circles as any).color,
-          inviter_name: ownerProfile?.display_name || 'Un utilisateur',
-          expired,
-          already_accepted,
-        });
+        setInvitation(data);
       } catch (err: any) {
         console.error('Error fetching invitation:', err);
         setError("Erreur lors de la récupération de l'invitation");
@@ -103,22 +77,45 @@ const InviteAccept = () => {
   }, [token]);
 
   const handleAccept = async () => {
-    if (!invitation || !user) return;
+    if (!invitation || !user || !token) return;
 
     setAccepting(true);
     try {
-      // Update the invitation with user_id and accepted_at
-      const { error } = await supabase
-        .from('circle_members')
-        .update({
-          user_id: user.id,
-          accepted_at: new Date().toISOString(),
-        })
-        .eq('id', invitation.id);
+      // Get the session for auth header
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error("Session expirée, veuillez vous reconnecter");
+        navigate(`/login?redirect=/invite/${token}`);
+        return;
+      }
 
-      if (error) throw error;
+      // Use edge function to accept invitation (bypasses RLS securely)
+      const { data, error: acceptError } = await supabase.functions.invoke('accept-invitation', {
+        body: { token },
+      });
 
-      toast.success(`Vous avez rejoint le cercle "${invitation.circle_name}" !`);
+      if (acceptError) {
+        console.error('Error accepting invitation:', acceptError);
+        toast.error("Erreur lors de l'acceptation de l'invitation");
+        return;
+      }
+
+      if (data.error) {
+        if (data.error === 'already_accepted') {
+          toast.info(`Vous êtes déjà membre du cercle "${data.circle_name}"`);
+          navigate('/circles');
+          return;
+        }
+        if (data.error === 'expired') {
+          toast.error("Cette invitation a expiré");
+          return;
+        }
+        toast.error(data.message || "Erreur lors de l'acceptation");
+        return;
+      }
+
+      toast.success(`Vous avez rejoint le cercle "${data.circle_name}" !`);
       navigate('/circles');
     } catch (err: any) {
       console.error('Error accepting invitation:', err);
