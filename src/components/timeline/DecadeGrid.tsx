@@ -125,8 +125,8 @@ const DecadeGrid = ({ decades, decadeCounts, onDecadeClick }: DecadeGridProps) =
                 <span className="text-3xl">{config.emoji}</span>
               </div>
               
-              <h3 className="font-display font-bold text-2xl sm:text-3xl mb-1">
-                {decade}
+              <h3 className="font-display font-bold text-xl sm:text-2xl mb-1">
+                Années {decade}
               </h3>
               <p className="text-white/80 text-sm mb-3">
                 {config.description}
