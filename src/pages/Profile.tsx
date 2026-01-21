@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import confetti from 'canvas-confetti';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -133,6 +134,32 @@ const Profile = () => {
     const subscriptionStatus = searchParams.get('subscription');
     
     if (subscriptionStatus === 'success' && user) {
+      // Launch confetti celebration
+      const duration = 3000;
+      const end = Date.now() + duration;
+
+      const frame = () => {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.6 },
+          colors: ['#D4AF37', '#C9A227', '#B8860B', '#FFD700'],
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.6 },
+          colors: ['#D4AF37', '#C9A227', '#B8860B', '#FFD700'],
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+      frame();
+
       // Refresh subscription status
       checkSubscription();
       // Refresh profile to get updated storage limits
