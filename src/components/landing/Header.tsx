@@ -43,7 +43,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     { label: "Fonctionnalités", href: "#features" },
     { label: "Comment ça marche", href: "#how-it-works" },
     { label: "Tarifs", href: "#pricing" },
-    { label: "FAQ", href: "#faq" },
+    { label: "À propos", href: "/about", isRoute: true },
   ];
 
   const getInitials = () => {
@@ -92,13 +92,23 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
-            >
-              {link.label}
-            </a>
+            link.isRoute ? (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </nav>
 
@@ -181,14 +191,25 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
               {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
-                >
-                  {link.label}
-                </a>
+                link.isRoute ? (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
               <div className="pt-4 mt-2 border-t border-border flex flex-col gap-3">
                 {user ? (
