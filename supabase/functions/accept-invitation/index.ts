@@ -164,9 +164,8 @@ serve(async (req: Request) => {
       // Send email notification to circle owner
       if (resendApiKey) {
         try {
-          // Get owner's email from auth.users via profile
-          const { data: ownerData } = await supabaseAdmin.auth.admin.getUserById(ownerId);
-          const ownerEmail = ownerData?.user?.email;
+          // Get owner's email via secure RPC function
+          const { data: ownerEmail } = await supabaseAdmin.rpc('get_user_email', { _user_id: ownerId });
 
           // Get owner's display name
           const { data: ownerProfile } = await supabaseAdmin
