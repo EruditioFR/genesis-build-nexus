@@ -7,26 +7,26 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Subscription tiers with their Stripe price IDs
+// Subscription tiers with their Stripe price IDs (PRODUCTION)
 const SUBSCRIPTION_TIERS = {
   premium: {
     monthly: {
-      price_id: "price_1SnTCvRc375UxOm0bA7Hk2bm",
-      product_id: "prod_TkzBr0QmFuD1zC",
+      price_id: "price_1SrzsNRc375UxOm0w9dJmRFf",
+      product_id: "prod_TpfCfW2XoivaMo",
     },
     yearly: {
-      price_id: "price_1Sro1vRc375UxOm0XL72JSNl",
-      product_id: "prod_TpSxAm8b0GrQU4",
+      price_id: "price_1SrzsjRc375UxOm0SEiXQkW6",
+      product_id: "prod_TpfDVWEiQyAskK",
     },
   },
   heritage: {
     monthly: {
-      price_id: "price_1SrnowRc375UxOm0JYq9Dm0V",
-      product_id: "prod_TpSkLunxzpbl1E",
+      price_id: "price_1SrztIRc375UxOm0U452itnc",
+      product_id: "prod_TpfDHDc4suNNpU",
     },
     yearly: {
-      price_id: "price_1SrntuRc375UxOm0Eb4nUPT5",
-      product_id: "prod_TpSpdTcwfI91FM",
+      price_id: "price_1SrzthRc375UxOm0JeYmlaIM",
+      product_id: "prod_TpfEpqH8Z3zaDh",
     },
   },
 };
