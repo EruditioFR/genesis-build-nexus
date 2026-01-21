@@ -34,6 +34,52 @@
 
     <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="//fngbrxoblmbukqzzdwxp.supabase.co" />
+
+    <!-- JSON-LD Structured Data for GEO (Generative Engine Optimization) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://www.familygarden.fr/#organization",
+      "name": "Family Garden",
+      "url": "https://www.familygarden.fr",
+      "logo": "https://www.familygarden.fr/logo.png",
+      "description": "Plateforme française de capsules mémorielles pour préserver et transmettre vos souvenirs aux générations futures. Stockage sécurisé avec chiffrement AES-256 sur serveurs européens conformes RGPD.",
+      "foundingDate": "2024",
+      "areaServed": "France",
+      "knowsLanguage": "fr",
+      "slogan": "Préservez l'extraordinaire de votre vie ordinaire"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "@id": "https://www.familygarden.fr/#app",
+      "name": "Family Garden",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "description": "Application web de création de capsules mémorielles numériques. Stockez textes, photos, vidéos et audio pour créer votre héritage familial digital.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "description": "Version gratuite disponible avec 500 Mo de stockage"
+      },
+      "featureList": [
+        "Capsules mémorielles multimédia",
+        "Chronologie interactive par décennies",
+        "Cercles de partage familial sécurisés",
+        "Export PDF haute qualité",
+        "Arbre généalogique interactif",
+        "Legs posthume programmé",
+        "Chiffrement AES-256"
+      ],
+      "provider": {
+        "@id": "https://www.familygarden.fr/#organization"
+      }
+    }
+    </script>
   </head>
 
   <body>
