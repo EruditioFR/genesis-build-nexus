@@ -114,25 +114,71 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
             onClick={() => onDecadeClick(decade)}
             className="relative overflow-hidden rounded-2xl text-left shadow-lg hover:shadow-xl transition-shadow group"
           >
-            {/* Fond avec vignettes ou gradient */}
+            {/* Fond avec vignettes ou gradient - adapté au nombre d'images */}
             {thumbnails.length > 0 ? (
               <div className="absolute inset-0">
-                {/* Grille de miniatures en fond */}
-                <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
-                  {thumbnails.slice(0, 4).map((url, i) => (
-                    <div key={i} className="relative overflow-hidden">
+                {/* Grille adaptative selon le nombre d'images */}
+                {thumbnails.length === 1 ? (
+                  // 1 image : pleine largeur
+                  <div className="absolute inset-0">
+                    <img 
+                      src={thumbnails[0]} 
+                      alt="" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : thumbnails.length === 2 ? (
+                  // 2 images : 2 colonnes
+                  <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
+                    {thumbnails.map((url, i) => (
+                      <div key={i} className="relative overflow-hidden">
+                        <img 
+                          src={url} 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : thumbnails.length === 3 ? (
+                  // 3 images : 1 grande + 2 petites
+                  <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
+                    <div className="relative overflow-hidden row-span-2">
                       <img 
-                        src={url} 
+                        src={thumbnails[0]} 
                         alt="" 
                         className="w-full h-full object-cover"
                       />
                     </div>
-                  ))}
-                  {/* Remplir les cases vides */}
-                  {Array.from({ length: Math.max(0, 4 - thumbnails.length) }).map((_, i) => (
-                    <div key={`empty-${i}`} className={`bg-gradient-to-br ${config.gradient}`} />
-                  ))}
-                </div>
+                    <div className="relative overflow-hidden">
+                      <img 
+                        src={thumbnails[1]} 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="relative overflow-hidden">
+                      <img 
+                        src={thumbnails[2]} 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  // 4+ images : grille 2x2
+                  <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5">
+                    {thumbnails.slice(0, 4).map((url, i) => (
+                      <div key={i} className="relative overflow-hidden">
+                        <img 
+                          src={url} 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {/* Overlay gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30`} />
               </div>
