@@ -103,7 +103,7 @@ const HeroSection = () => {
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">Ne laissez pas vos</span>
             <span className="block">souvenirs s'effacer,</span>
-            <span className="block mt-2 sm:mt-3 text-secondary">faites-en un trésor familial.</span>
+            <span className="block mt-2 sm:mt-3 text-primary-foreground">faites-en un trésor familial.</span>
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
