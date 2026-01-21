@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { Layers, Filter, X, ChevronUp, Folder, CalendarRange, FileText, Image, Video, Music } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Layers, Filter, X, Folder, CalendarRange, FileText, Image, Video, Music, Play } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -24,16 +24,10 @@ import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
-
-import {
-  DecadeCard,
-  DecadeNavigation,
-  MonthGroup,
-  TimelineCapsuleCard,
-  TimelineEmpty,
-  TimelineHeader,
-  YearSection,
-} from '@/components/timeline';
+import DecadeGrid from '@/components/timeline/DecadeGrid';
+import DecadeModal from '@/components/timeline/DecadeModal';
+import YearModal from '@/components/timeline/YearModal';
+import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -64,12 +58,6 @@ const statusConfig: Record<CapsuleStatus, { label: string }> = {
   archived: { label: 'Archivé' },
 };
 
-interface GroupedCapsules {
-  [year: string]: {
-    [month: string]: Capsule[];
-  };
-}
-
 const Timeline = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -77,8 +65,11 @@ const Timeline = () => {
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
-  const [activeDecade, setActiveDecade] = useState<string | null>(null);
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
+
+  // Modal states
+  const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -90,9 +81,6 @@ const Timeline = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
   const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
-
-  const { scrollYProgress } = useScroll();
-  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   // Extract all unique tags
   const allTags = useMemo(() => {
@@ -118,51 +106,46 @@ const Timeline = () => {
     });
   }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategories, capsuleCategories, dateFrom, dateTo]);
 
-  // Extract decades
-  const decades = useMemo(() => {
-    const decadeSet = new Set<string>();
+  // Extract decades with counts
+  const { decades, decadeCounts } = useMemo(() => {
+    const counts: Record<string, number> = {};
     filteredCapsules.forEach((capsule) => {
       const date = getCapsuleDate(capsule);
       const year = parseInt(format(date, 'yyyy'));
-      const decade = Math.floor(year / 10) * 10;
-      decadeSet.add(decade.toString());
+      const decade = (Math.floor(year / 10) * 10).toString();
+      counts[decade] = (counts[decade] || 0) + 1;
     });
-    return Array.from(decadeSet).sort((a, b) => parseInt(b) - parseInt(a));
+    const sortedDecades = Object.keys(counts).sort((a, b) => parseInt(b) - parseInt(a));
+    return { decades: sortedDecades, decadeCounts: counts };
   }, [filteredCapsules]);
 
-  // Scroll to decade
-  const scrollToDecade = (decade: string) => {
-    const element = document.getElementById(`decade-${decade}`);
-    if (element) {
-      const headerOffset = 120;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }
-  };
-
-  // Track active decade on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const decadeElements = decades.map((d) => ({
-        decade: d,
-        element: document.getElementById(`decade-${d}`),
-      }));
-
-      for (const { decade, element } of decadeElements) {
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 180 && rect.bottom > 0) {
-            setActiveDecade(decade);
-            break;
-          }
-        }
+  // Get years for selected decade
+  const yearsForDecade = useMemo(() => {
+    if (!selectedDecade) return {};
+    const years: Record<string, number> = {};
+    filteredCapsules.forEach((capsule) => {
+      const date = getCapsuleDate(capsule);
+      const year = format(date, 'yyyy');
+      const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
+      if (decade === selectedDecade) {
+        years[year] = (years[year] || 0) + 1;
       }
-    };
+    });
+    return years;
+  }, [filteredCapsules, selectedDecade]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [decades]);
+  // Get capsules for selected year
+  const capsulesForYear = useMemo(() => {
+    if (!selectedYear) return [];
+    return filteredCapsules.filter((capsule) => {
+      const date = getCapsuleDate(capsule);
+      return format(date, 'yyyy') === selectedYear;
+    }).sort((a, b) => {
+      const dateA = getCapsuleDate(a);
+      const dateB = getCapsuleDate(b);
+      return dateB.getTime() - dateA.getTime();
+    });
+  }, [filteredCapsules, selectedYear]);
 
   const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategories.length + (dateFrom ? 1 : 0) + (dateTo ? 1 : 0);
 
@@ -270,36 +253,6 @@ const Timeline = () => {
     navigate('/');
   };
 
-  // Group filtered capsules by decade, year and month
-  const groupedByDecade = useMemo(() => {
-    const result: Record<string, GroupedCapsules> = {};
-    
-    filteredCapsules.forEach((capsule) => {
-      const date = getCapsuleDate(capsule);
-      const year = format(date, 'yyyy');
-      const month = format(date, 'MMMM', { locale: fr });
-      const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
-
-      if (!result[decade]) result[decade] = {};
-      if (!result[decade][year]) result[decade][year] = {};
-      if (!result[decade][year][month]) result[decade][year][month] = [];
-      result[decade][year][month].push(capsule);
-    });
-
-    return result;
-  }, [filteredCapsules]);
-
-  // Count capsules per decade
-  const decadeCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    Object.entries(groupedByDecade).forEach(([decade, years]) => {
-      counts[decade] = Object.values(years).reduce((sum, months) => {
-        return sum + Object.values(months).reduce((s, caps) => s + caps.length, 0);
-      }, 0);
-    });
-    return counts;
-  }, [groupedByDecade]);
-
   if (authLoading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -315,6 +268,7 @@ const Timeline = () => {
 
   return (
     <>
+      {/* Story Viewer */}
       <AnimatePresence>
         {storyOpen && storyItems.length > 0 && (
           <StoryViewer
@@ -325,6 +279,28 @@ const Timeline = () => {
           />
         )}
       </AnimatePresence>
+
+      {/* Decade Modal */}
+      <DecadeModal
+        decade={selectedDecade && !selectedYear ? selectedDecade : null}
+        years={yearsForDecade}
+        onClose={() => setSelectedDecade(null)}
+        onYearClick={(year) => setSelectedYear(year)}
+      />
+
+      {/* Year Modal */}
+      <YearModal
+        year={selectedYear}
+        decade={selectedDecade}
+        capsules={capsulesForYear}
+        capsuleCategories={capsuleCategories}
+        onClose={() => {
+          setSelectedYear(null);
+          setSelectedDecade(null);
+        }}
+        onBackToDecade={() => setSelectedYear(null)}
+        onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
+      />
 
       <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0 overflow-x-hidden">
         <DashboardHeader
@@ -337,7 +313,7 @@ const Timeline = () => {
           onSignOut={handleSignOut}
         />
 
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-hidden">
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Header */}
           <TimelineHeader
             filteredCount={filteredCapsules.length}
@@ -354,7 +330,7 @@ const Timeline = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="mb-6 flex flex-wrap items-center justify-center gap-2"
+              className="mb-8 flex flex-wrap items-center justify-center gap-2"
             >
               {/* Type Filter */}
               <DropdownMenu>
@@ -570,75 +546,11 @@ const Timeline = () => {
           ) : filteredCapsules.length === 0 ? (
             <TimelineEmpty type="no-results" onClearFilters={clearAllFilters} />
           ) : (
-            <div className="relative overflow-hidden">
-              {/* Decade Navigation */}
-              <DecadeNavigation
-                decades={decades}
-                activeDecade={activeDecade}
-                onDecadeClick={scrollToDecade}
-              />
-
-              {/* Timeline line - Desktop */}
-              <motion.div
-                className="hidden sm:block absolute left-1/2 -translate-x-[1px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary via-primary to-secondary origin-top rounded-full opacity-20"
-                style={{ scaleY }}
-              />
-              <div className="hidden sm:block absolute left-1/2 -translate-x-[1px] top-0 bottom-0 w-0.5 bg-border rounded-full" />
-
-              {/* Decades */}
-              {Object.entries(groupedByDecade)
-                .sort(([a], [b]) => parseInt(b) - parseInt(a))
-                .map(([decade, years]) => (
-                  <DecadeCard 
-                    key={decade} 
-                    decade={decade}
-                    capsuleCount={decadeCounts[decade] || 0}
-                  >
-                    {Object.entries(years)
-                      .sort(([a], [b]) => parseInt(b) - parseInt(a))
-                      .map(([year, months]) => {
-                        const yearCapsuleCount = Object.values(months).reduce((sum, caps) => sum + caps.length, 0);
-                        
-                        return (
-                          <YearSection 
-                            key={year} 
-                            year={year}
-                            capsuleCount={yearCapsuleCount}
-                          >
-                            {Object.entries(months).map(([month, monthCapsules]) => (
-                              <MonthGroup 
-                                key={`${year}-${month}`} 
-                                month={month}
-                                capsuleCount={monthCapsules.length}
-                              >
-                                {monthCapsules.map((capsule, index) => (
-                                  <TimelineCapsuleCard
-                                    key={capsule.id}
-                                    capsule={capsule}
-                                    index={index}
-                                    isLeft={index % 2 === 0}
-                                    onClick={() => navigate(`/capsules/${capsule.id}`)}
-                                    category={capsuleCategories[capsule.id]}
-                                  />
-                                ))}
-                              </MonthGroup>
-                            ))}
-                          </YearSection>
-                        );
-                      })}
-                  </DecadeCard>
-                ))}
-
-              {/* Scroll to top button */}
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="fixed bottom-24 md:bottom-6 right-4 sm:right-6 z-30 p-3 bg-gradient-to-r from-secondary to-primary text-primary-foreground rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-              >
-                <ChevronUp className="w-5 h-5" />
-              </motion.button>
-            </div>
+            <DecadeGrid
+              decades={decades}
+              decadeCounts={decadeCounts}
+              onDecadeClick={setSelectedDecade}
+            />
           )}
         </main>
 
