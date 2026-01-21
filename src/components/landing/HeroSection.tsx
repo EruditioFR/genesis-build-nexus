@@ -33,8 +33,9 @@ const HeroSection = () => {
           fetchPriority="high"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/50 to-primary/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-secondary/15" />
       </motion.div>
 
       {/* Floating Elements - Parallax - Hidden on mobile for cleaner look */}
@@ -49,7 +50,7 @@ const HeroSection = () => {
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut"
-      }} className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-secondary/20 blur-3xl" />
+      }} className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-secondary/30 blur-2xl" />
         <motion.div animate={{
         y: [0, 20, 0],
         rotate: [0, -5, 0]
@@ -57,7 +58,7 @@ const HeroSection = () => {
         duration: 10,
         repeat: Infinity,
         ease: "easeInOut"
-      }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/20 blur-3xl" />
+      }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/30 blur-2xl" />
       </motion.div>
 
       <motion.div 
