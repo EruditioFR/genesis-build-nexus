@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 // Lazy load below-the-fold components to improve LCP
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
@@ -40,6 +41,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      {/* JSON-LD Structured Data for GEO optimization */}
+      <JsonLdSchema type="all" />
       <Header />
       <main>
         <HeroSection />

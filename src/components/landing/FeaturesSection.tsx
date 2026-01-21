@@ -10,35 +10,36 @@ import {
   Mic
 } from "lucide-react";
 
+// Features with GEO-optimized descriptions containing factual, citable information
 const features = [
   {
     icon: BookOpen,
-    title: "Racontez vos souvenirs",
-    description: "Créez des souvenirs riches combinant textes, photos, vidéos et audio pour raconter chaque moment important de votre vie.",
+    title: "Capsules Mémorielles Multimédia",
+    description: "Créez des capsules mémorielles numériques combinant textes, photos, vidéos et enregistrements audio. Chaque souvenir est contextualisé avec date, lieu et personnes liées.",
     color: "bg-secondary text-white",
   },
   {
     icon: Clock,
-    title: "Chronologie Interactive",
-    description: "Visualisez votre histoire sur une frise chronologique élégante, naviguez par décennies et découvrez le contexte historique.",
+    title: "Chronologie Interactive par Décennies",
+    description: "Visualisez votre histoire familiale sur une frise chronologique interactive. Naviguez par décennies et explorez vos souvenirs dans leur contexte temporel.",
     color: "bg-accent text-white",
   },
   {
     icon: Users,
-    title: "Cercles de Partage",
-    description: "Partagez sélectivement avec votre famille et vos amis. Définissez qui peut voir, commenter ou contribuer.",
+    title: "Cercles de Partage Sécurisés",
+    description: "Créez des cercles de confiance (famille, amis) avec permissions granulaires : lecture, commentaires ou contribution. Transmission intergénérationnelle maîtrisée.",
     color: "bg-violet-600 text-white",
   },
   {
     icon: Shield,
-    title: "Sécurité & Héritage",
-    description: "Vos données sont chiffrées et sauvegardées. Programmez la transmission de votre héritage numérique.",
+    title: "Sécurité AES-256 & Legs Posthume",
+    description: "Chiffrement de niveau bancaire AES-256, stockage sur serveurs européens conformes RGPD. Programmez la transmission de votre héritage numérique à vos proches.",
     color: "bg-emerald-600 text-white",
   },
   {
     icon: Download,
-    title: "Export & Téléchargement",
-    description: "Exportez vos souvenirs en PDF haute qualité ou téléchargez tous vos médias en un clic.",
+    title: "Export PDF & Sauvegarde",
+    description: "Exportez vos capsules en PDF haute qualité ou téléchargez l'intégralité de vos médias. Vos données vous appartiennent, exportables à tout moment.",
     color: "bg-rose-500 text-white",
   },
 ];
@@ -73,10 +74,10 @@ const FeaturesSection = () => {
           </span>
           <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6">
             Tout ce dont vous avez besoin pour
-            <span className="text-secondary block sm:inline"> préserver vos souvenirs</span>
+            <span className="text-secondary block sm:inline"> préserver votre héritage familial</span>
           </h2>
           <p className="text-base sm:text-lg text-white/80 px-2 leading-relaxed">
-            Une plateforme complète qui combine la simplicité d'utilisation avec des fonctionnalités puissantes pour créer votre héritage numérique.
+            Une plateforme française complète de capsules mémorielles : créez, organisez et transmettez vos souvenirs aux générations futures en toute sécurité.
           </p>
         </motion.div>
 
