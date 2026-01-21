@@ -217,7 +217,7 @@ const TermsOfUse = () => {
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">15. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
               Pour toute question concernant ces Conditions Générales d'Utilisation, vous pouvez 
-              nous contacter à : contact@familygarden.com
+              nous contacter à : contact@familygarden.fr
             </p>
           </section>
         </div>

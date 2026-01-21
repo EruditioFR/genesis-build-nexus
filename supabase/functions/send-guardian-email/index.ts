@@ -48,11 +48,12 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { guardianEmail, guardianName, ownerName, verificationToken }: GuardianEmailRequest = await req.json();
 
-    const appUrl = Deno.env.get("APP_URL") || "https://fngbrxoblmbukqzzdwxp.lovable.app";
+    const appUrl = Deno.env.get("APP_URL") || "https://www.familygarden.fr";
     const verifyLink = `${appUrl}/guardian/verify/${verificationToken}`;
+    const logoUrl = "https://www.familygarden.fr/logo.png";
 
     const emailResponse = await resend.emails.send({
-      from: "MemoryCapsule <onboarding@resend.dev>",
+      from: "FamilyGarden <onboarding@resend.dev>",
       to: [guardianEmail],
       subject: `${ownerName} vous désigne comme gardien de ses souvenirs`,
       html: `
@@ -66,6 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="max-width: 560px; margin: 0 auto; background-color: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden;">
             
             <div style="background: linear-gradient(135deg, #1E3A5F 0%, #2D4A6F 100%); padding: 32px; text-align: center;">
+              <img src="${logoUrl}" alt="FamilyGarden" style="width: 60px; height: 60px; margin-bottom: 16px;" />
               <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">
                 🛡️ Demande de gardien
               </h1>
@@ -77,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
               </p>
               
               <p style="font-size: 16px; color: #2D3748; line-height: 1.6; margin: 0 0 24px;">
-                <strong>${ownerName}</strong> vous a désigné comme <strong style="color: #1E3A5F;">gardien</strong> de ses capsules héritage sur MemoryCapsule.
+                <strong>${ownerName}</strong> vous a désigné comme <strong style="color: #1E3A5F;">gardien</strong> de ses capsules héritage sur FamilyGarden.
               </p>
               
               <div style="background-color: #f0f4f8; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -104,8 +106,9 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <div style="background-color: #f8f5f0; padding: 20px; text-align: center; border-top: 1px solid #E2E8F0;">
+              <img src="${logoUrl}" alt="FamilyGarden" style="width: 32px; height: 32px; margin-bottom: 8px;" />
               <p style="font-size: 12px; color: #718096; margin: 0;">
-                MemoryCapsule - Préservez vos souvenirs précieux
+                FamilyGarden - Préservez vos souvenirs précieux
               </p>
             </div>
           </div>

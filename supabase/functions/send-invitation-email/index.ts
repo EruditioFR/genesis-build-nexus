@@ -50,12 +50,12 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { circleId, circleName, inviterName, memberEmail, memberName, invitationToken }: InvitationEmailRequest = await req.json();
 
-    // Get the app URL from environment or use the published URL
-    const appUrl = Deno.env.get("APP_URL") || "https://genesis-build-nexus.lovable.app";
+    // Get the app URL from environment or use the production URL
+    const appUrl = Deno.env.get("APP_URL") || "https://www.familygarden.fr";
     const inviteLink = `${appUrl}/invite/${invitationToken}`;
 
-    // Use the published URL for the logo to ensure it's always accessible
-    const logoUrl = "https://genesis-build-nexus.lovable.app/logo.png";
+    // Use the production URL for the logo
+    const logoUrl = "https://www.familygarden.fr/logo.png";
 
     const emailResponse = await resend.emails.send({
       from: "FamilyGarden <onboarding@resend.dev>",

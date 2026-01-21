@@ -136,7 +136,7 @@ const ForgotPassword = () => {
         <div className="mt-8 text-center text-sm text-muted-foreground">
           <p>
             Besoin d'aide ?{' '}
-            <a href="mailto:support@familygarden.com" className="text-secondary hover:text-secondary/80">
+            <a href="mailto:support@familygarden.fr" className="text-secondary hover:text-secondary/80">
               Contactez le support
             </a>
           </p>
