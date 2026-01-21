@@ -238,6 +238,34 @@
   .delay-300 { animation-delay: 300ms; }
   .delay-400 { animation-delay: 400ms; }
   .delay-500 { animation-delay: 500ms; }
+
+  /* Hide scrollbar but allow scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Collapsible animations */
+  @keyframes collapse {
+    from { height: var(--radix-collapsible-content-height); }
+    to { height: 0; }
+  }
+
+  @keyframes expand {
+    from { height: 0; }
+    to { height: var(--radix-collapsible-content-height); }
+  }
+
+  .animate-collapse {
+    animation: collapse 0.2s ease-out;
+  }
+
+  .animate-expand {
+    animation: expand 0.2s ease-out;
+  }
 }
 
 /* Decade-themed backgrounds for Timeline */
