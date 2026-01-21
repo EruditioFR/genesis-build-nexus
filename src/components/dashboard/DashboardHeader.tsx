@@ -159,6 +159,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const { tier } = useSubscription();
 
   const isPremium = tier === 'premium' || tier === 'heritage';
+  const isHeritage = tier === 'heritage';
 
   const getInitials = () => {
     if (user.displayName) {
@@ -334,28 +335,28 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         gradient="bg-gradient-to-br from-secondary to-secondary/70"
                       />
                       
-                      {isPremium ? (
+                      {isHeritage ? (
                         <FeatureCard
                           to="/family-tree"
                           icon={GitBranch}
                           title="Arbre généalogique"
                           description="Visualisez et enrichissez votre histoire familiale"
                           gradient="bg-gradient-to-br from-primary to-primary/70"
-                          badge="Premium"
+                          badge="Héritage"
                         />
                       ) : (
                         <div className="relative">
                           <FeatureCard
-                            to="/premium"
+                            to="/premium?tier=heritage"
                             icon={GitBranch}
                             title="Arbre généalogique"
-                            description="Passez Premium pour débloquer cette fonctionnalité exclusive"
+                            description="Passez au forfait Héritage pour débloquer cette fonctionnalité"
                             gradient="bg-gradient-to-br from-muted-foreground/50 to-muted-foreground/30"
-                            badge="Premium"
+                            badge="Héritage"
                           />
                           <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
                             <Link
-                              to="/premium"
+                              to="/premium?tier=heritage"
                               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors shadow-lg"
                             >
                               <Crown className="w-4 h-4" />
@@ -366,8 +367,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                       )}
                     </div>
 
-                    {/* Premium CTA for non-premium users */}
-                    {!isPremium && (
+                    {/* Upgrade CTA for non-heritage users */}
+                    {!isHeritage && (
                       <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-lg bg-secondary/20">
@@ -375,14 +376,16 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-foreground">
-                              Passez à Premium
+                              {tier === 'premium' ? 'Passez à Héritage' : 'Passez à Premium'}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Débloquez l'arbre généalogique et plus d'espace de stockage
+                              {tier === 'premium' 
+                                ? 'Débloquez l\'arbre généalogique et le partage illimité'
+                                : 'Débloquez les capsules vidéo/audio et plus d\'espace'}
                             </p>
                           </div>
                           <Link
-                            to="/premium"
+                            to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
                             className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
                           >
                             Découvrir
