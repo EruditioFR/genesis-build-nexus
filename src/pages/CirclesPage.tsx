@@ -36,6 +36,7 @@ import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
 import { toast } from 'sonner';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import NoIndex from '@/components/seo/NoIndex';
 
 interface Circle {
   id: string;
@@ -206,7 +207,9 @@ const CirclesPage = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -513,6 +516,7 @@ const CirclesPage = () => {
 
       <MobileBottomNav />
     </div>
+    </>
   );
 };
 

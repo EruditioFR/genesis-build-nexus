@@ -46,6 +46,7 @@ import { useCategories, type Category } from '@/hooks/useCategories';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -351,7 +352,9 @@ const CapsuleEdit = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -647,6 +650,7 @@ const CapsuleEdit = () => {
 
       <MobileBottomNav />
     </div>
+    </>
   );
 };
 

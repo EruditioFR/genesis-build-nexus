@@ -16,6 +16,7 @@ import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -282,8 +283,10 @@ const Dashboard = () => {
   const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy';
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+        <DashboardHeader
         user={{
           id: user.id,
           email: user.email,
@@ -371,6 +374,7 @@ const Dashboard = () => {
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
     </div>
+    </>
   );
 };
 

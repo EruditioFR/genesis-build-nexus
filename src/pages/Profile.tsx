@@ -37,6 +37,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import AvatarUpload from '@/components/profile/AvatarUpload';
 import GuardiansSection from '@/components/profile/GuardiansSection';
 import { cn } from '@/lib/utils';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -259,7 +260,9 @@ const Profile = () => {
   const subscription = subscriptionLabels[profile.subscription_level];
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+    <>
+      <NoIndex />
+      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <DashboardHeader
         user={{
           id: user.id,
@@ -661,6 +664,7 @@ const Profile = () => {
 
       <MobileBottomNav />
     </div>
+    </>
   );
 };
 

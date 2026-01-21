@@ -28,6 +28,7 @@ import DecadeGrid from '@/components/timeline/DecadeGrid';
 import DecadeModal from '@/components/timeline/DecadeModal';
 import YearModal from '@/components/timeline/YearModal';
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -351,6 +352,7 @@ const Timeline = () => {
 
   return (
     <>
+      <NoIndex />
       {/* Story Viewer */}
       <AnimatePresence>
         {storyOpen && storyItems.length > 0 && (
