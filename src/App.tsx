@@ -33,6 +33,7 @@ const GuardianDashboard = lazy(() => import("./pages/GuardianDashboard"));
 const CategoriesPage = lazy(() => import("./pages/CategoriesPage"));
 const CategoryDetailPage = lazy(() => import("./pages/CategoryDetailPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const About = lazy(() => import("./pages/About"));
 
 // Legal pages - lazy loaded
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -99,6 +100,7 @@ const App = () => (
                   <Route path="/terms" element={<TermsOfUse />} />
                   <Route path="/mentions-legales" element={<LegalNotice />} />
                   <Route path="/faq" element={<FAQ />} />
+                  <Route path="/about" element={<About />} />
                   
                   {/* Admin routes */}
                   <Route path="/admin" element={<AdminLayout />}>
