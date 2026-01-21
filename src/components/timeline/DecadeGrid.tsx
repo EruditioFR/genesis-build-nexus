@@ -199,12 +199,9 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
               </div>
               
               <div className="mt-4">
-                <h3 className="font-display font-bold text-xl sm:text-2xl mb-1">
+                <h3 className="font-display font-bold text-xl sm:text-2xl mb-3">
                   Années {decade}
                 </h3>
-                <p className="text-white/80 text-sm mb-3">
-                  {config.description}
-                </p>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
