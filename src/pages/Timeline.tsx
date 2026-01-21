@@ -126,9 +126,9 @@ const Timeline = () => {
       const decade = (Math.floor(year / 10) * 10).toString();
       counts[decade] = (counts[decade] || 0) + 1;
       
-      // Collect thumbnails for this decade
+      // Collect thumbnails for this decade (images only)
       const media = capsuleMedias[capsule.id];
-      if (media && (media.file_type.startsWith('image/') || media.file_type.startsWith('video/'))) {
+      if (media && media.file_type.startsWith('image/')) {
         if (!thumbnails[decade]) thumbnails[decade] = [];
         if (thumbnails[decade].length < 4) {
           thumbnails[decade].push(media.file_url);
@@ -161,7 +161,8 @@ const Timeline = () => {
           if (media.file_type.startsWith('video/')) {
             years[year].hasVideo = true;
           }
-          if ((media.file_type.startsWith('image/') || media.file_type.startsWith('video/')) && years[year].thumbnails.length < 2) {
+          // Only add images as thumbnails
+          if (media.file_type.startsWith('image/') && years[year].thumbnails.length < 2) {
             years[year].thumbnails.push(media.file_url);
           }
         }
@@ -289,9 +290,9 @@ const Timeline = () => {
               
               for (const media of mediasRes.data) {
                 const isImage = media.file_type.startsWith('image/');
-                const isVideo = media.file_type.startsWith('video/');
                 
-                if (isImage || isVideo) {
+                // Only process images for thumbnails
+                if (isImage) {
                   // Get signed URL
                   const { data: signedData } = await supabase.storage
                     .from('capsule-medias')
@@ -306,7 +307,7 @@ const Timeline = () => {
                     };
                     mediasWithUrls.push(mediaWithUrl);
                     
-                    // Only keep first media per capsule for thumbnails
+                    // Only keep first image per capsule for thumbnails
                     if (!mediaMap[media.capsule_id]) {
                       mediaMap[media.capsule_id] = mediaWithUrl;
                     }
