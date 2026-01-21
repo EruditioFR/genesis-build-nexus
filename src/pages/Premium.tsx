@@ -42,7 +42,7 @@ const Premium = () => {
     { feature: 'Espace de stockage', value: '10 Go', icon: HardDrive },
     { feature: 'Tous les formats de capsules', value: 'Texte, photo, vidéo, audio', icon: Sparkles },
     { feature: 'Chronologie avancée', value: true, icon: Zap },
-    { feature: 'Partage de souvenirs', value: '1 personne', icon: Users },
+    { feature: 'Partage de souvenirs', value: '5 personnes (famille, amis...)', icon: Users },
     { feature: 'Sans publicité', value: true, icon: Shield },
   ];
 
