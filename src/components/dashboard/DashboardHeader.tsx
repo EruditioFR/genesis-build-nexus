@@ -468,14 +468,14 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     Mon profil
                   </Link>
                 </DropdownMenuItem>
-                {!isPremium && (
+                {tier !== 'heritage' && (
                   <DropdownMenuItem asChild>
                     <Link
-                      to="/premium"
+                      to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
                       className="flex items-center gap-3 cursor-pointer text-secondary"
                     >
                       <Crown className="h-4 w-4" />
-                      Passer Premium
+                      {tier === 'premium' ? 'Passer Héritage' : 'Passer Premium'}
                     </Link>
                   </DropdownMenuItem>
                 )}
