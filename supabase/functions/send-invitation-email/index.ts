@@ -71,46 +71,57 @@ const handler = async (req: Request): Promise<Response> => {
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f5f0; margin: 0; padding: 40px 20px;">
           <div style="max-width: 560px; margin: 0 auto; background-color: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden;">
             
-            <div style="background: linear-gradient(135deg, #C9A86C 0%, #B8956A 100%); padding: 32px; text-align: center;">
-              <img src="${logoUrl}" alt="FamilyGarden" style="width: 60px; height: 60px; margin-bottom: 16px;" />
-              <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">
-                ✨ Invitation à rejoindre un cercle
+            <!-- Header avec logo centré -->
+            <div style="background: linear-gradient(135deg, #C9A86C 0%, #B8956A 100%); padding: 40px 32px; text-align: center;">
+              <div style="background-color: white; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <img src="${logoUrl}" alt="FamilyGarden" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;" />
+              </div>
+              <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                Invitation à rejoindre un cercle
               </h1>
             </div>
             
-            <div style="padding: 32px;">
-              <p style="font-size: 16px; color: #2D3748; line-height: 1.6; margin: 0 0 24px;">
-                Bonjour${memberName ? ` ${memberName}` : ''} !
+            <!-- Contenu principal -->
+            <div style="padding: 36px 32px;">
+              <p style="font-size: 17px; color: #2D3748; line-height: 1.6; margin: 0 0 20px;">
+                Bonjour${memberName ? ` <strong>${memberName}</strong>` : ''} !
               </p>
               
-              <p style="font-size: 16px; color: #2D3748; line-height: 1.6; margin: 0 0 24px;">
+              <p style="font-size: 16px; color: #2D3748; line-height: 1.7; margin: 0 0 20px;">
                 <strong>${inviterName}</strong> vous invite à rejoindre le cercle 
-                <strong style="color: #C9A86C;">"${circleName}"</strong> sur FamilyGarden.
+                <span style="color: #C9A86C; font-weight: 600;">"${circleName}"</span> sur FamilyGarden.
               </p>
               
-              <p style="font-size: 14px; color: #718096; line-height: 1.6; margin: 0 0 32px;">
-                En rejoignant ce cercle, vous pourrez consulter et commenter les capsules souvenirs partagées par les membres du cercle.
-              </p>
+              <div style="background-color: #faf8f5; border-left: 4px solid #C9A86C; padding: 16px 20px; margin: 24px 0; border-radius: 0 8px 8px 0;">
+                <p style="font-size: 14px; color: #5a6a72; line-height: 1.6; margin: 0;">
+                  🌿 En rejoignant ce cercle, vous pourrez consulter et commenter les capsules souvenirs partagées par les membres.
+                </p>
+              </div>
               
-              <div style="text-align: center; margin: 32px 0;">
+              <div style="text-align: center; margin: 36px 0;">
                 <a href="${inviteLink}" 
                    style="display: inline-block; background: linear-gradient(135deg, #C9A86C 0%, #B8956A 100%); 
-                          color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; 
-                          font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(201, 168, 108, 0.4);">
-                  Accepter l'invitation
+                          color: white; text-decoration: none; padding: 16px 40px; border-radius: 30px; 
+                          font-weight: 600; font-size: 16px; box-shadow: 0 6px 20px rgba(201, 168, 108, 0.35);
+                          transition: transform 0.2s ease;">
+                  ✨ Accepter l'invitation
                 </a>
               </div>
               
-              <p style="font-size: 12px; color: #A0AEC0; text-align: center; margin: 24px 0 0;">
+              <p style="font-size: 12px; color: #A0AEC0; text-align: center; margin: 28px 0 0; line-height: 1.6;">
                 Ce lien est valide pendant 7 jours.<br>
                 Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet email.
               </p>
             </div>
             
-            <div style="background-color: #f8f5f0; padding: 20px; text-align: center; border-top: 1px solid #E2E8F0;">
-              <img src="${logoUrl}" alt="FamilyGarden" style="width: 32px; height: 32px; margin-bottom: 8px;" />
-              <p style="font-size: 12px; color: #718096; margin: 0;">
-                FamilyGarden - Préservez vos souvenirs précieux
+            <!-- Footer avec logo -->
+            <div style="background-color: #faf8f5; padding: 24px; text-align: center; border-top: 1px solid #E8E4DF;">
+              <img src="${logoUrl}" alt="FamilyGarden" style="width: 36px; height: 36px; margin-bottom: 10px; border-radius: 50%;" />
+              <p style="font-size: 13px; color: #8a9a72; margin: 0; font-weight: 500;">
+                FamilyGarden
+              </p>
+              <p style="font-size: 11px; color: #a0aec0; margin: 4px 0 0;">
+                Préservez vos souvenirs précieux 🌳
               </p>
             </div>
           </div>
