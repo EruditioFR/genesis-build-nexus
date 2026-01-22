@@ -47,16 +47,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    let mounted = true;
+
+    // Safety timeout - force loading to false after 5 seconds
+    const timeoutId = setTimeout(() => {
+      if (mounted && loading) {
+        console.warn('Auth timeout - forcing loading state to false');
+        setLoading(false);
+      }
+    }, 5000);
+
     // Set up auth state listener BEFORE checking session
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
+        if (!mounted) return;
+
+        // Handle failed token refresh
+        if (event === 'TOKEN_REFRESHED' && !session) {
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
           // Use setTimeout to avoid potential race conditions with Supabase
           setTimeout(() => {
-            fetchProfile(session.user.id);
+            if (mounted) fetchProfile(session.user.id);
           }, 0);
         } else {
           setProfile(null);
@@ -66,19 +87,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-      
-      setLoading(false);
-    });
+    // Check for existing session with robust error handling
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (!mounted) return;
 
-    return () => subscription.unsubscribe();
+        // If refresh token error, clean up and continue
+        if (error) {
+          console.warn('Session error:', error.message);
+          setSession(null);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        }
+        
+        setLoading(false);
+      })
+      .catch((err) => {
+        // Fallback for unexpected errors
+        console.error('Auth init error:', err);
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, displayName?: string) => {
