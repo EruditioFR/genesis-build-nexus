@@ -50,12 +50,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { circleId, circleName, inviterName, memberEmail, memberName, invitationToken }: InvitationEmailRequest = await req.json();
 
-    // Get the app URL from environment or use the production URL
-    const appUrl = Deno.env.get("APP_URL") || "https://www.familygarden.fr";
+    // Base URL used in emails (links + images must be absolute URLs)
+    // Prefer configuring APP_URL as an HTTPS URL (e.g. https://www.familygarden.fr)
+    const appUrl = (Deno.env.get("APP_URL") || "https://www.familygarden.fr").replace(/\/$/, "");
     const inviteLink = `${appUrl}/invite/${invitationToken}`;
 
-    // Use the production URL for the logo
-    const logoUrl = "https://www.familygarden.fr/logo.png";
+    // Host logo on the same domain to avoid broken/mixed-content links in email clients
+    const logoUrl = `${appUrl}/logo.png`;
 
     const emailResponse = await resend.emails.send({
       from: "FamilyGarden <contact@familygarden.fr>",
