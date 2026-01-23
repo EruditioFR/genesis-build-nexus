@@ -3,9 +3,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import heroBackground from "@/assets/hero-background.jpg";
 
 const HeroSection = () => {
+  const { t } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   
   const { scrollYProgress } = useScroll({
@@ -27,7 +29,7 @@ const HeroSection = () => {
       >
         <img 
           src={heroBackground} 
-          alt="Souvenirs de famille" 
+          alt={t('hero.badge')} 
           className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
@@ -87,7 +89,7 @@ const HeroSection = () => {
             >
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
             </motion.div>
-            <span className="text-xs sm:text-sm font-medium text-primary-foreground">Préservez vos souvenirs pour l'éternité</span>
+            <span className="text-xs sm:text-sm font-medium text-primary-foreground">{t('hero.badge')}</span>
           </motion.div>
 
           {/* Main Title */}
@@ -101,9 +103,9 @@ const HeroSection = () => {
           duration: 0.7,
           delay: 0.1
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
-            <span className="block">Ne laissez pas vos</span>
-            <span className="block">souvenirs s'effacer,</span>
-            <span className="block mt-2 sm:mt-3 text-primary-foreground">faites-en un trésor familial.</span>
+            <span className="block">{t('hero.title.line1')}</span>
+            <span className="block">{t('hero.title.line2')}</span>
+            <span className="block mt-2 sm:mt-3 text-primary-foreground">{t('hero.title.line3')}</span>
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
@@ -117,7 +119,7 @@ const HeroSection = () => {
           duration: 0.7,
           delay: 0.2
         }} className="text-sm sm:text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
-            Créez votre capsule mémorielle numérique et transmettez votre héritage familial aux générations futures. Textes, photos, vidéos, audio — tous vos souvenirs préservés dans un coffre-fort digital sécurisé avec chiffrement AES-256.
+            {t('hero.subtitle')}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -139,7 +141,7 @@ const HeroSection = () => {
             >
               <Button asChild variant="hero" size="xl" className="group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <Link to="/signup">
-                  Commencer gratuitement
+                  {t('hero.cta.primary')}
                   <motion.span
                     className="inline-flex"
                     whileHover={{ x: 4 }}
@@ -165,7 +167,7 @@ const HeroSection = () => {
                   >
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                   </motion.span>
-                  Voir la démo
+                  {t('hero.cta.secondary')}
                 </a>
               </Button>
             </motion.div>
@@ -181,23 +183,23 @@ const HeroSection = () => {
           delay: 0.5
         }} className="mt-6 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80">
             {/* Trust indicators with GEO-optimized factual claims */}
-            <div className="flex items-center gap-2 sm:gap-3" title="Chiffrement AES-256 de niveau bancaire">
+            <div className="flex items-center gap-2 sm:gap-3" title={t('hero.trust.encryption')}>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span className="text-sm sm:text-base font-medium">Chiffrement AES-256</span>
+              <span className="text-sm sm:text-base font-medium">{t('hero.trust.encryption')}</span>
             </div>
-            <div className="hidden sm:flex items-center gap-3" title="Stockage sur serveurs européens conformes RGPD">
+            <div className="hidden sm:flex items-center gap-3" title={t('hero.trust.gdpr')}>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-base font-medium">Serveurs européens RGPD</span>
+              <span className="text-base font-medium">{t('hero.trust.gdpr')}</span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3" title="Transmission intergénérationnelle sécurisée">
+            <div className="flex items-center gap-2 sm:gap-3" title={t('hero.trust.legacy')}>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <span className="text-sm sm:text-base font-medium">Héritage familial</span>
+              <span className="text-sm sm:text-base font-medium">{t('hero.trust.legacy')}</span>
             </div>
           </motion.div>
         </div>

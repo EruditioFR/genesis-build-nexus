@@ -9,49 +9,51 @@ import {
   Video,
   Mic
 } from "lucide-react";
-
-// Features with GEO-optimized descriptions containing factual, citable information
-const features = [
-  {
-    icon: BookOpen,
-    title: "Capsules Mémorielles Multimédia",
-    description: "Créez des capsules mémorielles numériques combinant textes, photos, vidéos et enregistrements audio. Chaque souvenir est contextualisé avec date, lieu et personnes liées.",
-    color: "bg-secondary text-white",
-  },
-  {
-    icon: Clock,
-    title: "Chronologie Interactive par Décennies",
-    description: "Visualisez votre histoire familiale sur une frise chronologique interactive. Naviguez par décennies et explorez vos souvenirs dans leur contexte temporel.",
-    color: "bg-accent text-white",
-  },
-  {
-    icon: Users,
-    title: "Cercles de Partage Sécurisés",
-    description: "Créez des cercles de confiance (famille, amis) avec permissions granulaires : lecture, commentaires ou contribution. Transmission intergénérationnelle maîtrisée.",
-    color: "bg-violet-600 text-white",
-  },
-  {
-    icon: Shield,
-    title: "Sécurité AES-256 & Legs Posthume",
-    description: "Chiffrement de niveau bancaire AES-256, stockage sur serveurs européens conformes RGPD. Programmez la transmission de votre héritage numérique à vos proches.",
-    color: "bg-emerald-600 text-white",
-  },
-  {
-    icon: Download,
-    title: "Export PDF & Sauvegarde",
-    description: "Exportez vos capsules en PDF haute qualité ou téléchargez l'intégralité de vos médias. Vos données vous appartiennent, exportables à tout moment.",
-    color: "bg-rose-500 text-white",
-  },
-];
-
-const mediaTypes = [
-  { icon: Image, label: "Photos" },
-  { icon: Video, label: "Vidéos" },
-  { icon: Mic, label: "Audio" },
-  { icon: BookOpen, label: "Textes" },
-];
+import { useTranslation } from "react-i18next";
 
 const FeaturesSection = () => {
+  const { t } = useTranslation('landing');
+
+  const features = [
+    {
+      icon: BookOpen,
+      titleKey: "features.items.capsules.title",
+      descriptionKey: "features.items.capsules.description",
+      color: "bg-secondary text-white",
+    },
+    {
+      icon: Clock,
+      titleKey: "features.items.timeline.title",
+      descriptionKey: "features.items.timeline.description",
+      color: "bg-accent text-white",
+    },
+    {
+      icon: Users,
+      titleKey: "features.items.circles.title",
+      descriptionKey: "features.items.circles.description",
+      color: "bg-violet-600 text-white",
+    },
+    {
+      icon: Shield,
+      titleKey: "features.items.security.title",
+      descriptionKey: "features.items.security.description",
+      color: "bg-emerald-600 text-white",
+    },
+    {
+      icon: Download,
+      titleKey: "features.items.export.title",
+      descriptionKey: "features.items.export.description",
+      color: "bg-rose-500 text-white",
+    },
+  ];
+
+  const mediaTypes = [
+    { icon: Image, labelKey: "features.mediaTypes.photos" },
+    { icon: Video, labelKey: "features.mediaTypes.videos" },
+    { icon: Mic, labelKey: "features.mediaTypes.audio" },
+    { icon: BookOpen, labelKey: "features.mediaTypes.texts" },
+  ];
+
   return (
     <section id="features" className="py-16 sm:py-24 bg-[#1a1a2e] relative overflow-hidden">
       {/* Background Pattern */}
@@ -70,14 +72,14 @@ const FeaturesSection = () => {
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/20 text-secondary text-sm font-semibold mb-3 sm:mb-4">
-            Fonctionnalités
+            {t('features.badge')}
           </span>
           <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6">
-            Tout ce dont vous avez besoin pour
-            <span className="text-secondary block sm:inline"> préserver votre héritage familial</span>
+            {t('features.title')}
+            <span className="text-secondary block sm:inline"> {t('features.titleHighlight')}</span>
           </h2>
           <p className="text-base sm:text-lg text-white/80 px-2 leading-relaxed">
-            Une plateforme française complète de capsules mémorielles : créez, organisez et transmettez vos souvenirs aux générations futures en toute sécurité.
+            {t('features.subtitle')}
           </p>
         </motion.div>
 
@@ -89,12 +91,12 @@ const FeaturesSection = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="flex justify-center gap-4 sm:gap-6 md:gap-12 mb-10 sm:mb-16"
         >
-          {mediaTypes.map((type, index) => (
-            <div key={type.label} className="flex flex-col items-center gap-1.5 sm:gap-2">
+          {mediaTypes.map((type) => (
+            <div key={type.labelKey} className="flex flex-col items-center gap-1.5 sm:gap-2">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 shadow-lg flex items-center justify-center">
                 <type.icon className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
-              <span className="text-sm font-semibold text-white/90">{type.label}</span>
+              <span className="text-sm font-semibold text-white/90">{t(type.labelKey)}</span>
             </div>
           ))}
         </motion.div>
@@ -103,7 +105,7 @@ const FeaturesSection = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((feature, index) => (
             <motion.div
-              key={feature.title}
+              key={feature.titleKey}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -115,10 +117,10 @@ const FeaturesSection = () => {
                   <feature.icon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h3 className="text-xl sm:text-xl font-display font-bold text-white mb-2 sm:mb-3">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
                 <p className="text-base sm:text-base text-white/75 leading-relaxed">
-                  {feature.description}
+                  {t(feature.descriptionKey)}
                 </p>
               </div>
             </motion.div>

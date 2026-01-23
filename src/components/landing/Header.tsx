@@ -41,11 +41,13 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     navigate("/");
   };
 
+  const { t } = useTranslation('common');
+
   const navLinks = [
-    { label: "Fonctionnalités", href: "#features" },
-    { label: "Comment ça marche", href: "#how-it-works" },
-    { label: "Tarifs", href: "#pricing" },
-    { label: "À propos", href: "/about", isRoute: true },
+    { label: t('nav.features'), href: "#features" },
+    { label: t('nav.howItWorks'), href: "#how-it-works" },
+    { label: t('nav.pricing'), href: "#pricing" },
+    { label: t('nav.about'), href: "/about", isRoute: true },
   ];
 
   const getInitials = () => {
@@ -116,6 +118,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
 
         {/* Desktop CTA / User Menu */}
         <div className="hidden md:flex items-center gap-4">
+          <LanguageSelector />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -138,13 +141,13 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 <DropdownMenuItem asChild>
                   <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer">
                     <LayoutDashboard className="h-4 w-4" />
-                    Accueil
+                    {t('nav.dashboard')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
                     <User className="h-4 w-4" />
-                    Mon profil
+                    {t('nav.profile')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -153,7 +156,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                   className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="h-4 w-4" />
-                  Se déconnecter
+                  {t('auth.signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -164,10 +167,10 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 variant="ghost"
                 className="transition-colors duration-300 text-primary-foreground hover:bg-primary-foreground/10"
               >
-                <Link to="/login">Se connecter</Link>
+                <Link to="/login">{t('auth.signIn')}</Link>
               </Button>
               <Button asChild variant="hero" size="lg">
-                <Link to="/signup">Commencer gratuitement</Link>
+                <Link to="/signup">{t('auth.startFree')}</Link>
               </Button>
             </>
           )}
@@ -214,6 +217,9 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 )
               ))}
               <div className="pt-4 mt-2 border-t border-border flex flex-col gap-3">
+                <div className="flex justify-center py-2">
+                  <LanguageSelector />
+                </div>
                 {user ? (
                   <>
                     <div className="flex items-center gap-4 py-3 px-4 bg-muted/50 rounded-xl">
@@ -230,13 +236,13 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
                       <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                         <LayoutDashboard className="h-6 w-6 mr-3" />
-                        Accueil
+                        {t('nav.dashboard')}
                       </Link>
                     </Button>
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full justify-start">
                       <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
                         <User className="h-6 w-6 mr-3" />
-                        Mon profil
+                        {t('nav.profile')}
                       </Link>
                     </Button>
                     <Button 
@@ -249,16 +255,16 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                       }}
                     >
                       <LogOut className="h-6 w-6 mr-3" />
-                      Se déconnecter
+                      {t('auth.signOut')}
                     </Button>
                   </>
                 ) : (
                   <>
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full">
-                      <Link to="/login">Se connecter</Link>
+                      <Link to="/login">{t('auth.signIn')}</Link>
                     </Button>
                     <Button asChild variant="mobilePrimary" size="mobileLg" className="w-full">
-                      <Link to="/signup">Commencer gratuitement</Link>
+                      <Link to="/signup">{t('auth.startFree')}</Link>
                     </Button>
                   </>
                 )}
