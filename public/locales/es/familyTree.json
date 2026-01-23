@@ -1,0 +1,55 @@
+{
+  "loading": "Cargando árbol...",
+  "defaultTreeName": "Mi árbol genealógico",
+  "defaultTreeDescription": "Mi historia familiar",
+  "errorLoading": "Error al cargar el árbol",
+  "noTreeSelected": "Ningún árbol seleccionado",
+  "importError": "Error de importación",
+  "importPartial": "Importación parcial: {{created}} persona(s) importada(s), {{failed}} fallida(s)",
+  "importSuccess": "{{persons}} persona(s) y {{relations}} relación(es) importada(s)",
+  "locked": {
+    "title": "Árbol Genealógico",
+    "description": "Crea y explora la historia de tu familia con nuestro módulo interactivo de árbol genealógico. Esta función está reservada para suscriptores de Herencia.",
+    "premiumNote": "Actualmente tienes el plan Premium. Pasa al plan Herencia para acceder al árbol genealógico.",
+    "upgradeHeritage": "Pasar al plan Herencia",
+    "discoverHeritage": "Descubrir el plan Herencia"
+  },
+  "toolbar": {
+    "myTree": "Mi árbol",
+    "persons_one": "{{count}} persona",
+    "persons_other": "{{count}} personas",
+    "list": "Lista",
+    "centerOn": "Centrar en...",
+    "andOthers": "... y {{count}} más (usa la búsqueda)",
+    "add": "Añadir"
+  },
+  "viewMode": {
+    "descendant": "Vista descendiente",
+    "ascendant": "Vista ascendiente",
+    "hourglass": "Vista reloj de arena"
+  },
+  "zoom": {
+    "reset": "Restablecer zoom"
+  },
+  "minimap": {
+    "toggle": "Mostrar/Ocultar minimapa"
+  },
+  "fullscreen": {
+    "exit": "Salir"
+  },
+  "export": {
+    "title": "Exportar",
+    "pdf": "Exportar a PDF",
+    "gedcom": "Exportar a GEDCOM"
+  },
+  "import": {
+    "title": "Importar",
+    "gedcom": "Importar GEDCOM"
+  },
+  "empty": {
+    "title": "Tu árbol está vacío",
+    "description": "Comienza añadiendo la primera persona o importa un árbol existente.",
+    "addPerson": "Añadir una persona",
+    "importGedcom": "Importar GEDCOM"
+  }
+}

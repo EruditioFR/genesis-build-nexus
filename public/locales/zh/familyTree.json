@@ -1,0 +1,55 @@
+{
+  "loading": "正在加载家谱...",
+  "defaultTreeName": "我的家谱",
+  "defaultTreeDescription": "我的家族历史",
+  "errorLoading": "加载家谱时出错",
+  "noTreeSelected": "未选择家谱",
+  "importError": "导入错误",
+  "importPartial": "部分导入：已导入 {{created}} 人，{{failed}} 人失败",
+  "importSuccess": "已导入 {{persons}} 人和 {{relations}} 个关系",
+  "locked": {
+    "title": "家谱",
+    "description": "使用我们的互动家谱模块创建和探索您的家族历史。此功能仅限传承版订阅者使用。",
+    "premiumNote": "您当前使用的是高级版套餐。升级到传承版以访问家谱。",
+    "upgradeHeritage": "升级到传承版",
+    "discoverHeritage": "了解传承版套餐"
+  },
+  "toolbar": {
+    "myTree": "我的家谱",
+    "persons_one": "{{count}} 人",
+    "persons_other": "{{count}} 人",
+    "list": "列表",
+    "centerOn": "居中显示...",
+    "andOthers": "... 以及其他 {{count}} 人（使用搜索）",
+    "add": "添加"
+  },
+  "viewMode": {
+    "descendant": "后代视图",
+    "ascendant": "祖先视图",
+    "hourglass": "沙漏视图"
+  },
+  "zoom": {
+    "reset": "重置缩放"
+  },
+  "minimap": {
+    "toggle": "显示/隐藏小地图"
+  },
+  "fullscreen": {
+    "exit": "退出"
+  },
+  "export": {
+    "title": "导出",
+    "pdf": "导出为 PDF",
+    "gedcom": "导出为 GEDCOM"
+  },
+  "import": {
+    "title": "导入",
+    "gedcom": "导入 GEDCOM"
+  },
+  "empty": {
+    "title": "您的家谱是空的",
+    "description": "从添加第一个人开始，或导入现有的家谱。",
+    "addPerson": "添加成员",
+    "importGedcom": "导入 GEDCOM"
+  }
+}

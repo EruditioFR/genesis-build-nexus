@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -64,6 +65,7 @@ import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export default function FamilyTreePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation('familyTree');
   const { user, signOut, loading: authLoading } = useAuth();
   const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
   const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
@@ -111,7 +113,6 @@ export default function FamilyTreePage() {
       const trees = await fetchTrees();
       
       if (trees.length > 0) {
-        // Use existing tree
         const treeId = trees[0].id;
         const data = await fetchTree(treeId);
         setTree(data.tree);
@@ -119,8 +120,7 @@ export default function FamilyTreePage() {
         setRelationships(data.relationships);
         setUnions(data.unions);
       } else {
-        // Create default tree
-        const newTree = await createTree('Mon arbre généalogique', 'Mon histoire familiale');
+        const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
         if (newTree) {
           setTree(newTree);
           setPersons([]);
@@ -130,11 +130,11 @@ export default function FamilyTreePage() {
       }
     } catch (error) {
       console.error('Error initializing tree:', error);
-      toast.error('Erreur lors du chargement de l\'arbre');
+      toast.error(t('errorLoading'));
     } finally {
       setIsInitializing(false);
     }
-  }, [user, canAccessFamilyTree, fetchTrees, fetchTree, createTree]);
+  }, [user, canAccessFamilyTree, fetchTrees, fetchTree, createTree, t]);
 
   useEffect(() => {
     if (!authLoading && !subLoading && user && canAccessFamilyTree) {
@@ -336,7 +336,7 @@ export default function FamilyTreePage() {
 
   const handleGedcomImport = async (gedcomData: GedcomParseResult, skipIds: string[] = []) => {
     if (!tree?.id) {
-      throw new Error('Aucun arbre sélectionné');
+      throw new Error(t('noTreeSelected'));
     }
     
     // Filter out skipped persons
@@ -348,14 +348,14 @@ export default function FamilyTreePage() {
     const result = await importFromGedcom(tree.id, filteredData);
     
     if (!result.success) {
-      throw new Error(result.errorMessage || 'Erreur lors de l\'import');
+      throw new Error(result.errorMessage || t('importError'));
     }
     
     // Partial success: some persons imported, some failed
     if (result.failedCount && result.failedCount > 0) {
-      toast.warning(`Import partiel: ${result.personsCreated} personne(s) importée(s), ${result.failedCount} en échec`);
+      toast.warning(t('importPartial', { created: result.personsCreated, failed: result.failedCount }));
     } else if (result.personsCreated > 0) {
-      toast.success(`${result.personsCreated} personne(s) et ${result.relationsCreated} relation(s) importée(s)`);
+      toast.success(t('importSuccess', { persons: result.personsCreated, relations: result.relationsCreated }));
     }
     
     await loadTree();
@@ -409,7 +409,7 @@ export default function FamilyTreePage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <TreeDeciduous className="w-12 h-12 mx-auto text-secondary animate-pulse" />
-          <p className="text-muted-foreground">Chargement de l'arbre...</p>
+          <p className="text-muted-foreground">{t('loading')}</p>
         </div>
       </div>
     );
@@ -430,20 +430,19 @@ export default function FamilyTreePage() {
             <div className="w-24 h-24 mx-auto rounded-full bg-secondary/20 flex items-center justify-center">
               <Lock className="w-12 h-12 text-secondary" />
             </div>
-            <h1 className="text-3xl font-display font-bold">Arbre Généalogique</h1>
+            <h1 className="text-3xl font-display font-bold">{t('locked.title')}</h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Créez et explorez l'histoire de votre famille avec notre module d'arbre généalogique interactif. 
-              Cette fonctionnalité est réservée aux abonnés <strong>Héritage</strong>.
+              {t('locked.description')}
             </p>
             {isPremiumUser && (
               <p className="text-sm text-muted-foreground">
-                Vous avez actuellement le forfait Premium. Passez au forfait Héritage pour accéder à l'arbre généalogique.
+                {t('locked.premiumNote')}
               </p>
             )}
             <div className="pt-4">
               <Button size="lg" onClick={() => navigate('/premium?tier=heritage')} className="gap-2">
                 <TreeDeciduous className="w-5 h-5" />
-                {isPremiumUser ? 'Passer au forfait Héritage' : 'Découvrir le forfait Héritage'}
+                {isPremiumUser ? t('locked.upgradeHeritage') : t('locked.discoverHeritage')}
               </Button>
             </div>
           </motion.div>
@@ -467,9 +466,9 @@ export default function FamilyTreePage() {
             <div className="flex items-center justify-between px-4 py-2">
               <div className="flex items-center gap-3">
                 <TreeDeciduous className="w-5 h-5 text-secondary" />
-                <h1 className="font-semibold">{tree?.name || 'Mon arbre'}</h1>
+                <h1 className="font-semibold">{tree?.name || t('toolbar.myTree')}</h1>
                 <Badge variant="outline" className="text-xs">
-                  {persons.length} personnes
+                  {t('toolbar.persons', { count: persons.length })}
                 </Badge>
               </div>
 
@@ -481,9 +480,9 @@ export default function FamilyTreePage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="descendant">Vue descendante</SelectItem>
-                    <SelectItem value="ascendant">Vue ascendante</SelectItem>
-                    <SelectItem value="hourglass">Vue sablier</SelectItem>
+                    <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
+                    <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
+                    <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -507,7 +506,7 @@ export default function FamilyTreePage() {
 
                 <Button variant="outline" size="sm" onClick={toggleFullscreen} className="gap-2">
                   <Minimize2 className="w-4 h-4" />
-                  Quitter
+                  {t('fullscreen.exit')}
                 </Button>
               </div>
             </div>
@@ -594,8 +593,8 @@ export default function FamilyTreePage() {
                 <div className="flex items-center gap-3">
                   <TreeDeciduous className="w-6 h-6 text-secondary" />
                   <div>
-                    <h1 className="font-semibold">{tree?.name || 'Mon arbre généalogique'}</h1>
-                    <p className="text-sm text-muted-foreground">{persons.length} personnes</p>
+                    <h1 className="font-semibold">{tree?.name || t('defaultTreeName')}</h1>
+                    <p className="text-sm text-muted-foreground">{t('toolbar.persons', { count: persons.length })}</p>
                   </div>
                 </div>
 
@@ -606,16 +605,16 @@ export default function FamilyTreePage() {
 
                   <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2" data-tour="tree-persons-list">
                     <List className="w-4 h-4" />
-                    <span className="hidden sm:inline">Liste</span>
+                    <span className="hidden sm:inline">{t('toolbar.list')}</span>
                   </Button>
 
                   {/* Centrer sur... dropdown */}
                   {persons.length > 0 && (
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="sm" className="gap-2" data-tour="tree-center">
                           <Focus className="w-4 h-4" />
-                          <span className="hidden sm:inline">Centrer sur...</span>
+                          <span className="hidden sm:inline">{t('toolbar.centerOn')}</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
@@ -630,7 +629,7 @@ export default function FamilyTreePage() {
                         ))}
                         {persons.length > 50 && (
                           <DropdownMenuItem disabled className="text-muted-foreground text-xs">
-                            ... et {persons.length - 50} autres (utilisez la recherche)
+                            {t('toolbar.andOthers', { count: persons.length - 50 })}
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
@@ -643,9 +642,9 @@ export default function FamilyTreePage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="descendant">Vue descendante</SelectItem>
-                        <SelectItem value="ascendant">Vue ascendante</SelectItem>
-                        <SelectItem value="hourglass">Vue sablier</SelectItem>
+                        <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
+                        <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
+                        <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -670,7 +669,7 @@ export default function FamilyTreePage() {
                   <div data-tour="tree-import-export" className="flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" title="Exporter">
+                        <Button variant="outline" size="icon" title={t('export.title')}>
                           <Download className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -680,14 +679,14 @@ export default function FamilyTreePage() {
                           className="gap-2"
                         >
                           <FileText className="w-4 h-4" />
-                          Exporter en PDF
+                          {t('export.pdf')}
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
                           className="gap-2"
                         >
                           <FileDown className="w-4 h-4" />
-                          Exporter en GEDCOM
+                          {t('export.gedcom')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -696,7 +695,7 @@ export default function FamilyTreePage() {
                       variant="outline" 
                       size="icon"
                       onClick={() => setShowGedcomImport(true)}
-                      title="Importer GEDCOM"
+                      title={t('import.gedcom')}
                     >
                       <Upload className="w-4 h-4" />
                     </Button>
@@ -704,7 +703,7 @@ export default function FamilyTreePage() {
 
                   <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
                     <Plus className="w-4 h-4" />
-                    <span className="hidden sm:inline">Ajouter</span>
+                    <span className="hidden sm:inline">{t('toolbar.add')}</span>
                   </Button>
                 </div>
               </div>
@@ -723,18 +722,18 @@ export default function FamilyTreePage() {
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center space-y-4 p-8">
                     <TreeDeciduous className="w-16 h-16 mx-auto text-muted-foreground/50" />
-                    <h3 className="text-lg font-medium">Votre arbre est vide</h3>
+                    <h3 className="text-lg font-medium">{t('empty.title')}</h3>
                     <p className="text-muted-foreground max-w-md">
-                      Commencez par ajouter la première personne ou importez un arbre existant.
+                      {t('empty.description')}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Button onClick={() => handleAddPerson('child')} className="gap-2">
                         <Plus className="w-4 h-4" />
-                        Ajouter une personne
+                        {t('empty.addPerson')}
                       </Button>
                       <Button variant="outline" onClick={() => setShowGedcomImport(true)} className="gap-2">
                         <Upload className="w-4 h-4" />
-                        Importer GEDCOM
+                        {t('empty.importGedcom')}
                       </Button>
                     </div>
                   </div>

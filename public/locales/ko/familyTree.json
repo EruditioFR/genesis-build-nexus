@@ -1,0 +1,55 @@
+{
+  "loading": "가계도 불러오는 중...",
+  "defaultTreeName": "내 가계도",
+  "defaultTreeDescription": "내 가족 역사",
+  "errorLoading": "가계도 로딩 오류",
+  "noTreeSelected": "선택된 가계도 없음",
+  "importError": "가져오기 오류",
+  "importPartial": "부분 가져오기: {{created}}명 가져옴, {{failed}}명 실패",
+  "importSuccess": "{{persons}}명과 {{relations}}개의 관계를 가져왔습니다",
+  "locked": {
+    "title": "가계도",
+    "description": "인터랙티브 가계도 모듈로 가족 역사를 만들고 탐험하세요. 이 기능은 헤리티지 구독자 전용입니다.",
+    "premiumNote": "현재 프리미엄 플랜을 사용 중입니다. 가계도에 접근하려면 헤리티지로 업그레이드하세요.",
+    "upgradeHeritage": "헤리티지로 업그레이드",
+    "discoverHeritage": "헤리티지 플랜 알아보기"
+  },
+  "toolbar": {
+    "myTree": "내 가계도",
+    "persons_one": "{{count}}명",
+    "persons_other": "{{count}}명",
+    "list": "목록",
+    "centerOn": "중앙에 맞추기...",
+    "andOthers": "... 외 {{count}}명 (검색 사용)",
+    "add": "추가"
+  },
+  "viewMode": {
+    "descendant": "후손 보기",
+    "ascendant": "조상 보기",
+    "hourglass": "모래시계 보기"
+  },
+  "zoom": {
+    "reset": "줌 초기화"
+  },
+  "minimap": {
+    "toggle": "미니맵 표시/숨기기"
+  },
+  "fullscreen": {
+    "exit": "나가기"
+  },
+  "export": {
+    "title": "내보내기",
+    "pdf": "PDF로 내보내기",
+    "gedcom": "GEDCOM으로 내보내기"
+  },
+  "import": {
+    "title": "가져오기",
+    "gedcom": "GEDCOM 가져오기"
+  },
+  "empty": {
+    "title": "가계도가 비어 있습니다",
+    "description": "첫 번째 사람을 추가하거나 기존 가계도를 가져오세요.",
+    "addPerson": "사람 추가",
+    "importGedcom": "GEDCOM 가져오기"
+  }
+}

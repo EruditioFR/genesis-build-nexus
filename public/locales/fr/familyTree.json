@@ -1,0 +1,55 @@
+{
+  "loading": "Chargement de l'arbre...",
+  "defaultTreeName": "Mon arbre généalogique",
+  "defaultTreeDescription": "Mon histoire familiale",
+  "errorLoading": "Erreur lors du chargement de l'arbre",
+  "noTreeSelected": "Aucun arbre sélectionné",
+  "importError": "Erreur lors de l'import",
+  "importPartial": "Import partiel: {{created}} personne(s) importée(s), {{failed}} en échec",
+  "importSuccess": "{{persons}} personne(s) et {{relations}} relation(s) importée(s)",
+  "locked": {
+    "title": "Arbre Généalogique",
+    "description": "Créez et explorez l'histoire de votre famille avec notre module d'arbre généalogique interactif. Cette fonctionnalité est réservée aux abonnés Héritage.",
+    "premiumNote": "Vous avez actuellement le forfait Premium. Passez au forfait Héritage pour accéder à l'arbre généalogique.",
+    "upgradeHeritage": "Passer au forfait Héritage",
+    "discoverHeritage": "Découvrir le forfait Héritage"
+  },
+  "toolbar": {
+    "myTree": "Mon arbre",
+    "persons_one": "{{count}} personne",
+    "persons_other": "{{count}} personnes",
+    "list": "Liste",
+    "centerOn": "Centrer sur...",
+    "andOthers": "... et {{count}} autres (utilisez la recherche)",
+    "add": "Ajouter"
+  },
+  "viewMode": {
+    "descendant": "Vue descendante",
+    "ascendant": "Vue ascendante",
+    "hourglass": "Vue sablier"
+  },
+  "zoom": {
+    "reset": "Réinitialiser le zoom"
+  },
+  "minimap": {
+    "toggle": "Afficher/Masquer la minimap"
+  },
+  "fullscreen": {
+    "exit": "Quitter"
+  },
+  "export": {
+    "title": "Exporter",
+    "pdf": "Exporter en PDF",
+    "gedcom": "Exporter en GEDCOM"
+  },
+  "import": {
+    "title": "Importer",
+    "gedcom": "Importer GEDCOM"
+  },
+  "empty": {
+    "title": "Votre arbre est vide",
+    "description": "Commencez par ajouter la première personne ou importez un arbre existant.",
+    "addPerson": "Ajouter une personne",
+    "importGedcom": "Importer GEDCOM"
+  }
+}
