@@ -1,0 +1,82 @@
+{
+  "create": {
+    "title": "Nueva cápsula",
+    "titlePlaceholder": "Título de tu recuerdo",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe este recuerdo...",
+    "content": "Contenido",
+    "contentPlaceholder": "Cuenta tu historia...",
+    "memoryDate": "Fecha del recuerdo",
+    "category": "Categoría",
+    "tags": "Etiquetas",
+    "tagsPlaceholder": "Añadir etiquetas...",
+    "media": "Medios",
+    "addMedia": "Añadir medios",
+    "publish": "Publicar",
+    "saveDraft": "Guardar como borrador",
+    "schedule": "Programar publicación"
+  },
+  "types": {
+    "text": "Texto",
+    "photo": "Foto",
+    "video": "Video",
+    "audio": "Audio",
+    "mixed": "Mixto"
+  },
+  "status": {
+    "draft": "Borrador",
+    "published": "Publicado",
+    "scheduled": "Programado",
+    "archived": "Archivado"
+  },
+  "categories": {
+    "childhood": "Infancia",
+    "family": "Familia",
+    "travel": "Viajes",
+    "celebrations": "Celebraciones",
+    "career": "Carrera",
+    "hobbies": "Pasatiempos",
+    "traditions": "Tradiciones"
+  },
+  "detail": {
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "share": "Compartir",
+    "export": "Exportar",
+    "comments": "Comentarios",
+    "noComments": "Sin comentarios",
+    "addComment": "Añadir comentario",
+    "linkedPersons": "Personas relacionadas",
+    "createdAt": "Creado el",
+    "updatedAt": "Actualizado el"
+  },
+  "list": {
+    "title": "Mis cápsulas",
+    "empty": "Sin cápsulas",
+    "emptySubtitle": "Crea tu primera cápsula para comenzar",
+    "filters": {
+      "all": "Todas",
+      "drafts": "Borradores",
+      "published": "Publicadas",
+      "scheduled": "Programadas"
+    },
+    "sort": {
+      "newest": "Más recientes",
+      "oldest": "Más antiguas",
+      "title": "Título A-Z"
+    }
+  },
+  "delete": {
+    "title": "¿Eliminar esta cápsula?",
+    "description": "Esta acción no se puede deshacer. La cápsula y todos sus medios serán eliminados permanentemente.",
+    "confirm": "Sí, eliminar",
+    "cancel": "Cancelar"
+  },
+  "share": {
+    "title": "Compartir cápsula",
+    "selectCircle": "Elegir un círculo",
+    "noCircles": "No hay círculos disponibles",
+    "createCircle": "Crear un círculo",
+    "shared": "Cápsula compartida exitosamente"
+  }
+}

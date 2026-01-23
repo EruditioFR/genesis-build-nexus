@@ -1,0 +1,82 @@
+{
+  "create": {
+    "title": "New capsule",
+    "titlePlaceholder": "Title of your memory",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe this memory...",
+    "content": "Content",
+    "contentPlaceholder": "Tell your story...",
+    "memoryDate": "Memory date",
+    "category": "Category",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tags...",
+    "media": "Media",
+    "addMedia": "Add media",
+    "publish": "Publish",
+    "saveDraft": "Save as draft",
+    "schedule": "Schedule publication"
+  },
+  "types": {
+    "text": "Text",
+    "photo": "Photo",
+    "video": "Video",
+    "audio": "Audio",
+    "mixed": "Mixed"
+  },
+  "status": {
+    "draft": "Draft",
+    "published": "Published",
+    "scheduled": "Scheduled",
+    "archived": "Archived"
+  },
+  "categories": {
+    "childhood": "Childhood",
+    "family": "Family",
+    "travel": "Travel",
+    "celebrations": "Celebrations",
+    "career": "Career",
+    "hobbies": "Hobbies",
+    "traditions": "Traditions"
+  },
+  "detail": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "share": "Share",
+    "export": "Export",
+    "comments": "Comments",
+    "noComments": "No comments",
+    "addComment": "Add a comment",
+    "linkedPersons": "Linked people",
+    "createdAt": "Created on",
+    "updatedAt": "Updated on"
+  },
+  "list": {
+    "title": "My capsules",
+    "empty": "No capsules",
+    "emptySubtitle": "Create your first capsule to get started",
+    "filters": {
+      "all": "All",
+      "drafts": "Drafts",
+      "published": "Published",
+      "scheduled": "Scheduled"
+    },
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "title": "Title A-Z"
+    }
+  },
+  "delete": {
+    "title": "Delete this capsule?",
+    "description": "This action cannot be undone. The capsule and all its media will be permanently deleted.",
+    "confirm": "Yes, delete",
+    "cancel": "Cancel"
+  },
+  "share": {
+    "title": "Share capsule",
+    "selectCircle": "Choose a circle",
+    "noCircles": "No circles available",
+    "createCircle": "Create a circle",
+    "shared": "Capsule shared successfully"
+  }
+}

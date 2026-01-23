@@ -1,0 +1,55 @@
+{
+  "welcome": "Bonjour, {{name}} !",
+  "subtitle": "Votre jardin mémoriel vous attend",
+  "stats": {
+    "capsules": "Capsules",
+    "mediaFiles": "Fichiers médias",
+    "circles": "Cercles",
+    "familyMembers": "Membres famille"
+  },
+  "quickActions": {
+    "title": "Actions rapides",
+    "newCapsule": "Nouvelle capsule",
+    "viewTimeline": "Voir la chronologie",
+    "manageCircles": "Gérer les cercles",
+    "familyTree": "Arbre généalogique"
+  },
+  "recentCapsules": {
+    "title": "Capsules récentes",
+    "empty": "Aucune capsule pour le moment",
+    "emptySubtitle": "Créez votre première capsule pour commencer à préserver vos souvenirs.",
+    "createFirst": "Créer ma première capsule",
+    "viewAll": "Voir toutes les capsules"
+  },
+  "storage": {
+    "title": "Stockage",
+    "used": "{{used}} sur {{total}} utilisés",
+    "upgrade": "Augmenter le stockage"
+  },
+  "onboarding": {
+    "title": "Premiers pas",
+    "subtitle": "Complétez ces étapes pour bien démarrer",
+    "steps": {
+      "profile": "Compléter votre profil",
+      "firstCapsule": "Créer votre première capsule",
+      "inviteFamily": "Inviter un membre de la famille",
+      "familyTree": "Démarrer l'arbre généalogique"
+    }
+  },
+  "prompts": {
+    "title": "Idées de souvenirs",
+    "subtitle": "Laissez-vous inspirer par ces suggestions"
+  },
+  "sidebar": {
+    "home": "Accueil",
+    "capsules": "Mes capsules",
+    "timeline": "Chronologie",
+    "circles": "Cercles",
+    "familyTree": "Arbre généalogique",
+    "categories": "Catégories",
+    "statistics": "Statistiques",
+    "settings": "Paramètres",
+    "profile": "Mon profil",
+    "premium": "Premium"
+  }
+}

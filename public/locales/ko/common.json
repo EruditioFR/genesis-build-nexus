@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "features": "기능",
+    "howItWorks": "이용 방법",
+    "pricing": "요금제",
+    "about": "소개",
+    "login": "로그인",
+    "signup": "무료로 시작하기",
+    "dashboard": "홈",
+    "profile": "내 프로필",
+    "logout": "로그아웃"
+  },
+  "footer": {
+    "tagline": "가족의 추억을 미래 세대를 위해 보존하세요.",
+    "product": "제품",
+    "features": "기능",
+    "howItWorks": "이용 방법",
+    "pricing": "요금제",
+    "faq": "FAQ",
+    "legal": "법적 고지",
+    "privacyPolicy": "개인정보 처리방침",
+    "termsOfUse": "이용약관",
+    "termsOfSale": "판매 조건",
+    "legalNotice": "법적 고지",
+    "contact": "연락처",
+    "email": "contact@familygarden.fr",
+    "copyright": "© {{year}} FamilyGarden. All rights reserved.",
+    "madeWith": "Made with",
+    "inFrance": "in France"
+  },
+  "buttons": {
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "수정",
+    "create": "만들기",
+    "close": "닫기",
+    "confirm": "확인",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "loading": "로딩 중..."
+  },
+  "validation": {
+    "required": "필수 입력 항목입니다",
+    "email": "유효하지 않은 이메일 주소입니다",
+    "minLength": "최소 {{count}}자 이상",
+    "maxLength": "최대 {{count}}자"
+  }
+}

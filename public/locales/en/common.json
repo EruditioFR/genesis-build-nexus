@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "features": "Features",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Sign in",
+    "signup": "Get started free",
+    "dashboard": "Home",
+    "profile": "My profile",
+    "logout": "Sign out"
+  },
+  "footer": {
+    "tagline": "Preserve your family memories for future generations.",
+    "product": "Product",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "termsOfSale": "Terms of Sale",
+    "legalNotice": "Legal Notice",
+    "contact": "Contact",
+    "email": "contact@familygarden.fr",
+    "copyright": "© {{year}} FamilyGarden. All rights reserved.",
+    "madeWith": "Made with",
+    "inFrance": "in France"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading..."
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "minLength": "Minimum {{count}} characters",
+    "maxLength": "Maximum {{count}} characters"
+  }
+}

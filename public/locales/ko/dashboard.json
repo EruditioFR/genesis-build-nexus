@@ -1,0 +1,55 @@
+{
+  "welcome": "안녕하세요, {{name}}님!",
+  "subtitle": "추억의 정원이 기다리고 있습니다",
+  "stats": {
+    "capsules": "캡슐",
+    "mediaFiles": "미디어 파일",
+    "circles": "서클",
+    "familyMembers": "가족 구성원"
+  },
+  "quickActions": {
+    "title": "빠른 작업",
+    "newCapsule": "새 캡슐",
+    "viewTimeline": "타임라인 보기",
+    "manageCircles": "서클 관리",
+    "familyTree": "가계도"
+  },
+  "recentCapsules": {
+    "title": "최근 캡슐",
+    "empty": "아직 캡슐이 없습니다",
+    "emptySubtitle": "첫 번째 캡슐을 만들어 추억 보존을 시작하세요.",
+    "createFirst": "첫 번째 캡슐 만들기",
+    "viewAll": "모든 캡슐 보기"
+  },
+  "storage": {
+    "title": "저장공간",
+    "used": "{{total}} 중 {{used}} 사용",
+    "upgrade": "저장공간 늘리기"
+  },
+  "onboarding": {
+    "title": "시작하기",
+    "subtitle": "시작하려면 이 단계를 완료하세요",
+    "steps": {
+      "profile": "프로필 완성하기",
+      "firstCapsule": "첫 번째 캡슐 만들기",
+      "inviteFamily": "가족 초대하기",
+      "familyTree": "가계도 시작하기"
+    }
+  },
+  "prompts": {
+    "title": "추억 아이디어",
+    "subtitle": "이 제안에서 영감을 얻으세요"
+  },
+  "sidebar": {
+    "home": "홈",
+    "capsules": "내 캡슐",
+    "timeline": "타임라인",
+    "circles": "서클",
+    "familyTree": "가계도",
+    "categories": "카테고리",
+    "statistics": "통계",
+    "settings": "설정",
+    "profile": "내 프로필",
+    "premium": "프리미엄"
+  }
+}
