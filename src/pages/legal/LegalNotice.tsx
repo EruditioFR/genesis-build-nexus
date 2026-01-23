@@ -52,7 +52,7 @@ const LegalNotice = () => {
             </h2>
             <div className="text-muted-foreground leading-relaxed space-y-2">
               
-              <p><strong>Forme juridique :</strong>JEAN-BAPTISTE BEJOT</p>
+              <p><strong>Forme juridique :</strong>Forme juridique : JEAN-BAPTISTE BEJOT</p>
               
               
               
