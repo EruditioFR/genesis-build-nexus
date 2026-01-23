@@ -58,7 +58,7 @@ const LegalNotice = () => {
               <p>JEAN-BAPTISTE BEJOT</p>
 
               <p>
-                <strong>SIRET :</strong>SIRET : 51089741600036
+                <strong>SIRET :</strong>51089741600036
               </p>
 
               <p>
