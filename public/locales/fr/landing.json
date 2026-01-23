@@ -172,8 +172,40 @@
     }
   },
   "cta": {
-    "title": "Prêt à préserver vos souvenirs ?",
-    "subtitle": "Rejoignez des milliers de familles qui transmettent leur histoire.",
-    "button": "Créer mon compte gratuit"
+    "title": "Vos souvenirs méritent",
+    "titleHighlight": "d'être préservés",
+    "subtitle": "Commencez dès aujourd'hui à construire l'héritage que vous laisserez aux générations futures. Gratuit, sans engagement.",
+    "button": "Créer ma première capsule",
+    "trust": "Inscription gratuite • Aucune carte bancaire requise • Vos données restent privées"
+  },
+  "footer": {
+    "description": "Votre histoire mérite de traverser les générations. Transmettez votre héritage aux générations futures.",
+    "copyright": "Tous droits réservés.",
+    "madeWith": "Fait avec",
+    "toPreserve": "pour préserver vos souvenirs",
+    "categories": {
+      "product": "Produit",
+      "company": "Entreprise",
+      "resources": "Ressources",
+      "legal": "Légal"
+    },
+    "links": {
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog",
+      "about": "À propos",
+      "blog": "Blog",
+      "careers": "Carrières",
+      "partners": "Partenaires",
+      "helpCenter": "Centre d'aide",
+      "faq": "FAQ",
+      "guides": "Guides",
+      "community": "Communauté",
+      "privacy": "Confidentialité",
+      "terms": "CGV",
+      "legalNotice": "Mentions légales",
+      "gdpr": "RGPD"
+    }
   }
 }

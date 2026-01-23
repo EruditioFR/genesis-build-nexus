@@ -172,8 +172,40 @@
     }
   },
   "cta": {
-    "title": "Ready to preserve your memories?",
-    "subtitle": "Join thousands of families passing on their story.",
-    "button": "Create my free account"
+    "title": "Your memories deserve",
+    "titleHighlight": "to be preserved",
+    "subtitle": "Start building the legacy you'll leave to future generations today. Free, no commitment.",
+    "button": "Create my first capsule",
+    "trust": "Free signup • No credit card required • Your data stays private"
+  },
+  "footer": {
+    "description": "Your story deserves to span generations. Pass on your legacy to future generations.",
+    "copyright": "All rights reserved.",
+    "madeWith": "Made with",
+    "toPreserve": "to preserve your memories",
+    "categories": {
+      "product": "Product",
+      "company": "Company",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog",
+      "about": "About",
+      "blog": "Blog",
+      "careers": "Careers",
+      "partners": "Partners",
+      "helpCenter": "Help Center",
+      "faq": "FAQ",
+      "guides": "Guides",
+      "community": "Community",
+      "privacy": "Privacy",
+      "terms": "Terms of Sale",
+      "legalNotice": "Legal Notice",
+      "gdpr": "GDPR"
+    }
   }
 }

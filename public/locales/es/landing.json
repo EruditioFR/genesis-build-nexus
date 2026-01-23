@@ -172,8 +172,40 @@
     }
   },
   "cta": {
-    "title": "¿Listo para preservar tus recuerdos?",
-    "subtitle": "Únete a miles de familias que transmiten su historia.",
-    "button": "Crear mi cuenta gratis"
+    "title": "Tus recuerdos merecen",
+    "titleHighlight": "ser preservados",
+    "subtitle": "Comienza hoy a construir el legado que dejarás a las generaciones futuras. Gratis, sin compromiso.",
+    "button": "Crear mi primera cápsula",
+    "trust": "Registro gratuito • Sin tarjeta de crédito • Tus datos permanecen privados"
+  },
+  "footer": {
+    "description": "Tu historia merece atravesar generaciones. Transmite tu legado a las generaciones futuras.",
+    "copyright": "Todos los derechos reservados.",
+    "madeWith": "Hecho con",
+    "toPreserve": "para preservar tus recuerdos",
+    "categories": {
+      "product": "Producto",
+      "company": "Empresa",
+      "resources": "Recursos",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Funcionalidades",
+      "pricing": "Precios",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog",
+      "about": "Acerca de",
+      "blog": "Blog",
+      "careers": "Carreras",
+      "partners": "Socios",
+      "helpCenter": "Centro de ayuda",
+      "faq": "FAQ",
+      "guides": "Guías",
+      "community": "Comunidad",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "legalNotice": "Aviso legal",
+      "gdpr": "RGPD"
+    }
   }
 }
