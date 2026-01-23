@@ -6,7 +6,8 @@ import {
   MoreHorizontal, Edit, Trash2, Share2, Eye, ArrowLeft
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,22 +59,18 @@ interface CapsuleWithMedia extends Capsule {
   firstVideoUrl?: string;
 }
 
-const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
-  text: { icon: FileText, label: 'Texte', color: 'bg-primary/10 text-primary' },
-  photo: { icon: Image, label: 'Photo', color: 'bg-secondary/10 text-secondary' },
-  video: { icon: Video, label: 'Vidéo', color: 'bg-accent/10 text-accent' },
-  audio: { icon: Music, label: 'Audio', color: 'bg-navy-light/10 text-navy-light' },
-  mixed: { icon: Layers, label: 'Mixte', color: 'bg-terracotta/10 text-terracotta' },
-};
-
-const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
-  draft: { label: 'Brouillon', color: 'bg-muted text-muted-foreground' },
-  published: { label: 'Publiée', color: 'bg-green-100 text-green-700' },
-  scheduled: { label: 'Programmée', color: 'bg-blue-100 text-blue-700' },
-  archived: { label: 'Archivée', color: 'bg-gray-100 text-gray-600' },
+const getDateLocale = (lang: string) => {
+  switch (lang) {
+    case 'en': return enUS;
+    case 'es': return es;
+    case 'ko': return ko;
+    case 'zh': return zhCN;
+    default: return fr;
+  }
 };
 
 const CapsulesList = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { categories } = useCategories();
@@ -91,6 +88,21 @@ const CapsulesList = () => {
   // Delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [capsuleToDelete, setCapsuleToDelete] = useState<Capsule | null>(null);
+
+  const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
+    text: { icon: FileText, label: t('types.text'), color: 'bg-primary/10 text-primary' },
+    photo: { icon: Image, label: t('types.photo'), color: 'bg-secondary/10 text-secondary' },
+    video: { icon: Video, label: t('types.video'), color: 'bg-accent/10 text-accent' },
+    audio: { icon: Music, label: t('types.audio'), color: 'bg-navy-light/10 text-navy-light' },
+    mixed: { icon: Layers, label: t('types.mixed'), color: 'bg-terracotta/10 text-terracotta' },
+  };
+
+  const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
+    draft: { label: t('status.draft'), color: 'bg-muted text-muted-foreground' },
+    published: { label: t('status.published'), color: 'bg-green-100 text-green-700' },
+    scheduled: { label: t('status.scheduled'), color: 'bg-blue-100 text-blue-700' },
+    archived: { label: t('status.archived'), color: 'bg-gray-100 text-gray-600' },
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -193,10 +205,10 @@ const CapsulesList = () => {
       .eq('id', capsuleToDelete.id);
 
     if (error) {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('detail.deleteError'));
     } else {
       setCapsules(prev => prev.filter(c => c.id !== capsuleToDelete.id));
-      toast.success('Souvenir supprimé');
+      toast.success(t('detail.deleteSuccess'));
     }
     
     setDeleteDialogOpen(false);
@@ -223,7 +235,7 @@ const CapsulesList = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement des souvenirs...</p>
+          <p className="text-muted-foreground">{t('loading')}</p>
         </div>
       </div>
     );
@@ -260,7 +272,7 @@ const CapsulesList = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            {t('backToHome')}
           </Button>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -270,10 +282,10 @@ const CapsulesList = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-display font-bold text-foreground">
-                  Mes souvenirs
+                  {t('list.title')}
                 </h1>
                 <p className="text-muted-foreground text-sm">
-                  {capsules.length} souvenir{capsules.length !== 1 ? 's' : ''} au total
+                  {t('list.count', { count: capsules.length })}
                 </p>
               </div>
             </div>
@@ -281,7 +293,7 @@ const CapsulesList = () => {
             <Button asChild className="gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold">
               <Link to="/capsules/new">
                 <Plus className="w-4 h-4" />
-                Nouveau souvenir
+                {t('list.newCapsule')}
               </Link>
             </Button>
           </div>
@@ -298,7 +310,7 @@ const CapsulesList = () => {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Rechercher par titre, description ou tag..."
+                placeholder={t('list.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -312,12 +324,12 @@ const CapsulesList = () => {
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous types</SelectItem>
-                  <SelectItem value="text">Texte</SelectItem>
-                  <SelectItem value="photo">Photo</SelectItem>
-                  <SelectItem value="video">Vidéo</SelectItem>
-                  <SelectItem value="audio">Audio</SelectItem>
-                  <SelectItem value="mixed">Mixte</SelectItem>
+                  <SelectItem value="all">{t('list.typeFilters.all')}</SelectItem>
+                  <SelectItem value="text">{t('list.typeFilters.text')}</SelectItem>
+                  <SelectItem value="photo">{t('list.typeFilters.photo')}</SelectItem>
+                  <SelectItem value="video">{t('list.typeFilters.video')}</SelectItem>
+                  <SelectItem value="audio">{t('list.typeFilters.audio')}</SelectItem>
+                  <SelectItem value="mixed">{t('list.typeFilters.mixed')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -326,20 +338,20 @@ const CapsulesList = () => {
                   <SelectValue placeholder="Statut" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous statuts</SelectItem>
-                  <SelectItem value="draft">Brouillon</SelectItem>
-                  <SelectItem value="published">Publiée</SelectItem>
-                  <SelectItem value="scheduled">Programmée</SelectItem>
-                  <SelectItem value="archived">Archivée</SelectItem>
+                  <SelectItem value="all">{t('list.statusFilters.all')}</SelectItem>
+                  <SelectItem value="draft">{t('list.statusFilters.draft')}</SelectItem>
+                  <SelectItem value="published">{t('list.statusFilters.published')}</SelectItem>
+                  <SelectItem value="scheduled">{t('list.statusFilters.scheduled')}</SelectItem>
+                  <SelectItem value="archived">{t('list.statusFilters.archived')}</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-[160px]">
-                  <SelectValue placeholder="Catégorie" />
+                  <SelectValue placeholder={t('list.categoryFilters.all')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes catégories</SelectItem>
+                  <SelectItem value="all">{t('list.categoryFilters.all')}</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       <span className="flex items-center gap-2">
@@ -368,25 +380,25 @@ const CapsulesList = () => {
             {capsules.length === 0 ? (
               <>
                 <h2 className="text-xl font-display font-semibold text-foreground mb-2">
-                  Aucun souvenir ajouté
+                  {t('list.empty')}
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  Commencez à préserver vos souvenirs dès maintenant
+                  {t('list.emptySubtitle')}
                 </p>
                 <Button asChild className="gap-2">
                   <Link to="/capsules/new">
                     <Plus className="w-4 h-4" />
-                    Ajouter mon premier souvenir
+                    {t('list.addFirst')}
                   </Link>
                 </Button>
               </>
             ) : (
               <>
                 <h2 className="text-xl font-display font-semibold text-foreground mb-2">
-                  Aucun résultat
+                  {t('list.noResults')}
                 </h2>
                 <p className="text-muted-foreground">
-                  Essayez de modifier vos filtres de recherche
+                  {t('list.noResultsSubtitle')}
                 </p>
               </>
             )}
@@ -437,15 +449,15 @@ const CapsulesList = () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
                             <Eye className="w-4 h-4" />
-                            Voir
+                            {t('list.actions.view')}
                           </DropdownMenuItem>
                           <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
                             <Edit className="w-4 h-4" />
-                            Modifier
+                            {t('list.actions.edit')}
                           </DropdownMenuItem>
                           <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
                             <Share2 className="w-4 h-4" />
-                            Partager
+                            {t('list.actions.share')}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem 
@@ -457,7 +469,7 @@ const CapsulesList = () => {
                             }}
                           >
                             <Trash2 className="w-4 h-4" />
-                            Supprimer
+                            {t('list.actions.delete')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -484,7 +496,7 @@ const CapsulesList = () => {
                         />
                       )}
                       <span className="text-xs text-muted-foreground">
-                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale(i18n.language) })}
                       </span>
                     </div>
 
@@ -514,15 +526,15 @@ const CapsulesList = () => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer cette capsule ?</AlertDialogTitle>
+            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. La capsule "{capsuleToDelete?.title}" et tous ses médias seront définitivement supprimés.
+              {t('delete.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Supprimer
+              {t('delete.confirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

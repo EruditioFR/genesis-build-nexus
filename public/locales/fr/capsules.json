@@ -1,20 +1,49 @@
 {
+  "loading": "Chargement des souvenirs...",
+  "loadingSingle": "Chargement du souvenir...",
+  "notFound": "Souvenir introuvable",
+  "backToHome": "Retour à l'accueil",
+  "backToList": "Retour",
+  "backToDetail": "Retour au souvenir",
   "create": {
+    "pageTitle": "Ajouter un souvenir",
+    "pageSubtitle": "Préservez un souvenir précieux",
     "title": "Nouvelle capsule",
-    "titlePlaceholder": "Titre de votre souvenir",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "Ex: Vacances en Bretagne 2024",
+    "titleRequired": "Le titre est requis",
+    "titleMaxLength": "Le titre ne peut pas dépasser 100 caractères",
     "description": "Description",
-    "descriptionPlaceholder": "Décrivez ce souvenir...",
+    "descriptionPlaceholder": "Décrivez brièvement cette capsule...",
+    "descriptionMaxLength": "La description ne peut pas dépasser 500 caractères",
     "content": "Contenu",
-    "contentPlaceholder": "Racontez votre histoire...",
+    "contentPlaceholder": "Écrivez votre texte, lettre ou récit...",
+    "contentMaxLength": "Le contenu ne peut pas dépasser 10 000 caractères",
     "memoryDate": "Date du souvenir",
     "category": "Catégorie",
     "tags": "Mots-clés",
-    "tagsPlaceholder": "Ajoutez des mots-clés...",
+    "tagsPlaceholder": "Ajouter des mots-clés...",
     "media": "Médias",
     "addMedia": "Ajouter des médias",
     "publish": "Publier",
     "saveDraft": "Enregistrer comme brouillon",
-    "schedule": "Programmer la publication"
+    "schedule": "Programmer la publication",
+    "typeLabel": "Type de souvenir",
+    "uploadError": "Erreur lors de l'upload des fichiers. Veuillez corriger les erreurs et réessayer.",
+    "successPublished": "Souvenir publié avec succès !",
+    "successScheduled": "Souvenir programmé avec succès !",
+    "successDraft": "Brouillon enregistré",
+    "saveError": "Erreur lors de la sauvegarde"
+  },
+  "edit": {
+    "pageTitle": "Modifier le souvenir",
+    "pageSubtitle": "Mettez à jour votre souvenir",
+    "existingMedia": "Médias existants",
+    "addNewMedia": "Ajouter de nouveaux médias",
+    "removeMedia": "Supprimer",
+    "successPublished": "Souvenir publié avec succès !",
+    "successSaved": "Modifications enregistrées",
+    "loadError": "Erreur lors du chargement du souvenir"
   },
   "types": {
     "text": "Texte",
@@ -25,9 +54,9 @@
   },
   "status": {
     "draft": "Brouillon",
-    "published": "Publié",
-    "scheduled": "Programmé",
-    "archived": "Archivé"
+    "published": "Publiée",
+    "scheduled": "Programmée",
+    "archived": "Archivée"
   },
   "categories": {
     "childhood": "Enfance",
@@ -43,40 +72,83 @@
     "delete": "Supprimer",
     "share": "Partager",
     "export": "Exporter",
+    "exportPdf": "Exporter en PDF",
+    "exportZip": "Exporter en ZIP",
+    "exportSuccess": "Souvenir exporté",
+    "exportError": "Erreur lors de l'export",
     "comments": "Commentaires",
     "noComments": "Aucun commentaire",
     "addComment": "Ajouter un commentaire",
     "linkedPersons": "Personnes liées",
     "createdAt": "Créé le",
-    "updatedAt": "Modifié le"
+    "updatedAt": "Modifié le",
+    "memoryOf": "Souvenir de",
+    "sharedWith": "Partagé avec",
+    "content": "Contenu",
+    "mediaGallery": "Galerie médias",
+    "viewInStory": "Voir en mode story",
+    "changeHeaderImage": "Changer l'image d'en-tête",
+    "deleteSuccess": "Souvenir supprimé",
+    "deleteError": "Erreur lors de la suppression"
   },
   "list": {
-    "title": "Mes capsules",
-    "empty": "Aucune capsule",
-    "emptySubtitle": "Créez votre première capsule pour commencer",
+    "title": "Mes souvenirs",
+    "count_one": "{{count}} souvenir au total",
+    "count_other": "{{count}} souvenirs au total",
+    "newCapsule": "Nouveau souvenir",
+    "empty": "Aucun souvenir ajouté",
+    "emptySubtitle": "Commencez à préserver vos souvenirs dès maintenant",
+    "addFirst": "Ajouter mon premier souvenir",
+    "noResults": "Aucun résultat",
+    "noResultsSubtitle": "Essayez de modifier vos filtres de recherche",
+    "searchPlaceholder": "Rechercher par titre, description ou tag...",
     "filters": {
       "all": "Toutes",
       "drafts": "Brouillons",
       "published": "Publiées",
       "scheduled": "Programmées"
     },
+    "typeFilters": {
+      "all": "Tous types",
+      "text": "Texte",
+      "photo": "Photo",
+      "video": "Vidéo",
+      "audio": "Audio",
+      "mixed": "Mixte"
+    },
+    "statusFilters": {
+      "all": "Tous statuts",
+      "draft": "Brouillon",
+      "published": "Publiée",
+      "scheduled": "Programmée",
+      "archived": "Archivée"
+    },
+    "categoryFilters": {
+      "all": "Toutes catégories"
+    },
     "sort": {
       "newest": "Plus récentes",
       "oldest": "Plus anciennes",
       "title": "Titre A-Z"
+    },
+    "actions": {
+      "view": "Voir",
+      "edit": "Modifier",
+      "share": "Partager",
+      "delete": "Supprimer"
     }
   },
   "delete": {
-    "title": "Supprimer cette capsule ?",
-    "description": "Cette action est irréversible. La capsule et tous ses médias seront définitivement supprimés.",
+    "title": "Supprimer ce souvenir ?",
+    "description": "Cette action est irréversible. Le souvenir et tous ses médias seront définitivement supprimés.",
     "confirm": "Oui, supprimer",
     "cancel": "Annuler"
   },
   "share": {
-    "title": "Partager la capsule",
+    "title": "Partager le souvenir",
     "selectCircle": "Choisir un cercle",
     "noCircles": "Aucun cercle disponible",
     "createCircle": "Créer un cercle",
-    "shared": "Capsule partagée avec succès"
+    "shared": "Souvenir partagé avec succès"
   }
 }
