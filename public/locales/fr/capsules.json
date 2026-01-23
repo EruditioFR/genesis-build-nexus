@@ -1,0 +1,82 @@
+{
+  "create": {
+    "title": "Nouvelle capsule",
+    "titlePlaceholder": "Titre de votre souvenir",
+    "description": "Description",
+    "descriptionPlaceholder": "Décrivez ce souvenir...",
+    "content": "Contenu",
+    "contentPlaceholder": "Racontez votre histoire...",
+    "memoryDate": "Date du souvenir",
+    "category": "Catégorie",
+    "tags": "Mots-clés",
+    "tagsPlaceholder": "Ajoutez des mots-clés...",
+    "media": "Médias",
+    "addMedia": "Ajouter des médias",
+    "publish": "Publier",
+    "saveDraft": "Enregistrer comme brouillon",
+    "schedule": "Programmer la publication"
+  },
+  "types": {
+    "text": "Texte",
+    "photo": "Photo",
+    "video": "Vidéo",
+    "audio": "Audio",
+    "mixed": "Mixte"
+  },
+  "status": {
+    "draft": "Brouillon",
+    "published": "Publié",
+    "scheduled": "Programmé",
+    "archived": "Archivé"
+  },
+  "categories": {
+    "childhood": "Enfance",
+    "family": "Famille",
+    "travel": "Voyages",
+    "celebrations": "Fêtes",
+    "career": "Carrière",
+    "hobbies": "Loisirs",
+    "traditions": "Traditions"
+  },
+  "detail": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "share": "Partager",
+    "export": "Exporter",
+    "comments": "Commentaires",
+    "noComments": "Aucun commentaire",
+    "addComment": "Ajouter un commentaire",
+    "linkedPersons": "Personnes liées",
+    "createdAt": "Créé le",
+    "updatedAt": "Modifié le"
+  },
+  "list": {
+    "title": "Mes capsules",
+    "empty": "Aucune capsule",
+    "emptySubtitle": "Créez votre première capsule pour commencer",
+    "filters": {
+      "all": "Toutes",
+      "drafts": "Brouillons",
+      "published": "Publiées",
+      "scheduled": "Programmées"
+    },
+    "sort": {
+      "newest": "Plus récentes",
+      "oldest": "Plus anciennes",
+      "title": "Titre A-Z"
+    }
+  },
+  "delete": {
+    "title": "Supprimer cette capsule ?",
+    "description": "Cette action est irréversible. La capsule et tous ses médias seront définitivement supprimés.",
+    "confirm": "Oui, supprimer",
+    "cancel": "Annuler"
+  },
+  "share": {
+    "title": "Partager la capsule",
+    "selectCircle": "Choisir un cercle",
+    "noCircles": "Aucun cercle disponible",
+    "createCircle": "Créer un cercle",
+    "shared": "Capsule partagée avec succès"
+  }
+}

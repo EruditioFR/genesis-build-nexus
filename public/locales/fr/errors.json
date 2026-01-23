@@ -1,0 +1,30 @@
+{
+  "generic": "Une erreur est survenue. Veuillez réessayer.",
+  "network": "Erreur de connexion. Vérifiez votre connexion internet.",
+  "unauthorized": "Vous devez être connecté pour accéder à cette page.",
+  "forbidden": "Vous n'avez pas les droits pour effectuer cette action.",
+  "notFound": "La page demandée n'existe pas.",
+  "serverError": "Erreur serveur. Nos équipes ont été notifiées.",
+  "timeout": "La requête a pris trop de temps. Réessayez.",
+  "validation": "Veuillez vérifier les informations saisies.",
+  "fileUpload": {
+    "tooLarge": "Le fichier est trop volumineux (max {{size}})",
+    "invalidType": "Type de fichier non supporté",
+    "failed": "Échec de l'envoi du fichier"
+  },
+  "auth": {
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "invalidToken": "Lien invalide ou expiré."
+  },
+  "capsule": {
+    "createFailed": "Impossible de créer la capsule",
+    "updateFailed": "Impossible de mettre à jour la capsule",
+    "deleteFailed": "Impossible de supprimer la capsule",
+    "loadFailed": "Impossible de charger la capsule"
+  },
+  "circle": {
+    "createFailed": "Impossible de créer le cercle",
+    "inviteFailed": "Impossible d'envoyer l'invitation",
+    "joinFailed": "Impossible de rejoindre le cercle"
+  }
+}

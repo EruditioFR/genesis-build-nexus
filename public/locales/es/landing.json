@@ -1,0 +1,147 @@
+{
+  "hero": {
+    "badge": "Preserva tus recuerdos para siempre",
+    "title": {
+      "line1": "No dejes que tus",
+      "line2": "recuerdos se desvanezcan,",
+      "line3": "hazlos un tesoro familiar."
+    },
+    "subtitle": "Crea tu cápsula de memoria digital y transmite tu legado familiar a las futuras generaciones. Textos, fotos, videos, audio — todos tus recuerdos preservados en una bóveda digital segura con cifrado AES-256.",
+    "cta": {
+      "primary": "Comenzar gratis",
+      "secondary": "Ver demo"
+    },
+    "trust": {
+      "encryption": "Cifrado AES-256",
+      "gdpr": "Servidores europeos RGPD",
+      "legacy": "Legado familiar"
+    }
+  },
+  "features": {
+    "badge": "Características",
+    "title": "Todo lo que necesitas para",
+    "titleHighlight": "preservar tu legado familiar",
+    "subtitle": "Una plataforma francesa completa de cápsulas de memoria: crea, organiza y transmite tus recuerdos a las futuras generaciones de forma segura.",
+    "mediaTypes": {
+      "photos": "Fotos",
+      "videos": "Videos",
+      "audio": "Audio",
+      "texts": "Textos"
+    },
+    "items": {
+      "capsules": {
+        "title": "Cápsulas de Memoria Multimedia",
+        "description": "Crea cápsulas de memoria digitales combinando textos, fotos, videos y grabaciones de audio. Cada recuerdo está contextualizado con fecha, lugar y personas relacionadas."
+      },
+      "timeline": {
+        "title": "Línea de Tiempo Interactiva por Décadas",
+        "description": "Visualiza tu historia familiar en una línea de tiempo interactiva. Navega por décadas y explora tus recuerdos en su contexto temporal."
+      },
+      "circles": {
+        "title": "Círculos de Compartir Seguros",
+        "description": "Crea círculos de confianza (familia, amigos) con permisos granulares: lectura, comentarios o contribución. Transmisión intergeneracional controlada."
+      },
+      "security": {
+        "title": "Seguridad AES-256 y Legado Póstumo",
+        "description": "Cifrado de nivel bancario AES-256, almacenamiento en servidores europeos conformes con RGPD. Programa la transmisión de tu legado digital a tus seres queridos."
+      },
+      "export": {
+        "title": "Exportación PDF y Respaldo",
+        "description": "Exporta tus cápsulas en PDF de alta calidad o descarga todos tus medios. Tus datos te pertenecen, exportables en cualquier momento."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "Cómo funciona",
+    "title": "Crea tu legado en 3 simples pasos",
+    "subtitle": "Una interfaz diseñada para ser accesible a todos, sin importar la edad o nivel técnico.",
+    "steps": {
+      "step1": {
+        "title": "Crea tu cuenta",
+        "description": "Registro gratuito en 30 segundos. No se requiere tarjeta de crédito para comenzar."
+      },
+      "step2": {
+        "title": "Añade tus recuerdos",
+        "description": "Importa fotos, videos, textos y audio. Organízalos por fecha, tema o personas."
+      },
+      "step3": {
+        "title": "Comparte con la familia",
+        "description": "Invita a tus seres queridos a tus círculos de confianza. Todos pueden contribuir y comentar."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Testimonios",
+    "title": "Confían en nosotros",
+    "subtitle": "Descubre lo que nuestros usuarios dicen de Family Garden."
+  },
+  "pricing": {
+    "badge": "Precios",
+    "title": "Elige tu plan",
+    "subtitle": "Comienza gratis, mejora según crezcas.",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "yearlyDiscount": "-20%",
+    "perMonth": "/mes",
+    "perYear": "/año",
+    "popular": "Popular",
+    "cta": {
+      "free": "Comenzar gratis",
+      "premium": "Ir a Premium"
+    },
+    "plans": {
+      "free": {
+        "name": "Gratis",
+        "price": "0€",
+        "description": "Para descubrir la plataforma",
+        "features": [
+          "10 cápsulas de memoria",
+          "500 MB de almacenamiento",
+          "1 círculo de compartir",
+          "Exportación PDF básica"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "priceMonthly": "9,90€",
+        "priceYearly": "95€",
+        "description": "Para preservar todos tus recuerdos",
+        "features": [
+          "Cápsulas ilimitadas",
+          "50 GB de almacenamiento",
+          "Círculos ilimitados",
+          "Árbol genealógico",
+          "Legado póstumo",
+          "Exportación PDF HD",
+          "Soporte prioritario"
+        ]
+      }
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "items": {
+      "q1": {
+        "question": "¿Cómo se protegen mis datos?",
+        "answer": "Tus datos están cifrados con el estándar AES-256 y almacenados en servidores europeos conformes con RGPD."
+      },
+      "q2": {
+        "question": "¿Puedo exportar mis recuerdos?",
+        "answer": "Sí, puedes exportar tus cápsulas como PDF o descargar todos tus medios en cualquier momento."
+      },
+      "q3": {
+        "question": "¿Cómo funciona el legado póstumo?",
+        "answer": "Designas guardianes de confianza que podrán acceder a tus cápsulas según las condiciones que definas."
+      },
+      "q4": {
+        "question": "¿Puedo cancelar mi suscripción?",
+        "answer": "Sí, puedes cancelar en cualquier momento. Tus datos permanecen accesibles y exportables."
+      }
+    }
+  },
+  "cta": {
+    "title": "¿Listo para preservar tus recuerdos?",
+    "subtitle": "Únete a miles de familias que transmiten su historia.",
+    "button": "Crear mi cuenta gratis"
+  }
+}

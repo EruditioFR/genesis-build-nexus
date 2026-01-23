@@ -1,0 +1,147 @@
+{
+  "hero": {
+    "badge": "Préservez vos souvenirs pour l'éternité",
+    "title": {
+      "line1": "Ne laissez pas vos",
+      "line2": "souvenirs s'effacer,",
+      "line3": "faites-en un trésor familial."
+    },
+    "subtitle": "Créez votre capsule mémorielle numérique et transmettez votre héritage familial aux générations futures. Textes, photos, vidéos, audio — tous vos souvenirs préservés dans un coffre-fort digital sécurisé avec chiffrement AES-256.",
+    "cta": {
+      "primary": "Commencer gratuitement",
+      "secondary": "Voir la démo"
+    },
+    "trust": {
+      "encryption": "Chiffrement AES-256",
+      "gdpr": "Serveurs européens RGPD",
+      "legacy": "Héritage familial"
+    }
+  },
+  "features": {
+    "badge": "Fonctionnalités",
+    "title": "Tout ce dont vous avez besoin pour",
+    "titleHighlight": "préserver votre héritage familial",
+    "subtitle": "Une plateforme française complète de capsules mémorielles : créez, organisez et transmettez vos souvenirs aux générations futures en toute sécurité.",
+    "mediaTypes": {
+      "photos": "Photos",
+      "videos": "Vidéos",
+      "audio": "Audio",
+      "texts": "Textes"
+    },
+    "items": {
+      "capsules": {
+        "title": "Capsules Mémorielles Multimédia",
+        "description": "Créez des capsules mémorielles numériques combinant textes, photos, vidéos et enregistrements audio. Chaque souvenir est contextualisé avec date, lieu et personnes liées."
+      },
+      "timeline": {
+        "title": "Chronologie Interactive par Décennies",
+        "description": "Visualisez votre histoire familiale sur une frise chronologique interactive. Naviguez par décennies et explorez vos souvenirs dans leur contexte temporel."
+      },
+      "circles": {
+        "title": "Cercles de Partage Sécurisés",
+        "description": "Créez des cercles de confiance (famille, amis) avec permissions granulaires : lecture, commentaires ou contribution. Transmission intergénérationnelle maîtrisée."
+      },
+      "security": {
+        "title": "Sécurité AES-256 & Legs Posthume",
+        "description": "Chiffrement de niveau bancaire AES-256, stockage sur serveurs européens conformes RGPD. Programmez la transmission de votre héritage numérique à vos proches."
+      },
+      "export": {
+        "title": "Export PDF & Sauvegarde",
+        "description": "Exportez vos capsules en PDF haute qualité ou téléchargez l'intégralité de vos médias. Vos données vous appartiennent, exportables à tout moment."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "Comment ça marche",
+    "title": "Créez votre héritage en 3 étapes simples",
+    "subtitle": "Une interface pensée pour être accessible à tous, quel que soit votre âge ou niveau technique.",
+    "steps": {
+      "step1": {
+        "title": "Créez votre compte",
+        "description": "Inscription gratuite en 30 secondes. Aucune carte bancaire requise pour commencer."
+      },
+      "step2": {
+        "title": "Ajoutez vos souvenirs",
+        "description": "Importez photos, vidéos, textes et audio. Organisez-les par date, thème ou personnes."
+      },
+      "step3": {
+        "title": "Partagez en famille",
+        "description": "Invitez vos proches dans vos cercles de confiance. Chacun peut contribuer et commenter."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Témoignages",
+    "title": "Ils nous font confiance",
+    "subtitle": "Découvrez ce que nos utilisateurs disent de Family Garden."
+  },
+  "pricing": {
+    "badge": "Tarifs",
+    "title": "Choisissez votre formule",
+    "subtitle": "Commencez gratuitement, évoluez selon vos besoins.",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "yearlyDiscount": "-20%",
+    "perMonth": "/mois",
+    "perYear": "/an",
+    "popular": "Populaire",
+    "cta": {
+      "free": "Commencer gratuitement",
+      "premium": "Passer à Premium"
+    },
+    "plans": {
+      "free": {
+        "name": "Gratuit",
+        "price": "0€",
+        "description": "Pour découvrir la plateforme",
+        "features": [
+          "10 capsules mémorielles",
+          "500 Mo de stockage",
+          "1 cercle de partage",
+          "Export PDF basique"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "priceMonthly": "9,90€",
+        "priceYearly": "95€",
+        "description": "Pour préserver tous vos souvenirs",
+        "features": [
+          "Capsules illimitées",
+          "50 Go de stockage",
+          "Cercles illimités",
+          "Arbre généalogique",
+          "Legs posthume",
+          "Export PDF HD",
+          "Support prioritaire"
+        ]
+      }
+    }
+  },
+  "faq": {
+    "title": "Questions fréquentes",
+    "items": {
+      "q1": {
+        "question": "Comment sont protégées mes données ?",
+        "answer": "Vos données sont chiffrées avec le standard AES-256 et stockées sur des serveurs européens conformes au RGPD."
+      },
+      "q2": {
+        "question": "Puis-je exporter mes souvenirs ?",
+        "answer": "Oui, vous pouvez exporter vos capsules en PDF ou télécharger tous vos médias à tout moment."
+      },
+      "q3": {
+        "question": "Comment fonctionne le legs posthume ?",
+        "answer": "Vous désignez des gardiens de confiance qui pourront accéder à vos capsules selon les conditions que vous définissez."
+      },
+      "q4": {
+        "question": "Puis-je annuler mon abonnement ?",
+        "answer": "Oui, vous pouvez annuler à tout moment. Vos données restent accessibles et exportables."
+      }
+    }
+  },
+  "cta": {
+    "title": "Prêt à préserver vos souvenirs ?",
+    "subtitle": "Rejoignez des milliers de familles qui transmettent leur histoire.",
+    "button": "Créer mon compte gratuit"
+  }
+}

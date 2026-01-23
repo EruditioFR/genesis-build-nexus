@@ -1,0 +1,55 @@
+{
+  "welcome": "Hello, {{name}}!",
+  "subtitle": "Your memory garden awaits",
+  "stats": {
+    "capsules": "Capsules",
+    "mediaFiles": "Media files",
+    "circles": "Circles",
+    "familyMembers": "Family members"
+  },
+  "quickActions": {
+    "title": "Quick actions",
+    "newCapsule": "New capsule",
+    "viewTimeline": "View timeline",
+    "manageCircles": "Manage circles",
+    "familyTree": "Family tree"
+  },
+  "recentCapsules": {
+    "title": "Recent capsules",
+    "empty": "No capsules yet",
+    "emptySubtitle": "Create your first capsule to start preserving your memories.",
+    "createFirst": "Create my first capsule",
+    "viewAll": "View all capsules"
+  },
+  "storage": {
+    "title": "Storage",
+    "used": "{{used}} of {{total}} used",
+    "upgrade": "Increase storage"
+  },
+  "onboarding": {
+    "title": "Getting started",
+    "subtitle": "Complete these steps to get started",
+    "steps": {
+      "profile": "Complete your profile",
+      "firstCapsule": "Create your first capsule",
+      "inviteFamily": "Invite a family member",
+      "familyTree": "Start the family tree"
+    }
+  },
+  "prompts": {
+    "title": "Memory ideas",
+    "subtitle": "Get inspired by these suggestions"
+  },
+  "sidebar": {
+    "home": "Home",
+    "capsules": "My capsules",
+    "timeline": "Timeline",
+    "circles": "Circles",
+    "familyTree": "Family tree",
+    "categories": "Categories",
+    "statistics": "Statistics",
+    "settings": "Settings",
+    "profile": "My profile",
+    "premium": "Premium"
+  }
+}

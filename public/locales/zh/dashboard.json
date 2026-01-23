@@ -1,0 +1,8 @@
+{
+  "welcome": "您好,{{name}}!", "subtitle": "您的记忆花园等待着您",
+  "stats": { "capsules": "胶囊", "mediaFiles": "媒体文件", "circles": "圈子", "familyMembers": "家庭成员" },
+  "quickActions": { "title": "快捷操作", "newCapsule": "新胶囊", "viewTimeline": "查看时间线", "manageCircles": "管理圈子", "familyTree": "家谱" },
+  "recentCapsules": { "title": "最近胶囊", "empty": "还没有胶囊", "emptySubtitle": "创建您的第一个胶囊开始保存记忆。", "createFirst": "创建第一个胶囊", "viewAll": "查看所有胶囊" },
+  "storage": { "title": "存储空间", "used": "已使用{{used}}/{{total}}", "upgrade": "增加存储空间" },
+  "sidebar": { "home": "首页", "capsules": "我的胶囊", "timeline": "时间线", "circles": "圈子", "familyTree": "家谱", "categories": "分类", "statistics": "统计", "settings": "设置", "profile": "我的资料", "premium": "高级版" }
+}

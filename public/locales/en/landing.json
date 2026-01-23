@@ -1,0 +1,147 @@
+{
+  "hero": {
+    "badge": "Preserve your memories forever",
+    "title": {
+      "line1": "Don't let your",
+      "line2": "memories fade away,",
+      "line3": "make them a family treasure."
+    },
+    "subtitle": "Create your digital memory capsule and pass on your family legacy to future generations. Texts, photos, videos, audio — all your memories preserved in a secure digital vault with AES-256 encryption.",
+    "cta": {
+      "primary": "Get started free",
+      "secondary": "Watch demo"
+    },
+    "trust": {
+      "encryption": "AES-256 Encryption",
+      "gdpr": "GDPR European Servers",
+      "legacy": "Family Legacy"
+    }
+  },
+  "features": {
+    "badge": "Features",
+    "title": "Everything you need to",
+    "titleHighlight": "preserve your family legacy",
+    "subtitle": "A complete French platform for memory capsules: create, organize and transmit your memories to future generations safely.",
+    "mediaTypes": {
+      "photos": "Photos",
+      "videos": "Videos",
+      "audio": "Audio",
+      "texts": "Texts"
+    },
+    "items": {
+      "capsules": {
+        "title": "Multimedia Memory Capsules",
+        "description": "Create digital memory capsules combining texts, photos, videos and audio recordings. Each memory is contextualized with date, place and linked people."
+      },
+      "timeline": {
+        "title": "Interactive Timeline by Decades",
+        "description": "Visualize your family history on an interactive timeline. Navigate by decades and explore your memories in their temporal context."
+      },
+      "circles": {
+        "title": "Secure Sharing Circles",
+        "description": "Create circles of trust (family, friends) with granular permissions: reading, comments or contribution. Controlled intergenerational transmission."
+      },
+      "security": {
+        "title": "AES-256 Security & Posthumous Legacy",
+        "description": "Bank-level AES-256 encryption, storage on GDPR-compliant European servers. Schedule the transmission of your digital legacy to your loved ones."
+      },
+      "export": {
+        "title": "PDF Export & Backup",
+        "description": "Export your capsules in high-quality PDF or download all your media. Your data belongs to you, exportable at any time."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "How it works",
+    "title": "Create your legacy in 3 simple steps",
+    "subtitle": "An interface designed to be accessible to everyone, regardless of age or technical level.",
+    "steps": {
+      "step1": {
+        "title": "Create your account",
+        "description": "Free registration in 30 seconds. No credit card required to start."
+      },
+      "step2": {
+        "title": "Add your memories",
+        "description": "Import photos, videos, texts and audio. Organize them by date, theme or people."
+      },
+      "step3": {
+        "title": "Share with family",
+        "description": "Invite your loved ones into your circles of trust. Everyone can contribute and comment."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Testimonials",
+    "title": "They trust us",
+    "subtitle": "Discover what our users say about Family Garden."
+  },
+  "pricing": {
+    "badge": "Pricing",
+    "title": "Choose your plan",
+    "subtitle": "Start free, upgrade as you grow.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "yearlyDiscount": "-20%",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "popular": "Popular",
+    "cta": {
+      "free": "Get started free",
+      "premium": "Go Premium"
+    },
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "description": "To discover the platform",
+        "features": [
+          "10 memory capsules",
+          "500 MB storage",
+          "1 sharing circle",
+          "Basic PDF export"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "priceMonthly": "$9.90",
+        "priceYearly": "$95",
+        "description": "To preserve all your memories",
+        "features": [
+          "Unlimited capsules",
+          "50 GB storage",
+          "Unlimited circles",
+          "Family tree",
+          "Posthumous legacy",
+          "HD PDF export",
+          "Priority support"
+        ]
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": {
+      "q1": {
+        "question": "How is my data protected?",
+        "answer": "Your data is encrypted with the AES-256 standard and stored on GDPR-compliant European servers."
+      },
+      "q2": {
+        "question": "Can I export my memories?",
+        "answer": "Yes, you can export your capsules as PDF or download all your media at any time."
+      },
+      "q3": {
+        "question": "How does posthumous legacy work?",
+        "answer": "You designate trusted guardians who will be able to access your capsules according to the conditions you define."
+      },
+      "q4": {
+        "question": "Can I cancel my subscription?",
+        "answer": "Yes, you can cancel at any time. Your data remains accessible and exportable."
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to preserve your memories?",
+    "subtitle": "Join thousands of families passing on their story.",
+    "button": "Create my free account"
+  }
+}

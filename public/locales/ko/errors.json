@@ -1,0 +1,30 @@
+{
+  "generic": "오류가 발생했습니다. 다시 시도해 주세요.",
+  "network": "연결 오류. 인터넷 연결을 확인하세요.",
+  "unauthorized": "이 페이지에 접근하려면 로그인이 필요합니다.",
+  "forbidden": "이 작업을 수행할 권한이 없습니다.",
+  "notFound": "요청한 페이지가 존재하지 않습니다.",
+  "serverError": "서버 오류. 팀에 알림이 전송되었습니다.",
+  "timeout": "요청 시간이 초과되었습니다. 다시 시도해 주세요.",
+  "validation": "입력한 정보를 확인해 주세요.",
+  "fileUpload": {
+    "tooLarge": "파일이 너무 큽니다 (최대 {{size}})",
+    "invalidType": "지원하지 않는 파일 형식입니다",
+    "failed": "파일 업로드 실패"
+  },
+  "auth": {
+    "sessionExpired": "세션이 만료되었습니다. 다시 로그인해 주세요.",
+    "invalidToken": "유효하지 않거나 만료된 링크입니다."
+  },
+  "capsule": {
+    "createFailed": "캡슐을 만들 수 없습니다",
+    "updateFailed": "캡슐을 업데이트할 수 없습니다",
+    "deleteFailed": "캡슐을 삭제할 수 없습니다",
+    "loadFailed": "캡슐을 로드할 수 없습니다"
+  },
+  "circle": {
+    "createFailed": "서클을 만들 수 없습니다",
+    "inviteFailed": "초대를 보낼 수 없습니다",
+    "joinFailed": "서클에 참여할 수 없습니다"
+  }
+}
