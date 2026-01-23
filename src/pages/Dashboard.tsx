@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -62,7 +63,18 @@ interface Stats {
   upcomingEvents: number;
 }
 
+const getDateLocale = (lang: string) => {
+  switch (lang) {
+    case 'en': return enUS;
+    case 'es': return es;
+    case 'ko': return ko;
+    case 'zh': return zhCN;
+    default: return fr;
+  }
+};
+
 const Dashboard = () => {
+  const { t, i18n } = useTranslation('dashboard');
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -162,7 +174,7 @@ const Dashboard = () => {
             id: capsule.id,
             title: capsule.title,
             type: capsule.capsule_type,
-            date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: fr }),
+            date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: getDateLocale(i18n.language) }),
             thumbnail: capsule.thumbnail_url || undefined,
             content: capsule.content || undefined,
             firstMediaUrl: firstImageMap[capsule.id] || undefined,
@@ -270,7 +282,7 @@ const Dashboard = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement de votre espace...</p>
+          <p className="text-muted-foreground">{t('loading')}</p>
         </div>
       </div>
     );
@@ -305,12 +317,12 @@ const Dashboard = () => {
           data-tour="welcome"
         >
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
-            Bonjour{profile?.display_name ? `, ${profile.display_name.split(' ')[0]}` : ''} 👋
+            {t('welcome', { name: profile?.display_name?.split(' ')[0] || '' })} 👋
           </h1>
           <p className="text-muted-foreground text-base">
             {stats.totalCapsules === 0 
-              ? 'Commencez à préserver vos souvenirs précieux'
-              : 'Continuez à préserver vos souvenirs précieux'}
+              ? t('subtitleEmpty')
+              : t('subtitle')}
           </p>
         </motion.div>
 

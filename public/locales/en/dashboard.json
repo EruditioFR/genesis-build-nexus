@@ -1,30 +1,77 @@
 {
-  "welcome": "Hello, {{name}}!",
-  "subtitle": "Your memory garden awaits",
+  "welcome": "Hello{{name, andSpace}}!",
+  "subtitle": "Continue preserving your precious memories",
+  "subtitleEmpty": "Start preserving your precious memories",
+  "loading": "Loading your space...",
   "stats": {
-    "capsules": "Capsules",
-    "mediaFiles": "Media files",
-    "circles": "Circles",
-    "familyMembers": "Family members"
+    "capsules_one": "Memory",
+    "capsules_other": "Memories",
+    "capsules": "Memory",
+    "mediaFiles_one": "Media",
+    "mediaFiles_other": "Media files",
+    "mediaFiles": "Media",
+    "circles_one": "Share",
+    "circles_other": "Shares",
+    "circles": "Share",
+    "familyMembers_one": "Event",
+    "familyMembers_other": "Events",
+    "familyMembers": "Event"
+  },
+  "types": {
+    "photo": "Photo",
+    "video": "Video",
+    "audio": "Audio",
+    "mixed": "Mixed",
+    "text": "Text"
   },
   "quickActions": {
     "title": "Quick actions",
-    "newCapsule": "New capsule",
-    "viewTimeline": "View timeline",
-    "manageCircles": "Manage circles",
-    "familyTree": "Family tree"
+    "newCapsule": "New memory",
+    "newCapsuleDesc": "Add a memory",
+    "viewTimeline": "My timeline",
+    "viewTimelineDesc": "Browse through time",
+    "manageCircles": "My shares",
+    "manageCirclesDesc": "Family & friends",
+    "familyTree": "Family tree",
+    "familyTreeDesc": "My family"
   },
   "recentCapsules": {
-    "title": "Recent capsules",
-    "empty": "No capsules yet",
+    "title": "Recent memories",
+    "empty": "You haven't added any memory yet",
     "emptySubtitle": "Create your first capsule to start preserving your memories.",
-    "createFirst": "Create my first capsule",
-    "viewAll": "View all capsules"
+    "createFirst": "Add my first memory",
+    "viewAll": "View all",
+    "noContent": "No content"
   },
   "storage": {
-    "title": "Storage",
-    "used": "{{used}} of {{total}} used",
-    "upgrade": "Increase storage"
+    "title": "Storage space",
+    "subtitle": "View your storage usage",
+    "used": "{{used}} GB used of {{total}} GB",
+    "upgrade": "Increase storage",
+    "upgradePremium": "Upgrade to Premium",
+    "upgradeHeritage": "Upgrade to Heritage",
+    "nearLimit": "Your space is almost full. Upgrade to get more space!",
+    "atLimit": "Storage full! Upgrade to continue preserving your memories.",
+    "needSpace": "Running out of space?",
+    "upgradeNow": "Upgrade now!",
+    "comparePlans": "Compare plans",
+    "storageComparison": "Storage comparison",
+    "current": "Current",
+    "yourPlan": "Your current plan",
+    "choose": "Choose"
+  },
+  "plans": {
+    "free": "Free",
+    "premium": "Premium",
+    "heritage": "Heritage",
+    "freeFeature1": "Text & photo memories",
+    "freeFeature2": "Basic timeline",
+    "premiumFeature1": "All media types",
+    "premiumFeature2": "Advanced timeline",
+    "premiumFeature3": "1 sharing circle",
+    "heritageFeature1": "Massive storage",
+    "heritageFeature2": "Family tree",
+    "heritageFeature3": "Unlimited sharing"
   },
   "onboarding": {
     "title": "Getting started",
@@ -51,5 +98,52 @@
     "settings": "Settings",
     "profile": "My profile",
     "premium": "Premium"
+  },
+  "nav": {
+    "home": "Home",
+    "memories": "Memories",
+    "memoriesDesc": "Preserve and organize your precious moments",
+    "newMemory": "New memory",
+    "allMemories": "All memories",
+    "allMemoriesDesc": "Explore and manage your complete memory collection",
+    "categories": "Categories",
+    "categoriesDesc": "Organize your memories by custom themes",
+    "timeline": "Timeline",
+    "timelineDesc": "Visualize your history interactively through time",
+    "statistics": "Statistics",
+    "statisticsDesc": "Analyze your habits and app usage",
+    "family": "Family",
+    "familyDesc": "Connect with loved ones and preserve your family heritage",
+    "circles": "Sharing circles",
+    "circlesDesc": "Create groups to share your memories with loved ones",
+    "familyTree": "Family tree",
+    "familyTreeDesc": "Visualize and enrich your family history",
+    "unlock": "Unlock",
+    "upgradeTitle": "Upgrade to Premium",
+    "upgradeTitleHeritage": "Upgrade to Heritage",
+    "upgradeDesc": "Unlock video/audio capsules and more space",
+    "upgradeDescHeritage": "Unlock family tree and unlimited sharing",
+    "discover": "Discover",
+    "admin": "Admin"
+  },
+  "userMenu": {
+    "myProfile": "My profile",
+    "upgradePremium": "Upgrade to Premium",
+    "upgradeHeritage": "Upgrade to Heritage",
+    "guidedTour": "Guided tour",
+    "backoffice": "Backoffice",
+    "signOut": "Sign out",
+    "user": "User"
+  },
+  "mobileNav": {
+    "home": "Home",
+    "memories": "Memories",
+    "add": "Add",
+    "timeline": "Timeline",
+    "profile": "Profile",
+    "myAccount": "My account",
+    "myProfile": "My profile",
+    "myCircles": "My circles",
+    "guidedTour": "Guided tour"
   }
 }

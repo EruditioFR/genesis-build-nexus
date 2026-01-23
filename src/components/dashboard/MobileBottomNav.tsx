@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FolderOpen, Plus, Clock, User, HelpCircle, Users, Settings, LogOut, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Home, FolderOpen, Plus, Clock, User, HelpCircle, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -8,16 +9,17 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const MobileBottomNav = () => {
+  const { t } = useTranslation('dashboard');
   const location = useLocation();
   const { startTour } = useOnboardingTour();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const navItems = [
-    { to: '/dashboard', icon: Home, label: 'Accueil' },
-    { to: '/capsules', icon: FolderOpen, label: 'Souvenirs' },
-    { to: '/capsules/new', icon: Plus, label: 'Ajouter', isAction: true },
-    { to: '/timeline', icon: Clock, label: 'Chrono' },
-    { to: '/profile', icon: User, label: 'Profil', openSheet: true },
+    { to: '/dashboard', icon: Home, labelKey: 'mobileNav.home' },
+    { to: '/capsules', icon: FolderOpen, labelKey: 'mobileNav.memories' },
+    { to: '/capsules/new', icon: Plus, labelKey: 'mobileNav.add', isAction: true },
+    { to: '/timeline', icon: Clock, labelKey: 'mobileNav.timeline' },
+    { to: '/profile', icon: User, labelKey: 'mobileNav.profile', openSheet: true },
   ];
 
   const handleStartTour = () => {
@@ -46,7 +48,7 @@ const MobileBottomNav = () => {
                   <div className="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
                     <item.icon className="w-7 h-7 text-primary-foreground" strokeWidth={2.5} />
                   </div>
-                  <span className="text-xs font-semibold text-secondary mt-1">{item.label}</span>
+                  <span className="text-xs font-semibold text-secondary mt-1">{t(item.labelKey)}</span>
                 </Link>
               );
             }
@@ -74,13 +76,13 @@ const MobileBottomNav = () => {
                         "text-xs font-medium",
                         isActive ? "text-secondary font-semibold" : "text-white/60"
                       )}>
-                        {item.label}
+                        {t(item.labelKey)}
                       </span>
                     </button>
                   </SheetTrigger>
                   <SheetContent side="bottom" className="rounded-t-3xl pb-8">
                     <SheetHeader className="mb-4">
-                      <SheetTitle>Mon compte</SheetTitle>
+                      <SheetTitle>{t('mobileNav.myAccount')}</SheetTitle>
                     </SheetHeader>
                     
                     <div className="space-y-2">
@@ -92,7 +94,7 @@ const MobileBottomNav = () => {
                       >
                         <Link to="/profile">
                           <User className="w-5 h-5" />
-                          Mon profil
+                          {t('mobileNav.myProfile')}
                         </Link>
                       </Button>
                       
@@ -104,7 +106,7 @@ const MobileBottomNav = () => {
                       >
                         <Link to="/circles">
                           <Users className="w-5 h-5" />
-                          Mes cercles
+                          {t('mobileNav.myCircles')}
                         </Link>
                       </Button>
                       
@@ -116,7 +118,7 @@ const MobileBottomNav = () => {
                         onClick={handleStartTour}
                       >
                         <HelpCircle className="w-5 h-5" />
-                        Visite guidée
+                        {t('mobileNav.guidedTour')}
                       </Button>
                     </div>
                   </SheetContent>
@@ -146,7 +148,7 @@ const MobileBottomNav = () => {
                   "text-xs font-medium",
                   isActive ? "text-secondary font-semibold" : "text-white/60"
                 )}>
-                  {item.label}
+                  {t(item.labelKey)}
                 </span>
               </Link>
             );

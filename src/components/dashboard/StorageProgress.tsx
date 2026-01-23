@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HardDrive, TrendingUp, ChevronDown, Check, Crown, Sparkles } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -53,6 +54,7 @@ const plans: PlanInfo[] = [
 ];
 
 const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgressProps) => {
+  const { t } = useTranslation('dashboard');
   const [showComparison, setShowComparison] = useState(false);
   
   const percentage = Math.min((usedMb / limitMb) * 100, 100);
@@ -61,6 +63,36 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
   
   const isNearLimit = percentage > 80;
   const isAtLimit = percentage >= 95;
+
+  const plans: PlanInfo[] = [
+    {
+      id: 'free',
+      name: t('plans.free'),
+      storageMb: 250,
+      storageLabel: '250 Mo',
+      price: '0€',
+      color: 'bg-muted-foreground',
+      features: [t('plans.freeFeature1'), t('plans.freeFeature2')],
+    },
+    {
+      id: 'premium',
+      name: t('plans.premium'),
+      storageMb: 10240,
+      storageLabel: '10 Go',
+      price: '9,99€/mois',
+      color: 'bg-secondary',
+      features: [t('plans.premiumFeature1'), t('plans.premiumFeature2'), t('plans.premiumFeature3')],
+    },
+    {
+      id: 'legacy',
+      name: t('plans.heritage'),
+      storageMb: 51200,
+      storageLabel: '50 Go',
+      price: '19,99€/mois',
+      color: 'bg-primary',
+      features: [t('plans.heritageFeature1'), t('plans.heritageFeature2'), t('plans.heritageFeature3')],
+    },
+  ];
 
   const currentPlan = plans.find(p => p.id === subscriptionLevel) || plans[0];
   const maxStorage = plans[plans.length - 1].storageMb;
@@ -79,9 +111,9 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
             <HardDrive className="w-6 h-6 text-primary-foreground" />
           </div>
           <div>
-            <h3 className="text-lg font-display font-semibold text-foreground">Espace de stockage</h3>
+            <h3 className="text-lg font-display font-semibold text-foreground">{t('storage.title')}</h3>
             <p className="text-sm text-muted-foreground">
-              Visualisez l'espace que vous utilisez
+              {t('storage.subtitle')}
             </p>
           </div>
         </div>
@@ -89,7 +121,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
           <Button variant="outline" size="sm" className="gap-2" asChild>
             <Link to={subscriptionLevel === 'free' ? '/premium' : '/premium?tier=heritage'}>
               <TrendingUp className="w-4 h-4" />
-              {subscriptionLevel === 'free' ? 'Passer Premium' : 'Passer Héritage'}
+              {subscriptionLevel === 'free' ? t('storage.upgradePremium') : t('storage.upgradeHeritage')}
             </Link>
           </Button>
         )}
@@ -97,9 +129,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
 
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">
-            {usedGb} Go utilisés sur {limitGb} Go
-          </span>
+          <span className="text-muted-foreground">{t('storage.used', { used: usedGb, total: limitGb })}</span>
           <span className={`font-medium ${isAtLimit ? 'text-destructive' : isNearLimit ? 'text-accent' : 'text-foreground'}`}>
             {percentage.toFixed(0)}%
           </span>
@@ -112,27 +142,26 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
 
         {isNearLimit && !isAtLimit && (
           <p className="text-sm text-accent">
-            ⚠️ Votre espace est presque plein. Passez au forfait supérieur pour plus d'espace !
+            ⚠️ {t('storage.nearLimit')}
           </p>
         )}
         {isAtLimit && (
           <p className="text-sm text-destructive">
-            🚨 Espace épuisé ! Passez au forfait supérieur pour continuer à préserver vos souvenirs.
+            🚨 {t('storage.atLimit')}
           </p>
         )}
         {!isNearLimit && subscriptionLevel === 'free' && (
           <p className="text-sm text-muted-foreground">
-            Vous manquez d'espace ? <Link to="/premium" className="text-secondary hover:underline font-medium">Passez au forfait supérieur !</Link>
+            {t('storage.needSpace')} <Link to="/premium" className="text-secondary hover:underline font-medium">{t('storage.upgradeNow')}</Link>
           </p>
         )}
       </div>
 
-      {/* Toggle comparison button */}
       <button
         onClick={() => setShowComparison(!showComparison)}
         className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
-        <span>Comparer les forfaits</span>
+        <span>{t('storage.comparePlans')}</span>
         <ChevronDown className={cn('w-4 h-4 transition-transform', showComparison && 'rotate-180')} />
       </button>
 
@@ -150,7 +179,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
               {/* Visual storage comparison bar */}
               <div className="mb-6">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-                  Comparaison de l'espace disponible
+                  {t('storage.storageComparison')}
                 </p>
                 <div className="space-y-2">
                   {plans.map((plan) => {
@@ -172,7 +201,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
                             </span>
                             {isCurrent && (
                               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-secondary/15 text-secondary">
-                                Actuel
+                                {t('storage.current')}
                               </span>
                             )}
                           </div>
@@ -265,12 +294,12 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
                       {/* CTA */}
                       {isCurrent ? (
                         <div className="text-center py-2 text-xs font-medium text-secondary">
-                          ✓ Votre forfait actuel
+                          ✓ {t('storage.yourPlan')}
                         </div>
                       ) : isUpgrade ? (
                         <Button size="sm" className="w-full" variant={plan.id === 'legacy' ? 'default' : 'secondary'} asChild>
                           <Link to={plan.id === 'legacy' ? '/premium?tier=heritage' : '/premium'}>
-                            Choisir
+                            {t('storage.choose')}
                           </Link>
                         </Button>
                       ) : null}

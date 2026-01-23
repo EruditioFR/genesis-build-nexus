@@ -1,8 +1,149 @@
 {
-  "welcome": "您好,{{name}}!", "subtitle": "您的记忆花园等待着您",
-  "stats": { "capsules": "胶囊", "mediaFiles": "媒体文件", "circles": "圈子", "familyMembers": "家庭成员" },
-  "quickActions": { "title": "快捷操作", "newCapsule": "新胶囊", "viewTimeline": "查看时间线", "manageCircles": "管理圈子", "familyTree": "家谱" },
-  "recentCapsules": { "title": "最近胶囊", "empty": "还没有胶囊", "emptySubtitle": "创建您的第一个胶囊开始保存记忆。", "createFirst": "创建第一个胶囊", "viewAll": "查看所有胶囊" },
-  "storage": { "title": "存储空间", "used": "已使用{{used}}/{{total}}", "upgrade": "增加存储空间" },
-  "sidebar": { "home": "首页", "capsules": "我的胶囊", "timeline": "时间线", "circles": "圈子", "familyTree": "家谱", "categories": "分类", "statistics": "统计", "settings": "设置", "profile": "我的资料", "premium": "高级版" }
+  "welcome": "您好{{name, andSpace}}!",
+  "subtitle": "继续保存您珍贵的回忆",
+  "subtitleEmpty": "开始保存您珍贵的回忆",
+  "loading": "正在加载您的空间...",
+  "stats": {
+    "capsules_one": "回忆",
+    "capsules_other": "回忆",
+    "capsules": "回忆",
+    "mediaFiles_one": "媒体",
+    "mediaFiles_other": "媒体",
+    "mediaFiles": "媒体",
+    "circles_one": "分享",
+    "circles_other": "分享",
+    "circles": "分享",
+    "familyMembers_one": "事件",
+    "familyMembers_other": "事件",
+    "familyMembers": "事件"
+  },
+  "types": {
+    "photo": "照片",
+    "video": "视频",
+    "audio": "音频",
+    "mixed": "混合",
+    "text": "文字"
+  },
+  "quickActions": {
+    "title": "快捷操作",
+    "newCapsule": "新回忆",
+    "newCapsuleDesc": "添加回忆",
+    "viewTimeline": "我的时间线",
+    "viewTimelineDesc": "穿越时光",
+    "manageCircles": "我的分享",
+    "manageCirclesDesc": "家人和朋友",
+    "familyTree": "家谱",
+    "familyTreeDesc": "我的家人"
+  },
+  "recentCapsules": {
+    "title": "最近的回忆",
+    "empty": "您还没有添加任何回忆",
+    "emptySubtitle": "创建您的第一个胶囊开始保存回忆。",
+    "createFirst": "添加我的第一个回忆",
+    "viewAll": "查看全部",
+    "noContent": "无内容"
+  },
+  "storage": {
+    "title": "存储空间",
+    "subtitle": "查看您的存储使用情况",
+    "used": "已使用 {{used}} GB / {{total}} GB",
+    "upgrade": "增加存储空间",
+    "upgradePremium": "升级到高级版",
+    "upgradeHeritage": "升级到传承版",
+    "nearLimit": "您的空间即将用完。升级以获得更多空间！",
+    "atLimit": "存储空间已满！升级以继续保存您的回忆。",
+    "needSpace": "空间不足？",
+    "upgradeNow": "立即升级！",
+    "comparePlans": "比较套餐",
+    "storageComparison": "存储空间比较",
+    "current": "当前",
+    "yourPlan": "您当前的套餐",
+    "choose": "选择"
+  },
+  "plans": {
+    "free": "免费",
+    "premium": "高级版",
+    "heritage": "传承版",
+    "freeFeature1": "文字和照片回忆",
+    "freeFeature2": "基础时间线",
+    "premiumFeature1": "所有媒体类型",
+    "premiumFeature2": "高级时间线",
+    "premiumFeature3": "1个分享圈",
+    "heritageFeature1": "大容量存储",
+    "heritageFeature2": "家谱",
+    "heritageFeature3": "无限分享"
+  },
+  "onboarding": {
+    "title": "入门指南",
+    "subtitle": "完成这些步骤开始使用",
+    "steps": {
+      "profile": "完善您的资料",
+      "firstCapsule": "创建您的第一个胶囊",
+      "inviteFamily": "邀请家人",
+      "familyTree": "开始家谱"
+    }
+  },
+  "prompts": {
+    "title": "回忆灵感",
+    "subtitle": "从这些建议中获取灵感"
+  },
+  "sidebar": {
+    "home": "首页",
+    "capsules": "我的胶囊",
+    "timeline": "时间线",
+    "circles": "圈子",
+    "familyTree": "家谱",
+    "categories": "分类",
+    "statistics": "统计",
+    "settings": "设置",
+    "profile": "我的资料",
+    "premium": "高级版"
+  },
+  "nav": {
+    "home": "首页",
+    "memories": "回忆",
+    "memoriesDesc": "保存和整理您珍贵的时刻",
+    "newMemory": "新回忆",
+    "allMemories": "所有回忆",
+    "allMemoriesDesc": "探索和管理您完整的回忆收藏",
+    "categories": "分类",
+    "categoriesDesc": "按自定义主题整理您的回忆",
+    "timeline": "时间线",
+    "timelineDesc": "通过时间交互式地可视化您的历史",
+    "statistics": "统计",
+    "statisticsDesc": "分析您的习惯和应用使用情况",
+    "family": "家人",
+    "familyDesc": "与亲人联系并保存您的家族遗产",
+    "circles": "分享圈",
+    "circlesDesc": "创建群组与亲人分享您的回忆",
+    "familyTree": "家谱",
+    "familyTreeDesc": "可视化和丰富您的家族历史",
+    "unlock": "解锁",
+    "upgradeTitle": "升级到高级版",
+    "upgradeTitleHeritage": "升级到传承版",
+    "upgradeDesc": "解锁视频/音频胶囊和更多空间",
+    "upgradeDescHeritage": "解锁家谱和无限分享",
+    "discover": "了解更多",
+    "admin": "管理"
+  },
+  "userMenu": {
+    "myProfile": "我的资料",
+    "upgradePremium": "升级到高级版",
+    "upgradeHeritage": "升级到传承版",
+    "guidedTour": "导览",
+    "backoffice": "后台",
+    "signOut": "退出登录",
+    "user": "用户"
+  },
+  "mobileNav": {
+    "home": "首页",
+    "memories": "回忆",
+    "add": "添加",
+    "timeline": "时间线",
+    "profile": "资料",
+    "myAccount": "我的账户",
+    "myProfile": "我的资料",
+    "myCircles": "我的圈子",
+    "guidedTour": "导览"
+  }
 }

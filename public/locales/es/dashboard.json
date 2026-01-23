@@ -1,30 +1,77 @@
 {
-  "welcome": "¡Hola, {{name}}!",
-  "subtitle": "Tu jardín de memorias te espera",
+  "welcome": "¡Hola{{name, andSpace}}!",
+  "subtitle": "Continúa preservando tus recuerdos preciosos",
+  "subtitleEmpty": "Comienza a preservar tus recuerdos preciosos",
+  "loading": "Cargando tu espacio...",
   "stats": {
-    "capsules": "Cápsulas",
-    "mediaFiles": "Archivos multimedia",
-    "circles": "Círculos",
-    "familyMembers": "Miembros de familia"
+    "capsules_one": "Recuerdo",
+    "capsules_other": "Recuerdos",
+    "capsules": "Recuerdo",
+    "mediaFiles_one": "Archivo",
+    "mediaFiles_other": "Archivos",
+    "mediaFiles": "Archivo",
+    "circles_one": "Compartido",
+    "circles_other": "Compartidos",
+    "circles": "Compartido",
+    "familyMembers_one": "Evento",
+    "familyMembers_other": "Eventos",
+    "familyMembers": "Evento"
+  },
+  "types": {
+    "photo": "Foto",
+    "video": "Video",
+    "audio": "Audio",
+    "mixed": "Mixto",
+    "text": "Texto"
   },
   "quickActions": {
     "title": "Acciones rápidas",
-    "newCapsule": "Nueva cápsula",
-    "viewTimeline": "Ver línea de tiempo",
-    "manageCircles": "Gestionar círculos",
-    "familyTree": "Árbol genealógico"
+    "newCapsule": "Nuevo recuerdo",
+    "newCapsuleDesc": "Agregar un recuerdo",
+    "viewTimeline": "Mi cronología",
+    "viewTimelineDesc": "Navegar en el tiempo",
+    "manageCircles": "Mis compartidos",
+    "manageCirclesDesc": "Familia y amigos",
+    "familyTree": "Árbol genealógico",
+    "familyTreeDesc": "Mi familia"
   },
   "recentCapsules": {
-    "title": "Cápsulas recientes",
-    "empty": "Aún no hay cápsulas",
+    "title": "Recuerdos recientes",
+    "empty": "Aún no has agregado ningún recuerdo",
     "emptySubtitle": "Crea tu primera cápsula para comenzar a preservar tus recuerdos.",
-    "createFirst": "Crear mi primera cápsula",
-    "viewAll": "Ver todas las cápsulas"
+    "createFirst": "Agregar mi primer recuerdo",
+    "viewAll": "Ver todo",
+    "noContent": "Sin contenido"
   },
   "storage": {
-    "title": "Almacenamiento",
-    "used": "{{used}} de {{total}} usado",
-    "upgrade": "Aumentar almacenamiento"
+    "title": "Espacio de almacenamiento",
+    "subtitle": "Visualiza tu uso de almacenamiento",
+    "used": "{{used}} GB usados de {{total}} GB",
+    "upgrade": "Aumentar almacenamiento",
+    "upgradePremium": "Pasar a Premium",
+    "upgradeHeritage": "Pasar a Herencia",
+    "nearLimit": "Tu espacio está casi lleno. ¡Mejora tu plan para más espacio!",
+    "atLimit": "¡Almacenamiento lleno! Mejora para continuar preservando tus recuerdos.",
+    "needSpace": "¿Te falta espacio?",
+    "upgradeNow": "¡Mejora ahora!",
+    "comparePlans": "Comparar planes",
+    "storageComparison": "Comparación de almacenamiento",
+    "current": "Actual",
+    "yourPlan": "Tu plan actual",
+    "choose": "Elegir"
+  },
+  "plans": {
+    "free": "Gratis",
+    "premium": "Premium",
+    "heritage": "Herencia",
+    "freeFeature1": "Recuerdos texto y foto",
+    "freeFeature2": "Cronología básica",
+    "premiumFeature1": "Todos los tipos de medios",
+    "premiumFeature2": "Cronología avanzada",
+    "premiumFeature3": "1 círculo de compartir",
+    "heritageFeature1": "Almacenamiento masivo",
+    "heritageFeature2": "Árbol genealógico",
+    "heritageFeature3": "Compartidos ilimitados"
   },
   "onboarding": {
     "title": "Primeros pasos",
@@ -43,7 +90,7 @@
   "sidebar": {
     "home": "Inicio",
     "capsules": "Mis cápsulas",
-    "timeline": "Línea de tiempo",
+    "timeline": "Cronología",
     "circles": "Círculos",
     "familyTree": "Árbol genealógico",
     "categories": "Categorías",
@@ -51,5 +98,52 @@
     "settings": "Configuración",
     "profile": "Mi perfil",
     "premium": "Premium"
+  },
+  "nav": {
+    "home": "Inicio",
+    "memories": "Recuerdos",
+    "memoriesDesc": "Preserva y organiza tus momentos preciosos",
+    "newMemory": "Nuevo recuerdo",
+    "allMemories": "Todos los recuerdos",
+    "allMemoriesDesc": "Explora y gestiona tu colección completa de recuerdos",
+    "categories": "Categorías",
+    "categoriesDesc": "Organiza tus recuerdos por temas personalizados",
+    "timeline": "Cronología",
+    "timelineDesc": "Visualiza tu historia en el tiempo de forma interactiva",
+    "statistics": "Estadísticas",
+    "statisticsDesc": "Analiza tus hábitos y uso de la aplicación",
+    "family": "Familia",
+    "familyDesc": "Conecta con tus seres queridos y preserva tu herencia familiar",
+    "circles": "Círculos de compartir",
+    "circlesDesc": "Crea grupos para compartir tus recuerdos con seres queridos",
+    "familyTree": "Árbol genealógico",
+    "familyTreeDesc": "Visualiza y enriquece tu historia familiar",
+    "unlock": "Desbloquear",
+    "upgradeTitle": "Pasar a Premium",
+    "upgradeTitleHeritage": "Pasar a Herencia",
+    "upgradeDesc": "Desbloquea cápsulas de video/audio y más espacio",
+    "upgradeDescHeritage": "Desbloquea árbol genealógico y compartidos ilimitados",
+    "discover": "Descubrir",
+    "admin": "Admin"
+  },
+  "userMenu": {
+    "myProfile": "Mi perfil",
+    "upgradePremium": "Pasar a Premium",
+    "upgradeHeritage": "Pasar a Herencia",
+    "guidedTour": "Visita guiada",
+    "backoffice": "Backoffice",
+    "signOut": "Cerrar sesión",
+    "user": "Usuario"
+  },
+  "mobileNav": {
+    "home": "Inicio",
+    "memories": "Recuerdos",
+    "add": "Agregar",
+    "timeline": "Crono",
+    "profile": "Perfil",
+    "myAccount": "Mi cuenta",
+    "myProfile": "Mi perfil",
+    "myCircles": "Mis círculos",
+    "guidedTour": "Visita guiada"
   }
 }

@@ -1,30 +1,77 @@
 {
-  "welcome": "Bonjour, {{name}} !",
-  "subtitle": "Votre jardin mémoriel vous attend",
+  "welcome": "Bonjour{{name, andSpace}} !",
+  "subtitle": "Continuez à préserver vos souvenirs précieux",
+  "subtitleEmpty": "Commencez à préserver vos souvenirs précieux",
+  "loading": "Chargement de votre espace...",
   "stats": {
-    "capsules": "Capsules",
-    "mediaFiles": "Fichiers médias",
-    "circles": "Cercles",
-    "familyMembers": "Membres famille"
+    "capsules_one": "Souvenir",
+    "capsules_other": "Souvenirs",
+    "capsules": "Souvenir",
+    "mediaFiles_one": "Média",
+    "mediaFiles_other": "Médias",
+    "mediaFiles": "Média",
+    "circles_one": "Partage",
+    "circles_other": "Partages",
+    "circles": "Partage",
+    "familyMembers_one": "Événement",
+    "familyMembers_other": "Événements",
+    "familyMembers": "Événement"
+  },
+  "types": {
+    "photo": "Photo",
+    "video": "Vidéo",
+    "audio": "Audio",
+    "mixed": "Mixte",
+    "text": "Texte"
   },
   "quickActions": {
     "title": "Actions rapides",
-    "newCapsule": "Nouvelle capsule",
-    "viewTimeline": "Voir la chronologie",
-    "manageCircles": "Gérer les cercles",
-    "familyTree": "Arbre généalogique"
+    "newCapsule": "Nouveau souvenir",
+    "newCapsuleDesc": "Ajouter un souvenir",
+    "viewTimeline": "Ma chronologie",
+    "viewTimelineDesc": "Parcourir le temps",
+    "manageCircles": "Mes partages",
+    "manageCirclesDesc": "Famille & amis",
+    "familyTree": "Arbre généalogique",
+    "familyTreeDesc": "Ma famille"
   },
   "recentCapsules": {
-    "title": "Capsules récentes",
-    "empty": "Aucune capsule pour le moment",
+    "title": "Derniers souvenirs",
+    "empty": "Vous n'avez pas encore ajouté de souvenir",
     "emptySubtitle": "Créez votre première capsule pour commencer à préserver vos souvenirs.",
-    "createFirst": "Créer ma première capsule",
-    "viewAll": "Voir toutes les capsules"
+    "createFirst": "Ajouter mon premier souvenir",
+    "viewAll": "Voir tout",
+    "noContent": "Aucun contenu"
   },
   "storage": {
-    "title": "Stockage",
-    "used": "{{used}} sur {{total}} utilisés",
-    "upgrade": "Augmenter le stockage"
+    "title": "Espace de stockage",
+    "subtitle": "Visualisez l'espace que vous utilisez",
+    "used": "{{used}} Go utilisés sur {{total}} Go",
+    "upgrade": "Augmenter le stockage",
+    "upgradePremium": "Passer Premium",
+    "upgradeHeritage": "Passer Héritage",
+    "nearLimit": "Votre espace est presque plein. Passez au forfait supérieur pour plus d'espace !",
+    "atLimit": "Espace épuisé ! Passez au forfait supérieur pour continuer à préserver vos souvenirs.",
+    "needSpace": "Vous manquez d'espace ?",
+    "upgradeNow": "Passez au forfait supérieur !",
+    "comparePlans": "Comparer les forfaits",
+    "storageComparison": "Comparaison de l'espace disponible",
+    "current": "Actuel",
+    "yourPlan": "Votre forfait actuel",
+    "choose": "Choisir"
+  },
+  "plans": {
+    "free": "Gratuit",
+    "premium": "Premium",
+    "heritage": "Héritage",
+    "freeFeature1": "Souvenirs texte & photo",
+    "freeFeature2": "Chronologie basique",
+    "premiumFeature1": "Tous types de médias",
+    "premiumFeature2": "Chronologie avancée",
+    "premiumFeature3": "1 cercle de partage",
+    "heritageFeature1": "Stockage massif",
+    "heritageFeature2": "Arbre généalogique",
+    "heritageFeature3": "Partages illimités"
   },
   "onboarding": {
     "title": "Premiers pas",
@@ -51,5 +98,52 @@
     "settings": "Paramètres",
     "profile": "Mon profil",
     "premium": "Premium"
+  },
+  "nav": {
+    "home": "Accueil",
+    "memories": "Souvenirs",
+    "memoriesDesc": "Préservez et organisez vos moments précieux",
+    "newMemory": "Nouveau souvenir",
+    "allMemories": "Tous les souvenirs",
+    "allMemoriesDesc": "Explorez et gérez votre collection complète de souvenirs",
+    "categories": "Catégories",
+    "categoriesDesc": "Organisez vos souvenirs par thèmes personnalisés",
+    "timeline": "Chronologie",
+    "timelineDesc": "Visualisez votre histoire dans le temps de manière interactive",
+    "statistics": "Statistiques",
+    "statisticsDesc": "Analysez vos habitudes et votre utilisation de l'application",
+    "family": "Famille",
+    "familyDesc": "Connectez vos proches et préservez votre héritage familial",
+    "circles": "Cercles de partage",
+    "circlesDesc": "Créez des groupes pour partager vos souvenirs avec vos proches",
+    "familyTree": "Arbre généalogique",
+    "familyTreeDesc": "Visualisez et enrichissez votre histoire familiale",
+    "unlock": "Débloquer",
+    "upgradeTitle": "Passez à Premium",
+    "upgradeTitleHeritage": "Passez à Héritage",
+    "upgradeDesc": "Débloquez les capsules vidéo/audio et plus d'espace",
+    "upgradeDescHeritage": "Débloquez l'arbre généalogique et le partage illimité",
+    "discover": "Découvrir",
+    "admin": "Admin"
+  },
+  "userMenu": {
+    "myProfile": "Mon profil",
+    "upgradePremium": "Passer Premium",
+    "upgradeHeritage": "Passer Héritage",
+    "guidedTour": "Visite guidée",
+    "backoffice": "Backoffice",
+    "signOut": "Se déconnecter",
+    "user": "Utilisateur"
+  },
+  "mobileNav": {
+    "home": "Accueil",
+    "memories": "Souvenirs",
+    "add": "Ajouter",
+    "timeline": "Chrono",
+    "profile": "Profil",
+    "myAccount": "Mon compte",
+    "myProfile": "Mon profil",
+    "myCircles": "Mes cercles",
+    "guidedTour": "Visite guidée"
   }
 }

@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
-import { Plus, Clock, Users, TreeDeciduous, ArrowRight, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Plus, Clock, Users, TreeDeciduous, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const QuickActions = () => {
+  const { t } = useTranslation('dashboard');
+
   const actions = [
     {
-      label: 'Nouveau souvenir',
-      description: 'Ajouter un souvenir',
+      labelKey: 'quickActions.newCapsule',
+      descriptionKey: 'quickActions.newCapsuleDesc',
       icon: Plus,
       href: '/capsules/new',
       gradient: 'from-secondary to-secondary/80',
@@ -14,24 +17,24 @@ const QuickActions = () => {
       primary: true,
     },
     {
-      label: 'Ma chronologie',
-      description: 'Parcourir le temps',
+      labelKey: 'quickActions.viewTimeline',
+      descriptionKey: 'quickActions.viewTimelineDesc',
       icon: Clock,
       href: '/timeline',
       gradient: 'from-primary to-primary/80',
       iconBg: 'bg-white/20',
     },
     {
-      label: 'Mes partages',
-      description: 'Famille & amis',
+      labelKey: 'quickActions.manageCircles',
+      descriptionKey: 'quickActions.manageCirclesDesc',
       icon: Users,
       href: '/circles',
       gradient: 'from-accent to-accent/80',
       iconBg: 'bg-white/20',
     },
     {
-      label: 'Arbre généalogique',
-      description: 'Ma famille',
+      labelKey: 'quickActions.familyTree',
+      descriptionKey: 'quickActions.familyTreeDesc',
       icon: TreeDeciduous,
       href: '/family-tree',
       gradient: 'from-muted-foreground/90 to-muted-foreground/70',
@@ -50,7 +53,7 @@ const QuickActions = () => {
       <div className="hidden md:flex flex-wrap gap-3">
         {actions.map((action, index) => (
           <motion.div
-            key={action.label}
+            key={action.labelKey}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
@@ -68,8 +71,8 @@ const QuickActions = () => {
                 <action.icon className="w-5 h-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12" strokeWidth={2.5} />
               </div>
               <div className="flex flex-col">
-                <span className="font-semibold">{action.label}</span>
-                <span className="text-xs text-white/70">{action.description}</span>
+                <span className="font-semibold">{t(action.labelKey)}</span>
+                <span className="text-xs text-white/70">{t(action.descriptionKey)}</span>
               </div>
               {action.primary && (
                 <Sparkles className="w-4 h-4 ml-1 animate-pulse" />
@@ -83,7 +86,7 @@ const QuickActions = () => {
       <div className="grid grid-cols-2 gap-3 md:hidden">
         {actions.map((action, index) => (
           <motion.div
-            key={action.label}
+            key={action.labelKey}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
@@ -107,8 +110,8 @@ const QuickActions = () => {
                 )}
               </div>
               <div className="relative text-center">
-                <span className="font-bold block">{action.label}</span>
-                <span className="text-xs text-white/70">{action.description}</span>
+                <span className="font-bold block">{t(action.labelKey)}</span>
+                <span className="text-xs text-white/70">{t(action.descriptionKey)}</span>
               </div>
             </Link>
           </motion.div>
