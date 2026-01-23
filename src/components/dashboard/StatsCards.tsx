@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface StatsCardsProps {
   stats: {
@@ -10,25 +11,23 @@ interface StatsCardsProps {
 }
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
+  const { t } = useTranslation('dashboard');
+
   const items = [
     {
-      singular: 'Souvenir',
-      plural: 'Souvenirs',
+      labelKey: 'stats.capsules',
       value: stats.totalCapsules,
     },
     {
-      singular: 'Média',
-      plural: 'Médias',
+      labelKey: 'stats.mediaFiles',
       value: stats.totalMedias,
     },
     {
-      singular: 'Partage',
-      plural: 'Partages',
+      labelKey: 'stats.circles',
       value: stats.sharedCircles,
     },
     {
-      singular: 'Événement',
-      plural: 'Événements',
+      labelKey: 'stats.familyMembers',
       value: stats.upcomingEvents,
     },
   ];
@@ -43,14 +42,14 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
     >
       {items.map((item) => (
         <div 
-          key={item.singular} 
+          key={item.labelKey} 
           className="flex flex-col items-center text-center flex-1"
         >
           <p className="text-2xl sm:text-3xl font-bold text-[#1a1a2e]">
             {item.value}
           </p>
           <p className="text-xs sm:text-sm text-[#1a1a2e]/60 font-medium">
-            {item.value <= 1 ? item.singular : item.plural}
+            {t(item.labelKey, { count: item.value })}
           </p>
         </div>
       ))}

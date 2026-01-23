@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, HelpCircle, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ interface CapsuleCategoryData {
 }
 
 const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
+  const { t } = useTranslation('dashboard');
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -108,11 +110,11 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
 
   const getTypeLabel = (type: Capsule['type']) => {
     switch (type) {
-      case 'photo': return 'Photo';
-      case 'video': return 'Vidéo';
-      case 'audio': return 'Audio';
-      case 'mixed': return 'Mixte';
-      case 'text': return 'Texte';
+      case 'photo': return t('types.photo');
+      case 'video': return t('types.video');
+      case 'audio': return t('types.audio');
+      case 'mixed': return t('types.mixed');
+      case 'text': return t('types.text');
     }
   };
 
@@ -141,7 +143,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
             <Clock className="w-5 h-5 text-primary" />
           </div>
           <h3 className="text-lg font-semibold text-foreground">
-            Derniers souvenirs
+            {t('recentCapsules.title')}
           </h3>
         </div>
         <div className="flex items-center gap-2">
@@ -168,7 +170,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
           </div>
           <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" asChild>
             <Link to="/capsules">
-              <span className="hidden sm:inline">Voir tout</span>
+              <span className="hidden sm:inline">{t('recentCapsules.viewAll')}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
@@ -181,12 +183,12 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
             <Clock className="w-8 h-8 text-muted-foreground" />
           </div>
           <p className="text-muted-foreground mb-4 text-base">
-            Vous n'avez pas encore ajouté de souvenir
+            {t('recentCapsules.empty')}
           </p>
           <Button className="gap-2" size="lg" asChild>
             <Link to="/capsules/new">
               <Plus className="w-5 h-5" />
-              Ajouter mon premier souvenir
+              {t('recentCapsules.createFirst')}
             </Link>
           </Button>
         </div>
@@ -259,7 +261,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 gap-2">
                             <HelpCircle className="w-12 h-12 text-muted-foreground/40" strokeWidth={1.5} />
-                            <span className="text-xs text-muted-foreground/60 font-medium">Aucun contenu</span>
+                            <span className="text-xs text-muted-foreground/60 font-medium">{t('recentCapsules.noContent')}</span>
                           </div>
                         )}
                         
@@ -308,12 +310,12 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                 transition={{ duration: 0.3, delay: capsules.length * 0.05 }}
                 className="w-64 md:w-72 h-full"
               >
-                <div className="h-full min-h-[280px] rounded-2xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 cursor-pointer group">
+                  <div className="h-full min-h-[280px] rounded-2xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 cursor-pointer group">
                   <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Plus className="w-7 h-7 text-primary" />
                   </div>
                   <span className="font-medium text-muted-foreground group-hover:text-primary transition-colors">
-                    Nouveau souvenir
+                    {t('quickActions.newCapsule')}
                   </span>
                 </div>
               </motion.div>

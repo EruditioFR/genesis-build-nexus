@@ -1,30 +1,77 @@
 {
-  "welcome": "안녕하세요, {{name}}님!",
-  "subtitle": "추억의 정원이 기다리고 있습니다",
+  "welcome": "안녕하세요{{name, andSpace}}!",
+  "subtitle": "소중한 추억을 계속 보존하세요",
+  "subtitleEmpty": "소중한 추억 보존을 시작하세요",
+  "loading": "공간을 불러오는 중...",
   "stats": {
-    "capsules": "캡슐",
-    "mediaFiles": "미디어 파일",
-    "circles": "서클",
-    "familyMembers": "가족 구성원"
+    "capsules_one": "추억",
+    "capsules_other": "추억",
+    "capsules": "추억",
+    "mediaFiles_one": "미디어",
+    "mediaFiles_other": "미디어",
+    "mediaFiles": "미디어",
+    "circles_one": "공유",
+    "circles_other": "공유",
+    "circles": "공유",
+    "familyMembers_one": "이벤트",
+    "familyMembers_other": "이벤트",
+    "familyMembers": "이벤트"
+  },
+  "types": {
+    "photo": "사진",
+    "video": "영상",
+    "audio": "오디오",
+    "mixed": "혼합",
+    "text": "텍스트"
   },
   "quickActions": {
     "title": "빠른 작업",
-    "newCapsule": "새 캡슐",
-    "viewTimeline": "타임라인 보기",
-    "manageCircles": "서클 관리",
-    "familyTree": "가계도"
+    "newCapsule": "새 추억",
+    "newCapsuleDesc": "추억 추가하기",
+    "viewTimeline": "내 타임라인",
+    "viewTimelineDesc": "시간 여행하기",
+    "manageCircles": "내 공유",
+    "manageCirclesDesc": "가족 & 친구",
+    "familyTree": "가계도",
+    "familyTreeDesc": "내 가족"
   },
   "recentCapsules": {
-    "title": "최근 캡슐",
-    "empty": "아직 캡슐이 없습니다",
+    "title": "최근 추억",
+    "empty": "아직 추억이 없습니다",
     "emptySubtitle": "첫 번째 캡슐을 만들어 추억 보존을 시작하세요.",
-    "createFirst": "첫 번째 캡슐 만들기",
-    "viewAll": "모든 캡슐 보기"
+    "createFirst": "첫 번째 추억 추가하기",
+    "viewAll": "모두 보기",
+    "noContent": "콘텐츠 없음"
   },
   "storage": {
-    "title": "저장공간",
-    "used": "{{total}} 중 {{used}} 사용",
-    "upgrade": "저장공간 늘리기"
+    "title": "저장 공간",
+    "subtitle": "저장 공간 사용량 확인",
+    "used": "{{total}} GB 중 {{used}} GB 사용",
+    "upgrade": "저장 공간 늘리기",
+    "upgradePremium": "프리미엄으로 업그레이드",
+    "upgradeHeritage": "헤리티지로 업그레이드",
+    "nearLimit": "공간이 거의 가득 찼습니다. 더 많은 공간을 위해 업그레이드하세요!",
+    "atLimit": "저장 공간이 가득 찼습니다! 추억을 계속 보존하려면 업그레이드하세요.",
+    "needSpace": "공간이 부족하신가요?",
+    "upgradeNow": "지금 업그레이드하세요!",
+    "comparePlans": "요금제 비교",
+    "storageComparison": "저장 공간 비교",
+    "current": "현재",
+    "yourPlan": "현재 요금제",
+    "choose": "선택"
+  },
+  "plans": {
+    "free": "무료",
+    "premium": "프리미엄",
+    "heritage": "헤리티지",
+    "freeFeature1": "텍스트 & 사진 추억",
+    "freeFeature2": "기본 타임라인",
+    "premiumFeature1": "모든 미디어 유형",
+    "premiumFeature2": "고급 타임라인",
+    "premiumFeature3": "1개 공유 서클",
+    "heritageFeature1": "대용량 저장 공간",
+    "heritageFeature2": "가계도",
+    "heritageFeature3": "무제한 공유"
   },
   "onboarding": {
     "title": "시작하기",
@@ -51,5 +98,52 @@
     "settings": "설정",
     "profile": "내 프로필",
     "premium": "프리미엄"
+  },
+  "nav": {
+    "home": "홈",
+    "memories": "추억",
+    "memoriesDesc": "소중한 순간을 보존하고 정리하세요",
+    "newMemory": "새 추억",
+    "allMemories": "모든 추억",
+    "allMemoriesDesc": "완전한 추억 컬렉션을 탐색하고 관리하세요",
+    "categories": "카테고리",
+    "categoriesDesc": "맞춤 테마로 추억을 정리하세요",
+    "timeline": "타임라인",
+    "timelineDesc": "시간을 통해 당신의 역사를 인터랙티브하게 시각화하세요",
+    "statistics": "통계",
+    "statisticsDesc": "습관과 앱 사용을 분석하세요",
+    "family": "가족",
+    "familyDesc": "사랑하는 사람들과 연결하고 가족 유산을 보존하세요",
+    "circles": "공유 서클",
+    "circlesDesc": "사랑하는 사람들과 추억을 공유할 그룹을 만드세요",
+    "familyTree": "가계도",
+    "familyTreeDesc": "가족 역사를 시각화하고 풍부하게 하세요",
+    "unlock": "잠금 해제",
+    "upgradeTitle": "프리미엄으로 업그레이드",
+    "upgradeTitleHeritage": "헤리티지로 업그레이드",
+    "upgradeDesc": "영상/오디오 캡슐과 더 많은 공간을 잠금 해제하세요",
+    "upgradeDescHeritage": "가계도와 무제한 공유를 잠금 해제하세요",
+    "discover": "알아보기",
+    "admin": "관리자"
+  },
+  "userMenu": {
+    "myProfile": "내 프로필",
+    "upgradePremium": "프리미엄으로 업그레이드",
+    "upgradeHeritage": "헤리티지로 업그레이드",
+    "guidedTour": "가이드 투어",
+    "backoffice": "백오피스",
+    "signOut": "로그아웃",
+    "user": "사용자"
+  },
+  "mobileNav": {
+    "home": "홈",
+    "memories": "추억",
+    "add": "추가",
+    "timeline": "타임라인",
+    "profile": "프로필",
+    "myAccount": "내 계정",
+    "myProfile": "내 프로필",
+    "myCircles": "내 서클",
+    "guidedTour": "가이드 투어"
   }
 }

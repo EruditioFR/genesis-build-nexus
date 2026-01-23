@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
   BookOpen,
@@ -34,6 +35,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import ThemeToggle from '@/components/ThemeToggle';
+import LanguageSelector from '@/components/LanguageSelector';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import GlobalSearch from '@/components/search/GlobalSearch';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -152,6 +154,7 @@ const QuickActionItem = ({
 );
 
 const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
+  const { t } = useTranslation('dashboard');
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
@@ -223,7 +226,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   )}
                 >
                   <Home className="w-4 h-4 mr-2" />
-                  Accueil
+                  {t('nav.home')}
                 </Link>
               </NavigationMenuItem>
 
@@ -241,18 +244,18 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   )}
                 >
                   <BookOpen className="w-4 h-4 mr-2" />
-                  Souvenirs
+                  {t('nav.memories')}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="w-[650px] p-5">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-                      <div>
-                        <h3 className="text-base font-semibold text-foreground">
-                          Vos souvenirs
-                        </h3>
-                        <p className="text-xs text-muted-foreground">
-                          Préservez et organisez vos moments précieux
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+                        <div>
+                          <h3 className="text-base font-semibold text-foreground">
+                            {t('nav.memories')}
+                          </h3>
+                          <p className="text-xs text-muted-foreground">
+                            {t('nav.memoriesDesc')}
                         </p>
                       </div>
                       <Link
@@ -260,38 +263,38 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
                       >
                         <Plus className="w-4 h-4" />
-                        Nouveau souvenir
+                        {t('nav.newMemory')}
                       </Link>
                     </div>
 
                     {/* Features Grid */}
-                    <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                       <FeatureCard
                         to="/capsules"
                         icon={BookOpen}
-                        title="Tous les souvenirs"
-                        description="Explorez et gérez votre collection complète de souvenirs"
+                        title={t('nav.allMemories')}
+                        description={t('nav.allMemoriesDesc')}
                         gradient="bg-gradient-to-br from-primary to-primary/70"
                       />
                       <FeatureCard
                         to="/categories"
                         icon={FolderOpen}
-                        title="Catégories"
-                        description="Organisez vos souvenirs par thèmes personnalisés"
+                        title={t('nav.categories')}
+                        description={t('nav.categoriesDesc')}
                         gradient="bg-gradient-to-br from-accent to-accent/70"
                       />
                       <FeatureCard
                         to="/timeline"
                         icon={Clock}
-                        title="Chronologie"
-                        description="Visualisez votre histoire dans le temps de manière interactive"
+                        title={t('nav.timeline')}
+                        description={t('nav.timelineDesc')}
                         gradient="bg-gradient-to-br from-emerald-600 to-emerald-500"
                       />
                       <FeatureCard
                         to="/statistics"
                         icon={BarChart3}
-                        title="Statistiques"
-                        description="Analysez vos habitudes et votre utilisation de l'application"
+                        title={t('nav.statistics')}
+                        description={t('nav.statisticsDesc')}
                         gradient="bg-gradient-to-br from-violet-600 to-violet-500"
                       />
                     </div>
@@ -311,17 +314,17 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   )}
                 >
                   <Users className="w-4 h-4 mr-2" />
-                  Famille
+                  {t('nav.family')}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="w-[550px] p-5">
-                    {/* Header */}
-                    <div className="mb-4 pb-3 border-b border-border">
-                      <h3 className="text-base font-semibold text-foreground">
-                        Votre famille
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        Connectez vos proches et préservez votre héritage familial
+                      {/* Header */}
+                      <div className="mb-4 pb-3 border-b border-border">
+                        <h3 className="text-base font-semibold text-foreground">
+                          {t('nav.family')}
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          {t('nav.familyDesc')}
                       </p>
                     </div>
 
@@ -330,8 +333,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                       <FeatureCard
                         to="/circles"
                         icon={Users}
-                        title="Cercles de partage"
-                        description="Créez des groupes pour partager vos souvenirs avec vos proches"
+                        title={t('nav.circles')}
+                        description={t('nav.circlesDesc')}
                         gradient="bg-gradient-to-br from-secondary to-secondary/70"
                       />
                       
@@ -339,20 +342,20 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         <FeatureCard
                           to="/family-tree"
                           icon={GitBranch}
-                          title="Arbre généalogique"
-                          description="Visualisez et enrichissez votre histoire familiale"
+                          title={t('nav.familyTree')}
+                          description={t('nav.familyTreeDesc')}
                           gradient="bg-gradient-to-br from-primary to-primary/70"
-                          badge="Héritage"
+                          badge={t('plans.heritage')}
                         />
                       ) : (
                         <div className="relative">
                           <FeatureCard
                             to="/premium?tier=heritage"
                             icon={GitBranch}
-                            title="Arbre généalogique"
-                            description="Passez au forfait Héritage pour débloquer cette fonctionnalité"
+                            title={t('nav.familyTree')}
+                            description={t('nav.upgradeDescHeritage')}
                             gradient="bg-gradient-to-br from-muted-foreground/50 to-muted-foreground/30"
-                            badge="Héritage"
+                            badge={t('plans.heritage')}
                           />
                           <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
                             <Link
@@ -360,7 +363,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors shadow-lg"
                             >
                               <Crown className="w-4 h-4" />
-                              Débloquer
+                              {t('nav.unlock')}
                             </Link>
                           </div>
                         </div>
@@ -368,27 +371,27 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </div>
 
                     {/* Upgrade CTA for non-heritage users */}
-                    {!isHeritage && (
-                      <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-secondary/20">
-                            <Sparkles className="w-5 h-5 text-secondary" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-foreground">
-                              {tier === 'premium' ? 'Passez à Héritage' : 'Passez à Premium'}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {tier === 'premium' 
-                                ? 'Débloquez l\'arbre généalogique et le partage illimité'
-                                : 'Débloquez les capsules vidéo/audio et plus d\'espace'}
+                      {!isHeritage && (
+                        <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-secondary/20">
+                              <Sparkles className="w-5 h-5 text-secondary" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-foreground">
+                                {tier === 'premium' ? t('nav.upgradeTitleHeritage') : t('nav.upgradeTitle')}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {tier === 'premium' 
+                                  ? t('nav.upgradeDescHeritage')
+                                  : t('nav.upgradeDesc')}
                             </p>
                           </div>
                           <Link
                             to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
-                            className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
-                          >
-                            Découvrir
+                              className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
+                            >
+                              {t('nav.discover')}
                           </Link>
                         </div>
                       </div>
@@ -411,7 +414,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     )}
                   >
                     <Shield className="w-4 h-4 mr-2" />
-                    Admin
+                    {t('nav.admin')}
                   </Link>
                 </NavigationMenuItem>
               )}
@@ -424,6 +427,9 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
             <div className="hidden md:block" data-tour="search">
               {user.id && <GlobalSearch userId={user.id} />}
             </div>
+
+            {/* Language Selector */}
+            <LanguageSelector />
 
             {/* Theme Toggle */}
             <ThemeToggle />
@@ -456,7 +462,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
               <DropdownMenuContent align="end" className="w-56">
                 <div className="px-3 py-2 border-b border-border">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {user.displayName || 'Utilisateur'}
+                    {user.displayName || t('userMenu.user')}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
                     {user.email}
@@ -468,7 +474,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     className="flex items-center gap-3 cursor-pointer"
                   >
                     <User className="h-4 w-4" />
-                    Mon profil
+                    {t('userMenu.myProfile')}
                   </Link>
                 </DropdownMenuItem>
                 {tier !== 'heritage' && (
@@ -478,7 +484,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                       className="flex items-center gap-3 cursor-pointer text-secondary"
                     >
                       <Crown className="h-4 w-4" />
-                      {tier === 'premium' ? 'Passer Héritage' : 'Passer Premium'}
+                      {tier === 'premium' ? t('userMenu.upgradeHeritage') : t('userMenu.upgradePremium')}
                     </Link>
                   </DropdownMenuItem>
                 )}
@@ -487,7 +493,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   className="flex items-center gap-3 cursor-pointer"
                 >
                   <HelpCircle className="h-4 w-4" />
-                  Visite guidée
+                  {t('userMenu.guidedTour')}
                 </DropdownMenuItem>
                 {isAdminOrModerator && (
                   <>
@@ -498,7 +504,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         className="flex items-center gap-3 cursor-pointer text-primary"
                       >
                         <Shield className="h-4 w-4" />
-                        Backoffice
+                        {t('userMenu.backoffice')}
                       </Link>
                     </DropdownMenuItem>
                   </>
@@ -509,7 +515,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   className="flex items-center gap-3 cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="h-4 w-4" />
-                  Se déconnecter
+                  {t('userMenu.signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
