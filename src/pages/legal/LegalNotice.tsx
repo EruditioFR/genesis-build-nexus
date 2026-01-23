@@ -55,9 +55,7 @@ const LegalNotice = () => {
               1. Éditeur du site
             </h2>
             <div className="text-muted-foreground leading-relaxed space-y-2">
-              <p>
-                <strong>Forme juridique :</strong>JEAN-BAPTISTE BEJOT
-              </p>
+              <p>JEAN-BAPTISTE BEJOT</p>
 
               <p>
                 <strong>SIRET :</strong>SIRET : 51089741600036
