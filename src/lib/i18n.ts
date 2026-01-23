@@ -34,7 +34,7 @@ i18n
       escapeValue: false,
     },
     react: {
-      useSuspense: true,
+      useSuspense: false,
     },
   });
 
