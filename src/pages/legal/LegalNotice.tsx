@@ -74,9 +74,7 @@ const LegalNotice = () => {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">2. Directeur de la publication</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Nom : JEAN-BAPTISTE BEJOT<strong>Nom :</strong> [Nom du directeur de publication à compléter]
-            </p>
+            <p className="text-muted-foreground leading-relaxed">Nom : JEAN-BAPTISTE BEJOT</p>
           </section>
 
           <section>
