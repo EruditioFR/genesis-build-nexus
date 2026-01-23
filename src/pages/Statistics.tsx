@@ -16,12 +16,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
@@ -203,8 +202,7 @@ const Statistics = () => {
   return (
     <>
       <NoIndex />
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
+      <AuthenticatedLayout
         user={{
           id: user.id,
           email: user.email,
@@ -212,9 +210,8 @@ const Statistics = () => {
           avatarUrl: profile?.avatar_url || undefined,
         }}
         onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -617,10 +614,8 @@ const Statistics = () => {
             </CardContent>
           </Card>
         </motion.div>
-      </main>
-
-      <MobileBottomNav />
-    </div>
+      </div>
+      </AuthenticatedLayout>
     </>
   );
 };

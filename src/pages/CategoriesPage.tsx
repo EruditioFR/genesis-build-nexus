@@ -7,8 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 
 interface CategoryWithCount extends Category {
   capsuleCount: number;
@@ -93,18 +92,16 @@ const CategoriesPage = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
-        user={{
-          id: user.id,
-          email: user.email,
-          displayName: profile?.display_name || undefined,
-          avatarUrl: profile?.avatar_url || undefined,
-        }}
-        onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <AuthenticatedLayout
+      user={{
+        id: user.id,
+        email: user.email,
+        displayName: profile?.display_name || undefined,
+        avatarUrl: profile?.avatar_url || undefined,
+      }}
+      onSignOut={handleSignOut}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -269,10 +266,8 @@ const CategoriesPage = () => {
             </Button>
           </motion.div>
         )}
-      </main>
-
-      <MobileBottomNav />
-    </div>
+      </div>
+    </AuthenticatedLayout>
   );
 };
 

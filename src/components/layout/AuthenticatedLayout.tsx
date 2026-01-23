@@ -12,14 +12,24 @@ interface AuthenticatedLayoutProps {
     avatarUrl?: string;
   };
   onSignOut: () => void;
+  /** Hide header (for pages with custom headers) */
+  hideHeader?: boolean;
+  /** Custom background class instead of default */
+  backgroundClass?: string;
 }
 
-const AuthenticatedLayout = ({ children, user, onSignOut }: AuthenticatedLayoutProps) => {
+const AuthenticatedLayout = ({ 
+  children, 
+  user, 
+  onSignOut, 
+  hideHeader = false,
+  backgroundClass = 'bg-gradient-warm'
+}: AuthenticatedLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-warm">
-      <DashboardHeader user={user} onSignOut={onSignOut} />
+    <div className={`min-h-screen flex flex-col ${backgroundClass}`}>
+      {!hideHeader && <DashboardHeader user={user} onSignOut={onSignOut} />}
       
-      <main className="flex-1">
+      <main className="flex-1 pb-24 md:pb-0">
         {children}
       </main>
 

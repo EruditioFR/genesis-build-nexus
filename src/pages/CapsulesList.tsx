@@ -39,7 +39,7 @@ import {
 
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import { toast } from 'sonner';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 import VideoPreviewCard from '@/components/capsule/VideoPreviewCard';
@@ -48,7 +48,6 @@ import { useCategories, type Category } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
@@ -246,8 +245,7 @@ const CapsulesList = () => {
   return (
     <>
       <NoIndex />
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
+      <AuthenticatedLayout
         user={{
           id: user.id,
           email: user.email,
@@ -255,9 +253,8 @@ const CapsulesList = () => {
           avatarUrl: profile?.avatar_url || undefined,
         }}
         onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -520,28 +517,26 @@ const CapsulesList = () => {
             })}
           </div>
         )}
-      </main>
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('delete.description')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              {t('delete.confirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <MobileBottomNav />
-    </div>
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('delete.description')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                {t('delete.confirm')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      </AuthenticatedLayout>
     </>
   );
 };
