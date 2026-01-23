@@ -52,21 +52,30 @@
     }
   },
   "howItWorks": {
-    "badge": "Comment ça marche",
-    "title": "Créez votre héritage en 3 étapes simples",
-    "subtitle": "Une interface pensée pour être accessible à tous, quel que soit votre âge ou niveau technique.",
+    "badge": "Comment ça marche ?",
+    "title": "Créez votre capsule mémorielle",
+    "titleHighlight": "en 4 étapes simples",
+    "stepLabel": "Étape",
+    "capsuleExplainer": {
+      "title": "Qu'est-ce qu'une capsule mémorielle ?",
+      "description": "Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver et transmettre votre histoire familiale aux générations futures."
+    },
     "steps": {
       "step1": {
         "title": "Créez votre compte",
-        "description": "Inscription gratuite en 30 secondes. Aucune carte bancaire requise pour commencer."
+        "description": "Inscrivez-vous gratuitement et commencez à documenter votre histoire en quelques minutes."
       },
       "step2": {
         "title": "Ajoutez vos souvenirs",
-        "description": "Importez photos, vidéos, textes et audio. Organisez-les par date, thème ou personnes."
+        "description": "Uploadez photos, vidéos, enregistrements audio et rédigez vos histoires avec notre éditeur intuitif."
       },
       "step3": {
-        "title": "Partagez en famille",
-        "description": "Invitez vos proches dans vos cercles de confiance. Chacun peut contribuer et commenter."
+        "title": "Organisez et partagez",
+        "description": "Structurez vos capsules en chapitres de vie et invitez votre famille à contribuer."
+      },
+      "step4": {
+        "title": "Préservez pour l'éternité",
+        "description": "Vos souvenirs sont sécurisés et prêts à être transmis aux générations futures."
       }
     }
   },
@@ -77,65 +86,88 @@
   },
   "pricing": {
     "badge": "Tarifs",
-    "title": "Choisissez votre formule",
-    "subtitle": "Commencez gratuitement, évoluez selon vos besoins.",
+    "title": "Un accompagnement pour chaque",
+    "titleHighlight": "histoire de vie",
+    "subtitle": "Commencez gratuitement et évoluez selon vos besoins. Pas de frais cachés.",
     "monthly": "Mensuel",
     "yearly": "Annuel",
-    "yearlyDiscount": "-20%",
-    "perMonth": "/mois",
-    "perYear": "/an",
-    "popular": "Populaire",
+    "discount": "-17%",
+    "perMonth": "mois",
+    "perYear": "an",
+    "popular": "Le plus populaire",
+    "loading": "Chargement...",
+    "error": "Erreur lors de la création du paiement",
     "cta": {
       "free": "Commencer gratuitement",
-      "premium": "Passer à Premium"
+      "premium": "Essayer Premium",
+      "heritage": "Choisir Héritage"
     },
     "plans": {
       "free": {
         "name": "Gratuit",
-        "price": "0€",
-        "description": "Pour découvrir la plateforme",
-        "features": [
-          "10 capsules mémorielles",
-          "500 Mo de stockage",
-          "1 cercle de partage",
-          "Export PDF basique"
-        ]
+        "description": "Parfait pour commencer à préserver vos souvenirs",
+        "features": {
+          "storage": "250 Mo de stockage",
+          "formats": "Capsules au format texte et photo",
+          "timeline": "Chronologie basique",
+          "ads": "Avec publicité"
+        }
       },
       "premium": {
         "name": "Premium",
-        "priceMonthly": "9,90€",
-        "priceYearly": "95€",
-        "description": "Pour préserver tous vos souvenirs",
-        "features": [
-          "Capsules illimitées",
-          "50 Go de stockage",
-          "Cercles illimités",
-          "Arbre généalogique",
-          "Legs posthume",
-          "Export PDF HD",
-          "Support prioritaire"
-        ]
+        "description": "Pour les créateurs de contenu réguliers",
+        "features": {
+          "storage": "10 Go de stockage",
+          "formats": "Capsules au format texte, photo, vidéo et audio",
+          "sharing": "1 partage de souvenirs à la personne de votre choix",
+          "timeline": "Chronologie avancée",
+          "noAds": "Sans publicité"
+        }
+      },
+      "heritage": {
+        "name": "Héritage",
+        "description": "Pour les familles multigénérationnelles",
+        "features": {
+          "storage": "50 Go de stockage",
+          "formats": "Capsules au format texte, photo, vidéo et audio",
+          "sharing": "Partages illimités",
+          "timeline": "Chronologie avancée",
+          "familyTree": "Arbre généalogique interactif",
+          "podcast": "Création d'un podcast à partir de vos souvenirs",
+          "vipSupport": "Support VIP via WhatsApp",
+          "noAds": "Sans publicité"
+        }
       }
     }
   },
   "faq": {
-    "title": "Questions fréquentes",
+    "badge": "FAQ",
+    "title": "Questions",
+    "titleHighlight": "fréquentes",
     "items": {
       "q1": {
-        "question": "Comment sont protégées mes données ?",
-        "answer": "Vos données sont chiffrées avec le standard AES-256 et stockées sur des serveurs européens conformes au RGPD."
+        "question": "Qu'est-ce qu'une capsule mémorielle ?",
+        "answer": "Une capsule mémorielle est un conteneur numérique sécurisé qui préserve vos souvenirs sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures. Chaque capsule est privée et accessible uniquement aux personnes que vous autorisez."
       },
       "q2": {
-        "question": "Puis-je exporter mes souvenirs ?",
-        "answer": "Oui, vous pouvez exporter vos capsules en PDF ou télécharger tous vos médias à tout moment."
+        "question": "Mes données sont-elles sécurisées ?",
+        "answer": "Absolument. Vos données sont chiffrées avec les standards les plus élevés (AES-256), sauvegardées quotidiennement sur des serveurs sécurisés, et vous gardez un contrôle total sur qui peut y accéder. Notre engagement : vos souvenirs restent privés."
       },
       "q3": {
-        "question": "Comment fonctionne le legs posthume ?",
-        "answer": "Vous désignez des gardiens de confiance qui pourront accéder à vos capsules selon les conditions que vous définissez."
+        "question": "Comment fonctionne le partage familial ?",
+        "answer": "Vous pouvez créer des cercles de confiance (famille, amis) et inviter des membres par email. Pour chaque cercle, vous définissez les permissions : lecture seule, commentaires, ou contribution. Les membres peuvent ajouter leurs propres perspectives sur vos souvenirs partagés."
       },
       "q4": {
-        "question": "Puis-je annuler mon abonnement ?",
-        "answer": "Oui, vous pouvez annuler à tout moment. Vos données restent accessibles et exportables."
+        "question": "Que se passe-t-il avec mes données si je ne renouvelle pas ?",
+        "answer": "Vos données ne sont jamais supprimées automatiquement. Si vous passez de Premium à Gratuit, vous conservez l'accès en lecture à tout votre contenu. Seules les fonctionnalités avancées sont désactivées. Vous pouvez toujours exporter vos données à tout moment."
+      },
+      "q5": {
+        "question": "Comment fonctionne le legs posthume ?",
+        "answer": "Avec l'offre Legacy, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certaines capsules selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels."
+      },
+      "q6": {
+        "question": "Y a-t-il une application mobile ?",
+        "answer": "La plateforme web est entièrement responsive et fonctionne parfaitement sur mobile. Une application native iOS et Android est prévue dans notre roadmap pour permettre l'enregistrement direct et le mode hors-ligne."
       }
     }
   },

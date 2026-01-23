@@ -1,7 +1,179 @@
 {
-  "hero": { "badge": "永久保存您的记忆", "title": { "line1": "不要让您的", "line2": "记忆消逝,", "line3": "让它们成为家族的宝藏。" }, "subtitle": "创建您的数字记忆胶囊,将家族遗产传递给后代。文字、照片、视频、音频 - 所有记忆都安全保存在AES-256加密的数字保险库中。", "cta": { "primary": "免费开始", "secondary": "观看演示" }, "trust": { "encryption": "AES-256加密", "gdpr": "GDPR欧洲服务器", "legacy": "家族遗产" } },
-  "features": { "badge": "功能", "title": "保存家族遗产所需的", "titleHighlight": "一切", "subtitle": "完整的法国记忆胶囊平台:安全地创建、组织和传递您的记忆给后代。", "mediaTypes": { "photos": "照片", "videos": "视频", "audio": "音频", "texts": "文字" }, "items": { "capsules": { "title": "多媒体记忆胶囊", "description": "创建结合文字、照片、视频和音频录音的数字记忆胶囊。每个记忆都附有日期、地点和相关人物。" }, "timeline": { "title": "按年代的互动时间线", "description": "在互动时间线上可视化您的家族历史。按年代浏览并在时间背景下探索您的记忆。" }, "circles": { "title": "安全分享圈", "description": "创建具有精细权限的信任圈(家人、朋友):阅读、评论或贡献。受控的代际传承。" }, "security": { "title": "AES-256安全与身后遗产", "description": "银行级AES-256加密,存储在符合GDPR的欧洲服务器上。安排将您的数字遗产传递给亲人。" }, "export": { "title": "PDF导出与备份", "description": "将胶囊导出为高质量PDF或下载所有媒体。您的数据属于您,随时可导出。" } } },
-  "pricing": { "badge": "价格", "title": "选择您的计划", "subtitle": "免费开始,按需升级。", "monthly": "月付", "yearly": "年付", "yearlyDiscount": "-20%", "perMonth": "/月", "perYear": "/年", "popular": "热门", "cta": { "free": "免费开始", "premium": "升级高级版" }, "plans": { "free": { "name": "免费", "price": "¥0", "description": "体验平台", "features": ["10个记忆胶囊", "500 MB存储空间", "1个分享圈", "基础PDF导出"] }, "premium": { "name": "高级版", "priceMonthly": "¥68", "priceYearly": "¥650", "description": "保存所有记忆", "features": ["无限胶囊", "50 GB存储空间", "无限圈子", "家谱", "身后遗产", "高清PDF导出", "优先支持"] } } },
-  "faq": { "title": "常见问题", "items": { "q1": { "question": "我的数据如何保护?", "answer": "您的数据使用AES-256标准加密并存储在符合GDPR的欧洲服务器上。" }, "q2": { "question": "我可以导出我的记忆吗?", "answer": "是的,您可以随时将胶囊导出为PDF或下载所有媒体。" }, "q3": { "question": "身后遗产如何运作?", "answer": "您指定可信任的守护者,他们将根据您定义的条件访问您的胶囊。" }, "q4": { "question": "我可以取消订阅吗?", "answer": "是的,您可以随时取消。您的数据仍可访问和导出。" } } },
-  "cta": { "title": "准备好保存您的记忆了吗?", "subtitle": "加入数千个传承故事的家庭。", "button": "创建免费账户" }
+  "hero": {
+    "badge": "永久保存您的回忆",
+    "title": {
+      "line1": "不要让您的",
+      "line2": "回忆消逝,",
+      "line3": "让它们成为家族的珍宝。"
+    },
+    "subtitle": "创建您的数字回忆胶囊,将家族遗产传递给后代。文字、照片、视频、音频——所有回忆都通过AES-256加密安全保存在数字保险库中。",
+    "cta": {
+      "primary": "免费开始",
+      "secondary": "观看演示"
+    },
+    "trust": {
+      "encryption": "AES-256加密",
+      "gdpr": "欧洲GDPR服务器",
+      "legacy": "家族遗产"
+    }
+  },
+  "features": {
+    "badge": "功能",
+    "title": "保存家族遗产",
+    "titleHighlight": "所需的一切",
+    "subtitle": "完整的法国回忆胶囊平台：安全地创建、整理和传递您的回忆给后代。",
+    "mediaTypes": {
+      "photos": "照片",
+      "videos": "视频",
+      "audio": "音频",
+      "texts": "文字"
+    },
+    "items": {
+      "capsules": {
+        "title": "多媒体回忆胶囊",
+        "description": "创建结合文字、照片、视频和录音的数字回忆胶囊。每段回忆都包含日期、地点和相关人物。"
+      },
+      "timeline": {
+        "title": "按年代的互动时间线",
+        "description": "在互动时间线上可视化您的家族历史。按年代浏览，在时间背景下探索您的回忆。"
+      },
+      "circles": {
+        "title": "安全分享圈",
+        "description": "创建具有精细权限（阅读、评论、贡献）的信任圈（家人、朋友）。通过控制的代际传递。"
+      },
+      "security": {
+        "title": "AES-256安全与遗嘱传承",
+        "description": "银行级AES-256加密，存储在符合GDPR的欧洲服务器。安排将您的数字遗产传递给亲人。"
+      },
+      "export": {
+        "title": "PDF导出与备份",
+        "description": "以高质量PDF导出胶囊或下载所有媒体。您的数据属于您，随时可以导出。"
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "如何运作？",
+    "title": "创建您的回忆胶囊",
+    "titleHighlight": "简单4步",
+    "stepLabel": "步骤",
+    "capsuleExplainer": {
+      "title": "什么是回忆胶囊？",
+      "description": "回忆胶囊是一个安全的数字空间，您可以在其中收集最珍贵的回忆：照片、视频、录音和文字。这是您的数字遗产，一种独特的方式来保存和传递您的家族历史给后代。"
+    },
+    "steps": {
+      "step1": {
+        "title": "创建账户",
+        "description": "免费注册，几分钟内开始记录您的故事。"
+      },
+      "step2": {
+        "title": "添加回忆",
+        "description": "使用我们直观的编辑器上传照片、视频、录音并撰写您的故事。"
+      },
+      "step3": {
+        "title": "整理与分享",
+        "description": "将胶囊组织成人生章节，邀请家人一起贡献。"
+      },
+      "step4": {
+        "title": "永久保存",
+        "description": "您的回忆将得到安全保护，准备好传递给后代。"
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "用户评价",
+    "title": "他们信任我们",
+    "subtitle": "了解用户对Family Garden的评价。"
+  },
+  "pricing": {
+    "badge": "价格",
+    "title": "为每个人生故事",
+    "titleHighlight": "提供支持",
+    "subtitle": "免费开始，按需扩展。无隐藏费用。",
+    "monthly": "月付",
+    "yearly": "年付",
+    "discount": "-17%",
+    "perMonth": "月",
+    "perYear": "年",
+    "popular": "最受欢迎",
+    "loading": "加载中...",
+    "error": "创建支付时出错",
+    "cta": {
+      "free": "免费开始",
+      "premium": "试用高级版",
+      "heritage": "选择传承版"
+    },
+    "plans": {
+      "free": {
+        "name": "免费",
+        "description": "开始保存回忆的完美选择",
+        "features": {
+          "storage": "250 MB存储空间",
+          "formats": "文字和照片胶囊",
+          "timeline": "基本时间线",
+          "ads": "含广告"
+        }
+      },
+      "premium": {
+        "name": "高级版",
+        "description": "适合经常创作内容的用户",
+        "features": {
+          "storage": "10 GB存储空间",
+          "formats": "文字、照片、视频和音频胶囊",
+          "sharing": "与您选择的1人分享回忆",
+          "timeline": "高级时间线",
+          "noAds": "无广告"
+        }
+      },
+      "heritage": {
+        "name": "传承版",
+        "description": "适合多代家庭",
+        "features": {
+          "storage": "50 GB存储空间",
+          "formats": "文字、照片、视频和音频胶囊",
+          "sharing": "无限分享",
+          "timeline": "高级时间线",
+          "familyTree": "互动家谱",
+          "podcast": "用回忆创建播客",
+          "vipSupport": "WhatsApp VIP支持",
+          "noAds": "无广告"
+        }
+      }
+    }
+  },
+  "faq": {
+    "badge": "常见问题",
+    "title": "常见",
+    "titleHighlight": "问题",
+    "items": {
+      "q1": {
+        "question": "什么是回忆胶囊？",
+        "answer": "回忆胶囊是一个安全的数字容器，以文字、照片、视频和音频的形式保存您的回忆。这是您的个人故事，按时间顺序组织，准备好传递给后代。每个胶囊都是私密的，只有您授权的人才能访问。"
+      },
+      "q2": {
+        "question": "我的数据安全吗？",
+        "answer": "绝对安全。您的数据采用最高标准（AES-256）加密，每天在安全服务器上备份，您可以完全控制谁可以访问。我们的承诺：您的回忆保持私密。"
+      },
+      "q3": {
+        "question": "家庭分享如何运作？",
+        "answer": "您可以创建信任圈（家人、朋友）并通过电子邮件邀请成员。对于每个圈子，您可以定义权限：只读、评论或贡献。成员可以在您分享的回忆中添加自己的观点。"
+      },
+      "q4": {
+        "question": "如果我不续订会怎样？",
+        "answer": "您的数据永远不会被自动删除。如果您从高级版切换到免费版，您将保留对所有内容的阅读权限。只有高级功能会被禁用。您随时可以导出您的数据。"
+      },
+      "q5": {
+        "question": "遗嘱传承如何运作？",
+        "answer": "通过传承版，您可以指定信任的联系人，他们将收到通知并根据您的意愿访问某些胶囊。您可以安排延迟揭示、定义访问条件并留下个人信息。"
+      },
+      "q6": {
+        "question": "有移动应用吗？",
+        "answer": "网页平台完全响应式，在移动设备上运行完美。原生iOS和Android应用已列入我们的路线图，将支持直接录制和离线模式。"
+      }
+    }
+  },
+  "cta": {
+    "title": "准备好保存您的回忆了吗？",
+    "subtitle": "加入成千上万传递故事的家庭。",
+    "button": "创建免费账户"
+  }
 }

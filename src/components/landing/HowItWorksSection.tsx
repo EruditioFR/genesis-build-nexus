@@ -1,46 +1,49 @@
 import { motion } from "framer-motion";
 import { Upload, Layers, Share2, Heart, Sparkles } from "lucide-react";
-
-const steps = [
-  {
-    number: "01",
-    icon: Upload,
-    title: "Créez votre compte",
-    description: "Inscrivez-vous gratuitement et commencez à documenter votre histoire en quelques minutes.",
-    color: "from-primary to-primary/70",
-    bgColor: "bg-primary/10",
-    accentColor: "text-primary"
-  },
-  {
-    number: "02",
-    icon: Layers,
-    title: "Ajoutez vos souvenirs",
-    description: "Uploadez photos, vidéos, enregistrements audio et rédigez vos histoires avec notre éditeur intuitif.",
-    color: "from-secondary to-secondary/70",
-    bgColor: "bg-secondary/10",
-    accentColor: "text-secondary"
-  },
-  {
-    number: "03",
-    icon: Share2,
-    title: "Organisez et partagez",
-    description: "Structurez vos capsules en chapitres de vie et invitez votre famille à contribuer.",
-    color: "from-accent to-accent/70",
-    bgColor: "bg-accent/10",
-    accentColor: "text-accent"
-  },
-  {
-    number: "04",
-    icon: Heart,
-    title: "Préservez pour l'éternité",
-    description: "Vos souvenirs sont sécurisés et prêts à être transmis aux générations futures.",
-    color: "from-primary via-secondary to-accent",
-    bgColor: "bg-gradient-to-br from-primary/10 to-secondary/10",
-    accentColor: "text-primary"
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const HowItWorksSection = () => {
+  const { t } = useTranslation('landing');
+
+  const steps = [
+    {
+      number: "01",
+      icon: Upload,
+      titleKey: "howItWorks.steps.step1.title",
+      descriptionKey: "howItWorks.steps.step1.description",
+      color: "from-primary to-primary/70",
+      bgColor: "bg-primary/10",
+      accentColor: "text-primary"
+    },
+    {
+      number: "02",
+      icon: Layers,
+      titleKey: "howItWorks.steps.step2.title",
+      descriptionKey: "howItWorks.steps.step2.description",
+      color: "from-secondary to-secondary/70",
+      bgColor: "bg-secondary/10",
+      accentColor: "text-secondary"
+    },
+    {
+      number: "03",
+      icon: Share2,
+      titleKey: "howItWorks.steps.step3.title",
+      descriptionKey: "howItWorks.steps.step3.description",
+      color: "from-accent to-accent/70",
+      bgColor: "bg-accent/10",
+      accentColor: "text-accent"
+    },
+    {
+      number: "04",
+      icon: Heart,
+      titleKey: "howItWorks.steps.step4.title",
+      descriptionKey: "howItWorks.steps.step4.description",
+      color: "from-primary via-secondary to-accent",
+      bgColor: "bg-gradient-to-br from-primary/10 to-secondary/10",
+      accentColor: "text-primary"
+    }
+  ];
+
   return (
     <section id="how-it-works" className="py-20 sm:py-32 bg-[#f5f0e8] relative overflow-hidden">
       {/* Decorative background elements */}
@@ -66,13 +69,13 @@ const HowItWorksSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-semibold mb-6"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-primary">Comment ça marche ?</span>
+            <span className="text-primary">{t('howItWorks.badge')}</span>
           </motion.span>
           
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-6 leading-tight">
-            Créez votre capsule mémorielle
+            {t('howItWorks.title')}
             <br />
-            <span className="text-secondary">en 4 étapes simples</span>
+            <span className="text-secondary">{t('howItWorks.titleHighlight')}</span>
           </h2>
         </motion.div>
 
@@ -94,13 +97,11 @@ const HowItWorksSection = () => {
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-display font-bold text-[#1a1a2e]">
-                  Qu'est-ce qu'une capsule mémorielle ?
+                  {t('howItWorks.capsuleExplainer.title')}
                 </h3>
               </div>
               <p className="text-[#1a1a2e]/80 leading-relaxed text-base sm:text-lg">
-                Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : 
-                photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver 
-                et transmettre votre histoire familiale aux générations futures.
+                {t('howItWorks.capsuleExplainer.description')}
               </p>
             </div>
           </div>
@@ -137,16 +138,16 @@ const HowItWorksSection = () => {
                       <step.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                     </motion.div>
                     <div className={`text-sm font-bold ${step.accentColor} uppercase tracking-wider`}>
-                      Étape {step.number}
+                      {t('howItWorks.stepLabel')} {step.number}
                     </div>
                   </div>
 
                   {/* Content */}
                   <h3 className="text-xl sm:text-2xl font-display font-bold text-[#1a1a2e] mb-3">
-                    {step.title}
+                    {t(step.titleKey)}
                   </h3>
                   <p className="text-[#1a1a2e]/70 leading-relaxed text-base sm:text-base">
-                    {step.description}
+                    {t(step.descriptionKey)}
                   </p>
 
                   {/* Progress indicator */}

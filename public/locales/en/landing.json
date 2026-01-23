@@ -52,21 +52,30 @@
     }
   },
   "howItWorks": {
-    "badge": "How it works",
-    "title": "Create your legacy in 3 simple steps",
-    "subtitle": "An interface designed to be accessible to everyone, regardless of age or technical level.",
+    "badge": "How it works?",
+    "title": "Create your memory capsule",
+    "titleHighlight": "in 4 simple steps",
+    "stepLabel": "Step",
+    "capsuleExplainer": {
+      "title": "What is a memory capsule?",
+      "description": "A memory capsule is a secure digital space where you can gather your most precious memories: photos, videos, audio recordings and texts. It's your digital heritage, a unique way to preserve and pass on your family history to future generations."
+    },
     "steps": {
       "step1": {
         "title": "Create your account",
-        "description": "Free registration in 30 seconds. No credit card required to start."
+        "description": "Sign up for free and start documenting your story in minutes."
       },
       "step2": {
         "title": "Add your memories",
-        "description": "Import photos, videos, texts and audio. Organize them by date, theme or people."
+        "description": "Upload photos, videos, audio recordings and write your stories with our intuitive editor."
       },
       "step3": {
-        "title": "Share with family",
-        "description": "Invite your loved ones into your circles of trust. Everyone can contribute and comment."
+        "title": "Organize and share",
+        "description": "Structure your capsules into life chapters and invite your family to contribute."
+      },
+      "step4": {
+        "title": "Preserve forever",
+        "description": "Your memories are secured and ready to be passed on to future generations."
       }
     }
   },
@@ -77,65 +86,88 @@
   },
   "pricing": {
     "badge": "Pricing",
-    "title": "Choose your plan",
-    "subtitle": "Start free, upgrade as you grow.",
+    "title": "Support for every",
+    "titleHighlight": "life story",
+    "subtitle": "Start free and scale as you need. No hidden fees.",
     "monthly": "Monthly",
     "yearly": "Yearly",
-    "yearlyDiscount": "-20%",
-    "perMonth": "/month",
-    "perYear": "/year",
-    "popular": "Popular",
+    "discount": "-17%",
+    "perMonth": "month",
+    "perYear": "year",
+    "popular": "Most popular",
+    "loading": "Loading...",
+    "error": "Error creating payment",
     "cta": {
       "free": "Get started free",
-      "premium": "Go Premium"
+      "premium": "Try Premium",
+      "heritage": "Choose Heritage"
     },
     "plans": {
       "free": {
         "name": "Free",
-        "price": "$0",
-        "description": "To discover the platform",
-        "features": [
-          "10 memory capsules",
-          "500 MB storage",
-          "1 sharing circle",
-          "Basic PDF export"
-        ]
+        "description": "Perfect for starting to preserve your memories",
+        "features": {
+          "storage": "250 MB storage",
+          "formats": "Text and photo capsules",
+          "timeline": "Basic timeline",
+          "ads": "With ads"
+        }
       },
       "premium": {
         "name": "Premium",
-        "priceMonthly": "$9.90",
-        "priceYearly": "$95",
-        "description": "To preserve all your memories",
-        "features": [
-          "Unlimited capsules",
-          "50 GB storage",
-          "Unlimited circles",
-          "Family tree",
-          "Posthumous legacy",
-          "HD PDF export",
-          "Priority support"
-        ]
+        "description": "For regular content creators",
+        "features": {
+          "storage": "10 GB storage",
+          "formats": "Text, photo, video and audio capsules",
+          "sharing": "1 memory share with the person of your choice",
+          "timeline": "Advanced timeline",
+          "noAds": "No ads"
+        }
+      },
+      "heritage": {
+        "name": "Heritage",
+        "description": "For multigenerational families",
+        "features": {
+          "storage": "50 GB storage",
+          "formats": "Text, photo, video and audio capsules",
+          "sharing": "Unlimited shares",
+          "timeline": "Advanced timeline",
+          "familyTree": "Interactive family tree",
+          "podcast": "Create a podcast from your memories",
+          "vipSupport": "VIP support via WhatsApp",
+          "noAds": "No ads"
+        }
       }
     }
   },
   "faq": {
-    "title": "Frequently Asked Questions",
+    "badge": "FAQ",
+    "title": "Frequently asked",
+    "titleHighlight": "questions",
     "items": {
       "q1": {
-        "question": "How is my data protected?",
-        "answer": "Your data is encrypted with the AES-256 standard and stored on GDPR-compliant European servers."
+        "question": "What is a memory capsule?",
+        "answer": "A memory capsule is a secure digital container that preserves your memories as texts, photos, videos and audio. It's your personal story, organized chronologically and ready to be passed on to future generations. Each capsule is private and accessible only to people you authorize."
       },
       "q2": {
-        "question": "Can I export my memories?",
-        "answer": "Yes, you can export your capsules as PDF or download all your media at any time."
+        "question": "Is my data secure?",
+        "answer": "Absolutely. Your data is encrypted with the highest standards (AES-256), backed up daily on secure servers, and you maintain full control over who can access it. Our commitment: your memories remain private."
       },
       "q3": {
-        "question": "How does posthumous legacy work?",
-        "answer": "You designate trusted guardians who will be able to access your capsules according to the conditions you define."
+        "question": "How does family sharing work?",
+        "answer": "You can create circles of trust (family, friends) and invite members by email. For each circle, you define permissions: read only, comments, or contribution. Members can add their own perspectives on your shared memories."
       },
       "q4": {
-        "question": "Can I cancel my subscription?",
-        "answer": "Yes, you can cancel at any time. Your data remains accessible and exportable."
+        "question": "What happens to my data if I don't renew?",
+        "answer": "Your data is never automatically deleted. If you switch from Premium to Free, you keep read access to all your content. Only advanced features are disabled. You can always export your data at any time."
+      },
+      "q5": {
+        "question": "How does the posthumous legacy work?",
+        "answer": "With the Legacy offer, you designate trusted contacts who will be notified and receive access to certain capsules according to your wishes. You can schedule delayed revelations, define access conditions, and leave personal messages."
+      },
+      "q6": {
+        "question": "Is there a mobile app?",
+        "answer": "The web platform is fully responsive and works perfectly on mobile. A native iOS and Android app is planned in our roadmap to enable direct recording and offline mode."
       }
     }
   },
