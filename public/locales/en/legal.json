@@ -1,0 +1,450 @@
+{
+  "common": {
+    "backToHome": "Back to home",
+    "lastUpdated": "Last updated: {{date}}",
+    "contactEmail": "contact@familygarden.fr",
+    "privacyEmail": "privacy@familygarden.fr",
+    "dpoEmail": "dpo@familygarden.fr"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "sections": {
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Family Garden is committed to protecting the privacy of its users. This privacy policy explains how we collect, use, store and protect your personal data in accordance with the General Data Protection Regulation (GDPR) of April 27, 2016 and the French Data Protection Act of January 6, 1978, as amended.",
+        "controller": "Data controller:",
+        "controllerName": "Family Garden SAS",
+        "email": "Email:"
+      },
+      "dataCollected": {
+        "title": "2. Data collected",
+        "intro": "We collect the following types of data:",
+        "items": {
+          "identification": "Identification data:",
+          "identificationDesc": "name, first name, email address",
+          "profile": "Profile data:",
+          "profileDesc": "profile photo, biography, date of birth",
+          "userContent": "User content:",
+          "userContentDesc": "time capsules, photos, videos, texts, family trees",
+          "technical": "Technical data:",
+          "technicalDesc": "IP address, browser type, connection data, access logs",
+          "payment": "Payment data:",
+          "paymentDesc": "processed exclusively by our provider Stripe (we never store your banking data)"
+        }
+      },
+      "dataUsage": {
+        "title": "3. Data usage",
+        "intro": "Your data is used to:",
+        "items": [
+          "Provide and improve our time capsule services",
+          "Manage your account and subscriptions",
+          "Process your payments securely",
+          "Send you notifications about your capsules and their scheduled opening",
+          "Ensure the security and availability of the platform",
+          "Respond to your support requests"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Legal basis for processing",
+        "intro": "We process your data on the following legal bases:",
+        "contract": "Performance of contract (Art. 6.1.b GDPR):",
+        "contractDesc": "to provide our time capsule services",
+        "consent": "Consent (Art. 6.1.a GDPR):",
+        "consentDesc": "for marketing communications and analytical cookies",
+        "legitimateInterest": "Legitimate interest (Art. 6.1.f GDPR):",
+        "legitimateInterestDesc": "to improve our services and ensure security",
+        "legalObligation": "Legal obligation (Art. 6.1.c GDPR):",
+        "legalObligationDesc": "for billing and tax data"
+      },
+      "retention": {
+        "title": "5. Data retention",
+        "content": "Your data is retained for the duration of your active account. If you delete your account, your personal data will be deleted within 30 days, except for legal retention obligations (billing data: 10 years).",
+        "capsules": "Time capsules are retained according to the settings you have defined, including digital legacy capsules that can be transmitted to your designated guardians."
+      },
+      "hosting": {
+        "title": "6. Hosting and data location",
+        "location": {
+          "title": "Data location",
+          "content": "Your personal data is stored on servers located in the European Union (AWS regions eu-west-1 Ireland and eu-central-1 Frankfurt), ensuring GDPR-compliant protection without transfer to third countries."
+        },
+        "infrastructure": {
+          "title": "Technical infrastructure",
+          "database": "Database:",
+          "databaseDesc": "PostgreSQL hosted on AWS (EU region)",
+          "files": "Files and media:",
+          "filesDesc": "AWS S3 (EU region) with encryption",
+          "auth": "Authentication:",
+          "authDesc": "Supabase Auth (EU region)",
+          "cdn": "CDN:",
+          "cdnDesc": "Content delivery from European servers"
+        },
+        "encryption": {
+          "title": "Encryption and protection",
+          "atRest": "Encryption at rest:",
+          "atRestDesc": "AES-256 for all stored data",
+          "inTransit": "Encryption in transit:",
+          "inTransitDesc": "TLS 1.2 / TLS 1.3 for all communications",
+          "backups": "Backups:",
+          "backupsDesc": "Daily, encrypted, with 30-day retention",
+          "replication": "Replication:",
+          "replicationDesc": "Data replicated within the EU region for high availability"
+        }
+      },
+      "rights": {
+        "title": "7. Your rights",
+        "intro": "In accordance with the GDPR (Articles 15 to 22), you have the following rights:",
+        "access": "Right of access (Art. 15):",
+        "accessDesc": "obtain a copy of your personal data",
+        "rectification": "Right to rectification (Art. 16):",
+        "rectificationDesc": "correct inaccurate data",
+        "erasure": "Right to erasure (Art. 17):",
+        "erasureDesc": "request the deletion of your data",
+        "restriction": "Right to restriction (Art. 18):",
+        "restrictionDesc": "restrict the processing of your data",
+        "portability": "Right to data portability (Art. 20):",
+        "portabilityDesc": "receive your data in a structured format",
+        "objection": "Right to object (Art. 21):",
+        "objectionDesc": "object to the processing of your data",
+        "withdrawal": "Right to withdraw consent:",
+        "withdrawalDesc": "withdraw your consent at any time",
+        "exerciseRights": "To exercise these rights, contact us at:",
+        "responseTime": "We will respond to your request within one month in accordance with the GDPR."
+      },
+      "security": {
+        "title": "8. Data security",
+        "technical": {
+          "title": "Technical measures",
+          "items": [
+            "AES-256 encryption for all data at rest",
+            "TLS 1.2+ protocol for all network communications",
+            "Two-factor authentication (2FA) available",
+            "Role-based access control (Row Level Security - RLS)",
+            "Continuous access monitoring and anomaly detection",
+            "Regular penetration testing by independent experts",
+            "Web Application Firewall (WAF) and DDoS protection"
+          ]
+        },
+        "organizational": {
+          "title": "Organizational measures",
+          "items": [
+            "Restricted data access based on the principle of least privilege",
+            "Regular staff training on data protection",
+            "Documented security incident management procedures",
+            "Annual security audits",
+            "Vulnerability management policy"
+          ]
+        },
+        "certifications": "Certifications of our subprocessors"
+      },
+      "transfers": {
+        "title": "9. International data transfers",
+        "intro": "Your data is primarily stored in the European Union. However, some of our subprocessors are located in the United States. These transfers are governed by appropriate safeguards:",
+        "guarantees": {
+          "title": "Legal guarantees",
+          "scc": "Standard Contractual Clauses (SCCs) approved by the European Commission (Implementing Decision 2021/914 of June 4, 2021)",
+          "dpf": "Data Privacy Framework (DPF) for certified US companies (Adequacy Decision of July 10, 2023)",
+          "additional": "Additional measures: end-to-end encryption, pseudonymization, transfer impact assessment"
+        },
+        "table": {
+          "subprocessor": "Subprocessor",
+          "purpose": "Purpose",
+          "guarantees": "Safeguards"
+        },
+        "copyRequest": "You can request a copy of the appropriate safeguards by contacting us at"
+      },
+      "cookies": {
+        "title": "10. Cookies",
+        "intro": "We use essential cookies for site operation and analytical cookies (with your consent) to improve our services.",
+        "typesTitle": "Types of cookies used",
+        "essential": "Essential cookies:",
+        "essentialDesc": "authentication, language preferences, security (duration: session)",
+        "analytics": "Analytical cookies:",
+        "analyticsDesc": "Google Analytics with IP anonymization (duration: 13 months maximum)"
+      },
+      "contact": {
+        "title": "11. Contact and complaints",
+        "contactTitle": "Contact our team",
+        "dpo": "Data Protection Officer (DPO):",
+        "authority": {
+          "title": "Supervisory authority",
+          "intro": "You have the right to lodge a complaint with the CNIL:",
+          "name": "CNIL - French Data Protection Authority",
+          "address": "3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France",
+          "website": "Website:"
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "sections": {
+      "presentation": {
+        "title": "1. Service presentation",
+        "content": "Family Garden is a family memory preservation platform that allows users to create, store and share digital memory capsules. These capsules can contain texts, photos, videos, audio recordings and other multimedia content intended to be preserved and transmitted to future generations."
+      },
+      "acceptance": {
+        "title": "2. Acceptance of terms",
+        "content": "Using Family Garden implies full and complete acceptance of these Terms of Use. If you do not accept these terms, please do not use our service. We reserve the right to modify these Terms at any time. Modifications will take effect upon publication on the site."
+      },
+      "registration": {
+        "title": "3. Registration and user account",
+        "intro": "To access Family Garden features, you must create a user account by providing accurate and complete information. You are responsible for:",
+        "items": [
+          "The confidentiality of your login credentials",
+          "All activities carried out under your account",
+          "Updating your personal information",
+          "Immediate notification in case of unauthorized use of your account"
+        ],
+        "ageRequirement": "You must be at least 16 years old to create an account. Minors under 16 must obtain parental consent."
+      },
+      "usage": {
+        "title": "4. Use of the service",
+        "intro": "You agree to use Family Garden responsibly and legally. It is prohibited to:",
+        "items": [
+          "Publish illegal, defamatory, obscene content or content that infringes the rights of others",
+          "Impersonate another person",
+          "Attempt to access other users' accounts",
+          "Use the service for unauthorized commercial purposes",
+          "Transmit viruses or malicious code",
+          "Disrupt the normal operation of the platform",
+          "Collect personal data from other users without their consent"
+        ]
+      },
+      "userContent": {
+        "title": "5. User content",
+        "intro": "You retain all intellectual property rights to the content you post on Family Garden. By uploading content, you grant us a non-exclusive license to:",
+        "items": [
+          "Store, display and transmit your content according to your sharing settings",
+          "Create backup copies for data preservation",
+          "Technically adapt your content for different devices (resizing, compression)"
+        ],
+        "guarantee": "You warrant that you have the necessary rights to all content you post and that it does not violate the rights of third parties."
+      },
+      "capsules": {
+        "title": "6. Memory capsules and Legacy feature",
+        "intro": "Family Garden offers a unique feature for transmitting capsules after the user's death. This feature involves:",
+        "items": [
+          "Designating trusted guardians who can unlock your capsules",
+          "Defining unlock conditions (date, event, death)",
+          "Responsibility for keeping your guardians' information up to date"
+        ],
+        "disclaimer": "Family Garden cannot guarantee transmission in case of service discontinuation. We recommend keeping copies of your most important content."
+      },
+      "circles": {
+        "title": "7. Sharing circles",
+        "content": "Circles allow you to share your capsules with trusted groups of people. You are responsible for managing your circles and the people you invite. Circle members can view shared capsules according to the permissions you define."
+      },
+      "storage": {
+        "title": "8. Storage and retention",
+        "intro": "Family Garden is committed to preserving your content with the greatest care. However:",
+        "items": [
+          "Storage space is limited according to your subscription type",
+          "We perform regular backups but do not guarantee 100% recovery in case of major disaster",
+          "Inactive free accounts for more than 2 years may be deleted after notification"
+        ]
+      },
+      "ip": {
+        "title": "9. Intellectual property",
+        "content": "The Family Garden platform, including its design, logo, features and source code, is protected by intellectual property rights. Any unauthorized reproduction, modification or use is strictly prohibited."
+      },
+      "liability": {
+        "title": "10. Limitation of liability",
+        "intro": "Family Garden is provided \"as is\". We cannot be held responsible for:",
+        "items": [
+          "Temporary service interruptions for maintenance",
+          "Data loss caused by exceptional circumstances",
+          "Your use of the service",
+          "Content posted by other users",
+          "Indirect damages related to the use of the service"
+        ]
+      },
+      "termination": {
+        "title": "11. Suspension and termination",
+        "intro": "We reserve the right to suspend or terminate your account in case of:",
+        "items": [
+          "Violation of these Terms",
+          "Fraudulent or illegal activity",
+          "Non-payment of subscriptions (for premium accounts)",
+          "Request from competent authorities"
+        ],
+        "deletion": "You can delete your account at any time from your personal space. Deletion results in permanent erasure of your data after a 30-day period."
+      },
+      "dataProtection": {
+        "title": "12. Personal data protection",
+        "content": "The processing of your personal data is detailed in our",
+        "privacyLink": "Privacy Policy",
+        "commitment": ". We are committed to complying with the General Data Protection Regulation (GDPR) and protecting your personal information."
+      },
+      "modifications": {
+        "title": "13. Service modifications",
+        "content": "Family Garden may modify, suspend or discontinue all or part of the service, temporarily or permanently. We will endeavor to notify you within a reasonable time in case of major changes."
+      },
+      "law": {
+        "title": "14. Applicable law and jurisdiction",
+        "content": "These Terms are governed by French law. Any dispute relating to their interpretation or execution will be submitted to the competent French courts, after an attempt at amicable resolution."
+      },
+      "contact": {
+        "title": "15. Contact",
+        "content": "For any questions regarding these Terms of Use, you can contact us at:"
+      }
+    }
+  },
+  "legalNotice": {
+    "title": "Legal Notice",
+    "sections": {
+      "editor": {
+        "title": "1. Website publisher",
+        "siret": "SIRET:",
+        "email": "Email:",
+        "phone": "Phone:"
+      },
+      "director": {
+        "title": "2. Publication director",
+        "name": "Name:"
+      },
+      "hosting": {
+        "title": "3. Hosting and technical infrastructure",
+        "appHost": {
+          "title": "Application host",
+          "platform": "Platform:",
+          "infrastructure": "Infrastructure:",
+          "region": "Storage region:",
+          "regionValue": "European Union (eu-west-1 Ireland / eu-central-1 Frankfurt)",
+          "website": "Website:"
+        },
+        "dbHost": {
+          "title": "Database and storage host",
+          "company": "Company:",
+          "address": "Address:",
+          "infrastructure": "Infrastructure:",
+          "region": "Region:",
+          "regionValue": "European Union",
+          "website": "Website:"
+        },
+        "cloudInfra": {
+          "title": "Cloud infrastructure",
+          "provider": "Provider:",
+          "region": "Region:",
+          "regionValue": "Europe (Ireland eu-west-1, Frankfurt eu-central-1)",
+          "website": "Website:"
+        },
+        "payment": {
+          "title": "Payment provider",
+          "company": "Company:",
+          "address": "Address:",
+          "website": "Website:"
+        },
+        "email": {
+          "title": "Email service provider",
+          "company": "Company:",
+          "website": "Website:"
+        }
+      },
+      "subprocessors": {
+        "title": "4. Subprocessors and data transfers",
+        "intro": "In accordance with Article 28 of the GDPR, we use the following subprocessors for data processing:",
+        "table": {
+          "subprocessor": "Subprocessor",
+          "purpose": "Purpose",
+          "location": "Location",
+          "guarantees": "Safeguards"
+        },
+        "guaranteesTitle": "Safeguards for non-EU transfers",
+        "scc": "Standard Contractual Clauses (SCCs) approved by the European Commission (Decision 2021/914)",
+        "dpf": "Data Privacy Framework (DPF) for certified US companies",
+        "additional": "Additional measures: end-to-end encryption, data pseudonymization"
+      },
+      "ip": {
+        "title": "5. Intellectual property",
+        "content": "All content on this site (except user content: texts, images, videos, logos, icons, sounds, software, etc.) is the exclusive property of Family Garden or its partners. Any reproduction, representation, modification, publication, transmission, distortion, in whole or in part, of the site or its content, by any means whatsoever, and on any medium whatsoever, is prohibited without prior written authorization from Family Garden."
+      },
+      "dataProtection": {
+        "title": "6. Personal data protection",
+        "intro": "In accordance with the General Data Protection Regulation (GDPR) and the French Data Protection Act, you have the right to access, rectify, erase and port your personal data.",
+        "moreInfo": "For more information on data processing, see our",
+        "privacyLink": "Privacy Policy",
+        "dpo": "Data Protection Officer (DPO)",
+        "email": "Email:",
+        "authority": "Supervisory authority:",
+        "cnil": "CNIL - French Data Protection Authority",
+        "website": "Website:",
+        "address": "Address:"
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "content": "This site uses cookies to improve user experience and analyze traffic. Essential cookies are necessary for site operation. Analytical cookies help us understand how visitors interact with the site.",
+        "manage": "You can manage your cookie preferences in your browser settings."
+      },
+      "links": {
+        "title": "8. Hyperlinks",
+        "content": "This site may contain links to other websites. Family Garden is not responsible for the content of these external sites and cannot be held liable for damages resulting from their use."
+      },
+      "law": {
+        "title": "9. Applicable law",
+        "content": "These legal notices are governed by French law. In case of dispute, and after failure of any attempt to find an amicable solution, the French courts shall have sole jurisdiction."
+      },
+      "contact": {
+        "title": "10. Contact",
+        "content": "For any questions regarding these legal notices, you can contact us at:"
+      }
+    }
+  },
+  "sales": {
+    "title": "Terms of Sale",
+    "sections": {
+      "object": {
+        "title": "1. Purpose",
+        "content": "These Terms of Sale govern the contractual relationship between Family Garden and its users for subscription to paid services offered on the platform."
+      },
+      "services": {
+        "title": "2. Services offered",
+        "intro": "Family Garden offers the following subscriptions:",
+        "free": "Free:",
+        "freeDesc": "Limited access to basic features",
+        "premium": "Premium:",
+        "premiumDesc": "Full access to advanced features, extended storage",
+        "heritage": "Heritage:",
+        "heritageDesc": "Premium features + posthumous transmission options"
+      },
+      "pricing": {
+        "title": "3. Pricing and payment",
+        "content": "Prices are indicated in euros including tax. Payment is made by credit card via our secure provider Stripe. Subscriptions are billed monthly or annually according to the chosen option.",
+        "modification": "Prices may be changed at any time. In case of modification, the new price will apply to the next billing period, after 30 days prior notice."
+      },
+      "duration": {
+        "title": "4. Duration and renewal",
+        "content": "The subscription is taken out for a period of one month or one year according to the chosen option. It is automatically renewed at each due date, unless cancelled by the user before the renewal date."
+      },
+      "withdrawal": {
+        "title": "5. Right of withdrawal",
+        "content": "In accordance with Article L221-28 of the French Consumer Code, the right of withdrawal does not apply to contracts for the supply of digital content not provided on a tangible medium whose execution has begun with the consumer's agreement.",
+        "guarantee": "However, we offer a 14-day \"satisfaction guaranteed\" refund for any new Premium or Heritage subscription."
+      },
+      "termination": {
+        "title": "6. Termination",
+        "content": "The user can cancel their subscription at any time from their personal space or via the subscription management portal. Cancellation takes effect at the end of the current billing period.",
+        "access": "In case of cancellation, the user retains access to paid features until the end of the already paid period."
+      },
+      "liability": {
+        "title": "7. Liability",
+        "content": "Family Garden is committed to providing services with diligence. We cannot be held liable for service interruptions beyond our control, nor for indirect damages related to the use of our services."
+      },
+      "dataProtection": {
+        "title": "8. Data protection",
+        "content": "The processing of your personal data is governed by our Privacy Policy, accessible from our site. We are committed to protecting your data in accordance with the GDPR."
+      },
+      "modifications": {
+        "title": "9. Modification of Terms",
+        "content": "We reserve the right to modify these Terms. Modifications will be notified to users by email at least 30 days before they take effect."
+      },
+      "law": {
+        "title": "10. Applicable law and disputes",
+        "content": "These Terms are subject to French law. In case of dispute, an amicable solution will be sought before any legal action. Failing that, the French courts shall have sole jurisdiction."
+      },
+      "contact": {
+        "title": "11. Contact",
+        "content": "For any questions regarding the Terms of Sale, contact us at:"
+      }
+    }
+  }
+}

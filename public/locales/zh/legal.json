@@ -1,0 +1,450 @@
+{
+  "common": {
+    "backToHome": "返回首页",
+    "lastUpdated": "最后更新：{{date}}",
+    "contactEmail": "contact@familygarden.fr",
+    "privacyEmail": "privacy@familygarden.fr",
+    "dpoEmail": "dpo@familygarden.fr"
+  },
+  "privacy": {
+    "title": "隐私政策",
+    "sections": {
+      "introduction": {
+        "title": "1. 简介",
+        "content": "Family Garden 致力于保护用户的隐私。本隐私政策根据2016年4月27日的《通用数据保护条例》(GDPR)和1978年1月6日经修订的法国数据保护法，说明我们如何收集、使用、存储和保护您的个人数据。",
+        "controller": "数据控制者：",
+        "controllerName": "Family Garden SAS",
+        "email": "电子邮件："
+      },
+      "dataCollected": {
+        "title": "2. 收集的数据",
+        "intro": "我们收集以下类型的数据：",
+        "items": {
+          "identification": "身份数据：",
+          "identificationDesc": "姓名、名字、电子邮件地址",
+          "profile": "个人资料数据：",
+          "profileDesc": "头像、个人简介、出生日期",
+          "userContent": "用户内容：",
+          "userContentDesc": "时间胶囊、照片、视频、文本、家谱",
+          "technical": "技术数据：",
+          "technicalDesc": "IP地址、浏览器类型、连接数据、访问日志",
+          "payment": "支付数据：",
+          "paymentDesc": "仅通过我们的服务提供商 Stripe 处理（我们从不存储您的银行数据）"
+        }
+      },
+      "dataUsage": {
+        "title": "3. 数据使用",
+        "intro": "您的数据用于：",
+        "items": [
+          "提供和改进我们的时间胶囊服务",
+          "管理您的账户和订阅",
+          "安全处理您的付款",
+          "向您发送有关胶囊及其预定开启时间的通知",
+          "确保平台的安全性和可用性",
+          "响应您的支持请求"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. 处理的法律依据",
+        "intro": "我们基于以下法律依据处理您的数据：",
+        "contract": "合同履行（GDPR 第6.1.b条）：",
+        "contractDesc": "提供我们的时间胶囊服务",
+        "consent": "同意（GDPR 第6.1.a条）：",
+        "consentDesc": "营销通信和分析 Cookie",
+        "legitimateInterest": "合法利益（GDPR 第6.1.f条）：",
+        "legitimateInterestDesc": "改进我们的服务并确保安全",
+        "legalObligation": "法律义务（GDPR 第6.1.c条）：",
+        "legalObligationDesc": "账单和税务数据"
+      },
+      "retention": {
+        "title": "5. 数据保留",
+        "content": "您的数据在账户活跃期间保留。如果您删除账户，除法定保留义务（账单数据：10年）外，您的个人数据将在30天内删除。",
+        "capsules": "时间胶囊根据您定义的设置保留，包括可以传递给您指定监护人的数字遗产胶囊。"
+      },
+      "hosting": {
+        "title": "6. 托管和数据位置",
+        "location": {
+          "title": "数据位置",
+          "content": "您的个人数据存储在欧盟境内的服务器上（AWS 区域 eu-west-1 爱尔兰和 eu-central-1 法兰克福），确保符合 GDPR 的保护，不会转移到第三国。"
+        },
+        "infrastructure": {
+          "title": "技术基础设施",
+          "database": "数据库：",
+          "databaseDesc": "托管在 AWS（欧盟区域）的 PostgreSQL",
+          "files": "文件和媒体：",
+          "filesDesc": "带加密的 AWS S3（欧盟区域）",
+          "auth": "身份验证：",
+          "authDesc": "Supabase Auth（欧盟区域）",
+          "cdn": "CDN：",
+          "cdnDesc": "从欧洲服务器分发内容"
+        },
+        "encryption": {
+          "title": "加密和保护",
+          "atRest": "静态加密：",
+          "atRestDesc": "所有存储数据使用 AES-256",
+          "inTransit": "传输中加密：",
+          "inTransitDesc": "所有通信使用 TLS 1.2 / TLS 1.3",
+          "backups": "备份：",
+          "backupsDesc": "每日、加密、保留30天",
+          "replication": "复制：",
+          "replicationDesc": "在欧盟区域内复制数据以实现高可用性"
+        }
+      },
+      "rights": {
+        "title": "7. 您的权利",
+        "intro": "根据 GDPR（第15至22条），您拥有以下权利：",
+        "access": "访问权（第15条）：",
+        "accessDesc": "获取您个人数据的副本",
+        "rectification": "更正权（第16条）：",
+        "rectificationDesc": "更正不准确的数据",
+        "erasure": "删除权（第17条）：",
+        "erasureDesc": "请求删除您的数据",
+        "restriction": "限制处理权（第18条）：",
+        "restrictionDesc": "限制对您数据的处理",
+        "portability": "数据可携权（第20条）：",
+        "portabilityDesc": "以结构化格式接收您的数据",
+        "objection": "反对权（第21条）：",
+        "objectionDesc": "反对处理您的数据",
+        "withdrawal": "撤回同意权：",
+        "withdrawalDesc": "随时撤回您的同意",
+        "exerciseRights": "要行使这些权利，请联系我们：",
+        "responseTime": "我们将根据 GDPR 在一个月内回复您的请求。"
+      },
+      "security": {
+        "title": "8. 数据安全",
+        "technical": {
+          "title": "技术措施",
+          "items": [
+            "所有静态数据使用 AES-256 加密",
+            "所有网络通信使用 TLS 1.2+ 协议",
+            "可用的双因素身份验证 (2FA)",
+            "基于角色的访问控制（Row Level Security - RLS）",
+            "持续的访问监控和异常检测",
+            "由独立专家定期进行渗透测试",
+            "Web 应用防火墙 (WAF) 和 DDoS 保护"
+          ]
+        },
+        "organizational": {
+          "title": "组织措施",
+          "items": [
+            "基于最小权限原则的受限数据访问",
+            "定期对员工进行数据保护培训",
+            "文档化的安全事件管理程序",
+            "年度安全审计",
+            "漏洞管理策略"
+          ]
+        },
+        "certifications": "我们的子处理者认证"
+      },
+      "transfers": {
+        "title": "9. 国际数据传输",
+        "intro": "您的数据主要存储在欧盟。但是，我们的一些子处理者位于美国。这些传输受到适当保障措施的约束：",
+        "guarantees": {
+          "title": "法律保障",
+          "scc": "欧盟委员会批准的标准合同条款 (SCC)（2021年6月4日实施决定 2021/914）",
+          "dpf": "经认证的美国公司的数据隐私框架 (DPF)（2023年7月10日充分性决定）",
+          "additional": "补充措施：端到端加密、假名化、传输影响评估"
+        },
+        "table": {
+          "subprocessor": "子处理者",
+          "purpose": "目的",
+          "guarantees": "保障措施"
+        },
+        "copyRequest": "您可以通过联系我们索取适当保障措施的副本"
+      },
+      "cookies": {
+        "title": "10. Cookie",
+        "intro": "我们使用网站运行所需的必要 Cookie 和（经您同意的）分析 Cookie 来改进我们的服务。",
+        "typesTitle": "使用的 Cookie 类型",
+        "essential": "必要 Cookie：",
+        "essentialDesc": "身份验证、语言偏好、安全（持续时间：会话）",
+        "analytics": "分析 Cookie：",
+        "analyticsDesc": "带 IP 匿名化的 Google Analytics（持续时间：最多13个月）"
+      },
+      "contact": {
+        "title": "11. 联系方式和投诉",
+        "contactTitle": "联系我们的团队",
+        "dpo": "数据保护官 (DPO)：",
+        "authority": {
+          "title": "监管机构",
+          "intro": "您有权向 CNIL 提出投诉：",
+          "name": "CNIL - 法国国家信息与自由委员会",
+          "address": "3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, 法国",
+          "website": "网站："
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "使用条款",
+    "sections": {
+      "presentation": {
+        "title": "1. 服务介绍",
+        "content": "Family Garden 是一个家庭记忆保存平台，允许用户创建、存储和分享数字记忆胶囊。这些胶囊可以包含文本、照片、视频、音频录音和其他多媒体内容，旨在保存并传递给后代。"
+      },
+      "acceptance": {
+        "title": "2. 接受条款",
+        "content": "使用 Family Garden 即表示完全接受本使用条款。如果您不接受这些条款，请不要使用我们的服务。我们保留随时修改这些条款的权利。修改将在网站上发布后立即生效。"
+      },
+      "registration": {
+        "title": "3. 注册和用户账户",
+        "intro": "要访问 Family Garden 功能，您必须通过提供准确完整的信息创建用户账户。您对以下内容负责：",
+        "items": [
+          "登录凭据的保密性",
+          "在您账户下进行的所有活动",
+          "更新您的个人信息",
+          "账户未经授权使用时立即通知"
+        ],
+        "ageRequirement": "您必须年满16周岁才能创建账户。16周岁以下的未成年人必须获得父母同意。"
+      },
+      "usage": {
+        "title": "4. 服务使用",
+        "intro": "您同意负责任地、合法地使用 Family Garden。禁止以下行为：",
+        "items": [
+          "发布非法、诽谤、淫秽或侵犯他人权利的内容",
+          "冒充他人身份",
+          "尝试访问其他用户的账户",
+          "将服务用于未经授权的商业目的",
+          "传输病毒或恶意代码",
+          "干扰平台的正常运行",
+          "未经同意收集其他用户的个人数据"
+        ]
+      },
+      "userContent": {
+        "title": "5. 用户内容",
+        "intro": "您保留在 Family Garden 上发布的内容的所有知识产权。通过上传内容，您授予我们非独家许可：",
+        "items": [
+          "根据您的分享设置存储、显示和传输您的内容",
+          "为数据保存创建备份副本",
+          "为不同设备技术性地调整您的内容（调整大小、压缩）"
+        ],
+        "guarantee": "您保证拥有发布的所有内容的必要权利，并且不会侵犯第三方的权利。"
+      },
+      "capsules": {
+        "title": "6. 记忆胶囊和遗产功能",
+        "intro": "Family Garden 提供在用户去世后传输胶囊的独特功能。此功能涉及：",
+        "items": [
+          "指定可以解锁您胶囊的受信任监护人",
+          "定义解锁条件（日期、事件、死亡）",
+          "保持监护人信息更新的责任"
+        ],
+        "disclaimer": "Family Garden 无法保证在服务中断的情况下进行传输。我们建议您保留最重要内容的副本。"
+      },
+      "circles": {
+        "title": "7. 分享圈",
+        "content": "圈子允许您与受信任的人群分享您的胶囊。您负责管理您的圈子和您邀请的人。圈子成员可以根据您定义的权限查看共享的胶囊。"
+      },
+      "storage": {
+        "title": "8. 存储和保留",
+        "intro": "Family Garden 致力于以最大的关心保存您的内容。但是：",
+        "items": [
+          "存储空间根据您的订阅类型有限",
+          "我们定期执行备份，但不保证在重大灾难情况下100%恢复",
+          "超过2年不活跃的免费账户可能会在通知后被删除"
+        ]
+      },
+      "ip": {
+        "title": "9. 知识产权",
+        "content": "Family Garden 平台，包括其设计、标志、功能和源代码，受知识产权保护。严禁任何未经授权的复制、修改或使用。"
+      },
+      "liability": {
+        "title": "10. 责任限制",
+        "intro": "Family Garden 按"原样"提供。我们不对以下情况负责：",
+        "items": [
+          "维护导致的临时服务中断",
+          "特殊情况造成的数据丢失",
+          "您对服务的使用",
+          "其他用户发布的内容",
+          "与服务使用相关的间接损害"
+        ]
+      },
+      "termination": {
+        "title": "11. 暂停和终止",
+        "intro": "在以下情况下，我们保留暂停或终止您账户的权利：",
+        "items": [
+          "违反本条款",
+          "欺诈或非法活动",
+          "未支付订阅费（高级账户）",
+          "主管当局的要求"
+        ],
+        "deletion": "您可以随时从个人空间删除您的账户。删除后30天内将永久删除您的数据。"
+      },
+      "dataProtection": {
+        "title": "12. 个人数据保护",
+        "content": "您个人数据的处理详见我们的",
+        "privacyLink": "隐私政策",
+        "commitment": "。我们致力于遵守《通用数据保护条例》(GDPR) 并保护您的个人信息。"
+      },
+      "modifications": {
+        "title": "13. 服务修改",
+        "content": "Family Garden 可能会临时或永久修改、暂停或中断全部或部分服务。如有重大变更，我们将在合理时间内通知您。"
+      },
+      "law": {
+        "title": "14. 适用法律和管辖权",
+        "content": "本条款受法国法律管辖。与其解释或执行相关的任何争议将在尝试友好解决后提交给有管辖权的法国法院。"
+      },
+      "contact": {
+        "title": "15. 联系方式",
+        "content": "如有关于本使用条款的任何问题，您可以联系我们："
+      }
+    }
+  },
+  "legalNotice": {
+    "title": "法律声明",
+    "sections": {
+      "editor": {
+        "title": "1. 网站发布者",
+        "siret": "SIRET：",
+        "email": "电子邮件：",
+        "phone": "电话："
+      },
+      "director": {
+        "title": "2. 出版负责人",
+        "name": "姓名："
+      },
+      "hosting": {
+        "title": "3. 托管和技术基础设施",
+        "appHost": {
+          "title": "应用程序托管",
+          "platform": "平台：",
+          "infrastructure": "基础设施：",
+          "region": "存储区域：",
+          "regionValue": "欧盟（eu-west-1 爱尔兰 / eu-central-1 法兰克福）",
+          "website": "网站："
+        },
+        "dbHost": {
+          "title": "数据库和存储托管",
+          "company": "公司：",
+          "address": "地址：",
+          "infrastructure": "基础设施：",
+          "region": "区域：",
+          "regionValue": "欧盟",
+          "website": "网站："
+        },
+        "cloudInfra": {
+          "title": "云基础设施",
+          "provider": "提供商：",
+          "region": "区域：",
+          "regionValue": "欧洲（爱尔兰 eu-west-1，法兰克福 eu-central-1）",
+          "website": "网站："
+        },
+        "payment": {
+          "title": "支付服务提供商",
+          "company": "公司：",
+          "address": "地址：",
+          "website": "网站："
+        },
+        "email": {
+          "title": "电子邮件服务提供商",
+          "company": "公司：",
+          "website": "网站："
+        }
+      },
+      "subprocessors": {
+        "title": "4. 子处理者和数据传输",
+        "intro": "根据 GDPR 第28条，我们使用以下子处理者进行数据处理：",
+        "table": {
+          "subprocessor": "子处理者",
+          "purpose": "目的",
+          "location": "位置",
+          "guarantees": "保障措施"
+        },
+        "guaranteesTitle": "欧盟外传输的保障措施",
+        "scc": "欧盟委员会批准的标准合同条款 (SCC)（决定 2021/914）",
+        "dpf": "经认证的美国公司的数据隐私框架 (DPF)",
+        "additional": "补充措施：端到端加密、数据假名化"
+      },
+      "ip": {
+        "title": "5. 知识产权",
+        "content": "本网站的所有内容（用户内容除外：文本、图像、视频、标志、图标、声音、软件等）均为 Family Garden 或其合作伙伴的专有财产。未经 Family Garden 事先书面授权，禁止以任何方式、在任何媒体上对网站或其内容进行全部或部分复制、表现、修改、出版、传输、歪曲。"
+      },
+      "dataProtection": {
+        "title": "6. 个人数据保护",
+        "intro": "根据《通用数据保护条例》(GDPR) 和法国数据保护法，您有权访问、更正、删除和携带您的个人数据。",
+        "moreInfo": "有关数据处理的更多信息，请参阅我们的",
+        "privacyLink": "隐私政策",
+        "dpo": "数据保护官 (DPO)",
+        "email": "电子邮件：",
+        "authority": "监管机构：",
+        "cnil": "CNIL - 法国国家信息与自由委员会",
+        "website": "网站：",
+        "address": "地址："
+      },
+      "cookies": {
+        "title": "7. Cookie",
+        "content": "本网站使用 Cookie 来改善用户体验和分析流量。必要 Cookie 是网站运行所必需的。分析 Cookie 帮助我们了解访问者如何与网站互动。",
+        "manage": "您可以在浏览器设置中管理您的 Cookie 偏好。"
+      },
+      "links": {
+        "title": "8. 超链接",
+        "content": "本网站可能包含指向其他网站的链接。Family Garden 对这些外部网站的内容不承担责任，也不对因使用这些网站而造成的损害承担责任。"
+      },
+      "law": {
+        "title": "9. 适用法律",
+        "content": "本法律声明受法国法律管辖。如发生争议，在尝试友好解决失败后，法国法院拥有唯一管辖权。"
+      },
+      "contact": {
+        "title": "10. 联系方式",
+        "content": "如有关于本法律声明的任何问题，您可以联系我们："
+      }
+    }
+  },
+  "sales": {
+    "title": "销售条款",
+    "sections": {
+      "object": {
+        "title": "1. 目的",
+        "content": "本销售条款规定 Family Garden 与其用户之间关于平台上提供的付费服务订阅的合同关系。"
+      },
+      "services": {
+        "title": "2. 提供的服务",
+        "intro": "Family Garden 提供以下订阅：",
+        "free": "免费：",
+        "freeDesc": "有限访问基本功能",
+        "premium": "高级版：",
+        "premiumDesc": "完全访问高级功能，扩展存储",
+        "heritage": "传承版：",
+        "heritageDesc": "高级功能 + 遗产传输选项"
+      },
+      "pricing": {
+        "title": "3. 价格和付款",
+        "content": "价格以含税欧元表示。付款通过我们的安全提供商 Stripe 使用信用卡进行。订阅根据所选选项按月或按年计费。",
+        "modification": "价格可随时更改。如有更改，新价格将在提前30天通知后于下一个计费周期生效。"
+      },
+      "duration": {
+        "title": "4. 期限和续订",
+        "content": "订阅期限根据所选选项为一个月或一年。除非用户在续订日期前取消，否则将在每个到期日自动续订。"
+      },
+      "withdrawal": {
+        "title": "5. 撤回权",
+        "content": "根据法国消费者法典第L221-28条，撤回权不适用于经消费者同意开始执行的非有形媒体提供的数字内容供应合同。",
+        "guarantee": "但是，我们为任何新的高级版或传承版订阅提供14天"满意保证"退款。"
+      },
+      "termination": {
+        "title": "6. 终止",
+        "content": "用户可以随时从个人空间或通过订阅管理门户取消订阅。取消在当前计费周期结束时生效。",
+        "access": "取消后，用户保留对付费功能的访问权限，直到已支付的期限结束。"
+      },
+      "liability": {
+        "title": "7. 责任",
+        "content": "Family Garden 致力于尽职提供服务。我们不对超出我们控制范围的服务中断或与使用我们服务相关的间接损害负责。"
+      },
+      "dataProtection": {
+        "title": "8. 数据保护",
+        "content": "您个人数据的处理受我们网站上提供的隐私政策约束。我们致力于根据 GDPR 保护您的数据。"
+      },
+      "modifications": {
+        "title": "9. 条款修改",
+        "content": "我们保留修改这些条款的权利。修改将在生效前至少30天通过电子邮件通知用户。"
+      },
+      "law": {
+        "title": "10. 适用法律和争议",
+        "content": "本条款受法国法律管辖。如发生争议，将在采取任何法律行动之前寻求友好解决。否则，法国法院拥有唯一管辖权。"
+      },
+      "contact": {
+        "title": "11. 联系方式",
+        "content": "如有关于销售条款的任何问题，请联系我们："
+      }
+    }
+  }
+}
