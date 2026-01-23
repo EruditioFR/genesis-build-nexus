@@ -8,10 +8,12 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.jpg';
 
 const Signup = () => {
+  const { t } = useTranslation('auth');
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
@@ -62,9 +64,9 @@ const Signup = () => {
   }, [email, checkEmailExists]);
 
   const passwordRequirements = [
-    { label: 'Au moins 8 caractères', met: password.length >= 8 },
-    { label: 'Une majuscule', met: /[A-Z]/.test(password) },
-    { label: 'Un chiffre', met: /[0-9]/.test(password) },
+    { labelKey: 'signup.passwordRequirements.minLength', met: password.length >= 8 },
+    { labelKey: 'signup.passwordRequirements.uppercase', met: /[A-Z]/.test(password) },
+    { labelKey: 'signup.passwordRequirements.number', met: /[0-9]/.test(password) },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,8 +75,8 @@ const Signup = () => {
     if (emailExists) {
       toast({
         variant: 'destructive',
-        title: 'Email déjà utilisé',
-        description: 'Cette adresse email est déjà associée à un compte.',
+        title: t('signup.errors.emailExistsTitle'),
+        description: t('signup.errors.emailExists'),
       });
       return;
     }
@@ -82,8 +84,8 @@ const Signup = () => {
     if (email !== confirmEmail) {
       toast({
         variant: 'destructive',
-        title: 'Erreur',
-        description: 'Les adresses email ne correspondent pas',
+        title: t('signup.errors.title'),
+        description: t('signup.errors.emailMismatch'),
       });
       return;
     }
@@ -91,8 +93,8 @@ const Signup = () => {
     if (password !== confirmPassword) {
       toast({
         variant: 'destructive',
-        title: 'Erreur',
-        description: 'Les mots de passe ne correspondent pas',
+        title: t('signup.errors.title'),
+        description: t('signup.errors.passwordMismatch'),
       });
       return;
     }
@@ -100,8 +102,8 @@ const Signup = () => {
     if (!passwordRequirements.every((req) => req.met)) {
       toast({
         variant: 'destructive',
-        title: 'Mot de passe trop faible',
-        description: 'Veuillez respecter les critères de sécurité',
+        title: t('signup.errors.weakPasswordTitle'),
+        description: t('signup.errors.weakPassword'),
       });
       return;
     }
@@ -122,15 +124,15 @@ const Signup = () => {
 
       toast({
         variant: 'destructive',
-        title: isEmailExists ? 'Email déjà utilisé' : 'Erreur d\'inscription',
+        title: isEmailExists ? t('signup.errors.emailExistsTitle') : t('signup.errors.title'),
         description: isEmailExists 
-          ? 'Cette adresse email est déjà associée à un compte. Veuillez vous connecter ou utiliser une autre adresse.'
+          ? t('signup.errors.emailExistsDescription')
           : error.message,
       });
     } else {
       toast({
-        title: 'Compte créé !',
-        description: 'Bienvenue sur Family Garden',
+        title: t('signup.success.title'),
+        description: t('signup.success.description'),
       });
       navigate('/dashboard?welcome=true');
     }
@@ -141,28 +143,28 @@ const Signup = () => {
   const tutorialSteps = [
     {
       icon: BookOpen,
-      title: "1. Créez vos capsules",
-      description: "Enregistrez vos souvenirs sous forme de texte, photos, vidéos ou audio. Chaque capsule préserve un moment précieux."
+      titleKey: "signup.tutorial.capsules.title",
+      descriptionKey: "signup.tutorial.capsules.description"
     },
     {
       icon: Users,
-      title: "2. Construisez votre arbre",
-      description: "Créez votre arbre généalogique interactif et reliez vos souvenirs aux membres de votre famille."
+      titleKey: "signup.tutorial.tree.title",
+      descriptionKey: "signup.tutorial.tree.description"
     },
     {
       icon: Clock,
-      title: "3. Explorez votre histoire",
-      description: "Naviguez dans votre chronologie familiale et redécouvrez vos moments à travers le temps."
+      titleKey: "signup.tutorial.timeline.title",
+      descriptionKey: "signup.tutorial.timeline.description"
     },
     {
       icon: Share2,
-      title: "4. Partagez en toute sécurité",
-      description: "Créez des cercles privés pour partager vos souvenirs uniquement avec vos proches."
+      titleKey: "signup.tutorial.share.title",
+      descriptionKey: "signup.tutorial.share.description"
     },
     {
       icon: Sparkles,
-      title: "5. L'IA vous accompagne",
-      description: "Notre assistant vous aide à rédiger et enrichir vos récits pour des souvenirs encore plus vivants."
+      titleKey: "signup.tutorial.ai.title",
+      descriptionKey: "signup.tutorial.ai.description"
     }
   ];
 
@@ -197,18 +199,18 @@ const Signup = () => {
             </Link>
 
             <h1 className="text-3xl lg:text-4xl font-display font-bold text-white mb-3 leading-tight">
-              Comment ça marche ?
+              {t('signup.howItWorks')}
             </h1>
             
             <p className="text-lg text-white/80 max-w-md mb-8">
-              Préservez votre héritage familial en quelques étapes simples
+              {t('signup.howItWorksSubtitle')}
             </p>
 
             {/* Tutorial steps */}
             <div className="space-y-5">
               {tutorialSteps.map((step, index) => (
                 <motion.div 
-                  key={step.title}
+                  key={step.titleKey}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -218,8 +220,8 @@ const Signup = () => {
                     <step.icon className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold mb-1">{step.title}</h3>
-                    <p className="text-white/70 text-sm leading-relaxed">{step.description}</p>
+                    <h3 className="text-white font-semibold mb-1">{t(step.titleKey)}</h3>
+                    <p className="text-white/70 text-sm leading-relaxed">{t(step.descriptionKey)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -235,11 +237,11 @@ const Signup = () => {
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-secondary" />
-                  <span className="text-white/70 text-sm">100% sécurisé</span>
+                  <span className="text-white/70 text-sm">{t('signup.trust.secure')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-secondary" />
-                  <span className="text-white/70 text-sm">Gratuit pour commencer</span>
+                  <span className="text-white/70 text-sm">{t('signup.trust.free')}</span>
                 </div>
               </div>
             </motion.div>
@@ -258,22 +260,22 @@ const Signup = () => {
 
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#1a1a2e] mb-2">
-              Créer un compte
+              {t('signup.title')}
             </h2>
             <p className="text-[#1a1a2e]/70 text-base">
-              Commencez à préserver vos souvenirs dès aujourd'hui
+              {t('signup.subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="displayName" className="text-base font-semibold text-[#1a1a2e]">Votre nom</Label>
+              <Label htmlFor="displayName" className="text-base font-semibold text-[#1a1a2e]">{t('signup.displayName')}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="displayName"
                   type="text"
-                  placeholder="Jean Dupont"
+                  placeholder={t('signup.displayNamePlaceholder')}
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
@@ -283,13 +285,13 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">Adresse email</Label>
+              <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">{t('signup.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="vous@exemple.com"
+                  placeholder={t('signup.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`pl-10 pr-10 h-12 bg-white border-2 text-[#1a1a2e] placeholder:text-[#1a1a2e]/40 ${
@@ -312,22 +314,22 @@ const Signup = () => {
               {emailExists && (
                 <p className="text-sm text-destructive font-medium mt-1 flex items-center gap-1.5">
                   <AlertCircle className="w-4 h-4" />
-                  Cette adresse email est déjà utilisée.{' '}
+                  {t('signup.errors.emailAlreadyUsed')}{' '}
                   <Link to="/login" className="underline hover:no-underline">
-                    Se connecter ?
+                    {t('signup.errors.loginInstead')}
                   </Link>
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmEmail" className="text-base font-semibold text-[#1a1a2e]">Confirmer l'adresse email</Label>
+              <Label htmlFor="confirmEmail" className="text-base font-semibold text-[#1a1a2e]">{t('signup.confirmEmail')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="confirmEmail"
                   type="email"
-                  placeholder="vous@exemple.com"
+                  placeholder={t('signup.emailPlaceholder')}
                   value={confirmEmail}
                   onChange={(e) => setConfirmEmail(e.target.value)}
                   className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
@@ -336,13 +338,13 @@ const Signup = () => {
               </div>
               {confirmEmail && email !== confirmEmail && (
                 <p className="text-sm text-destructive font-medium mt-1">
-                  Les adresses email ne correspondent pas
+                  {t('signup.errors.emailMismatch')}
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">Mot de passe</Label>
+              <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">{t('signup.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
@@ -366,14 +368,14 @@ const Signup = () => {
               {/* Password requirements */}
               <div className="mt-3 space-y-1.5">
                 {passwordRequirements.map((req) => (
-                  <div key={req.label} className="flex items-center gap-2 text-sm">
+                  <div key={req.labelKey} className="flex items-center gap-2 text-sm">
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${
                       req.met ? 'bg-green-600' : 'bg-[#1a1a2e]/20'
                     }`}>
                       {req.met && <Check className="w-3 h-3 text-white" />}
                     </div>
                     <span className={req.met ? 'text-[#1a1a2e] font-medium' : 'text-[#1a1a2e]/60'}>
-                      {req.label}
+                      {t(req.labelKey)}
                     </span>
                   </div>
                 ))}
@@ -381,7 +383,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-base font-semibold text-[#1a1a2e]">Confirmer le mot de passe</Label>
+              <Label htmlFor="confirmPassword" className="text-base font-semibold text-[#1a1a2e]">{t('signup.confirmPassword')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
@@ -396,7 +398,7 @@ const Signup = () => {
               </div>
               {confirmPassword && password !== confirmPassword && (
                 <p className="text-sm text-destructive font-medium mt-1">
-                  Les mots de passe ne correspondent pas
+                  {t('signup.errors.passwordMismatch')}
                 </p>
               )}
             </div>
@@ -408,26 +410,26 @@ const Signup = () => {
               className="w-full mt-6"
               disabled={loading || emailExists}
             >
-              {loading ? 'Création en cours...' : 'Créer mon compte'}
+              {loading ? t('signup.loading') : t('signup.submit')}
             </Button>
           </form>
 
           <div className="mt-5 text-center text-sm text-[#1a1a2e]/70">
-            En créant un compte, vous acceptez nos{' '}
+            {t('signup.terms')}{' '}
             <Link to="/terms" className="text-secondary font-medium hover:text-secondary/80">
-              Conditions d'utilisation
+              {t('signup.termsLink')}
             </Link>{' '}
-            et notre{' '}
+            {t('signup.and')}{' '}
             <Link to="/privacy" className="text-secondary font-medium hover:text-secondary/80">
-              Politique de confidentialité
+              {t('signup.privacyLink')}
             </Link>
           </div>
 
           <div className="mt-5 text-center">
             <p className="text-[#1a1a2e]/80 text-base">
-              Déjà un compte ?{' '}
+              {t('signup.hasAccount')}{' '}
               <Link to="/login" className="text-secondary font-semibold hover:text-secondary/80 transition-colors">
-                Se connecter
+                {t('signup.login')}
               </Link>
             </p>
           </div>

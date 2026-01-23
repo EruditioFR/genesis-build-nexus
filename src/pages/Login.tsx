@@ -7,10 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.jpg';
 
 const Login = () => {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,15 +30,15 @@ const Login = () => {
     if (error) {
       toast({
         variant: 'destructive',
-        title: 'Erreur de connexion',
+        title: t('login.errors.title'),
         description: error.message === 'Invalid login credentials' 
-          ? 'Email ou mot de passe incorrect' 
+          ? t('login.errors.invalidCredentials') 
           : error.message,
       });
     } else {
       toast({
-        title: 'Bienvenue !',
-        description: 'Connexion réussie',
+        title: t('login.success.title'),
+        description: t('login.success.description'),
       });
       navigate('/dashboard');
     }
@@ -47,28 +49,28 @@ const Login = () => {
   const tutorialSteps = [
     {
       icon: Shield,
-      title: "Connexion sécurisée",
-      description: "Vos identifiants sont protégés par un chiffrement de niveau bancaire."
+      titleKey: "login.tutorial.secure.title",
+      descriptionKey: "login.tutorial.secure.description"
     },
     {
       icon: Heart,
-      title: "Retrouvez vos souvenirs",
-      description: "Accédez instantanément à toutes vos capsules mémorielles préservées."
+      titleKey: "login.tutorial.memories.title",
+      descriptionKey: "login.tutorial.memories.description"
     },
     {
       icon: Users,
-      title: "Votre famille vous attend",
-      description: "Découvrez les nouveaux souvenirs partagés par vos proches."
+      titleKey: "login.tutorial.family.title",
+      descriptionKey: "login.tutorial.family.description"
     },
     {
       icon: Clock,
-      title: "Reprenez où vous étiez",
-      description: "Continuez à enrichir votre chronologie familiale et votre arbre."
+      titleKey: "login.tutorial.continue.title",
+      descriptionKey: "login.tutorial.continue.description"
     },
     {
       icon: Sparkles,
-      title: "Nouveautés à découvrir",
-      description: "L'assistant IA a de nouvelles suggestions pour vos récits."
+      titleKey: "login.tutorial.discover.title",
+      descriptionKey: "login.tutorial.discover.description"
     }
   ];
 
@@ -103,18 +105,18 @@ const Login = () => {
             </Link>
 
             <h1 className="text-3xl lg:text-4xl font-display font-bold text-white mb-3 leading-tight">
-              Bon retour parmi nous !
+              {t('login.welcomeBack')}
             </h1>
             
             <p className="text-lg text-white/80 max-w-md mb-8">
-              Votre famille et vos souvenirs vous attendent
+              {t('login.welcomeSubtitle')}
             </p>
 
             {/* Tutorial steps */}
             <div className="space-y-5">
               {tutorialSteps.map((step, index) => (
                 <motion.div 
-                  key={step.title}
+                  key={step.titleKey}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -124,8 +126,8 @@ const Login = () => {
                     <step.icon className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold mb-1">{step.title}</h3>
-                    <p className="text-white/70 text-sm leading-relaxed">{step.description}</p>
+                    <h3 className="text-white font-semibold mb-1">{t(step.titleKey)}</h3>
+                    <p className="text-white/70 text-sm leading-relaxed">{t(step.descriptionKey)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -144,7 +146,7 @@ const Login = () => {
                     <div key={i} className="w-8 h-8 rounded-full bg-secondary/30 border-2 border-white/20" />
                   ))}
                 </div>
-                <span>+2,000 familles nous font confiance</span>
+                <span>{t('login.trustIndicator')}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -162,22 +164,22 @@ const Login = () => {
 
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#1a1a2e] mb-2">
-              Connexion
+              {t('login.title')}
             </h2>
             <p className="text-[#1a1a2e]/70 text-base">
-              Entrez vos identifiants pour accéder à votre espace
+              {t('login.subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">Adresse email</Label>
+              <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">{t('login.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="vous@exemple.com"
+                  placeholder={t('login.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
@@ -188,12 +190,12 @@ const Login = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">Mot de passe</Label>
+                <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">{t('login.password')}</Label>
                 <Link 
                   to="/forgot-password" 
                   className="text-sm text-secondary hover:text-secondary/80 transition-colors"
                 >
-                  Mot de passe oublié ?
+                  {t('login.forgotPassword')}
                 </Link>
               </div>
               <div className="relative">
@@ -224,15 +226,15 @@ const Login = () => {
               className="w-full mt-6"
               disabled={loading}
             >
-              {loading ? 'Connexion en cours...' : 'Se connecter'}
+              {loading ? t('login.loading') : t('login.submit')}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-[#1a1a2e]/80 text-base">
-              Pas encore de compte ?{' '}
+              {t('login.noAccount')}{' '}
               <Link to="/signup" className="text-secondary font-semibold hover:text-secondary/80 transition-colors">
-                Créer un compte
+                {t('login.createAccount')}
               </Link>
             </p>
           </div>
@@ -242,15 +244,15 @@ const Login = () => {
             <div className="flex items-center justify-center gap-4 md:gap-6 text-sm text-[#1a1a2e]/60 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
-                <span>Sécurisé SSL</span>
+                <span>{t('login.security.ssl')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span>🇫🇷</span>
-                <span>Données en France</span>
+                <span>{t('login.security.france')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span>🔒</span>
-                <span>RGPD</span>
+                <span>{t('login.security.gdpr')}</span>
               </div>
             </div>
           </div>
