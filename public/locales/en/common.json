@@ -10,6 +10,11 @@
     "profile": "My profile",
     "logout": "Sign out"
   },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "startFree": "Get started free"
+  },
   "footer": {
     "tagline": "Preserve your family memories for future generations.",
     "product": "Product",
