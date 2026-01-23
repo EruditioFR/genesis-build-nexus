@@ -1,11 +1,24 @@
 {
+  "loading": "Cargando recuerdos...",
+  "loadingSingle": "Cargando recuerdo...",
+  "notFound": "Recuerdo no encontrado",
+  "backToHome": "Volver al inicio",
+  "backToList": "Volver",
+  "backToDetail": "Volver al recuerdo",
   "create": {
+    "pageTitle": "Añadir un recuerdo",
+    "pageSubtitle": "Preserva un recuerdo precioso",
     "title": "Nueva cápsula",
-    "titlePlaceholder": "Título de tu recuerdo",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Ej: Vacaciones de verano 2024",
+    "titleRequired": "El título es obligatorio",
+    "titleMaxLength": "El título no puede superar los 100 caracteres",
     "description": "Descripción",
-    "descriptionPlaceholder": "Describe este recuerdo...",
+    "descriptionPlaceholder": "Describe brevemente esta cápsula...",
+    "descriptionMaxLength": "La descripción no puede superar los 500 caracteres",
     "content": "Contenido",
-    "contentPlaceholder": "Cuenta tu historia...",
+    "contentPlaceholder": "Escribe tu texto, carta o historia...",
+    "contentMaxLength": "El contenido no puede superar los 10.000 caracteres",
     "memoryDate": "Fecha del recuerdo",
     "category": "Categoría",
     "tags": "Etiquetas",
@@ -14,7 +27,23 @@
     "addMedia": "Añadir medios",
     "publish": "Publicar",
     "saveDraft": "Guardar como borrador",
-    "schedule": "Programar publicación"
+    "schedule": "Programar publicación",
+    "typeLabel": "Tipo de recuerdo",
+    "uploadError": "Error al subir los archivos. Por favor, corrige los errores e inténtalo de nuevo.",
+    "successPublished": "¡Recuerdo publicado con éxito!",
+    "successScheduled": "¡Recuerdo programado con éxito!",
+    "successDraft": "Borrador guardado",
+    "saveError": "Error al guardar"
+  },
+  "edit": {
+    "pageTitle": "Editar recuerdo",
+    "pageSubtitle": "Actualiza tu recuerdo",
+    "existingMedia": "Medios existentes",
+    "addNewMedia": "Añadir nuevos medios",
+    "removeMedia": "Eliminar",
+    "successPublished": "¡Recuerdo publicado con éxito!",
+    "successSaved": "Cambios guardados",
+    "loadError": "Error al cargar el recuerdo"
   },
   "types": {
     "text": "Texto",
@@ -43,40 +72,83 @@
     "delete": "Eliminar",
     "share": "Compartir",
     "export": "Exportar",
+    "exportPdf": "Exportar a PDF",
+    "exportZip": "Exportar a ZIP",
+    "exportSuccess": "Recuerdo exportado",
+    "exportError": "Error al exportar",
     "comments": "Comentarios",
     "noComments": "Sin comentarios",
     "addComment": "Añadir comentario",
     "linkedPersons": "Personas relacionadas",
     "createdAt": "Creado el",
-    "updatedAt": "Actualizado el"
+    "updatedAt": "Actualizado el",
+    "memoryOf": "Recuerdo de",
+    "sharedWith": "Compartido con",
+    "content": "Contenido",
+    "mediaGallery": "Galería de medios",
+    "viewInStory": "Ver en modo historia",
+    "changeHeaderImage": "Cambiar imagen de cabecera",
+    "deleteSuccess": "Recuerdo eliminado",
+    "deleteError": "Error al eliminar"
   },
   "list": {
-    "title": "Mis cápsulas",
-    "empty": "Sin cápsulas",
-    "emptySubtitle": "Crea tu primera cápsula para comenzar",
+    "title": "Mis recuerdos",
+    "count_one": "{{count}} recuerdo en total",
+    "count_other": "{{count}} recuerdos en total",
+    "newCapsule": "Nuevo recuerdo",
+    "empty": "Sin recuerdos añadidos",
+    "emptySubtitle": "Empieza a preservar tus recuerdos ahora",
+    "addFirst": "Añadir mi primer recuerdo",
+    "noResults": "Sin resultados",
+    "noResultsSubtitle": "Intenta modificar tus filtros de búsqueda",
+    "searchPlaceholder": "Buscar por título, descripción o etiqueta...",
     "filters": {
       "all": "Todas",
       "drafts": "Borradores",
       "published": "Publicadas",
       "scheduled": "Programadas"
     },
+    "typeFilters": {
+      "all": "Todos los tipos",
+      "text": "Texto",
+      "photo": "Foto",
+      "video": "Video",
+      "audio": "Audio",
+      "mixed": "Mixto"
+    },
+    "statusFilters": {
+      "all": "Todos los estados",
+      "draft": "Borrador",
+      "published": "Publicado",
+      "scheduled": "Programado",
+      "archived": "Archivado"
+    },
+    "categoryFilters": {
+      "all": "Todas las categorías"
+    },
     "sort": {
       "newest": "Más recientes",
       "oldest": "Más antiguas",
       "title": "Título A-Z"
+    },
+    "actions": {
+      "view": "Ver",
+      "edit": "Editar",
+      "share": "Compartir",
+      "delete": "Eliminar"
     }
   },
   "delete": {
-    "title": "¿Eliminar esta cápsula?",
-    "description": "Esta acción no se puede deshacer. La cápsula y todos sus medios serán eliminados permanentemente.",
+    "title": "¿Eliminar este recuerdo?",
+    "description": "Esta acción no se puede deshacer. El recuerdo y todos sus medios serán eliminados permanentemente.",
     "confirm": "Sí, eliminar",
     "cancel": "Cancelar"
   },
   "share": {
-    "title": "Compartir cápsula",
+    "title": "Compartir recuerdo",
     "selectCircle": "Elegir un círculo",
     "noCircles": "No hay círculos disponibles",
     "createCircle": "Crear un círculo",
-    "shared": "Cápsula compartida exitosamente"
+    "shared": "Recuerdo compartido exitosamente"
   }
 }

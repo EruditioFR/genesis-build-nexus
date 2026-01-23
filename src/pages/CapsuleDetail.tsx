@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
   FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus
@@ -70,22 +71,18 @@ interface CapsuleSubCategoryWithData {
   sub_category: SubCategory;
 }
 
-const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
-  text: { icon: FileText, label: 'Texte', color: 'bg-primary/10 text-primary' },
-  photo: { icon: Image, label: 'Photo', color: 'bg-secondary/10 text-secondary' },
-  video: { icon: Video, label: 'Vidéo', color: 'bg-accent/10 text-accent' },
-  audio: { icon: Music, label: 'Audio', color: 'bg-navy-light/10 text-navy-light' },
-  mixed: { icon: Layers, label: 'Mixte', color: 'bg-terracotta/10 text-terracotta' },
-};
-
-const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
-  draft: { label: 'Brouillon', color: 'bg-muted text-muted-foreground' },
-  published: { label: 'Publiée', color: 'bg-green-100 text-green-700' },
-  scheduled: { label: 'Programmée', color: 'bg-blue-100 text-blue-700' },
-  archived: { label: 'Archivée', color: 'bg-gray-100 text-gray-600' },
+const getDateLocale = (lang: string) => {
+  switch (lang) {
+    case 'en': return enUS;
+    case 'es': return es;
+    case 'ko': return ko;
+    case 'zh': return zhCN;
+    default: return fr;
+  }
 };
 
 const CapsuleDetail = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { id } = useParams<{ id: string }>();
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -97,7 +94,6 @@ const CapsuleDetail = () => {
   const [capsuleSubCategories, setCapsuleSubCategories] = useState<CapsuleSubCategoryWithData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
-
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -113,6 +109,21 @@ const CapsuleDetail = () => {
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
+
+  const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
+    text: { icon: FileText, label: t('types.text'), color: 'bg-primary/10 text-primary' },
+    photo: { icon: Image, label: t('types.photo'), color: 'bg-secondary/10 text-secondary' },
+    video: { icon: Video, label: t('types.video'), color: 'bg-accent/10 text-accent' },
+    audio: { icon: Music, label: t('types.audio'), color: 'bg-navy-light/10 text-navy-light' },
+    mixed: { icon: Layers, label: t('types.mixed'), color: 'bg-terracotta/10 text-terracotta' },
+  };
+
+  const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
+    draft: { label: t('status.draft'), color: 'bg-muted text-muted-foreground' },
+    published: { label: t('status.published'), color: 'bg-green-100 text-green-700' },
+    scheduled: { label: t('status.scheduled'), color: 'bg-blue-100 text-blue-700' },
+    archived: { label: t('status.archived'), color: 'bg-gray-100 text-gray-600' },
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -141,7 +152,7 @@ const CapsuleDetail = () => {
         .maybeSingle();
 
       if (capsuleError || !capsuleData) {
-        toast.error('Souvenir introuvable');
+        toast.error(t('notFound'));
         navigate('/capsules');
         return;
       }
@@ -209,7 +220,7 @@ const CapsuleDetail = () => {
     };
 
     if (user && id) fetchData();
-  }, [user, id, navigate]);
+  }, [user, id, navigate, t]);
 
   // Load hero image URL - prioritize thumbnail_url, then first image
   useEffect(() => {
@@ -249,9 +260,9 @@ const CapsuleDetail = () => {
       .eq('id', capsule.id);
 
     if (error) {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('detail.deleteError'));
     } else {
-      toast.success('Souvenir supprimé');
+      toast.success(t('detail.deleteSuccess'));
       navigate('/capsules');
     }
 
@@ -284,10 +295,10 @@ const CapsuleDetail = () => {
     setIsExporting(true);
     try {
       await exportCapsuleToPDF(capsule, medias, sharedCircles);
-      toast.success('Souvenir exporté en PDF');
+      toast.success(t('detail.exportSuccess') + ' PDF');
     } catch (error) {
       console.error('Export PDF error:', error);
-      toast.error('Erreur lors de l\'export PDF');
+      toast.error(t('detail.exportError') + ' PDF');
     } finally {
       setIsExporting(false);
     }
@@ -330,10 +341,10 @@ const CapsuleDetail = () => {
       }
 
       await exportCapsuleToZIP(capsule, medias, sharedCircles, commentsWithNames);
-      toast.success('Souvenir exporté en ZIP');
+      toast.success(t('detail.exportSuccess') + ' ZIP');
     } catch (error) {
       console.error('Export ZIP error:', error);
-      toast.error('Erreur lors de l\'export ZIP');
+      toast.error(t('detail.exportError') + ' ZIP');
     } finally {
       setIsExporting(false);
     }
@@ -344,7 +355,7 @@ const CapsuleDetail = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement du souvenir...</p>
+          <p className="text-muted-foreground">{t('loadingSingle')}</p>
         </div>
       </div>
     );
@@ -355,6 +366,7 @@ const CapsuleDetail = () => {
   const typeInfo = typeConfig[capsule.capsule_type];
   const statusInfo = statusConfig[capsule.status];
   const Icon = typeInfo.icon;
+  const dateLocale = getDateLocale(i18n.language);
 
   // Get hero image from medias (first image)
   const heroImage = medias.find(m => m.file_type.startsWith('image/'));
@@ -409,7 +421,7 @@ const CapsuleDetail = () => {
                 className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour
+                {t('backToList')}
               </Button>
 
               {/* Actions on hero */}
@@ -419,7 +431,7 @@ const CapsuleDetail = () => {
                   size="icon"
                   onClick={() => setHeaderSelectorOpen(true)}
                   className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
-                  title="Changer l'image d'en-tête"
+                  title={t('detail.changeHeaderImage')}
                 >
                   <ImagePlus className="w-4 h-4" />
                 </Button>
@@ -446,17 +458,17 @@ const CapsuleDetail = () => {
                     <DropdownMenuItem asChild className="gap-2">
                       <Link to={`/capsules/${capsule.id}/edit`}>
                         <Edit className="w-4 h-4" />
-                        Modifier
+                        {t('detail.edit')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
                       <FileDown className="w-4 h-4" />
-                      Exporter en PDF
+                      {t('detail.exportPdf')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
                       <FolderArchive className="w-4 h-4" />
-                      Exporter en ZIP
+                      {t('detail.exportZip')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -464,7 +476,7 @@ const CapsuleDetail = () => {
                       onClick={() => setDeleteDialogOpen(true)}
                     >
                       <Trash2 className="w-4 h-4" />
-                      Supprimer
+                      {t('detail.delete')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -496,13 +508,13 @@ const CapsuleDetail = () => {
                       <p className="text-lg text-white/90 font-medium flex items-center gap-2">
                         <CalendarHeart className="w-5 h-5" />
                         {capsule.memory_date_precision === 'year' ? (
-                          format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
+                          format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })
                         ) : capsule.memory_date_precision === 'month' ? (
-                          format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
+                          format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale })
                         ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
-                          `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
+                          `${format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })} - ${capsule.memory_date_year_end}`
                         ) : (
-                          format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+                          format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: dateLocale })
                         )}
                       </p>
                     )}
@@ -521,7 +533,7 @@ const CapsuleDetail = () => {
                   className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Retour aux souvenirs
+                  {t('backToList')}
                 </Button>
 
                 <motion.div
@@ -542,13 +554,13 @@ const CapsuleDetail = () => {
                         <p className="text-lg text-secondary font-medium flex items-center gap-2 mt-1 mb-3">
                           <CalendarHeart className="w-5 h-5" />
                           {capsule.memory_date_precision === 'year' ? (
-                            format(new Date(capsule.memory_date), 'yyyy', { locale: fr })
+                            format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })
                           ) : capsule.memory_date_precision === 'month' ? (
-                            format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: fr })
+                            format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale })
                           ) : capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ? (
-                            `${format(new Date(capsule.memory_date), 'yyyy', { locale: fr })} - ${capsule.memory_date_year_end}`
+                            `${format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })} - ${capsule.memory_date_year_end}`
                           ) : (
-                            format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: fr })
+                            format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: dateLocale })
                           )}
                         </p>
                       )}
@@ -578,7 +590,7 @@ const CapsuleDetail = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => setHeaderSelectorOpen(true)}
-                      title="Ajouter une image d'en-tête"
+                      title={t('detail.changeHeaderImage')}
                     >
                       <ImagePlus className="w-4 h-4" />
                     </Button>
@@ -599,17 +611,17 @@ const CapsuleDetail = () => {
                         <DropdownMenuItem asChild className="gap-2">
                           <Link to={`/capsules/${capsule.id}/edit`}>
                             <Edit className="w-4 h-4" />
-                            Modifier
+                            {t('detail.edit')}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
                           <FileDown className="w-4 h-4" />
-                          Exporter en PDF
+                          {t('detail.exportPdf')}
                         </DropdownMenuItem>
                         <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
                           <FolderArchive className="w-4 h-4" />
-                          Exporter en ZIP
+                          {t('detail.exportZip')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -617,7 +629,7 @@ const CapsuleDetail = () => {
                           onClick={() => setDeleteDialogOpen(true)}
                         >
                           <Trash2 className="w-4 h-4" />
-                          Supprimer
+                          {t('detail.delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -667,7 +679,7 @@ const CapsuleDetail = () => {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                       <Image className="w-5 h-5 text-secondary" />
-                      Médias
+                      {t('detail.mediaGallery')}
                       <span className="text-sm font-normal text-muted-foreground">({medias.length})</span>
                     </h2>
                     <Button
@@ -678,7 +690,7 @@ const CapsuleDetail = () => {
                       className="gap-2"
                     >
                       <Play className="w-4 h-4" />
-                      {storyLoading ? 'Chargement...' : 'Diaporama'}
+                      {t('detail.viewInStory')}
                     </Button>
                   </div>
                   <MediaGallery 
@@ -727,9 +739,9 @@ const CapsuleDetail = () => {
                       <Calendar className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Créé le</p>
+                      <p className="text-xs text-muted-foreground">{t('detail.createdAt')}</p>
                       <p className="font-medium text-foreground">
-                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: dateLocale })}
                       </p>
                     </div>
                   </div>
@@ -737,7 +749,7 @@ const CapsuleDetail = () => {
                   {/* Sub-categories */}
                   {capsuleSubCategories.length > 0 && (
                     <div className="pt-3 border-t border-border">
-                      <p className="text-xs text-muted-foreground mb-2">Sous-catégories</p>
+                      <p className="text-xs text-muted-foreground mb-2">{t('categories.subcategories', 'Sous-catégories')}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {capsuleSubCategories.map((csc) => csc.sub_category && (
                           <SubCategoryBadge 
@@ -762,7 +774,7 @@ const CapsuleDetail = () => {
                 >
                   <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                     <Tag className="w-4 h-4" />
-                    Mots-clés
+                    {t('create.tags')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {capsule.tags.map((tag) => (
@@ -784,16 +796,16 @@ const CapsuleDetail = () => {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <Users className="w-4 h-4" />
-                    Partagé avec
+                    {t('detail.sharedWith')}
                   </h3>
                   <Button variant="ghost" size="sm" onClick={() => setShareDialogOpen(true)} className="h-7 px-2 text-xs">
-                    Gérer
+                    {t('detail.edit')}
                   </Button>
                 </div>
 
                 {sharedCircles.length === 0 ? (
                   <p className="text-muted-foreground text-sm">
-                    Aucun partage
+                    {t('share.noCircles')}
                   </p>
                 ) : (
                   <div className="flex flex-wrap gap-2">
@@ -833,15 +845,15 @@ const CapsuleDetail = () => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer cette capsule ?</AlertDialogTitle>
+            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. La capsule "{capsule.title}" et tous ses médias seront définitivement supprimés.
+              {t('delete.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Supprimer
+              {t('delete.confirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

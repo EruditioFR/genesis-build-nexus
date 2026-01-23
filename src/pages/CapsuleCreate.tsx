@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,21 +49,8 @@ import type { Database } from '@/integrations/supabase/types';
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
-const capsuleSchema = z.object({
-  title: z.string()
-    .min(1, 'Le titre est requis')
-    .max(100, 'Le titre ne peut pas dépasser 100 caractères'),
-  description: z.string()
-    .max(500, 'La description ne peut pas dépasser 500 caractères')
-    .optional(),
-  content: z.string()
-    .max(10000, 'Le contenu ne peut pas dépasser 10 000 caractères')
-    .optional(),
-});
-
-type CapsuleFormValues = z.infer<typeof capsuleSchema>;
-
 const CapsuleCreate = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -96,6 +84,20 @@ const CapsuleCreate = () => {
 
   // Get prompt from URL if present
   const promptFromUrl = searchParams.get('prompt');
+
+  const capsuleSchema = z.object({
+    title: z.string()
+      .min(1, t('create.titleRequired'))
+      .max(100, t('create.titleMaxLength')),
+    description: z.string()
+      .max(500, t('create.descriptionMaxLength'))
+      .optional(),
+    content: z.string()
+      .max(10000, t('create.contentMaxLength'))
+      .optional(),
+  });
+
+  type CapsuleFormValues = z.infer<typeof capsuleSchema>;
 
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
@@ -153,7 +155,7 @@ const CapsuleCreate = () => {
       if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
-        toast.error('Erreur lors de l\'upload des fichiers. Veuillez corriger les erreurs et réessayer.');
+        toast.error(t('create.uploadError'));
         return;
       }
       
@@ -274,15 +276,15 @@ const CapsuleCreate = () => {
       }
 
       if (finalStatus === 'scheduled') {
-        toast.success('Souvenir programmé avec succès !');
+        toast.success(t('create.successScheduled'));
       } else if (status === 'published') {
-        toast.success('Souvenir publié avec succès !');
+        toast.success(t('create.successPublished'));
       } else {
-        toast.success('Brouillon enregistré');
+        toast.success(t('create.successDraft'));
       }
       navigate('/dashboard');
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la sauvegarde');
+      toast.error(error.message || t('create.saveError'));
     } finally {
       setIsSaving(false);
     }
@@ -365,7 +367,7 @@ const CapsuleCreate = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            {t('backToHome')}
           </Button>
           
           <div className="flex items-center gap-3">
@@ -374,10 +376,10 @@ const CapsuleCreate = () => {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Ajouter un souvenir
+                {t('create.pageTitle')}
               </h1>
               <p className="text-muted-foreground text-sm">
-                Préservez un souvenir précieux
+                {t('create.pageSubtitle')}
               </p>
             </div>
           </div>
@@ -410,7 +412,7 @@ const CapsuleCreate = () => {
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-type">
               <Label className="text-base font-medium mb-4 block">
-                Type de souvenir
+                {t('create.typeLabel')}
               </Label>
               <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
             </div>
@@ -423,10 +425,10 @@ const CapsuleCreate = () => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Titre *</FormLabel>
+                      <FormLabel>{t('create.titleLabel')} *</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Ex: Vacances en Bretagne 2024"
+                          placeholder={t('create.titlePlaceholder')}
                           className="text-lg"
                           {...field}
                         />
@@ -441,10 +443,10 @@ const CapsuleCreate = () => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{t('create.description')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Décrivez brièvement cette capsule..."
+                          placeholder={t('create.descriptionPlaceholder')}
                           className="resize-none"
                           rows={3}
                           {...field}
@@ -461,10 +463,10 @@ const CapsuleCreate = () => {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Contenu</FormLabel>
+                        <FormLabel>{t('create.content')}</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Écrivez votre texte, lettre ou récit..."
+                            placeholder={t('create.contentPlaceholder')}
                             className="resize-none min-h-[200px]"
                             rows={8}
                             {...field}
@@ -488,11 +490,11 @@ const CapsuleCreate = () => {
                 data-tour="capsule-media"
               >
                 <Label className="text-base font-medium mb-4 block">
-                  Fichiers médias
+                  {t('create.media')}
                 </Label>
                 {mediaError && (
                   <p className="text-sm text-destructive mb-4">
-                    Certains fichiers n'ont pas pu être uploadés. Veuillez les supprimer ou réessayer.
+                    {t('create.uploadError')}
                   </p>
                 )}
                 <MediaUpload
@@ -524,10 +526,10 @@ const CapsuleCreate = () => {
             <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-date">
               <Label className="text-base font-medium mb-4 block">
                 <CalendarHeart className="w-4 h-4 inline-block mr-2" />
-                Date du souvenir
+                {t('create.memoryDate')}
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.
+                {t('create.memoryDateDesc', 'Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.')}
               </p>
               <MemoryDateSelector
                 value={memoryDate}
@@ -538,7 +540,7 @@ const CapsuleCreate = () => {
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-tags">
               <Label className="text-base font-medium mb-4 block">
-                Mots-clés
+                {t('create.tags')}
               </Label>
               <TagInput tags={tags} onChange={setTags} />
             </div>
@@ -571,7 +573,7 @@ const CapsuleCreate = () => {
                 disabled={isSaving}
               >
                 <Save className="w-4 h-4" />
-                Enregistrer en brouillon
+                {t('create.saveDraft')}
               </Button>
               <Button
                 size="lg"
@@ -580,7 +582,7 @@ const CapsuleCreate = () => {
                 disabled={isSaving}
               >
                 <Send className="w-4 h-4" />
-                Publier la capsule
+                {t('create.publish')}
               </Button>
             </div>
           </motion.div>

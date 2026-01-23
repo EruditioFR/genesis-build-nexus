@@ -1,11 +1,24 @@
 {
+  "loading": "Loading memories...",
+  "loadingSingle": "Loading memory...",
+  "notFound": "Memory not found",
+  "backToHome": "Back to home",
+  "backToList": "Back",
+  "backToDetail": "Back to memory",
   "create": {
+    "pageTitle": "Add a memory",
+    "pageSubtitle": "Preserve a precious memory",
     "title": "New capsule",
-    "titlePlaceholder": "Title of your memory",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Summer vacation 2024",
+    "titleRequired": "Title is required",
+    "titleMaxLength": "Title cannot exceed 100 characters",
     "description": "Description",
-    "descriptionPlaceholder": "Describe this memory...",
+    "descriptionPlaceholder": "Briefly describe this capsule...",
+    "descriptionMaxLength": "Description cannot exceed 500 characters",
     "content": "Content",
-    "contentPlaceholder": "Tell your story...",
+    "contentPlaceholder": "Write your text, letter or story...",
+    "contentMaxLength": "Content cannot exceed 10,000 characters",
     "memoryDate": "Memory date",
     "category": "Category",
     "tags": "Tags",
@@ -14,7 +27,23 @@
     "addMedia": "Add media",
     "publish": "Publish",
     "saveDraft": "Save as draft",
-    "schedule": "Schedule publication"
+    "schedule": "Schedule publication",
+    "typeLabel": "Memory type",
+    "uploadError": "Error uploading files. Please fix the errors and try again.",
+    "successPublished": "Memory published successfully!",
+    "successScheduled": "Memory scheduled successfully!",
+    "successDraft": "Draft saved",
+    "saveError": "Error saving"
+  },
+  "edit": {
+    "pageTitle": "Edit memory",
+    "pageSubtitle": "Update your memory",
+    "existingMedia": "Existing media",
+    "addNewMedia": "Add new media",
+    "removeMedia": "Remove",
+    "successPublished": "Memory published successfully!",
+    "successSaved": "Changes saved",
+    "loadError": "Error loading memory"
   },
   "types": {
     "text": "Text",
@@ -43,40 +72,83 @@
     "delete": "Delete",
     "share": "Share",
     "export": "Export",
+    "exportPdf": "Export to PDF",
+    "exportZip": "Export to ZIP",
+    "exportSuccess": "Memory exported",
+    "exportError": "Export error",
     "comments": "Comments",
     "noComments": "No comments",
     "addComment": "Add a comment",
     "linkedPersons": "Linked people",
     "createdAt": "Created on",
-    "updatedAt": "Updated on"
+    "updatedAt": "Updated on",
+    "memoryOf": "Memory of",
+    "sharedWith": "Shared with",
+    "content": "Content",
+    "mediaGallery": "Media gallery",
+    "viewInStory": "View in story mode",
+    "changeHeaderImage": "Change header image",
+    "deleteSuccess": "Memory deleted",
+    "deleteError": "Error deleting"
   },
   "list": {
-    "title": "My capsules",
-    "empty": "No capsules",
-    "emptySubtitle": "Create your first capsule to get started",
+    "title": "My memories",
+    "count_one": "{{count}} memory total",
+    "count_other": "{{count}} memories total",
+    "newCapsule": "New memory",
+    "empty": "No memories added",
+    "emptySubtitle": "Start preserving your memories now",
+    "addFirst": "Add my first memory",
+    "noResults": "No results",
+    "noResultsSubtitle": "Try modifying your search filters",
+    "searchPlaceholder": "Search by title, description or tag...",
     "filters": {
       "all": "All",
       "drafts": "Drafts",
       "published": "Published",
       "scheduled": "Scheduled"
     },
+    "typeFilters": {
+      "all": "All types",
+      "text": "Text",
+      "photo": "Photo",
+      "video": "Video",
+      "audio": "Audio",
+      "mixed": "Mixed"
+    },
+    "statusFilters": {
+      "all": "All statuses",
+      "draft": "Draft",
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "archived": "Archived"
+    },
+    "categoryFilters": {
+      "all": "All categories"
+    },
     "sort": {
       "newest": "Newest first",
       "oldest": "Oldest first",
       "title": "Title A-Z"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "share": "Share",
+      "delete": "Delete"
     }
   },
   "delete": {
-    "title": "Delete this capsule?",
-    "description": "This action cannot be undone. The capsule and all its media will be permanently deleted.",
+    "title": "Delete this memory?",
+    "description": "This action cannot be undone. The memory and all its media will be permanently deleted.",
     "confirm": "Yes, delete",
     "cancel": "Cancel"
   },
   "share": {
-    "title": "Share capsule",
+    "title": "Share memory",
     "selectCircle": "Choose a circle",
     "noCircles": "No circles available",
     "createCircle": "Create a circle",
-    "shared": "Capsule shared successfully"
+    "shared": "Memory shared successfully"
   }
 }

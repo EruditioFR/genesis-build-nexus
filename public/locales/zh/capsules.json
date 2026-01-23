@@ -1,1 +1,154 @@
-{ "create": { "title": "新胶囊", "titlePlaceholder": "记忆标题", "publish": "发布", "saveDraft": "保存草稿" }, "types": { "text": "文字", "photo": "照片", "video": "视频", "audio": "音频", "mixed": "混合" }, "status": { "draft": "草稿", "published": "已发布", "scheduled": "已安排", "archived": "已归档" }, "list": { "title": "我的胶囊", "empty": "没有胶囊", "filters": { "all": "全部", "drafts": "草稿", "published": "已发布", "scheduled": "已安排" } }, "delete": { "title": "删除此胶囊?", "description": "此操作无法撤销。胶囊和所有媒体将被永久删除。", "confirm": "是的,删除", "cancel": "取消" } }
+{
+  "loading": "加载回忆中...",
+  "loadingSingle": "加载回忆中...",
+  "notFound": "回忆未找到",
+  "backToHome": "返回首页",
+  "backToList": "返回",
+  "backToDetail": "返回回忆",
+  "create": {
+    "pageTitle": "添加回忆",
+    "pageSubtitle": "保存珍贵的回忆",
+    "title": "新胶囊",
+    "titleLabel": "标题",
+    "titlePlaceholder": "例如：2024年夏日度假",
+    "titleRequired": "标题是必填项",
+    "titleMaxLength": "标题不能超过100个字符",
+    "description": "描述",
+    "descriptionPlaceholder": "简要描述这个胶囊...",
+    "descriptionMaxLength": "描述不能超过500个字符",
+    "content": "内容",
+    "contentPlaceholder": "写下你的文字、信件或故事...",
+    "contentMaxLength": "内容不能超过10,000个字符",
+    "memoryDate": "回忆日期",
+    "category": "分类",
+    "tags": "标签",
+    "tagsPlaceholder": "添加标签...",
+    "media": "媒体",
+    "addMedia": "添加媒体",
+    "publish": "发布",
+    "saveDraft": "保存草稿",
+    "schedule": "定时发布",
+    "typeLabel": "回忆类型",
+    "uploadError": "文件上传错误。请修正错误后重试。",
+    "successPublished": "回忆发布成功！",
+    "successScheduled": "回忆定时成功！",
+    "successDraft": "草稿已保存",
+    "saveError": "保存错误"
+  },
+  "edit": {
+    "pageTitle": "编辑回忆",
+    "pageSubtitle": "更新你的回忆",
+    "existingMedia": "现有媒体",
+    "addNewMedia": "添加新媒体",
+    "removeMedia": "删除",
+    "successPublished": "回忆发布成功！",
+    "successSaved": "更改已保存",
+    "loadError": "加载回忆错误"
+  },
+  "types": {
+    "text": "文字",
+    "photo": "照片",
+    "video": "视频",
+    "audio": "音频",
+    "mixed": "混合"
+  },
+  "status": {
+    "draft": "草稿",
+    "published": "已发布",
+    "scheduled": "已安排",
+    "archived": "已归档"
+  },
+  "categories": {
+    "childhood": "童年",
+    "family": "家庭",
+    "travel": "旅行",
+    "celebrations": "庆祝活动",
+    "career": "职业",
+    "hobbies": "爱好",
+    "traditions": "传统"
+  },
+  "detail": {
+    "edit": "编辑",
+    "delete": "删除",
+    "share": "分享",
+    "export": "导出",
+    "exportPdf": "导出为PDF",
+    "exportZip": "导出为ZIP",
+    "exportSuccess": "回忆已导出",
+    "exportError": "导出错误",
+    "comments": "评论",
+    "noComments": "暂无评论",
+    "addComment": "添加评论",
+    "linkedPersons": "关联的人",
+    "createdAt": "创建于",
+    "updatedAt": "更新于",
+    "memoryOf": "回忆",
+    "sharedWith": "分享给",
+    "content": "内容",
+    "mediaGallery": "媒体库",
+    "viewInStory": "故事模式查看",
+    "changeHeaderImage": "更改头图",
+    "deleteSuccess": "回忆已删除",
+    "deleteError": "删除错误"
+  },
+  "list": {
+    "title": "我的回忆",
+    "count_one": "共 {{count}} 个回忆",
+    "count_other": "共 {{count}} 个回忆",
+    "newCapsule": "新回忆",
+    "empty": "没有回忆",
+    "emptySubtitle": "现在开始保存你的回忆吧",
+    "addFirst": "添加我的第一个回忆",
+    "noResults": "没有结果",
+    "noResultsSubtitle": "尝试修改搜索条件",
+    "searchPlaceholder": "按标题、描述或标签搜索...",
+    "filters": {
+      "all": "全部",
+      "drafts": "草稿",
+      "published": "已发布",
+      "scheduled": "已安排"
+    },
+    "typeFilters": {
+      "all": "所有类型",
+      "text": "文字",
+      "photo": "照片",
+      "video": "视频",
+      "audio": "音频",
+      "mixed": "混合"
+    },
+    "statusFilters": {
+      "all": "所有状态",
+      "draft": "草稿",
+      "published": "已发布",
+      "scheduled": "已安排",
+      "archived": "已归档"
+    },
+    "categoryFilters": {
+      "all": "所有分类"
+    },
+    "sort": {
+      "newest": "最新",
+      "oldest": "最旧",
+      "title": "标题A-Z"
+    },
+    "actions": {
+      "view": "查看",
+      "edit": "编辑",
+      "share": "分享",
+      "delete": "删除"
+    }
+  },
+  "delete": {
+    "title": "删除此回忆？",
+    "description": "此操作无法撤销。回忆和所有媒体将被永久删除。",
+    "confirm": "是的，删除",
+    "cancel": "取消"
+  },
+  "share": {
+    "title": "分享回忆",
+    "selectCircle": "选择圈子",
+    "noCircles": "没有可用的圈子",
+    "createCircle": "创建圈子",
+    "shared": "回忆分享成功"
+  }
+}

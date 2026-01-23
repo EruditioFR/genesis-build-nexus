@@ -1,11 +1,24 @@
 {
+  "loading": "추억 불러오는 중...",
+  "loadingSingle": "추억 불러오는 중...",
+  "notFound": "추억을 찾을 수 없습니다",
+  "backToHome": "홈으로 돌아가기",
+  "backToList": "돌아가기",
+  "backToDetail": "추억으로 돌아가기",
   "create": {
+    "pageTitle": "추억 추가",
+    "pageSubtitle": "소중한 추억을 보존하세요",
     "title": "새 캡슐",
-    "titlePlaceholder": "추억의 제목",
+    "titleLabel": "제목",
+    "titlePlaceholder": "예: 2024년 여름 휴가",
+    "titleRequired": "제목은 필수입니다",
+    "titleMaxLength": "제목은 100자를 초과할 수 없습니다",
     "description": "설명",
-    "descriptionPlaceholder": "이 추억을 설명하세요...",
+    "descriptionPlaceholder": "이 캡슐을 간략히 설명하세요...",
+    "descriptionMaxLength": "설명은 500자를 초과할 수 없습니다",
     "content": "내용",
-    "contentPlaceholder": "이야기를 들려주세요...",
+    "contentPlaceholder": "텍스트, 편지 또는 이야기를 작성하세요...",
+    "contentMaxLength": "내용은 10,000자를 초과할 수 없습니다",
     "memoryDate": "추억 날짜",
     "category": "카테고리",
     "tags": "태그",
@@ -14,7 +27,23 @@
     "addMedia": "미디어 추가",
     "publish": "게시",
     "saveDraft": "임시 저장",
-    "schedule": "예약 게시"
+    "schedule": "예약 게시",
+    "typeLabel": "추억 유형",
+    "uploadError": "파일 업로드 오류. 오류를 수정하고 다시 시도하세요.",
+    "successPublished": "추억이 성공적으로 게시되었습니다!",
+    "successScheduled": "추억이 성공적으로 예약되었습니다!",
+    "successDraft": "임시 저장됨",
+    "saveError": "저장 오류"
+  },
+  "edit": {
+    "pageTitle": "추억 수정",
+    "pageSubtitle": "추억을 업데이트하세요",
+    "existingMedia": "기존 미디어",
+    "addNewMedia": "새 미디어 추가",
+    "removeMedia": "삭제",
+    "successPublished": "추억이 성공적으로 게시되었습니다!",
+    "successSaved": "변경사항 저장됨",
+    "loadError": "추억 불러오기 오류"
   },
   "types": {
     "text": "텍스트",
@@ -43,40 +72,83 @@
     "delete": "삭제",
     "share": "공유",
     "export": "내보내기",
+    "exportPdf": "PDF로 내보내기",
+    "exportZip": "ZIP으로 내보내기",
+    "exportSuccess": "추억 내보내기 완료",
+    "exportError": "내보내기 오류",
     "comments": "댓글",
     "noComments": "댓글 없음",
     "addComment": "댓글 추가",
     "linkedPersons": "관련된 사람들",
     "createdAt": "생성일",
-    "updatedAt": "수정일"
+    "updatedAt": "수정일",
+    "memoryOf": "추억",
+    "sharedWith": "공유 대상",
+    "content": "내용",
+    "mediaGallery": "미디어 갤러리",
+    "viewInStory": "스토리 모드로 보기",
+    "changeHeaderImage": "헤더 이미지 변경",
+    "deleteSuccess": "추억 삭제됨",
+    "deleteError": "삭제 오류"
   },
   "list": {
-    "title": "내 캡슐",
-    "empty": "캡슐 없음",
-    "emptySubtitle": "첫 번째 캡슐을 만들어 시작하세요",
+    "title": "내 추억",
+    "count_one": "총 {{count}}개의 추억",
+    "count_other": "총 {{count}}개의 추억",
+    "newCapsule": "새 추억",
+    "empty": "추억이 없습니다",
+    "emptySubtitle": "지금 바로 추억을 보존하세요",
+    "addFirst": "첫 번째 추억 추가하기",
+    "noResults": "결과 없음",
+    "noResultsSubtitle": "검색 필터를 수정해 보세요",
+    "searchPlaceholder": "제목, 설명 또는 태그로 검색...",
     "filters": {
       "all": "전체",
       "drafts": "초안",
       "published": "게시됨",
       "scheduled": "예약됨"
     },
+    "typeFilters": {
+      "all": "모든 유형",
+      "text": "텍스트",
+      "photo": "사진",
+      "video": "비디오",
+      "audio": "오디오",
+      "mixed": "혼합"
+    },
+    "statusFilters": {
+      "all": "모든 상태",
+      "draft": "초안",
+      "published": "게시됨",
+      "scheduled": "예약됨",
+      "archived": "보관됨"
+    },
+    "categoryFilters": {
+      "all": "모든 카테고리"
+    },
     "sort": {
       "newest": "최신순",
       "oldest": "오래된순",
       "title": "제목 가나다순"
+    },
+    "actions": {
+      "view": "보기",
+      "edit": "수정",
+      "share": "공유",
+      "delete": "삭제"
     }
   },
   "delete": {
-    "title": "이 캡슐을 삭제하시겠습니까?",
-    "description": "이 작업은 취소할 수 없습니다. 캡슐과 모든 미디어가 영구적으로 삭제됩니다.",
+    "title": "이 추억을 삭제하시겠습니까?",
+    "description": "이 작업은 취소할 수 없습니다. 추억과 모든 미디어가 영구적으로 삭제됩니다.",
     "confirm": "예, 삭제",
     "cancel": "취소"
   },
   "share": {
-    "title": "캡슐 공유",
+    "title": "추억 공유",
     "selectCircle": "서클 선택",
     "noCircles": "사용 가능한 서클 없음",
     "createCircle": "서클 만들기",
-    "shared": "캡슐이 성공적으로 공유되었습니다"
+    "shared": "추억이 성공적으로 공유되었습니다"
   }
 }

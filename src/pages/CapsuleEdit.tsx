@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,21 +65,18 @@ interface ExistingMedia {
   position: number | null;
 }
 
-const capsuleSchema = z.object({
-  title: z.string()
-    .min(1, 'Le titre est requis')
-    .max(100, 'Le titre ne peut pas dépasser 100 caractères'),
-  description: z.string()
-    .max(500, 'La description ne peut pas dépasser 500 caractères')
-    .optional(),
-  content: z.string()
-    .max(10000, 'Le contenu ne peut pas dépasser 10 000 caractères')
-    .optional(),
-});
-
-type CapsuleFormValues = z.infer<typeof capsuleSchema>;
+const getDateLocale = (lang: string) => {
+  switch (lang) {
+    case 'en': return enUS;
+    case 'es': return es;
+    case 'ko': return ko;
+    case 'zh': return zhCN;
+    default: return fr;
+  }
+};
 
 const CapsuleEdit = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -100,6 +98,20 @@ const CapsuleEdit = () => {
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
 
+  const capsuleSchema = z.object({
+    title: z.string()
+      .min(1, t('create.titleRequired'))
+      .max(100, t('create.titleMaxLength')),
+    description: z.string()
+      .max(500, t('create.descriptionMaxLength'))
+      .optional(),
+    content: z.string()
+      .max(10000, t('create.contentMaxLength'))
+      .optional(),
+  });
+
+  type CapsuleFormValues = z.infer<typeof capsuleSchema>;
+
   const form = useForm<CapsuleFormValues>({
     resolver: zodResolver(capsuleSchema),
     defaultValues: {
@@ -110,6 +122,7 @@ const CapsuleEdit = () => {
   });
 
   const watchedValues = form.watch();
+  const dateLocale = getDateLocale(i18n.language);
 
   // Auth check
   useEffect(() => {
@@ -134,7 +147,7 @@ const CapsuleEdit = () => {
 
         if (capsuleError) throw capsuleError;
         if (!capsule) {
-          toast.error('Souvenir non trouvé');
+          toast.error(t('notFound'));
           navigate('/capsules');
           return;
         }
@@ -185,7 +198,7 @@ const CapsuleEdit = () => {
           setSelectedSubCategories(capsuleSubCats.map(c => c.sub_category_id));
         }
       } catch (error: any) {
-        toast.error('Erreur lors du chargement du souvenir');
+        toast.error(t('edit.loadError'));
         navigate('/capsules');
       } finally {
         setIsLoading(false);
@@ -193,7 +206,7 @@ const CapsuleEdit = () => {
     };
 
     if (user) fetchCapsule();
-  }, [user, id, navigate, form]);
+  }, [user, id, navigate, form, t]);
 
   // Fetch profile
   useEffect(() => {
@@ -240,7 +253,7 @@ const CapsuleEdit = () => {
       if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
-        toast.error('Erreur lors de l\'upload des fichiers. Veuillez corriger les erreurs et réessayer.');
+        toast.error(t('create.uploadError'));
         return;
       }
       
@@ -323,12 +336,12 @@ const CapsuleEdit = () => {
 
       toast.success(
         status === 'published' 
-          ? 'Souvenir publié avec succès !' 
-          : 'Modifications enregistrées'
+          ? t('edit.successPublished')
+          : t('edit.successSaved')
       );
       navigate(`/capsules/${id}`);
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la sauvegarde');
+      toast.error(error.message || t('create.saveError'));
     } finally {
       setIsSaving(false);
     }
@@ -380,7 +393,7 @@ const CapsuleEdit = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour au souvenir
+            {t('backToDetail')}
           </Button>
           
           <div className="flex items-center gap-3">
@@ -389,10 +402,10 @@ const CapsuleEdit = () => {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Modifier le souvenir
+                {t('edit.pageTitle')}
               </h1>
               <p className="text-muted-foreground text-sm">
-                Mettez à jour votre souvenir
+                {t('edit.pageSubtitle')}
               </p>
             </div>
           </div>
@@ -425,7 +438,7 @@ const CapsuleEdit = () => {
             {/* Type selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
-                Type de souvenir
+                {t('create.typeLabel')}
               </Label>
               <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
             </div>
@@ -438,10 +451,10 @@ const CapsuleEdit = () => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Titre *</FormLabel>
+                      <FormLabel>{t('create.titleLabel')} *</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Ex: Vacances en Bretagne 2024"
+                          placeholder={t('create.titlePlaceholder')}
                           className="text-lg"
                           {...field}
                         />
@@ -456,10 +469,10 @@ const CapsuleEdit = () => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{t('create.description')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Décrivez brièvement cette capsule..."
+                          placeholder={t('create.descriptionPlaceholder')}
                           className="resize-none"
                           rows={3}
                           {...field}
@@ -476,10 +489,10 @@ const CapsuleEdit = () => {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Contenu</FormLabel>
+                        <FormLabel>{t('create.content')}</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Écrivez votre texte, lettre ou récit..."
+                            placeholder={t('create.contentPlaceholder')}
                             className="resize-none min-h-[200px]"
                             rows={8}
                             {...field}
@@ -497,7 +510,7 @@ const CapsuleEdit = () => {
             {capsuleType !== 'text' && existingMedia.length > 0 && (
               <div className="p-6 rounded-2xl border border-border bg-card">
                 <Label className="text-base font-medium mb-4 block">
-                  Médias existants
+                  {t('edit.existingMedia')}
                 </Label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {existingMedia.map((media) => (
@@ -506,6 +519,7 @@ const CapsuleEdit = () => {
                       media={media}
                       onRemove={() => removeExistingMedia(media.id)}
                       getSignedUrl={getSignedUrl}
+                      removeLabel={t('edit.removeMedia')}
                     />
                   ))}
                 </div>
@@ -520,11 +534,11 @@ const CapsuleEdit = () => {
                 }`}
               >
                 <Label className="text-base font-medium mb-4 block">
-                  Ajouter des fichiers
+                  {t('edit.addNewMedia')}
                 </Label>
                 {mediaError && (
                   <p className="text-sm text-destructive mb-4">
-                    Certains fichiers n'ont pas pu être uploadés. Veuillez les supprimer ou réessayer.
+                    {t('create.uploadError')}
                   </p>
                 )}
                 <MediaUpload
@@ -555,10 +569,10 @@ const CapsuleEdit = () => {
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
                 <CalendarHeart className="w-4 h-4 inline-block mr-2" />
-                Date du souvenir
+                {t('create.memoryDate')}
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Quand ce souvenir a-t-il eu lieu ?
+                {t('create.memoryDateDesc', 'Quand ce souvenir a-t-il eu lieu ?')}
               </p>
               <Popover>
                 <PopoverTrigger asChild>
@@ -570,7 +584,7 @@ const CapsuleEdit = () => {
                     )}
                   >
                     <CalendarHeart className="mr-2 h-4 w-4" />
-                    {memoryDate ? format(memoryDate, "PPP", { locale: fr }) : "Sélectionner une date"}
+                    {memoryDate ? format(memoryDate, "PPP", { locale: dateLocale }) : t('create.memoryDateSelect', 'Sélectionner une date')}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -591,7 +605,7 @@ const CapsuleEdit = () => {
                   className="mt-2 text-muted-foreground"
                   onClick={() => setMemoryDate(null)}
                 >
-                  Effacer la date
+                  {t('create.memoryDateClear', 'Effacer la date')}
                 </Button>
               )}
             </div>
@@ -599,7 +613,7 @@ const CapsuleEdit = () => {
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
-                Mots-clés
+                {t('create.tags')}
               </Label>
               <TagInput tags={tags} onChange={setTags} />
             </div>
@@ -614,7 +628,7 @@ const CapsuleEdit = () => {
                 disabled={isSaving}
               >
                 <Save className="w-4 h-4" />
-                Enregistrer en brouillon
+                {t('create.saveDraft')}
               </Button>
               <Button
                 size="lg"
@@ -623,7 +637,7 @@ const CapsuleEdit = () => {
                 disabled={isSaving}
               >
                 <Send className="w-4 h-4" />
-                Publier
+                {t('create.publish')}
               </Button>
             </div>
           </motion.div>
@@ -658,12 +672,15 @@ const CapsuleEdit = () => {
 const ExistingMediaItem = ({ 
   media, 
   onRemove,
-  getSignedUrl 
+  getSignedUrl,
+  removeLabel
 }: { 
   media: ExistingMedia; 
   onRemove: () => void;
   getSignedUrl: (path: string) => Promise<string>;
+  removeLabel: string;
 }) => {
+  const { t } = useTranslation('capsules');
   const [previewUrl, setPreviewUrl] = useState<string>('');
 
   useEffect(() => {
@@ -704,14 +721,14 @@ const ExistingMediaItem = ({
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer ce média ?</AlertDialogTitle>
+            <AlertDialogTitle>{t('delete.mediaTitle', 'Supprimer ce média ?')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action ne peut pas être annulée.
+              {t('delete.mediaDescription', 'Cette action ne peut pas être annulée.')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={onRemove}>Supprimer</AlertDialogAction>
+            <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={onRemove}>{removeLabel}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
