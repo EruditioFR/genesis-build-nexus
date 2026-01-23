@@ -200,5 +200,35 @@
     "summaryTags": "Mots-clés",
     "publish": "Publier le souvenir",
     "saveDraft": "Enregistrer en brouillon"
+  },
+  "typeSelector": {
+    "types": {
+      "text": {
+        "label": "Texte",
+        "description": "Lettre, récit, poème"
+      },
+      "photo": {
+        "label": "Photo",
+        "description": "Images et albums"
+      },
+      "video": {
+        "label": "Vidéo",
+        "description": "Clips et souvenirs filmés"
+      },
+      "audio": {
+        "label": "Audio",
+        "description": "Messages vocaux, musique"
+      },
+      "mixed": {
+        "label": "Mixte",
+        "description": "Plusieurs types de médias"
+      }
+    },
+    "upgradeBadge": {
+      "premium": "Premium",
+      "heritage": "Héritage"
+    },
+    "upgradeTooltip": "Les souvenirs {{type}} sont disponibles avec le forfait {{plan}}.",
+    "viewPlans": "Voir les forfaits →"
   }
 }

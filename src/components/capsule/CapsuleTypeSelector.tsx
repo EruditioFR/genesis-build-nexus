@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FileText, Image, Video, Music, Layers, Lock, Crown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useFeatureAccess, type CapsuleTypeKey } from '@/hooks/useFeatureAccess';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -18,16 +19,17 @@ interface CapsuleTypeSelectorProps {
   onChange: (type: CapsuleType) => void;
 }
 
-const types: { value: CapsuleType; label: string; icon: typeof FileText; description: string }[] = [
-  { value: 'text', label: 'Texte', icon: FileText, description: 'Lettre, récit, poème' },
-  { value: 'photo', label: 'Photo', icon: Image, description: 'Images et albums' },
-  { value: 'video', label: 'Vidéo', icon: Video, description: 'Clips et souvenirs filmés' },
-  { value: 'audio', label: 'Audio', icon: Music, description: 'Messages vocaux, musique' },
-  { value: 'mixed', label: 'Mixte', icon: Layers, description: 'Plusieurs types de médias' },
+const typeConfigs: { value: CapsuleType; icon: typeof FileText }[] = [
+  { value: 'text', icon: FileText },
+  { value: 'photo', icon: Image },
+  { value: 'video', icon: Video },
+  { value: 'audio', icon: Music },
+  { value: 'mixed', icon: Layers },
 ];
 
 const CapsuleTypeSelector = ({ value, onChange }: CapsuleTypeSelectorProps) => {
-  const { canCreateCapsuleType, getUpgradePathForFeature, isFree } = useFeatureAccess();
+  const { t } = useTranslation('capsules');
+  const { canCreateCapsuleType, getUpgradePathForFeature } = useFeatureAccess();
 
   const handleClick = (type: CapsuleType) => {
     if (canCreateCapsuleType(type as CapsuleTypeKey)) {
@@ -47,21 +49,23 @@ const CapsuleTypeSelector = ({ value, onChange }: CapsuleTypeSelectorProps) => {
   return (
     <TooltipProvider>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        {types.map((type, index) => {
-          const isSelected = value === type.value;
-          const Icon = type.icon;
-          const canUse = canCreateCapsuleType(type.value as CapsuleTypeKey);
-          const featureKey = getFeatureKey(type.value);
+        {typeConfigs.map((config, index) => {
+          const isSelected = value === config.value;
+          const Icon = config.icon;
+          const canUse = canCreateCapsuleType(config.value as CapsuleTypeKey);
+          const featureKey = getFeatureKey(config.value);
           const upgradePath = featureKey ? getUpgradePathForFeature(featureKey) : null;
+          const label = t(`typeSelector.types.${config.value}.label`);
+          const description = t(`typeSelector.types.${config.value}.description`);
           
           const button = (
             <motion.button
-              key={type.value}
+              key={config.value}
               type="button"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              onClick={() => handleClick(type.value)}
+              onClick={() => handleClick(config.value)}
               disabled={!canUse}
               className={`relative p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                 !canUse
@@ -92,15 +96,15 @@ const CapsuleTypeSelector = ({ value, onChange }: CapsuleTypeSelectorProps) => {
                     ? 'text-secondary' 
                     : 'text-foreground'
               }`}>
-                {type.label}
+                {label}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                {type.description}
+                {description}
               </p>
               {!canUse && upgradePath && (
                 <Badge variant="outline" className="mt-2 text-xs gap-1">
                   <Crown className="w-3 h-3" />
-                  {upgradePath === 'premium' ? 'Premium' : 'Héritage'}
+                  {t(`typeSelector.upgradeBadge.${upgradePath}`)}
                 </Badge>
               )}
             </motion.button>
@@ -108,19 +112,22 @@ const CapsuleTypeSelector = ({ value, onChange }: CapsuleTypeSelectorProps) => {
 
           if (!canUse && upgradePath) {
             return (
-              <Tooltip key={type.value}>
+              <Tooltip key={config.value}>
                 <TooltipTrigger asChild>
                   {button}
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-[200px]">
                   <p className="text-sm">
-                    Les capsules {type.label.toLowerCase()} sont disponibles avec le forfait {upgradePath === 'premium' ? 'Premium' : 'Héritage'}.
+                    {t('typeSelector.upgradeTooltip', { 
+                      type: label.toLowerCase(), 
+                      plan: t(`typeSelector.upgradeBadge.${upgradePath}`) 
+                    })}
                   </p>
                   <Link 
                     to={`/premium${upgradePath === 'heritage' ? '?tier=heritage' : ''}`}
                     className="text-secondary text-sm font-medium hover:underline block mt-1"
                   >
-                    Voir les forfaits →
+                    {t('typeSelector.viewPlans')}
                   </Link>
                 </TooltipContent>
               </Tooltip>
