@@ -172,8 +172,40 @@
     }
   },
   "cta": {
-    "title": "추억을 보존할 준비가 되셨나요?",
-    "subtitle": "자신의 이야기를 전하는 수천 가족에 합류하세요.",
-    "button": "무료 계정 만들기"
+    "title": "당신의 추억은",
+    "titleHighlight": "보존받을 자격이 있습니다",
+    "subtitle": "오늘부터 미래 세대에 남길 유산을 구축하세요. 무료, 약정 없음.",
+    "button": "첫 번째 캡슐 만들기",
+    "trust": "무료 가입 • 신용카드 불필요 • 데이터는 비공개로 유지"
+  },
+  "footer": {
+    "description": "당신의 이야기는 세대를 넘어 전해질 자격이 있습니다. 미래 세대에 유산을 전달하세요.",
+    "copyright": "모든 권리 보유.",
+    "madeWith": "만든 이:",
+    "toPreserve": "추억을 보존하기 위해",
+    "categories": {
+      "product": "제품",
+      "company": "회사",
+      "resources": "리소스",
+      "legal": "법적"
+    },
+    "links": {
+      "features": "기능",
+      "pricing": "가격",
+      "roadmap": "로드맵",
+      "changelog": "변경 로그",
+      "about": "소개",
+      "blog": "블로그",
+      "careers": "채용",
+      "partners": "파트너",
+      "helpCenter": "고객센터",
+      "faq": "FAQ",
+      "guides": "가이드",
+      "community": "커뮤니티",
+      "privacy": "개인정보",
+      "terms": "이용약관",
+      "legalNotice": "법적 고지",
+      "gdpr": "GDPR"
+    }
   }
 }

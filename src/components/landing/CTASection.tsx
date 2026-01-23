@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CTASection = () => {
+  const { t } = useTranslation('landing');
+
   return (
     <section className="py-16 sm:py-24 relative overflow-hidden">
       {/* Gradient Background */}
@@ -42,28 +45,27 @@ const CTASection = () => {
 
           {/* Title */}
           <h2 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-4 sm:mb-6 leading-tight">
-            Vos souvenirs méritent
+            {t('cta.title')}
             <br />
-            <span className="text-gradient-gold">d'être préservés</span>
+            <span className="text-gradient-gold">{t('cta.titleHighlight')}</span>
           </h2>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2">
-            Commencez dès aujourd'hui à construire l'héritage que vous laisserez aux générations futures. 
-            Gratuit, sans engagement.
+            {t('cta.subtitle')}
           </p>
 
           {/* CTA */}
           <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto">
             <Link to="/signup">
-              Créer ma première capsule
+              {t('cta.button')}
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
 
           {/* Trust */}
           <p className="mt-6 sm:mt-8 text-sm text-primary-foreground/60 px-4">
-            Inscription gratuite • Aucune carte bancaire requise • Vos données restent privées
+            {t('cta.trust')}
           </p>
         </motion.div>
       </div>
