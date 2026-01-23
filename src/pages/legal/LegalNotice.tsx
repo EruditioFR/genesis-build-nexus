@@ -65,7 +65,7 @@ const LegalNotice = () => {
                 <strong>Email :</strong> contact@familygarden.fr
               </p>
               <p>
-                <strong>Téléphone :</strong>Téléphone : +33 6 66 69 24 41
+                <strong>Téléphone :</strong> +33 6 66 69 24 41
               </p>
             </div>
           </section>
