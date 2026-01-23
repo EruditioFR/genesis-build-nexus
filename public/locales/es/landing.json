@@ -52,21 +52,30 @@
     }
   },
   "howItWorks": {
-    "badge": "Cómo funciona",
-    "title": "Crea tu legado en 3 simples pasos",
-    "subtitle": "Una interfaz diseñada para ser accesible a todos, sin importar la edad o nivel técnico.",
+    "badge": "¿Cómo funciona?",
+    "title": "Crea tu cápsula de recuerdos",
+    "titleHighlight": "en 4 simples pasos",
+    "stepLabel": "Paso",
+    "capsuleExplainer": {
+      "title": "¿Qué es una cápsula de recuerdos?",
+      "description": "Una cápsula de recuerdos es un espacio digital seguro donde puedes reunir tus recuerdos más preciados: fotos, videos, grabaciones de audio y textos. Es tu herencia digital, una forma única de preservar y transmitir tu historia familiar a las generaciones futuras."
+    },
     "steps": {
       "step1": {
         "title": "Crea tu cuenta",
-        "description": "Registro gratuito en 30 segundos. No se requiere tarjeta de crédito para comenzar."
+        "description": "Regístrate gratis y comienza a documentar tu historia en minutos."
       },
       "step2": {
         "title": "Añade tus recuerdos",
-        "description": "Importa fotos, videos, textos y audio. Organízalos por fecha, tema o personas."
+        "description": "Sube fotos, videos, grabaciones de audio y escribe tus historias con nuestro editor intuitivo."
       },
       "step3": {
-        "title": "Comparte con la familia",
-        "description": "Invita a tus seres queridos a tus círculos de confianza. Todos pueden contribuir y comentar."
+        "title": "Organiza y comparte",
+        "description": "Estructura tus cápsulas en capítulos de vida e invita a tu familia a contribuir."
+      },
+      "step4": {
+        "title": "Preserva para siempre",
+        "description": "Tus recuerdos están asegurados y listos para ser transmitidos a las generaciones futuras."
       }
     }
   },
@@ -77,65 +86,88 @@
   },
   "pricing": {
     "badge": "Precios",
-    "title": "Elige tu plan",
-    "subtitle": "Comienza gratis, mejora según crezcas.",
+    "title": "Acompañamiento para cada",
+    "titleHighlight": "historia de vida",
+    "subtitle": "Comienza gratis y escala según tus necesidades. Sin costos ocultos.",
     "monthly": "Mensual",
     "yearly": "Anual",
-    "yearlyDiscount": "-20%",
-    "perMonth": "/mes",
-    "perYear": "/año",
-    "popular": "Popular",
+    "discount": "-17%",
+    "perMonth": "mes",
+    "perYear": "año",
+    "popular": "Más popular",
+    "loading": "Cargando...",
+    "error": "Error al crear el pago",
     "cta": {
       "free": "Comenzar gratis",
-      "premium": "Ir a Premium"
+      "premium": "Probar Premium",
+      "heritage": "Elegir Herencia"
     },
     "plans": {
       "free": {
         "name": "Gratis",
-        "price": "0€",
-        "description": "Para descubrir la plataforma",
-        "features": [
-          "10 cápsulas de memoria",
-          "500 MB de almacenamiento",
-          "1 círculo de compartir",
-          "Exportación PDF básica"
-        ]
+        "description": "Perfecto para empezar a preservar tus recuerdos",
+        "features": {
+          "storage": "250 MB de almacenamiento",
+          "formats": "Cápsulas de texto y foto",
+          "timeline": "Cronología básica",
+          "ads": "Con publicidad"
+        }
       },
       "premium": {
         "name": "Premium",
-        "priceMonthly": "9,90€",
-        "priceYearly": "95€",
-        "description": "Para preservar todos tus recuerdos",
-        "features": [
-          "Cápsulas ilimitadas",
-          "50 GB de almacenamiento",
-          "Círculos ilimitados",
-          "Árbol genealógico",
-          "Legado póstumo",
-          "Exportación PDF HD",
-          "Soporte prioritario"
-        ]
+        "description": "Para creadores de contenido regulares",
+        "features": {
+          "storage": "10 GB de almacenamiento",
+          "formats": "Cápsulas de texto, foto, video y audio",
+          "sharing": "1 recuerdo compartido con la persona de tu elección",
+          "timeline": "Cronología avanzada",
+          "noAds": "Sin publicidad"
+        }
+      },
+      "heritage": {
+        "name": "Herencia",
+        "description": "Para familias multigeneracionales",
+        "features": {
+          "storage": "50 GB de almacenamiento",
+          "formats": "Cápsulas de texto, foto, video y audio",
+          "sharing": "Compartir ilimitado",
+          "timeline": "Cronología avanzada",
+          "familyTree": "Árbol genealógico interactivo",
+          "podcast": "Crea un podcast de tus recuerdos",
+          "vipSupport": "Soporte VIP por WhatsApp",
+          "noAds": "Sin publicidad"
+        }
       }
     }
   },
   "faq": {
-    "title": "Preguntas Frecuentes",
+    "badge": "FAQ",
+    "title": "Preguntas",
+    "titleHighlight": "frecuentes",
     "items": {
       "q1": {
-        "question": "¿Cómo se protegen mis datos?",
-        "answer": "Tus datos están cifrados con el estándar AES-256 y almacenados en servidores europeos conformes con RGPD."
+        "question": "¿Qué es una cápsula de recuerdos?",
+        "answer": "Una cápsula de recuerdos es un contenedor digital seguro que preserva tus recuerdos como textos, fotos, videos y audio. Es tu historia personal, organizada cronológicamente y lista para ser transmitida a las generaciones futuras. Cada cápsula es privada y accesible solo para las personas que autorices."
       },
       "q2": {
-        "question": "¿Puedo exportar mis recuerdos?",
-        "answer": "Sí, puedes exportar tus cápsulas como PDF o descargar todos tus medios en cualquier momento."
+        "question": "¿Mis datos están seguros?",
+        "answer": "Absolutamente. Tus datos están cifrados con los estándares más altos (AES-256), respaldados diariamente en servidores seguros, y mantienes control total sobre quién puede acceder a ellos. Nuestro compromiso: tus recuerdos permanecen privados."
       },
       "q3": {
-        "question": "¿Cómo funciona el legado póstumo?",
-        "answer": "Designas guardianes de confianza que podrán acceder a tus cápsulas según las condiciones que definas."
+        "question": "¿Cómo funciona el compartir familiar?",
+        "answer": "Puedes crear círculos de confianza (familia, amigos) e invitar miembros por email. Para cada círculo, defines los permisos: solo lectura, comentarios o contribución. Los miembros pueden añadir sus propias perspectivas sobre tus recuerdos compartidos."
       },
       "q4": {
-        "question": "¿Puedo cancelar mi suscripción?",
-        "answer": "Sí, puedes cancelar en cualquier momento. Tus datos permanecen accesibles y exportables."
+        "question": "¿Qué pasa con mis datos si no renuevo?",
+        "answer": "Tus datos nunca se eliminan automáticamente. Si cambias de Premium a Gratis, conservas acceso de lectura a todo tu contenido. Solo las funciones avanzadas se desactivan. Siempre puedes exportar tus datos en cualquier momento."
+      },
+      "q5": {
+        "question": "¿Cómo funciona el legado póstumo?",
+        "answer": "Con la oferta Legacy, designas contactos de confianza que serán notificados y recibirán acceso a ciertas cápsulas según tus deseos. Puedes programar revelaciones diferidas, definir condiciones de acceso y dejar mensajes personales."
+      },
+      "q6": {
+        "question": "¿Hay una aplicación móvil?",
+        "answer": "La plataforma web es totalmente responsive y funciona perfectamente en móvil. Una aplicación nativa para iOS y Android está prevista en nuestra hoja de ruta para permitir grabación directa y modo sin conexión."
       }
     }
   },

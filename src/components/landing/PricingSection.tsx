@@ -6,78 +6,78 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
-
-const plans = [
-  {
-    name: "Gratuit",
-    icon: Sparkles,
-    price: { monthly: 0, yearly: 0 },
-    description: "Parfait pour commencer à préserver vos souvenirs",
-    features: [
-      "250 Mo de stockage",
-      "Capsules au format texte et photo",
-      "Chronologie basique",
-      "Avec publicité",
-    ],
-    cta: "Commencer gratuitement",
-    variant: "outline" as const,
-    popular: false,
-  },
-  {
-    name: "Premium",
-    icon: Crown,
-    price: { monthly: 9.99, yearly: 99 },
-    description: "Pour les créateurs de contenu réguliers",
-    features: [
-      "10 Go de stockage",
-      "Capsules au format texte, photo, vidéo et audio",
-      "1 partage de souvenirs à la personne de votre choix",
-      "Chronologie avancée",
-      "Sans publicité",
-    ],
-    cta: "Essayer Premium",
-    variant: "hero" as const,
-    popular: true,
-    tier: "premium" as const,
-  },
-  {
-    name: "Héritage",
-    icon: Building2,
-    price: { monthly: 19.99, yearly: 199 },
-    description: "Pour les familles multigénérationnelles",
-    features: [
-      "50 Go de stockage",
-      "Capsules au format texte, photo, vidéo et audio",
-      "Partages illimités",
-      "Chronologie avancée",
-      "Arbre généalogique interactif",
-      "Création d'un podcast à partir de vos souvenirs",
-      "Support VIP via WhatsApp",
-      "Sans publicité",
-    ],
-    cta: "Choisir Héritage",
-    variant: "gold" as const,
-    popular: false,
-    tier: "heritage" as const,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const PricingSection = () => {
+  const { t } = useTranslation('landing');
   const [isYearly, setIsYearly] = useState(false);
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const { user } = useAuth();
   const { createCheckout } = useSubscription();
   const navigate = useNavigate();
 
+  const plans = [
+    {
+      nameKey: "pricing.plans.free.name",
+      icon: Sparkles,
+      price: { monthly: 0, yearly: 0 },
+      descriptionKey: "pricing.plans.free.description",
+      featuresKeys: [
+        "pricing.plans.free.features.storage",
+        "pricing.plans.free.features.formats",
+        "pricing.plans.free.features.timeline",
+        "pricing.plans.free.features.ads",
+      ],
+      ctaKey: "pricing.cta.free",
+      variant: "outline" as const,
+      popular: false,
+    },
+    {
+      nameKey: "pricing.plans.premium.name",
+      icon: Crown,
+      price: { monthly: 9.99, yearly: 99 },
+      descriptionKey: "pricing.plans.premium.description",
+      featuresKeys: [
+        "pricing.plans.premium.features.storage",
+        "pricing.plans.premium.features.formats",
+        "pricing.plans.premium.features.sharing",
+        "pricing.plans.premium.features.timeline",
+        "pricing.plans.premium.features.noAds",
+      ],
+      ctaKey: "pricing.cta.premium",
+      variant: "hero" as const,
+      popular: true,
+      tier: "premium" as const,
+    },
+    {
+      nameKey: "pricing.plans.heritage.name",
+      icon: Building2,
+      price: { monthly: 19.99, yearly: 199 },
+      descriptionKey: "pricing.plans.heritage.description",
+      featuresKeys: [
+        "pricing.plans.heritage.features.storage",
+        "pricing.plans.heritage.features.formats",
+        "pricing.plans.heritage.features.sharing",
+        "pricing.plans.heritage.features.timeline",
+        "pricing.plans.heritage.features.familyTree",
+        "pricing.plans.heritage.features.podcast",
+        "pricing.plans.heritage.features.vipSupport",
+        "pricing.plans.heritage.features.noAds",
+      ],
+      ctaKey: "pricing.cta.heritage",
+      variant: "gold" as const,
+      popular: false,
+      tier: "heritage" as const,
+    },
+  ];
+
   const handleSubscribe = async (plan: typeof plans[0]) => {
     if (!plan.tier) {
-      // Free plan - just navigate to signup
       navigate('/signup');
       return;
     }
 
     if (!user) {
-      // Not logged in - redirect to signup with redirect back
       navigate('/signup');
       return;
     }
@@ -86,11 +86,12 @@ const PricingSection = () => {
     try {
       await createCheckout(plan.tier);
     } catch (error: any) {
-      toast.error(error.message || "Erreur lors de la création du paiement");
+      toast.error(error.message || t('pricing.error'));
     } finally {
       setLoadingTier(null);
     }
   };
+
   return (
     <section id="pricing" className="py-16 sm:py-24 bg-background relative overflow-hidden">
       {/* Background */}
@@ -109,14 +110,14 @@ const PricingSection = () => {
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-3 sm:mb-4">
-            Tarifs
+            {t('pricing.badge')}
           </span>
           <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
-            Un accompagnement pour chaque
-            <span className="text-secondary"> histoire de vie</span>
+            {t('pricing.title')}
+            <span className="text-secondary"> {t('pricing.titleHighlight')}</span>
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground px-2">
-            Commencez gratuitement et évoluez selon vos besoins. Pas de frais cachés.
+            {t('pricing.subtitle')}
           </p>
         </motion.div>
 
@@ -129,7 +130,7 @@ const PricingSection = () => {
           className="flex items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12"
         >
           <span className={`text-sm font-medium ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
-            Mensuel
+            {t('pricing.monthly')}
           </span>
           <button
             onClick={() => setIsYearly(!isYearly)}
@@ -144,10 +145,10 @@ const PricingSection = () => {
             />
           </button>
           <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
-            Annuel
+            {t('pricing.yearly')}
           </span>
           <span className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
-            -17%
+            {t('pricing.discount')}
           </span>
         </motion.div>
 
@@ -155,7 +156,7 @@ const PricingSection = () => {
         <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
-              key={plan.name}
+              key={plan.nameKey}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -170,7 +171,7 @@ const PricingSection = () => {
               {plan.popular && (
                 <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2">
                   <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
-                    Le plus populaire
+                    {t('pricing.popular')}
                   </span>
                 </div>
               )}
@@ -185,10 +186,10 @@ const PricingSection = () => {
                 <h3 className={`text-xl sm:text-2xl font-display font-bold mb-1 sm:mb-2 ${
                   plan.popular ? "text-primary-foreground" : "text-foreground"
                 }`}>
-                  {plan.name}
+                  {t(plan.nameKey)}
                 </h3>
                 <p className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                  {plan.description}
+                  {t(plan.descriptionKey)}
                 </p>
               </div>
 
@@ -201,22 +202,22 @@ const PricingSection = () => {
                     {isYearly ? plan.price.yearly : plan.price.monthly}€
                   </span>
                   <span className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                    /{isYearly ? "an" : "mois"}
+                    /{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
                   </span>
                 </div>
               </div>
 
               {/* Features */}
               <ul className="space-y-2 sm:space-y-4 mb-6 sm:mb-8 flex-1">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 sm:gap-3">
+                {plan.featuresKeys.map((featureKey) => (
+                  <li key={featureKey} className="flex items-start gap-2 sm:gap-3">
                     <Check className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${
                       plan.popular ? "text-secondary" : "text-secondary"
                     }`} />
                     <span className={`text-sm ${
                       plan.popular ? "text-primary-foreground/90" : "text-muted-foreground"
                     }`}>
-                      {feature}
+                      {t(featureKey)}
                     </span>
                   </li>
                 ))}
@@ -234,10 +235,10 @@ const PricingSection = () => {
                   {loadingTier === plan.tier ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Chargement...
+                      {t('pricing.loading')}
                     </>
                   ) : (
-                    plan.cta
+                    t(plan.ctaKey)
                   )}
                 </Button>
               ) : (
@@ -247,7 +248,7 @@ const PricingSection = () => {
                   size="default"
                   className="w-full"
                 >
-                  <Link to="/signup">{plan.cta}</Link>
+                  <Link to="/signup">{t(plan.ctaKey)}</Link>
                 </Button>
               )}
             </motion.div>
