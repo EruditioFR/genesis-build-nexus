@@ -200,5 +200,35 @@
     "summaryTags": "关键词",
     "publish": "发布回忆",
     "saveDraft": "保存为草稿"
+  },
+  "typeSelector": {
+    "types": {
+      "text": {
+        "label": "文字",
+        "description": "信件、故事、诗歌"
+      },
+      "photo": {
+        "label": "照片",
+        "description": "图片和相册"
+      },
+      "video": {
+        "label": "视频",
+        "description": "剪辑和拍摄的回忆"
+      },
+      "audio": {
+        "label": "音频",
+        "description": "语音消息、音乐"
+      },
+      "mixed": {
+        "label": "混合",
+        "description": "多种媒体类型"
+      }
+    },
+    "upgradeBadge": {
+      "premium": "高级版",
+      "heritage": "传承版"
+    },
+    "upgradeTooltip": "{{type}}回忆可在{{plan}}套餐中使用。",
+    "viewPlans": "查看套餐 →"
   }
 }

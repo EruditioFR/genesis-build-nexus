@@ -200,5 +200,35 @@
     "summaryTags": "Keywords",
     "publish": "Publish memory",
     "saveDraft": "Save as draft"
+  },
+  "typeSelector": {
+    "types": {
+      "text": {
+        "label": "Text",
+        "description": "Letter, story, poem"
+      },
+      "photo": {
+        "label": "Photo",
+        "description": "Images and albums"
+      },
+      "video": {
+        "label": "Video",
+        "description": "Clips and filmed memories"
+      },
+      "audio": {
+        "label": "Audio",
+        "description": "Voice messages, music"
+      },
+      "mixed": {
+        "label": "Mixed",
+        "description": "Multiple media types"
+      }
+    },
+    "upgradeBadge": {
+      "premium": "Premium",
+      "heritage": "Heritage"
+    },
+    "upgradeTooltip": "{{type}} memories are available with the {{plan}} plan.",
+    "viewPlans": "View plans →"
   }
 }

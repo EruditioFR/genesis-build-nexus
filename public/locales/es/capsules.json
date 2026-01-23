@@ -200,5 +200,35 @@
     "summaryTags": "Palabras clave",
     "publish": "Publicar recuerdo",
     "saveDraft": "Guardar como borrador"
+  },
+  "typeSelector": {
+    "types": {
+      "text": {
+        "label": "Texto",
+        "description": "Carta, relato, poema"
+      },
+      "photo": {
+        "label": "Foto",
+        "description": "Imágenes y álbumes"
+      },
+      "video": {
+        "label": "Video",
+        "description": "Clips y recuerdos filmados"
+      },
+      "audio": {
+        "label": "Audio",
+        "description": "Mensajes de voz, música"
+      },
+      "mixed": {
+        "label": "Mixto",
+        "description": "Varios tipos de medios"
+      }
+    },
+    "upgradeBadge": {
+      "premium": "Premium",
+      "heritage": "Herencia"
+    },
+    "upgradeTooltip": "Los recuerdos {{type}} están disponibles con el plan {{plan}}.",
+    "viewPlans": "Ver planes →"
   }
 }
