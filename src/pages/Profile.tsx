@@ -33,14 +33,13 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription, Invoice } from '@/hooks/useSubscription';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import AvatarUpload from '@/components/profile/AvatarUpload';
 import GuardiansSection from '@/components/profile/GuardiansSection';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -262,8 +261,7 @@ const Profile = () => {
   return (
     <>
       <NoIndex />
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
+      <AuthenticatedLayout
         user={{
           id: user.id,
           email: user.email,
@@ -271,9 +269,8 @@ const Profile = () => {
           avatarUrl: profile.avatar_url || undefined,
         }}
         onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -660,10 +657,8 @@ const Profile = () => {
             </div>
           </motion.div>
         </div>
-      </main>
-
-      <MobileBottomNav />
-    </div>
+        </div>
+      </AuthenticatedLayout>
     </>
   );
 };

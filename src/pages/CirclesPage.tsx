@@ -30,12 +30,11 @@ import {
 
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
 import { toast } from 'sonner';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import NoIndex from '@/components/seo/NoIndex';
 
 interface Circle {
@@ -209,8 +208,7 @@ const CirclesPage = () => {
   return (
     <>
       <NoIndex />
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-      <DashboardHeader
+      <AuthenticatedLayout
         user={{
           id: user.id,
           email: user.email,
@@ -218,9 +216,8 @@ const CirclesPage = () => {
           avatarUrl: profile?.avatar_url || undefined,
         }}
         onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -472,50 +469,48 @@ const CirclesPage = () => {
             )}
           </motion.div>
         </div>
-      </main>
 
-      {/* Dialogs */}
-      <CreateCircleDialog
-        open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-        userId={user.id}
-        onCircleCreated={fetchCircles}
-        currentCircleCount={circles.length}
-      />
-
-      {selectedCircle && (
-        <AddMemberDialog
-          open={addMemberDialogOpen}
-          onOpenChange={setAddMemberDialogOpen}
-          circleId={selectedCircle.id}
-          circleName={selectedCircle.name}
-          onMemberAdded={() => {
-            fetchMembers(selectedCircle.id);
-            fetchCircles();
-          }}
-          currentMemberCount={members.length}
+        {/* Dialogs */}
+        <CreateCircleDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+          userId={user.id}
+          onCircleCreated={fetchCircles}
+          currentCircleCount={circles.length}
         />
-      )}
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer ce cercle ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cette action est irréversible. Le cercle "{circleToDelete?.name}" et tous ses membres seront supprimés. Les capsules partagées ne seront plus accessibles aux membres.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteCircle} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Supprimer
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        {selectedCircle && (
+          <AddMemberDialog
+            open={addMemberDialogOpen}
+            onOpenChange={setAddMemberDialogOpen}
+            circleId={selectedCircle.id}
+            circleName={selectedCircle.name}
+            onMemberAdded={() => {
+              fetchMembers(selectedCircle.id);
+              fetchCircles();
+            }}
+            currentMemberCount={members.length}
+          />
+        )}
 
-      <MobileBottomNav />
-    </div>
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Supprimer ce cercle ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Cette action est irréversible. Le cercle "{circleToDelete?.name}" et tous ses membres seront supprimés. Les capsules partagées ne seront plus accessibles aux membres.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Annuler</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteCircle} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                Supprimer
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      </AuthenticatedLayout>
     </>
   );
 };
