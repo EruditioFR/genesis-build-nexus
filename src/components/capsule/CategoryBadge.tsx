@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import type { Category } from '@/hooks/useCategories';
 import { Star } from 'lucide-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CategoryBadgeProps {
   category: Category;
@@ -35,6 +36,8 @@ const CategoryBadge = ({
   showIcon = true,
   className,
 }: CategoryBadgeProps) => {
+  const { t } = useTranslation('dashboard');
+
   const sizeClasses = {
     sm: 'text-xs px-2.5 py-1 gap-1.5',
     md: 'text-sm px-3 py-1.5 gap-2',
@@ -70,6 +73,9 @@ const CategoryBadge = ({
     }
   }, [category.color, isLight]);
 
+  // Get translated name, fallback to name_fr if translation not found
+  const translatedName = t(`categoryNames.${category.slug}`, { defaultValue: category.name_fr });
+
   return (
     <Badge
       variant="outline"
@@ -91,7 +97,7 @@ const CategoryBadge = ({
           {category.icon}
         </span>
       )}
-      <span className="truncate max-w-[120px] font-semibold">{category.name_fr}</span>
+      <span className="truncate max-w-[120px] font-semibold">{translatedName}</span>
       {isPrimary && (
         <Star 
           className={cn(

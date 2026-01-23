@@ -2,12 +2,15 @@ import { motion } from 'framer-motion';
 import { TreePine, Users, ArrowRight, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface FamilyTreeCardProps {
   personsCount?: number;
 }
 
 const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
+  const { t } = useTranslation('dashboard');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,15 +25,15 @@ const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-display font-semibold text-foreground">
-              Arbre Généalogique
+              {t('familyTreeCard.title')}
             </h3>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs font-medium">
               <Crown className="w-3 h-3" />
-              Premium
+              {t('familyTreeCard.premiumBadge')}
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Explorez votre histoire familiale
+            {t('familyTreeCard.subtitle')}
           </p>
         </div>
       </div>
@@ -46,14 +49,14 @@ const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
                 {personsCount}
               </p>
               <p className="text-sm text-muted-foreground">
-                {personsCount === 1 ? 'membre' : 'membres'} dans votre arbre
+                {t('familyTreeCard.members', { count: personsCount })}
               </p>
             </div>
           </div>
 
           <Button asChild className="w-full gap-2">
             <Link to="/family-tree">
-              Voir mon arbre
+              {t('familyTreeCard.viewTree')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
@@ -65,16 +68,16 @@ const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
               <TreePine className="w-8 h-8 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-1">
-              Commencez à construire votre arbre familial
+              {t('familyTreeCard.emptyTitle')}
             </p>
             <p className="text-xs text-muted-foreground/70">
-              Ajoutez vos ancêtres et reliez-les à vos capsules
+              {t('familyTreeCard.emptySubtitle')}
             </p>
           </div>
 
           <Button asChild className="w-full gap-2">
             <Link to="/family-tree">
-              Créer mon arbre
+              {t('familyTreeCard.createTree')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>

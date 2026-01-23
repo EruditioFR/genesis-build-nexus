@@ -145,5 +145,26 @@
     "myProfile": "My profile",
     "myCircles": "My circles",
     "guidedTour": "Guided tour"
+  },
+  "familyTreeCard": {
+    "title": "Family Tree",
+    "premiumBadge": "Premium",
+    "subtitle": "Explore your family history",
+    "members_one": "member in your tree",
+    "members_other": "members in your tree",
+    "viewTree": "View my tree",
+    "emptyTitle": "Start building your family tree",
+    "emptySubtitle": "Add your ancestors and link them to your memories",
+    "createTree": "Create my tree"
+  },
+  "categoryNames": {
+    "famille-proches": "Family & Loved Ones",
+    "savoirs-traditions": "Knowledge & Traditions",
+    "histoires-vecues": "Lived Stories",
+    "vie-professionnelle": "Professional Life",
+    "amour-relations": "Love & Relationships",
+    "voyages-lieux": "Travel & Places",
+    "passions-loisirs": "Passions & Hobbies",
+    "reflexions-messages": "Reflections & Messages"
   }
 }
