@@ -281,12 +281,7 @@ const LegalNotice = () => {
             </p>
           </section>
 
-          <section className="mt-12 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground italic">
-              Note : Certaines informations de cette page doivent être complétées avec les données 
-              légales réelles de votre entreprise avant la mise en production du site.
-            </p>
-          </section>
+          
         </div>
       </div>
       <Footer />
