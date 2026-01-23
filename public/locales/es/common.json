@@ -10,6 +10,11 @@
     "profile": "Mi perfil",
     "logout": "Cerrar sesión"
   },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "startFree": "Comenzar gratis"
+  },
   "footer": {
     "tagline": "Preserva tus recuerdos familiares para las futuras generaciones.",
     "product": "Producto",

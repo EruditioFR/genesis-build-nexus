@@ -1,6 +1,55 @@
 {
-  "nav": { "features": "功能", "howItWorks": "使用方法", "pricing": "价格", "about": "关于", "login": "登录", "signup": "免费开始", "dashboard": "首页", "profile": "我的资料", "logout": "退出" },
-  "footer": { "tagline": "为后代保存您的家庭记忆。", "product": "产品", "features": "功能", "howItWorks": "使用方法", "pricing": "价格", "faq": "常见问题", "legal": "法律", "privacyPolicy": "隐私政策", "termsOfUse": "使用条款", "termsOfSale": "销售条款", "legalNotice": "法律声明", "contact": "联系我们", "email": "contact@familygarden.fr", "copyright": "© {{year}} FamilyGarden. 保留所有权利。", "madeWith": "Made with", "inFrance": "in France" },
-  "buttons": { "save": "保存", "cancel": "取消", "delete": "删除", "edit": "编辑", "create": "创建", "close": "关闭", "confirm": "确认", "back": "返回", "next": "下一步", "previous": "上一步", "loading": "加载中..." },
-  "validation": { "required": "此字段为必填", "email": "无效的电子邮件地址", "minLength": "最少{{count}}个字符", "maxLength": "最多{{count}}个字符" }
+  "nav": {
+    "features": "功能",
+    "howItWorks": "使用方法",
+    "pricing": "价格",
+    "about": "关于",
+    "login": "登录",
+    "signup": "免费开始",
+    "dashboard": "首页",
+    "profile": "我的资料",
+    "logout": "退出"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出",
+    "startFree": "免费开始"
+  },
+  "footer": {
+    "tagline": "为后代保存您的家庭记忆。",
+    "product": "产品",
+    "features": "功能",
+    "howItWorks": "使用方法",
+    "pricing": "价格",
+    "faq": "常见问题",
+    "legal": "法律",
+    "privacyPolicy": "隐私政策",
+    "termsOfUse": "使用条款",
+    "termsOfSale": "销售条款",
+    "legalNotice": "法律声明",
+    "contact": "联系我们",
+    "email": "contact@familygarden.fr",
+    "copyright": "© {{year}} FamilyGarden. 保留所有权利。",
+    "madeWith": "用心制作",
+    "inFrance": "法国制造"
+  },
+  "buttons": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "close": "关闭",
+    "confirm": "确认",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "loading": "加载中..."
+  },
+  "validation": {
+    "required": "此字段为必填",
+    "email": "无效的电子邮件地址",
+    "minLength": "最少{{count}}个字符",
+    "maxLength": "最多{{count}}个字符"
+  }
 }
