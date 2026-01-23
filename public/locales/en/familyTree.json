@@ -1,0 +1,55 @@
+{
+  "loading": "Loading tree...",
+  "defaultTreeName": "My family tree",
+  "defaultTreeDescription": "My family history",
+  "errorLoading": "Error loading tree",
+  "noTreeSelected": "No tree selected",
+  "importError": "Import error",
+  "importPartial": "Partial import: {{created}} person(s) imported, {{failed}} failed",
+  "importSuccess": "{{persons}} person(s) and {{relations}} relation(s) imported",
+  "locked": {
+    "title": "Family Tree",
+    "description": "Create and explore your family history with our interactive family tree module. This feature is reserved for Heritage subscribers.",
+    "premiumNote": "You currently have the Premium plan. Upgrade to Heritage to access the family tree.",
+    "upgradeHeritage": "Upgrade to Heritage",
+    "discoverHeritage": "Discover Heritage plan"
+  },
+  "toolbar": {
+    "myTree": "My tree",
+    "persons_one": "{{count}} person",
+    "persons_other": "{{count}} people",
+    "list": "List",
+    "centerOn": "Center on...",
+    "andOthers": "... and {{count}} others (use search)",
+    "add": "Add"
+  },
+  "viewMode": {
+    "descendant": "Descendant view",
+    "ascendant": "Ascendant view",
+    "hourglass": "Hourglass view"
+  },
+  "zoom": {
+    "reset": "Reset zoom"
+  },
+  "minimap": {
+    "toggle": "Show/Hide minimap"
+  },
+  "fullscreen": {
+    "exit": "Exit"
+  },
+  "export": {
+    "title": "Export",
+    "pdf": "Export to PDF",
+    "gedcom": "Export to GEDCOM"
+  },
+  "import": {
+    "title": "Import",
+    "gedcom": "Import GEDCOM"
+  },
+  "empty": {
+    "title": "Your tree is empty",
+    "description": "Start by adding the first person or import an existing tree.",
+    "addPerson": "Add a person",
+    "importGedcom": "Import GEDCOM"
+  }
+}
