@@ -145,5 +145,26 @@
     "myProfile": "我的资料",
     "myCircles": "我的圈子",
     "guidedTour": "导览"
+  },
+  "familyTreeCard": {
+    "title": "家谱",
+    "premiumBadge": "高级版",
+    "subtitle": "探索您的家族历史",
+    "members_one": "家谱成员",
+    "members_other": "家谱成员",
+    "viewTree": "查看我的家谱",
+    "emptyTitle": "开始构建您的家谱",
+    "emptySubtitle": "添加您的祖先并将他们与您的回忆关联",
+    "createTree": "创建家谱"
+  },
+  "categoryNames": {
+    "famille-proches": "家人与亲友",
+    "savoirs-traditions": "知识与传统",
+    "histoires-vecues": "亲历故事",
+    "vie-professionnelle": "职业生活",
+    "amour-relations": "爱情与关系",
+    "voyages-lieux": "旅行与地点",
+    "passions-loisirs": "热情与爱好",
+    "reflexions-messages": "思考与寄语"
   }
 }

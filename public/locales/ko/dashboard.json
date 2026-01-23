@@ -145,5 +145,26 @@
     "myProfile": "내 프로필",
     "myCircles": "내 서클",
     "guidedTour": "가이드 투어"
+  },
+  "familyTreeCard": {
+    "title": "가계도",
+    "premiumBadge": "프리미엄",
+    "subtitle": "가족 역사를 탐험하세요",
+    "members_one": "가계도 내 구성원",
+    "members_other": "가계도 내 구성원",
+    "viewTree": "내 가계도 보기",
+    "emptyTitle": "가계도 만들기를 시작하세요",
+    "emptySubtitle": "조상을 추가하고 추억과 연결하세요",
+    "createTree": "가계도 만들기"
+  },
+  "categoryNames": {
+    "famille-proches": "가족 & 지인",
+    "savoirs-traditions": "지식 & 전통",
+    "histoires-vecues": "살아온 이야기",
+    "vie-professionnelle": "직업 생활",
+    "amour-relations": "사랑 & 관계",
+    "voyages-lieux": "여행 & 장소",
+    "passions-loisirs": "열정 & 취미",
+    "reflexions-messages": "성찰 & 메시지"
   }
 }
