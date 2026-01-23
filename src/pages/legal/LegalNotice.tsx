@@ -56,7 +56,7 @@ const LegalNotice = () => {
               
               
               
-              <p><strong>SIRET :</strong>SIRET : [Nu</p>
+              <p><strong>SIRET :</strong>SIRET : 51089741600036</p>
               
               <p><strong>Email :</strong> contact@familygarden.fr</p>
               <p><strong>Téléphone :</strong>Téléphone : +33 6 66 69 24 41</p>
