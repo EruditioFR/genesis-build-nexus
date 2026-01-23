@@ -6,7 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import StatsCards from '@/components/dashboard/StatsCards';
 import StorageProgress from '@/components/dashboard/StorageProgress';
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
@@ -14,7 +14,6 @@ import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
-import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import NoIndex from '@/components/seo/NoIndex';
@@ -297,8 +296,7 @@ const Dashboard = () => {
   return (
     <>
       <NoIndex />
-      <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
-        <DashboardHeader
+      <AuthenticatedLayout
         user={{
           id: user.id,
           email: user.email,
@@ -306,9 +304,8 @@ const Dashboard = () => {
           avatarUrl: profile?.avatar_url || undefined,
         }}
         onSignOut={handleSignOut}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -381,11 +378,8 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-      </main>
-
-      {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
-    </div>
+        </div>
+      </AuthenticatedLayout>
     </>
   );
 };
