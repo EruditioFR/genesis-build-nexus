@@ -5,21 +5,32 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-
 const LegalNotice = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const subprocessors = [
-    { name: "Supabase (AWS)", purpose: "Base de données, authentification, stockage", location: "Union Européenne", guarantees: "RGPD, SOC 2 Type II" },
-    { name: "Stripe", purpose: "Traitement des paiements", location: "UE / US", guarantees: "PCI DSS Level 1, CCT" },
-    { name: "Resend", purpose: "Envoi d'emails transactionnels", location: "US", guarantees: "CCT, DPF" },
-    { name: "Google Analytics", purpose: "Analyse de trafic (anonymisée)", location: "US", guarantees: "CCT, anonymisation IP" },
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const subprocessors = [{
+    name: "Supabase (AWS)",
+    purpose: "Base de données, authentification, stockage",
+    location: "Union Européenne",
+    guarantees: "RGPD, SOC 2 Type II"
+  }, {
+    name: "Stripe",
+    purpose: "Traitement des paiements",
+    location: "UE / US",
+    guarantees: "PCI DSS Level 1, CCT"
+  }, {
+    name: "Resend",
+    purpose: "Envoi d'emails transactionnels",
+    location: "US",
+    guarantees: "CCT, DPF"
+  }, {
+    name: "Google Analytics",
+    purpose: "Analyse de trafic (anonymisée)",
+    location: "US",
+    guarantees: "CCT, anonymisation IP"
+  }];
+  return <div className="min-h-screen bg-background">
       <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">
@@ -40,22 +51,21 @@ const LegalNotice = () => {
               1. Éditeur du site
             </h2>
             <div className="text-muted-foreground leading-relaxed space-y-2">
-              <p><strong>Nom de la société :</strong> Family Garden SAS</p>
-              <p><strong>Forme juridique :</strong> Société par Actions Simplifiée</p>
-              <p><strong>Capital social :</strong> [À compléter] €</p>
-              <p><strong>Siège social :</strong> [Adresse à compléter]</p>
-              <p><strong>RCS :</strong> [Numéro RCS à compléter]</p>
+              
+              <p><strong>Forme juridique :</strong>JEAN-BAPTISTE BEJOT</p>
+              
+              
+              
               <p><strong>SIRET :</strong> [Numéro SIRET à compléter]</p>
-              <p><strong>Numéro de TVA intracommunautaire :</strong> [À compléter]</p>
+              
               <p><strong>Email :</strong> contact@familygarden.fr</p>
-              <p><strong>Téléphone :</strong> [À compléter]</p>
+              <p><strong>Téléphone :</strong>Téléphone : +33 6 66 69 24 41</p>
             </div>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">2. Directeur de la publication</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              <strong>Nom :</strong> [Nom du directeur de publication à compléter]
+            <p className="text-muted-foreground leading-relaxed">Nom : JEAN-BAPTISTE BEJOT<strong>Nom :</strong> [Nom du directeur de publication à compléter]
             </p>
           </section>
 
@@ -174,14 +184,12 @@ const LegalNotice = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {subprocessors.map((sp, index) => (
-                    <tr key={index} className="hover:bg-muted/50">
+                  {subprocessors.map((sp, index) => <tr key={index} className="hover:bg-muted/50">
                       <td className="border border-border px-4 py-3 text-muted-foreground font-medium">{sp.name}</td>
                       <td className="border border-border px-4 py-3 text-muted-foreground">{sp.purpose}</td>
                       <td className="border border-border px-4 py-3 text-muted-foreground">{sp.location}</td>
                       <td className="border border-border px-4 py-3 text-muted-foreground">{sp.guarantees}</td>
-                    </tr>
-                  ))}
+                    </tr>)}
                 </tbody>
               </table>
             </div>
@@ -201,13 +209,7 @@ const LegalNotice = () => {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">5. Propriété intellectuelle</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              L'ensemble du contenu de ce site (textes, images, vidéos, logos, icônes, sons, logiciels, 
-              etc.) est la propriété exclusive de Family Garden ou de ses partenaires. Toute reproduction, 
-              représentation, modification, publication, transmission, dénaturation, totale ou partielle 
-              du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce 
-              soit est interdite sans autorisation écrite préalable de Family Garden.
-            </p>
+            <p className="text-muted-foreground leading-relaxed">L'ensemble du contenu de ce site (hors contenus des utilisateurs : textes, images, vidéos, logos, icônes, sons, logiciels, etc.) est la propriété exclusive de Family Garden ou de ses partenaires. Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit est interdite sans autorisation écrite préalable de Family Garden.</p>
           </section>
 
           <section>
@@ -288,8 +290,6 @@ const LegalNotice = () => {
         </div>
       </div>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default LegalNotice;
