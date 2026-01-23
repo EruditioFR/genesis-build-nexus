@@ -1,0 +1,450 @@
+{
+  "common": {
+    "backToHome": "Volver al inicio",
+    "lastUpdated": "Última actualización: {{date}}",
+    "contactEmail": "contact@familygarden.fr",
+    "privacyEmail": "privacy@familygarden.fr",
+    "dpoEmail": "dpo@familygarden.fr"
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "sections": {
+      "introduction": {
+        "title": "1. Introducción",
+        "content": "Family Garden se compromete a proteger la privacidad de sus usuarios. Esta política de privacidad explica cómo recopilamos, usamos, almacenamos y protegemos sus datos personales de conformidad con el Reglamento General de Protección de Datos (RGPD) del 27 de abril de 2016 y la Ley francesa de Protección de Datos del 6 de enero de 1978, modificada.",
+        "controller": "Responsable del tratamiento:",
+        "controllerName": "Family Garden SAS",
+        "email": "Email:"
+      },
+      "dataCollected": {
+        "title": "2. Datos recopilados",
+        "intro": "Recopilamos los siguientes tipos de datos:",
+        "items": {
+          "identification": "Datos de identificación:",
+          "identificationDesc": "nombre, apellido, dirección de email",
+          "profile": "Datos de perfil:",
+          "profileDesc": "foto de perfil, biografía, fecha de nacimiento",
+          "userContent": "Contenido del usuario:",
+          "userContentDesc": "cápsulas del tiempo, fotos, videos, textos, árboles genealógicos",
+          "technical": "Datos técnicos:",
+          "technicalDesc": "dirección IP, tipo de navegador, datos de conexión, registros de acceso",
+          "payment": "Datos de pago:",
+          "paymentDesc": "procesados exclusivamente por nuestro proveedor Stripe (nunca almacenamos sus datos bancarios)"
+        }
+      },
+      "dataUsage": {
+        "title": "3. Uso de los datos",
+        "intro": "Sus datos se utilizan para:",
+        "items": [
+          "Proporcionar y mejorar nuestros servicios de cápsulas del tiempo",
+          "Gestionar su cuenta y suscripciones",
+          "Procesar sus pagos de forma segura",
+          "Enviarle notificaciones sobre sus cápsulas y su apertura programada",
+          "Garantizar la seguridad y disponibilidad de la plataforma",
+          "Responder a sus solicitudes de asistencia"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Base legal del tratamiento",
+        "intro": "Tratamos sus datos sobre las siguientes bases legales:",
+        "contract": "Ejecución del contrato (Art. 6.1.b RGPD):",
+        "contractDesc": "para proporcionar nuestros servicios de cápsulas del tiempo",
+        "consent": "Consentimiento (Art. 6.1.a RGPD):",
+        "consentDesc": "para comunicaciones de marketing y cookies analíticas",
+        "legitimateInterest": "Interés legítimo (Art. 6.1.f RGPD):",
+        "legitimateInterestDesc": "para mejorar nuestros servicios y garantizar la seguridad",
+        "legalObligation": "Obligación legal (Art. 6.1.c RGPD):",
+        "legalObligationDesc": "para datos de facturación y fiscales"
+      },
+      "retention": {
+        "title": "5. Conservación de datos",
+        "content": "Sus datos se conservan durante toda la duración de su cuenta activa. Si elimina su cuenta, sus datos personales se eliminarán en un plazo de 30 días, excepto por obligaciones legales de conservación (datos de facturación: 10 años).",
+        "capsules": "Las cápsulas del tiempo se conservan según la configuración que haya definido, incluidas las cápsulas de legado digital que pueden transmitirse a sus guardianes designados."
+      },
+      "hosting": {
+        "title": "6. Alojamiento y ubicación de datos",
+        "location": {
+          "title": "Ubicación de los datos",
+          "content": "Sus datos personales se almacenan en servidores ubicados en la Unión Europea (regiones AWS eu-west-1 Irlanda y eu-central-1 Frankfurt), garantizando una protección conforme al RGPD sin transferencia a terceros países."
+        },
+        "infrastructure": {
+          "title": "Infraestructura técnica",
+          "database": "Base de datos:",
+          "databaseDesc": "PostgreSQL alojada en AWS (región UE)",
+          "files": "Archivos y medios:",
+          "filesDesc": "AWS S3 (región UE) con cifrado",
+          "auth": "Autenticación:",
+          "authDesc": "Supabase Auth (región UE)",
+          "cdn": "CDN:",
+          "cdnDesc": "Distribución de contenido desde servidores europeos"
+        },
+        "encryption": {
+          "title": "Cifrado y protección",
+          "atRest": "Cifrado en reposo:",
+          "atRestDesc": "AES-256 para todos los datos almacenados",
+          "inTransit": "Cifrado en tránsito:",
+          "inTransitDesc": "TLS 1.2 / TLS 1.3 para todas las comunicaciones",
+          "backups": "Copias de seguridad:",
+          "backupsDesc": "Diarias, cifradas, con retención de 30 días",
+          "replication": "Replicación:",
+          "replicationDesc": "Datos replicados dentro de la región UE para alta disponibilidad"
+        }
+      },
+      "rights": {
+        "title": "7. Sus derechos",
+        "intro": "De acuerdo con el RGPD (Artículos 15 a 22), usted tiene los siguientes derechos:",
+        "access": "Derecho de acceso (Art. 15):",
+        "accessDesc": "obtener una copia de sus datos personales",
+        "rectification": "Derecho de rectificación (Art. 16):",
+        "rectificationDesc": "corregir datos inexactos",
+        "erasure": "Derecho de supresión (Art. 17):",
+        "erasureDesc": "solicitar la eliminación de sus datos",
+        "restriction": "Derecho a la limitación (Art. 18):",
+        "restrictionDesc": "restringir el tratamiento de sus datos",
+        "portability": "Derecho a la portabilidad (Art. 20):",
+        "portabilityDesc": "recibir sus datos en un formato estructurado",
+        "objection": "Derecho de oposición (Art. 21):",
+        "objectionDesc": "oponerse al tratamiento de sus datos",
+        "withdrawal": "Derecho de retirada del consentimiento:",
+        "withdrawalDesc": "retirar su consentimiento en cualquier momento",
+        "exerciseRights": "Para ejercer estos derechos, contáctenos en:",
+        "responseTime": "Responderemos a su solicitud en un plazo de un mes de acuerdo con el RGPD."
+      },
+      "security": {
+        "title": "8. Seguridad de datos",
+        "technical": {
+          "title": "Medidas técnicas",
+          "items": [
+            "Cifrado AES-256 para todos los datos en reposo",
+            "Protocolo TLS 1.2+ para todas las comunicaciones de red",
+            "Autenticación de dos factores (2FA) disponible",
+            "Control de acceso basado en roles (Row Level Security - RLS)",
+            "Monitoreo continuo de accesos y detección de anomalías",
+            "Pruebas de penetración regulares por expertos independientes",
+            "Firewall de aplicaciones web (WAF) y protección DDoS"
+          ]
+        },
+        "organizational": {
+          "title": "Medidas organizativas",
+          "items": [
+            "Acceso restringido a datos basado en el principio de mínimo privilegio",
+            "Formación regular del personal en protección de datos",
+            "Procedimientos documentados de gestión de incidentes de seguridad",
+            "Auditorías de seguridad anuales",
+            "Política de gestión de vulnerabilidades"
+          ]
+        },
+        "certifications": "Certificaciones de nuestros subencargados"
+      },
+      "transfers": {
+        "title": "9. Transferencias internacionales de datos",
+        "intro": "Sus datos se almacenan principalmente en la Unión Europea. Sin embargo, algunos de nuestros subencargados están ubicados en Estados Unidos. Estas transferencias están reguladas por garantías apropiadas:",
+        "guarantees": {
+          "title": "Garantías jurídicas",
+          "scc": "Cláusulas Contractuales Tipo (CCT) aprobadas por la Comisión Europea (Decisión de ejecución 2021/914 del 4 de junio de 2021)",
+          "dpf": "Marco de Privacidad de Datos (DPF) para empresas estadounidenses certificadas (Decisión de adecuación del 10 de julio de 2023)",
+          "additional": "Medidas adicionales: cifrado de extremo a extremo, seudonimización, evaluación de impacto de transferencias"
+        },
+        "table": {
+          "subprocessor": "Subencargado",
+          "purpose": "Finalidad",
+          "guarantees": "Garantías"
+        },
+        "copyRequest": "Puede solicitar una copia de las garantías apropiadas contactándonos en"
+      },
+      "cookies": {
+        "title": "10. Cookies",
+        "intro": "Utilizamos cookies esenciales para el funcionamiento del sitio y cookies analíticas (con su consentimiento) para mejorar nuestros servicios.",
+        "typesTitle": "Tipos de cookies utilizadas",
+        "essential": "Cookies esenciales:",
+        "essentialDesc": "autenticación, preferencias de idioma, seguridad (duración: sesión)",
+        "analytics": "Cookies analíticas:",
+        "analyticsDesc": "Google Analytics con anonimización de IP (duración: 13 meses máximo)"
+      },
+      "contact": {
+        "title": "11. Contacto y reclamaciones",
+        "contactTitle": "Contactar a nuestro equipo",
+        "dpo": "Delegado de Protección de Datos (DPO):",
+        "authority": {
+          "title": "Autoridad de control",
+          "intro": "Tiene derecho a presentar una reclamación ante la CNIL:",
+          "name": "CNIL - Comisión Nacional de Informática y Libertades",
+          "address": "3 Place de Fontenoy, TSA 80715, 75334 París Cedex 07, Francia",
+          "website": "Sitio web:"
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Condiciones de Uso",
+    "sections": {
+      "presentation": {
+        "title": "1. Presentación del servicio",
+        "content": "Family Garden es una plataforma de preservación de recuerdos familiares que permite a los usuarios crear, almacenar y compartir cápsulas de memoria digitales. Estas cápsulas pueden contener textos, fotos, videos, grabaciones de audio y otros contenidos multimedia destinados a ser preservados y transmitidos a las generaciones futuras."
+      },
+      "acceptance": {
+        "title": "2. Aceptación de las condiciones",
+        "content": "El uso de Family Garden implica la aceptación plena y completa de estas Condiciones de Uso. Si no acepta estas condiciones, por favor no utilice nuestro servicio. Nos reservamos el derecho de modificar estas Condiciones en cualquier momento. Las modificaciones entrarán en vigor tras su publicación en el sitio."
+      },
+      "registration": {
+        "title": "3. Registro y cuenta de usuario",
+        "intro": "Para acceder a las funcionalidades de Family Garden, debe crear una cuenta de usuario proporcionando información precisa y completa. Usted es responsable de:",
+        "items": [
+          "La confidencialidad de sus credenciales de acceso",
+          "Todas las actividades realizadas bajo su cuenta",
+          "La actualización de su información personal",
+          "La notificación inmediata en caso de uso no autorizado de su cuenta"
+        ],
+        "ageRequirement": "Debe tener al menos 16 años para crear una cuenta. Los menores de 16 años deben obtener el consentimiento parental."
+      },
+      "usage": {
+        "title": "4. Uso del servicio",
+        "intro": "Usted se compromete a utilizar Family Garden de manera responsable y legal. Está prohibido:",
+        "items": [
+          "Publicar contenido ilegal, difamatorio, obsceno o que vulnere los derechos de terceros",
+          "Suplantar la identidad de otra persona",
+          "Intentar acceder a las cuentas de otros usuarios",
+          "Utilizar el servicio con fines comerciales no autorizados",
+          "Transmitir virus o código malicioso",
+          "Interrumpir el funcionamiento normal de la plataforma",
+          "Recopilar datos personales de otros usuarios sin su consentimiento"
+        ]
+      },
+      "userContent": {
+        "title": "5. Contenido del usuario",
+        "intro": "Usted conserva todos los derechos de propiedad intelectual sobre el contenido que publica en Family Garden. Al cargar contenido, nos otorga una licencia no exclusiva para:",
+        "items": [
+          "Almacenar, mostrar y transmitir su contenido según su configuración de compartir",
+          "Crear copias de seguridad para la preservación de datos",
+          "Adaptar técnicamente su contenido para diferentes dispositivos (redimensionar, comprimir)"
+        ],
+        "guarantee": "Usted garantiza que tiene los derechos necesarios sobre todo el contenido que publica y que no viola los derechos de terceros."
+      },
+      "capsules": {
+        "title": "6. Cápsulas de memoria y función Legado",
+        "intro": "Family Garden ofrece una función única para transmitir cápsulas después del fallecimiento del usuario. Esta función implica:",
+        "items": [
+          "La designación de guardianes de confianza que pueden desbloquear sus cápsulas",
+          "La definición de condiciones de desbloqueo (fecha, evento, fallecimiento)",
+          "La responsabilidad de mantener actualizada la información de sus guardianes"
+        ],
+        "disclaimer": "Family Garden no puede garantizar la transmisión en caso de interrupción del servicio. Recomendamos conservar copias de su contenido más importante."
+      },
+      "circles": {
+        "title": "7. Círculos de compartir",
+        "content": "Los círculos le permiten compartir sus cápsulas con grupos de personas de confianza. Usted es responsable de gestionar sus círculos y las personas que invita. Los miembros del círculo pueden ver las cápsulas compartidas según los permisos que defina."
+      },
+      "storage": {
+        "title": "8. Almacenamiento y conservación",
+        "intro": "Family Garden se compromete a preservar su contenido con el mayor cuidado. Sin embargo:",
+        "items": [
+          "El espacio de almacenamiento está limitado según su tipo de suscripción",
+          "Realizamos copias de seguridad regulares pero no garantizamos una recuperación del 100% en caso de desastre mayor",
+          "Las cuentas gratuitas inactivas durante más de 2 años pueden eliminarse después de notificación"
+        ]
+      },
+      "ip": {
+        "title": "9. Propiedad intelectual",
+        "content": "La plataforma Family Garden, incluyendo su diseño, logotipo, funcionalidades y código fuente, está protegida por derechos de propiedad intelectual. Cualquier reproducción, modificación o uso no autorizado está estrictamente prohibido."
+      },
+      "liability": {
+        "title": "10. Limitación de responsabilidad",
+        "intro": "Family Garden se proporciona \"tal cual\". No podemos ser responsables de:",
+        "items": [
+          "Interrupciones temporales del servicio por mantenimiento",
+          "Pérdida de datos causada por circunstancias excepcionales",
+          "Su uso del servicio",
+          "Contenido publicado por otros usuarios",
+          "Daños indirectos relacionados con el uso del servicio"
+        ]
+      },
+      "termination": {
+        "title": "11. Suspensión y terminación",
+        "intro": "Nos reservamos el derecho de suspender o terminar su cuenta en caso de:",
+        "items": [
+          "Violación de estas Condiciones",
+          "Actividad fraudulenta o ilegal",
+          "Falta de pago de suscripciones (para cuentas premium)",
+          "Solicitud de autoridades competentes"
+        ],
+        "deletion": "Puede eliminar su cuenta en cualquier momento desde su espacio personal. La eliminación resulta en el borrado permanente de sus datos después de un período de 30 días."
+      },
+      "dataProtection": {
+        "title": "12. Protección de datos personales",
+        "content": "El tratamiento de sus datos personales se detalla en nuestra",
+        "privacyLink": "Política de Privacidad",
+        "commitment": ". Nos comprometemos a cumplir con el Reglamento General de Protección de Datos (RGPD) y proteger su información personal."
+      },
+      "modifications": {
+        "title": "13. Modificaciones del servicio",
+        "content": "Family Garden puede modificar, suspender o interrumpir todo o parte del servicio, temporal o permanentemente. Nos esforzaremos por notificarle con antelación razonable en caso de cambios importantes."
+      },
+      "law": {
+        "title": "14. Ley aplicable y jurisdicción",
+        "content": "Estas Condiciones se rigen por la ley francesa. Cualquier disputa relacionada con su interpretación o ejecución se someterá a los tribunales franceses competentes, tras un intento de resolución amistosa."
+      },
+      "contact": {
+        "title": "15. Contacto",
+        "content": "Para cualquier pregunta sobre estas Condiciones de Uso, puede contactarnos en:"
+      }
+    }
+  },
+  "legalNotice": {
+    "title": "Aviso Legal",
+    "sections": {
+      "editor": {
+        "title": "1. Editor del sitio web",
+        "siret": "SIRET:",
+        "email": "Email:",
+        "phone": "Teléfono:"
+      },
+      "director": {
+        "title": "2. Director de publicación",
+        "name": "Nombre:"
+      },
+      "hosting": {
+        "title": "3. Alojamiento e infraestructura técnica",
+        "appHost": {
+          "title": "Alojamiento de la aplicación",
+          "platform": "Plataforma:",
+          "infrastructure": "Infraestructura:",
+          "region": "Región de almacenamiento:",
+          "regionValue": "Unión Europea (eu-west-1 Irlanda / eu-central-1 Frankfurt)",
+          "website": "Sitio web:"
+        },
+        "dbHost": {
+          "title": "Alojamiento de base de datos y almacenamiento",
+          "company": "Empresa:",
+          "address": "Dirección:",
+          "infrastructure": "Infraestructura:",
+          "region": "Región:",
+          "regionValue": "Unión Europea",
+          "website": "Sitio web:"
+        },
+        "cloudInfra": {
+          "title": "Infraestructura cloud",
+          "provider": "Proveedor:",
+          "region": "Región:",
+          "regionValue": "Europa (Irlanda eu-west-1, Frankfurt eu-central-1)",
+          "website": "Sitio web:"
+        },
+        "payment": {
+          "title": "Proveedor de pagos",
+          "company": "Empresa:",
+          "address": "Dirección:",
+          "website": "Sitio web:"
+        },
+        "email": {
+          "title": "Proveedor de servicio de email",
+          "company": "Empresa:",
+          "website": "Sitio web:"
+        }
+      },
+      "subprocessors": {
+        "title": "4. Subencargados y transferencias de datos",
+        "intro": "De acuerdo con el Artículo 28 del RGPD, utilizamos los siguientes subencargados para el tratamiento de datos:",
+        "table": {
+          "subprocessor": "Subencargado",
+          "purpose": "Finalidad",
+          "location": "Ubicación",
+          "guarantees": "Garantías"
+        },
+        "guaranteesTitle": "Garantías para transferencias fuera de la UE",
+        "scc": "Cláusulas Contractuales Tipo (CCT) aprobadas por la Comisión Europea (Decisión 2021/914)",
+        "dpf": "Marco de Privacidad de Datos (DPF) para empresas estadounidenses certificadas",
+        "additional": "Medidas adicionales: cifrado de extremo a extremo, seudonimización de datos"
+      },
+      "ip": {
+        "title": "5. Propiedad intelectual",
+        "content": "Todo el contenido de este sitio (excepto el contenido del usuario: textos, imágenes, videos, logotipos, iconos, sonidos, software, etc.) es propiedad exclusiva de Family Garden o sus socios. Cualquier reproducción, representación, modificación, publicación, transmisión, distorsión, total o parcial, del sitio o su contenido, por cualquier medio, y en cualquier soporte, está prohibida sin autorización previa por escrito de Family Garden."
+      },
+      "dataProtection": {
+        "title": "6. Protección de datos personales",
+        "intro": "De acuerdo con el Reglamento General de Protección de Datos (RGPD) y la Ley francesa de Protección de Datos, usted tiene derecho a acceder, rectificar, eliminar y portar sus datos personales.",
+        "moreInfo": "Para más información sobre el tratamiento de datos, consulte nuestra",
+        "privacyLink": "Política de Privacidad",
+        "dpo": "Delegado de Protección de Datos (DPO)",
+        "email": "Email:",
+        "authority": "Autoridad de control:",
+        "cnil": "CNIL - Comisión Nacional de Informática y Libertades",
+        "website": "Sitio web:",
+        "address": "Dirección:"
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "content": "Este sitio utiliza cookies para mejorar la experiencia del usuario y analizar el tráfico. Las cookies esenciales son necesarias para el funcionamiento del sitio. Las cookies analíticas nos ayudan a comprender cómo los visitantes interactúan con el sitio.",
+        "manage": "Puede gestionar sus preferencias de cookies en la configuración de su navegador."
+      },
+      "links": {
+        "title": "8. Enlaces",
+        "content": "Este sitio puede contener enlaces a otros sitios web. Family Garden no es responsable del contenido de estos sitios externos y no puede ser responsable de los daños resultantes de su uso."
+      },
+      "law": {
+        "title": "9. Ley aplicable",
+        "content": "Este aviso legal se rige por la ley francesa. En caso de disputa, y tras el fracaso de cualquier intento de encontrar una solución amistosa, los tribunales franceses tendrán jurisdicción exclusiva."
+      },
+      "contact": {
+        "title": "10. Contacto",
+        "content": "Para cualquier pregunta sobre este aviso legal, puede contactarnos en:"
+      }
+    }
+  },
+  "sales": {
+    "title": "Condiciones de Venta",
+    "sections": {
+      "object": {
+        "title": "1. Objeto",
+        "content": "Estas Condiciones de Venta rigen la relación contractual entre Family Garden y sus usuarios para la suscripción a servicios de pago ofrecidos en la plataforma."
+      },
+      "services": {
+        "title": "2. Servicios ofrecidos",
+        "intro": "Family Garden ofrece las siguientes suscripciones:",
+        "free": "Gratis:",
+        "freeDesc": "Acceso limitado a funciones básicas",
+        "premium": "Premium:",
+        "premiumDesc": "Acceso completo a funciones avanzadas, almacenamiento extendido",
+        "heritage": "Herencia:",
+        "heritageDesc": "Funciones Premium + opciones de transmisión póstuma"
+      },
+      "pricing": {
+        "title": "3. Precios y pago",
+        "content": "Los precios se indican en euros con impuestos incluidos. El pago se realiza con tarjeta de crédito a través de nuestro proveedor seguro Stripe. Las suscripciones se facturan mensual o anualmente según la opción elegida.",
+        "modification": "Los precios pueden modificarse en cualquier momento. En caso de modificación, el nuevo precio se aplicará al siguiente período de facturación, con un preaviso de 30 días."
+      },
+      "duration": {
+        "title": "4. Duración y renovación",
+        "content": "La suscripción se contrata por un período de un mes o un año según la opción elegida. Se renueva automáticamente en cada vencimiento, salvo cancelación por el usuario antes de la fecha de renovación."
+      },
+      "withdrawal": {
+        "title": "5. Derecho de desistimiento",
+        "content": "De acuerdo con el Artículo L221-28 del Código de Consumo francés, el derecho de desistimiento no se aplica a los contratos de suministro de contenido digital no proporcionado en un soporte material cuya ejecución ha comenzado con el acuerdo del consumidor.",
+        "guarantee": "Sin embargo, ofrecemos una garantía de \"satisfacción garantizada\" de 14 días para cualquier nueva suscripción Premium o Herencia."
+      },
+      "termination": {
+        "title": "6. Cancelación",
+        "content": "El usuario puede cancelar su suscripción en cualquier momento desde su espacio personal o a través del portal de gestión de suscripciones. La cancelación entra en vigor al final del período de facturación actual.",
+        "access": "En caso de cancelación, el usuario conserva el acceso a las funciones de pago hasta el final del período ya pagado."
+      },
+      "liability": {
+        "title": "7. Responsabilidad",
+        "content": "Family Garden se compromete a proporcionar servicios con diligencia. No podemos ser responsables de las interrupciones del servicio fuera de nuestro control, ni de los daños indirectos relacionados con el uso de nuestros servicios."
+      },
+      "dataProtection": {
+        "title": "8. Protección de datos",
+        "content": "El tratamiento de sus datos personales se rige por nuestra Política de Privacidad, accesible desde nuestro sitio. Nos comprometemos a proteger sus datos de acuerdo con el RGPD."
+      },
+      "modifications": {
+        "title": "9. Modificación de las Condiciones",
+        "content": "Nos reservamos el derecho de modificar estas Condiciones. Las modificaciones se notificarán a los usuarios por email con al menos 30 días de antelación."
+      },
+      "law": {
+        "title": "10. Ley aplicable y disputas",
+        "content": "Estas Condiciones están sujetas a la ley francesa. En caso de disputa, se buscará una solución amistosa antes de cualquier acción legal. En su defecto, los tribunales franceses tendrán jurisdicción exclusiva."
+      },
+      "contact": {
+        "title": "11. Contacto",
+        "content": "Para cualquier pregunta sobre las Condiciones de Venta, contáctenos en:"
+      }
+    }
+  }
+}
