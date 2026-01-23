@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
@@ -12,12 +12,10 @@ import {
   Layers,
   Tag,
   Calendar,
-  Clock,
   Send,
   Save
 } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,13 +76,8 @@ interface MobileCapsuleWizardProps {
   onUploadAllRef?: (uploadFn: () => Promise<import('./MediaUpload').UploadResult>) => void;
 }
 
-const STEPS = [
-  { id: 'type', label: 'Type', icon: Sparkles },
-  { id: 'info', label: 'Infos', icon: Type },
-  { id: 'media', label: 'Médias', icon: Image },
-  { id: 'details', label: 'Détails', icon: Tag },
-  { id: 'review', label: 'Valider', icon: Check },
-];
+const STEP_KEYS = ['type', 'info', 'media', 'details', 'review'] as const;
+const STEP_ICONS = [Sparkles, Type, Image, Tag, Check];
 
 const MobileCapsuleWizard = ({
   userId,
@@ -115,8 +108,16 @@ const MobileCapsuleWizard = ({
   onBack,
   onUploadAllRef,
 }: MobileCapsuleWizardProps) => {
+  const { t } = useTranslation('capsules');
   const [currentStep, setCurrentStep] = useState(0);
   const [mediaError, setMediaError] = useState(false);
+
+  // Build steps with translated labels
+  const STEPS = STEP_KEYS.map((key, index) => ({
+    id: key,
+    label: t(`wizard.steps.${key}`),
+    icon: STEP_ICONS[index],
+  }));
 
   // For text capsules, we skip the media step, so we have 4 steps instead of 5
   const effectiveSteps = capsuleType === 'text' ? STEPS.filter(s => s.id !== 'media') : STEPS;
@@ -182,15 +183,7 @@ const MobileCapsuleWizard = ({
     }
   };
 
-  const getTypeLabel = (type: CapsuleType) => {
-    switch (type) {
-      case 'photo': return 'Photo';
-      case 'video': return 'Vidéo';
-      case 'audio': return 'Audio';
-      case 'mixed': return 'Mixte';
-      default: return 'Texte';
-    }
-  };
+  const getTypeLabel = (type: CapsuleType) => t(`types.${type}`);
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -202,10 +195,10 @@ const MobileCapsuleWizard = ({
                 <Sparkles className="w-8 h-8 text-primary-foreground" />
               </div>
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Type de souvenir
+                {t('wizard.typeTitle')}
               </h2>
               <p className="text-muted-foreground">
-                Quel type de souvenir souhaitez-vous ajouter ?
+                {t('wizard.typeSubtitle')}
               </p>
             </div>
             
@@ -221,20 +214,20 @@ const MobileCapsuleWizard = ({
           <div className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Informations
+                {t('wizard.infoTitle')}
               </h2>
               <p className="text-muted-foreground">
-                Donnez un titre à votre souvenir
+                {t('wizard.infoSubtitle')}
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
                 <Label className="text-lg font-semibold mb-3 block">
-                  Titre *
+                  {t('wizard.titleLabel')}
                 </Label>
                 <Input
-                  placeholder="Ex: Vacances en Bretagne 2024"
+                  placeholder={t('wizard.titlePlaceholder')}
                   className="h-14 text-lg px-4"
                   value={title}
                   onChange={(e) => onTitleChange(e.target.value)}
@@ -243,10 +236,10 @@ const MobileCapsuleWizard = ({
 
               <div>
                 <Label className="text-lg font-semibold mb-3 block">
-                  Description
+                  {t('wizard.descriptionLabel')}
                 </Label>
                 <Textarea
-                  placeholder="Décrivez brièvement ce souvenir..."
+                  placeholder={t('wizard.descriptionPlaceholder')}
                   className="min-h-[120px] text-base px-4 py-3"
                   value={description}
                   onChange={(e) => onDescriptionChange(e.target.value)}
@@ -256,10 +249,10 @@ const MobileCapsuleWizard = ({
               {capsuleType === 'text' && (
                 <div>
                   <Label className="text-lg font-semibold mb-3 block">
-                    Contenu
+                    {t('wizard.contentLabel')}
                   </Label>
                   <Textarea
-                    placeholder="Écrivez votre texte, lettre ou récit..."
+                    placeholder={t('wizard.contentPlaceholder')}
                     className="min-h-[200px] text-base px-4 py-3"
                     value={content}
                     onChange={(e) => onContentChange(e.target.value)}
@@ -275,19 +268,16 @@ const MobileCapsuleWizard = ({
           <div className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Ajoutez vos fichiers
+                {t('wizard.mediaTitle')}
               </h2>
               <p className="text-muted-foreground">
-                {capsuleType === 'photo' && 'Ajoutez vos photos'}
-                {capsuleType === 'video' && 'Ajoutez vos vidéos'}
-                {capsuleType === 'audio' && 'Ajoutez vos enregistrements'}
-                {capsuleType === 'mixed' && 'Ajoutez photos, vidéos ou audio'}
+                {t(`wizard.mediaSubtitle.${capsuleType}`)}
               </p>
             </div>
 
             {mediaError && (
               <p className="text-sm text-destructive text-center mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
-                Certains fichiers n'ont pas pu être uploadés. Veuillez les supprimer ou réessayer.
+                {t('wizard.mediaError')}
               </p>
             )}
 
@@ -319,17 +309,17 @@ const MobileCapsuleWizard = ({
           <div className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Détails
+                {t('wizard.detailsTitle')}
               </h2>
               <p className="text-muted-foreground">
-                Ajoutez des informations supplémentaires
+                {t('wizard.detailsSubtitle')}
               </p>
             </div>
 
             {/* Category */}
             <div className="p-4 rounded-2xl border border-border bg-card">
               <Label className="text-lg font-semibold mb-4 block">
-                Catégorie
+                {t('wizard.categoryLabel')}
               </Label>
               <CategorySelector
                 categories={categories}
@@ -346,10 +336,10 @@ const MobileCapsuleWizard = ({
             <div className="p-4 rounded-2xl border border-border bg-card">
               <Label className="text-lg font-semibold mb-3 block">
                 <Calendar className="w-5 h-5 inline-block mr-2" />
-                Date du souvenir
+                {t('wizard.memoryDateLabel')}
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.
+                {t('wizard.memoryDateHelp')}
               </p>
               <MemoryDateSelector
                 value={memoryDate}
@@ -361,7 +351,7 @@ const MobileCapsuleWizard = ({
             <div className="p-4 rounded-2xl border border-border bg-card">
               <Label className="text-lg font-semibold mb-4 block">
                 <Tag className="w-5 h-5 inline-block mr-2" />
-                Mots-clés
+                {t('wizard.tagsLabel')}
               </Label>
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
@@ -379,10 +369,10 @@ const MobileCapsuleWizard = ({
                 <Check className="w-8 h-8 text-primary-foreground" />
               </div>
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                Récapitulatif
+                {t('wizard.reviewTitle')}
               </h2>
               <p className="text-muted-foreground">
-                Vérifiez avant de publier
+                {t('wizard.reviewSubtitle')}
               </p>
             </div>
 
@@ -390,8 +380,8 @@ const MobileCapsuleWizard = ({
             <div className="p-5 rounded-2xl border border-border bg-card space-y-4">
               {/* Title */}
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Titre</p>
-                <p className="text-lg font-semibold text-foreground">{title || 'Sans titre'}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('wizard.summaryTitle')}</p>
+                <p className="text-lg font-semibold text-foreground">{title || t('wizard.noTitle')}</p>
               </div>
 
               {/* Type */}
@@ -400,7 +390,7 @@ const MobileCapsuleWizard = ({
                   <TypeIcon className="w-5 h-5 text-secondary" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Type</p>
+                  <p className="text-sm text-muted-foreground">{t('wizard.summaryType')}</p>
                   <p className="font-medium">{getTypeLabel(capsuleType)}</p>
                 </div>
               </div>
@@ -415,7 +405,7 @@ const MobileCapsuleWizard = ({
                     <span className="text-lg">{selectedCategory.icon}</span>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Catégorie</p>
+                    <p className="text-sm text-muted-foreground">{t('wizard.summaryCategory')}</p>
                     <p className="font-medium">{selectedCategory.name_fr}</p>
                   </div>
                 </div>
@@ -428,8 +418,8 @@ const MobileCapsuleWizard = ({
                     <Image className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Fichiers</p>
-                    <p className="font-medium">{mediaFiles.length} fichier{mediaFiles.length > 1 ? 's' : ''}</p>
+                    <p className="text-sm text-muted-foreground">{t('wizard.summaryFiles')}</p>
+                    <p className="font-medium">{t('wizard.fileCount', { count: mediaFiles.length })}</p>
                   </div>
                 </div>
               )}
@@ -441,7 +431,7 @@ const MobileCapsuleWizard = ({
                     <Calendar className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Date du souvenir</p>
+                    <p className="text-sm text-muted-foreground">{t('wizard.summaryDate')}</p>
                     <p className="font-medium">{formatMemoryDate(memoryDate)}</p>
                   </div>
                 </div>
@@ -450,7 +440,7 @@ const MobileCapsuleWizard = ({
               {/* Tags */}
               {tags.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Mots-clés</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t('wizard.summaryTags')}</p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((tag) => (
                       <span 
@@ -474,7 +464,7 @@ const MobileCapsuleWizard = ({
                 disabled={isSaving}
               >
                 <Send className="w-6 h-6" />
-                Publier le souvenir
+                {t('wizard.publish')}
               </Button>
               <Button
                 variant="mobileSecondary"
@@ -484,7 +474,7 @@ const MobileCapsuleWizard = ({
                 disabled={isSaving}
               >
                 <Save className="w-5 h-5" />
-                Enregistrer en brouillon
+                {t('wizard.saveDraft')}
               </Button>
             </div>
           </div>
@@ -506,11 +496,11 @@ const MobileCapsuleWizard = ({
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-base">
-              {currentStep === 0 ? 'Annuler' : 'Retour'}
+              {currentStep === 0 ? t('wizard.cancel') : t('wizard.back')}
             </span>
           </button>
           <span className="text-white font-semibold text-base">
-            Étape {getDisplayStepNumber()}/{effectiveSteps.length}
+            {t('wizard.stepOf', { current: getDisplayStepNumber(), total: effectiveSteps.length })}
           </span>
         </div>
         
@@ -582,7 +572,7 @@ const MobileCapsuleWizard = ({
             onClick={goNext}
             disabled={!canGoNext()}
           >
-            Continuer
+            {t('wizard.continue')}
             <ArrowRight className="w-6 h-6" />
           </Button>
         </div>
