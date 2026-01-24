@@ -477,6 +477,14 @@ export const useFeatureTour = (tourType: TourType) => {
       },
       onDestroyed: () => {
         localStorage.setItem(getTourStorageKey(tourType), 'true');
+        // Cleanup any lingering DOM elements after a short delay
+        setTimeout(() => {
+          const driverElements = document.querySelectorAll(
+            '.driver-overlay, .driver-popover, [class*="driver-"]'
+          );
+          driverElements.forEach((el) => el.remove());
+          document.body.classList.remove('driver-active', 'driver-fade', 'driver-simple');
+        }, 100);
       },
     };
 
@@ -520,11 +528,33 @@ export const useFeatureTour = (tourType: TourType) => {
     setShowWelcomeDialog(false);
   }, []);
 
+  // Force cleanup of driver.js DOM elements
+  const cleanupDriverElements = useCallback(() => {
+    // Remove any lingering driver.js elements from the DOM
+    const driverElements = document.querySelectorAll(
+      '.driver-overlay, .driver-popover, .driver-active-element, [class*="driver-"]'
+    );
+    driverElements.forEach((el) => el.remove());
+    
+    // Also remove any SVG overlays that driver.js might have created
+    const svgOverlays = document.querySelectorAll('svg.driver-overlay');
+    svgOverlays.forEach((el) => el.remove());
+    
+    // Remove body classes that driver.js adds
+    document.body.classList.remove('driver-active', 'driver-fade', 'driver-simple');
+    
+    // Remove any inline styles driver.js might have added to body
+    document.body.style.removeProperty('overflow');
+  }, []);
+
   const stopTour = useCallback(() => {
     if (driverRef.current) {
       driverRef.current.destroy();
+      driverRef.current = null;
     }
-  }, []);
+    // Always cleanup DOM elements as a safety measure
+    cleanupDriverElements();
+  }, [cleanupDriverElements]);
 
   const isTourCompleted = useCallback(() => {
     return localStorage.getItem(getTourStorageKey(tourType)) === 'true';
@@ -539,9 +569,11 @@ export const useFeatureTour = (tourType: TourType) => {
     return () => {
       if (driverRef.current) {
         driverRef.current.destroy();
+        driverRef.current = null;
       }
+      cleanupDriverElements();
     };
-  }, []);
+  }, [cleanupDriverElements]);
 
   return {
     startTour,
