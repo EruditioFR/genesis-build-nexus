@@ -6,13 +6,13 @@ export interface TourStep extends DriveStep {
   route?: string;
 }
 
-// Dashboard tour steps
+// Dashboard tour steps - ENHANCED with better content and tips
 export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="welcome"]',
     popover: {
       title: '👋 Bienvenue sur Family Garden !',
-      description: 'Découvrez comment préserver et partager vos souvenirs de famille. Cette visite vous guidera à travers les fonctionnalités principales.',
+      description: 'Votre espace personnel pour préserver et transmettre vos souvenirs de famille. Suivez cette visite pour découvrir toutes les fonctionnalités en quelques minutes.',
       side: 'bottom',
       align: 'center',
     },
@@ -20,8 +20,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="quick-actions"]',
     popover: {
-      title: '🚀 Actions rapides',
-      description: 'Créez un nouveau souvenir en un clic ! C\'est le moyen le plus rapide d\'ajouter des photos, vidéos ou textes à votre collection.',
+      title: '🚀 Créez votre premier souvenir',
+      description: 'C\'est ici que tout commence ! Cliquez sur "Nouveau souvenir" pour ajouter vos photos, vidéos, textes ou enregistrements audio. Chaque souvenir peut contenir plusieurs médias.',
       side: 'bottom',
       align: 'start',
     },
@@ -29,8 +29,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="stats"]',
     popover: {
-      title: '📊 Vos statistiques',
-      description: 'Suivez l\'évolution de votre collection : nombre de souvenirs, fichiers médias et cercles de partage.',
+      title: '📊 Votre tableau de bord en chiffres',
+      description: 'Visualisez d\'un coup d\'œil l\'évolution de votre collection : nombre de souvenirs créés, fichiers médias stockés et cercles de partage actifs.',
       side: 'top',
       align: 'center',
     },
@@ -38,8 +38,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="storage"]',
     popover: {
-      title: '💾 Espace de stockage',
-      description: 'Visualisez votre espace utilisé. Passez à Premium pour un stockage illimité !',
+      title: '💾 Votre espace de stockage',
+      description: 'Suivez votre consommation d\'espace. L\'offre gratuite inclut 500 Mo, parfait pour commencer. Passez à Premium pour un stockage illimité et des fonctionnalités exclusives !',
       side: 'top',
       align: 'start',
     },
@@ -47,8 +47,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="recent-capsules"]',
     popover: {
-      title: '📦 Souvenirs récents',
-      description: 'Retrouvez ici vos derniers souvenirs ajoutés. Cliquez sur une carte pour la consulter.',
+      title: '📦 Vos souvenirs récents',
+      description: 'Retrouvez instantanément vos dernières créations. Cliquez sur une carte pour consulter, modifier ou partager ce souvenir avec vos proches.',
       side: 'top',
       align: 'center',
     },
@@ -56,8 +56,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-capsules"]',
     popover: {
-      title: '🗂️ Toutes vos capsules',
-      description: 'Accédez à l\'ensemble de vos souvenirs, organisés et filtrables par catégorie.',
+      title: '🗂️ Bibliothèque complète',
+      description: 'Accédez à tous vos souvenirs organisés par catégories : Voyages, Famille, Événements... Utilisez les filtres pour retrouver facilement un moment précis.',
       side: 'bottom',
       align: 'start',
     },
@@ -65,8 +65,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-timeline"]',
     popover: {
-      title: '📅 La chronologie',
-      description: 'Visualisez vos souvenirs dans le temps, comme un album photo chronologique.',
+      title: '📅 Chronologie visuelle',
+      description: 'Voyagez dans le temps ! Visualisez vos souvenirs sur une frise chronologique interactive, des années 40 à aujourd\'hui. Parfait pour redécouvrir votre histoire.',
       side: 'bottom',
       align: 'start',
     },
@@ -74,8 +74,17 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-circles"]',
     popover: {
-      title: '👨‍👩‍👧‍👦 Les cercles',
-      description: 'Créez des cercles pour partager vos souvenirs avec la famille ou les amis proches.',
+      title: '👨‍👩‍👧‍👦 Cercles de partage',
+      description: 'Partagez en toute confidentialité avec vos proches. Créez des cercles (Famille, Amis d\'enfance...) et invitez-les par email. Ils pourront consulter et commenter vos souvenirs.',
+      side: 'bottom',
+      align: 'start',
+    },
+  },
+  {
+    element: '[data-tour="nav-family-tree"]',
+    popover: {
+      title: '🌳 Arbre généalogique',
+      description: 'Construisez votre arbre familial interactif ! Ajoutez vos ancêtres, liez les générations et associez des souvenirs à chaque personne. Disponible avec Premium.',
       side: 'bottom',
       align: 'start',
     },
@@ -83,8 +92,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="search"]',
     popover: {
-      title: '🔍 Recherche globale',
-      description: 'Retrouvez n\'importe quel souvenir instantanément grâce à la recherche.',
+      title: '🔍 Recherche intelligente',
+      description: 'Retrouvez n\'importe quel souvenir en un instant. Tapez un mot-clé, un nom de personne ou une date pour explorer votre collection.',
       side: 'bottom',
       align: 'end',
     },
@@ -92,8 +101,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="notifications"]',
     popover: {
-      title: '🔔 Notifications',
-      description: 'Restez informé des nouveaux partages et événements importants.',
+      title: '🔔 Restez connecté',
+      description: 'Recevez des notifications quand un proche partage un souvenir, commente vos créations ou quand un événement important approche.',
       side: 'bottom',
       align: 'end',
     },
@@ -101,16 +110,16 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="user-menu"]',
     popover: {
-      title: '👤 Votre profil',
-      description: 'Gérez votre profil, vos paramètres et votre abonnement depuis ce menu.',
+      title: '👤 Votre espace personnel',
+      description: 'Gérez votre profil, personnalisez vos paramètres, consultez votre abonnement ou relancez cette visite guidée à tout moment.',
       side: 'bottom',
       align: 'end',
     },
   },
   {
     popover: {
-      title: '🎉 C\'est parti !',
-      description: 'Vous êtes prêt à commencer ! Cliquez sur "Nouveau souvenir" pour créer votre première capsule temporelle.',
+      title: '🎉 Vous êtes prêt !',
+      description: 'Bravo, vous connaissez maintenant les bases ! Commencez par créer votre premier souvenir — chaque moment compte. Besoin d\'aide ? Retrouvez la visite guidée dans votre profil.',
     },
   },
 ];

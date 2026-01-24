@@ -1,90 +1,249 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { TourType, getTourSteps, getTourStorageKey } from '@/lib/tourSteps';
 
-// Inject custom styles for driver.js
+// Inject custom styles for driver.js - ENHANCED version
 const injectTourStyles = () => {
   const styleId = 'driver-custom-styles';
-  if (!document.getElementById(styleId)) {
-    const style = document.createElement('style');
-    style.id = styleId;
-    style.textContent = `
+  // Remove existing to ensure fresh styles
+  const existing = document.getElementById(styleId);
+  if (existing) existing.remove();
+  
+  const style = document.createElement('style');
+  style.id = styleId;
+  style.textContent = `
+    /* Overlay - darker and more immersive */
+    .driver-overlay {
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: blur(2px);
+    }
+    
+    /* Main popover container - larger and more polished */
+    .driver-popover {
+      background: hsl(var(--card)) !important;
+      color: hsl(var(--card-foreground)) !important;
+      border: 2px solid hsl(var(--secondary) / 0.3) !important;
+      border-radius: 1.25rem !important;
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px hsl(var(--secondary) / 0.1),
+        0 0 40px -15px hsl(var(--secondary) / 0.3) !important;
+      padding: 1.75rem !important;
+      min-width: 340px !important;
+      max-width: 420px !important;
+      animation: driverPopoverIn 0.3s ease-out !important;
+    }
+    
+    @keyframes driverPopoverIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    /* Title - larger with gradient accent */
+    .driver-popover-title {
+      font-family: var(--font-display, 'Playfair Display'), serif !important;
+      font-size: 1.375rem !important;
+      font-weight: 700 !important;
+      color: hsl(var(--foreground)) !important;
+      line-height: 1.3 !important;
+      margin-bottom: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+      border-bottom: 1px solid hsl(var(--border) / 0.5) !important;
+    }
+    
+    /* Description - more readable */
+    .driver-popover-description {
+      color: hsl(var(--muted-foreground)) !important;
+      font-size: 1rem !important;
+      line-height: 1.65 !important;
+      margin-bottom: 1.25rem !important;
+    }
+    
+    /* Progress section - visual progress bar */
+    .driver-popover-progress-text {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.75rem !important;
+      color: hsl(var(--muted-foreground)) !important;
+      font-size: 0.875rem !important;
+      font-weight: 500 !important;
+      padding: 0.5rem 0 !important;
+    }
+    
+    /* Navigation footer */
+    .driver-popover-navigation-btns {
+      display: flex !important;
+      gap: 0.75rem !important;
+      margin-top: 0.5rem !important;
+    }
+    
+    /* Previous button */
+    .driver-popover-prev-btn {
+      background: transparent !important;
+      color: hsl(var(--foreground)) !important;
+      border: 1.5px solid hsl(var(--border)) !important;
+      border-radius: 0.75rem !important;
+      padding: 0.75rem 1.25rem !important;
+      font-size: 0.9375rem !important;
+      font-weight: 600 !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+    }
+    
+    .driver-popover-prev-btn:hover {
+      background: hsl(var(--muted)) !important;
+      border-color: hsl(var(--muted-foreground) / 0.3) !important;
+      transform: translateX(-2px) !important;
+    }
+    
+    /* Next and Done buttons */
+    .driver-popover-next-btn,
+    .driver-popover-close-btn {
+      background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary) / 0.85) 100%) !important;
+      color: hsl(var(--secondary-foreground)) !important;
+      border: none !important;
+      border-radius: 0.75rem !important;
+      padding: 0.75rem 1.5rem !important;
+      font-size: 0.9375rem !important;
+      font-weight: 600 !important;
+      text-shadow: none !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 14px -3px hsl(var(--secondary) / 0.4) !important;
+    }
+    
+    .driver-popover-next-btn:hover,
+    .driver-popover-close-btn:hover {
+      transform: translateY(-1px) translateX(2px) !important;
+      box-shadow: 0 6px 20px -3px hsl(var(--secondary) / 0.5) !important;
+    }
+    
+    /* Close X button in corner */
+    .driver-popover-close-btn-x {
+      position: absolute !important;
+      top: 0.75rem !important;
+      right: 0.75rem !important;
+      width: 2rem !important;
+      height: 2rem !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: hsl(var(--muted)) !important;
+      border: none !important;
+      border-radius: 0.5rem !important;
+      color: hsl(var(--muted-foreground)) !important;
+      font-size: 1.25rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+    
+    .driver-popover-close-btn-x:hover {
+      background: hsl(var(--destructive) / 0.15) !important;
+      color: hsl(var(--destructive)) !important;
+    }
+    
+    /* Arrow styles */
+    .driver-popover-arrow {
+      border: 2px solid hsl(var(--secondary) / 0.3) !important;
+    }
+    
+    .driver-popover-arrow-side-left.driver-popover-arrow,
+    .driver-popover-arrow-side-right.driver-popover-arrow,
+    .driver-popover-arrow-side-top.driver-popover-arrow,
+    .driver-popover-arrow-side-bottom.driver-popover-arrow {
+      background: hsl(var(--card)) !important;
+    }
+    
+    /* Highlighted element pulse animation */
+    .driver-highlighted-element {
+      animation: highlightPulse 2s ease-in-out infinite !important;
+    }
+    
+    @keyframes highlightPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 4px hsl(var(--secondary) / 0.3) !important;
+      }
+      50% {
+        box-shadow: 0 0 0 8px hsl(var(--secondary) / 0.15) !important;
+      }
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 640px) {
       .driver-popover {
-        background: hsl(var(--card)) !important;
-        color: hsl(var(--card-foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
-        border-radius: 1rem !important;
-        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+        min-width: 290px !important;
+        max-width: calc(100vw - 2rem) !important;
+        padding: 1.25rem !important;
+        margin: 0.5rem !important;
       }
+      
       .driver-popover-title {
-        font-family: var(--font-display), serif !important;
-        font-size: 1.125rem !important;
-        font-weight: 700 !important;
-        color: hsl(var(--foreground)) !important;
+        font-size: 1.2rem !important;
       }
+      
       .driver-popover-description {
-        color: hsl(var(--muted-foreground)) !important;
-        font-size: 0.875rem !important;
-        line-height: 1.5 !important;
+        font-size: 0.9375rem !important;
       }
-      .driver-popover-progress-text {
-        color: hsl(var(--muted-foreground)) !important;
+      
+      .driver-popover-navigation-btns {
+        flex-direction: column !important;
       }
-      .driver-popover-prev-btn {
-        background: transparent !important;
-        color: hsl(var(--foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
-        border-radius: 0.5rem !important;
-        padding: 0.5rem 1rem !important;
+      
+      .driver-popover-prev-btn,
+      .driver-popover-next-btn,
+      .driver-popover-close-btn {
+        width: 100% !important;
+        justify-content: center !important;
       }
-      .driver-popover-prev-btn:hover {
-        background: hsl(var(--muted)) !important;
-      }
-      .driver-popover-next-btn, .driver-popover-close-btn {
-        background: hsl(var(--secondary)) !important;
-        color: hsl(var(--secondary-foreground)) !important;
-        border: none !important;
-        border-radius: 0.5rem !important;
-        padding: 0.5rem 1rem !important;
-        text-shadow: none !important;
-      }
-      .driver-popover-next-btn:hover, .driver-popover-close-btn:hover {
-        opacity: 0.9 !important;
-      }
-      .driver-overlay {
-        background: rgba(0, 0, 0, 0.7) !important;
-      }
-      .driver-popover-arrow-side-left,
-      .driver-popover-arrow-side-right,
-      .driver-popover-arrow-side-top,
-      .driver-popover-arrow-side-bottom {
-        border-color: hsl(var(--card)) !important;
-      }
-    `;
-    document.head.appendChild(style);
-  }
+    }
+  `;
+  document.head.appendChild(style);
 };
 
 export const useFeatureTour = (tourType: TourType) => {
   const driverRef = useRef<ReturnType<typeof driver> | null>(null);
+  const { t, i18n } = useTranslation('common');
+
+  // Get localized button text
+  const getButtonText = useCallback(() => {
+    const lang = i18n.language;
+    const texts: Record<string, { next: string; prev: string; done: string; progress: string }> = {
+      fr: { next: 'Suivant →', prev: '← Précédent', done: 'Terminer ✓', progress: '{{current}} sur {{total}}' },
+      en: { next: 'Next →', prev: '← Previous', done: 'Finish ✓', progress: '{{current}} of {{total}}' },
+      es: { next: 'Siguiente →', prev: '← Anterior', done: 'Finalizar ✓', progress: '{{current}} de {{total}}' },
+      ko: { next: '다음 →', prev: '← 이전', done: '완료 ✓', progress: '{{current}} / {{total}}' },
+      zh: { next: '下一步 →', prev: '← 上一步', done: '完成 ✓', progress: '{{current}} / {{total}}' },
+    };
+    return texts[lang] || texts.fr;
+  }, [i18n.language]);
 
   const startTour = useCallback(() => {
     injectTourStyles();
 
     const steps = getTourSteps(tourType);
+    const buttonText = getButtonText();
 
     driverRef.current = driver({
       showProgress: true,
-      progressText: '{{current}} sur {{total}}',
-      nextBtnText: 'Suivant',
-      prevBtnText: 'Précédent',
-      doneBtnText: 'Terminer',
+      progressText: buttonText.progress,
+      nextBtnText: buttonText.next,
+      prevBtnText: buttonText.prev,
+      doneBtnText: buttonText.done,
       animate: true,
       allowClose: true,
-      stagePadding: 8,
-      stageRadius: 8,
-      popoverOffset: 15,
+      overlayClickBehavior: 'close',
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverOffset: 20,
+      showButtons: ['next', 'previous', 'close'],
       steps: steps.map(step => ({
         element: step.element,
         popover: step.popover,
@@ -96,7 +255,7 @@ export const useFeatureTour = (tourType: TourType) => {
     });
 
     driverRef.current.drive();
-  }, [tourType]);
+  }, [tourType, getButtonText]);
 
   const stopTour = useCallback(() => {
     if (driverRef.current) {
