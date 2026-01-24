@@ -71,10 +71,11 @@
   },
   "tour": {
     "buttons": {
-      "next": "下一步 →",
-      "prev": "← 上一步",
-      "done": "完成 ✓",
-      "progress": "{{current}} / {{total}}"
+      "next": "继续",
+      "prev": "返回",
+      "done": "完成 🎉",
+      "progress": "第{{current}}/{{total}}步",
+      "skip": "跳过"
     },
     "titles": {
       "dashboard": "探索仪表板",

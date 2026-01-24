@@ -71,10 +71,11 @@
   },
   "tour": {
     "buttons": {
-      "next": "다음 →",
-      "prev": "← 이전",
-      "done": "완료 ✓",
-      "progress": "{{current}} / {{total}}"
+      "next": "계속",
+      "prev": "뒤로",
+      "done": "완료 🎉",
+      "progress": "{{current}}/{{total}} 단계",
+      "skip": "건너뛰기"
     },
     "titles": {
       "dashboard": "대시보드 둘러보기",

@@ -71,10 +71,11 @@
   },
   "tour": {
     "buttons": {
-      "next": "Suivant →",
-      "prev": "← Précédent",
-      "done": "Terminer ✓",
-      "progress": "{{current}} sur {{total}}"
+      "next": "Continuer",
+      "prev": "Retour",
+      "done": "Terminer 🎉",
+      "progress": "Étape {{current}}/{{total}}",
+      "skip": "Passer"
     },
     "titles": {
       "dashboard": "Découvrir le tableau de bord",
