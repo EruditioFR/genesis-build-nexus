@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { CalendarClock, Clock, X } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { format, Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -20,8 +21,14 @@ interface ScheduleSelectorProps {
 }
 
 const ScheduleSelector = ({ scheduledAt, onChange }: ScheduleSelectorProps) => {
+  const { t, i18n } = useTranslation('capsules');
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(scheduledAt ? format(scheduledAt, 'HH:mm') : '09:00');
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) {
@@ -54,11 +61,13 @@ const ScheduleSelector = ({ scheduledAt, onChange }: ScheduleSelectorProps) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
+  const locale = getLocale();
+
   return (
     <div className="space-y-2">
       <Label className="text-base font-medium flex items-center gap-2">
         <CalendarClock className="w-4 h-4" />
-        Programmer la publication
+        {t('schedule.title')}
       </Label>
       
       <div className="flex gap-2">
@@ -73,9 +82,9 @@ const ScheduleSelector = ({ scheduledAt, onChange }: ScheduleSelectorProps) => {
             >
               <CalendarClock className="mr-2 h-4 w-4" />
               {scheduledAt ? (
-                format(scheduledAt, "PPP 'à' HH:mm", { locale: fr })
+                format(scheduledAt, t('schedule.dateTimeFormat'), { locale })
               ) : (
-                "Choisir une date"
+                t('schedule.chooseDate')
               )}
             </Button>
           </PopoverTrigger>
@@ -86,12 +95,13 @@ const ScheduleSelector = ({ scheduledAt, onChange }: ScheduleSelectorProps) => {
               onSelect={handleDateSelect}
               disabled={(date) => date < tomorrow}
               initialFocus
-              locale={fr}
+              locale={locale}
+              className="pointer-events-auto"
             />
             <div className="p-3 border-t">
               <Label className="text-sm flex items-center gap-2 mb-2">
                 <Clock className="w-3 h-3" />
-                Heure de publication
+                {t('schedule.publicationTime')}
               </Label>
               <Input
                 type="time"
@@ -117,8 +127,9 @@ const ScheduleSelector = ({ scheduledAt, onChange }: ScheduleSelectorProps) => {
 
       {scheduledAt && (
         <p className="text-sm text-muted-foreground">
-          La capsule sera automatiquement publiée le{' '}
-          {format(scheduledAt, "d MMMM yyyy 'à' HH:mm", { locale: fr })}
+          {t('schedule.willPublishAt', { 
+            date: format(scheduledAt, "d MMMM yyyy HH:mm", { locale }) 
+          })}
         </p>
       )}
     </div>

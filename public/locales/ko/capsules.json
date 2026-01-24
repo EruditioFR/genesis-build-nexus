@@ -231,5 +231,32 @@
     },
     "upgradeTooltip": "{{type}} 추억은 {{plan}} 플랜에서 사용할 수 있습니다.",
     "viewPlans": "플랜 보기 →"
+  },
+  "schedule": {
+    "title": "발행 예약",
+    "chooseDate": "날짜 선택",
+    "dateTimeFormat": "PPP HH:mm",
+    "publicationTime": "발행 시간",
+    "willPublishAt": "캡슐은 {{date}}에 자동으로 발행됩니다"
+  },
+  "legacy": {
+    "title": "유산 캡슐",
+    "description": "유산 캡슐은 조건이 충족될 때까지 잠겨 있습니다. 특정 날짜나 승인 후 추억을 전달하는 데 이상적입니다.",
+    "unlockByDate": "특정 날짜에 잠금 해제",
+    "unlockByGuardian": "보호자에 의해 잠금 해제",
+    "unlockDate": "잠금 해제 날짜",
+    "chooseDate": "날짜 선택",
+    "willUnlockAt": "캡슐은 {{date}}에 잠금 해제됩니다",
+    "guardian": "담당 보호자",
+    "loading": "로딩 중...",
+    "noGuardians": "아직 보호자가 없습니다. 프로필에서 추가하세요.",
+    "selectGuardian": "보호자 선택",
+    "verified": "인증됨",
+    "loadError": "보호자 로딩 오류"
+  },
+  "preview": {
+    "title": "추억 미리보기",
+    "emptyState": "미리보기를 보려면 양식을 작성하세요",
+    "keywords": "키워드"
   }
 }

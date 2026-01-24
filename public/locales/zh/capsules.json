@@ -231,5 +231,32 @@
     },
     "upgradeTooltip": "{{type}}回忆可在{{plan}}套餐中使用。",
     "viewPlans": "查看套餐 →"
+  },
+  "schedule": {
+    "title": "定时发布",
+    "chooseDate": "选择日期",
+    "dateTimeFormat": "PPP HH:mm",
+    "publicationTime": "发布时间",
+    "willPublishAt": "胶囊将于{{date}}自动发布"
+  },
+  "legacy": {
+    "title": "传承胶囊",
+    "description": "传承胶囊在满足条件之前保持锁定。非常适合在特定日期或经您批准后传递回忆。",
+    "unlockByDate": "在特定日期解锁",
+    "unlockByGuardian": "由监护人解锁",
+    "unlockDate": "解锁日期",
+    "chooseDate": "选择日期",
+    "willUnlockAt": "胶囊将于{{date}}解锁",
+    "guardian": "负责监护人",
+    "loading": "加载中...",
+    "noGuardians": "您还没有监护人。请从个人资料中添加。",
+    "selectGuardian": "选择监护人",
+    "verified": "已验证",
+    "loadError": "加载监护人时出错"
+  },
+  "preview": {
+    "title": "回忆预览",
+    "emptyState": "开始填写表单以查看预览",
+    "keywords": "关键词"
   }
 }

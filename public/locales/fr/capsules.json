@@ -231,5 +231,32 @@
     },
     "upgradeTooltip": "Les souvenirs {{type}} sont disponibles avec le forfait {{plan}}.",
     "viewPlans": "Voir les forfaits →"
+  },
+  "schedule": {
+    "title": "Programmer la publication",
+    "chooseDate": "Choisir une date",
+    "dateTimeFormat": "PPP 'à' HH:mm",
+    "publicationTime": "Heure de publication",
+    "willPublishAt": "La capsule sera automatiquement publiée le {{date}}"
+  },
+  "legacy": {
+    "title": "Capsule Héritage",
+    "description": "Une capsule héritage reste verrouillée jusqu'à ce qu'une condition soit remplie. Idéal pour transmettre des souvenirs à une date précise ou après votre accord.",
+    "unlockByDate": "Déverrouillage à une date précise",
+    "unlockByGuardian": "Déverrouillage par un gardien",
+    "unlockDate": "Date de déverrouillage",
+    "chooseDate": "Choisir une date",
+    "willUnlockAt": "La capsule sera déverrouillée le {{date}}",
+    "guardian": "Gardien responsable",
+    "loading": "Chargement...",
+    "noGuardians": "Vous n'avez pas encore de gardien. Ajoutez-en un depuis votre profil.",
+    "selectGuardian": "Sélectionner un gardien",
+    "verified": "Vérifié",
+    "loadError": "Erreur lors du chargement des gardiens"
+  },
+  "preview": {
+    "title": "Aperçu du souvenir",
+    "emptyState": "Commencez à remplir le formulaire pour voir l'aperçu",
+    "keywords": "Mots-clés"
   }
 }
