@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CalendarHeart, X, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -39,33 +38,38 @@ interface MemoryDateSelectorProps {
   className?: string;
 }
 
-const MONTHS = [
-  { value: 1, label: 'Janvier' },
-  { value: 2, label: 'Février' },
-  { value: 3, label: 'Mars' },
-  { value: 4, label: 'Avril' },
-  { value: 5, label: 'Mai' },
-  { value: 6, label: 'Juin' },
-  { value: 7, label: 'Juillet' },
-  { value: 8, label: 'Août' },
-  { value: 9, label: 'Septembre' },
-  { value: 10, label: 'Octobre' },
-  { value: 11, label: 'Novembre' },
-  { value: 12, label: 'Décembre' },
-];
-
 const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: 150 }, (_, i) => currentYear - i);
 
-export const formatMemoryDate = (value: MemoryDateValue | null): string => {
+// Default month names for standalone usage (will be overridden by translations when available)
+const DEFAULT_MONTHS: Record<number, string> = {
+  1: 'January', 2: 'February', 3: 'March', 4: 'April',
+  5: 'May', 6: 'June', 7: 'July', 8: 'August',
+  9: 'September', 10: 'October', 11: 'November', 12: 'December'
+};
+
+export const formatMemoryDate = (
+  value: MemoryDateValue | null, 
+  t?: (key: string) => string, 
+  locale?: Locale
+): string => {
   if (!value) return '';
+
+  const getMonthName = (monthNum: number) => {
+    if (t) {
+      return t(`memoryDate.months.${monthNum}`);
+    }
+    return DEFAULT_MONTHS[monthNum] || '';
+  };
+
+  const dateLocale = locale || fr;
 
   switch (value.precision) {
     case 'exact':
-      return value.date ? format(value.date, 'PPP', { locale: fr }) : '';
+      return value.date ? format(value.date, 'PPP', { locale: dateLocale }) : '';
     case 'month':
       if (value.month && value.year) {
-        const monthName = MONTHS.find(m => m.value === value.month)?.label || '';
+        const monthName = getMonthName(value.month);
         return `${monthName} ${value.year}`;
       }
       return '';
@@ -170,7 +174,8 @@ export const storageToMemoryDate = (
   }
 };
 
-const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDateSelectorProps) => {
+const MemoryDateSelector = ({ value, onChange, className }: MemoryDateSelectorProps) => {
+  const { t, i18n } = useTranslation('capsules');
   const [precision, setPrecision] = useState<DatePrecision>(value?.precision || 'exact');
   const [date, setDate] = useState<Date | null>(value?.date || null);
   const [month, setMonth] = useState<number | undefined>(value?.month);
@@ -178,6 +183,24 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
   const [yearStart, setYearStart] = useState<number | undefined>(value?.yearStart);
   const [yearEnd, setYearEnd] = useState<number | undefined>(value?.yearEnd);
   const [open, setOpen] = useState(false);
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = {
+      fr,
+      en: enUS,
+      es,
+      ko,
+      zh: zhCN,
+    };
+    return localeMap[i18n.language] || fr;
+  };
+
+  const MONTHS = useMemo(() => 
+    Array.from({ length: 12 }, (_, i) => ({
+      value: i + 1,
+      label: t(`memoryDate.months.${i + 1}`)
+    })), [t]
+  );
 
   // Sync internal state with value prop
   useEffect(() => {
@@ -190,35 +213,6 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
       setYearEnd(value.yearEnd);
     }
   }, [value]);
-
-  const updateValue = () => {
-    let newValue: MemoryDateValue | null = null;
-
-    switch (precision) {
-      case 'exact':
-        if (date) {
-          newValue = { precision: 'exact', date };
-        }
-        break;
-      case 'month':
-        if (month && year) {
-          newValue = { precision: 'month', month, year };
-        }
-        break;
-      case 'year':
-        if (year) {
-          newValue = { precision: 'year', year };
-        }
-        break;
-      case 'range':
-        if (yearStart && yearEnd && yearStart <= yearEnd) {
-          newValue = { precision: 'range', yearStart, yearEnd };
-        }
-        break;
-    }
-
-    onChange(newValue);
-  };
 
   const handlePrecisionChange = (newPrecision: DatePrecision) => {
     setPrecision(newPrecision);
@@ -275,13 +269,13 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
     onChange(null);
   };
 
-  const displayValue = formatMemoryDate(value);
+  const displayValue = formatMemoryDate(value, t, getLocale());
 
   const precisionLabels: Record<DatePrecision, string> = {
-    exact: 'Date exacte',
-    month: 'Mois / Année',
-    year: 'Année',
-    range: 'Période',
+    exact: t('memoryDate.exact'),
+    month: t('memoryDate.month'),
+    year: t('memoryDate.year'),
+    range: t('memoryDate.range'),
   };
 
   return (
@@ -319,7 +313,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
                 )}
               >
                 <CalendarDays className="mr-2 h-4 w-4" />
-                {date ? format(date, 'PPP', { locale: fr }) : 'Sélectionner une date'}
+                {date ? format(date, 'PPP', { locale: getLocale() }) : t('memoryDate.selectDate')}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -328,6 +322,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
                 selected={date || undefined}
                 onSelect={handleDateSelect}
                 disabled={(d) => d > new Date()}
+                locale={getLocale()}
                 initialFocus
                 className="pointer-events-auto"
               />
@@ -342,7 +337,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
               onValueChange={(val) => handleMonthYearChange(parseInt(val, 10), undefined)}
             >
               <SelectTrigger className="flex-1">
-                <SelectValue placeholder="Mois" />
+                <SelectValue placeholder={t('memoryDate.monthPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
                 {MONTHS.map((m) => (
@@ -357,7 +352,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
               onValueChange={(val) => handleMonthYearChange(undefined, parseInt(val, 10))}
             >
               <SelectTrigger className="w-24">
-                <SelectValue placeholder="Année" />
+                <SelectValue placeholder={t('memoryDate.yearPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
                 {YEARS.map((y) => (
@@ -376,7 +371,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
             onValueChange={(val) => handleYearChange(parseInt(val, 10))}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Sélectionner une année" />
+              <SelectValue placeholder={t('memoryDate.selectYear')} />
             </SelectTrigger>
             <SelectContent>
               {YEARS.map((y) => (
@@ -395,7 +390,7 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
               onValueChange={(val) => handleRangeChange(parseInt(val, 10), undefined)}
             >
               <SelectTrigger className="flex-1">
-                <SelectValue placeholder="De" />
+                <SelectValue placeholder={t('memoryDate.from')} />
               </SelectTrigger>
               <SelectContent>
                 {YEARS.map((y) => (
@@ -405,13 +400,13 @@ const MemoryDateSelector = ({ value, onChange, required, className }: MemoryDate
                 ))}
               </SelectContent>
             </Select>
-            <span className="text-muted-foreground">à</span>
+            <span className="text-muted-foreground">{t('memoryDate.rangeSeparator')}</span>
             <Select
               value={yearEnd?.toString()}
               onValueChange={(val) => handleRangeChange(undefined, parseInt(val, 10))}
             >
               <SelectTrigger className="flex-1">
-                <SelectValue placeholder="À" />
+                <SelectValue placeholder={t('memoryDate.to')} />
               </SelectTrigger>
               <SelectContent>
                 {YEARS.filter(y => !yearStart || y >= yearStart).map((y) => (

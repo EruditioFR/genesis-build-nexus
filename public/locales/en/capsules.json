@@ -258,5 +258,70 @@
     "title": "Memory preview",
     "emptyState": "Start filling out the form to see the preview",
     "keywords": "Keywords"
+  },
+  "tags": {
+    "placeholder": "Add a keyword...",
+    "suggestions": "Suggestions:",
+    "counter": "{{count}}/{{max}} keywords • Press Enter to add",
+    "suggestedTags": {
+      "family": "Family",
+      "vacation": "Vacation",
+      "childhood": "Childhood",
+      "wedding": "Wedding",
+      "birthday": "Birthday",
+      "travel": "Travel",
+      "holidays": "Holidays",
+      "memories": "Memories",
+      "heritage": "Heritage",
+      "traditions": "Traditions"
+    }
+  },
+  "media": {
+    "recordVoice": "Record a voice message",
+    "cancelRecording": "Cancel recording",
+    "orImportFile": "or import a file",
+    "dropHere": "Drop your files here",
+    "dragDrop": "Drag and drop your files",
+    "clickToSelect": "or click to select • Max {{maxFiles}} files, {{maxSize}} MB each",
+    "audioSupported": "Audio files supported",
+    "allSupported": "Images, videos and audio supported",
+    "formatNotSupported": "Format not supported: {{type}}",
+    "fileTooLarge": "File too large (max {{max}} MB)",
+    "maxFilesReached": "Maximum {{max}} files allowed",
+    "notAuthenticated": "Not authenticated",
+    "networkError": "Network error - please try again",
+    "timeoutError": "Timeout - file too large or slow connection",
+    "uploadError": "Error {{status}}",
+    "recordingAdded": "Recording added!",
+    "uploaded": "Uploaded",
+    "uploading": "Uploading...",
+    "fileCounter": "{{count}}/{{max}} files"
+  },
+  "memoryDate": {
+    "exact": "Exact date",
+    "month": "Month / Year",
+    "year": "Year",
+    "range": "Period",
+    "selectDate": "Select a date",
+    "monthPlaceholder": "Month",
+    "yearPlaceholder": "Year",
+    "selectYear": "Select a year",
+    "from": "From",
+    "to": "To",
+    "rangeSeparator": "to",
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    }
   }
 }

@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, X, Image, Video, Music, Loader2, GripVertical, Mic } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
@@ -57,8 +58,8 @@ const getFileIcon = (type: 'image' | 'video' | 'audio') => {
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} Ko`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
 const MediaUpload = ({
@@ -71,6 +72,7 @@ const MediaUpload = ({
   showAudioRecorder = false,
   onUploadAll,
 }: MediaUploadProps) => {
+  const { t } = useTranslation('capsules');
   const [isDragging, setIsDragging] = useState(false);
   const [showRecorder, setShowRecorder] = useState(false);
   
@@ -93,8 +95,8 @@ const MediaUpload = ({
     };
     onFilesChange([...files, mediaFile]);
     setShowRecorder(false);
-    toast.success('Enregistrement ajouté !');
-  }, [files, onFilesChange]);
+    toast.success(t('media.recordingAdded'));
+  }, [files, onFilesChange, t]);
 
   const createPreview = (file: File): string => {
     if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
@@ -103,22 +105,22 @@ const MediaUpload = ({
     return '';
   };
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!acceptedTypes.includes(file.type)) {
-      return `Format non supporté: ${file.type}`;
+      return t('media.formatNotSupported', { type: file.type });
     }
     if (file.size > maxSizeMb * 1024 * 1024) {
-      return `Fichier trop volumineux (max ${maxSizeMb} Mo)`;
+      return t('media.fileTooLarge', { max: maxSizeMb });
     }
     return null;
-  };
+  }, [acceptedTypes, maxSizeMb, t]);
 
   const addFiles = useCallback((newFiles: FileList | File[]) => {
     const fileArray = Array.from(newFiles);
     const remainingSlots = maxFiles - files.length;
     
     if (fileArray.length > remainingSlots) {
-      toast.error(`Maximum ${maxFiles} fichiers autorisés`);
+      toast.error(t('media.maxFilesReached', { max: maxFiles }));
     }
 
     const filesToAdd = fileArray.slice(0, remainingSlots);
@@ -144,7 +146,7 @@ const MediaUpload = ({
     if (mediaFiles.length > 0) {
       onFilesChange([...files, ...mediaFiles]);
     }
-  }, [files, maxFiles, acceptedTypes, maxSizeMb, onFilesChange]);
+  }, [files, maxFiles, validateFile, onFilesChange, t]);
 
   const removeFile = (id: string) => {
     const file = files.find(f => f.id === id);
@@ -166,7 +168,7 @@ const MediaUpload = ({
     const accessToken = sessionData?.session?.access_token;
 
     if (!accessToken) {
-      throw new Error('Non authentifié');
+      throw new Error(t('media.notAuthenticated'));
     }
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -188,19 +190,19 @@ const MediaUpload = ({
         } else {
           try {
             const response = JSON.parse(xhr.responseText);
-            reject(new Error(response.message || `Erreur ${xhr.status}`));
+            reject(new Error(response.message || t('media.uploadError', { status: xhr.status })));
           } catch {
-            reject(new Error(`Erreur ${xhr.status}`));
+            reject(new Error(t('media.uploadError', { status: xhr.status })));
           }
         }
       });
 
       xhr.addEventListener('error', () => {
-        reject(new Error('Erreur réseau - veuillez réessayer'));
+        reject(new Error(t('media.networkError')));
       });
 
       xhr.addEventListener('timeout', () => {
-        reject(new Error('Timeout - fichier trop volumineux ou connexion lente'));
+        reject(new Error(t('media.timeoutError')));
       });
 
       xhr.open('POST', uploadUrl);
@@ -209,7 +211,7 @@ const MediaUpload = ({
       xhr.timeout = 300000; // 5 minutes timeout for large files
       xhr.send(mediaFile.file);
     });
-  }, [userId]);
+  }, [userId, t]);
 
   const uploadAllFiles = useCallback(async (): Promise<UploadResult> => {
     // Use ref to get current files
@@ -289,7 +291,6 @@ const MediaUpload = ({
     }
   };
 
-  const pendingCount = files.filter(f => !f.uploaded && !f.uploading).length;
   const uploadingCount = files.filter(f => f.uploading).length;
 
   return (
@@ -306,7 +307,7 @@ const MediaUpload = ({
               disabled={files.length >= maxFiles}
             >
               <Mic className="w-5 h-5 text-primary" />
-              Enregistrer un message vocal
+              {t('media.recordVoice')}
             </Button>
           ) : (
             <div className="space-y-3">
@@ -320,7 +321,7 @@ const MediaUpload = ({
                 onClick={() => setShowRecorder(false)}
                 className="w-full text-muted-foreground"
               >
-                Annuler l'enregistrement
+                {t('media.cancelRecording')}
               </Button>
             </div>
           )}
@@ -331,7 +332,7 @@ const MediaUpload = ({
                 <div className="w-full border-t border-border" />
               </div>
               <span className="relative bg-background px-3 text-sm text-muted-foreground">
-                ou importez un fichier
+                {t('media.orImportFile')}
               </span>
             </div>
           )}
@@ -366,13 +367,13 @@ const MediaUpload = ({
               <Upload className="w-7 h-7" />
             </div>
             <p className="text-foreground font-medium mb-1">
-              {isDragging ? 'Déposez vos fichiers ici' : 'Glissez-déposez vos fichiers'}
+              {isDragging ? t('media.dropHere') : t('media.dragDrop')}
             </p>
             <p className="text-sm text-muted-foreground">
-              ou cliquez pour sélectionner • Max {maxFiles} fichiers, {maxSizeMb} Mo chacun
+              {t('media.clickToSelect', { maxFiles, maxSize: maxSizeMb })}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              {showAudioRecorder ? 'Fichiers audio supportés' : 'Images, vidéos et audio supportés'}
+              {showAudioRecorder ? t('media.audioSupported') : t('media.allSupported')}
             </p>
           </div>
         </div>
@@ -387,7 +388,7 @@ const MediaUpload = ({
             exit={{ opacity: 0, height: 0 }}
             className="space-y-2"
           >
-            {files.map((mediaFile, index) => {
+            {files.map((mediaFile) => {
               const Icon = getFileIcon(mediaFile.type);
               
               return (
@@ -438,7 +439,7 @@ const MediaUpload = ({
                       <p className="text-xs text-muted-foreground">
                         {formatFileSize(mediaFile.file.size)}
                       </p>
-                      {mediaFile.uploaded && <span className="text-xs text-green-600">✓ Uploadé</span>}
+                      {mediaFile.uploaded && <span className="text-xs text-green-600">✓ {t('media.uploaded')}</span>}
                       {mediaFile.error && <span className="text-xs text-destructive">{mediaFile.error}</span>}
                     </div>
                     {/* Progress bar */}
@@ -479,13 +480,13 @@ const MediaUpload = ({
       {files.length > 0 && uploadingCount > 0 && (
         <div className="flex items-center gap-2 pt-2 text-sm text-muted-foreground">
           <Loader2 className="w-4 h-4 animate-spin text-secondary" />
-          <span>Upload en cours...</span>
+          <span>{t('media.uploading')}</span>
         </div>
       )}
 
       {/* Counter */}
       <p className="text-xs text-muted-foreground text-right">
-        {files.length}/{maxFiles} fichiers
+        {t('media.fileCounter', { count: files.length, max: maxFiles })}
       </p>
     </div>
   );

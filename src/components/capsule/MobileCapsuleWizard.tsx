@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
@@ -16,6 +16,7 @@ import {
   Save
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -108,9 +109,20 @@ const MobileCapsuleWizard = ({
   onBack,
   onUploadAllRef,
 }: MobileCapsuleWizardProps) => {
-  const { t } = useTranslation('capsules');
+  const { t, i18n } = useTranslation('capsules');
   const [currentStep, setCurrentStep] = useState(0);
   const [mediaError, setMediaError] = useState(false);
+
+  const getLocale = useMemo((): Locale => {
+    const localeMap: Record<string, Locale> = {
+      fr,
+      en: enUS,
+      es,
+      ko,
+      zh: zhCN,
+    };
+    return localeMap[i18n.language] || fr;
+  }, [i18n.language]);
 
   // Build steps with translated labels
   const STEPS = STEP_KEYS.map((key, index) => ({
@@ -432,7 +444,7 @@ const MobileCapsuleWizard = ({
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{t('wizard.summaryDate')}</p>
-                    <p className="font-medium">{formatMemoryDate(memoryDate)}</p>
+                    <p className="font-medium">{formatMemoryDate(memoryDate, t, getLocale)}</p>
                   </div>
                 </div>
               )}

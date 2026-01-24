@@ -258,5 +258,70 @@
     "title": "Vista previa del recuerdo",
     "emptyState": "Comienza a llenar el formulario para ver la vista previa",
     "keywords": "Palabras clave"
+  },
+  "tags": {
+    "placeholder": "Añadir una palabra clave...",
+    "suggestions": "Sugerencias:",
+    "counter": "{{count}}/{{max}} palabras clave • Presiona Enter para añadir",
+    "suggestedTags": {
+      "family": "Familia",
+      "vacation": "Vacaciones",
+      "childhood": "Infancia",
+      "wedding": "Boda",
+      "birthday": "Cumpleaños",
+      "travel": "Viaje",
+      "holidays": "Fiestas",
+      "memories": "Recuerdos",
+      "heritage": "Herencia",
+      "traditions": "Tradiciones"
+    }
+  },
+  "media": {
+    "recordVoice": "Grabar un mensaje de voz",
+    "cancelRecording": "Cancelar grabación",
+    "orImportFile": "o importar un archivo",
+    "dropHere": "Suelta tus archivos aquí",
+    "dragDrop": "Arrastra y suelta tus archivos",
+    "clickToSelect": "o haz clic para seleccionar • Máx {{maxFiles}} archivos, {{maxSize}} MB cada uno",
+    "audioSupported": "Archivos de audio soportados",
+    "allSupported": "Imágenes, videos y audio soportados",
+    "formatNotSupported": "Formato no soportado: {{type}}",
+    "fileTooLarge": "Archivo demasiado grande (máx {{max}} MB)",
+    "maxFilesReached": "Máximo {{max}} archivos permitidos",
+    "notAuthenticated": "No autenticado",
+    "networkError": "Error de red - por favor, inténtalo de nuevo",
+    "timeoutError": "Tiempo de espera - archivo muy grande o conexión lenta",
+    "uploadError": "Error {{status}}",
+    "recordingAdded": "¡Grabación añadida!",
+    "uploaded": "Subido",
+    "uploading": "Subiendo...",
+    "fileCounter": "{{count}}/{{max}} archivos"
+  },
+  "memoryDate": {
+    "exact": "Fecha exacta",
+    "month": "Mes / Año",
+    "year": "Año",
+    "range": "Período",
+    "selectDate": "Seleccionar una fecha",
+    "monthPlaceholder": "Mes",
+    "yearPlaceholder": "Año",
+    "selectYear": "Seleccionar un año",
+    "from": "De",
+    "to": "A",
+    "rangeSeparator": "a",
+    "months": {
+      "1": "Enero",
+      "2": "Febrero",
+      "3": "Marzo",
+      "4": "Abril",
+      "5": "Mayo",
+      "6": "Junio",
+      "7": "Julio",
+      "8": "Agosto",
+      "9": "Septiembre",
+      "10": "Octubre",
+      "11": "Noviembre",
+      "12": "Diciembre"
+    }
   }
 }
