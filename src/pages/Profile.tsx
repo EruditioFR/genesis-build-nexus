@@ -44,18 +44,11 @@ import type { Database } from '@/integrations/supabase/types';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
-const profileSchema = z.object({
-  display_name: z.string()
-    .min(2, 'Le nom doit contenir au moins 2 caractères')
-    .max(100, 'Le nom ne peut pas dépasser 100 caractères'),
-  bio: z.string()
-    .max(500, 'La bio ne peut pas dépasser 500 caractères')
-    .optional()
-    .nullable(),
-  birth_date: z.date().optional().nullable(),
-});
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
+type ProfileFormValues = {
+  display_name: string;
+  bio?: string | null;
+  birth_date?: Date | null;
+};
 
 
 const Profile = () => {
@@ -69,6 +62,18 @@ const Profile = () => {
     const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
     return localeMap[i18n.language] || fr;
   };
+
+  // Create schema with translations
+  const profileSchema = z.object({
+    display_name: z.string()
+      .min(2, t('profile.displayNameMin'))
+      .max(100, t('profile.displayNameMax')),
+    bio: z.string()
+      .max(500, t('profile.bioMax'))
+      .optional()
+      .nullable(),
+    birth_date: z.date().optional().nullable(),
+  });
 
   const subscriptionLabels: Record<string, { label: string; color: string }> = {
     free: { label: t('profile.subscriptionFree'), color: 'bg-muted text-muted-foreground' },
@@ -173,12 +178,12 @@ const Profile = () => {
       // Refresh profile to get updated storage limits
       fetchProfile();
       // Show success notification
-      toast.success('🎉 Abonnement activé avec succès !');
+      toast.success(t('profile.subscriptionSuccess'));
       // Clean URL
       searchParams.delete('subscription');
       setSearchParams(searchParams, { replace: true });
     }
-  }, [searchParams, setSearchParams, user, checkSubscription, fetchProfile]);
+  }, [searchParams, setSearchParams, user, checkSubscription, fetchProfile, t]);
 
   useEffect(() => {
     if (user) {
@@ -202,7 +207,7 @@ const Profile = () => {
     try {
       await createCheckout('premium');
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la création de la session de paiement');
+      toast.error(error.message || t('profile.checkoutError'));
     } finally {
       setIsUpgrading(false);
     }
@@ -213,7 +218,7 @@ const Profile = () => {
     try {
       await openCustomerPortal();
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de l\'ouverture du portail de gestion');
+      toast.error(error.message || t('profile.portalError'));
     } finally {
       setIsManaging(false);
     }
@@ -319,7 +324,7 @@ const Profile = () => {
             className="p-6 rounded-2xl border border-border bg-card"
           >
             <h2 className="text-lg font-display font-semibold text-foreground mb-6">
-              Photo de profil
+              {t('profile.photo')}
             </h2>
             <AvatarUpload
               userId={user.id}
@@ -337,7 +342,7 @@ const Profile = () => {
             className="p-6 rounded-2xl border border-border bg-card"
           >
             <h2 className="text-lg font-display font-semibold text-foreground mb-6">
-              Informations personnelles
+              {t('profile.personalInfo')}
             </h2>
 
             <Form {...form}>
@@ -347,15 +352,15 @@ const Profile = () => {
                   name="display_name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nom d'affichage</FormLabel>
+                      <FormLabel>{t('profile.displayName')}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Votre nom"
+                          placeholder={t('profile.displayNamePlaceholder')}
                           {...field}
                         />
                       </FormControl>
                       <FormDescription>
-                        Ce nom sera visible par les membres de vos cercles
+                        {t('profile.displayNameHint')}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -363,14 +368,14 @@ const Profile = () => {
                 />
 
                 <div className="space-y-2">
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('profile.email')}</FormLabel>
                   <Input
                     value={user.email || ''}
                     disabled
                     className="bg-muted"
                   />
                   <p className="text-xs text-muted-foreground">
-                    L'email ne peut pas être modifié
+                    {t('profile.emailReadOnly')}
                   </p>
                 </div>
 
@@ -379,7 +384,7 @@ const Profile = () => {
                   name="birth_date"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Date de naissance</FormLabel>
+                      <FormLabel>{t('profile.birthDate')}</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -391,9 +396,9 @@ const Profile = () => {
                               )}
                             >
                               {field.value ? (
-                                format(field.value, "d MMMM yyyy", { locale: fr })
+                                format(field.value, "d MMMM yyyy", { locale: getLocale() })
                               ) : (
-                                <span>Sélectionner une date</span>
+                                <span>{t('profile.birthDatePlaceholder')}</span>
                               )}
                               <Calendar className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -411,11 +416,12 @@ const Profile = () => {
                             captionLayout="dropdown-buttons"
                             fromYear={1900}
                             toYear={new Date().getFullYear()}
+                            locale={getLocale()}
                           />
                         </PopoverContent>
                       </Popover>
                       <FormDescription>
-                        Utilisée pour les suggestions personnalisées
+                        {t('profile.birthDateHint')}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -427,10 +433,10 @@ const Profile = () => {
                   name="bio"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bio</FormLabel>
+                      <FormLabel>{t('profile.bio')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Parlez-nous de vous..."
+                          placeholder={t('profile.bioPlaceholder')}
                           className="resize-none"
                           rows={4}
                           {...field}
@@ -438,7 +444,7 @@ const Profile = () => {
                         />
                       </FormControl>
                       <FormDescription>
-                        Une courte description visible sur votre profil
+                        {t('profile.bioHint')}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -453,12 +459,12 @@ const Profile = () => {
                   {isSaving ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Enregistrement...
+                      {t('profile.saving')}
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      Enregistrer les modifications
+                      {t('profile.saveChanges')}
                     </>
                   )}
                 </Button>
@@ -474,7 +480,7 @@ const Profile = () => {
             className="p-6 rounded-2xl border border-border bg-card"
           >
             <h2 className="text-lg font-display font-semibold text-foreground mb-4">
-              Abonnement
+              {t('profile.subscription')}
             </h2>
             
             <div className="flex flex-col gap-4">
@@ -484,7 +490,7 @@ const Profile = () => {
                     {subscription.label}
                   </Badge>
                   <span className="text-sm text-muted-foreground">
-                    {realStorageUsedMb.toFixed(1)} Mo / {profile.storage_limit_mb} Mo utilisés
+                    {t('profile.storageUsed', { used: realStorageUsedMb.toFixed(1), total: profile.storage_limit_mb })}
                   </span>
                 </div>
               </div>
@@ -492,17 +498,13 @@ const Profile = () => {
               {profile.subscription_level !== 'free' && (
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-foreground">Prix :</span>
-                    <span>{tier === 'premium' ? '9,99 €/mois' : '19,99 €/mois'}</span>
+                    <span className="font-medium text-foreground">{t('profile.price')} :</span>
+                    <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9,99 €' : '19,99 €' })}</span>
                   </div>
                   {subscriptionEnd && (
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-foreground">Prochain renouvellement :</span>
-                      <span>{new Date(subscriptionEnd).toLocaleDateString('fr-FR', { 
-                        day: 'numeric', 
-                        month: 'long', 
-                        year: 'numeric' 
-                      })}</span>
+                      <span className="font-medium text-foreground">{t('profile.nextRenewal')} :</span>
+                      <span>{format(new Date(subscriptionEnd), 'd MMMM yyyy', { locale: getLocale() })}</span>
                     </div>
                   )}
                 </div>
@@ -515,7 +517,7 @@ const Profile = () => {
                   asChild
                 >
                   <Link to="/premium">
-                    Passer Premium
+                    {t('profile.upgrade')}
                   </Link>
                 </Button>
               ) : (
@@ -528,10 +530,10 @@ const Profile = () => {
                   {isManaging ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      Chargement...
+                      {t('profile.managingSubscription')}
                     </>
                   ) : (
-                    'Gérer mon abonnement'
+                    t('profile.manageSubscription')
                   )}
                 </Button>
               )}
@@ -552,7 +554,7 @@ const Profile = () => {
                     <Receipt className="w-5 h-5 text-primary" />
                   </div>
                   <h2 className="text-lg font-display font-semibold text-foreground">
-                    Mes factures
+                    {t('profile.invoices')}
                   </h2>
                 </div>
                 <Button
@@ -564,14 +566,14 @@ const Profile = () => {
                   {invoicesLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    'Charger les factures'
+                    t('profile.invoicesLoad')
                   )}
                 </Button>
               </div>
 
               {invoices.length === 0 && !invoicesLoading ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  Cliquez sur "Charger les factures" pour voir vos factures
+                  {t('profile.invoicesLoadPrompt')}
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -583,21 +585,17 @@ const Profile = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium text-sm">
-                            Facture {invoice.number || invoice.id.slice(-8)}
+                            {t('profile.invoiceNumber', { number: invoice.number || invoice.id.slice(-8) })}
                           </span>
                           <Badge 
                             variant={invoice.status === 'paid' ? 'default' : 'secondary'}
                             className={invoice.status === 'paid' ? 'bg-green-500/20 text-green-600 border-green-500/30' : ''}
                           >
-                            {invoice.status === 'paid' ? 'Payée' : invoice.status === 'open' ? 'En attente' : invoice.status}
+                            {invoice.status === 'paid' ? t('profile.invoicePaid') : invoice.status === 'open' ? t('profile.invoiceOpen') : invoice.status}
                           </Badge>
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          {new Date(invoice.created * 1000).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric'
-                          })}
+                          {format(new Date(invoice.created * 1000), 'd MMMM yyyy', { locale: getLocale() })}
                           {' • '}
                           {(invoice.amount_paid / 100).toFixed(2)} {invoice.currency.toUpperCase()}
                         </div>
@@ -610,7 +608,7 @@ const Profile = () => {
                             asChild
                             className="h-8 w-8"
                           >
-                            <a href={invoice.invoice_pdf} target="_blank" rel="noopener noreferrer" title="Télécharger PDF">
+                            <a href={invoice.invoice_pdf} target="_blank" rel="noopener noreferrer" title={t('profile.downloadPdf')}>
                               <Download className="w-4 h-4" />
                             </a>
                           </Button>
@@ -622,7 +620,7 @@ const Profile = () => {
                             asChild
                             className="h-8 w-8"
                           >
-                            <a href={invoice.hosted_invoice_url} target="_blank" rel="noopener noreferrer" title="Voir en ligne">
+                            <a href={invoice.hosted_invoice_url} target="_blank" rel="noopener noreferrer" title={t('profile.viewInvoice')}>
                               <ExternalLink className="w-4 h-4" />
                             </a>
                           </Button>
@@ -651,15 +649,15 @@ const Profile = () => {
                   <Shield className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">Espace Gardien</h3>
+                  <h3 className="font-medium">{t('profile.guardianSpace')}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Gérez les capsules héritage qui vous sont confiées
+                    {t('profile.guardianSpaceDesc')}
                   </p>
                 </div>
               </div>
               <Button asChild variant="outline">
                 <Link to="/guardian-dashboard">
-                  Accéder
+                  {t('profile.guardianAccess')}
                 </Link>
               </Button>
             </div>
