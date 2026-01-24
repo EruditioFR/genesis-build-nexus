@@ -4,7 +4,6 @@ import { driver, Config } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import confetti from 'canvas-confetti';
 import { TourType, getTourSteps, getTourStorageKey } from '@/lib/tourSteps';
-import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 
 // Inject custom styles for driver.js - COMPLETE UX OVERHAUL
 const injectTourStyles = (totalSteps: number) => {
@@ -490,15 +489,18 @@ export const useFeatureTour = (tourType: TourType) => {
 
   // Public startTour shows welcome dialog first
   const startTour = useCallback(() => {
+    console.log('[Tour] startTour called, showing welcome dialog');
     setShowWelcomeDialog(true);
   }, []);
 
   // Start tour directly without welcome dialog (for manual restart)
   const startTourDirect = useCallback(() => {
+    console.log('[Tour] startTourDirect called');
     startDriverTour();
   }, [startDriverTour]);
 
   const handleWelcomeStart = useCallback(() => {
+    console.log('[Tour] Welcome dialog - Start clicked');
     setShowWelcomeDialog(false);
     // Small delay to ensure dialog is closed before tour starts
     setTimeout(() => {
@@ -507,12 +509,14 @@ export const useFeatureTour = (tourType: TourType) => {
   }, [startDriverTour]);
 
   const handleWelcomeSkip = useCallback(() => {
+    console.log('[Tour] Welcome dialog - Skip clicked');
     setShowWelcomeDialog(false);
     // Mark as completed so it doesn't auto-show again
     localStorage.setItem(getTourStorageKey(tourType), 'true');
   }, [tourType]);
 
   const handleWelcomeClose = useCallback(() => {
+    console.log('[Tour] Welcome dialog - Close clicked');
     setShowWelcomeDialog(false);
   }, []);
 
@@ -539,25 +543,20 @@ export const useFeatureTour = (tourType: TourType) => {
     };
   }, []);
 
-  // Render welcome dialog component
-  const WelcomeDialog = useCallback(() => (
-    <TourWelcomeDialog
-      isOpen={showWelcomeDialog}
-      tourType={tourType}
-      onStart={handleWelcomeStart}
-      onSkip={handleWelcomeSkip}
-      onClose={handleWelcomeClose}
-    />
-  ), [showWelcomeDialog, tourType, handleWelcomeStart, handleWelcomeSkip, handleWelcomeClose]);
-
   return {
     startTour,
     startTourDirect,
     stopTour,
     isTourCompleted,
     resetTour,
-    WelcomeDialog,
-    showWelcomeDialog,
+    // Welcome dialog props - consumers render TourWelcomeDialog directly
+    welcomeDialogProps: {
+      isOpen: showWelcomeDialog,
+      tourType,
+      onStart: handleWelcomeStart,
+      onSkip: handleWelcomeSkip,
+      onClose: handleWelcomeClose,
+    },
   };
 };
 

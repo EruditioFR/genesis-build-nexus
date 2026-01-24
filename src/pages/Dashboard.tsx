@@ -16,6 +16,7 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
+import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -77,7 +78,7 @@ const Dashboard = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { startTour, isTourCompleted, WelcomeDialog } = useOnboardingTour();
+  const { startTour, isTourCompleted, welcomeDialogProps } = useOnboardingTour();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
   const [familyPersonsCount, setFamilyPersonsCount] = useState(0);
@@ -296,7 +297,7 @@ const Dashboard = () => {
   return (
     <>
       <NoIndex />
-      <WelcomeDialog />
+      <TourWelcomeDialog {...welcomeDialogProps} />
       <AuthenticatedLayout
         user={{
           id: user.id,
