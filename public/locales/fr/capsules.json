@@ -20,6 +20,7 @@
     "contentPlaceholder": "Écrivez votre texte, lettre ou récit...",
     "contentMaxLength": "Le contenu ne peut pas dépasser 10 000 caractères",
     "memoryDate": "Date du souvenir",
+    "memoryDateDesc": "Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.",
     "category": "Catégorie",
     "tags": "Mots-clés",
     "tagsPlaceholder": "Ajouter des mots-clés...",

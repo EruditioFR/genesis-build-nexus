@@ -20,6 +20,7 @@
     "contentPlaceholder": "写下你的文字、信件或故事...",
     "contentMaxLength": "内容不能超过10,000个字符",
     "memoryDate": "回忆日期",
+    "memoryDateDesc": "这段回忆发生在什么时候？您可以指定确切日期、月/年、年份或时间段。",
     "category": "分类",
     "tags": "标签",
     "tagsPlaceholder": "添加标签...",
