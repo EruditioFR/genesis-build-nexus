@@ -268,8 +268,11 @@
     "filterDateTo": "To",
     "clearFilters": "Clear filters",
     "emptyTitle": "Your timeline is empty",
-    "emptySubtitle": "Start by creating your first memory to see it appear here.",
+    "emptySubtitle": "Start creating your memories to see them here, organized by decade",
     "createFirst": "Create my first memory",
+    "emptyAutoOrganized": "Your memories will be automatically organized by era",
+    "noResults": "No memories found",
+    "noResultsSubtitle": "No memories match the selected filters",
     "decadeTitle": "{{decade}}s",
     "yearTitle": "Year {{year}}",
     "types": {
@@ -284,6 +287,38 @@
       "published": "Published",
       "scheduled": "Scheduled",
       "archived": "Archived"
+    },
+    "header": {
+      "title": "Your Timeline",
+      "organizedBy": "Organized by decade",
+      "outOf": "out of {{total}}",
+      "launchStory": "Launch slideshow",
+      "loadingStory": "Loading..."
+    },
+    "decade": {
+      "memoriesInDecade": "memory in this decade",
+      "memoriesInDecade_other": "memories in this decade",
+      "memoriesThisYear": "memory this year",
+      "memoriesThisYear_other": "memories this year",
+      "backToDecades": "Back to decades",
+      "media_one": "{{count}} media",
+      "media_other": "{{count}} media",
+      "labels": {
+        "1940": "War years",
+        "1950": "Rock'n'roll",
+        "1960": "Flower Power",
+        "1970": "Disco Fever",
+        "1980": "Neon & Synth",
+        "1990": "Grunge & Pop",
+        "2000": "Digital era",
+        "2010": "Social media",
+        "2020": "Modern era",
+        "default": "{{decade}}s"
+      }
+    },
+    "year": {
+      "close": "Close",
+      "backToYears": "{{decade}}s"
     }
   }
 }

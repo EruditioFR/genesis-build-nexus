@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Clock, Filter, Plus, X, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +11,7 @@ interface TimelineEmptyProps {
 
 const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('dashboard');
 
   if (type === 'no-capsules') {
     return (
@@ -35,10 +37,10 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
         </div>
         
         <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-3">
-          Votre chronologie est vide
+          {t('timeline.emptyTitle')}
         </h2>
         <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
-          Commencez à créer vos souvenirs pour les voir apparaître ici, organisés par décennie
+          {t('timeline.emptySubtitle')}
         </p>
         
         <Button
@@ -47,12 +49,12 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
           className="gap-2 bg-gradient-to-r from-secondary to-primary hover:opacity-90 text-primary-foreground shadow-lg"
         >
           <Plus className="w-5 h-5" />
-          Créer mon premier souvenir
+          {t('timeline.createFirst')}
         </Button>
         
         <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
           <Sparkles className="w-4 h-4 text-secondary" />
-          <span>Vos souvenirs seront automatiquement organisés par époque</span>
+          <span>{t('timeline.emptyAutoOrganized')}</span>
         </div>
       </motion.div>
     );
@@ -69,10 +71,10 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
       </div>
       
       <h2 className="text-xl font-semibold text-foreground mb-3">
-        Aucun souvenir trouvé
+        {t('timeline.noResults')}
       </h2>
       <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
-        Aucun souvenir ne correspond aux filtres sélectionnés
+        {t('timeline.noResultsSubtitle')}
       </p>
       
       <Button
@@ -81,7 +83,7 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
         className="gap-2"
       >
         <X className="w-4 h-4" />
-        Effacer les filtres
+        {t('timeline.clearFilters')}
       </Button>
     </motion.div>
   );

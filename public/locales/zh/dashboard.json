@@ -268,8 +268,11 @@
     "filterDateTo": "到",
     "clearFilters": "清除筛选",
     "emptyTitle": "您的时间线是空的",
-    "emptySubtitle": "创建您的第一个回忆，它将显示在这里。",
+    "emptySubtitle": "开始创建回忆，它们将按年代组织显示在这里",
     "createFirst": "创建我的第一个回忆",
+    "emptyAutoOrganized": "您的回忆将按时代自动整理",
+    "noResults": "未找到回忆",
+    "noResultsSubtitle": "没有回忆符合所选筛选条件",
     "decadeTitle": "{{decade}}年代",
     "yearTitle": "{{year}}年",
     "types": {
@@ -284,6 +287,38 @@
       "published": "已发布",
       "scheduled": "已安排",
       "archived": "已归档"
+    },
+    "header": {
+      "title": "您的时间线",
+      "organizedBy": "按年代组织",
+      "outOf": "共 {{total}} 个",
+      "launchStory": "启动幻灯片",
+      "loadingStory": "加载中..."
+    },
+    "decade": {
+      "memoriesInDecade": "个回忆在这个年代",
+      "memoriesInDecade_other": "个回忆在这个年代",
+      "memoriesThisYear": "个回忆在今年",
+      "memoriesThisYear_other": "个回忆在今年",
+      "backToDecades": "返回年代",
+      "media_one": "{{count}} 个媒体",
+      "media_other": "{{count}} 个媒体",
+      "labels": {
+        "1940": "战争年代",
+        "1950": "摇滚年代",
+        "1960": "花之力量",
+        "1970": "迪斯科狂热",
+        "1980": "霓虹与合成器",
+        "1990": "垃圾摇滚与流行",
+        "2000": "数字时代",
+        "2010": "社交媒体",
+        "2020": "现代",
+        "default": "{{decade}}年代"
+      }
+    },
+    "year": {
+      "close": "关闭",
+      "backToYears": "{{decade}}年代"
     }
   }
 }

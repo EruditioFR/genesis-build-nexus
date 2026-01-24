@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, FileText, Image, Video, Music, Layers, ChevronRight, Clock, Eye, Play } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import { 
   Dialog,
   DialogContent,
@@ -17,18 +18,6 @@ import type { Category } from '@/hooks/useCategories';
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
-
-const capsuleTypeConfig: Record<CapsuleType, { 
-  icon: typeof FileText; 
-  label: string; 
-  color: string;
-}> = {
-  text: { icon: FileText, label: 'Texte', color: 'bg-blue-500' },
-  photo: { icon: Image, label: 'Photo', color: 'bg-emerald-500' },
-  video: { icon: Video, label: 'Vidéo', color: 'bg-purple-500' },
-  audio: { icon: Music, label: 'Audio', color: 'bg-orange-500' },
-  mixed: { icon: Layers, label: 'Mixte', color: 'bg-pink-500' },
-};
 
 interface CapsuleMedia {
   id: string;
@@ -57,11 +46,29 @@ const YearModal = ({
   onBackToDecade,
   onCapsuleClick 
 }: YearModalProps) => {
+  const { t, i18n } = useTranslation('dashboard');
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
+
+  const capsuleTypeConfig: Record<CapsuleType, { 
+    icon: typeof FileText; 
+    color: string;
+  }> = {
+    text: { icon: FileText, color: 'bg-blue-500' },
+    photo: { icon: Image, color: 'bg-emerald-500' },
+    video: { icon: Video, color: 'bg-purple-500' },
+    audio: { icon: Music, color: 'bg-orange-500' },
+    mixed: { icon: Layers, color: 'bg-pink-500' },
+  };
+
   // Group by month
   const groupedByMonth: Record<string, Capsule[]> = {};
   capsules.forEach(capsule => {
     const date = capsule.memory_date ? parseISO(capsule.memory_date) : parseISO(capsule.created_at);
-    const month = format(date, 'MMMM', { locale: fr });
+    const month = format(date, 'MMMM', { locale: getLocale() });
     if (!groupedByMonth[month]) groupedByMonth[month] = [];
     groupedByMonth[month].push(capsule);
   });
@@ -78,7 +85,7 @@ const YearModal = ({
             </DialogTitle>
           </DialogHeader>
           <p className="text-white/80 mt-2">
-            {capsules.length} souvenir{capsules.length > 1 ? 's' : ''} cette année
+            {capsules.length} {t('timeline.decade.memoriesThisYear', { count: capsules.length })}
           </p>
         </div>
 
@@ -146,12 +153,12 @@ const YearModal = ({
                               {memoryDate && (
                                 <p className="text-xs text-secondary flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
-                                  {format(memoryDate, 'd MMM', { locale: fr })}
+                                  {format(memoryDate, 'd MMM', { locale: getLocale() })}
                                 </p>
                               )}
                               <p className={`text-xs flex items-center gap-1 ${memoryDate ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
                                 <Clock className="w-3 h-3" />
-                                {format(createdDate, 'd MMM', { locale: fr })}
+                                {format(createdDate, 'd MMM', { locale: getLocale() })}
                               </p>
                             </div>
 
@@ -169,8 +176,8 @@ const YearModal = ({
                                 }`}
                               >
                                 {capsule.status === 'published' ? (
-                                  <><Eye className="w-3 h-3 mr-1" />Publié</>
-                                ) : 'Brouillon'}
+                                  <><Eye className="w-3 h-3 mr-1" />{t('timeline.statuses.published')}</>
+                                ) : t('timeline.statuses.draft')}
                               </Badge>
                             </div>
                           </div>
@@ -191,10 +198,10 @@ const YearModal = ({
         <div className="p-4 border-t border-border bg-muted/30 flex gap-2">
           <Button variant="outline" onClick={onBackToDecade} className="flex-1 gap-2">
             <ArrowLeft className="w-4 h-4" />
-            Années {decade}
+            {t('timeline.year.backToYears', { decade })}
           </Button>
           <Button variant="ghost" onClick={onClose} className="gap-2">
-            Fermer
+            {t('timeline.year.close')}
           </Button>
         </div>
       </DialogContent>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Calendar, ChevronRight, ArrowLeft, ImageIcon, Video } from 'lucide-react';
+import { Calendar, ChevronRight, ArrowLeft, Video } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { 
   Dialog,
   DialogContent,
@@ -23,6 +24,7 @@ interface DecadeModalProps {
 }
 
 const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) => {
+  const { t } = useTranslation('dashboard');
   const sortedYears = Object.entries(years).sort(([a], [b]) => parseInt(b) - parseInt(a));
   const totalCapsules = Object.values(years).reduce((sum, data) => sum + data.count, 0);
 
@@ -34,11 +36,11 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
           <DialogHeader>
             <DialogTitle className="text-2xl font-display font-bold text-white flex items-center gap-2">
               <Calendar className="w-6 h-6" />
-              Années {decade}
+              {t('timeline.decadeTitle', { decade })}
             </DialogTitle>
           </DialogHeader>
           <p className="text-white/80 mt-2">
-            {totalCapsules} souvenir{totalCapsules > 1 ? 's' : ''} dans cette décennie
+            {totalCapsules} {t('timeline.decade.memoriesInDecade', { count: totalCapsules })}
           </p>
         </div>
 
@@ -92,9 +94,9 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
                     )}
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {data.count} souvenir{data.count > 1 ? 's' : ''}
+                    {t('timeline.memories', { count: data.count })}
                     {data.thumbnails.length > 0 && (
-                      <span className="text-secondary"> · {data.thumbnails.length} média{data.thumbnails.length > 1 ? 's' : ''}</span>
+                      <span className="text-secondary"> · {t('timeline.decade.media', { count: data.thumbnails.length })}</span>
                     )}
                   </span>
                 </div>
@@ -109,7 +111,7 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
         <div className="p-4 border-t border-border bg-muted/30">
           <Button variant="outline" onClick={onClose} className="w-full gap-2">
             <ArrowLeft className="w-4 h-4" />
-            Retour aux décennies
+            {t('timeline.decade.backToDecades')}
           </Button>
         </div>
       </DialogContent>

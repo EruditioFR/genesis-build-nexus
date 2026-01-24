@@ -268,8 +268,11 @@
     "filterDateTo": "Au",
     "clearFilters": "Effacer les filtres",
     "emptyTitle": "Votre chronologie est vide",
-    "emptySubtitle": "Commencez par créer votre premier souvenir pour le voir apparaître ici.",
+    "emptySubtitle": "Commencez à créer vos souvenirs pour les voir apparaître ici, organisés par décennie",
     "createFirst": "Créer mon premier souvenir",
+    "emptyAutoOrganized": "Vos souvenirs seront automatiquement organisés par époque",
+    "noResults": "Aucun souvenir trouvé",
+    "noResultsSubtitle": "Aucun souvenir ne correspond aux filtres sélectionnés",
     "decadeTitle": "Années {{decade}}",
     "yearTitle": "Année {{year}}",
     "types": {
@@ -284,6 +287,38 @@
       "published": "Publié",
       "scheduled": "Programmé",
       "archived": "Archivé"
+    },
+    "header": {
+      "title": "Votre Chronologie",
+      "organizedBy": "Organisés par décennie",
+      "outOf": "sur {{total}}",
+      "launchStory": "Lancer le diaporama",
+      "loadingStory": "Chargement..."
+    },
+    "decade": {
+      "memoriesInDecade": "souvenir dans cette décennie",
+      "memoriesInDecade_other": "souvenirs dans cette décennie",
+      "memoriesThisYear": "souvenir cette année",
+      "memoriesThisYear_other": "souvenirs cette année",
+      "backToDecades": "Retour aux décennies",
+      "media_one": "{{count}} média",
+      "media_other": "{{count}} médias",
+      "labels": {
+        "1940": "Années de guerre",
+        "1950": "Rock'n'roll",
+        "1960": "Flower Power",
+        "1970": "Disco Fever",
+        "1980": "Neon & Synth",
+        "1990": "Grunge & Pop",
+        "2000": "Ère digitale",
+        "2010": "Réseaux sociaux",
+        "2020": "Ère moderne",
+        "default": "Années {{decade}}"
+      }
+    },
+    "year": {
+      "close": "Fermer",
+      "backToYears": "Années {{decade}}"
     }
   }
 }
