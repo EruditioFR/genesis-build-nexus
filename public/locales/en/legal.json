@@ -446,5 +446,71 @@
         "content": "For any questions regarding the Terms of Sale, contact us at:"
       }
     }
+  },
+  "sale": {
+    "title": "Terms of Sale",
+    "sections": {
+      "purpose": {
+        "title": "1. Purpose",
+        "content": "These Terms of Sale govern the sales of services offered by Family Garden SAS to its users via the familygarden.fr platform. Any subscription to a paid plan implies unreserved acceptance of these Terms of Sale."
+      },
+      "services": {
+        "title": "2. Services offered",
+        "intro": "Family Garden offers the following subscriptions:",
+        "plans": {
+          "free": {
+            "name": "Free",
+            "description": "Limited access with basic storage (500 MB), text and photo capsule creation, 1 sharing circle."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Extended storage (10 GB), video and audio capsules, up to 5 sharing circles, scheduled capsules, PDF export."
+          },
+          "legacy": {
+            "name": "Heritage",
+            "description": "All Premium features + unlimited family tree, digital legacy capsules, trusted guardians, unlimited circles, 50 GB storage."
+          }
+        }
+      },
+      "pricing": {
+        "title": "3. Pricing and payment",
+        "content": "Subscription prices are displayed in euros including VAT on the pricing page. Payment is made by credit card via our secure provider Stripe. Billing is monthly or annual depending on the chosen option.",
+        "modifications": "Family Garden reserves the right to modify its prices at any time. New prices will apply to new subscriptions and renewals after 30 days prior notice."
+      },
+      "duration": {
+        "title": "4. Duration and renewal",
+        "content": "Subscriptions are concluded for a monthly or annual period depending on the chosen option. They are automatically renewed at expiry unless cancelled by the user before the renewal date via their personal space or the Stripe customer portal."
+      },
+      "withdrawal": {
+        "title": "5. Right of withdrawal",
+        "content": "In accordance with Article L221-28 of the French Consumer Code, the right of withdrawal does not apply to services fully performed before the end of the withdrawal period and whose execution began after the consumer's express prior agreement.",
+        "guarantee": "However, Family Garden offers a 14-day money-back guarantee for any new Premium or Heritage subscription. To benefit from it, contact us at contact@familygarden.fr."
+      },
+      "cancellation": {
+        "title": "6. Cancellation",
+        "content": "You can cancel your subscription at any time from your personal space. Cancellation takes effect at the end of the current period, without pro-rata refund.",
+        "access": "After cancellation, your account will automatically switch to the free plan. Your data exceeding free plan limits will remain accessible in read-only mode for 30 days."
+      },
+      "liability": {
+        "title": "7. Liability",
+        "content": "Family Garden undertakes to provide its services diligently. However, its liability cannot be engaged in case of force majeure, third party action, or user fault. Family Garden's liability is limited to the amounts actually paid by the user during the last 12 months."
+      },
+      "dataProtection": {
+        "title": "8. Data protection",
+        "content": "The processing of personal data within the scope of subscriptions is governed by our Privacy Policy accessible on our website. Payment data is processed exclusively by Stripe and is never stored on our servers."
+      },
+      "modifications": {
+        "title": "9. Modification of Terms",
+        "content": "Family Garden reserves the right to modify these Terms of Sale. Users will be informed by email of any substantial modification at least 30 days before it comes into effect. Continued use of the service after this date constitutes acceptance of the new terms."
+      },
+      "jurisdiction": {
+        "title": "10. Applicable law and disputes",
+        "content": "These Terms of Sale are governed by French law. In case of dispute, an amicable solution will be sought first. Failing that, French courts will have jurisdiction. In accordance with the Consumer Code, you may use the MEDICYS mediation service free of charge (www.medicys.fr)."
+      },
+      "contact": {
+        "title": "11. Contact",
+        "content": "For any questions regarding these Terms of Sale or your subscription, contact us at:"
+      }
+    }
   }
 }

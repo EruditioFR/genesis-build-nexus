@@ -41,7 +41,7 @@ const TermsOfSale = () => {
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6">
           <p className="text-muted-foreground">
-            {t('common.lastUpdated')} {new Date().toLocaleDateString(getLocale())}
+            {t('common.lastUpdated', { date: new Date().toLocaleDateString(getLocale()) })}
           </p>
 
           <section>

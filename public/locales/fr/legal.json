@@ -446,5 +446,71 @@
         "content": "Pour toute question relative aux CGV, contactez-nous à :"
       }
     }
+  },
+  "sale": {
+    "title": "Conditions Générales de Vente",
+    "sections": {
+      "purpose": {
+        "title": "1. Objet",
+        "content": "Les présentes Conditions Générales de Vente (CGV) régissent les ventes de services proposés par Family Garden SAS à ses utilisateurs via la plateforme familygarden.fr. Toute souscription à un abonnement payant implique l'acceptation sans réserve des présentes CGV."
+      },
+      "services": {
+        "title": "2. Services proposés",
+        "intro": "Family Garden propose les abonnements suivants :",
+        "plans": {
+          "free": {
+            "name": "Gratuit",
+            "description": "Accès limité avec stockage de base (500 Mo), création de capsules texte et photo, 1 cercle de partage."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Stockage étendu (10 Go), capsules vidéo et audio, jusqu'à 5 cercles de partage, capsules programmées, export PDF."
+          },
+          "legacy": {
+            "name": "Héritage",
+            "description": "Toutes les fonctionnalités Premium + arbre généalogique illimité, capsules d'héritage numérique, gardiens de confiance, cercles illimités, stockage 50 Go."
+          }
+        }
+      },
+      "pricing": {
+        "title": "3. Prix et paiement",
+        "content": "Les prix des abonnements sont indiqués en euros TTC sur la page de tarification. Le paiement s'effectue par carte bancaire via notre prestataire sécurisé Stripe. La facturation est mensuelle ou annuelle selon l'option choisie.",
+        "modifications": "Family Garden se réserve le droit de modifier ses tarifs à tout moment. Les nouveaux tarifs s'appliqueront aux nouvelles souscriptions et aux renouvellements après notification préalable de 30 jours."
+      },
+      "duration": {
+        "title": "4. Durée et renouvellement",
+        "content": "Les abonnements sont conclus pour une durée mensuelle ou annuelle selon l'option choisie. Ils sont renouvelés automatiquement à leur échéance sauf résiliation par l'utilisateur avant la date de renouvellement via son espace personnel ou le portail client Stripe."
+      },
+      "withdrawal": {
+        "title": "5. Droit de rétractation",
+        "content": "Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux services pleinement exécutés avant la fin du délai de rétractation et dont l'exécution a commencé après accord préalable exprès du consommateur.",
+        "guarantee": "Toutefois, Family Garden offre une garantie satisfait ou remboursé de 14 jours pour tout nouvel abonnement Premium ou Héritage. Pour en bénéficier, contactez-nous à contact@familygarden.fr."
+      },
+      "cancellation": {
+        "title": "6. Résiliation",
+        "content": "Vous pouvez résilier votre abonnement à tout moment depuis votre espace personnel. La résiliation prend effet à la fin de la période en cours, sans remboursement prorata temporis.",
+        "access": "Après résiliation, votre compte sera automatiquement basculé vers l'offre gratuite. Vos données excédant les limites de l'offre gratuite resteront accessibles en lecture seule pendant 30 jours."
+      },
+      "liability": {
+        "title": "7. Responsabilité",
+        "content": "Family Garden s'engage à fournir ses services avec diligence. Toutefois, sa responsabilité ne pourra être engagée en cas de force majeure, de fait d'un tiers, ou de faute de l'utilisateur. La responsabilité de Family Garden est limitée au montant des sommes effectivement versées par l'utilisateur au cours des 12 derniers mois."
+      },
+      "dataProtection": {
+        "title": "8. Protection des données",
+        "content": "Le traitement des données personnelles dans le cadre des abonnements est régi par notre Politique de Confidentialité accessible sur notre site. Les données de paiement sont traitées exclusivement par Stripe et ne sont jamais stockées sur nos serveurs."
+      },
+      "modifications": {
+        "title": "9. Modification des CGV",
+        "content": "Family Garden se réserve le droit de modifier les présentes CGV. Les utilisateurs seront informés par email de toute modification substantielle au moins 30 jours avant leur entrée en vigueur. L'utilisation continue du service après cette date vaut acceptation des nouvelles conditions."
+      },
+      "jurisdiction": {
+        "title": "10. Droit applicable et litiges",
+        "content": "Les présentes CGV sont régies par le droit français. En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux français seront compétents. Conformément aux dispositions du Code de la consommation, vous pouvez recourir gratuitement au service de médiation MEDICYS (www.medicys.fr)."
+      },
+      "contact": {
+        "title": "11. Contact",
+        "content": "Pour toute question relative aux présentes CGV ou à votre abonnement, contactez-nous à :"
+      }
+    }
   }
 }
