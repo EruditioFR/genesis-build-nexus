@@ -20,6 +20,7 @@
     "contentPlaceholder": "Write your text, letter or story...",
     "contentMaxLength": "Content cannot exceed 10,000 characters",
     "memoryDate": "Memory date",
+    "memoryDateDesc": "When did this memory take place? You can specify an exact date, month/year, year or period.",
     "category": "Category",
     "tags": "Tags",
     "tagsPlaceholder": "Add tags...",

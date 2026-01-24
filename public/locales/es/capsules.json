@@ -20,6 +20,7 @@
     "contentPlaceholder": "Escribe tu texto, carta o historia...",
     "contentMaxLength": "El contenido no puede superar los 10.000 caracteres",
     "memoryDate": "Fecha del recuerdo",
+    "memoryDateDesc": "¿Cuándo ocurrió este recuerdo? Puedes indicar una fecha exacta, mes/año, año o período.",
     "category": "Categoría",
     "tags": "Etiquetas",
     "tagsPlaceholder": "Añadir etiquetas...",

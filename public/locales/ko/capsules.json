@@ -20,6 +20,7 @@
     "contentPlaceholder": "텍스트, 편지 또는 이야기를 작성하세요...",
     "contentMaxLength": "내용은 10,000자를 초과할 수 없습니다",
     "memoryDate": "추억 날짜",
+    "memoryDateDesc": "이 추억은 언제 있었나요? 정확한 날짜, 월/년, 연도 또는 기간을 지정할 수 있습니다.",
     "category": "카테고리",
     "tags": "태그",
     "tagsPlaceholder": "태그 추가...",

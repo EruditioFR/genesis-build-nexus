@@ -529,7 +529,7 @@ const CapsuleCreate = () => {
                 {t('create.memoryDate')}
               </Label>
               <p className="text-sm text-muted-foreground mb-4">
-                {t('create.memoryDateDesc', 'Quand ce souvenir a-t-il eu lieu ? Vous pouvez indiquer une date exacte, un mois/année, une année ou une période.')}
+                {t('create.memoryDateDesc')}
               </p>
               <MemoryDateSelector
                 value={memoryDate}
