@@ -77,6 +77,28 @@
       "progress": "第{{current}}/{{total}}步",
       "skip": "跳过"
     },
+    "welcome": {
+      "dashboard": {
+        "title": "探索您的空间",
+        "description": "快速导览帮助您熟悉仪表板的所有功能。"
+      },
+      "capsule": {
+        "title": "创建您的第一个回忆",
+        "description": "通过几个简单的步骤学习如何创建和整理您的回忆。"
+      },
+      "familyTree": {
+        "title": "探索您的家谱",
+        "description": "了解如何构建和浏览您的互动家谱。"
+      },
+      "circles": {
+        "title": "与家人分享",
+        "description": "学习如何为您的亲人创建分享圈子。"
+      },
+      "duration": "约{{minutes}}分钟",
+      "start": "开始导览",
+      "later": "稍后",
+      "skipHint": "您可以随时从菜单重新开始此导览"
+    },
     "titles": {
       "dashboard": "探索仪表板",
       "capsule": "创建帮助",

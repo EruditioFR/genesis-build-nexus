@@ -77,6 +77,28 @@
       "progress": "Paso {{current}}/{{total}}",
       "skip": "Saltar"
     },
+    "welcome": {
+      "dashboard": {
+        "title": "Descubre tu espacio",
+        "description": "Una visita guiada rápida para familiarizarte con todas las funciones de tu panel."
+      },
+      "capsule": {
+        "title": "Crea tu primer recuerdo",
+        "description": "Aprende a crear y organizar tus recuerdos en unos sencillos pasos."
+      },
+      "familyTree": {
+        "title": "Explora tu árbol",
+        "description": "Descubre cómo construir y navegar por tu árbol genealógico interactivo."
+      },
+      "circles": {
+        "title": "Comparte en familia",
+        "description": "Aprende a crear círculos de intercambio para tus seres queridos."
+      },
+      "duration": "~{{minutes}} min",
+      "start": "Comenzar la visita",
+      "later": "Más tarde",
+      "skipHint": "Puedes reiniciar esta visita desde el menú en cualquier momento"
+    },
     "titles": {
       "dashboard": "Descubrir el panel",
       "capsule": "Ayuda de creación",
