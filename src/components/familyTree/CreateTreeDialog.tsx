@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { CalendarIcon, TreeDeciduous, User, Loader2, ArrowRight, ArrowLeft } from 'lucide-react';
 import type { FamilyTree, FamilyPerson } from '@/types/familyTree';
 
@@ -33,13 +34,18 @@ type PersonType = 'self' | 'ancestor' | 'descendant';
 export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTreeDialogProps) {
   const { user } = useAuth();
   const { createTree, loading } = useFamilyTree();
+  const { t, i18n } = useTranslation('familyTree');
+  
+  const getLocale = () => {
+    const localeMap: Record<string, typeof fr> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
   
   const [step, setStep] = useState<Step>(1);
   const [treeName, setTreeName] = useState('');
   const [treeDescription, setTreeDescription] = useState('');
   const [personType, setPersonType] = useState<PersonType>('self');
   
-  // Person form fields
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [maidenName, setMaidenName] = useState('');
@@ -85,16 +91,25 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
   const canProceedStep2 = true;
   const canCreate = firstName.trim().length > 0 && lastName.trim().length > 0;
 
+  const getRootPersonDescription = () => {
+    switch (personType) {
+      case 'self': return t('createTree.rootPersonInfo');
+      case 'ancestor': return t('createTree.ancestorInfo');
+      case 'descendant': return t('createTree.descendantInfo');
+      default: return '';
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <TreeDeciduous className="w-5 h-5 text-secondary" />
-            Créer un arbre généalogique
+            {t('createTree.title')}
           </DialogTitle>
           <DialogDescription>
-            Étape {step} sur 3
+            {t('createTree.step', { current: step, total: 3 })}
           </DialogDescription>
         </DialogHeader>
 
@@ -103,19 +118,19 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
           {step === 1 && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="treeName">Nom de l'arbre *</Label>
+                <Label htmlFor="treeName">{t('createTree.treeName')} *</Label>
                 <Input
                   id="treeName"
-                  placeholder="ex: Famille Martin, Mes ancêtres..."
+                  placeholder={t('createTree.treeNamePlaceholder')}
                   value={treeName}
                   onChange={(e) => setTreeName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="treeDescription">Description (optionnel)</Label>
+                <Label htmlFor="treeDescription">{t('createTree.treeDescription')}</Label>
                 <Textarea
                   id="treeDescription"
-                  placeholder="Une brève description de cet arbre..."
+                  placeholder={t('createTree.treeDescriptionPlaceholder')}
                   value={treeDescription}
                   onChange={(e) => setTreeDescription(e.target.value)}
                   rows={3}
@@ -128,7 +143,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
           {step === 2 && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Qui est la personne centrale de cet arbre ?
+                {t('createTree.centralPerson')}
               </p>
               <RadioGroup 
                 value={personType} 
@@ -138,27 +153,27 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                 <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="self" id="self" />
                   <Label htmlFor="self" className="flex-1 cursor-pointer">
-                    <span className="font-medium">Moi-même</span>
+                    <span className="font-medium">{t('createTree.personType.self')}</span>
                     <p className="text-sm text-muted-foreground">
-                      Je crée mon propre arbre familial
+                      {t('createTree.personType.selfDesc')}
                     </p>
                   </Label>
                 </div>
                 <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="ancestor" id="ancestor" />
                   <Label htmlFor="ancestor" className="flex-1 cursor-pointer">
-                    <span className="font-medium">Un ancêtre</span>
+                    <span className="font-medium">{t('createTree.personType.ancestor')}</span>
                     <p className="text-sm text-muted-foreground">
-                      Je pars d'un ancêtre pour descendre vers le présent
+                      {t('createTree.personType.ancestorDesc')}
                     </p>
                   </Label>
                 </div>
                 <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="descendant" id="descendant" />
                   <Label htmlFor="descendant" className="flex-1 cursor-pointer">
-                    <span className="font-medium">Un descendant</span>
+                    <span className="font-medium">{t('createTree.personType.descendant')}</span>
                     <p className="text-sm text-muted-foreground">
-                      Pour mes enfants ou petits-enfants
+                      {t('createTree.personType.descendantDesc')}
                     </p>
                   </Label>
                 </div>
@@ -172,18 +187,16 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                 <User className="w-10 h-10 text-muted-foreground" />
                 <div>
-                  <p className="font-medium">Personne centrale</p>
+                  <p className="font-medium">{t('createTree.rootPerson')}</p>
                   <p className="text-sm text-muted-foreground">
-                    {personType === 'self' ? 'Vos informations' : 
-                     personType === 'ancestor' ? 'L\'ancêtre à partir duquel construire' :
-                     'Le descendant central de l\'arbre'}
+                    {getRootPersonDescription()}
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName">Prénom(s) *</Label>
+                  <Label htmlFor="firstName">{t('addPerson.firstName')} *</Label>
                   <Input
                     id="firstName"
                     placeholder="Jean Pierre"
@@ -192,7 +205,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName">Nom de famille *</Label>
+                  <Label htmlFor="lastName">{t('addPerson.lastName')} *</Label>
                   <Input
                     id="lastName"
                     placeholder="Martin"
@@ -203,7 +216,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="maidenName">Nom de naissance (si différent)</Label>
+                <Label htmlFor="maidenName">{t('addPerson.maidenName')}</Label>
                 <Input
                   id="maidenName"
                   placeholder="Dupont"
@@ -213,7 +226,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               </div>
 
               <div className="space-y-2">
-                <Label>Sexe</Label>
+                <Label>{t('addPerson.gender')}</Label>
                 <RadioGroup 
                   value={gender} 
                   onValueChange={(v) => setGender(v as 'male' | 'female' | 'other')}
@@ -221,22 +234,22 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">Homme</Label>
+                    <Label htmlFor="male">{t('addPerson.male')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">Femme</Label>
+                    <Label htmlFor="female">{t('addPerson.female')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="other" id="other" />
-                    <Label htmlFor="other">Autre</Label>
+                    <Label htmlFor="other">{t('addPerson.other')}</Label>
                   </div>
                 </RadioGroup>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Date de naissance</Label>
+                  <Label>{t('addPerson.birthDate')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -247,7 +260,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {birthDate ? format(birthDate, "dd MMMM yyyy", { locale: fr }) : "Sélectionner"}
+                        {birthDate ? format(birthDate, "dd MMMM yyyy", { locale: getLocale() }) : t('addPerson.select')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -256,7 +269,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                         selected={birthDate}
                         onSelect={setBirthDate}
                         initialFocus
-                        locale={fr}
+                        locale={getLocale()}
                         captionLayout="dropdown-buttons"
                         fromYear={1850}
                         toYear={new Date().getFullYear()}
@@ -265,7 +278,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                   </Popover>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="birthPlace">Lieu de naissance</Label>
+                  <Label htmlFor="birthPlace">{t('addPerson.birthPlace')}</Label>
                   <Input
                     id="birthPlace"
                     placeholder="Paris, France"
@@ -276,7 +289,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               </div>
 
               <div className="space-y-2">
-                <Label>Cette personne est</Label>
+                <Label>{t('addPerson.isAlive')}</Label>
                 <RadioGroup 
                   value={isAlive ? 'alive' : 'deceased'} 
                   onValueChange={(v) => setIsAlive(v === 'alive')}
@@ -284,11 +297,11 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="alive" id="alive" />
-                    <Label htmlFor="alive">Vivante</Label>
+                    <Label htmlFor="alive">{t('detail.fields.isAlive')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="deceased" id="deceased" />
-                    <Label htmlFor="deceased">Décédée</Label>
+                    <Label htmlFor="deceased">{t('person.deceased')}</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -301,11 +314,11 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
           {step > 1 ? (
             <Button variant="outline" onClick={() => setStep((step - 1) as Step)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Précédent
+              {t('createTree.previous')}
             </Button>
           ) : (
             <Button variant="outline" onClick={handleClose}>
-              Annuler
+              {t('createTree.cancel')}
             </Button>
           )}
 
@@ -314,7 +327,7 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               onClick={() => setStep((step + 1) as Step)}
               disabled={step === 1 && !canProceedStep1}
             >
-              Suivant
+              {t('createTree.next')}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
@@ -325,12 +338,12 @@ export function CreateTreeDialog({ open, onOpenChange, onTreeCreated }: CreateTr
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Création...
+                  {t('createTree.creating')}
                 </>
               ) : (
                 <>
                   <TreeDeciduous className="w-4 h-4 mr-2" />
-                  Créer l'arbre
+                  {t('createTree.createTree')}
                 </>
               )}
             </Button>

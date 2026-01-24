@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, AlertCircle, CheckCircle2, Users, Heart, Loader2, UserCheck, UserPlus, SkipForward, Zap } from 'lucide-react';
-// Removed framer-motion animations for Android compatibility
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -30,17 +30,13 @@ interface GedcomImportDialogProps {
 
 type ImportStep = 'upload' | 'preview' | 'duplicates' | 'importing' | 'complete';
 
-interface DuplicateDecision {
-  importedId: string;
-  decision: MergeDecision;
-}
-
 export function GedcomImportDialog({
   open,
   onOpenChange,
   onImport,
   existingPersons,
 }: GedcomImportDialogProps) {
+  const { t } = useTranslation('familyTree');
   const [step, setStep] = useState<ImportStep>('upload');
   const [parseResult, setParseResult] = useState<GedcomParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -63,19 +59,12 @@ export function GedcomImportDialog({
   };
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    console.log('[GEDCOM] onDrop called with', acceptedFiles.length, 'files');
     const file = acceptedFiles[0];
-    if (!file) {
-      console.log('[GEDCOM] No file received');
-      return;
-    }
+    if (!file) return;
 
-    console.log('[GEDCOM] Processing file:', file.name, 'type:', file.type, 'size:', file.size);
-
-    // Vérification manuelle de l'extension
     const ext = file.name.split('.').pop()?.toLowerCase();
     if (ext !== 'ged' && ext !== 'gedcom') {
-      setError('Veuillez sélectionner un fichier .ged ou .gedcom');
+      setError(t('gedcom.invalidFile'));
       return;
     }
 
@@ -84,15 +73,13 @@ export function GedcomImportDialog({
 
     try {
       const content = await file.text();
-      console.log('[GEDCOM] File content length:', content.length);
       
       if (!isValidGedcomFile(content)) {
-        setError('Ce fichier ne semble pas être un fichier GEDCOM valide.');
+        setError(t('gedcom.invalidGedcom'));
         return;
       }
 
       const result = parseGedcom(content);
-      console.log('[GEDCOM] Parsed result:', result.individuals.length, 'individuals,', result.families.length, 'families');
 
       if (result.errors.length > 0 && result.individuals.length === 0) {
         setError(result.errors.join('\n'));
@@ -101,9 +88,7 @@ export function GedcomImportDialog({
 
       setParseResult(result);
 
-      // Mode test: import direct sans vérification de doublons (utile sur Android)
       if (directImport) {
-        console.log('[GEDCOM] Direct import enabled -> starting import');
         setStep('importing');
         setProgress(0);
         setError(null);
@@ -120,8 +105,7 @@ export function GedcomImportDialog({
           setImportStats({ created: result.individuals.length, skipped: 0 });
           setStep('complete');
         } catch (err) {
-          console.error('[GEDCOM] Direct import error:', err);
-          const errorMessage = err instanceof Error ? err.message : 'Erreur lors de l\'import. Veuillez réessayer.';
+          const errorMessage = err instanceof Error ? err.message : t('gedcom.importErrorMsg');
           setError(errorMessage);
           setStep('preview');
         }
@@ -129,28 +113,24 @@ export function GedcomImportDialog({
         return;
       }
 
-      console.log('[GEDCOM] Setting step to preview');
       setStep('preview');
-      console.log('[GEDCOM] Step set to preview, parseResult set');
     } catch (err) {
       console.error('[GEDCOM] Error parsing:', err);
-      setError('Erreur lors de la lecture du fichier. Vérifiez le format.');
+      setError(t('gedcom.readError'));
     }
-  }, [directImport, onImport]);
+  }, [directImport, onImport, t]);
 
   const onDropRejected = useCallback((fileRejections: Array<{ file: File; errors: readonly { message: string }[] }>) => {
-    console.log('[GEDCOM] onDropRejected called:', fileRejections);
     const rejection = fileRejections[0];
     if (rejection) {
       const errorMessages = rejection.errors.map(e => e.message).join(', ');
-      setError(`Fichier refusé : ${errorMessages}. Essayez un fichier .ged ou .gedcom.`);
+      setError(t('gedcom.fileRejected', { errors: errorMessages }));
     }
-  }, []);
+  }, [t]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     onDropRejected,
-    // Pas de filtre MIME strict - on valide manuellement l'extension
     maxFiles: 1,
     maxSize: 10 * 1024 * 1024,
   });
@@ -159,7 +139,6 @@ export function GedcomImportDialog({
     if (!parseResult) return;
 
     if (existingPersons.length === 0) {
-      // No existing persons, skip duplicate check
       handleImport();
       return;
     }
@@ -167,12 +146,10 @@ export function GedcomImportDialog({
     const { duplicates } = detectDuplicates(parseResult.individuals, existingPersons);
     
     if (duplicates.length === 0) {
-      // No duplicates found, proceed to import
       handleImport();
       return;
     }
 
-    // Initialize decisions to 'create' by default
     const initialDecisions: Record<string, MergeDecision> = {};
     duplicates.forEach((d) => {
       initialDecisions[d.importedPerson.id] = 'create';
@@ -199,12 +176,10 @@ export function GedcomImportDialog({
     setError(null);
 
     try {
-      // Get list of IDs to skip
       const skipIds = Object.entries(decisions)
         .filter(([, decision]) => decision === 'skip')
         .map(([id]) => id);
 
-      // Simulate progress
       const progressInterval = setInterval(() => {
         setProgress((prev) => Math.min(prev + 10, 90));
       }, 200);
@@ -219,7 +194,7 @@ export function GedcomImportDialog({
       setStep('complete');
     } catch (err) {
       console.error('Import error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Erreur lors de l\'import. Veuillez réessayer.';
+      const errorMessage = err instanceof Error ? err.message : t('gedcom.importErrorMsg');
       setError(errorMessage);
       setStep('preview');
     }
@@ -252,281 +227,278 @@ export function GedcomImportDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-secondary" />
-            Importer un fichier GEDCOM
+            {t('gedcom.title')}
           </DialogTitle>
           <DialogDescription>
             {step === 'duplicates' 
-              ? 'Des personnes similaires ont été détectées. Choisissez quoi faire pour chacune.'
-              : 'Importez votre arbre généalogique depuis un autre logiciel (Ancestry, MyHeritage, Geneanet, etc.)'}
+              ? t('gedcom.duplicatesDescription')
+              : t('gedcom.description')}
           </DialogDescription>
         </DialogHeader>
 
         {/* Upload Step */}
         {step === 'upload' && (
           <div className="space-y-4">
-              <div
-                {...getRootProps()}
-                className={`
-                  border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
-                  transition-colors duration-200
-                  ${isDragActive 
-                    ? 'border-secondary bg-secondary/10' 
-                    : 'border-muted-foreground/25 hover:border-secondary/50'
-                  }
-                `}
-              >
-                <input {...getInputProps()} />
-                <Upload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                {isDragActive ? (
-                  <p className="text-secondary font-medium">Déposez le fichier ici...</p>
-                ) : (
-                  <>
-                    <p className="text-foreground font-medium mb-1">
-                      Glissez-déposez un fichier GEDCOM
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      ou cliquez pour sélectionner (fichier .ged)
-                    </p>
-                  </>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between gap-4 rounded-lg border bg-card p-3">
-                <div className="space-y-0.5">
-                  <p className="text-sm font-medium">Import direct (test Android)</p>
-                  <p className="text-xs text-muted-foreground">Ignore la détection de doublons et lance l'import dès la sélection.</p>
-                </div>
-                <Switch checked={directImport} onCheckedChange={setDirectImport} />
-              </div>
-
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Erreur</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
+            <div
+              {...getRootProps()}
+              className={`
+                border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
+                transition-colors duration-200
+                ${isDragActive 
+                  ? 'border-secondary bg-secondary/10' 
+                  : 'border-muted-foreground/25 hover:border-secondary/50'
+                }
+              `}
+            >
+              <input {...getInputProps()} />
+              <Upload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              {isDragActive ? (
+                <p className="text-secondary font-medium">{t('gedcom.dropHere')}</p>
+              ) : (
+                <>
+                  <p className="text-foreground font-medium mb-1">
+                    {t('gedcom.dragDrop')}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('gedcom.clickToSelect')}
+                  </p>
+                </>
               )}
+            </div>
 
-              {existingPersons.length > 0 && !directImport && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Arbre existant</AlertTitle>
-                  <AlertDescription>
-                    Votre arbre contient déjà {existingPersons.length} personne(s). 
-                    Les doublons potentiels seront détectés avant l'import.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {existingPersons.length > 0 && directImport && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Mode test activé</AlertTitle>
-                  <AlertDescription>
-                    La détection de doublons est ignorée pour ce test.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="text-sm text-muted-foreground">
-                <p className="font-medium mb-2">Formats supportés :</p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>GEDCOM 5.5 et 5.5.1</li>
-                  <li>Export depuis Ancestry, MyHeritage, Geneanet, Gramps, etc.</li>
-                </ul>
+            <div className="flex items-center justify-between gap-4 rounded-lg border bg-card p-3">
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium">{t('gedcom.directImport')}</p>
+                <p className="text-xs text-muted-foreground">{t('gedcom.directImportDesc')}</p>
               </div>
+              <Switch checked={directImport} onCheckedChange={setDirectImport} />
+            </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('gedcom.error')}</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {existingPersons.length > 0 && !directImport && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('gedcom.existingTree')}</AlertTitle>
+                <AlertDescription>
+                  {t('gedcom.existingTreeDesc', { count: existingPersons.length })}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {existingPersons.length > 0 && directImport && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('gedcom.testModeActive')}</AlertTitle>
+                <AlertDescription>
+                  {t('gedcom.testModeDesc')}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="text-sm text-muted-foreground">
+              <p className="font-medium mb-2">{t('gedcom.supportedFormats')}</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>{t('gedcom.format1')}</li>
+                <li>{t('gedcom.format2')}</li>
+              </ul>
+            </div>
           </div>
         )}
 
         {/* Preview Step */}
         {step === 'preview' && parseResult && (
           <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                <FileText className="w-5 h-5 text-secondary" />
-                <div className="flex-1">
-                  <p className="font-medium text-sm">{fileName}</p>
-                  <p className="text-xs text-muted-foreground">Fichier GEDCOM</p>
-                </div>
+            <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+              <FileText className="w-5 h-5 text-secondary" />
+              <div className="flex-1">
+                <p className="font-medium text-sm">{fileName}</p>
+                <p className="text-xs text-muted-foreground">{t('gedcom.gedcomFile')}</p>
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-card border rounded-lg text-center">
-                  <Users className="w-8 h-8 mx-auto mb-2 text-secondary" />
-                  <p className="text-2xl font-bold">{parseResult.individuals.length}</p>
-                  <p className="text-sm text-muted-foreground">Personnes</p>
-                </div>
-                <div className="p-4 bg-card border rounded-lg text-center">
-                  <Heart className="w-8 h-8 mx-auto mb-2 text-secondary" />
-                  <p className="text-2xl font-bold">{parseResult.families.length}</p>
-                  <p className="text-sm text-muted-foreground">Familles</p>
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-card border rounded-lg text-center">
+                <Users className="w-8 h-8 mx-auto mb-2 text-secondary" />
+                <p className="text-2xl font-bold">{parseResult.individuals.length}</p>
+                <p className="text-sm text-muted-foreground">{t('gedcom.persons')}</p>
               </div>
+              <div className="p-4 bg-card border rounded-lg text-center">
+                <Heart className="w-8 h-8 mx-auto mb-2 text-secondary" />
+                <p className="text-2xl font-bold">{parseResult.families.length}</p>
+                <p className="text-sm text-muted-foreground">{t('gedcom.families')}</p>
+              </div>
+            </div>
 
-              {parseResult.warnings.length > 0 && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Avertissements ({parseResult.warnings.length})</AlertTitle>
-                  <AlertDescription>
-                    <ScrollArea className="h-20 mt-2">
-                      <ul className="text-xs space-y-1">
-                        {parseResult.warnings.slice(0, 10).map((w, i) => (
-                          <li key={i}>• {w}</li>
-                        ))}
-                        {parseResult.warnings.length > 10 && (
-                          <li>... et {parseResult.warnings.length - 10} autres</li>
-                        )}
-                      </ul>
-                    </ScrollArea>
-                  </AlertDescription>
-                </Alert>
-              )}
+            {parseResult.warnings.length > 0 && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('gedcom.warnings', { count: parseResult.warnings.length })}</AlertTitle>
+                <AlertDescription>
+                  <ScrollArea className="h-20 mt-2">
+                    <ul className="text-xs space-y-1">
+                      {parseResult.warnings.slice(0, 10).map((w, i) => (
+                        <li key={i}>• {w}</li>
+                      ))}
+                      {parseResult.warnings.length > 10 && (
+                        <li>{t('gedcom.andMore', { count: parseResult.warnings.length - 10 })}</li>
+                      )}
+                    </ul>
+                  </ScrollArea>
+                </AlertDescription>
+              </Alert>
+            )}
 
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Erreur</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('gedcom.error')}</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-              <div className="flex flex-col gap-3">
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={handleReset} className="flex-1">
-                    Annuler
-                  </Button>
-                  <Button onClick={handleCheckDuplicates} className="flex-1">
-                    {existingPersons.length > 0 ? 'Vérifier les doublons' : 'Importer'}
-                  </Button>
-                </div>
-                
-                {/* Import direct - sans détection de doublons */}
-                <Button 
-                  variant="secondary" 
-                  onClick={() => {
-                    console.log('[GEDCOM] Direct import clicked');
-                    handleImport();
-                  }}
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <Zap className="w-4 h-4" />
-                  Import direct (ignorer doublons)
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={handleReset} className="flex-1">
+                  {t('gedcom.cancel')}
+                </Button>
+                <Button onClick={handleCheckDuplicates} className="flex-1">
+                  {existingPersons.length > 0 ? t('gedcom.checkDuplicates') : t('gedcom.import')}
                 </Button>
               </div>
+              
+              <Button 
+                variant="secondary" 
+                onClick={() => handleImport()}
+                className="w-full flex items-center justify-center gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                {t('gedcom.directImportBtn')}
+              </Button>
+            </div>
           </div>
         )}
 
         {/* Duplicates Review Step */}
         {step === 'duplicates' && (
           <div className="space-y-4">
-              <Alert>
-                <UserCheck className="h-4 w-4" />
-                <AlertTitle>{duplicateMatches.length} doublon(s) potentiel(s) détecté(s)</AlertTitle>
-                <AlertDescription>
-                  Pour chaque personne, choisissez de la créer quand même ou de l'ignorer.
-                </AlertDescription>
-              </Alert>
+            <Alert>
+              <UserCheck className="h-4 w-4" />
+              <AlertTitle>{t('gedcom.duplicatesDetected', { count: duplicateMatches.length })}</AlertTitle>
+              <AlertDescription>
+                {t('gedcom.duplicatesHint')}
+              </AlertDescription>
+            </Alert>
 
-              <ScrollArea className="h-[300px] pr-4">
-                <div className="space-y-4">
-                  {duplicateMatches.map((match, index) => (
-                    <div key={match.importedPerson.id} className="border rounded-lg p-4 space-y-3">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">
-                              {formatPersonName(match.importedPerson)}
-                            </span>
-                            <Badge className={getConfidenceColor(match.confidence)}>
-                              {match.confidence}% similaire
-                            </Badge>
-                          </div>
-                          
-                          <div className="text-sm text-muted-foreground">
-                            <p>Ressemble à : <span className="font-medium text-foreground">{formatPersonName(match.existingPerson)}</span></p>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {match.matchReasons.map((reason, i) => (
-                                <Badge key={i} variant="outline" className="text-xs">
-                                  {reason}
-                                </Badge>
-                              ))}
-                            </div>
+            <ScrollArea className="h-[300px] pr-4">
+              <div className="space-y-4">
+                {duplicateMatches.map((match) => (
+                  <div key={match.importedPerson.id} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">
+                            {formatPersonName(match.importedPerson)}
+                          </span>
+                          <Badge className={getConfidenceColor(match.confidence)}>
+                            {t('gedcom.similar', { percent: match.confidence })}
+                          </Badge>
+                        </div>
+                        
+                        <div className="text-sm text-muted-foreground">
+                          <p>{t('gedcom.looksLike')} <span className="font-medium text-foreground">{formatPersonName(match.existingPerson)}</span></p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {match.matchReasons.map((reason, i) => (
+                              <Badge key={i} variant="outline" className="text-xs">
+                                {reason}
+                              </Badge>
+                            ))}
                           </div>
                         </div>
                       </div>
-
-                      <RadioGroup
-                        value={decisions[match.importedPerson.id] || 'create'}
-                        onValueChange={(value) => handleDecisionChange(match.importedPerson.id, value as MergeDecision)}
-                        className="flex gap-4"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="create" id={`create-${index}`} />
-                          <Label htmlFor={`create-${index}`} className="flex items-center gap-1 cursor-pointer">
-                            <UserPlus className="w-4 h-4" />
-                            Créer quand même
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="skip" id={`skip-${index}`} />
-                          <Label htmlFor={`skip-${index}`} className="flex items-center gap-1 cursor-pointer">
-                            <SkipForward className="w-4 h-4" />
-                            Ignorer (doublon)
-                          </Label>
-                        </div>
-                      </RadioGroup>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
 
-              <div className="flex items-center justify-between pt-2 border-t">
-                <p className="text-sm text-muted-foreground">
-                  {parseResult ? parseResult.individuals.length - skipCount : 0} personne(s) sera/seront créée(s)
-                  {skipCount > 0 && `, ${skipCount} ignorée(s)`}
-                </p>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setStep('preview')}>
-                    Retour
-                  </Button>
-                  <Button onClick={handleImport}>
-                    Importer
-                  </Button>
-                </div>
+                    <RadioGroup
+                      value={decisions[match.importedPerson.id]}
+                      onValueChange={(v) => handleDecisionChange(match.importedPerson.id, v as MergeDecision)}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="create" id={`create-${match.importedPerson.id}`} />
+                        <Label htmlFor={`create-${match.importedPerson.id}`} className="flex items-center gap-1 cursor-pointer">
+                          <UserPlus className="w-3 h-3" />
+                          {t('gedcom.createAnyway')}
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="skip" id={`skip-${match.importedPerson.id}`} />
+                        <Label htmlFor={`skip-${match.importedPerson.id}`} className="flex items-center gap-1 cursor-pointer">
+                          <SkipForward className="w-3 h-3" />
+                          {t('gedcom.skip')}
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                ))}
               </div>
+            </ScrollArea>
+
+            {skipCount > 0 && (
+              <Alert>
+                <SkipForward className="h-4 w-4" />
+                <AlertDescription>
+                  {t('gedcom.skipping', { count: skipCount })}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="flex gap-3 pt-2">
+              <Button variant="outline" onClick={() => setStep('preview')} className="flex-1">
+                {t('gedcom.cancel')}
+              </Button>
+              <Button onClick={handleImport} className="flex-1">
+                {t('gedcom.importDuplicates')}
+              </Button>
+            </div>
           </div>
         )}
 
         {/* Importing Step */}
         {step === 'importing' && (
           <div className="space-y-6 py-8">
-              <div className="text-center">
-                <Loader2 className="w-12 h-12 mx-auto text-secondary animate-spin mb-4" />
-                <p className="font-medium">Import en cours...</p>
-                <p className="text-sm text-muted-foreground">
-                  Veuillez patienter pendant l'import de vos données
-                </p>
-              </div>
-              <Progress value={progress} className="h-2" />
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 mx-auto mb-4 animate-spin text-secondary" />
+              <p className="font-medium">{t('gedcom.importing')}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t('gedcom.doNotClose')}
+              </p>
+            </div>
+            <Progress value={progress} className="w-full" />
           </div>
         )}
 
         {/* Complete Step */}
-        {step === 'complete' && parseResult && (
+        {step === 'complete' && (
           <div className="space-y-6 py-8">
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
-                </div>
-                <h3 className="text-lg font-semibold mb-1">Import terminé !</h3>
-                <p className="text-muted-foreground">
-                  {importStats.created} personne(s) créée(s)
-                  {importStats.skipped > 0 && `, ${importStats.skipped} ignorée(s)`}
-                </p>
+            <div className="text-center">
+              <CheckCircle2 className="w-16 h-16 mx-auto mb-4 text-green-500" />
+              <h3 className="text-xl font-semibold">{t('gedcom.importComplete')}</h3>
+              <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+                <p>{t('gedcom.personsCreated', { count: importStats.created })}</p>
+                {importStats.skipped > 0 && (
+                  <p>{t('gedcom.personsSkipped', { count: importStats.skipped })}</p>
+                )}
               </div>
-
-              <Button onClick={handleClose} className="w-full">
-                Voir mon arbre
-              </Button>
+            </div>
+            <Button onClick={handleClose} className="w-full">
+              {t('gedcom.close')}
+            </Button>
           </div>
         )}
       </DialogContent>
