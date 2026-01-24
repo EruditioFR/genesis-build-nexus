@@ -323,5 +323,38 @@
       "11": "November",
       "12": "December"
     }
+  },
+  "categorySelector": {
+    "primaryLabel": "Main category *",
+    "primaryDescription": "Choose the category that best matches your memory",
+    "customCategories": "My custom categories",
+    "createCustom": "Create a custom category",
+    "subCategoriesToggle": "Refine with sub-categories (optional)",
+    "subCategoriesDescription": "Add up to 3 sub-categories to refine classification",
+    "maxSubCategories": "Maximum 3 sub-categories",
+    "selectedCategories": "Selected categories:",
+    "dialog": {
+      "title": "Create a custom category",
+      "description": "Create your own category to organize your memories your way.",
+      "nameLabel": "Category name *",
+      "namePlaceholder": "e.g. My inventions",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Briefly describe this category...",
+      "cancel": "Cancel",
+      "create": "Create category",
+      "creating": "Creating...",
+      "success": "Category created successfully",
+      "error": "Error creating category"
+    },
+    "standardCategories": {
+      "famille-proches": "Family & Loved Ones",
+      "savoirs-traditions": "Knowledge & Traditions",
+      "histoires-vecues": "Lived Stories",
+      "vie-professionnelle": "Professional Life",
+      "amour-relations": "Love & Relationships",
+      "voyages-lieux": "Travel & Places",
+      "passions-loisirs": "Passions & Hobbies",
+      "reflexions-messages": "Reflections & Messages"
+    }
   }
 }
