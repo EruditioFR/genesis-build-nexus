@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import {
   Users, Plus, ArrowLeft, MoreHorizontal, UserPlus, Edit, Trash2,
   Mail, Clock, User, Loader2
@@ -56,8 +57,14 @@ interface CircleMember {
 }
 
 const CirclesPage = () => {
+  const { t, i18n } = useTranslation('dashboard');
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
   const [circles, setCircles] = useState<Circle[]>([]);
   const [selectedCircle, setSelectedCircle] = useState<Circle | null>(null);
   const [members, setMembers] = useState<CircleMember[]>([]);
@@ -156,14 +163,14 @@ const CirclesPage = () => {
       .eq('id', circleToDelete.id);
 
     if (error) {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('circles.deleteError'));
     } else {
       setCircles(prev => prev.filter(c => c.id !== circleToDelete.id));
       if (selectedCircle?.id === circleToDelete.id) {
         setSelectedCircle(null);
         setMembers([]);
       }
-      toast.success('Cercle supprimé');
+      toast.success(t('circles.deleteSuccess'));
     }
 
     setDeleteDialogOpen(false);
@@ -177,7 +184,7 @@ const CirclesPage = () => {
       .eq('id', memberId);
 
     if (error) {
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('circles.memberRemoveError'));
     } else {
       setMembers(prev => prev.filter(m => m.id !== memberId));
       // Update member count
@@ -188,7 +195,7 @@ const CirclesPage = () => {
             : c
         ));
       }
-      toast.success('Membre retiré');
+      toast.success(t('circles.memberRemoved'));
     }
   };
 
@@ -197,7 +204,7 @@ const CirclesPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement des cercles...</p>
+          <p className="text-muted-foreground">{t('circles.loading')}</p>
         </div>
       </div>
     );
@@ -232,7 +239,7 @@ const CirclesPage = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            {t('circles.backToHome')}
           </Button>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-tour="circles-header">
@@ -242,17 +249,17 @@ const CirclesPage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-display font-bold text-foreground">
-                  Mes cercles
+                  {t('circles.title')}
                 </h1>
                 <p className="text-muted-foreground text-sm">
-                  {circles.length} cercle{circles.length !== 1 ? 's' : ''} créé{circles.length !== 1 ? 's' : ''}
+                  {t('circles.subtitle', { count: circles.length })}
                 </p>
               </div>
             </div>
 
             <Button onClick={() => setCreateDialogOpen(true)} className="gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold" data-tour="circles-create">
               <Plus className="w-4 h-4" />
-              Nouveau cercle
+              {t('circles.newCircle')}
             </Button>
           </div>
         </motion.div>
@@ -277,11 +284,11 @@ const CirclesPage = () => {
                   <Users className="w-8 h-8 text-muted-foreground" />
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  Aucun cercle créé
+                  {t('circles.emptyTitle')}
                 </p>
                 <Button onClick={() => setCreateDialogOpen(true)} className="gap-2">
                   <Plus className="w-4 h-4" />
-                  Créer mon premier cercle
+                  {t('circles.createFirst')}
                 </Button>
               </div>
             ) : (
@@ -306,7 +313,7 @@ const CirclesPage = () => {
                       <div>
                         <h3 className="font-medium text-foreground">{circle.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {circle.member_count} membre{circle.member_count !== 1 ? 's' : ''}
+                          {t('circles.member', { count: circle.member_count })}
                         </p>
                       </div>
                     </div>
@@ -327,7 +334,7 @@ const CirclesPage = () => {
                           }}
                         >
                           <UserPlus className="w-4 h-4" />
-                          Inviter
+                          {t('circles.invite')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -339,7 +346,7 @@ const CirclesPage = () => {
                           }}
                         >
                           <Trash2 className="w-4 h-4" />
-                          Supprimer
+                          {t('circles.delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
