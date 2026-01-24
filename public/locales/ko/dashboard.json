@@ -1,5 +1,5 @@
 {
-  "welcome": "안녕하세요{{name, andSpace}}!",
+  "welcome": "안녕하세요 {{name}}님!",
   "subtitle": "소중한 추억을 계속 보존하세요",
   "subtitleEmpty": "소중한 추억 보존을 시작하세요",
   "loading": "공간을 불러오는 중...",
