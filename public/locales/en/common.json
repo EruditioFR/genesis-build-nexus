@@ -68,5 +68,175 @@
     "title": "Notifications",
     "markAllRead": "Mark all read",
     "empty": "No notifications"
+  },
+  "tour": {
+    "buttons": {
+      "next": "Next →",
+      "prev": "← Previous",
+      "done": "Finish ✓",
+      "progress": "{{current}} of {{total}}"
+    },
+    "titles": {
+      "dashboard": "Discover the dashboard",
+      "capsule": "Creation help",
+      "familyTree": "Discover the tree",
+      "circles": "Discover circles"
+    },
+    "dashboard": {
+      "welcome": {
+        "title": "👋 Welcome to Family Garden!",
+        "description": "Your personal space to preserve and share your family memories. Follow this tour to discover all features in just a few minutes."
+      },
+      "quickActions": {
+        "title": "🚀 Create your first memory",
+        "description": "This is where it all begins! Click \"New memory\" to add your photos, videos, texts or audio recordings."
+      },
+      "stats": {
+        "title": "📊 Your dashboard in numbers",
+        "description": "See at a glance the evolution of your collection: number of memories created, media files stored and active sharing circles."
+      },
+      "storage": {
+        "title": "💾 Your storage space",
+        "description": "Track your space usage. The free plan includes 500 MB. Upgrade to Premium for unlimited storage!"
+      },
+      "recentCapsules": {
+        "title": "📦 Your recent memories",
+        "description": "Instantly find your latest creations. Click a card to view, edit or share this memory."
+      },
+      "navCapsules": {
+        "title": "🗂️ Complete library",
+        "description": "Access all your memories organized by categories: Travels, Family, Events... Use filters to easily find a specific moment."
+      },
+      "navTimeline": {
+        "title": "📅 Visual timeline",
+        "description": "Travel through time! View your memories on an interactive timeline, from the 40s to today."
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 Sharing circles",
+        "description": "Share confidentially with your loved ones. Create circles and invite them by email."
+      },
+      "navFamilyTree": {
+        "title": "🌳 Family tree",
+        "description": "Build your interactive family tree! Add your ancestors and link memories to each person. Available with Premium."
+      },
+      "search": {
+        "title": "🔍 Smart search",
+        "description": "Find any memory instantly. Type a keyword, name or date to explore your collection."
+      },
+      "notifications": {
+        "title": "🔔 Stay connected",
+        "description": "Receive notifications when someone shares a memory, comments on your creations or when an important event approaches."
+      },
+      "userMenu": {
+        "title": "👤 Your personal space",
+        "description": "Manage your profile, customize your settings, check your subscription or restart this guided tour anytime."
+      },
+      "complete": {
+        "title": "🎉 You're ready!",
+        "description": "Great, you now know the basics! Start by creating your first memory — every moment counts."
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 Category",
+        "description": "Choose a category to organize your memory. You can also create custom categories."
+      },
+      "type": {
+        "title": "📷 Memory type",
+        "description": "Select the content type: text, photo, video, audio or mixed depending on what you want to save."
+      },
+      "title": {
+        "title": "✏️ Title and description",
+        "description": "Give your memory an evocative title and add a description to find it easily."
+      },
+      "media": {
+        "title": "📎 Media files",
+        "description": "Add your photos, videos or audio files. You can drag and drop or click to select."
+      },
+      "date": {
+        "title": "📅 Memory date",
+        "description": "Indicate when this moment took place. You can choose a precise date or a period."
+      },
+      "tags": {
+        "title": "🏷️ Tags",
+        "description": "Add keywords to easily find this memory later."
+      },
+      "actions": {
+        "title": "💾 Save",
+        "description": "Save as draft to continue later, or publish your memory directly."
+      },
+      "complete": {
+        "title": "🎉 Your turn!",
+        "description": "You now know all the steps to create a memory. Start by choosing a category!"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 Your family tree",
+        "description": "View your family as an interactive tree. Click on a person to see their details."
+      },
+      "addPerson": {
+        "title": "➕ Add a person",
+        "description": "Click here to add a new member to your family tree."
+      },
+      "zoom": {
+        "title": "🔍 Zoom and navigation",
+        "description": "Use the zoom controls to adjust the view. You can also drag the tree."
+      },
+      "viewMode": {
+        "title": "👁️ View mode",
+        "description": "Change the display mode: descendants, ancestors or hourglass view centered on a person."
+      },
+      "search": {
+        "title": "🔎 Search",
+        "description": "Quickly find a person in your tree using the search."
+      },
+      "center": {
+        "title": "🎯 Center on...",
+        "description": "Select a person to center the view on them."
+      },
+      "importExport": {
+        "title": "📥 Import/Export",
+        "description": "Import a GEDCOM file or export your tree as PDF or GEDCOM."
+      },
+      "personsList": {
+        "title": "📋 People list",
+        "description": "View the complete list of all people in your tree."
+      },
+      "minimap": {
+        "title": "🗺️ Minimap",
+        "description": "Use the minimap to quickly navigate in a large tree."
+      },
+      "complete": {
+        "title": "🎉 Ready to explore!",
+        "description": "Your family tree awaits. Start by adding your loved ones!"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 Your sharing circles",
+        "description": "Circles allow you to share your memories with specific groups: family, friends, etc."
+      },
+      "create": {
+        "title": "➕ Create a circle",
+        "description": "Click here to create a new sharing circle."
+      },
+      "list": {
+        "title": "📋 Your circles",
+        "description": "Find all your circles here. Click on a circle to see its members."
+      },
+      "details": {
+        "title": "👥 Circle details",
+        "description": "View and manage your circle members from this panel."
+      },
+      "invite": {
+        "title": "✉️ Invite members",
+        "description": "Invite new people by email. They will receive a link to join your circle."
+      },
+      "complete": {
+        "title": "🎉 Share your memories!",
+        "description": "Create your first circle and invite your loved ones to share your memories privately."
+      }
+    }
   }
 }
