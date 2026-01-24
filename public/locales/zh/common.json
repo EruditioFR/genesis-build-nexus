@@ -85,6 +85,200 @@
     "dashboard": {
       "welcome": {
         "title": "👋 欢迎来到 Family Garden！",
+        "description": "您保存和分享家庭回忆的个人空间。",
+        "descriptionCompact": "保存和分享家庭回忆。"
+      },
+      "quickActions": {
+        "title": "🚀 创建第一个回忆",
+        "description": "点击"新回忆"添加照片、视频或文字。",
+        "descriptionCompact": "添加照片、视频或文字。"
+      },
+      "stats": {
+        "title": "📊 数字化仪表板",
+        "description": "一目了然地查看统计数据。",
+        "descriptionCompact": "一目了然的统计。"
+      },
+      "storage": {
+        "title": "💾 存储空间",
+        "description": "免费500MB，高级版无限。",
+        "descriptionCompact": "免费500MB。"
+      },
+      "recentCapsules": {
+        "title": "📦 最近的回忆",
+        "description": "查找最新创作。",
+        "descriptionCompact": "最新创作。"
+      },
+      "navCapsules": {
+        "title": "🗂️ 完整图书馆",
+        "description": "按类别组织的所有回忆。",
+        "descriptionCompact": "按类别分类。"
+      },
+      "navTimeline": {
+        "title": "📅 可视化时间线",
+        "description": "时间中的回忆。",
+        "descriptionCompact": "时间中的回忆。"
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 分享圈子",
+        "description": "与亲人分享。",
+        "descriptionCompact": "与亲人分享。"
+      },
+      "navFamilyTree": {
+        "title": "🌳 家谱",
+        "description": "家谱（高级版）。",
+        "descriptionCompact": "家谱（高级版）。"
+      },
+      "search": {
+        "title": "🔍 智能搜索",
+        "description": "即时查找任何回忆。",
+        "descriptionCompact": "查找回忆。"
+      },
+      "notifications": {
+        "title": "🔔 保持联系",
+        "description": "分享和评论通知。",
+        "descriptionCompact": "分享通知。"
+      },
+      "userMenu": {
+        "title": "👤 个人空间",
+        "description": "个人资料和设置。",
+        "descriptionCompact": "个人资料和设置。"
+      },
+      "complete": {
+        "title": "🎉 准备就绪！",
+        "description": "创建您的第一个回忆！",
+        "descriptionCompact": "创建第一个回忆！"
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 类别",
+        "description": "按主题组织。",
+        "descriptionCompact": "按主题组织。"
+      },
+      "type": {
+        "title": "📷 回忆类型",
+        "description": "照片、视频、文字或音频。",
+        "descriptionCompact": "照片、视频、文字。"
+      },
+      "title": {
+        "title": "✏️ 标题和描述",
+        "description": "命名您的回忆。",
+        "descriptionCompact": "命名回忆。"
+      },
+      "media": {
+        "title": "📎 媒体文件",
+        "description": "添加文件。",
+        "descriptionCompact": "添加文件。"
+      },
+      "date": {
+        "title": "📅 回忆日期",
+        "description": "什么时候发生的。",
+        "descriptionCompact": "选择日期。"
+      },
+      "tags": {
+        "title": "🏷️ 标签",
+        "description": "关键词查找。",
+        "descriptionCompact": "关键词。"
+      },
+      "actions": {
+        "title": "💾 保存",
+        "description": "草稿或发布。",
+        "descriptionCompact": "草稿或发布。"
+      },
+      "complete": {
+        "title": "🎉 轮到您了！",
+        "description": "开始吧！",
+        "descriptionCompact": "开始！"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 您的家谱",
+        "description": "点击查看详情。",
+        "descriptionCompact": "点击查看。"
+      },
+      "addPerson": {
+        "title": "➕ 添加人员",
+        "description": "新成员。",
+        "descriptionCompact": "新成员。"
+      },
+      "zoom": {
+        "title": "🔍 缩放和导航",
+        "description": "缩放和拖动。",
+        "descriptionCompact": "缩放拖动。"
+      },
+      "viewMode": {
+        "title": "👁️ 查看模式",
+        "description": "后代或祖先。",
+        "descriptionCompact": "后代/祖先。"
+      },
+      "search": {
+        "title": "🔎 搜索",
+        "description": "查找人员。",
+        "descriptionCompact": "查找人员。"
+      },
+      "center": {
+        "title": "🎯 居中",
+        "description": "居中视图。",
+        "descriptionCompact": "居中视图。"
+      },
+      "importExport": {
+        "title": "📥 导入/导出",
+        "description": "GEDCOM和PDF。",
+        "descriptionCompact": "GEDCOM/PDF。"
+      },
+      "personsList": {
+        "title": "📋 人员列表",
+        "description": "查看所有人。",
+        "descriptionCompact": "查看所有。"
+      },
+      "minimap": {
+        "title": "🗺️ 迷你地图",
+        "description": "快速导航。",
+        "descriptionCompact": "快速导航。"
+      },
+      "complete": {
+        "title": "🎉 准备探索！",
+        "description": "添加家人！",
+        "descriptionCompact": "添加家人！"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 分享圈子",
+        "description": "分享群组。",
+        "descriptionCompact": "分享群组。"
+      },
+      "create": {
+        "title": "➕ 创建圈子",
+        "description": "新圈子。",
+        "descriptionCompact": "新圈子。"
+      },
+      "list": {
+        "title": "📋 您的圈子",
+        "description": "活跃群组。",
+        "descriptionCompact": "活跃群组。"
+      },
+      "details": {
+        "title": "👥 圈子详情",
+        "description": "管理成员。",
+        "descriptionCompact": "管理成员。"
+      },
+      "invite": {
+        "title": "✉️ 邀请成员",
+        "description": "通过电子邮件邀请。",
+        "descriptionCompact": "邮件邀请。"
+      },
+      "complete": {
+        "title": "🎉 分享！",
+        "description": "邀请家人！",
+        "descriptionCompact": "邀请家人！"
+      }
+    }
+  }
+    "dashboard": {
+      "welcome": {
+        "title": "👋 欢迎来到 Family Garden！",
         "description": "您保存和分享家庭回忆的个人空间。跟随此导览，几分钟内了解所有功能。"
       },
       "quickActions": {

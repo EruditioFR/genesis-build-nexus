@@ -85,6 +85,200 @@
     "dashboard": {
       "welcome": {
         "title": "👋 ¡Bienvenido a Family Garden!",
+        "description": "Tu espacio personal para preservar y compartir los recuerdos familiares. Sigue esta visita para descubrir todas las funciones en pocos minutos.",
+        "descriptionCompact": "Preserva y comparte recuerdos."
+      },
+      "quickActions": {
+        "title": "🚀 Crea tu primer recuerdo",
+        "description": "¡Aquí es donde todo comienza! Haz clic en \"Nuevo recuerdo\" para añadir tus fotos, videos, textos o grabaciones de audio.",
+        "descriptionCompact": "Añade fotos, videos o textos."
+      },
+      "stats": {
+        "title": "📊 Tu panel en números",
+        "description": "Visualiza de un vistazo la evolución de tu colección: número de recuerdos creados, archivos multimedia almacenados y círculos activos.",
+        "descriptionCompact": "Tus estadísticas."
+      },
+      "storage": {
+        "title": "💾 Tu espacio de almacenamiento",
+        "description": "Sigue tu consumo de espacio. El plan gratuito incluye 500 MB. ¡Pasa a Premium para almacenamiento ilimitado!",
+        "descriptionCompact": "500 MB gratis, ilimitado Premium."
+      },
+      "recentCapsules": {
+        "title": "📦 Tus recuerdos recientes",
+        "description": "Encuentra instantáneamente tus últimas creaciones. Haz clic en una tarjeta para ver, editar o compartir.",
+        "descriptionCompact": "Tus últimas creaciones."
+      },
+      "navCapsules": {
+        "title": "🗂️ Biblioteca completa",
+        "description": "Accede a todos tus recuerdos organizados por categorías: Viajes, Familia, Eventos...",
+        "descriptionCompact": "Recuerdos por categoría."
+      },
+      "navTimeline": {
+        "title": "📅 Cronología visual",
+        "description": "¡Viaja en el tiempo! Visualiza tus recuerdos en una línea de tiempo interactiva.",
+        "descriptionCompact": "Recuerdos en el tiempo."
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 Círculos de compartir",
+        "description": "Comparte de forma confidencial con tus seres queridos. Crea círculos e invítalos por email.",
+        "descriptionCompact": "Comparte con tus seres queridos."
+      },
+      "navFamilyTree": {
+        "title": "🌳 Árbol genealógico",
+        "description": "¡Construye tu árbol familiar interactivo! Disponible con Premium.",
+        "descriptionCompact": "Tu árbol familiar (Premium)."
+      },
+      "search": {
+        "title": "🔍 Búsqueda inteligente",
+        "description": "Encuentra cualquier recuerdo al instante.",
+        "descriptionCompact": "Encuentra cualquier recuerdo."
+      },
+      "notifications": {
+        "title": "🔔 Mantente conectado",
+        "description": "Recibe notificaciones de compartidos y comentarios.",
+        "descriptionCompact": "Alertas de compartidos."
+      },
+      "userMenu": {
+        "title": "👤 Tu espacio personal",
+        "description": "Gestiona tu perfil y ajustes.",
+        "descriptionCompact": "Perfil y ajustes."
+      },
+      "complete": {
+        "title": "🎉 ¡Estás listo!",
+        "description": "¡Genial! Comienza creando tu primer recuerdo.",
+        "descriptionCompact": "¡Crea tu primer recuerdo!"
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 Categoría",
+        "description": "Elige una categoría para organizar tu recuerdo.",
+        "descriptionCompact": "Organiza por tema."
+      },
+      "type": {
+        "title": "📷 Tipo de recuerdo",
+        "description": "Selecciona: texto, foto, video, audio o mixto.",
+        "descriptionCompact": "Foto, video, texto o audio."
+      },
+      "title": {
+        "title": "✏️ Título y descripción",
+        "description": "Dale un título a tu recuerdo.",
+        "descriptionCompact": "Nombra tu recuerdo."
+      },
+      "media": {
+        "title": "📎 Archivos multimedia",
+        "description": "Añade tus fotos, videos o audios.",
+        "descriptionCompact": "Añade archivos aquí."
+      },
+      "date": {
+        "title": "📅 Fecha del recuerdo",
+        "description": "Indica cuándo ocurrió.",
+        "descriptionCompact": "Cuándo pasó."
+      },
+      "tags": {
+        "title": "🏷️ Etiquetas",
+        "description": "Añade palabras clave.",
+        "descriptionCompact": "Palabras clave."
+      },
+      "actions": {
+        "title": "💾 Guardar",
+        "description": "Borrador o publicar directamente.",
+        "descriptionCompact": "Borrador o publicar."
+      },
+      "complete": {
+        "title": "🎉 ¡Tu turno!",
+        "description": "¡Comienza eligiendo una categoría!",
+        "descriptionCompact": "¡Vamos!"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 Tu árbol genealógico",
+        "description": "Visualiza tu familia como árbol interactivo.",
+        "descriptionCompact": "Clic para ver detalles."
+      },
+      "addPerson": {
+        "title": "➕ Añadir persona",
+        "description": "Añade un nuevo miembro.",
+        "descriptionCompact": "Nuevo miembro aquí."
+      },
+      "zoom": {
+        "title": "🔍 Zoom y navegación",
+        "description": "Usa los controles de zoom.",
+        "descriptionCompact": "Zoom y arrastrar."
+      },
+      "viewMode": {
+        "title": "👁️ Modo de vista",
+        "description": "Descendientes, ascendientes o reloj de arena.",
+        "descriptionCompact": "Descendientes o ascendientes."
+      },
+      "search": {
+        "title": "🔎 Buscar",
+        "description": "Encuentra rápidamente una persona.",
+        "descriptionCompact": "Encuentra una persona."
+      },
+      "center": {
+        "title": "🎯 Centrar en...",
+        "description": "Centra la vista en una persona.",
+        "descriptionCompact": "Centrar la vista."
+      },
+      "importExport": {
+        "title": "📥 Importar/Exportar",
+        "description": "GEDCOM y PDF.",
+        "descriptionCompact": "GEDCOM y PDF."
+      },
+      "personsList": {
+        "title": "📋 Lista de personas",
+        "description": "Lista completa de personas.",
+        "descriptionCompact": "Ver a todos."
+      },
+      "minimap": {
+        "title": "🗺️ Minimapa",
+        "description": "Navegación rápida.",
+        "descriptionCompact": "Navegación rápida."
+      },
+      "complete": {
+        "title": "🎉 ¡Listo para explorar!",
+        "description": "¡Añade a tus seres queridos!",
+        "descriptionCompact": "¡Añade a tu familia!"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 Tus círculos",
+        "description": "Grupos de compartir.",
+        "descriptionCompact": "Grupos de compartir."
+      },
+      "create": {
+        "title": "➕ Crear círculo",
+        "description": "Nuevo círculo de compartir.",
+        "descriptionCompact": "Nuevo círculo aquí."
+      },
+      "list": {
+        "title": "📋 Tus círculos",
+        "description": "Tus grupos activos.",
+        "descriptionCompact": "Tus grupos activos."
+      },
+      "details": {
+        "title": "👥 Detalles del círculo",
+        "description": "Gestiona los miembros.",
+        "descriptionCompact": "Gestiona miembros."
+      },
+      "invite": {
+        "title": "✉️ Invitar miembros",
+        "description": "Invita por email.",
+        "descriptionCompact": "Invita por email."
+      },
+      "complete": {
+        "title": "🎉 ¡Comparte!",
+        "description": "¡Invita a tus seres queridos!",
+        "descriptionCompact": "¡Invita a tu familia!"
+      }
+    }
+  }
+    "dashboard": {
+      "welcome": {
+        "title": "👋 ¡Bienvenido a Family Garden!",
         "description": "Tu espacio personal para preservar y compartir los recuerdos familiares. Sigue esta visita para descubrir todas las funciones en pocos minutos."
       },
       "quickActions": {
