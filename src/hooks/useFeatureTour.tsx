@@ -126,23 +126,25 @@ const injectTourStyles = () => {
       box-shadow: 0 6px 20px -3px hsl(var(--secondary) / 0.5) !important;
     }
     
-    /* Close X button in corner */
+    /* Close X button in corner - compact */
     .driver-popover-close-btn-x {
       position: absolute !important;
-      top: 0.75rem !important;
-      right: 0.75rem !important;
-      width: 2rem !important;
-      height: 2rem !important;
+      top: 0.5rem !important;
+      right: 0.5rem !important;
+      width: 1.5rem !important;
+      height: 1.5rem !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      background: hsl(var(--muted)) !important;
+      background: hsl(var(--muted) / 0.7) !important;
       border: none !important;
-      border-radius: 0.5rem !important;
+      border-radius: 0.375rem !important;
       color: hsl(var(--muted-foreground)) !important;
-      font-size: 1.25rem !important;
+      font-size: 0.875rem !important;
       cursor: pointer !important;
       transition: all 0.2s ease !important;
+      padding: 0 !important;
+      line-height: 1 !important;
     }
     
     .driver-popover-close-btn-x:hover {
