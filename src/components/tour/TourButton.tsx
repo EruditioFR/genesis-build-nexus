@@ -28,47 +28,10 @@ export function TourButton({
   enhanced = false,
 }: TourButtonProps) {
   const { startTour } = useFeatureTour(tourType);
-  const { t, i18n } = useTranslation('common');
+  const { t } = useTranslation('common');
   
-  // Get localized title
-  const getLocalizedTitle = () => {
-    const titles: Record<string, Record<TourType, string>> = {
-      fr: {
-        dashboard: 'Découvrir le tableau de bord',
-        capsule: 'Aide à la création',
-        familyTree: 'Découvrir l\'arbre',
-        circles: 'Découvrir les cercles',
-      },
-      en: {
-        dashboard: 'Discover the dashboard',
-        capsule: 'Creation help',
-        familyTree: 'Discover the tree',
-        circles: 'Discover circles',
-      },
-      es: {
-        dashboard: 'Descubrir el panel',
-        capsule: 'Ayuda de creación',
-        familyTree: 'Descubrir el árbol',
-        circles: 'Descubrir círculos',
-      },
-      ko: {
-        dashboard: '대시보드 둘러보기',
-        capsule: '만들기 도움말',
-        familyTree: '가계도 둘러보기',
-        circles: '서클 둘러보기',
-      },
-      zh: {
-        dashboard: '探索仪表板',
-        capsule: '创建帮助',
-        familyTree: '探索家谱',
-        circles: '探索圈子',
-      },
-    };
-    const lang = i18n.language;
-    return titles[lang]?.[tourType] || titles.fr[tourType];
-  };
-
-  const title = getLocalizedTitle();
+  // Get localized title from translations
+  const title = t(`tour.titles.${tourType}`);
 
   // Enhanced version with more prominent styling
   if (enhanced) {

@@ -214,18 +214,15 @@ export const useFeatureTour = (tourType: TourType) => {
   const driverRef = useRef<ReturnType<typeof driver> | null>(null);
   const { t, i18n } = useTranslation('common');
 
-  // Get localized button text
+  // Get localized button text from i18n
   const getButtonText = useCallback(() => {
-    const lang = i18n.language;
-    const texts: Record<string, { next: string; prev: string; done: string; progress: string }> = {
-      fr: { next: 'Suivant →', prev: '← Précédent', done: 'Terminer ✓', progress: '{{current}} sur {{total}}' },
-      en: { next: 'Next →', prev: '← Previous', done: 'Finish ✓', progress: '{{current}} of {{total}}' },
-      es: { next: 'Siguiente →', prev: '← Anterior', done: 'Finalizar ✓', progress: '{{current}} de {{total}}' },
-      ko: { next: '다음 →', prev: '← 이전', done: '완료 ✓', progress: '{{current}} / {{total}}' },
-      zh: { next: '下一步 →', prev: '← 上一步', done: '完成 ✓', progress: '{{current}} / {{total}}' },
+    return {
+      next: t('tour.buttons.next'),
+      prev: t('tour.buttons.prev'),
+      done: t('tour.buttons.done'),
+      progress: t('tour.buttons.progress'),
     };
-    return texts[lang] || texts.fr;
-  }, [i18n.language]);
+  }, [t]);
 
   const startTour = useCallback(() => {
     injectTourStyles();

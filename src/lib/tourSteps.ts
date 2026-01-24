@@ -1,4 +1,5 @@
 import { DriveStep } from 'driver.js';
+import i18n from './i18n';
 
 export type TourType = 'dashboard' | 'capsule' | 'familyTree' | 'circles';
 
@@ -6,13 +7,16 @@ export interface TourStep extends DriveStep {
   route?: string;
 }
 
-// Dashboard tour steps - ENHANCED with better content and tips
-export const dashboardTourSteps: TourStep[] = [
+// Helper to get translation
+const t = (key: string) => i18n.t(key, { ns: 'common' });
+
+// Dashboard tour steps - dynamically translated
+const getDashboardTourSteps = (): TourStep[] => [
   {
     element: '[data-tour="welcome"]',
     popover: {
-      title: '👋 Bienvenue sur Family Garden !',
-      description: 'Votre espace personnel pour préserver et transmettre vos souvenirs de famille. Suivez cette visite pour découvrir toutes les fonctionnalités en quelques minutes.',
+      title: t('tour.dashboard.welcome.title'),
+      description: t('tour.dashboard.welcome.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -20,8 +24,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="quick-actions"]',
     popover: {
-      title: '🚀 Créez votre premier souvenir',
-      description: 'C\'est ici que tout commence ! Cliquez sur "Nouveau souvenir" pour ajouter vos photos, vidéos, textes ou enregistrements audio. Chaque souvenir peut contenir plusieurs médias.',
+      title: t('tour.dashboard.quickActions.title'),
+      description: t('tour.dashboard.quickActions.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -29,8 +33,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="stats"]',
     popover: {
-      title: '📊 Votre tableau de bord en chiffres',
-      description: 'Visualisez d\'un coup d\'œil l\'évolution de votre collection : nombre de souvenirs créés, fichiers médias stockés et cercles de partage actifs.',
+      title: t('tour.dashboard.stats.title'),
+      description: t('tour.dashboard.stats.description'),
       side: 'top',
       align: 'center',
     },
@@ -38,8 +42,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="storage"]',
     popover: {
-      title: '💾 Votre espace de stockage',
-      description: 'Suivez votre consommation d\'espace. L\'offre gratuite inclut 500 Mo, parfait pour commencer. Passez à Premium pour un stockage illimité et des fonctionnalités exclusives !',
+      title: t('tour.dashboard.storage.title'),
+      description: t('tour.dashboard.storage.description'),
       side: 'top',
       align: 'start',
     },
@@ -47,8 +51,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="recent-capsules"]',
     popover: {
-      title: '📦 Vos souvenirs récents',
-      description: 'Retrouvez instantanément vos dernières créations. Cliquez sur une carte pour consulter, modifier ou partager ce souvenir avec vos proches.',
+      title: t('tour.dashboard.recentCapsules.title'),
+      description: t('tour.dashboard.recentCapsules.description'),
       side: 'top',
       align: 'center',
     },
@@ -56,8 +60,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-capsules"]',
     popover: {
-      title: '🗂️ Bibliothèque complète',
-      description: 'Accédez à tous vos souvenirs organisés par catégories : Voyages, Famille, Événements... Utilisez les filtres pour retrouver facilement un moment précis.',
+      title: t('tour.dashboard.navCapsules.title'),
+      description: t('tour.dashboard.navCapsules.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -65,8 +69,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-timeline"]',
     popover: {
-      title: '📅 Chronologie visuelle',
-      description: 'Voyagez dans le temps ! Visualisez vos souvenirs sur une frise chronologique interactive, des années 40 à aujourd\'hui. Parfait pour redécouvrir votre histoire.',
+      title: t('tour.dashboard.navTimeline.title'),
+      description: t('tour.dashboard.navTimeline.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -74,8 +78,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-circles"]',
     popover: {
-      title: '👨‍👩‍👧‍👦 Cercles de partage',
-      description: 'Partagez en toute confidentialité avec vos proches. Créez des cercles (Famille, Amis d\'enfance...) et invitez-les par email. Ils pourront consulter et commenter vos souvenirs.',
+      title: t('tour.dashboard.navCircles.title'),
+      description: t('tour.dashboard.navCircles.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -83,8 +87,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="nav-family-tree"]',
     popover: {
-      title: '🌳 Arbre généalogique',
-      description: 'Construisez votre arbre familial interactif ! Ajoutez vos ancêtres, liez les générations et associez des souvenirs à chaque personne. Disponible avec Premium.',
+      title: t('tour.dashboard.navFamilyTree.title'),
+      description: t('tour.dashboard.navFamilyTree.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -92,8 +96,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="search"]',
     popover: {
-      title: '🔍 Recherche intelligente',
-      description: 'Retrouvez n\'importe quel souvenir en un instant. Tapez un mot-clé, un nom de personne ou une date pour explorer votre collection.',
+      title: t('tour.dashboard.search.title'),
+      description: t('tour.dashboard.search.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -101,8 +105,8 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="notifications"]',
     popover: {
-      title: '🔔 Restez connecté',
-      description: 'Recevez des notifications quand un proche partage un souvenir, commente vos créations ou quand un événement important approche.',
+      title: t('tour.dashboard.notifications.title'),
+      description: t('tour.dashboard.notifications.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -110,27 +114,27 @@ export const dashboardTourSteps: TourStep[] = [
   {
     element: '[data-tour="user-menu"]',
     popover: {
-      title: '👤 Votre espace personnel',
-      description: 'Gérez votre profil, personnalisez vos paramètres, consultez votre abonnement ou relancez cette visite guidée à tout moment.',
+      title: t('tour.dashboard.userMenu.title'),
+      description: t('tour.dashboard.userMenu.description'),
       side: 'bottom',
       align: 'end',
     },
   },
   {
     popover: {
-      title: '🎉 Vous êtes prêt !',
-      description: 'Bravo, vous connaissez maintenant les bases ! Commencez par créer votre premier souvenir — chaque moment compte. Besoin d\'aide ? Retrouvez la visite guidée dans votre profil.',
+      title: t('tour.dashboard.complete.title'),
+      description: t('tour.dashboard.complete.description'),
     },
   },
 ];
 
 // Capsule creation tour steps
-export const capsuleTourSteps: TourStep[] = [
+const getCapsuleTourSteps = (): TourStep[] => [
   {
     element: '[data-tour="capsule-category"]',
     popover: {
-      title: '📂 Catégorie',
-      description: 'Choisissez une catégorie pour organiser votre souvenir. Vous pouvez aussi créer des catégories personnalisées.',
+      title: t('tour.capsule.category.title'),
+      description: t('tour.capsule.category.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -138,8 +142,8 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-type"]',
     popover: {
-      title: '📷 Type de souvenir',
-      description: 'Sélectionnez le type de contenu : texte, photo, vidéo, audio ou mixte selon ce que vous souhaitez sauvegarder.',
+      title: t('tour.capsule.type.title'),
+      description: t('tour.capsule.type.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -147,8 +151,8 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-title"]',
     popover: {
-      title: '✏️ Titre et description',
-      description: 'Donnez un titre évocateur à votre souvenir et ajoutez une description pour le retrouver facilement.',
+      title: t('tour.capsule.title.title'),
+      description: t('tour.capsule.title.description'),
       side: 'top',
       align: 'start',
     },
@@ -156,8 +160,8 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-media"]',
     popover: {
-      title: '📎 Fichiers médias',
-      description: 'Ajoutez vos photos, vidéos ou fichiers audio. Vous pouvez glisser-déposer ou cliquer pour sélectionner.',
+      title: t('tour.capsule.media.title'),
+      description: t('tour.capsule.media.description'),
       side: 'top',
       align: 'center',
     },
@@ -165,8 +169,8 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-date"]',
     popover: {
-      title: '📅 Date du souvenir',
-      description: 'Indiquez quand ce moment a eu lieu. Vous pouvez choisir une date précise ou une période.',
+      title: t('tour.capsule.date.title'),
+      description: t('tour.capsule.date.description'),
       side: 'top',
       align: 'start',
     },
@@ -174,8 +178,8 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-tags"]',
     popover: {
-      title: '🏷️ Tags',
-      description: 'Ajoutez des mots-clés pour retrouver facilement ce souvenir plus tard.',
+      title: t('tour.capsule.tags.title'),
+      description: t('tour.capsule.tags.description'),
       side: 'top',
       align: 'center',
     },
@@ -183,27 +187,27 @@ export const capsuleTourSteps: TourStep[] = [
   {
     element: '[data-tour="capsule-actions"]',
     popover: {
-      title: '💾 Enregistrer',
-      description: 'Sauvegardez en brouillon pour continuer plus tard, ou publiez directement votre souvenir.',
+      title: t('tour.capsule.actions.title'),
+      description: t('tour.capsule.actions.description'),
       side: 'top',
       align: 'end',
     },
   },
   {
     popover: {
-      title: '🎉 À vous de jouer !',
-      description: 'Vous connaissez maintenant toutes les étapes pour créer un souvenir. Commencez par choisir une catégorie !',
+      title: t('tour.capsule.complete.title'),
+      description: t('tour.capsule.complete.description'),
     },
   },
 ];
 
 // Family tree tour steps
-export const familyTreeTourSteps: TourStep[] = [
+const getFamilyTreeTourSteps = (): TourStep[] => [
   {
     element: '[data-tour="tree-visualization"]',
     popover: {
-      title: '🌳 Votre arbre généalogique',
-      description: 'Visualisez votre famille sous forme d\'arbre interactif. Cliquez sur une personne pour voir ses détails.',
+      title: t('tour.familyTree.visualization.title'),
+      description: t('tour.familyTree.visualization.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -211,8 +215,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-add-person"]',
     popover: {
-      title: '➕ Ajouter une personne',
-      description: 'Cliquez ici pour ajouter un nouveau membre à votre arbre familial.',
+      title: t('tour.familyTree.addPerson.title'),
+      description: t('tour.familyTree.addPerson.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -220,8 +224,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-zoom"]',
     popover: {
-      title: '🔍 Zoom et navigation',
-      description: 'Utilisez les contrôles de zoom pour ajuster la vue. Vous pouvez aussi faire glisser l\'arbre.',
+      title: t('tour.familyTree.zoom.title'),
+      description: t('tour.familyTree.zoom.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -229,8 +233,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-view-mode"]',
     popover: {
-      title: '👁️ Mode de vue',
-      description: 'Changez le mode d\'affichage : descendants, ascendants ou vue sablier centrée sur une personne.',
+      title: t('tour.familyTree.viewMode.title'),
+      description: t('tour.familyTree.viewMode.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -238,8 +242,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-search"]',
     popover: {
-      title: '🔎 Rechercher',
-      description: 'Trouvez rapidement une personne dans votre arbre grâce à la recherche.',
+      title: t('tour.familyTree.search.title'),
+      description: t('tour.familyTree.search.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -247,8 +251,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-center"]',
     popover: {
-      title: '🎯 Centrer sur...',
-      description: 'Sélectionnez une personne pour centrer la vue sur elle.',
+      title: t('tour.familyTree.center.title'),
+      description: t('tour.familyTree.center.description'),
       side: 'bottom',
       align: 'center',
     },
@@ -256,8 +260,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-import-export"]',
     popover: {
-      title: '📥 Import/Export',
-      description: 'Importez un fichier GEDCOM ou exportez votre arbre en PDF ou GEDCOM.',
+      title: t('tour.familyTree.importExport.title'),
+      description: t('tour.familyTree.importExport.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -265,8 +269,8 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-persons-list"]',
     popover: {
-      title: '📋 Liste des personnes',
-      description: 'Consultez la liste complète de toutes les personnes de votre arbre.',
+      title: t('tour.familyTree.personsList.title'),
+      description: t('tour.familyTree.personsList.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -274,27 +278,27 @@ export const familyTreeTourSteps: TourStep[] = [
   {
     element: '[data-tour="tree-minimap"]',
     popover: {
-      title: '🗺️ Mini-carte',
-      description: 'Utilisez la mini-carte pour naviguer rapidement dans un grand arbre.',
+      title: t('tour.familyTree.minimap.title'),
+      description: t('tour.familyTree.minimap.description'),
       side: 'left',
       align: 'end',
     },
   },
   {
     popover: {
-      title: '🎉 Prêt à explorer !',
-      description: 'Votre arbre généalogique vous attend. Commencez par ajouter vos proches !',
+      title: t('tour.familyTree.complete.title'),
+      description: t('tour.familyTree.complete.description'),
     },
   },
 ];
 
 // Circles tour steps
-export const circlesTourSteps: TourStep[] = [
+const getCirclesTourSteps = (): TourStep[] => [
   {
     element: '[data-tour="circles-header"]',
     popover: {
-      title: '👨‍👩‍👧‍👦 Vos cercles de partage',
-      description: 'Les cercles vous permettent de partager vos souvenirs avec des groupes spécifiques : famille, amis, etc.',
+      title: t('tour.circles.header.title'),
+      description: t('tour.circles.header.description'),
       side: 'bottom',
       align: 'start',
     },
@@ -302,8 +306,8 @@ export const circlesTourSteps: TourStep[] = [
   {
     element: '[data-tour="circles-create"]',
     popover: {
-      title: '➕ Créer un cercle',
-      description: 'Cliquez ici pour créer un nouveau cercle de partage.',
+      title: t('tour.circles.create.title'),
+      description: t('tour.circles.create.description'),
       side: 'bottom',
       align: 'end',
     },
@@ -311,8 +315,8 @@ export const circlesTourSteps: TourStep[] = [
   {
     element: '[data-tour="circles-list"]',
     popover: {
-      title: '📋 Vos cercles',
-      description: 'Retrouvez tous vos cercles ici. Cliquez sur un cercle pour voir ses membres.',
+      title: t('tour.circles.list.title'),
+      description: t('tour.circles.list.description'),
       side: 'right',
       align: 'start',
     },
@@ -320,8 +324,8 @@ export const circlesTourSteps: TourStep[] = [
   {
     element: '[data-tour="circles-details"]',
     popover: {
-      title: '👥 Détails du cercle',
-      description: 'Consultez et gérez les membres de votre cercle depuis ce panneau.',
+      title: t('tour.circles.details.title'),
+      description: t('tour.circles.details.description'),
       side: 'left',
       align: 'start',
     },
@@ -329,50 +333,39 @@ export const circlesTourSteps: TourStep[] = [
   {
     element: '[data-tour="circles-invite"]',
     popover: {
-      title: '✉️ Inviter des membres',
-      description: 'Invitez de nouvelles personnes par email. Elles recevront un lien pour rejoindre votre cercle.',
+      title: t('tour.circles.invite.title'),
+      description: t('tour.circles.invite.description'),
       side: 'bottom',
       align: 'center',
     },
   },
   {
     popover: {
-      title: '🎉 Partagez vos souvenirs !',
-      description: 'Créez votre premier cercle et invitez vos proches pour partager vos souvenirs en toute intimité.',
+      title: t('tour.circles.complete.title'),
+      description: t('tour.circles.complete.description'),
     },
   },
 ];
 
-// Get steps by tour type
+// Get steps by tour type - now returns fresh translations
 export const getTourSteps = (tourType: TourType): TourStep[] => {
   switch (tourType) {
     case 'dashboard':
-      return dashboardTourSteps;
+      return getDashboardTourSteps();
     case 'capsule':
-      return capsuleTourSteps;
+      return getCapsuleTourSteps();
     case 'familyTree':
-      return familyTreeTourSteps;
+      return getFamilyTreeTourSteps();
     case 'circles':
-      return circlesTourSteps;
+      return getCirclesTourSteps();
     default:
-      return dashboardTourSteps;
+      return getDashboardTourSteps();
   }
 };
 
-// Get tour title for display
+// Get tour title for display - now translated
 export const getTourTitle = (tourType: TourType): string => {
-  switch (tourType) {
-    case 'dashboard':
-      return 'Découvrir le tableau de bord';
-    case 'capsule':
-      return 'Créer un souvenir';
-    case 'familyTree':
-      return 'Arbre généalogique';
-    case 'circles':
-      return 'Cercles de partage';
-    default:
-      return 'Visite guidée';
-  }
+  return t(`tour.titles.${tourType}`);
 };
 
 // Tour completion storage keys
