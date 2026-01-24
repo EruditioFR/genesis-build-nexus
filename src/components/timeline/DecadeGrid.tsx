@@ -3,98 +3,85 @@ import {
   Camera, Radio, Disc3, Sparkles, 
   Tv, Smartphone, Leaf, Music2, ChevronRight, ImageIcon
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface DecadeGridProps {
   decades: string[];
   decadeCounts: Record<string, number>;
-  decadeThumbnails: Record<string, string[]>; // decade -> array of thumbnail URLs
+  decadeThumbnails: Record<string, string[]>;
   onDecadeClick: (decade: string) => void;
 }
 
 // Configuration des icônes et styles par décennie
 const decadeConfig: Record<string, { 
   icon: typeof Camera; 
-  label: string; 
   emoji: string;
   gradient: string;
-  description: string;
 }> = {
   '1940': { 
     icon: Camera, 
-    label: 'Années 40',
     emoji: '📷',
     gradient: 'from-amber-700 to-amber-900',
-    description: 'Années de guerre'
   },
   '1950': { 
     icon: Radio, 
-    label: 'Années 50',
     emoji: '📻',
     gradient: 'from-amber-600 to-amber-800',
-    description: 'Rock\'n\'roll'
   },
   '1960': { 
     icon: Sparkles, 
-    label: 'Années 60',
     emoji: '✌️',
     gradient: 'from-pink-500 to-orange-400',
-    description: 'Flower Power'
   },
   '1970': { 
     icon: Disc3, 
-    label: 'Années 70',
     emoji: '🕺',
     gradient: 'from-orange-500 to-yellow-500',
-    description: 'Disco Fever'
   },
   '1980': { 
     icon: Tv, 
-    label: 'Années 80',
     emoji: '📼',
     gradient: 'from-purple-500 to-pink-500',
-    description: 'Neon & Synth'
   },
   '1990': { 
     icon: Music2, 
-    label: 'Années 90',
     emoji: '💿',
     gradient: 'from-cyan-500 to-teal-500',
-    description: 'Grunge & Pop'
   },
   '2000': { 
     icon: Smartphone, 
-    label: 'Années 2000',
     emoji: '📱',
     gradient: 'from-indigo-500 to-blue-500',
-    description: 'Ère digitale'
   },
   '2010': { 
     icon: Camera, 
-    label: 'Années 2010',
     emoji: '📸',
     gradient: 'from-pink-500 to-purple-500',
-    description: 'Réseaux sociaux'
   },
   '2020': { 
     icon: Leaf, 
-    label: 'Années 2020',
     emoji: '🌿',
     gradient: 'from-emerald-500 to-teal-500',
-    description: 'Ère moderne'
   },
 };
 
 const getDecadeConfig = (decade: string) => {
   return decadeConfig[decade] || {
     icon: Camera,
-    label: `Années ${decade}`,
     emoji: '📅',
     gradient: 'from-secondary to-primary',
-    description: `Décennie ${decade}`
   };
 };
 
 const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: DecadeGridProps) => {
+  const { t } = useTranslation('dashboard');
+
+  const getDecadeLabel = (decade: string): string => {
+    const labelKey = `timeline.decade.labels.${decade}`;
+    const translated = t(labelKey);
+    return translated !== labelKey ? translated : t('timeline.decade.labels.default', { decade });
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {decades.map((decade, index) => {
@@ -119,7 +106,6 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
               <div className="absolute inset-0">
                 {/* Grille adaptative selon le nombre d'images */}
                 {thumbnails.length === 1 ? (
-                  // 1 image : pleine largeur
                   <div className="absolute inset-0">
                     <img 
                       src={thumbnails[0]} 
@@ -128,7 +114,6 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
                     />
                   </div>
                 ) : thumbnails.length === 2 ? (
-                  // 2 images : 2 colonnes
                   <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
                     {thumbnails.map((url, i) => (
                       <div key={i} className="relative overflow-hidden">
@@ -141,7 +126,6 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
                     ))}
                   </div>
                 ) : thumbnails.length === 3 ? (
-                  // 3 images : 1 grande + 2 petites
                   <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
                     <div className="relative overflow-hidden row-span-2">
                       <img 
@@ -166,7 +150,6 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
                     </div>
                   </div>
                 ) : (
-                  // 4+ images : grille 2x2
                   <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5">
                     {thumbnails.slice(0, 4).map((url, i) => (
                       <div key={i} className="relative overflow-hidden">
@@ -179,7 +162,6 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
                     ))}
                   </div>
                 )}
-                {/* Overlay gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30`} />
               </div>
             ) : (
@@ -197,13 +179,13 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
               
               <div className="mt-4">
                 <h3 className="font-display font-bold text-xl sm:text-2xl mb-3">
-                  Années {decade}
+                  {getDecadeLabel(decade)}
                 </h3>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium">
-                      {count} souvenir{count > 1 ? 's' : ''}
+                      {count} {t('timeline.memories', { count })}
                     </span>
                     {thumbnails.length > 0 && (
                       <span className="flex items-center gap-1 text-xs text-white/70">
