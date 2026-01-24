@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Search, X, FileText, Image, Video, Music, Layers, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
 
 import {
   Dialog,
@@ -43,11 +44,17 @@ interface GlobalSearchProps {
 
 const GlobalSearch = ({ userId }: GlobalSearchProps) => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation('common');
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Capsule[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+
+  const getLocale = () => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
 
   // Keyboard shortcut to open search
   useEffect(() => {
@@ -173,7 +180,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
         className="gap-2 text-white bg-white/10 hover:bg-white/20 border-white/20 hidden sm:flex"
       >
         <Search className="w-4 h-4" />
-        <span>Rechercher...</span>
+        <span>{t('search.placeholder')}</span>
         <kbd className="pointer-events-none ml-2 hidden h-5 select-none items-center gap-1 rounded border border-white/30 bg-white/15 px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
         </kbd>
@@ -193,7 +200,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[550px] p-0 gap-0 overflow-hidden">
           <DialogHeader className="p-4 pb-0">
-            <DialogTitle className="sr-only">Recherche globale</DialogTitle>
+            <DialogTitle className="sr-only">{t('search.dialogTitle')}</DialogTitle>
           </DialogHeader>
 
           {/* Search input */}
@@ -202,7 +209,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher par titre, description ou tags..."
+              placeholder={t('search.inputPlaceholder')}
               className="border-0 focus-visible:ring-0 px-0 text-base"
               autoFocus
             />
@@ -228,13 +235,13 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
               <div className="text-center py-12 px-4">
                 <Search className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
                 <p className="text-muted-foreground">
-                  Aucune capsule trouvée pour "{query}"
+                  {t('search.noResults', { query })}
                 </p>
               </div>
             ) : results.length > 0 ? (
               <div className="py-2">
                 <p className="px-4 py-2 text-xs font-medium text-muted-foreground">
-                  {results.length} résultat{results.length > 1 ? 's' : ''}
+                  {t('search.resultsCount', { count: results.length })}
                 </p>
                 <AnimatePresence>
                   {results.map((capsule, index) => {
@@ -265,7 +272,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Clock className="w-3 h-3" />
-                              {format(parseISO(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                              {format(parseISO(capsule.created_at), 'd MMM yyyy', { locale: getLocale() })}
                             </span>
                             {capsule.tags?.slice(0, 2).map(tag => (
                               <Badge key={tag} variant="outline" className="text-xs h-5">
@@ -282,7 +289,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
             ) : !hasSearched ? (
               <div className="text-center py-12 px-4">
                 <p className="text-muted-foreground text-sm">
-                  Commencez à taper pour rechercher vos capsules
+                  {t('search.startTyping')}
                 </p>
               </div>
             ) : null}
@@ -290,12 +297,12 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
 
           {/* Footer */}
           <div className="px-4 py-3 border-t border-border bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
-            <span>Recherche dans vos capsules</span>
+            <span>{t('search.searchingIn')}</span>
             <div className="flex items-center gap-2">
               <kbd className="px-1.5 py-0.5 bg-background border rounded text-[10px]">↵</kbd>
-              <span>sélectionner</span>
+              <span>{t('search.select')}</span>
               <kbd className="px-1.5 py-0.5 bg-background border rounded text-[10px] ml-2">esc</kbd>
-              <span>fermer</span>
+              <span>{t('search.close')}</span>
             </div>
           </div>
         </DialogContent>

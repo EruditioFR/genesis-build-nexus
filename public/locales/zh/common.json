@@ -51,5 +51,17 @@
     "email": "无效的电子邮件地址",
     "minLength": "最少{{count}}个字符",
     "maxLength": "最多{{count}}个字符"
+  },
+  "search": {
+    "placeholder": "搜索...",
+    "inputPlaceholder": "按标题、描述或关键词搜索...",
+    "dialogTitle": "全局搜索",
+    "noResults": "未找到与\"{{query}}\"相关的回忆",
+    "resultsCount": "{{count}}个结果",
+    "resultsCount_other": "{{count}}个结果",
+    "startTyping": "开始输入以搜索您的回忆",
+    "searchingIn": "正在搜索您的回忆",
+    "select": "选择",
+    "close": "关闭"
   }
 }
