@@ -139,6 +139,9 @@
       "transfers": {
         "title": "9. International data transfers",
         "intro": "Your data is primarily stored in the European Union. However, some of our subprocessors are located in the United States. These transfers are governed by appropriate safeguards:",
+        "stripe": "Secure payments",
+        "resend": "Transactional emails",
+        "analytics": "Traffic analysis",
         "guarantees": {
           "title": "Legal guarantees",
           "scc": "Standard Contractual Clauses (SCCs) approved by the European Commission (Implementing Decision 2021/914 of June 4, 2021)",
