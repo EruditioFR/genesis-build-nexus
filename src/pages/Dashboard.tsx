@@ -77,7 +77,7 @@ const Dashboard = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { startTour, isTourCompleted } = useOnboardingTour();
+  const { startTour, isTourCompleted, WelcomeDialog } = useOnboardingTour();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recentCapsules, setRecentCapsules] = useState<RecentCapsule[]>([]);
   const [familyPersonsCount, setFamilyPersonsCount] = useState(0);
@@ -296,6 +296,7 @@ const Dashboard = () => {
   return (
     <>
       <NoIndex />
+      <WelcomeDialog />
       <AuthenticatedLayout
         user={{
           id: user.id,

@@ -9,7 +9,15 @@ import { getTourStorageKey } from '@/lib/tourSteps';
 export const useOnboardingTour = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { startTour: startDashboardTour, stopTour, isTourCompleted, resetTour } = useFeatureTour('dashboard');
+  const { 
+    startTour: startDashboardTour, 
+    startTourDirect,
+    stopTour, 
+    isTourCompleted, 
+    resetTour,
+    WelcomeDialog,
+    showWelcomeDialog,
+  } = useFeatureTour('dashboard');
 
   const startTour = useCallback(() => {
     // Navigate to dashboard first if not there
@@ -31,9 +39,12 @@ export const useOnboardingTour = () => {
 
   return {
     startTour,
+    startTourDirect,
     stopTour,
     isTourCompleted: isCompleted,
     resetTour,
+    WelcomeDialog,
+    showWelcomeDialog,
   };
 };
 

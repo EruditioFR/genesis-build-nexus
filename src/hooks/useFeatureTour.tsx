@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { driver, Config } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import confetti from 'canvas-confetti';
 import { TourType, getTourSteps, getTourStorageKey } from '@/lib/tourSteps';
+import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 
 // Inject custom styles for driver.js - COMPLETE UX OVERHAUL
 const injectTourStyles = (totalSteps: number) => {
@@ -424,6 +425,7 @@ export const useFeatureTour = (tourType: TourType) => {
   const driverRef = useRef<ReturnType<typeof driver> | null>(null);
   const currentStepRef = useRef(0);
   const { t } = useTranslation('common');
+  const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
 
   // Get localized button text from i18n
   const getButtonText = useCallback(() => {
@@ -435,7 +437,7 @@ export const useFeatureTour = (tourType: TourType) => {
     };
   }, [t]);
 
-  const startTour = useCallback(() => {
+  const startDriverTour = useCallback(() => {
     const steps = getTourSteps(tourType);
     const totalSteps = steps.length;
     
@@ -486,6 +488,34 @@ export const useFeatureTour = (tourType: TourType) => {
     setTimeout(() => updateProgress(1, totalSteps), 100);
   }, [tourType, getButtonText]);
 
+  // Public startTour shows welcome dialog first
+  const startTour = useCallback(() => {
+    setShowWelcomeDialog(true);
+  }, []);
+
+  // Start tour directly without welcome dialog (for manual restart)
+  const startTourDirect = useCallback(() => {
+    startDriverTour();
+  }, [startDriverTour]);
+
+  const handleWelcomeStart = useCallback(() => {
+    setShowWelcomeDialog(false);
+    // Small delay to ensure dialog is closed before tour starts
+    setTimeout(() => {
+      startDriverTour();
+    }, 150);
+  }, [startDriverTour]);
+
+  const handleWelcomeSkip = useCallback(() => {
+    setShowWelcomeDialog(false);
+    // Mark as completed so it doesn't auto-show again
+    localStorage.setItem(getTourStorageKey(tourType), 'true');
+  }, [tourType]);
+
+  const handleWelcomeClose = useCallback(() => {
+    setShowWelcomeDialog(false);
+  }, []);
+
   const stopTour = useCallback(() => {
     if (driverRef.current) {
       driverRef.current.destroy();
@@ -509,11 +539,25 @@ export const useFeatureTour = (tourType: TourType) => {
     };
   }, []);
 
+  // Render welcome dialog component
+  const WelcomeDialog = useCallback(() => (
+    <TourWelcomeDialog
+      isOpen={showWelcomeDialog}
+      tourType={tourType}
+      onStart={handleWelcomeStart}
+      onSkip={handleWelcomeSkip}
+      onClose={handleWelcomeClose}
+    />
+  ), [showWelcomeDialog, tourType, handleWelcomeStart, handleWelcomeSkip, handleWelcomeClose]);
+
   return {
     startTour,
+    startTourDirect,
     stopTour,
     isTourCompleted,
     resetTour,
+    WelcomeDialog,
+    showWelcomeDialog,
   };
 };
 

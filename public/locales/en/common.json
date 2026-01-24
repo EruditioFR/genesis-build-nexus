@@ -77,6 +77,28 @@
       "progress": "Step {{current}}/{{total}}",
       "skip": "Skip"
     },
+    "welcome": {
+      "dashboard": {
+        "title": "Discover your space",
+        "description": "A quick guided tour to familiarize you with all the features of your dashboard."
+      },
+      "capsule": {
+        "title": "Create your first memory",
+        "description": "Learn how to create and organize your memories in a few simple steps."
+      },
+      "familyTree": {
+        "title": "Explore your tree",
+        "description": "Discover how to build and navigate your interactive family tree."
+      },
+      "circles": {
+        "title": "Share with family",
+        "description": "Learn how to create sharing circles for your loved ones."
+      },
+      "duration": "~{{minutes}} min",
+      "start": "Start the tour",
+      "later": "Maybe later",
+      "skipHint": "You can restart this tour from the menu anytime"
+    },
     "titles": {
       "dashboard": "Discover the dashboard",
       "capsule": "Creation help",

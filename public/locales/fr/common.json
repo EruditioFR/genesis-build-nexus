@@ -77,6 +77,28 @@
       "progress": "Étape {{current}}/{{total}}",
       "skip": "Passer"
     },
+    "welcome": {
+      "dashboard": {
+        "title": "Découvrez votre espace",
+        "description": "Une visite guidée rapide pour vous familiariser avec toutes les fonctionnalités de votre tableau de bord."
+      },
+      "capsule": {
+        "title": "Créez votre premier souvenir",
+        "description": "Apprenez à créer et organiser vos souvenirs en quelques étapes simples."
+      },
+      "familyTree": {
+        "title": "Explorez votre arbre",
+        "description": "Découvrez comment construire et naviguer dans votre arbre généalogique interactif."
+      },
+      "circles": {
+        "title": "Partagez en famille",
+        "description": "Apprenez à créer des cercles de partage pour vos proches."
+      },
+      "duration": "~{{minutes}} min",
+      "start": "Commencer la visite",
+      "later": "Plus tard",
+      "skipHint": "Vous pourrez relancer cette visite depuis le menu à tout moment"
+    },
     "titles": {
       "dashboard": "Découvrir le tableau de bord",
       "capsule": "Aide à la création",
