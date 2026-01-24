@@ -355,6 +355,16 @@
       "voyages-lieux": "旅行与地点",
       "passions-loisirs": "热情与爱好",
       "reflexions-messages": "思考与寄语"
+    },
+    "standardDescriptions": {
+      "famille-proches": "与亲人和家人的回忆",
+      "savoirs-traditions": "食谱、技艺和家庭传统",
+      "histoires-vecues": "人生中的趣事和难忘时刻",
+      "vie-professionnelle": "职业、工作和成就",
+      "amour-relations": "爱情故事和重要关系",
+      "voyages-lieux": "发现、旅行和有意义的地方",
+      "passions-loisirs": "爱好、运动和创意活动",
+      "reflexions-messages": "留给未来的想法、信件和寄语"
     }
   }
 }

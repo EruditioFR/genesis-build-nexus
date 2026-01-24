@@ -60,6 +60,13 @@ const CategorySelector = ({
     return translated !== translationKey ? translated : category.name_fr;
   };
 
+  // Helper to get localized category description
+  const getCategoryDescription = (category: Category): string => {
+    const translationKey = `categorySelector.standardDescriptions.${category.slug}`;
+    const translated = t(translationKey);
+    return translated !== translationKey ? translated : category.description_short;
+  };
+
   // Get available sub-categories for the primary category
   const availableSubCategories = primaryCategory
     ? subCategories.filter(sub => sub.category_id === primaryCategory)
@@ -185,7 +192,7 @@ const CategorySelector = ({
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-xs">
                   <p className="font-medium">{getCategoryName(category)}</p>
-                  <p className="text-sm text-muted-foreground">{category.description_short}</p>
+                  <p className="text-sm text-muted-foreground">{getCategoryDescription(category)}</p>
                 </TooltipContent>
               </Tooltip>
             );

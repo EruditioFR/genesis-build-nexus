@@ -355,6 +355,16 @@
       "voyages-lieux": "Travel & Places",
       "passions-loisirs": "Passions & Hobbies",
       "reflexions-messages": "Reflections & Messages"
+    },
+    "standardDescriptions": {
+      "famille-proches": "Memories with your loved ones and family",
+      "savoirs-traditions": "Recipes, know-how and family traditions",
+      "histoires-vecues": "Anecdotes and memorable moments of your life",
+      "vie-professionnelle": "Career, jobs and accomplishments",
+      "amour-relations": "Love stories and important relationships",
+      "voyages-lieux": "Discoveries, travels and significant places",
+      "passions-loisirs": "Hobbies, sports and creative activities",
+      "reflexions-messages": "Thoughts, letters and messages for the future"
     }
   }
 }
