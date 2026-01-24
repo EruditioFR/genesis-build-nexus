@@ -41,6 +41,7 @@ import GlobalSearch from '@/components/search/GlobalSearch';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { useSubscription } from '@/hooks/useSubscription';
+import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import logo from '@/assets/logo.png';
 import React from 'react';
 
@@ -158,7 +159,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
-  const { startTour } = useOnboardingTour();
+  const { startTour, welcomeDialogProps } = useOnboardingTour();
   const { tier } = useSubscription();
 
   const isPremium = tier === 'premium' || tier === 'heritage';
@@ -183,7 +184,9 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const isActivePrefix = (prefix: string) => location.pathname.startsWith(prefix);
 
   return (
-    <motion.header
+    <>
+      <TourWelcomeDialog {...welcomeDialogProps} />
+      <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="sticky top-0 z-50 w-full bg-[hsl(215_50%_18%)] backdrop-blur-md border-b border-[hsl(215_50%_25%)] shadow-sm"
@@ -523,6 +526,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
         </div>
       </div>
     </motion.header>
+    </>
   );
 };
 
