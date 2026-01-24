@@ -366,5 +366,24 @@
       "passions-loisirs": "爱好、运动和创意活动",
       "reflexions-messages": "留给未来的想法、信件和寄语"
     }
+  },
+  "comments": {
+    "title": "评论",
+    "empty": "暂无评论。成为第一个评论的人吧！",
+    "placeholder": "写评论...",
+    "anonymous_user": "用户",
+    "edited": "已编辑",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存",
+    "cancel": "取消",
+    "delete_confirm_title": "删除此评论？",
+    "delete_confirm_description": "此操作无法撤销。",
+    "added": "评论已添加",
+    "updated": "评论已修改",
+    "deleted": "评论已删除",
+    "error_add": "添加评论时出错",
+    "error_update": "修改评论时出错",
+    "error_delete": "删除评论时出错"
   }
 }

@@ -366,5 +366,24 @@
       "passions-loisirs": "Aficiones, deportes y actividades creativas",
       "reflexions-messages": "Pensamientos, cartas y mensajes para el futuro"
     }
+  },
+  "comments": {
+    "title": "Comentarios",
+    "empty": "Sin comentarios por el momento. ¡Sé el primero en comentar!",
+    "placeholder": "Escribir un comentario...",
+    "anonymous_user": "Usuario",
+    "edited": "editado",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete_confirm_title": "¿Eliminar este comentario?",
+    "delete_confirm_description": "Esta acción no se puede deshacer.",
+    "added": "Comentario añadido",
+    "updated": "Comentario modificado",
+    "deleted": "Comentario eliminado",
+    "error_add": "Error al añadir el comentario",
+    "error_update": "Error al modificar el comentario",
+    "error_delete": "Error al eliminar el comentario"
   }
 }

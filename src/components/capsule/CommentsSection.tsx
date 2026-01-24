@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Send, Trash2, Edit2, X, Check, User } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -38,13 +40,18 @@ interface CommentsSectionProps {
   currentUserId: string;
 }
 
+const dateLocales: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+
 const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => {
+  const { t, i18n } = useTranslation('capsules');
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
+  
+  const currentLocale = dateLocales[i18n.language] || enUS;
 
   useEffect(() => {
     fetchComments();
@@ -113,9 +120,9 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
 
       setComments(prev => [...prev, { ...data, profile }]);
       setNewComment('');
-      toast.success('Commentaire ajouté');
+      toast.success(t('comments.added'));
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de l\'ajout du commentaire');
+      toast.error(error.message || t('comments.error_add'));
     } finally {
       setIsSubmitting(false);
     }
@@ -141,9 +148,9 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
       );
       setEditingId(null);
       setEditContent('');
-      toast.success('Commentaire modifié');
+      toast.success(t('comments.updated'));
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la modification');
+      toast.error(error.message || t('comments.error_update'));
     }
   };
 
@@ -157,9 +164,9 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
       if (error) throw error;
 
       setComments(prev => prev.filter(c => c.id !== commentId));
-      toast.success('Commentaire supprimé');
+      toast.success(t('comments.deleted'));
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la suppression');
+      toast.error(error.message || t('comments.error_delete'));
     }
   };
 
@@ -183,7 +190,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
       <div className="p-6 rounded-2xl border border-border bg-card">
         <div className="flex items-center gap-2 mb-4">
           <MessageCircle className="w-5 h-5 text-secondary" />
-          <h3 className="font-semibold text-foreground">Commentaires</h3>
+          <h3 className="font-semibold text-foreground">{t('comments.title')}</h3>
         </div>
         <div className="flex justify-center py-8">
           <div className="w-6 h-6 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
@@ -197,7 +204,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
       <div className="flex items-center gap-2 mb-6">
         <MessageCircle className="w-5 h-5 text-secondary" />
         <h3 className="font-semibold text-foreground">
-          Commentaires ({comments.length})
+          {t('comments.title')} ({comments.length})
         </h3>
       </div>
 
@@ -210,7 +217,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
               animate={{ opacity: 1 }}
               className="text-center text-muted-foreground py-8"
             >
-              Aucun commentaire pour le moment. Soyez le premier à commenter !
+              {t('comments.empty')}
             </motion.p>
           ) : (
             comments.map((comment) => (
@@ -231,13 +238,13 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-medium text-sm text-foreground">
-                      {comment.profile?.display_name || 'Utilisateur'}
+                      {comment.profile?.display_name || t('comments.anonymous_user')}
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      {format(parseISO(comment.created_at), 'd MMM yyyy, HH:mm', { locale: fr })}
+                      {format(parseISO(comment.created_at), 'd MMM yyyy, HH:mm', { locale: currentLocale })}
                     </span>
                     {comment.updated_at !== comment.created_at && (
-                      <span className="text-xs text-muted-foreground italic">(modifié)</span>
+                      <span className="text-xs text-muted-foreground italic">({t('comments.edited')})</span>
                     )}
                   </div>
 
@@ -256,7 +263,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
                           className="gap-1"
                         >
                           <Check className="w-3.5 h-3.5" />
-                          Enregistrer
+                          {t('comments.save')}
                         </Button>
                         <Button
                           size="sm"
@@ -265,7 +272,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
                           className="gap-1"
                         >
                           <X className="w-3.5 h-3.5" />
-                          Annuler
+                          {t('comments.cancel')}
                         </Button>
                       </div>
                     </div>
@@ -285,7 +292,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
                         className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
                       >
                         <Edit2 className="w-3 h-3 mr-1" />
-                        Modifier
+                        {t('comments.edit')}
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -295,20 +302,20 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
                             className="h-7 px-2 text-xs text-muted-foreground hover:text-destructive"
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
-                            Supprimer
+                            {t('comments.delete')}
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Supprimer le commentaire ?</AlertDialogTitle>
+                            <AlertDialogTitle>{t('comments.delete_confirm_title')}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Cette action est irréversible.
+                              {t('comments.delete_confirm_description')}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogCancel>{t('comments.cancel')}</AlertDialogCancel>
                             <AlertDialogAction onClick={() => handleDelete(comment.id)}>
-                              Supprimer
+                              {t('comments.delete')}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -328,7 +335,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
           <Textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Écrire un commentaire..."
+            placeholder={t('comments.placeholder')}
             className="min-h-[80px] resize-none"
           />
         </div>
