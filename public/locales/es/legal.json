@@ -389,61 +389,69 @@
       }
     }
   },
-  "sales": {
-    "title": "Condiciones de Venta",
+  "sale": {
+    "title": "Condiciones Generales de Venta",
     "sections": {
-      "object": {
+      "purpose": {
         "title": "1. Objeto",
-        "content": "Estas Condiciones de Venta rigen la relación contractual entre Family Garden y sus usuarios para la suscripción a servicios de pago ofrecidos en la plataforma."
+        "content": "Las presentes Condiciones Generales de Venta (CGV) rigen las ventas de servicios ofrecidos por Family Garden SAS a sus usuarios a través de la plataforma familygarden.fr. Cualquier suscripción a un plan de pago implica la aceptación sin reservas de estas CGV."
       },
       "services": {
         "title": "2. Servicios ofrecidos",
         "intro": "Family Garden ofrece las siguientes suscripciones:",
-        "free": "Gratis:",
-        "freeDesc": "Acceso limitado a funciones básicas",
-        "premium": "Premium:",
-        "premiumDesc": "Acceso completo a funciones avanzadas, almacenamiento extendido",
-        "heritage": "Herencia:",
-        "heritageDesc": "Funciones Premium + opciones de transmisión póstuma"
+        "plans": {
+          "free": {
+            "name": "Gratis",
+            "description": "Acceso limitado con almacenamiento básico (500 MB), creación de cápsulas de texto y foto, 1 círculo de compartir."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Almacenamiento extendido (10 GB), cápsulas de video y audio, hasta 5 círculos de compartir, cápsulas programadas, exportación PDF."
+          },
+          "legacy": {
+            "name": "Herencia",
+            "description": "Todas las funciones Premium + árbol genealógico ilimitado, cápsulas de legado digital, guardianes de confianza, círculos ilimitados, 50 GB de almacenamiento."
+          }
+        }
       },
       "pricing": {
         "title": "3. Precios y pago",
-        "content": "Los precios se indican en euros con impuestos incluidos. El pago se realiza con tarjeta de crédito a través de nuestro proveedor seguro Stripe. Las suscripciones se facturan mensual o anualmente según la opción elegida.",
-        "modification": "Los precios pueden modificarse en cualquier momento. En caso de modificación, el nuevo precio se aplicará al siguiente período de facturación, con un preaviso de 30 días."
+        "content": "Los precios de las suscripciones se muestran en euros con IVA incluido en la página de precios. El pago se realiza con tarjeta de crédito a través de nuestro proveedor seguro Stripe. La facturación es mensual o anual según la opción elegida.",
+        "modifications": "Family Garden se reserva el derecho de modificar sus precios en cualquier momento. Los nuevos precios se aplicarán a las nuevas suscripciones y renovaciones con 30 días de aviso previo."
       },
       "duration": {
         "title": "4. Duración y renovación",
-        "content": "La suscripción se contrata por un período de un mes o un año según la opción elegida. Se renueva automáticamente en cada vencimiento, salvo cancelación por el usuario antes de la fecha de renovación."
+        "content": "Las suscripciones se contratan por un período mensual o anual según la opción elegida. Se renuevan automáticamente al vencimiento a menos que el usuario las cancele antes de la fecha de renovación a través de su espacio personal o el portal de clientes de Stripe."
       },
       "withdrawal": {
         "title": "5. Derecho de desistimiento",
-        "content": "De acuerdo con el Artículo L221-28 del Código de Consumo francés, el derecho de desistimiento no se aplica a los contratos de suministro de contenido digital no proporcionado en un soporte material cuya ejecución ha comenzado con el acuerdo del consumidor.",
-        "guarantee": "Sin embargo, ofrecemos una garantía de \"satisfacción garantizada\" de 14 días para cualquier nueva suscripción Premium o Herencia."
+        "content": "De acuerdo con el Artículo L221-28 del Código de Consumo francés, el derecho de desistimiento no se aplica a los servicios completamente ejecutados antes del fin del período de desistimiento y cuya ejecución comenzó con el acuerdo previo expreso del consumidor.",
+        "guarantee": "Sin embargo, Family Garden ofrece una garantía de devolución de dinero de 14 días para cualquier nueva suscripción Premium o Herencia. Para beneficiarse, contáctenos en contact@familygarden.fr."
       },
-      "termination": {
+      "cancellation": {
         "title": "6. Cancelación",
-        "content": "El usuario puede cancelar su suscripción en cualquier momento desde su espacio personal o a través del portal de gestión de suscripciones. La cancelación entra en vigor al final del período de facturación actual.",
-        "access": "En caso de cancelación, el usuario conserva el acceso a las funciones de pago hasta el final del período ya pagado."
+        "content": "Puede cancelar su suscripción en cualquier momento desde su espacio personal. La cancelación entra en vigor al final del período actual, sin reembolso prorrateado.",
+        "access": "Después de la cancelación, su cuenta cambiará automáticamente al plan gratuito. Sus datos que excedan los límites del plan gratuito permanecerán accesibles en modo de solo lectura durante 30 días."
       },
       "liability": {
         "title": "7. Responsabilidad",
-        "content": "Family Garden se compromete a proporcionar servicios con diligencia. No podemos ser responsables de las interrupciones del servicio fuera de nuestro control, ni de los daños indirectos relacionados con el uso de nuestros servicios."
+        "content": "Family Garden se compromete a proporcionar sus servicios con diligencia. Sin embargo, su responsabilidad no puede ser comprometida en caso de fuerza mayor, acción de terceros o falta del usuario. La responsabilidad de Family Garden se limita a las cantidades efectivamente pagadas por el usuario durante los últimos 12 meses."
       },
       "dataProtection": {
         "title": "8. Protección de datos",
-        "content": "El tratamiento de sus datos personales se rige por nuestra Política de Privacidad, accesible desde nuestro sitio. Nos comprometemos a proteger sus datos de acuerdo con el RGPD."
+        "content": "El tratamiento de datos personales en el marco de las suscripciones se rige por nuestra Política de Privacidad accesible en nuestro sitio web. Los datos de pago son procesados exclusivamente por Stripe y nunca se almacenan en nuestros servidores."
       },
       "modifications": {
-        "title": "9. Modificación de las Condiciones",
-        "content": "Nos reservamos el derecho de modificar estas Condiciones. Las modificaciones se notificarán a los usuarios por email con al menos 30 días de antelación."
+        "title": "9. Modificación de las CGV",
+        "content": "Family Garden se reserva el derecho de modificar estas CGV. Los usuarios serán informados por email de cualquier modificación sustancial al menos 30 días antes de su entrada en vigor. El uso continuado del servicio después de esta fecha constituye la aceptación de las nuevas condiciones."
       },
-      "law": {
+      "jurisdiction": {
         "title": "10. Ley aplicable y disputas",
-        "content": "Estas Condiciones están sujetas a la ley francesa. En caso de disputa, se buscará una solución amistosa antes de cualquier acción legal. En su defecto, los tribunales franceses tendrán jurisdicción exclusiva."
+        "content": "Estas CGV se rigen por la ley francesa. En caso de disputa, se buscará primero una solución amistosa. En su defecto, los tribunales franceses tendrán jurisdicción. De acuerdo con el Código de Consumo, puede utilizar el servicio de mediación MEDICYS de forma gratuita (www.medicys.fr)."
       },
       "contact": {
         "title": "11. Contacto",
-        "content": "Para cualquier pregunta sobre las Condiciones de Venta, contáctenos en:"
+        "content": "Para cualquier pregunta sobre estas CGV o su suscripción, contáctenos en:"
       }
     }
   }
