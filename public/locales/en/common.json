@@ -63,5 +63,10 @@
     "searchingIn": "Searching in your memories",
     "select": "select",
     "close": "close"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications"
   }
 }

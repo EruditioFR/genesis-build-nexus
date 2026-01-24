@@ -63,5 +63,10 @@
     "searchingIn": "正在搜索您的回忆",
     "select": "选择",
     "close": "关闭"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部标为已读",
+    "empty": "没有通知"
   }
 }

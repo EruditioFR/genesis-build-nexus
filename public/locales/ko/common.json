@@ -63,5 +63,10 @@
     "searchingIn": "내 추억 검색 중",
     "select": "선택",
     "close": "닫기"
+  },
+  "notifications": {
+    "title": "알림",
+    "markAllRead": "모두 읽음 표시",
+    "empty": "알림이 없습니다"
   }
 }
