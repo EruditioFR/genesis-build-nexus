@@ -304,16 +304,16 @@
       "media_one": "{{count}} media",
       "media_other": "{{count}} media",
       "labels": {
-        "1940": "War years",
-        "1950": "Rock'n'roll",
-        "1960": "Flower Power",
-        "1970": "Disco Fever",
-        "1980": "Neon & Synth",
-        "1990": "Grunge & Pop",
-        "2000": "Digital era",
-        "2010": "Social media",
-        "2020": "Modern era",
-        "default": "{{decade}}s"
+        "1940": "40's",
+        "1950": "50's",
+        "1960": "60's",
+        "1970": "70's",
+        "1980": "80's",
+        "1990": "90's",
+        "2000": "2000's",
+        "2010": "2010's",
+        "2020": "2020's",
+        "default": "{{decade}}'s"
       }
     },
     "year": {
