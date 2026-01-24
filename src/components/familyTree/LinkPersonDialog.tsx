@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link2, Search, Users, Heart, Baby, UserPlus } from 'lucide-react';
+import { Link2, Search, Heart, Baby, UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -33,6 +34,7 @@ export function LinkPersonDialog({
   availablePersons,
   onLink,
 }: LinkPersonDialogProps) {
+  const { t } = useTranslation('familyTree');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [relationType, setRelationType] = useState<RelationType>('parent');
@@ -73,11 +75,11 @@ export function LinkPersonDialog({
     
     switch (relationType) {
       case 'parent':
-        return `${selectedPerson.first_names} sera le parent de ${sourcePerson.first_names}`;
+        return t('link.willBeParent', { selected: selectedPerson.first_names, source: sourcePerson.first_names });
       case 'child':
-        return `${selectedPerson.first_names} sera l'enfant de ${sourcePerson.first_names}`;
+        return t('link.willBeChild', { selected: selectedPerson.first_names, source: sourcePerson.first_names });
       case 'spouse':
-        return `${selectedPerson.first_names} sera le conjoint de ${sourcePerson.first_names}`;
+        return t('link.willBeSpouse', { selected: selectedPerson.first_names, source: sourcePerson.first_names });
       default:
         return '';
     }
@@ -94,10 +96,10 @@ export function LinkPersonDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link2 className="w-5 h-5 text-secondary" />
-            Lier une personne existante
+            {t('link.title')}
           </DialogTitle>
           <DialogDescription>
-            Sélectionnez une personne de l'arbre et définissez son lien avec {sourcePerson.first_names} {sourcePerson.last_name}
+            {t('link.description', { name: `${sourcePerson.first_names} ${sourcePerson.last_name}` })}
           </DialogDescription>
         </DialogHeader>
 
@@ -106,7 +108,7 @@ export function LinkPersonDialog({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Rechercher une personne..."
+              placeholder={t('link.search')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
@@ -118,7 +120,7 @@ export function LinkPersonDialog({
             <div className="p-2 space-y-1">
               {filteredPersons.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground py-8">
-                  Aucune personne trouvée
+                  {t('link.noResults')}
                 </p>
               ) : (
                 filteredPersons.map((person) => (
@@ -143,8 +145,8 @@ export function LinkPersonDialog({
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {formatBirthYear(person.birth_date) 
-                          ? `Né(e) en ${formatBirthYear(person.birth_date)}`
-                          : 'Date de naissance inconnue'}
+                          ? t('person.bornIn', { year: formatBirthYear(person.birth_date) })
+                          : t('person.unknownBirthDate')}
                       </p>
                     </div>
                   </button>
@@ -156,7 +158,7 @@ export function LinkPersonDialog({
           {/* Relationship type */}
           {selectedPerson && (
             <div className="space-y-3">
-              <Label>Type de relation</Label>
+              <Label>{t('link.relationType')}</Label>
               <RadioGroup
                 value={relationType}
                 onValueChange={(v) => setRelationType(v as RelationType)}
@@ -171,7 +173,7 @@ export function LinkPersonDialog({
                 >
                   <RadioGroupItem value="parent" id="parent" className="sr-only" />
                   <UserPlus className="w-5 h-5" />
-                  <span className="text-sm font-medium">Parent</span>
+                  <span className="text-sm font-medium">{t('link.parent')}</span>
                 </Label>
                 
                 <Label
@@ -183,7 +185,7 @@ export function LinkPersonDialog({
                 >
                   <RadioGroupItem value="child" id="child" className="sr-only" />
                   <Baby className="w-5 h-5" />
-                  <span className="text-sm font-medium">Enfant</span>
+                  <span className="text-sm font-medium">{t('link.child')}</span>
                 </Label>
                 
                 <Label
@@ -195,7 +197,7 @@ export function LinkPersonDialog({
                 >
                   <RadioGroupItem value="spouse" id="spouse" className="sr-only" />
                   <Heart className="w-5 h-5" />
-                  <span className="text-sm font-medium">Conjoint</span>
+                  <span className="text-sm font-medium">{t('link.spouse')}</span>
                 </Label>
               </RadioGroup>
 
@@ -208,7 +210,7 @@ export function LinkPersonDialog({
           {/* Actions */}
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => handleOpenChange(false)}>
-              Annuler
+              {t('link.cancel')}
             </Button>
             <Button 
               onClick={handleSubmit} 
@@ -216,11 +218,11 @@ export function LinkPersonDialog({
               className="gap-2"
             >
               {loading ? (
-                <>Liaison en cours...</>
+                <>{t('link.linking')}</>
               ) : (
                 <>
                   <Link2 className="w-4 h-4" />
-                  Lier
+                  {t('link.link')}
                 </>
               )}
             </Button>

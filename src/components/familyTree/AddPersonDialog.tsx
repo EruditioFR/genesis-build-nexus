@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { CalendarIcon, User, Loader2, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -36,9 +37,7 @@ interface AddPersonDialogProps {
   relationType: 'parent' | 'child' | 'spouse' | 'sibling' | null;
   targetPerson: FamilyPerson | null;
   onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string) => void;
-  // Pour l'ajout d'enfant: liste des conjoints possibles du parent
   availableSpouses?: FamilyPerson[];
-  // Pour vérifier les unions existantes
   existingUnions?: FamilyUnion[];
 }
 
@@ -52,7 +51,13 @@ export function AddPersonDialog({
   availableSpouses = [],
   existingUnions = []
 }: AddPersonDialogProps) {
+  const { t, i18n } = useTranslation('familyTree');
   const { addPerson, loading } = useFamilyTree();
+  
+  const getLocale = () => {
+    const localeMap: Record<string, typeof fr> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -66,14 +71,10 @@ export function AddPersonDialog({
   const [occupation, setOccupation] = useState('');
   const [biography, setBiography] = useState('');
   
-  // Second parent selection for child
   const [secondParentId, setSecondParentId] = useState<string>('none');
-  // Union selection when adding a child (in case of multiple unions with same spouse)
   const [selectedUnionId, setSelectedUnionId] = useState<string>('auto');
-  // For new spouse: is this a new union (divorce/remarriage case)?
   const [isNewUnion, setIsNewUnion] = useState(false);
 
-  // Get unions between target person and selected second parent
   const getUnionsWithSelectedParent = () => {
     if (!targetPerson || secondParentId === 'none') return [];
     return existingUnions.filter(
@@ -84,18 +85,14 @@ export function AddPersonDialog({
 
   const unionsWithSelectedParent = getUnionsWithSelectedParent();
   const hasMultipleUnions = unionsWithSelectedParent.length > 1;
-
-  // Determine if target person already has spouses (for showing new union option)
   const hasExistingSpouses = availableSpouses.length > 0 && relationType === 'spouse';
 
   useEffect(() => {
-    // Pre-select the first spouse if adding a child
     if (relationType === 'child' && availableSpouses.length === 1) {
       setSecondParentId(availableSpouses[0].id);
     }
   }, [relationType, availableSpouses]);
 
-  // Reset union selection when second parent changes
   useEffect(() => {
     setSelectedUnionId('auto');
   }, [secondParentId]);
@@ -138,18 +135,15 @@ export function AddPersonDialog({
     });
 
     if (person) {
-      // Pass the second parent ID and union ID for children
       const selectedSecondParent = relationType === 'child' && secondParentId !== 'none' 
         ? secondParentId 
         : undefined;
       
-      // Determine union ID to use
       let unionIdToUse: string | undefined;
       if (relationType === 'child' && secondParentId !== 'none') {
         if (selectedUnionId !== 'auto' && selectedUnionId !== '') {
           unionIdToUse = selectedUnionId;
         } else if (unionsWithSelectedParent.length === 1) {
-          // Auto-select if only one union
           unionIdToUse = unionsWithSelectedParent[0].id;
         }
       }
@@ -160,14 +154,14 @@ export function AddPersonDialog({
   };
 
   const getTitle = () => {
-    if (!relationType || !targetPerson) return 'Ajouter une personne';
+    if (!relationType || !targetPerson) return t('addPerson.title');
     const name = `${targetPerson.first_names} ${targetPerson.last_name}`;
     switch (relationType) {
-      case 'parent': return `Ajouter un parent de ${name}`;
-      case 'child': return `Ajouter un enfant de ${name}`;
-      case 'spouse': return `Ajouter le conjoint de ${name}`;
-      case 'sibling': return `Ajouter un frère/sœur de ${name}`;
-      default: return 'Ajouter une personne';
+      case 'parent': return t('addPerson.addParentOf', { name });
+      case 'child': return t('addPerson.addChildOf', { name });
+      case 'spouse': return t('addPerson.addSpouseOf', { name });
+      case 'sibling': return t('addPerson.addSiblingOf', { name });
+      default: return t('addPerson.title');
     }
   };
 
@@ -182,7 +176,7 @@ export function AddPersonDialog({
             {getTitle()}
           </DialogTitle>
           <DialogDescription>
-            Renseignez les informations de la personne à ajouter.
+            {t('addPerson.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -190,7 +184,7 @@ export function AddPersonDialog({
           {/* Name fields */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">Prénom(s) *</Label>
+              <Label htmlFor="firstName">{t('addPerson.firstName')} *</Label>
               <Input
                 id="firstName"
                 placeholder="Jean Pierre"
@@ -199,7 +193,7 @@ export function AddPersonDialog({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Nom de famille *</Label>
+              <Label htmlFor="lastName">{t('addPerson.lastName')} *</Label>
               <Input
                 id="lastName"
                 placeholder="Martin"
@@ -210,7 +204,7 @@ export function AddPersonDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="maidenName">Nom de naissance (si différent)</Label>
+            <Label htmlFor="maidenName">{t('addPerson.maidenName')}</Label>
             <Input
               id="maidenName"
               placeholder="Dupont"
@@ -221,7 +215,7 @@ export function AddPersonDialog({
 
           {/* Gender */}
           <div className="space-y-2">
-            <Label>Sexe</Label>
+            <Label>{t('addPerson.gender')}</Label>
             <RadioGroup
               value={gender}
               onValueChange={(v) => setGender(v as 'male' | 'female' | 'other')}
@@ -229,15 +223,15 @@ export function AddPersonDialog({
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="male" id="male" />
-                <Label htmlFor="male">Homme</Label>
+                <Label htmlFor="male">{t('addPerson.male')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="female" id="female" />
-                <Label htmlFor="female">Femme</Label>
+                <Label htmlFor="female">{t('addPerson.female')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="other" id="other" />
-                <Label htmlFor="other">Autre</Label>
+                <Label htmlFor="other">{t('addPerson.other')}</Label>
               </div>
             </RadioGroup>
           </div>
@@ -245,7 +239,7 @@ export function AddPersonDialog({
           {/* Birth info */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Date de naissance</Label>
+              <Label>{t('addPerson.birthDate')}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -256,7 +250,7 @@ export function AddPersonDialog({
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {birthDate ? format(birthDate, "dd/MM/yyyy") : "Sélectionner"}
+                    {birthDate ? format(birthDate, "dd/MM/yyyy") : t('addPerson.select')}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -265,7 +259,7 @@ export function AddPersonDialog({
                     selected={birthDate}
                     onSelect={setBirthDate}
                     initialFocus
-                    locale={fr}
+                    locale={getLocale()}
                     captionLayout="dropdown-buttons"
                     fromYear={1800}
                     toYear={new Date().getFullYear()}
@@ -274,7 +268,7 @@ export function AddPersonDialog({
               </Popover>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="birthPlace">Lieu de naissance</Label>
+              <Label htmlFor="birthPlace">{t('addPerson.birthPlace')}</Label>
               <Input
                 id="birthPlace"
                 placeholder="Paris, France"
@@ -287,7 +281,7 @@ export function AddPersonDialog({
           {/* Alive status */}
           <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
             <Label htmlFor="isAlive" className="cursor-pointer">
-              Cette personne est vivante
+              {t('addPerson.isAlive')}
             </Label>
             <Switch
               id="isAlive"
@@ -300,7 +294,7 @@ export function AddPersonDialog({
           {!isAlive && (
             <div className="grid grid-cols-2 gap-4 p-3 bg-muted/50 rounded-lg">
               <div className="space-y-2">
-                <Label>Date de décès</Label>
+                <Label>{t('addPerson.deathDate')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -311,7 +305,7 @@ export function AddPersonDialog({
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {deathDate ? format(deathDate, "dd/MM/yyyy") : "Sélectionner"}
+                      {deathDate ? format(deathDate, "dd/MM/yyyy") : t('addPerson.select')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -320,7 +314,7 @@ export function AddPersonDialog({
                       selected={deathDate}
                       onSelect={setDeathDate}
                       initialFocus
-                      locale={fr}
+                      locale={getLocale()}
                       captionLayout="dropdown-buttons"
                       fromYear={1800}
                       toYear={new Date().getFullYear()}
@@ -329,7 +323,7 @@ export function AddPersonDialog({
                 </Popover>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="deathPlace">Lieu de décès</Label>
+                <Label htmlFor="deathPlace">{t('addPerson.deathPlace')}</Label>
                 <Input
                   id="deathPlace"
                   placeholder="Lyon, France"
@@ -342,7 +336,7 @@ export function AddPersonDialog({
 
           {/* Occupation */}
           <div className="space-y-2">
-            <Label htmlFor="occupation">Profession</Label>
+            <Label htmlFor="occupation">{t('addPerson.occupation')}</Label>
             <Input
               id="occupation"
               placeholder="Instituteur"
@@ -357,19 +351,19 @@ export function AddPersonDialog({
               <div>
                 <Label className="flex items-center gap-2 text-secondary">
                   <Users className="w-4 h-4" />
-                  Second parent
+                  {t('addPerson.secondParent')}
                 </Label>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Sélectionnez le second parent de cet enfant (conjoint de {targetPerson?.first_names})
+                  {t('addPerson.secondParentHint', { name: targetPerson?.first_names })}
                 </p>
               </div>
               <Select value={secondParentId} onValueChange={setSecondParentId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner le second parent" />
+                  <SelectValue placeholder={t('addPerson.select')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">
-                    <span className="text-muted-foreground">Aucun / Inconnu</span>
+                    <span className="text-muted-foreground">{t('addPerson.noneUnknown')}</span>
                   </SelectItem>
                   {availableSpouses.map((spouse) => (
                     <SelectItem key={spouse.id} value={spouse.id}>
@@ -391,30 +385,23 @@ export function AddPersonDialog({
               {hasMultipleUnions && (
                 <div className="pt-2 border-t border-secondary/20">
                   <Label className="text-xs text-muted-foreground mb-2 block">
-                    Sélectionnez l'union concernée
+                    {t('addPerson.selectUnion')}
                   </Label>
                   <Select value={selectedUnionId} onValueChange={setSelectedUnionId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Choisir l'union" />
+                      <SelectValue placeholder={t('addPerson.chooseUnion')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="auto">
-                        <span className="text-muted-foreground">Automatique (plus récente)</span>
+                        <span className="text-muted-foreground">{t('addPerson.autoLatest')}</span>
                       </SelectItem>
                       {unionsWithSelectedParent.map((union, index) => {
-                        const unionTypeLabels: Record<string, string> = {
-                          'marriage': 'Mariage',
-                          'civil_union': 'Union civile',
-                          'partnership': 'Concubinage',
-                          'engagement': 'Fiançailles',
-                          'other': 'Union'
-                        };
-                        const label = unionTypeLabels[union.union_type] || 'Union';
+                        const label = t(`union.types.${union.union_type}`) || t('union.types.other');
                         const dateInfo = union.start_date 
                           ? ` (${format(new Date(union.start_date), 'yyyy')})`
                           : '';
                         const endInfo = !union.is_current && union.end_date
-                          ? ` - terminée en ${format(new Date(union.end_date), 'yyyy')}`
+                          ? ` - ${format(new Date(union.end_date), 'yyyy')}`
                           : '';
                         return (
                           <SelectItem key={union.id} value={union.id}>
@@ -425,7 +412,7 @@ export function AddPersonDialog({
                     </SelectContent>
                   </Select>
                   <p className="text-[10px] text-muted-foreground mt-1">
-                    Ces personnes ont eu plusieurs unions. Précisez de laquelle est issu l'enfant.
+                    {t('addPerson.multipleUnionsHint')}
                   </p>
                 </div>
               )}
@@ -438,21 +425,21 @@ export function AddPersonDialog({
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-amber-600" />
                 <span className="text-sm font-medium text-amber-700 dark:text-amber-400">
-                  {targetPerson?.first_names} a déjà {availableSpouses.length} conjoint(s)
+                  {t('addPerson.existingSpouses', { name: targetPerson?.first_names, count: availableSpouses.length })}
                 </span>
               </div>
               <p className="text-xs text-muted-foreground">
-                Vous pouvez ajouter un nouveau conjoint (remariage, nouvelle union après divorce ou veuvage).
+                {t('addPerson.newUnionHint')}
               </p>
             </div>
           )}
 
           {/* Biography */}
           <div className="space-y-2">
-            <Label htmlFor="biography">Notes / Biographie</Label>
+            <Label htmlFor="biography">{t('addPerson.biography')}</Label>
             <Textarea
               id="biography"
-              placeholder="Anecdotes, traits de caractère, accomplissements..."
+              placeholder=""
               value={biography}
               onChange={(e) => setBiography(e.target.value)}
               rows={3}
@@ -460,19 +447,19 @@ export function AddPersonDialog({
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t">
+        {/* Footer */}
+        <div className="flex justify-end gap-2 pt-4 border-t">
           <Button variant="outline" onClick={handleClose}>
-            Annuler
+            {t('createTree.cancel')}
           </Button>
           <Button onClick={handleSubmit} disabled={!canSubmit || loading}>
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Ajout...
+                {t('addPerson.adding')}
               </>
             ) : (
-              'Ajouter la personne'
+              t('addPerson.add')
             )}
           </Button>
         </div>

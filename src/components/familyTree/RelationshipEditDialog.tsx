@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -28,11 +29,11 @@ interface RelationshipEditDialogProps {
   onSave: (relationshipId: string, updates: Partial<ParentChildRelationship>) => Promise<boolean>;
 }
 
-const RELATIONSHIP_TYPES: { value: ParentChildRelationship['relationship_type']; label: string }[] = [
-  { value: 'biological', label: 'Biologique' },
-  { value: 'adopted', label: 'Adopté(e)' },
-  { value: 'step', label: 'Beau-parent' },
-  { value: 'foster', label: 'Famille d\'accueil' },
+const RELATIONSHIP_TYPES: ParentChildRelationship['relationship_type'][] = [
+  'biological',
+  'adopted',
+  'step',
+  'foster',
 ];
 
 export function RelationshipEditDialog({
@@ -43,6 +44,7 @@ export function RelationshipEditDialog({
   child,
   onSave,
 }: RelationshipEditDialogProps) {
+  const { t } = useTranslation('familyTree');
   const [relationshipType, setRelationshipType] = useState<ParentChildRelationship['relationship_type']>(
     relationship.relationship_type
   );
@@ -66,26 +68,29 @@ export function RelationshipEditDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Modifier la relation</DialogTitle>
+          <DialogTitle>{t('relationship.title')}</DialogTitle>
           <DialogDescription>
-            Relation entre {parent.first_names} {parent.last_name} et {child.first_names} {child.last_name}
+            {t('relationship.description', { 
+              parent: `${parent.first_names} ${parent.last_name}`, 
+              child: `${child.first_names} ${child.last_name}` 
+            })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="relationshipType">Type de relation</Label>
+            <Label htmlFor="relationshipType">{t('relationship.type')}</Label>
             <Select
               value={relationshipType}
               onValueChange={(value: ParentChildRelationship['relationship_type']) => setRelationshipType(value)}
             >
               <SelectTrigger id="relationshipType">
-                <SelectValue placeholder="Sélectionner le type" />
+                <SelectValue placeholder={t('addPerson.select')} />
               </SelectTrigger>
               <SelectContent>
                 {RELATIONSHIP_TYPES.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                  <SelectItem key={type} value={type}>
+                    {t(`relationship.types.${type}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -95,11 +100,11 @@ export function RelationshipEditDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
-            Annuler
+            {t('relationship.cancel')}
           </Button>
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Enregistrer
+            {t('relationship.save')}
           </Button>
         </DialogFooter>
       </DialogContent>

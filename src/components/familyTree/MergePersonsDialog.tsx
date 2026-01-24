@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Users, ArrowRight, Check, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ export function MergePersonsDialog({
   initialPerson,
   onMerge,
 }: MergePersonsDialogProps) {
+  const { t } = useTranslation('familyTree');
   const [step, setStep] = useState<'select' | 'preview'>('select');
   const [keepPerson, setKeepPerson] = useState<FamilyPerson | null>(initialPerson || null);
   const [mergePerson, setMergePerson] = useState<FamilyPerson | null>(null);
@@ -60,31 +62,31 @@ export function MergePersonsDialog({
   const mergeableFields = useMemo((): MergeField[] => {
     if (!keepPerson || !mergePerson) return [];
 
-    const fields: { key: keyof FamilyPerson; label: string }[] = [
-      { key: 'first_names', label: 'Prénoms' },
-      { key: 'last_name', label: 'Nom' },
-      { key: 'maiden_name', label: 'Nom de jeune fille' },
-      { key: 'gender', label: 'Genre' },
-      { key: 'birth_date', label: 'Date de naissance' },
-      { key: 'birth_place', label: 'Lieu de naissance' },
-      { key: 'death_date', label: 'Date de décès' },
-      { key: 'death_place', label: 'Lieu de décès' },
-      { key: 'burial_place', label: 'Lieu d\'inhumation' },
-      { key: 'occupation', label: 'Profession' },
-      { key: 'nationality', label: 'Nationalité' },
-      { key: 'biography', label: 'Biographie' },
-      { key: 'profile_photo_url', label: 'Photo de profil' },
+    const fields: { key: keyof FamilyPerson; labelKey: string }[] = [
+      { key: 'first_names', labelKey: 'merge.fields.first_names' },
+      { key: 'last_name', labelKey: 'merge.fields.last_name' },
+      { key: 'maiden_name', labelKey: 'merge.fields.maiden_name' },
+      { key: 'gender', labelKey: 'merge.fields.gender' },
+      { key: 'birth_date', labelKey: 'merge.fields.birth_date' },
+      { key: 'birth_place', labelKey: 'merge.fields.birth_place' },
+      { key: 'death_date', labelKey: 'merge.fields.death_date' },
+      { key: 'death_place', labelKey: 'merge.fields.death_place' },
+      { key: 'burial_place', labelKey: 'merge.fields.burial_place' },
+      { key: 'occupation', labelKey: 'merge.fields.occupation' },
+      { key: 'nationality', labelKey: 'merge.fields.nationality' },
+      { key: 'biography', labelKey: 'merge.fields.biography' },
+      { key: 'profile_photo_url', labelKey: 'merge.fields.profile_photo_url' },
     ];
 
     return fields
-      .map(({ key, label }) => ({
+      .map(({ key, labelKey }) => ({
         key,
-        label,
+        label: t(labelKey),
         keepValue: formatValue(keepPerson[key]),
         mergeValue: formatValue(mergePerson[key]),
       }))
       .filter(f => f.mergeValue && f.mergeValue !== f.keepValue);
-  }, [keepPerson, mergePerson]);
+  }, [keepPerson, mergePerson, t]);
 
   const handleReset = () => {
     setStep('select');
@@ -101,7 +103,6 @@ export function MergePersonsDialog({
 
   const handleNext = () => {
     if (keepPerson && mergePerson) {
-      // Pre-select fields where keep is empty but merge has value
       const autoSelect = mergeableFields
         .filter(f => !f.keepValue && f.mergeValue)
         .map(f => f.key);
@@ -151,12 +152,12 @@ export function MergePersonsDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Users className="w-5 h-5 text-secondary" />
-            Fusionner deux personnes
+            {t('merge.title')}
           </DialogTitle>
           <DialogDescription>
             {step === 'select'
-              ? 'Sélectionnez la personne à fusionner avec la fiche actuelle.'
-              : 'Choisissez les informations à récupérer de la fiche fusionnée.'}
+              ? t('merge.selectDescription')
+              : t('merge.previewDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -168,7 +169,7 @@ export function MergePersonsDialog({
           >
             {/* Keep person (primary) */}
             <div className="space-y-2">
-              <Label>Fiche à conserver (principale)</Label>
+              <Label>{t('merge.keepPerson')}</Label>
               {keepPerson ? (
                 <div className="flex items-center gap-3 p-3 bg-secondary/10 border border-secondary/20 rounded-lg">
                   <Avatar>
@@ -179,20 +180,20 @@ export function MergePersonsDialog({
                     <p className="font-medium">{formatPersonName(keepPerson)}</p>
                     {keepPerson.birth_date && (
                       <p className="text-sm text-muted-foreground">
-                        Né(e) le {new Date(keepPerson.birth_date).toLocaleDateString('fr-FR')}
+                        {t('person.bornIn', { year: new Date(keepPerson.birth_date).getFullYear() })}
                       </p>
                     )}
                   </div>
-                  <Badge variant="secondary">Conservée</Badge>
+                  <Badge variant="secondary">{t('merge.kept')}</Badge>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Sélectionnez une personne dans la liste</p>
+                <p className="text-sm text-muted-foreground">{t('merge.selectPerson')}</p>
               )}
             </div>
 
             {/* Merge person selection */}
             <div className="space-y-2">
-              <Label>Fiche à fusionner (sera supprimée)</Label>
+              <Label>{t('merge.mergePerson')}</Label>
               <ScrollArea className="h-[250px] border rounded-lg">
                 <RadioGroup
                   value={mergePerson?.id || ''}
@@ -201,7 +202,7 @@ export function MergePersonsDialog({
                   <div className="p-2 space-y-1">
                     {availablePersons.length === 0 ? (
                       <p className="text-sm text-muted-foreground text-center py-8">
-                        Aucune autre personne dans l'arbre
+                        {t('merge.noOtherPersons')}
                       </p>
                     ) : (
                       availablePersons.map((person) => (
@@ -223,8 +224,8 @@ export function MergePersonsDialog({
                             <p className="font-medium truncate">{formatPersonName(person)}</p>
                             <p className="text-xs text-muted-foreground truncate">
                               {person.birth_date
-                                ? `Né(e) le ${new Date(person.birth_date).toLocaleDateString('fr-FR')}`
-                                : 'Date de naissance inconnue'}
+                                ? t('person.bornIn', { year: new Date(person.birth_date).getFullYear() })
+                                : t('person.unknownBirthDate')}
                             </p>
                           </div>
                         </div>
@@ -237,14 +238,14 @@ export function MergePersonsDialog({
 
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={handleClose} className="flex-1">
-                Annuler
+                {t('merge.cancel')}
               </Button>
               <Button 
                 onClick={handleNext} 
                 disabled={!keepPerson || !mergePerson}
                 className="flex-1"
               >
-                Suivant
+                {t('merge.next')}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -265,7 +266,7 @@ export function MergePersonsDialog({
                   <AvatarFallback>{getInitials(keepPerson)}</AvatarFallback>
                 </Avatar>
                 <p className="text-sm font-medium">{formatPersonName(keepPerson)}</p>
-                <Badge variant="secondary" className="mt-1">Conservée</Badge>
+                <Badge variant="secondary" className="mt-1">{t('merge.kept')}</Badge>
               </div>
               <ArrowRight className="w-6 h-6 text-muted-foreground" />
               <div className="text-center opacity-50">
@@ -274,22 +275,21 @@ export function MergePersonsDialog({
                   <AvatarFallback>{getInitials(mergePerson)}</AvatarFallback>
                 </Avatar>
                 <p className="text-sm font-medium line-through">{formatPersonName(mergePerson)}</p>
-                <Badge variant="destructive" className="mt-1">Supprimée</Badge>
+                <Badge variant="destructive" className="mt-1">{t('merge.deleted')}</Badge>
               </div>
             </div>
 
             <Alert>
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                Toutes les relations (parents, enfants, conjoints) de la fiche fusionnée 
-                seront transférées vers la fiche conservée.
+                {t('merge.warning')}
               </AlertDescription>
             </Alert>
 
             {/* Fields to merge */}
             {mergeableFields.length > 0 ? (
               <div className="space-y-2">
-                <Label>Informations à récupérer de la fiche fusionnée :</Label>
+                <Label>{t('merge.fieldsToMerge')}</Label>
                 <ScrollArea className="h-[180px] border rounded-lg p-3">
                   <div className="space-y-3">
                     {mergeableFields.map((field) => (
@@ -306,7 +306,7 @@ export function MergePersonsDialog({
                           <p className="text-sm font-medium">{field.label}</p>
                           <div className="flex items-center gap-2 text-xs mt-1">
                             <span className="text-muted-foreground truncate">
-                              {field.keepValue || '(vide)'}
+                              {field.keepValue || t('merge.empty')}
                             </span>
                             <ArrowRight className="w-3 h-3 flex-shrink-0" />
                             <span className="text-secondary font-medium truncate">
@@ -321,13 +321,13 @@ export function MergePersonsDialog({
               </div>
             ) : (
               <p className="text-sm text-muted-foreground text-center py-4">
-                Aucune information supplémentaire à récupérer de la fiche fusionnée.
+                {t('merge.noFieldsToMerge')}
               </p>
             )}
 
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={() => setStep('select')} className="flex-1">
-                Retour
+                {t('merge.back')}
               </Button>
               <Button 
                 onClick={handleMerge}
@@ -336,11 +336,11 @@ export function MergePersonsDialog({
                 className="flex-1"
               >
                 {isLoading ? (
-                  'Fusion en cours...'
+                  t('merge.merging')
                 ) : (
                   <>
                     <Check className="w-4 h-4 mr-2" />
-                    Fusionner
+                    {t('merge.merge')}
                   </>
                 )}
               </Button>
