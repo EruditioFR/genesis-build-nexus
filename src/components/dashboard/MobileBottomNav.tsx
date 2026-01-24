@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Home, FolderOpen, Plus, Clock, User, HelpCircle, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
+import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -11,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 const MobileBottomNav = () => {
   const { t } = useTranslation('dashboard');
   const location = useLocation();
-  const { startTour } = useOnboardingTour();
+  const { startTour, welcomeDialogProps } = useOnboardingTour();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const navItems = [
@@ -32,6 +33,7 @@ const MobileBottomNav = () => {
 
   return (
     <>
+      <TourWelcomeDialog {...welcomeDialogProps} />
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1a1a2e] border-t border-white/10 safe-area-inset-bottom">
         <div className="flex items-center justify-around h-20 px-2">
           {navItems.map((item) => {
