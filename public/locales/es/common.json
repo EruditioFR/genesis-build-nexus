@@ -63,5 +63,10 @@
     "searchingIn": "Buscando en tus recuerdos",
     "select": "seleccionar",
     "close": "cerrar"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo leído",
+    "empty": "Sin notificaciones"
   }
 }

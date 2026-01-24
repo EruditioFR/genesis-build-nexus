@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, Plus, Clock, Image, Video, Music, FileText, Layers,
   MoreHorizontal, Edit, Trash2, Share2, Eye
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -40,26 +42,30 @@ type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
 
-const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
-  text: { icon: FileText, label: 'Texte', color: 'bg-primary/10 text-primary' },
-  photo: { icon: Image, label: 'Photo', color: 'bg-secondary/10 text-secondary' },
-  video: { icon: Video, label: 'Vidéo', color: 'bg-accent/10 text-accent' },
-  audio: { icon: Music, label: 'Audio', color: 'bg-navy-light/10 text-navy-light' },
-  mixed: { icon: Layers, label: 'Mixte', color: 'bg-terracotta/10 text-terracotta' },
+const dateLocales: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+
+const typeConfig: Record<CapsuleType, { icon: typeof FileText; labelKey: string; color: string }> = {
+  text: { icon: FileText, labelKey: 'types.text', color: 'bg-primary/10 text-primary' },
+  photo: { icon: Image, labelKey: 'types.photo', color: 'bg-secondary/10 text-secondary' },
+  video: { icon: Video, labelKey: 'types.video', color: 'bg-accent/10 text-accent' },
+  audio: { icon: Music, labelKey: 'types.audio', color: 'bg-navy-light/10 text-navy-light' },
+  mixed: { icon: Layers, labelKey: 'types.mixed', color: 'bg-terracotta/10 text-terracotta' },
 };
 
-const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
-  draft: { label: 'Brouillon', color: 'bg-muted text-muted-foreground' },
-  published: { label: 'Publiée', color: 'bg-green-100 text-green-700' },
-  scheduled: { label: 'Programmée', color: 'bg-blue-100 text-blue-700' },
-  archived: { label: 'Archivée', color: 'bg-gray-100 text-gray-600' },
+const statusConfigKeys: Record<CapsuleStatus, { labelKey: string; color: string }> = {
+  draft: { labelKey: 'status.draft', color: 'bg-muted text-muted-foreground' },
+  published: { labelKey: 'status.published', color: 'bg-green-100 text-green-700' },
+  scheduled: { labelKey: 'status.scheduled', color: 'bg-blue-100 text-blue-700' },
+  archived: { labelKey: 'status.archived', color: 'bg-gray-100 text-gray-600' },
 };
 
 const CategoryDetailPage = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { slug } = useParams<{ slug: string }>();
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const { categories, getSubCategoriesForCategory, getCategoryBySlug, loading: categoriesLoading } = useCategories();
+  const currentLocale = dateLocales[i18n.language] || enUS;
   
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [capsules, setCapsules] = useState<Capsule[]>([]);
@@ -278,7 +284,7 @@ const CategoryDetailPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {capsules.map((capsule, index) => {
               const typeInfo = typeConfig[capsule.capsule_type];
-              const statusInfo = statusConfig[capsule.status];
+              const statusInfo = statusConfigKeys[capsule.status];
               const Icon = typeInfo.icon;
 
               return (
@@ -351,10 +357,10 @@ const CategoryDetailPage = () => {
 
                     <div className="flex items-center gap-2 mb-3">
                       <Badge variant="outline" className={statusInfo.color}>
-                        {statusInfo.label}
+                        {t(statusInfo.labelKey)}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
-                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: fr })}
+                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: currentLocale })}
                       </span>
                     </div>
 

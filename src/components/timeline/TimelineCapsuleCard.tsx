@@ -4,48 +4,52 @@ import {
   Calendar, ChevronRight, Clock, Eye
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import type { Database } from '@/integrations/supabase/types';
 import type { Category } from '@/hooks/useCategories';
+
+const dateLocales: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
 
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 
 const capsuleTypeConfig: Record<CapsuleType, { 
   icon: typeof FileText; 
-  label: string; 
+  labelKey: string; 
   color: string;
   bgLight: string;
 }> = {
   text: { 
     icon: FileText, 
-    label: 'Texte', 
+    labelKey: 'types.text', 
     color: 'bg-blue-500',
     bgLight: 'bg-blue-500/10 text-blue-600'
   },
   photo: { 
     icon: Image, 
-    label: 'Photo', 
+    labelKey: 'types.photo', 
     color: 'bg-emerald-500',
     bgLight: 'bg-emerald-500/10 text-emerald-600'
   },
   video: { 
     icon: Video, 
-    label: 'Vidéo', 
+    labelKey: 'types.video', 
     color: 'bg-purple-500',
     bgLight: 'bg-purple-500/10 text-purple-600'
   },
   audio: { 
     icon: Music, 
-    label: 'Audio', 
+    labelKey: 'types.audio', 
     color: 'bg-orange-500',
     bgLight: 'bg-orange-500/10 text-orange-600'
   },
   mixed: { 
     icon: Layers, 
-    label: 'Mixte', 
+    labelKey: 'types.mixed', 
     color: 'bg-pink-500',
     bgLight: 'bg-pink-500/10 text-pink-600'
   },
@@ -66,10 +70,12 @@ const TimelineCapsuleCard = ({
   onClick,
   category,
 }: TimelineCapsuleCardProps) => {
+  const { t, i18n } = useTranslation('capsules');
   const config = capsuleTypeConfig[capsule.capsule_type];
   const Icon = config.icon;
   const memoryDate = capsule.memory_date ? parseISO(capsule.memory_date) : null;
   const createdDate = parseISO(capsule.created_at);
+  const currentLocale = dateLocales[i18n.language] || enUS;
 
   return (
     <motion.div
@@ -126,12 +132,12 @@ const TimelineCapsuleCard = ({
                 {memoryDate && (
                   <p className="text-xs text-secondary font-medium flex items-center gap-1.5">
                     <Calendar className="w-3 h-3" />
-                    {format(memoryDate, 'd MMMM yyyy', { locale: fr })}
+                    {format(memoryDate, 'd MMMM yyyy', { locale: currentLocale })}
                   </p>
                 )}
                 <p className={`text-xs flex items-center gap-1.5 ${memoryDate ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
                   <Clock className="w-3 h-3" />
-                  {memoryDate ? 'Créé le ' : ''}{format(createdDate, 'd MMM yyyy', { locale: fr })}
+                  {memoryDate ? t('detail.createdAt') + ' ' : ''}{format(createdDate, 'd MMM yyyy', { locale: currentLocale })}
                 </p>
               </div>
             </div>
@@ -166,13 +172,13 @@ const TimelineCapsuleCard = ({
               }`}
             >
               {capsule.status === 'published' ? (
-                <><Eye className="w-3 h-3 mr-1" />Publié</>
-              ) : 'Brouillon'}
+                <><Eye className="w-3 h-3 mr-1" />{t('status.published')}</>
+              ) : t('status.draft')}
             </Badge>
             
             {/* Type badge mobile */}
             <Badge variant="outline" className={`text-xs sm:hidden ${config.bgLight}`}>
-              {config.label}
+              {t(config.labelKey)}
             </Badge>
             
             {/* Tags */}

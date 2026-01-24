@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, MessageCircle, Check, Trash2, CheckCheck } from 'lucide-react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +16,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+
+const dateLocales: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
 
 interface Notification {
   id: string;
@@ -30,10 +34,12 @@ interface NotificationsBellProps {
 }
 
 const NotificationsBell = ({ userId }: NotificationsBellProps) => {
+  const { t, i18n } = useTranslation('common');
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const currentLocale = dateLocales[i18n.language] || enUS;
 
   // Fetch notifications
   useEffect(() => {
@@ -188,7 +194,7 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0 bg-popover">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <h3 className="font-semibold text-foreground">Notifications</h3>
+          <h3 className="font-semibold text-foreground">{t('notifications.title')}</h3>
           {unreadCount > 0 && (
             <Button
               variant="ghost"
@@ -197,7 +203,7 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
               className="text-xs h-7 gap-1 text-muted-foreground hover:text-foreground"
             >
               <CheckCheck className="w-3.5 h-3.5" />
-              Tout marquer lu
+              {t('notifications.markAllRead')}
             </Button>
           )}
         </div>
@@ -206,7 +212,7 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <Bell className="w-10 h-10 text-muted-foreground/50 mb-3" />
-              <p className="text-sm text-muted-foreground">Aucune notification</p>
+              <p className="text-sm text-muted-foreground">{t('notifications.empty')}</p>
             </div>
           ) : (
             <div className="divide-y divide-border">
@@ -246,7 +252,7 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
                       <p className="text-xs text-muted-foreground mt-1">
                         {formatDistanceToNow(parseISO(notification.created_at), {
                           addSuffix: true,
-                          locale: fr,
+                          locale: currentLocale,
                         })}
                       </p>
                     </div>

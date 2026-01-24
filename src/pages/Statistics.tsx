@@ -10,7 +10,9 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { format, subMonths, startOfMonth, endOfMonth, parseISO, eachMonthOfInterval } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -30,18 +32,22 @@ interface CategoryStats {
   count: number;
 }
 
-const typeConfig: Record<CapsuleType, { label: string; color: string; icon: typeof FileText }> = {
-  text: { label: 'Texte', color: '#3B82F6', icon: FileText },
-  photo: { label: 'Photo', color: '#10B981', icon: Image },
-  video: { label: 'Vidéo', color: '#8B5CF6', icon: Video },
-  audio: { label: 'Audio', color: '#F59E0B', icon: Music },
-  mixed: { label: 'Mixte', color: '#EC4899', icon: Layers },
+const dateLocales: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+
+const typeConfigKeys: Record<CapsuleType, { labelKey: string; color: string; icon: typeof FileText }> = {
+  text: { labelKey: 'types.text', color: '#3B82F6', icon: FileText },
+  photo: { labelKey: 'types.photo', color: '#10B981', icon: Image },
+  video: { labelKey: 'types.video', color: '#8B5CF6', icon: Video },
+  audio: { labelKey: 'types.audio', color: '#F59E0B', icon: Music },
+  mixed: { labelKey: 'types.mixed', color: '#EC4899', icon: Layers },
 };
 
 const Statistics = () => {
+  const { t, i18n } = useTranslation('capsules');
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const { categories } = useCategories();
+  const currentLocale = dateLocales[i18n.language] || enUS;
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   
@@ -141,25 +147,25 @@ const Statistics = () => {
       return createdAt >= monthStart && createdAt <= monthEnd;
     }).length;
     return {
-      month: format(month, 'MMM', { locale: fr }),
-      fullMonth: format(month, 'MMMM yyyy', { locale: fr }),
+      month: format(month, 'MMM', { locale: currentLocale }),
+      fullMonth: format(month, 'MMMM yyyy', { locale: currentLocale }),
       capsules: count,
     };
   });
 
   // Capsules by type
-  const capsulesByType = Object.entries(typeConfig).map(([type, config]) => ({
-    name: config.label,
+  const capsulesByType = Object.entries(typeConfigKeys).map(([type, config]) => ({
+    name: t(config.labelKey),
     value: capsules.filter(c => c.capsule_type === type).length,
     color: config.color,
   })).filter(item => item.value > 0);
 
   // Capsules by status
   const capsulesByStatus = [
-    { name: 'Publiées', value: capsules.filter(c => c.status === 'published').length, color: '#10B981' },
-    { name: 'Brouillons', value: capsules.filter(c => c.status === 'draft').length, color: '#6B7280' },
-    { name: 'Programmées', value: capsules.filter(c => c.status === 'scheduled').length, color: '#3B82F6' },
-    { name: 'Archivées', value: capsules.filter(c => c.status === 'archived').length, color: '#9CA3AF' },
+    { name: t('status.published'), value: capsules.filter(c => c.status === 'published').length, color: '#10B981' },
+    { name: t('status.draft'), value: capsules.filter(c => c.status === 'draft').length, color: '#6B7280' },
+    { name: t('status.scheduled'), value: capsules.filter(c => c.status === 'scheduled').length, color: '#3B82F6' },
+    { name: t('status.archived'), value: capsules.filter(c => c.status === 'archived').length, color: '#9CA3AF' },
   ].filter(item => item.value > 0);
 
   // Capsules by category

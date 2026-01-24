@@ -63,5 +63,10 @@
     "searchingIn": "Recherche dans vos souvenirs",
     "select": "sélectionner",
     "close": "fermer"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer lu",
+    "empty": "Aucune notification"
   }
 }
