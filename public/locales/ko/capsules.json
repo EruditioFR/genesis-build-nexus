@@ -355,6 +355,16 @@
       "voyages-lieux": "여행 & 장소",
       "passions-loisirs": "열정 & 취미",
       "reflexions-messages": "성찰 & 메시지"
+    },
+    "standardDescriptions": {
+      "famille-proches": "가족과 사랑하는 사람들과의 추억",
+      "savoirs-traditions": "레시피, 노하우 및 가족 전통",
+      "histoires-vecues": "인생의 일화와 기억에 남는 순간들",
+      "vie-professionnelle": "경력, 직업 및 성취",
+      "amour-relations": "사랑 이야기와 중요한 관계",
+      "voyages-lieux": "발견, 여행 및 의미 있는 장소",
+      "passions-loisirs": "취미, 스포츠 및 창작 활동",
+      "reflexions-messages": "미래를 위한 생각, 편지 및 메시지"
     }
   }
 }

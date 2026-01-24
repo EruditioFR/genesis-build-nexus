@@ -355,6 +355,16 @@
       "voyages-lieux": "Voyages & Lieux",
       "passions-loisirs": "Passions & Loisirs",
       "reflexions-messages": "Réflexions & Messages"
+    },
+    "standardDescriptions": {
+      "famille-proches": "Souvenirs avec vos proches et votre famille",
+      "savoirs-traditions": "Recettes, savoir-faire et traditions familiales",
+      "histoires-vecues": "Anecdotes et moments marquants de votre vie",
+      "vie-professionnelle": "Carrière, métiers et accomplissements",
+      "amour-relations": "Histoires d'amour et relations importantes",
+      "voyages-lieux": "Découvertes, voyages et lieux significatifs",
+      "passions-loisirs": "Hobbies, sports et activités créatives",
+      "reflexions-messages": "Pensées, lettres et messages pour l'avenir"
     }
   }
 }
