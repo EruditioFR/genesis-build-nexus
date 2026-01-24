@@ -17,25 +17,25 @@ const LegalNotice = () => {
   const subprocessors = [
     {
       name: "Supabase (AWS)",
-      purpose: t('notice.sections.subprocessors.supabase'),
-      location: t('notice.sections.subprocessors.locationEU'),
+      purpose: t('privacy.sections.transfers.stripe'),
+      location: t('legalNotice.sections.hosting.dbHost.regionValue'),
       guarantees: "RGPD, SOC 2 Type II",
     },
     {
       name: "Stripe",
-      purpose: t('notice.sections.subprocessors.stripe'),
+      purpose: t('privacy.sections.transfers.stripe'),
       location: "UE / US",
       guarantees: "PCI DSS Level 1, CCT",
     },
     {
       name: "Resend",
-      purpose: t('notice.sections.subprocessors.resend'),
+      purpose: t('privacy.sections.transfers.resend'),
       location: "US",
       guarantees: "CCT, DPF",
     },
     {
       name: "Google Analytics",
-      purpose: t('notice.sections.subprocessors.analytics'),
+      purpose: t('privacy.sections.transfers.analytics'),
       location: "US",
       guarantees: "CCT, IP anonymization",
     },
@@ -53,62 +53,62 @@ const LegalNotice = () => {
         </Button>
 
         <h1 className="text-3xl font-display font-bold text-foreground mb-8">
-          {t('notice.title')}
+          {t('legalNotice.title')}
         </h1>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6">
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center gap-2">
               <Building2 className="w-5 h-5 text-primary" />
-              {t('notice.sections.editor.title')}
+              {t('legalNotice.sections.editor.title')}
             </h2>
             <div className="text-muted-foreground leading-relaxed space-y-2">
               <p>JEAN-BAPTISTE BEJOT</p>
               <p>
-                <strong>SIRET :</strong> 51089741600036
+                <strong>{t('legalNotice.sections.editor.siret')}</strong> 51089741600036
               </p>
               <p>
-                <strong>Email :</strong> contact@familygarden.fr
+                <strong>{t('legalNotice.sections.editor.email')}</strong> contact@familygarden.fr
               </p>
               <p>
-                <strong>{t('notice.sections.editor.phone')}:</strong> +33 6 66 69 24 41
+                <strong>{t('legalNotice.sections.editor.phone')}</strong> +33 6 66 69 24 41
               </p>
             </div>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.director.title')}
+              {t('legalNotice.sections.director.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.director.name')}: JEAN-BAPTISTE BEJOT
+              {t('legalNotice.sections.director.name')} JEAN-BAPTISTE BEJOT
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center gap-2">
               <Server className="w-5 h-5 text-primary" />
-              {t('notice.sections.hosting.title')}
+              {t('legalNotice.sections.hosting.title')}
             </h2>
 
             <div className="bg-muted/50 rounded-lg p-6 space-y-6">
               <div>
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Globe className="w-4 h-4 text-secondary" />
-                  {t('notice.sections.hosting.application.title')}
+                  {t('legalNotice.sections.hosting.appHost.title')}
                 </h3>
                 <div className="text-muted-foreground space-y-1 ml-6">
                   <p>
-                    <strong>{t('notice.sections.hosting.application.platform')}:</strong> Lovable
+                    <strong>{t('legalNotice.sections.hosting.appHost.platform')}</strong> Lovable
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.infrastructure')}:</strong> Supabase on Amazon Web Services (AWS)
+                    <strong>{t('legalNotice.sections.hosting.appHost.infrastructure')}</strong> Supabase on Amazon Web Services (AWS)
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.region')}:</strong> {t('notice.sections.hosting.application.regionValue')}
+                    <strong>{t('legalNotice.sections.hosting.appHost.region')}</strong> {t('legalNotice.sections.hosting.appHost.regionValue')}
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.website')}:</strong>{" "}
+                    <strong>{t('legalNotice.sections.hosting.appHost.website')}</strong>{" "}
                     <a
                       href="https://lovable.dev"
                       target="_blank"
@@ -124,23 +124,23 @@ const LegalNotice = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Server className="w-4 h-4 text-secondary" />
-                  {t('notice.sections.hosting.database.title')}
+                  {t('legalNotice.sections.hosting.dbHost.title')}
                 </h3>
                 <div className="text-muted-foreground space-y-1 ml-6">
                   <p>
-                    <strong>{t('notice.sections.hosting.database.company')}:</strong> Supabase Inc.
+                    <strong>{t('legalNotice.sections.hosting.dbHost.company')}</strong> Supabase Inc.
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.database.address')}:</strong> 970 Toa Payoh North #07-04, Singapore 318992
+                    <strong>{t('legalNotice.sections.hosting.dbHost.address')}</strong> 970 Toa Payoh North #07-04, Singapore 318992
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.database.infrastructure')}:</strong> Amazon Web Services (AWS)
+                    <strong>{t('legalNotice.sections.hosting.dbHost.infrastructure')}</strong> Amazon Web Services (AWS)
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.database.region')}:</strong> {t('notice.sections.subprocessors.locationEU')}
+                    <strong>{t('legalNotice.sections.hosting.dbHost.region')}</strong> {t('legalNotice.sections.hosting.dbHost.regionValue')}
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.website')}:</strong>{" "}
+                    <strong>{t('legalNotice.sections.hosting.dbHost.website')}</strong>{" "}
                     <a
                       href="https://supabase.com"
                       target="_blank"
@@ -161,17 +161,17 @@ const LegalNotice = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-secondary" />
-                  {t('notice.sections.hosting.cloud.title')}
+                  {t('legalNotice.sections.hosting.cloudInfra.title')}
                 </h3>
                 <div className="text-muted-foreground space-y-1 ml-6">
                   <p>
-                    <strong>{t('notice.sections.hosting.cloud.provider')}:</strong> Amazon Web Services (AWS)
+                    <strong>{t('legalNotice.sections.hosting.cloudInfra.provider')}</strong> Amazon Web Services (AWS)
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.cloud.region')}:</strong> Europe (Ireland eu-west-1, Frankfurt eu-central-1)
+                    <strong>{t('legalNotice.sections.hosting.cloudInfra.region')}</strong> {t('legalNotice.sections.hosting.cloudInfra.regionValue')}
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.website')}:</strong>{" "}
+                    <strong>{t('legalNotice.sections.hosting.cloudInfra.website')}</strong>{" "}
                     <a
                       href="https://aws.amazon.com"
                       target="_blank"
@@ -192,17 +192,17 @@ const LegalNotice = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-secondary" />
-                  {t('notice.sections.hosting.payment.title')}
+                  {t('legalNotice.sections.hosting.payment.title')}
                 </h3>
                 <div className="text-muted-foreground space-y-1 ml-6">
                   <p>
-                    <strong>{t('notice.sections.hosting.database.company')}:</strong> Stripe, Inc.
+                    <strong>{t('legalNotice.sections.hosting.payment.company')}</strong> Stripe, Inc.
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.database.address')}:</strong> 354 Oyster Point Boulevard, South San Francisco, CA 94080, USA
+                    <strong>{t('legalNotice.sections.hosting.payment.address')}</strong> 354 Oyster Point Boulevard, South San Francisco, CA 94080, USA
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.website')}:</strong>{" "}
+                    <strong>{t('legalNotice.sections.hosting.payment.website')}</strong>{" "}
                     <a
                       href="https://stripe.com"
                       target="_blank"
@@ -222,14 +222,14 @@ const LegalNotice = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-secondary" />
-                  {t('notice.sections.hosting.email.title')}
+                  {t('legalNotice.sections.hosting.email.title')}
                 </h3>
                 <div className="text-muted-foreground space-y-1 ml-6">
                   <p>
-                    <strong>{t('notice.sections.hosting.database.company')}:</strong> Resend Inc.
+                    <strong>{t('legalNotice.sections.hosting.email.company')}</strong> Resend Inc.
                   </p>
                   <p>
-                    <strong>{t('notice.sections.hosting.application.website')}:</strong>{" "}
+                    <strong>{t('legalNotice.sections.hosting.email.website')}</strong>{" "}
                     <a
                       href="https://resend.com"
                       target="_blank"
@@ -251,11 +251,11 @@ const LegalNotice = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center gap-2">
               <Globe className="w-5 h-5 text-primary" />
-              {t('notice.sections.subprocessors.title')}
+              {t('legalNotice.sections.subprocessors.title')}
             </h2>
 
             <p className="text-muted-foreground leading-relaxed mb-4">
-              {t('notice.sections.subprocessors.intro')}
+              {t('legalNotice.sections.subprocessors.intro')}
             </p>
 
             <div className="overflow-x-auto">
@@ -263,16 +263,16 @@ const LegalNotice = () => {
                 <thead>
                   <tr className="bg-muted">
                     <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">
-                      {t('notice.sections.subprocessors.table.processor')}
+                      {t('legalNotice.sections.subprocessors.table.subprocessor')}
                     </th>
                     <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">
-                      {t('notice.sections.subprocessors.table.purpose')}
+                      {t('legalNotice.sections.subprocessors.table.purpose')}
                     </th>
                     <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">
-                      {t('notice.sections.subprocessors.table.location')}
+                      {t('legalNotice.sections.subprocessors.table.location')}
                     </th>
                     <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">
-                      {t('notice.sections.subprocessors.table.guarantees')}
+                      {t('legalNotice.sections.subprocessors.table.guarantees')}
                     </th>
                   </tr>
                 </thead>
@@ -292,52 +292,52 @@ const LegalNotice = () => {
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-primary" />
-                {t('notice.sections.subprocessors.guarantees.title')}
+                {t('legalNotice.sections.subprocessors.guaranteesTitle')}
               </h4>
               <ul className="text-muted-foreground space-y-1 text-sm">
-                <li>• <strong>{t('notice.sections.subprocessors.guarantees.scc')}</strong></li>
-                <li>• <strong>{t('notice.sections.subprocessors.guarantees.dpf')}</strong></li>
-                <li>• <strong>{t('notice.sections.subprocessors.guarantees.additional')}</strong></li>
+                <li>• <strong>{t('legalNotice.sections.subprocessors.scc')}</strong></li>
+                <li>• <strong>{t('legalNotice.sections.subprocessors.dpf')}</strong></li>
+                <li>• <strong>{t('legalNotice.sections.subprocessors.additional')}</strong></li>
               </ul>
             </div>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.intellectualProperty.title')}
+              {t('legalNotice.sections.ip.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.intellectualProperty.content')}
+              {t('legalNotice.sections.ip.content')}
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center gap-2">
               <Shield className="w-5 h-5 text-primary" />
-              {t('notice.sections.dataProtection.title')}
+              {t('legalNotice.sections.dataProtection.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.dataProtection.content')}
+              {t('legalNotice.sections.dataProtection.intro')}
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              {t('notice.sections.dataProtection.moreInfo')}{" "}
+              {t('legalNotice.sections.dataProtection.moreInfo')}{" "}
               <Link to="/privacy" className="text-primary hover:underline">
-                {t('notice.sections.dataProtection.link')}
+                {t('legalNotice.sections.dataProtection.privacyLink')}
               </Link>.
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
-              <p className="font-semibold text-foreground mb-2">{t('notice.sections.dataProtection.dpo')}</p>
+              <p className="font-semibold text-foreground mb-2">{t('legalNotice.sections.dataProtection.dpo')}</p>
               <p className="text-muted-foreground">
-                Email :{" "}
+                {t('legalNotice.sections.dataProtection.email')}{" "}
                 <a href="mailto:dpo@familygarden.fr" className="text-primary hover:underline">
                   dpo@familygarden.fr
                 </a>
               </p>
               <p className="text-muted-foreground mt-2">
-                <strong>{t('notice.sections.dataProtection.authority')}:</strong> CNIL - Commission Nationale de l'Informatique et des Libertés
+                <strong>{t('legalNotice.sections.dataProtection.authority')}</strong> {t('legalNotice.sections.dataProtection.cnil')}
               </p>
               <p className="text-muted-foreground">
-                {t('notice.sections.hosting.application.website')}:{" "}
+                {t('legalNotice.sections.dataProtection.website')}{" "}
                 <a
                   href="https://www.cnil.fr"
                   target="_blank"
@@ -348,47 +348,47 @@ const LegalNotice = () => {
                 </a>
               </p>
               <p className="text-muted-foreground">
-                {t('notice.sections.hosting.database.address')}: 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07
+                {t('legalNotice.sections.dataProtection.address')} 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07
               </p>
             </div>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.cookies.title')}
+              {t('legalNotice.sections.cookies.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.cookies.content')}
+              {t('legalNotice.sections.cookies.content')}
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              {t('notice.sections.cookies.management')}
+              {t('legalNotice.sections.cookies.manage')}
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.links.title')}
+              {t('legalNotice.sections.links.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.links.content')}
+              {t('legalNotice.sections.links.content')}
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.jurisdiction.title')}
+              {t('legalNotice.sections.law.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.jurisdiction.content')}
+              {t('legalNotice.sections.law.content')}
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('notice.sections.contact.title')}
+              {t('legalNotice.sections.contact.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('notice.sections.contact.content')}
+              {t('legalNotice.sections.contact.content')}
               <a href="mailto:contact@familygarden.fr" className="text-primary hover:underline ml-1">
                 contact@familygarden.fr
               </a>
