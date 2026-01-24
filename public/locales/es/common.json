@@ -51,5 +51,17 @@
     "email": "Dirección de correo inválida",
     "minLength": "Mínimo {{count}} caracteres",
     "maxLength": "Máximo {{count}} caracteres"
+  },
+  "search": {
+    "placeholder": "Buscar...",
+    "inputPlaceholder": "Buscar por título, descripción o palabras clave...",
+    "dialogTitle": "Búsqueda global",
+    "noResults": "No se encontró ningún recuerdo para \"{{query}}\"",
+    "resultsCount": "{{count}} resultado",
+    "resultsCount_other": "{{count}} resultados",
+    "startTyping": "Comienza a escribir para buscar tus recuerdos",
+    "searchingIn": "Buscando en tus recuerdos",
+    "select": "seleccionar",
+    "close": "cerrar"
   }
 }

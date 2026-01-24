@@ -51,5 +51,17 @@
     "email": "Adresse email invalide",
     "minLength": "Minimum {{count}} caractères",
     "maxLength": "Maximum {{count}} caractères"
+  },
+  "search": {
+    "placeholder": "Rechercher...",
+    "inputPlaceholder": "Rechercher par titre, description ou mots-clés...",
+    "dialogTitle": "Recherche globale",
+    "noResults": "Aucun souvenir trouvé pour \"{{query}}\"",
+    "resultsCount": "{{count}} résultat",
+    "resultsCount_other": "{{count}} résultats",
+    "startTyping": "Commencez à taper pour rechercher vos souvenirs",
+    "searchingIn": "Recherche dans vos souvenirs",
+    "select": "sélectionner",
+    "close": "fermer"
   }
 }
