@@ -1,14 +1,28 @@
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 
 const TermsOfSale = () => {
+  const { t, i18n } = useTranslation('legal');
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const getLocale = () => {
+    const localeMap: Record<string, string> = {
+      fr: 'fr-FR',
+      en: 'en-US',
+      es: 'es-ES',
+      ko: 'ko-KR',
+      zh: 'zh-CN'
+    };
+    return localeMap[i18n.language] || 'fr-FR';
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,126 +31,129 @@ const TermsOfSale = () => {
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour à l'accueil
+            {t('common.backToHome')}
           </Link>
         </Button>
 
         <h1 className="text-3xl font-display font-bold text-foreground mb-8">
-          Conditions Générales de Vente
+          {t('sale.title')}
         </h1>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6">
           <p className="text-muted-foreground">
-            Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}
+            {t('common.lastUpdated')} {new Date().toLocaleDateString(getLocale())}
           </p>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">1. Objet</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.purpose.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles 
-              entre Family Garden et ses utilisateurs pour la souscription aux services payants proposés
-              sur la plateforme.
+              {t('sale.sections.purpose.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">2. Services proposés</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.services.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Family Garden propose les abonnements suivants :
+              {t('sale.sections.services.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li><strong>Gratuit :</strong> Accès limité aux fonctionnalités de base</li>
-              <li><strong>Premium :</strong> Accès complet aux fonctionnalités avancées, stockage étendu</li>
-              <li><strong>Héritage :</strong> Fonctionnalités Premium + options de transmission posthume</li>
+              <li><strong>{t('sale.sections.services.plans.free.name')}:</strong> {t('sale.sections.services.plans.free.description')}</li>
+              <li><strong>{t('sale.sections.services.plans.premium.name')}:</strong> {t('sale.sections.services.plans.premium.description')}</li>
+              <li><strong>{t('sale.sections.services.plans.legacy.name')}:</strong> {t('sale.sections.services.plans.legacy.description')}</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">3. Prix et paiement</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.pricing.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Les prix sont indiqués en euros TTC. Le paiement s'effectue par carte bancaire via 
-              notre prestataire sécurisé Stripe. Les abonnements sont facturés mensuellement ou 
-              annuellement selon l'option choisie.
+              {t('sale.sections.pricing.content')}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Les prix peuvent être modifiés à tout moment. En cas de modification, le nouveau prix 
-              s'appliquera à la prochaine période de facturation, après notification préalable de 30 jours.
+              {t('sale.sections.pricing.modifications')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">4. Durée et renouvellement</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.duration.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              L'abonnement est souscrit pour une durée d'un mois ou d'un an selon l'option choisie. 
-              Il est renouvelé automatiquement à chaque échéance, sauf résiliation par l'utilisateur 
-              avant la date de renouvellement.
+              {t('sale.sections.duration.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">5. Droit de rétractation</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.withdrawal.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation 
-              ne s'applique pas aux contrats de fourniture d'un contenu numérique non fourni sur un 
-              support matériel dont l'exécution a commencé avec l'accord du consommateur.
+              {t('sale.sections.withdrawal.content')}
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              Toutefois, nous offrons une garantie "satisfait ou remboursé" de 14 jours pour tout 
-              nouvel abonnement Premium ou Héritage.
+              {t('sale.sections.withdrawal.guarantee')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">6. Résiliation</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.cancellation.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              L'utilisateur peut résilier son abonnement à tout moment depuis son espace personnel 
-              ou via le portail de gestion d'abonnement. La résiliation prend effet à la fin de la 
-              période de facturation en cours.
+              {t('sale.sections.cancellation.content')}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              En cas de résiliation, l'utilisateur conserve l'accès aux fonctionnalités payantes 
-              jusqu'à la fin de la période déjà payée.
+              {t('sale.sections.cancellation.access')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">7. Responsabilité</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.liability.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Family Garden s'engage à fournir les services avec diligence. Nous ne pouvons être tenus 
-              responsables des interruptions de service indépendantes de notre volonté, ni des dommages
-              indirects liés à l'utilisation de nos services.
+              {t('sale.sections.liability.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">8. Protection des données</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.dataProtection.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Le traitement de vos données personnelles est régi par notre Politique de Confidentialité, 
-              accessible depuis notre site. Nous nous engageons à protéger vos données conformément au RGPD.
+              {t('sale.sections.dataProtection.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">9. Modification des CGV</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.modifications.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Nous nous réservons le droit de modifier ces CGV. Les modifications seront notifiées 
-              aux utilisateurs par email au moins 30 jours avant leur entrée en vigueur.
+              {t('sale.sections.modifications.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">10. Droit applicable et litiges</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.jurisdiction.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Les présentes CGV sont soumises au droit français. En cas de litige, une solution 
-              amiable sera recherchée avant toute action judiciaire. À défaut, les tribunaux 
-              français seront seuls compétents.
+              {t('sale.sections.jurisdiction.content')}
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">11. Contact</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
+              {t('sale.sections.contact.title')}
+            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Pour toute question relative aux CGV, contactez-nous à : contact@familygarden.fr
+              {t('sale.sections.contact.content')} contact@familygarden.fr
             </p>
           </section>
         </div>
