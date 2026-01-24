@@ -15,9 +15,9 @@ const PrivacyPolicy = () => {
   }, []);
 
   const internationalTransfers = [
-    { name: "Stripe", purpose: t('privacy.transfers.stripe'), guarantees: "CCT + Data Privacy Framework" },
-    { name: "Resend", purpose: t('privacy.transfers.resend'), guarantees: "CCT" },
-    { name: "Google Analytics", purpose: t('privacy.transfers.analytics'), guarantees: "CCT + Anonymisation IP" },
+    { name: "Stripe", purpose: t('privacy.sections.transfers.stripe'), guarantees: "CCT + Data Privacy Framework" },
+    { name: "Resend", purpose: t('privacy.sections.transfers.resend'), guarantees: "CCT" },
+    { name: "Google Analytics", purpose: t('privacy.sections.transfers.analytics'), guarantees: "CCT + Anonymisation IP" },
   ];
 
   const getLocale = () => {
@@ -54,14 +54,14 @@ const PrivacyPolicy = () => {
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-primary" />
-              {t('privacy.sections.intro.title')}
+              {t('privacy.sections.introduction.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('privacy.sections.intro.content')}
+              {t('privacy.sections.introduction.content')}
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-muted-foreground">
-                <strong>{t('privacy.sections.intro.controller')}:</strong> Family Garden SAS<br />
+                <strong>{t('privacy.sections.introduction.controller')}</strong> Family Garden SAS<br />
                 <strong>Email :</strong> <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
@@ -75,11 +75,11 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.dataCollected.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li><strong>{t('privacy.sections.dataCollected.identification.label')}:</strong> {t('privacy.sections.dataCollected.identification.content')}</li>
-              <li><strong>{t('privacy.sections.dataCollected.profile.label')}:</strong> {t('privacy.sections.dataCollected.profile.content')}</li>
-              <li><strong>{t('privacy.sections.dataCollected.userContent.label')}:</strong> {t('privacy.sections.dataCollected.userContent.content')}</li>
-              <li><strong>{t('privacy.sections.dataCollected.technical.label')}:</strong> {t('privacy.sections.dataCollected.technical.content')}</li>
-              <li><strong>{t('privacy.sections.dataCollected.payment.label')}:</strong> {t('privacy.sections.dataCollected.payment.content')}</li>
+              <li><strong>{t('privacy.sections.dataCollected.items.identification')}</strong> {t('privacy.sections.dataCollected.items.identificationDesc')}</li>
+              <li><strong>{t('privacy.sections.dataCollected.items.profile')}</strong> {t('privacy.sections.dataCollected.items.profileDesc')}</li>
+              <li><strong>{t('privacy.sections.dataCollected.items.userContent')}</strong> {t('privacy.sections.dataCollected.items.userContentDesc')}</li>
+              <li><strong>{t('privacy.sections.dataCollected.items.technical')}</strong> {t('privacy.sections.dataCollected.items.technicalDesc')}</li>
+              <li><strong>{t('privacy.sections.dataCollected.items.payment')}</strong> {t('privacy.sections.dataCollected.items.paymentDesc')}</li>
             </ul>
           </section>
 
@@ -91,12 +91,9 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.dataUsage.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('privacy.sections.dataUsage.purposes.provide')}</li>
-              <li>{t('privacy.sections.dataUsage.purposes.manage')}</li>
-              <li>{t('privacy.sections.dataUsage.purposes.payments')}</li>
-              <li>{t('privacy.sections.dataUsage.purposes.notifications')}</li>
-              <li>{t('privacy.sections.dataUsage.purposes.security')}</li>
-              <li>{t('privacy.sections.dataUsage.purposes.support')}</li>
+              {(t('privacy.sections.dataUsage.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </section>
 
@@ -108,10 +105,10 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.legalBasis.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2 mt-4">
-              <li><strong>{t('privacy.sections.legalBasis.contract')}:</strong> {t('privacy.sections.legalBasis.contractDesc')}</li>
-              <li><strong>{t('privacy.sections.legalBasis.consent')}:</strong> {t('privacy.sections.legalBasis.consentDesc')}</li>
-              <li><strong>{t('privacy.sections.legalBasis.legitimate')}:</strong> {t('privacy.sections.legalBasis.legitimateDesc')}</li>
-              <li><strong>{t('privacy.sections.legalBasis.legal')}:</strong> {t('privacy.sections.legalBasis.legalDesc')}</li>
+              <li><strong>{t('privacy.sections.legalBasis.contract')}</strong> {t('privacy.sections.legalBasis.contractDesc')}</li>
+              <li><strong>{t('privacy.sections.legalBasis.consent')}</strong> {t('privacy.sections.legalBasis.consentDesc')}</li>
+              <li><strong>{t('privacy.sections.legalBasis.legitimateInterest')}</strong> {t('privacy.sections.legalBasis.legitimateInterestDesc')}</li>
+              <li><strong>{t('privacy.sections.legalBasis.legalObligation')}</strong> {t('privacy.sections.legalBasis.legalObligationDesc')}</li>
             </ul>
           </section>
 
@@ -181,17 +178,17 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.rights.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li><strong>{t('privacy.sections.rights.access')}:</strong> {t('privacy.sections.rights.accessDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.rectification')}:</strong> {t('privacy.sections.rights.rectificationDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.erasure')}:</strong> {t('privacy.sections.rights.erasureDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.restriction')}:</strong> {t('privacy.sections.rights.restrictionDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.portability')}:</strong> {t('privacy.sections.rights.portabilityDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.objection')}:</strong> {t('privacy.sections.rights.objectionDesc')}</li>
-              <li><strong>{t('privacy.sections.rights.withdrawal')}:</strong> {t('privacy.sections.rights.withdrawalDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.access')}</strong> {t('privacy.sections.rights.accessDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.rectification')}</strong> {t('privacy.sections.rights.rectificationDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.erasure')}</strong> {t('privacy.sections.rights.erasureDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.restriction')}</strong> {t('privacy.sections.rights.restrictionDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.portability')}</strong> {t('privacy.sections.rights.portabilityDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.objection')}</strong> {t('privacy.sections.rights.objectionDesc')}</li>
+              <li><strong>{t('privacy.sections.rights.withdrawal')}</strong> {t('privacy.sections.rights.withdrawalDesc')}</li>
             </ul>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="text-muted-foreground">
-                {t('privacy.sections.rights.exercise')} <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
+                {t('privacy.sections.rights.exerciseRights')} <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
               <p className="text-muted-foreground text-sm mt-2">
                 {t('privacy.sections.rights.responseTime')}
@@ -212,24 +209,18 @@ const PrivacyPolicy = () => {
                   {t('privacy.sections.security.technical.title')}
                 </h3>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-1">
-                  <li>{t('privacy.sections.security.technical.aes')}</li>
-                  <li>{t('privacy.sections.security.technical.tls')}</li>
-                  <li>{t('privacy.sections.security.technical.twoFactor')}</li>
-                  <li>{t('privacy.sections.security.technical.rls')}</li>
-                  <li>{t('privacy.sections.security.technical.monitoring')}</li>
-                  <li>{t('privacy.sections.security.technical.pentest')}</li>
-                  <li>{t('privacy.sections.security.technical.waf')}</li>
+                  {(t('privacy.sections.security.technical.items', { returnObjects: true }) as string[]).map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
 
               <div>
                 <h3 className="font-semibold text-foreground mb-3">{t('privacy.sections.security.organizational.title')}</h3>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-1">
-                  <li>{t('privacy.sections.security.organizational.access')}</li>
-                  <li>{t('privacy.sections.security.organizational.training')}</li>
-                  <li>{t('privacy.sections.security.organizational.procedures')}</li>
-                  <li>{t('privacy.sections.security.organizational.audits')}</li>
-                  <li>{t('privacy.sections.security.organizational.vulnerabilities')}</li>
+                  {(t('privacy.sections.security.organizational.items', { returnObjects: true }) as string[]).map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -295,7 +286,7 @@ const PrivacyPolicy = () => {
                 <table className="w-full border-collapse border border-border rounded-lg">
                   <thead>
                     <tr className="bg-muted">
-                      <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">{t('privacy.sections.transfers.table.processor')}</th>
+                      <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">{t('privacy.sections.transfers.table.subprocessor')}</th>
                       <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">{t('privacy.sections.transfers.table.purpose')}</th>
                       <th className="border border-border px-4 py-3 text-left text-foreground font-semibold">{t('privacy.sections.transfers.table.guarantees')}</th>
                     </tr>
@@ -313,7 +304,7 @@ const PrivacyPolicy = () => {
               </div>
 
               <p className="text-muted-foreground text-sm">
-                {t('privacy.sections.transfers.request')}{" "}
+                {t('privacy.sections.transfers.copyRequest')}{" "}
                 <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
@@ -327,21 +318,12 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.cookies.intro')}
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
-              <h4 className="font-semibold text-foreground mb-2">{t('privacy.sections.cookies.types.title')}</h4>
+              <h4 className="font-semibold text-foreground mb-2">{t('privacy.sections.cookies.typesTitle')}</h4>
               <ul className="text-muted-foreground space-y-2 text-sm">
-                <li><strong>{t('privacy.sections.cookies.types.essential')}:</strong> {t('privacy.sections.cookies.types.essentialDesc')}</li>
-                <li><strong>{t('privacy.sections.cookies.types.analytics')}:</strong> {t('privacy.sections.cookies.types.analyticsDesc')}</li>
+                <li><strong>{t('privacy.sections.cookies.essential')}</strong> {t('privacy.sections.cookies.essentialDesc')}</li>
+                <li><strong>{t('privacy.sections.cookies.analytics')}</strong> {t('privacy.sections.cookies.analyticsDesc')}</li>
               </ul>
             </div>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('privacy.sections.modifications.title')}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {t('privacy.sections.modifications.content')}
-            </p>
           </section>
 
           <section>
@@ -349,13 +331,22 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.contact.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('privacy.sections.contact.content')}{" "}
+              {t('privacy.sections.contact.contactTitle')}{" "}
               <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
-              <p className="font-semibold text-foreground mb-2">{t('privacy.sections.contact.authority')}</p>
+              <p className="font-semibold text-foreground mb-2">{t('privacy.sections.contact.dpo')}</p>
+              <p className="text-muted-foreground text-sm mb-2">
+                {t('privacy.sections.contact.authority.title')}
+              </p>
               <p className="text-muted-foreground text-sm">
-                {t('privacy.sections.contact.authorityDesc')}
+                {t('privacy.sections.contact.authority.intro')}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {t('privacy.sections.contact.authority.name')}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {t('privacy.sections.contact.authority.address')}
               </p>
             </div>
           </section>

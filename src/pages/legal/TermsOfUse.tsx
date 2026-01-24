@@ -70,10 +70,9 @@ const TermsOfUse = () => {
               {t('terms.sections.registration.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.registration.responsibilities.confidentiality')}</li>
-              <li>{t('terms.sections.registration.responsibilities.activities')}</li>
-              <li>{t('terms.sections.registration.responsibilities.update')}</li>
-              <li>{t('terms.sections.registration.responsibilities.notification')}</li>
+              {(t('terms.sections.registration.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
               {t('terms.sections.registration.ageRequirement')}
@@ -88,13 +87,9 @@ const TermsOfUse = () => {
               {t('terms.sections.usage.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.usage.prohibited.illegal')}</li>
-              <li>{t('terms.sections.usage.prohibited.impersonation')}</li>
-              <li>{t('terms.sections.usage.prohibited.accessOthers')}</li>
-              <li>{t('terms.sections.usage.prohibited.commercial')}</li>
-              <li>{t('terms.sections.usage.prohibited.malware')}</li>
-              <li>{t('terms.sections.usage.prohibited.disruption')}</li>
-              <li>{t('terms.sections.usage.prohibited.dataCollection')}</li>
+              {(t('terms.sections.usage.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </section>
 
@@ -106,9 +101,9 @@ const TermsOfUse = () => {
               {t('terms.sections.userContent.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.userContent.license.store')}</li>
-              <li>{t('terms.sections.userContent.license.backup')}</li>
-              <li>{t('terms.sections.userContent.license.adapt')}</li>
+              {(t('terms.sections.userContent.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
               {t('terms.sections.userContent.guarantee')}
@@ -117,18 +112,18 @@ const TermsOfUse = () => {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('terms.sections.legacy.title')}
+              {t('terms.sections.capsules.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              {t('terms.sections.legacy.intro')}
+              {t('terms.sections.capsules.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.legacy.features.guardians')}</li>
-              <li>{t('terms.sections.legacy.features.conditions')}</li>
-              <li>{t('terms.sections.legacy.features.responsibility')}</li>
+              {(t('terms.sections.capsules.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              {t('terms.sections.legacy.disclaimer')}
+              {t('terms.sections.capsules.disclaimer')}
             </p>
           </section>
 
@@ -149,18 +144,18 @@ const TermsOfUse = () => {
               {t('terms.sections.storage.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.storage.limitations.space')}</li>
-              <li>{t('terms.sections.storage.limitations.backups')}</li>
-              <li>{t('terms.sections.storage.limitations.inactive')}</li>
+              {(t('terms.sections.storage.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('terms.sections.intellectualProperty.title')}
+              {t('terms.sections.ip.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('terms.sections.intellectualProperty.content')}
+              {t('terms.sections.ip.content')}
             </p>
           </section>
 
@@ -172,11 +167,9 @@ const TermsOfUse = () => {
               {t('terms.sections.liability.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.liability.exclusions.interruptions')}</li>
-              <li>{t('terms.sections.liability.exclusions.dataLoss')}</li>
-              <li>{t('terms.sections.liability.exclusions.usage')}</li>
-              <li>{t('terms.sections.liability.exclusions.otherUsers')}</li>
-              <li>{t('terms.sections.liability.exclusions.indirect')}</li>
+              {(t('terms.sections.liability.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </section>
 
@@ -188,13 +181,12 @@ const TermsOfUse = () => {
               {t('terms.sections.termination.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>{t('terms.sections.termination.reasons.violation')}</li>
-              <li>{t('terms.sections.termination.reasons.fraud')}</li>
-              <li>{t('terms.sections.termination.reasons.nonPayment')}</li>
-              <li>{t('terms.sections.termination.reasons.authorities')}</li>
+              {(t('terms.sections.termination.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              {t('terms.sections.termination.userDeletion')}
+              {t('terms.sections.termination.deletion')}
             </p>
           </section>
 
@@ -221,10 +213,10 @@ const TermsOfUse = () => {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground mt-8 mb-4">
-              {t('terms.sections.jurisdiction.title')}
+              {t('terms.sections.law.title')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              {t('terms.sections.jurisdiction.content')}
+              {t('terms.sections.law.content')}
             </p>
           </section>
 

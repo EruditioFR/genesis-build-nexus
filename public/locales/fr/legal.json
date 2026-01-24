@@ -139,6 +139,9 @@
       "transfers": {
         "title": "9. Transferts internationaux de données",
         "intro": "Vos données sont principalement stockées dans l'Union Européenne. Cependant, certains de nos sous-traitants sont situés aux États-Unis. Ces transferts sont encadrés par des garanties appropriées :",
+        "stripe": "Paiements sécurisés",
+        "resend": "Envoi d'emails transactionnels",
+        "analytics": "Analyse du trafic",
         "guarantees": {
           "title": "Garanties juridiques",
           "scc": "Clauses Contractuelles Types (CCT) approuvées par la Commission Européenne (Décision d'exécution 2021/914 du 4 juin 2021)",

@@ -139,6 +139,9 @@
       "transfers": {
         "title": "9. Transferencias internacionales de datos",
         "intro": "Sus datos se almacenan principalmente en la Unión Europea. Sin embargo, algunos de nuestros subencargados están ubicados en Estados Unidos. Estas transferencias están reguladas por garantías apropiadas:",
+        "stripe": "Pagos seguros",
+        "resend": "Correos electrónicos transaccionales",
+        "analytics": "Análisis del tráfico",
         "guarantees": {
           "title": "Garantías jurídicas",
           "scc": "Cláusulas Contractuales Tipo (CCT) aprobadas por la Comisión Europea (Decisión de ejecución 2021/914 del 4 de junio de 2021)",
