@@ -1,5 +1,5 @@
 {
-  "welcome": "Hello{{name, andSpace}}!",
+  "welcome": "Hello {{name}}!",
   "subtitle": "Continue preserving your precious memories",
   "subtitleEmpty": "Start preserving your precious memories",
   "loading": "Loading your space...",

@@ -1,5 +1,5 @@
 {
-  "welcome": "您好{{name, andSpace}}!",
+  "welcome": "您好 {{name}}!",
   "subtitle": "继续保存您珍贵的回忆",
   "subtitleEmpty": "开始保存您珍贵的回忆",
   "loading": "正在加载您的空间...",
