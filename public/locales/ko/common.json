@@ -85,6 +85,200 @@
     "dashboard": {
       "welcome": {
         "title": "👋 Family Garden에 오신 것을 환영합니다!",
+        "description": "가족 추억을 보존하고 공유하는 개인 공간입니다.",
+        "descriptionCompact": "가족 추억을 보존하세요."
+      },
+      "quickActions": {
+        "title": "🚀 첫 번째 추억 만들기",
+        "description": "\"새 추억\"을 클릭하여 사진, 동영상, 텍스트를 추가하세요.",
+        "descriptionCompact": "사진, 동영상 추가."
+      },
+      "stats": {
+        "title": "📊 숫자로 보는 대시보드",
+        "description": "컬렉션의 발전을 한눈에 확인하세요.",
+        "descriptionCompact": "통계 한눈에 보기."
+      },
+      "storage": {
+        "title": "💾 저장 공간",
+        "description": "무료 500MB, 프리미엄 무제한.",
+        "descriptionCompact": "무료 500MB."
+      },
+      "recentCapsules": {
+        "title": "📦 최근 추억",
+        "description": "최신 작품을 찾으세요.",
+        "descriptionCompact": "최근 작품."
+      },
+      "navCapsules": {
+        "title": "🗂️ 전체 라이브러리",
+        "description": "카테고리별 모든 추억.",
+        "descriptionCompact": "카테고리별 추억."
+      },
+      "navTimeline": {
+        "title": "📅 시각적 타임라인",
+        "description": "시간 속 추억.",
+        "descriptionCompact": "시간 속 추억."
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 공유 서클",
+        "description": "사랑하는 사람들과 공유.",
+        "descriptionCompact": "사랑하는 사람과 공유."
+      },
+      "navFamilyTree": {
+        "title": "🌳 가계도",
+        "description": "가계도 (프리미엄).",
+        "descriptionCompact": "가계도 (프리미엄)."
+      },
+      "search": {
+        "title": "🔍 스마트 검색",
+        "description": "추억을 즉시 찾으세요.",
+        "descriptionCompact": "추억 찾기."
+      },
+      "notifications": {
+        "title": "🔔 연결 상태 유지",
+        "description": "공유 및 댓글 알림.",
+        "descriptionCompact": "공유 알림."
+      },
+      "userMenu": {
+        "title": "👤 개인 공간",
+        "description": "프로필과 설정.",
+        "descriptionCompact": "프로필과 설정."
+      },
+      "complete": {
+        "title": "🎉 준비 완료!",
+        "description": "첫 번째 추억을 만드세요!",
+        "descriptionCompact": "첫 추억 만들기!"
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 카테고리",
+        "description": "테마로 정리하세요.",
+        "descriptionCompact": "테마로 정리."
+      },
+      "type": {
+        "title": "📷 추억 유형",
+        "description": "사진, 동영상, 텍스트, 오디오.",
+        "descriptionCompact": "사진, 동영상, 텍스트."
+      },
+      "title": {
+        "title": "✏️ 제목 및 설명",
+        "description": "추억에 이름을 붙이세요.",
+        "descriptionCompact": "이름 붙이기."
+      },
+      "media": {
+        "title": "📎 미디어 파일",
+        "description": "파일을 추가하세요.",
+        "descriptionCompact": "파일 추가."
+      },
+      "date": {
+        "title": "📅 추억 날짜",
+        "description": "언제 일어났나요.",
+        "descriptionCompact": "날짜 선택."
+      },
+      "tags": {
+        "title": "🏷️ 태그",
+        "description": "키워드로 찾기.",
+        "descriptionCompact": "키워드."
+      },
+      "actions": {
+        "title": "💾 저장",
+        "description": "임시저장 또는 게시.",
+        "descriptionCompact": "저장 또는 게시."
+      },
+      "complete": {
+        "title": "🎉 당신 차례입니다!",
+        "description": "시작하세요!",
+        "descriptionCompact": "시작!"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 가계도",
+        "description": "클릭하여 세부정보 보기.",
+        "descriptionCompact": "클릭하여 보기."
+      },
+      "addPerson": {
+        "title": "➕ 사람 추가",
+        "description": "새 구성원 추가.",
+        "descriptionCompact": "새 구성원."
+      },
+      "zoom": {
+        "title": "🔍 줌 및 탐색",
+        "description": "줌하고 드래그.",
+        "descriptionCompact": "줌 및 드래그."
+      },
+      "viewMode": {
+        "title": "👁️ 보기 모드",
+        "description": "후손 또는 조상.",
+        "descriptionCompact": "후손/조상."
+      },
+      "search": {
+        "title": "🔎 검색",
+        "description": "사람 찾기.",
+        "descriptionCompact": "사람 찾기."
+      },
+      "center": {
+        "title": "🎯 중심 이동",
+        "description": "보기 중심 이동.",
+        "descriptionCompact": "중심 이동."
+      },
+      "importExport": {
+        "title": "📥 가져오기/내보내기",
+        "description": "GEDCOM 및 PDF.",
+        "descriptionCompact": "GEDCOM/PDF."
+      },
+      "personsList": {
+        "title": "📋 사람 목록",
+        "description": "모든 사람 보기.",
+        "descriptionCompact": "모두 보기."
+      },
+      "minimap": {
+        "title": "🗺️ 미니맵",
+        "description": "빠른 탐색.",
+        "descriptionCompact": "빠른 탐색."
+      },
+      "complete": {
+        "title": "🎉 탐험 준비!",
+        "description": "가족을 추가하세요!",
+        "descriptionCompact": "가족 추가!"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 공유 서클",
+        "description": "공유 그룹.",
+        "descriptionCompact": "공유 그룹."
+      },
+      "create": {
+        "title": "➕ 서클 만들기",
+        "description": "새 서클.",
+        "descriptionCompact": "새 서클."
+      },
+      "list": {
+        "title": "📋 내 서클",
+        "description": "활성 그룹.",
+        "descriptionCompact": "활성 그룹."
+      },
+      "details": {
+        "title": "👥 서클 세부정보",
+        "description": "구성원 관리.",
+        "descriptionCompact": "구성원 관리."
+      },
+      "invite": {
+        "title": "✉️ 구성원 초대",
+        "description": "이메일로 초대.",
+        "descriptionCompact": "이메일 초대."
+      },
+      "complete": {
+        "title": "🎉 공유하세요!",
+        "description": "가족을 초대하세요!",
+        "descriptionCompact": "가족 초대!"
+      }
+    }
+  }
+    "dashboard": {
+      "welcome": {
+        "title": "👋 Family Garden에 오신 것을 환영합니다!",
         "description": "가족 추억을 보존하고 공유하는 개인 공간입니다. 이 투어를 따라 몇 분 만에 모든 기능을 알아보세요."
       },
       "quickActions": {
