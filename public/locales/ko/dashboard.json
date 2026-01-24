@@ -268,8 +268,11 @@
     "filterDateTo": "끝",
     "clearFilters": "필터 지우기",
     "emptyTitle": "타임라인이 비어 있습니다",
-    "emptySubtitle": "첫 번째 추억을 만들어 여기에 표시되도록 하세요.",
+    "emptySubtitle": "추억을 만들어 여기에 연대별로 정리되어 표시되도록 하세요",
     "createFirst": "첫 번째 추억 만들기",
+    "emptyAutoOrganized": "추억이 시대별로 자동 정리됩니다",
+    "noResults": "추억을 찾을 수 없습니다",
+    "noResultsSubtitle": "선택한 필터와 일치하는 추억이 없습니다",
     "decadeTitle": "{{decade}}년대",
     "yearTitle": "{{year}}년",
     "types": {
@@ -284,6 +287,38 @@
       "published": "게시됨",
       "scheduled": "예약됨",
       "archived": "보관됨"
+    },
+    "header": {
+      "title": "내 타임라인",
+      "organizedBy": "연대별 정리",
+      "outOf": "전체 {{total}}개 중",
+      "launchStory": "슬라이드쇼 시작",
+      "loadingStory": "로딩 중..."
+    },
+    "decade": {
+      "memoriesInDecade": "개 추억 (이 연대)",
+      "memoriesInDecade_other": "개 추억 (이 연대)",
+      "memoriesThisYear": "개 추억 (올해)",
+      "memoriesThisYear_other": "개 추억 (올해)",
+      "backToDecades": "연대로 돌아가기",
+      "media_one": "{{count}}개 미디어",
+      "media_other": "{{count}}개 미디어",
+      "labels": {
+        "1940": "전쟁의 시대",
+        "1950": "로큰롤",
+        "1960": "플라워 파워",
+        "1970": "디스코 피버",
+        "1980": "네온 & 신스",
+        "1990": "그런지 & 팝",
+        "2000": "디지털 시대",
+        "2010": "소셜 미디어",
+        "2020": "현대",
+        "default": "{{decade}}년대"
+      }
+    },
+    "year": {
+      "close": "닫기",
+      "backToYears": "{{decade}}년대"
     }
   }
 }

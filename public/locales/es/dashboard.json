@@ -268,8 +268,11 @@
     "filterDateTo": "Hasta",
     "clearFilters": "Borrar filtros",
     "emptyTitle": "Tu cronología está vacía",
-    "emptySubtitle": "Comienza creando tu primer recuerdo para verlo aparecer aquí.",
+    "emptySubtitle": "Comienza a crear tus recuerdos para verlos aquí, organizados por década",
     "createFirst": "Crear mi primer recuerdo",
+    "emptyAutoOrganized": "Tus recuerdos serán organizados automáticamente por época",
+    "noResults": "No se encontraron recuerdos",
+    "noResultsSubtitle": "Ningún recuerdo coincide con los filtros seleccionados",
     "decadeTitle": "Años {{decade}}",
     "yearTitle": "Año {{year}}",
     "types": {
@@ -284,6 +287,38 @@
       "published": "Publicado",
       "scheduled": "Programado",
       "archived": "Archivado"
+    },
+    "header": {
+      "title": "Tu Cronología",
+      "organizedBy": "Organizados por década",
+      "outOf": "de {{total}}",
+      "launchStory": "Iniciar presentación",
+      "loadingStory": "Cargando..."
+    },
+    "decade": {
+      "memoriesInDecade": "recuerdo en esta década",
+      "memoriesInDecade_other": "recuerdos en esta década",
+      "memoriesThisYear": "recuerdo este año",
+      "memoriesThisYear_other": "recuerdos este año",
+      "backToDecades": "Volver a las décadas",
+      "media_one": "{{count}} medio",
+      "media_other": "{{count}} medios",
+      "labels": {
+        "1940": "Años de guerra",
+        "1950": "Rock'n'roll",
+        "1960": "Flower Power",
+        "1970": "Disco Fever",
+        "1980": "Neon & Synth",
+        "1990": "Grunge & Pop",
+        "2000": "Era digital",
+        "2010": "Redes sociales",
+        "2020": "Era moderna",
+        "default": "Años {{decade}}"
+      }
+    },
+    "year": {
+      "close": "Cerrar",
+      "backToYears": "Años {{decade}}"
     }
   }
 }

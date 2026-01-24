@@ -51,19 +51,12 @@ const getCapsuleDate = (capsule: Capsule): Date => {
   return parseISO(capsule.created_at);
 };
 
-const capsuleTypeConfig: Record<CapsuleType, { icon: typeof FileText; label: string }> = {
-  text: { icon: FileText, label: 'Texte' },
-  photo: { icon: Image, label: 'Photo' },
-  video: { icon: Video, label: 'Vidéo' },
-  audio: { icon: Music, label: 'Audio' },
-  mixed: { icon: Layers, label: 'Mixte' },
-};
-
-const statusConfig: Record<CapsuleStatus, { label: string }> = {
-  draft: { label: 'Brouillon' },
-  published: { label: 'Publié' },
-  scheduled: { label: 'Programmé' },
-  archived: { label: 'Archivé' },
+const capsuleTypeIcons: Record<CapsuleType, typeof FileText> = {
+  text: FileText,
+  photo: Image,
+  video: Video,
+  audio: Music,
+  mixed: Layers,
 };
 
 const Timeline = () => {
@@ -427,7 +420,7 @@ const Timeline = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
                     <Layers className="w-4 h-4" />
-                    <span className="hidden xs:inline">Type</span>
+                    <span className="hidden xs:inline">{t('timeline.filterType')}</span>
                     {selectedTypes.length > 0 && (
                       <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
                         {selectedTypes.length}
@@ -436,18 +429,18 @@ const Timeline = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="center" className="w-48 bg-popover">
-                  <DropdownMenuLabel>Type de souvenir</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t('timeline.filterTypeLabel')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {(Object.keys(capsuleTypeConfig) as CapsuleType[]).map((type) => {
-                    const config = capsuleTypeConfig[type];
+                  {(Object.keys(capsuleTypeIcons) as CapsuleType[]).map((type) => {
+                    const Icon = capsuleTypeIcons[type];
                     return (
                       <DropdownMenuCheckboxItem
                         key={type}
                         checked={selectedTypes.includes(type)}
                         onCheckedChange={() => toggleType(type)}
                       >
-                        <config.icon className="w-4 h-4 mr-2" />
-                        {config.label}
+                        <Icon className="w-4 h-4 mr-2" />
+                        {t(`timeline.types.${type}`)}
                       </DropdownMenuCheckboxItem>
                     );
                   })}
@@ -459,7 +452,7 @@ const Timeline = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
                     <Filter className="w-4 h-4" />
-                    <span className="hidden xs:inline">Statut</span>
+                    <span className="hidden xs:inline">{t('timeline.filterStatus')}</span>
                     {selectedStatuses.length > 0 && (
                       <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
                         {selectedStatuses.length}
@@ -468,15 +461,15 @@ const Timeline = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="center" className="w-48 bg-popover">
-                  <DropdownMenuLabel>Statut</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t('timeline.filterStatus')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {(Object.keys(statusConfig) as CapsuleStatus[]).map((status) => (
+                  {(['draft', 'published', 'scheduled', 'archived'] as CapsuleStatus[]).map((status) => (
                     <DropdownMenuCheckboxItem
                       key={status}
                       checked={selectedStatuses.includes(status)}
                       onCheckedChange={() => toggleStatus(status)}
                     >
-                      {statusConfig[status].label}
+                      {t(`timeline.statuses.${status}`)}
                     </DropdownMenuCheckboxItem>
                   ))}
                 </DropdownMenuContent>
@@ -487,7 +480,7 @@ const Timeline = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                      <span className="hidden xs:inline">Mots-clés</span>
+                      <span className="hidden xs:inline">{t('timeline.filterTags')}</span>
                       <span className="xs:hidden">#</span>
                       {selectedTags.length > 0 && (
                         <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
@@ -497,7 +490,7 @@ const Timeline = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center" className="w-48 max-h-64 overflow-y-auto bg-popover">
-                    <DropdownMenuLabel>Mots-clés</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('timeline.filterTags')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {allTags.map((tag) => (
                       <DropdownMenuCheckboxItem
@@ -518,7 +511,7 @@ const Timeline = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
                       <Folder className="w-4 h-4" />
-                      <span className="hidden xs:inline">Catégorie</span>
+                      <span className="hidden xs:inline">{t('timeline.filterCategories')}</span>
                       {selectedCategoriesFilter.length > 0 && (
                         <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
                           {selectedCategoriesFilter.length}
@@ -527,18 +520,25 @@ const Timeline = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center" className="w-56 max-h-64 overflow-y-auto bg-popover">
-                    <DropdownMenuLabel>Catégorie</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('timeline.filterCategories')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {categories.map((category) => (
-                      <DropdownMenuCheckboxItem
-                        key={category.id}
-                        checked={selectedCategoriesFilter.includes(category.id)}
-                        onCheckedChange={() => toggleCategory(category.id)}
-                      >
-                        <span className="mr-2">{category.icon}</span>
-                        {category.name_fr}
-                      </DropdownMenuCheckboxItem>
-                    ))}
+                    {categories.map((category) => {
+                      // Try to get localized category name
+                      const categoryNameKey = `categoryNames.${category.slug}`;
+                      const localizedName = t(categoryNameKey);
+                      const displayName = localizedName !== categoryNameKey ? localizedName : category.name_fr;
+                      
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={category.id}
+                          checked={selectedCategoriesFilter.includes(category.id)}
+                          onCheckedChange={() => toggleCategory(category.id)}
+                        >
+                          <span className="mr-2">{category.icon}</span>
+                          {displayName}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
@@ -548,7 +548,7 @@ const Timeline = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
                     <CalendarRange className="w-4 h-4" />
-                    <span className="hidden xs:inline">Période</span>
+                    <span className="hidden xs:inline">{t('timeline.filterDate')}</span>
                     {(dateFrom || dateTo) && (
                       <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
                         {(dateFrom ? 1 : 0) + (dateTo ? 1 : 0)}
@@ -559,11 +559,12 @@ const Timeline = () => {
                 <PopoverContent className="w-auto p-4" align="center">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-foreground">Du</p>
+                      <p className="text-sm font-medium text-foreground">{t('timeline.filterDateFrom')}</p>
                       <CalendarComponent
                         mode="single"
                         selected={dateFrom}
                         onSelect={setDateFrom}
+                        locale={getLocale()}
                         disabled={(date) => dateTo ? isAfter(date, dateTo) : false}
                         initialFocus
                         className="pointer-events-auto"
@@ -571,7 +572,7 @@ const Timeline = () => {
                       {dateFrom && (
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-muted-foreground">
-                            {format(dateFrom, 'd MMMM yyyy', { locale: fr })}
+                            {format(dateFrom, 'd MMMM yyyy', { locale: getLocale() })}
                           </span>
                           <Button
                             variant="ghost"
@@ -579,25 +580,25 @@ const Timeline = () => {
                             onClick={() => setDateFrom(undefined)}
                             className="h-6 px-2 text-xs"
                           >
-                            <X className="w-3 h-3 mr-1" />
-                            Effacer
+                            <X className="w-3 h-3" />
                           </Button>
                         </div>
                       )}
                     </div>
                     <div className="border-t border-border pt-4 space-y-2">
-                      <p className="text-sm font-medium text-foreground">Au</p>
+                      <p className="text-sm font-medium text-foreground">{t('timeline.filterDateTo')}</p>
                       <CalendarComponent
                         mode="single"
                         selected={dateTo}
                         onSelect={setDateTo}
+                        locale={getLocale()}
                         disabled={(date) => dateFrom ? isBefore(date, dateFrom) : false}
                         className="pointer-events-auto"
                       />
                       {dateTo && (
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-muted-foreground">
-                            {format(dateTo, 'd MMMM yyyy', { locale: fr })}
+                            {format(dateTo, 'd MMMM yyyy', { locale: getLocale() })}
                           </span>
                           <Button
                             variant="ghost"
@@ -605,8 +606,7 @@ const Timeline = () => {
                             onClick={() => setDateTo(undefined)}
                             className="h-6 px-2 text-xs"
                           >
-                            <X className="w-3 h-3 mr-1" />
-                            Effacer
+                            <X className="w-3 h-3" />
                           </Button>
                         </div>
                       )}
@@ -624,7 +624,7 @@ const Timeline = () => {
                   className="gap-1 text-muted-foreground hover:text-foreground h-9"
                 >
                   <X className="w-4 h-4" />
-                  <span className="hidden sm:inline">Effacer</span> ({activeFiltersCount})
+                  <span className="hidden sm:inline">{t('timeline.clearFilters')}</span> ({activeFiltersCount})
                 </Button>
               )}
             </motion.div>
