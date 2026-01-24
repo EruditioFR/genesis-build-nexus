@@ -71,10 +71,11 @@
   },
   "tour": {
     "buttons": {
-      "next": "Siguiente →",
-      "prev": "← Anterior",
-      "done": "Finalizar ✓",
-      "progress": "{{current}} de {{total}}"
+      "next": "Continuar",
+      "prev": "Atrás",
+      "done": "Finalizar 🎉",
+      "progress": "Paso {{current}}/{{total}}",
+      "skip": "Saltar"
     },
     "titles": {
       "dashboard": "Descubrir el panel",

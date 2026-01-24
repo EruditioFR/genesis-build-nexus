@@ -71,10 +71,11 @@
   },
   "tour": {
     "buttons": {
-      "next": "Next →",
-      "prev": "← Previous",
-      "done": "Finish ✓",
-      "progress": "{{current}} of {{total}}"
+      "next": "Continue",
+      "prev": "Back",
+      "done": "Finish 🎉",
+      "progress": "Step {{current}}/{{total}}",
+      "skip": "Skip"
     },
     "titles": {
       "dashboard": "Discover the dashboard",
