@@ -323,5 +323,38 @@
       "11": "Novembre",
       "12": "Décembre"
     }
+  },
+  "categorySelector": {
+    "primaryLabel": "Catégorie principale *",
+    "primaryDescription": "Choisissez la catégorie qui correspond le mieux à votre souvenir",
+    "customCategories": "Mes catégories personnalisées",
+    "createCustom": "Créer une catégorie personnalisée",
+    "subCategoriesToggle": "Affiner avec des sous-catégories (optionnel)",
+    "subCategoriesDescription": "Ajoutez jusqu'à 3 sous-catégories pour affiner le classement",
+    "maxSubCategories": "Maximum 3 sous-catégories",
+    "selectedCategories": "Catégories sélectionnées :",
+    "dialog": {
+      "title": "Créer une catégorie personnalisée",
+      "description": "Créez votre propre catégorie pour organiser vos souvenirs à votre façon.",
+      "nameLabel": "Nom de la catégorie *",
+      "namePlaceholder": "Ex: Mes inventions",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Décrivez brièvement cette catégorie...",
+      "cancel": "Annuler",
+      "create": "Créer la catégorie",
+      "creating": "Création...",
+      "success": "Catégorie créée avec succès",
+      "error": "Erreur lors de la création"
+    },
+    "standardCategories": {
+      "famille-proches": "Famille & Proches",
+      "savoirs-traditions": "Savoirs & Traditions",
+      "histoires-vecues": "Histoires Vécues",
+      "vie-professionnelle": "Vie Professionnelle",
+      "amour-relations": "Amour & Relations",
+      "voyages-lieux": "Voyages & Lieux",
+      "passions-loisirs": "Passions & Loisirs",
+      "reflexions-messages": "Réflexions & Messages"
+    }
   }
 }

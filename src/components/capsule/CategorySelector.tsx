@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,11 +45,20 @@ const CategorySelector = ({
   selectedSubCategories = [],
   onSubCategoryChange,
 }: CategorySelectorProps) => {
+  const { t } = useTranslation('capsules');
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+
+  // Helper to get localized category name
+  const getCategoryName = (category: Category): string => {
+    const translationKey = `categorySelector.standardCategories.${category.slug}`;
+    const translated = t(translationKey);
+    // If translation exists (not same as key), use it; otherwise fallback to name_fr
+    return translated !== translationKey ? translated : category.name_fr;
+  };
 
   // Get available sub-categories for the primary category
   const availableSubCategories = primaryCategory
@@ -85,7 +95,7 @@ const CategorySelector = ({
     } else if (selectedSubCategories.length < 3) {
       onSubCategoryChange([...selectedSubCategories, subCategoryId]);
     } else {
-      toast.info('Maximum 3 sous-catégories');
+      toast.info(t('categorySelector.maxSubCategories'));
     }
   };
 
@@ -101,13 +111,13 @@ const CategorySelector = ({
     );
     
     if (result) {
-      toast.success('Catégorie créée avec succès');
+      toast.success(t('categorySelector.dialog.success'));
       setCreateDialogOpen(false);
       setNewCategoryName('');
       setNewCategoryDescription('');
       onPrimaryChange(result.id);
     } else {
-      toast.error('Erreur lors de la création');
+      toast.error(t('categorySelector.dialog.error'));
     }
     setIsCreating(false);
   };
@@ -120,10 +130,10 @@ const CategorySelector = ({
       {/* Primary Category Selection */}
       <div>
         <Label className="text-base font-medium mb-4 block">
-          Catégorie principale *
+          {t('categorySelector.primaryLabel')}
         </Label>
         <p className="text-sm text-muted-foreground mb-4">
-          Choisissez la catégorie qui correspond le mieux à votre capsule
+          {t('categorySelector.primaryDescription')}
         </p>
         
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -169,12 +179,12 @@ const CategorySelector = ({
                     </div>
                     
                     <h3 className="font-medium text-foreground text-sm line-clamp-1">
-                      {category.name_fr}
+                      {getCategoryName(category)}
                     </h3>
                   </motion.button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-xs">
-                  <p className="font-medium">{category.name_fr}</p>
+                  <p className="font-medium">{getCategoryName(category)}</p>
                   <p className="text-sm text-muted-foreground">{category.description_short}</p>
                 </TooltipContent>
               </Tooltip>
@@ -185,7 +195,7 @@ const CategorySelector = ({
         {/* Custom categories */}
         {customCategories.length > 0 && (
           <div className="mt-4">
-            <p className="text-sm text-muted-foreground mb-2">Mes catégories personnalisées</p>
+            <p className="text-sm text-muted-foreground mb-2">{t('categorySelector.customCategories')}</p>
             <div className="flex flex-wrap gap-2">
               {customCategories.map((category) => {
                 const isSelected = primaryCategory === category.id;
@@ -217,7 +227,7 @@ const CategorySelector = ({
             disabled={disabled}
           >
             <Plus className="w-4 h-4" />
-            Créer une catégorie personnalisée
+            {t('categorySelector.createCustom')}
           </Button>
         )}
       </div>
@@ -231,7 +241,7 @@ const CategorySelector = ({
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ChevronDown className={`w-4 h-4 transition-transform ${showSubCategories ? 'rotate-180' : ''}`} />
-            Affiner avec des sous-catégories (optionnel)
+            {t('categorySelector.subCategoriesToggle')}
             {selectedSubCategories.length > 0 && (
               <Badge variant="secondary" className="ml-2">
                 {selectedSubCategories.length}/3
@@ -250,7 +260,7 @@ const CategorySelector = ({
               >
                 <div className="pt-4">
                   <p className="text-sm text-muted-foreground mb-3">
-                    Ajoutez jusqu'à 3 sous-catégories pour affiner le classement
+                    {t('categorySelector.subCategoriesDescription')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {availableSubCategories.map((subCategory) => {
@@ -278,7 +288,7 @@ const CategorySelector = ({
       {/* Selected categories summary */}
       {primaryCategory && (
         <div className="bg-muted/30 rounded-lg p-3">
-          <p className="text-xs text-muted-foreground mb-2">Catégories sélectionnées :</p>
+          <p className="text-xs text-muted-foreground mb-2">{t('categorySelector.selectedCategories')}</p>
           <div className="flex flex-wrap gap-2">
             {categories
               .filter(c => c.id === primaryCategory)
@@ -288,7 +298,7 @@ const CategorySelector = ({
                   style={{ backgroundColor: `${category.color}20`, color: category.color, borderColor: category.color }}
                   className="gap-1.5"
                 >
-                  {category.icon} {category.name_fr}
+                  {category.icon} {getCategoryName(category)}
                 </Badge>
               ))}
             {/* Show selected sub-categories */}
@@ -311,28 +321,28 @@ const CategorySelector = ({
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Créer une catégorie personnalisée</DialogTitle>
+            <DialogTitle>{t('categorySelector.dialog.title')}</DialogTitle>
             <DialogDescription>
-              Créez votre propre catégorie pour organiser vos capsules à votre façon.
+              {t('categorySelector.dialog.description')}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="category-name">Nom de la catégorie *</Label>
+              <Label htmlFor="category-name">{t('categorySelector.dialog.nameLabel')}</Label>
               <Input
                 id="category-name"
-                placeholder="Ex: Mes inventions"
+                placeholder={t('categorySelector.dialog.namePlaceholder')}
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="category-description">Description</Label>
+              <Label htmlFor="category-description">{t('categorySelector.dialog.descriptionLabel')}</Label>
               <Textarea
                 id="category-description"
-                placeholder="Décrivez brièvement cette catégorie..."
+                placeholder={t('categorySelector.dialog.descriptionPlaceholder')}
                 value={newCategoryDescription}
                 onChange={(e) => setNewCategoryDescription(e.target.value)}
                 rows={3}
@@ -342,13 +352,13 @@ const CategorySelector = ({
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Annuler
+              {t('categorySelector.dialog.cancel')}
             </Button>
             <Button 
               onClick={handleCreateCategory} 
               disabled={!newCategoryName.trim() || isCreating}
             >
-              {isCreating ? 'Création...' : 'Créer la catégorie'}
+              {isCreating ? t('categorySelector.dialog.creating') : t('categorySelector.dialog.create')}
             </Button>
           </DialogFooter>
         </DialogContent>

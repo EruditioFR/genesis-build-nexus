@@ -323,5 +323,38 @@
       "11": "11월",
       "12": "12월"
     }
+  },
+  "categorySelector": {
+    "primaryLabel": "주요 카테고리 *",
+    "primaryDescription": "추억에 가장 잘 맞는 카테고리를 선택하세요",
+    "customCategories": "내 맞춤 카테고리",
+    "createCustom": "맞춤 카테고리 만들기",
+    "subCategoriesToggle": "하위 카테고리로 세분화 (선택사항)",
+    "subCategoriesDescription": "분류를 세분화하기 위해 최대 3개의 하위 카테고리를 추가하세요",
+    "maxSubCategories": "최대 3개 하위 카테고리",
+    "selectedCategories": "선택된 카테고리:",
+    "dialog": {
+      "title": "맞춤 카테고리 만들기",
+      "description": "나만의 카테고리를 만들어 추억을 정리하세요.",
+      "nameLabel": "카테고리 이름 *",
+      "namePlaceholder": "예: 내 발명품",
+      "descriptionLabel": "설명",
+      "descriptionPlaceholder": "이 카테고리를 간략히 설명하세요...",
+      "cancel": "취소",
+      "create": "카테고리 만들기",
+      "creating": "생성 중...",
+      "success": "카테고리가 성공적으로 생성되었습니다",
+      "error": "카테고리 생성 오류"
+    },
+    "standardCategories": {
+      "famille-proches": "가족 & 친지",
+      "savoirs-traditions": "지식 & 전통",
+      "histoires-vecues": "경험한 이야기",
+      "vie-professionnelle": "직장 생활",
+      "amour-relations": "사랑 & 관계",
+      "voyages-lieux": "여행 & 장소",
+      "passions-loisirs": "열정 & 취미",
+      "reflexions-messages": "성찰 & 메시지"
+    }
   }
 }

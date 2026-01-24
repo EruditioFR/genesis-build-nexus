@@ -323,5 +323,38 @@
       "11": "十一月",
       "12": "十二月"
     }
+  },
+  "categorySelector": {
+    "primaryLabel": "主要分类 *",
+    "primaryDescription": "选择最符合您回忆的分类",
+    "customCategories": "我的自定义分类",
+    "createCustom": "创建自定义分类",
+    "subCategoriesToggle": "使用子分类细化（可选）",
+    "subCategoriesDescription": "添加最多3个子分类以细化分类",
+    "maxSubCategories": "最多3个子分类",
+    "selectedCategories": "已选分类：",
+    "dialog": {
+      "title": "创建自定义分类",
+      "description": "创建您自己的分类，按您的方式整理回忆。",
+      "nameLabel": "分类名称 *",
+      "namePlaceholder": "例如：我的发明",
+      "descriptionLabel": "描述",
+      "descriptionPlaceholder": "简要描述此分类...",
+      "cancel": "取消",
+      "create": "创建分类",
+      "creating": "创建中...",
+      "success": "分类创建成功",
+      "error": "创建分类时出错"
+    },
+    "standardCategories": {
+      "famille-proches": "家人与亲友",
+      "savoirs-traditions": "知识与传统",
+      "histoires-vecues": "亲历故事",
+      "vie-professionnelle": "职业生活",
+      "amour-relations": "爱情与关系",
+      "voyages-lieux": "旅行与地点",
+      "passions-loisirs": "热情与爱好",
+      "reflexions-messages": "思考与寄语"
+    }
   }
 }
