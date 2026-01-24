@@ -7,8 +7,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
 import confetti from 'canvas-confetti';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,17 +57,24 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-const subscriptionLabels = {
-  free: { label: 'Gratuit', color: 'bg-muted text-muted-foreground' },
-  premium: { label: 'Premium', color: 'bg-gradient-gold text-primary-foreground' },
-  legacy: { label: 'Héritage', color: 'bg-primary text-primary-foreground' },
-};
 
 const Profile = () => {
+  const { t, i18n } = useTranslation('dashboard');
   const { user, loading, signOut } = useAuth();
   const { createCheckout, openCustomerPortal, subscriptionEnd, tier, invoices, invoicesLoading, fetchInvoices, checkSubscription } = useSubscription();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
+
+  const subscriptionLabels: Record<string, { label: string; color: string }> = {
+    free: { label: t('profile.subscriptionFree'), color: 'bg-muted text-muted-foreground' },
+    premium: { label: t('profile.subscriptionPremium'), color: 'bg-gradient-gold text-primary-foreground' },
+    legacy: { label: t('profile.subscriptionHeritage'), color: 'bg-primary text-primary-foreground' },
+  };
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -235,9 +243,9 @@ const Profile = () => {
         birth_date: values.birth_date ? format(values.birth_date, 'yyyy-MM-dd') : null,
       } : null);
 
-      toast.success('Profil mis à jour avec succès !');
+      toast.success(t('profile.saveSuccess'));
     } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la mise à jour');
+      toast.error(error.message || t('profile.saveError'));
     } finally {
       setIsSaving(false);
     }
@@ -248,7 +256,7 @@ const Profile = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Chargement du profil...</p>
+          <p className="text-muted-foreground">{t('profile.loading')}</p>
         </div>
       </div>
     );
@@ -284,7 +292,7 @@ const Profile = () => {
             className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            {t('profile.backToHome')}
           </Button>
 
           <div className="flex items-center gap-3">
@@ -293,10 +301,10 @@ const Profile = () => {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Mon profil
+                {t('profile.title')}
               </h1>
               <p className="text-muted-foreground text-sm">
-                Gérez vos informations personnelles
+                {t('profile.subtitle')}
               </p>
             </div>
           </div>

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, Filter, X, Folder, CalendarRange, FileText, Image, Video, Music } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -66,9 +67,15 @@ const statusConfig: Record<CapsuleStatus, { label: string }> = {
 };
 
 const Timeline = () => {
+  const { t, i18n } = useTranslation('dashboard');
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const { categories } = useCategories();
+
+  const getLocale = (): Locale => {
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
+    return localeMap[i18n.language] || fr;
+  };
   const [capsules, setCapsules] = useState<Capsule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
@@ -341,7 +348,7 @@ const Timeline = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-muted-foreground">Chargement de votre chronologie...</p>
+          <p className="text-sm text-muted-foreground">{t('timeline.loading')}</p>
         </div>
       </div>
     );
