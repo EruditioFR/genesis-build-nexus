@@ -15,8 +15,7 @@ export const useOnboardingTour = () => {
     stopTour, 
     isTourCompleted, 
     resetTour,
-    WelcomeDialog,
-    showWelcomeDialog,
+    welcomeDialogProps,
   } = useFeatureTour('dashboard');
 
   const startTour = useCallback(() => {
@@ -43,8 +42,7 @@ export const useOnboardingTour = () => {
     stopTour,
     isTourCompleted: isCompleted,
     resetTour,
-    WelcomeDialog,
-    showWelcomeDialog,
+    welcomeDialogProps,
   };
 };
 

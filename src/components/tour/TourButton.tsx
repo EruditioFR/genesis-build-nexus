@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/tooltip';
 import { useFeatureTour } from '@/hooks/useFeatureTour';
 import { TourType } from '@/lib/tourSteps';
+import { TourWelcomeDialog } from './TourWelcomeDialog';
 
 interface TourButtonProps {
   tourType: TourType;
@@ -29,7 +30,7 @@ export function TourButton({
   enhanced = false,
   skipWelcome = false,
 }: TourButtonProps) {
-  const { startTour, startTourDirect, WelcomeDialog } = useFeatureTour(tourType);
+  const { startTour, startTourDirect, welcomeDialogProps } = useFeatureTour(tourType);
   const { t } = useTranslation('common');
   
   // Get localized title from translations
@@ -42,7 +43,7 @@ export function TourButton({
   if (enhanced) {
     return (
       <>
-        <WelcomeDialog />
+        <TourWelcomeDialog {...welcomeDialogProps} />
         <Button
           variant="secondary"
           size={size}
@@ -61,7 +62,7 @@ export function TourButton({
   if (showLabel) {
     return (
       <>
-        <WelcomeDialog />
+        <TourWelcomeDialog {...welcomeDialogProps} />
         <Button
           variant={variant}
           size={size}
@@ -77,7 +78,7 @@ export function TourButton({
 
   return (
     <>
-      <WelcomeDialog />
+      <TourWelcomeDialog {...welcomeDialogProps} />
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
