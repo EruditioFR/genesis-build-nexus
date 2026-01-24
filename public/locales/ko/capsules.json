@@ -258,5 +258,70 @@
     "title": "추억 미리보기",
     "emptyState": "미리보기를 보려면 양식을 작성하세요",
     "keywords": "키워드"
+  },
+  "tags": {
+    "placeholder": "키워드 추가...",
+    "suggestions": "제안:",
+    "counter": "{{count}}/{{max}} 키워드 • Enter 키를 눌러 추가",
+    "suggestedTags": {
+      "family": "가족",
+      "vacation": "휴가",
+      "childhood": "어린 시절",
+      "wedding": "결혼식",
+      "birthday": "생일",
+      "travel": "여행",
+      "holidays": "명절",
+      "memories": "추억",
+      "heritage": "유산",
+      "traditions": "전통"
+    }
+  },
+  "media": {
+    "recordVoice": "음성 메시지 녹음",
+    "cancelRecording": "녹음 취소",
+    "orImportFile": "또는 파일 가져오기",
+    "dropHere": "파일을 여기에 드롭하세요",
+    "dragDrop": "파일을 드래그 앤 드롭하세요",
+    "clickToSelect": "또는 클릭하여 선택 • 최대 {{maxFiles}}개, 각 {{maxSize}}MB",
+    "audioSupported": "오디오 파일 지원",
+    "allSupported": "이미지, 비디오, 오디오 지원",
+    "formatNotSupported": "지원되지 않는 형식: {{type}}",
+    "fileTooLarge": "파일이 너무 큼 (최대 {{max}}MB)",
+    "maxFilesReached": "최대 {{max}}개 파일만 허용",
+    "notAuthenticated": "인증되지 않음",
+    "networkError": "네트워크 오류 - 다시 시도해주세요",
+    "timeoutError": "시간 초과 - 파일이 너무 크거나 연결이 느림",
+    "uploadError": "오류 {{status}}",
+    "recordingAdded": "녹음이 추가되었습니다!",
+    "uploaded": "업로드됨",
+    "uploading": "업로드 중...",
+    "fileCounter": "{{count}}/{{max}} 파일"
+  },
+  "memoryDate": {
+    "exact": "정확한 날짜",
+    "month": "월 / 년",
+    "year": "년",
+    "range": "기간",
+    "selectDate": "날짜 선택",
+    "monthPlaceholder": "월",
+    "yearPlaceholder": "년",
+    "selectYear": "연도 선택",
+    "from": "부터",
+    "to": "까지",
+    "rangeSeparator": "~",
+    "months": {
+      "1": "1월",
+      "2": "2월",
+      "3": "3월",
+      "4": "4월",
+      "5": "5월",
+      "6": "6월",
+      "7": "7월",
+      "8": "8월",
+      "9": "9월",
+      "10": "10월",
+      "11": "11월",
+      "12": "12월"
+    }
   }
 }

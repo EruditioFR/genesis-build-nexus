@@ -258,5 +258,70 @@
     "title": "Aperçu du souvenir",
     "emptyState": "Commencez à remplir le formulaire pour voir l'aperçu",
     "keywords": "Mots-clés"
+  },
+  "tags": {
+    "placeholder": "Ajouter un mot-clé...",
+    "suggestions": "Suggestions :",
+    "counter": "{{count}}/{{max}} mots-clés • Appuyez sur Entrée pour ajouter",
+    "suggestedTags": {
+      "family": "Famille",
+      "vacation": "Vacances",
+      "childhood": "Enfance",
+      "wedding": "Mariage",
+      "birthday": "Anniversaire",
+      "travel": "Voyage",
+      "holidays": "Fêtes",
+      "memories": "Souvenirs",
+      "heritage": "Héritage",
+      "traditions": "Traditions"
+    }
+  },
+  "media": {
+    "recordVoice": "Enregistrer un message vocal",
+    "cancelRecording": "Annuler l'enregistrement",
+    "orImportFile": "ou importez un fichier",
+    "dropHere": "Déposez vos fichiers ici",
+    "dragDrop": "Glissez-déposez vos fichiers",
+    "clickToSelect": "ou cliquez pour sélectionner • Max {{maxFiles}} fichiers, {{maxSize}} Mo chacun",
+    "audioSupported": "Fichiers audio supportés",
+    "allSupported": "Images, vidéos et audio supportés",
+    "formatNotSupported": "Format non supporté: {{type}}",
+    "fileTooLarge": "Fichier trop volumineux (max {{max}} Mo)",
+    "maxFilesReached": "Maximum {{max}} fichiers autorisés",
+    "notAuthenticated": "Non authentifié",
+    "networkError": "Erreur réseau - veuillez réessayer",
+    "timeoutError": "Timeout - fichier trop volumineux ou connexion lente",
+    "uploadError": "Erreur {{status}}",
+    "recordingAdded": "Enregistrement ajouté !",
+    "uploaded": "Uploadé",
+    "uploading": "Upload en cours...",
+    "fileCounter": "{{count}}/{{max}} fichiers"
+  },
+  "memoryDate": {
+    "exact": "Date exacte",
+    "month": "Mois / Année",
+    "year": "Année",
+    "range": "Période",
+    "selectDate": "Sélectionner une date",
+    "monthPlaceholder": "Mois",
+    "yearPlaceholder": "Année",
+    "selectYear": "Sélectionner une année",
+    "from": "De",
+    "to": "À",
+    "rangeSeparator": "à",
+    "months": {
+      "1": "Janvier",
+      "2": "Février",
+      "3": "Mars",
+      "4": "Avril",
+      "5": "Mai",
+      "6": "Juin",
+      "7": "Juillet",
+      "8": "Août",
+      "9": "Septembre",
+      "10": "Octobre",
+      "11": "Novembre",
+      "12": "Décembre"
+    }
   }
 }

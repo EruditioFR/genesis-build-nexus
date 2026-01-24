@@ -258,5 +258,70 @@
     "title": "回忆预览",
     "emptyState": "开始填写表单以查看预览",
     "keywords": "关键词"
+  },
+  "tags": {
+    "placeholder": "添加关键词...",
+    "suggestions": "建议：",
+    "counter": "{{count}}/{{max}} 关键词 • 按Enter添加",
+    "suggestedTags": {
+      "family": "家庭",
+      "vacation": "假期",
+      "childhood": "童年",
+      "wedding": "婚礼",
+      "birthday": "生日",
+      "travel": "旅行",
+      "holidays": "节日",
+      "memories": "回忆",
+      "heritage": "传承",
+      "traditions": "传统"
+    }
+  },
+  "media": {
+    "recordVoice": "录制语音消息",
+    "cancelRecording": "取消录制",
+    "orImportFile": "或导入文件",
+    "dropHere": "将文件拖放到这里",
+    "dragDrop": "拖放您的文件",
+    "clickToSelect": "或点击选择 • 最多 {{maxFiles}} 个文件，每个 {{maxSize}} MB",
+    "audioSupported": "支持音频文件",
+    "allSupported": "支持图片、视频和音频",
+    "formatNotSupported": "不支持的格式：{{type}}",
+    "fileTooLarge": "文件太大（最大 {{max}} MB）",
+    "maxFilesReached": "最多允许 {{max}} 个文件",
+    "notAuthenticated": "未认证",
+    "networkError": "网络错误 - 请重试",
+    "timeoutError": "超时 - 文件太大或连接太慢",
+    "uploadError": "错误 {{status}}",
+    "recordingAdded": "录音已添加！",
+    "uploaded": "已上传",
+    "uploading": "上传中...",
+    "fileCounter": "{{count}}/{{max}} 文件"
+  },
+  "memoryDate": {
+    "exact": "确切日期",
+    "month": "月 / 年",
+    "year": "年份",
+    "range": "时间段",
+    "selectDate": "选择日期",
+    "monthPlaceholder": "月",
+    "yearPlaceholder": "年",
+    "selectYear": "选择年份",
+    "from": "从",
+    "to": "到",
+    "rangeSeparator": "至",
+    "months": {
+      "1": "一月",
+      "2": "二月",
+      "3": "三月",
+      "4": "四月",
+      "5": "五月",
+      "6": "六月",
+      "7": "七月",
+      "8": "八月",
+      "9": "九月",
+      "10": "十月",
+      "11": "十一月",
+      "12": "十二月"
+    }
   }
 }

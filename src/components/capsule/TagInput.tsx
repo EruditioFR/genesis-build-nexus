@@ -1,5 +1,6 @@
-import { useState, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent, useMemo } from 'react';
 import { X, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,13 +12,23 @@ interface TagInputProps {
   maxTags?: number;
 }
 
-const suggestedTags = [
-  'Famille', 'Vacances', 'Enfance', 'Mariage', 'Anniversaire',
-  'Voyage', 'Fêtes', 'Souvenirs', 'Héritage', 'Traditions'
-];
-
-const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxTags = 10 }: TagInputProps) => {
+const TagInput = ({ tags, onChange, placeholder, maxTags = 10 }: TagInputProps) => {
+  const { t } = useTranslation('capsules');
   const [inputValue, setInputValue] = useState('');
+
+  // Build suggested tags from translations
+  const suggestedTags = useMemo(() => [
+    t('tags.suggestedTags.family'),
+    t('tags.suggestedTags.vacation'),
+    t('tags.suggestedTags.childhood'),
+    t('tags.suggestedTags.wedding'),
+    t('tags.suggestedTags.birthday'),
+    t('tags.suggestedTags.travel'),
+    t('tags.suggestedTags.holidays'),
+    t('tags.suggestedTags.memories'),
+    t('tags.suggestedTags.heritage'),
+    t('tags.suggestedTags.traditions'),
+  ], [t]);
 
   const addTag = (tag: string) => {
     const trimmedTag = tag.trim().toLowerCase();
@@ -44,6 +55,8 @@ const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxT
     tag => !tags.includes(tag.toLowerCase())
   );
 
+  const displayPlaceholder = placeholder || t('tags.placeholder');
+
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2 p-3 rounded-xl border border-border bg-card min-h-[52px]">
@@ -68,7 +81,7 @@ const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxT
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={tags.length === 0 ? placeholder : ''}
+            placeholder={tags.length === 0 ? displayPlaceholder : ''}
             className="flex-1 min-w-[120px] border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm"
           />
         )}
@@ -76,7 +89,7 @@ const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxT
       
       {availableSuggestions.length > 0 && tags.length < maxTags && (
         <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">Suggestions :</p>
+          <p className="text-xs text-muted-foreground">{t('tags.suggestions')}</p>
           <div className="flex flex-wrap gap-2">
             {availableSuggestions.slice(0, 6).map((tag) => (
               <Button
@@ -96,7 +109,7 @@ const TagInput = ({ tags, onChange, placeholder = 'Ajouter un mot-clé...', maxT
       )}
       
       <p className="text-xs text-muted-foreground">
-        {tags.length}/{maxTags} mots-clés • Appuyez sur Entrée pour ajouter
+        {t('tags.counter', { count: tags.length, max: maxTags })}
       </p>
     </div>
   );
