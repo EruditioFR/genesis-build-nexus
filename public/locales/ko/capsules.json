@@ -366,5 +366,24 @@
       "passions-loisirs": "취미, 스포츠 및 창작 활동",
       "reflexions-messages": "미래를 위한 생각, 편지 및 메시지"
     }
+  },
+  "comments": {
+    "title": "댓글",
+    "empty": "아직 댓글이 없습니다. 첫 번째로 댓글을 달아보세요!",
+    "placeholder": "댓글 작성...",
+    "anonymous_user": "사용자",
+    "edited": "수정됨",
+    "edit": "수정",
+    "delete": "삭제",
+    "save": "저장",
+    "cancel": "취소",
+    "delete_confirm_title": "이 댓글을 삭제하시겠습니까?",
+    "delete_confirm_description": "이 작업은 취소할 수 없습니다.",
+    "added": "댓글이 추가되었습니다",
+    "updated": "댓글이 수정되었습니다",
+    "deleted": "댓글이 삭제되었습니다",
+    "error_add": "댓글 추가 중 오류",
+    "error_update": "댓글 수정 중 오류",
+    "error_delete": "댓글 삭제 중 오류"
   }
 }

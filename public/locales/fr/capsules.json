@@ -366,5 +366,24 @@
       "passions-loisirs": "Hobbies, sports et activités créatives",
       "reflexions-messages": "Pensées, lettres et messages pour l'avenir"
     }
+  },
+  "comments": {
+    "title": "Commentaires",
+    "empty": "Aucun commentaire pour le moment. Soyez le premier à commenter !",
+    "placeholder": "Écrire un commentaire...",
+    "anonymous_user": "Utilisateur",
+    "edited": "modifié",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete_confirm_title": "Supprimer le commentaire ?",
+    "delete_confirm_description": "Cette action est irréversible.",
+    "added": "Commentaire ajouté",
+    "updated": "Commentaire modifié",
+    "deleted": "Commentaire supprimé",
+    "error_add": "Erreur lors de l'ajout du commentaire",
+    "error_update": "Erreur lors de la modification",
+    "error_delete": "Erreur lors de la suppression"
   }
 }

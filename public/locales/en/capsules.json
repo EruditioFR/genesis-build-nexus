@@ -366,5 +366,24 @@
       "passions-loisirs": "Hobbies, sports and creative activities",
       "reflexions-messages": "Thoughts, letters and messages for the future"
     }
+  },
+  "comments": {
+    "title": "Comments",
+    "empty": "No comments yet. Be the first to comment!",
+    "placeholder": "Write a comment...",
+    "anonymous_user": "User",
+    "edited": "edited",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete_confirm_title": "Delete this comment?",
+    "delete_confirm_description": "This action cannot be undone.",
+    "added": "Comment added",
+    "updated": "Comment updated",
+    "deleted": "Comment deleted",
+    "error_add": "Error adding comment",
+    "error_update": "Error updating comment",
+    "error_delete": "Error deleting comment"
   }
 }
