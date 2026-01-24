@@ -231,5 +231,32 @@
     },
     "upgradeTooltip": "{{type}} memories are available with the {{plan}} plan.",
     "viewPlans": "View plans →"
+  },
+  "schedule": {
+    "title": "Schedule publication",
+    "chooseDate": "Choose a date",
+    "dateTimeFormat": "PPP 'at' h:mm a",
+    "publicationTime": "Publication time",
+    "willPublishAt": "The capsule will be automatically published on {{date}}"
+  },
+  "legacy": {
+    "title": "Heritage Capsule",
+    "description": "A heritage capsule remains locked until a condition is met. Ideal for passing on memories at a specific date or with your approval.",
+    "unlockByDate": "Unlock at a specific date",
+    "unlockByGuardian": "Unlock by a guardian",
+    "unlockDate": "Unlock date",
+    "chooseDate": "Choose a date",
+    "willUnlockAt": "The capsule will be unlocked on {{date}}",
+    "guardian": "Responsible guardian",
+    "loading": "Loading...",
+    "noGuardians": "You don't have any guardians yet. Add one from your profile.",
+    "selectGuardian": "Select a guardian",
+    "verified": "Verified",
+    "loadError": "Error loading guardians"
+  },
+  "preview": {
+    "title": "Memory preview",
+    "emptyState": "Start filling out the form to see the preview",
+    "keywords": "Keywords"
   }
 }

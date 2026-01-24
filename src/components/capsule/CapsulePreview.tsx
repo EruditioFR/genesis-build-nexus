@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FileText, Image, Video, Music, Layers, Clock, Tag } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -13,15 +14,17 @@ interface CapsulePreviewProps {
   tags: string[];
 }
 
-const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
-  text: { icon: FileText, label: 'Texte', color: 'bg-primary/10 text-primary' },
-  photo: { icon: Image, label: 'Photo', color: 'bg-secondary/10 text-secondary' },
-  video: { icon: Video, label: 'Vidéo', color: 'bg-accent/10 text-accent' },
-  audio: { icon: Music, label: 'Audio', color: 'bg-navy-light/10 text-navy-light' },
-  mixed: { icon: Layers, label: 'Mixte', color: 'bg-terracotta/10 text-terracotta' },
-};
-
 const CapsulePreview = ({ title, description, content, capsuleType, tags }: CapsulePreviewProps) => {
+  const { t } = useTranslation('capsules');
+  
+  const typeConfig: Record<CapsuleType, { icon: typeof FileText; labelKey: string; color: string }> = {
+    text: { icon: FileText, labelKey: 'types.text', color: 'bg-primary/10 text-primary' },
+    photo: { icon: Image, labelKey: 'types.photo', color: 'bg-secondary/10 text-secondary' },
+    video: { icon: Video, labelKey: 'types.video', color: 'bg-accent/10 text-accent' },
+    audio: { icon: Music, labelKey: 'types.audio', color: 'bg-navy-light/10 text-navy-light' },
+    mixed: { icon: Layers, labelKey: 'types.mixed', color: 'bg-terracotta/10 text-terracotta' },
+  };
+
   const config = typeConfig[capsuleType];
   const Icon = config.icon;
   const hasContent = title || description || content;
@@ -37,7 +40,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
         <div className="w-8 h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
           <Clock className="w-4 h-4 text-primary-foreground" />
         </div>
-        <h3 className="text-sm font-medium text-muted-foreground">Aperçu du souvenir</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t('preview.title')}</h3>
       </div>
 
       {!hasContent ? (
@@ -46,7 +49,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
             <Icon className="w-8 h-8 text-muted-foreground" />
           </div>
           <p className="text-muted-foreground text-sm">
-            Commencez à remplir le formulaire<br />pour voir l'aperçu
+            {t('preview.emptyState')}
           </p>
         </div>
       ) : (
@@ -56,7 +59,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
             <div className={`w-8 h-8 rounded-lg ${config.color} flex items-center justify-center`}>
               <Icon className="w-4 h-4" />
             </div>
-            <span className="text-sm font-medium text-foreground">{config.label}</span>
+            <span className="text-sm font-medium text-foreground">{t(config.labelKey)}</span>
           </div>
 
           {/* Title */}
@@ -87,7 +90,7 @@ const CapsulePreview = ({ title, description, content, capsuleType, tags }: Caps
             <div className="pt-2 border-t border-border">
               <div className="flex items-center gap-1.5 mb-2">
                 <Tag className="w-3.5 h-3.5 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Mots-clés</span>
+                <span className="text-xs text-muted-foreground">{t('preview.keywords')}</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag) => (

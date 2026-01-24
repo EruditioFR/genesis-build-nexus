@@ -231,5 +231,32 @@
     },
     "upgradeTooltip": "Los recuerdos {{type}} están disponibles con el plan {{plan}}.",
     "viewPlans": "Ver planes →"
+  },
+  "schedule": {
+    "title": "Programar publicación",
+    "chooseDate": "Elegir una fecha",
+    "dateTimeFormat": "PPP 'a las' HH:mm",
+    "publicationTime": "Hora de publicación",
+    "willPublishAt": "La cápsula se publicará automáticamente el {{date}}"
+  },
+  "legacy": {
+    "title": "Cápsula Herencia",
+    "description": "Una cápsula herencia permanece bloqueada hasta que se cumpla una condición. Ideal para transmitir recuerdos en una fecha específica o con tu aprobación.",
+    "unlockByDate": "Desbloqueo en una fecha específica",
+    "unlockByGuardian": "Desbloqueo por un guardián",
+    "unlockDate": "Fecha de desbloqueo",
+    "chooseDate": "Elegir una fecha",
+    "willUnlockAt": "La cápsula se desbloqueará el {{date}}",
+    "guardian": "Guardián responsable",
+    "loading": "Cargando...",
+    "noGuardians": "Aún no tienes guardianes. Añade uno desde tu perfil.",
+    "selectGuardian": "Seleccionar un guardián",
+    "verified": "Verificado",
+    "loadError": "Error al cargar los guardianes"
+  },
+  "preview": {
+    "title": "Vista previa del recuerdo",
+    "emptyState": "Comienza a llenar el formulario para ver la vista previa",
+    "keywords": "Palabras clave"
   }
 }
