@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { getSignedUrls } from '@/lib/signedUrlCache';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { AudioPlayer } from './AudioPlayer';
 
 interface Media {
   id: string;
@@ -317,7 +318,7 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
             <h3 className="text-sm font-medium text-muted-foreground mb-3">
               Audio ({audios.length})
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {audios.map((media, index) => {
                 const url = getMediaUrl(media);
                 if (!url) return null;
@@ -328,32 +329,14 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="p-4 rounded-xl border border-border bg-card"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm font-medium text-foreground">
-                        {media.file_name || 'Audio'}
-                      </p>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-8 h-8"
-                        onClick={() => handleDownload(media)}
-                        disabled={downloading === media.id}
-                      >
-                        {downloading === media.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Download className="w-4 h-4" />
-                        )}
-                      </Button>
-                    </div>
-                    <audio src={url} controls className="w-full" />
-                    {media.caption && (
-                      <p className="text-sm text-muted-foreground mt-2">
-                        {media.caption}
-                      </p>
-                    )}
+                    <AudioPlayer
+                      src={url}
+                      fileName={media.file_name || 'Audio'}
+                      caption={media.caption || undefined}
+                      onDownload={() => handleDownload(media)}
+                      downloading={downloading === media.id}
+                    />
                   </motion.div>
                 );
               })}
