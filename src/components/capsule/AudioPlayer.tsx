@@ -21,6 +21,12 @@ const formatTime = (seconds: number): string => {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
+// Helper to resolve CSS variable to actual color
+const getCssColor = (varName: string): string => {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return value ? `hsl(${value})` : '#888888';
+};
+
 // Colorful waveform visualization component
 const AudioWaveformPlayer: React.FC<{
   analyser: AnalyserNode | null;
@@ -30,9 +36,23 @@ const AudioWaveformPlayer: React.FC<{
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const staticBarsRef = useRef<number[]>([]);
+  
+  // Resolved colors from CSS variables
+  const colorsRef = useRef({
+    primary: '#c4956a',
+    secondary: '#8b7355',
+    muted: '#888888',
+  });
 
-  // Generate static bars pattern on mount
+  // Generate static bars pattern and resolve colors on mount
   useEffect(() => {
+    // Resolve CSS variable colors
+    colorsRef.current = {
+      primary: getCssColor('--primary'),
+      secondary: getCssColor('--secondary'),
+      muted: getCssColor('--muted-foreground'),
+    };
+    
     const barCount = 50;
     staticBarsRef.current = Array.from({ length: barCount }, () => 
       0.2 + Math.random() * 0.6
@@ -89,15 +109,16 @@ const AudioWaveformPlayer: React.FC<{
         if (isPast) {
           // Played portion - vibrant gradient
           gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
-          gradient.addColorStop(0, 'hsl(var(--secondary))');
-          gradient.addColorStop(0.5, 'hsl(var(--primary))');
-          gradient.addColorStop(1, 'hsl(var(--secondary))');
+          gradient.addColorStop(0, colorsRef.current.secondary);
+          gradient.addColorStop(0.5, colorsRef.current.primary);
+          gradient.addColorStop(1, colorsRef.current.secondary);
         } else {
           // Unplayed portion - muted
           gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
-          gradient.addColorStop(0, 'hsl(var(--muted-foreground) / 0.3)');
-          gradient.addColorStop(0.5, 'hsl(var(--muted-foreground) / 0.5)');
-          gradient.addColorStop(1, 'hsl(var(--muted-foreground) / 0.3)');
+          const mutedColor = colorsRef.current.muted;
+          gradient.addColorStop(0, mutedColor.replace(')', ' / 0.3)').replace('hsl(', 'hsla('));
+          gradient.addColorStop(0.5, mutedColor.replace(')', ' / 0.5)').replace('hsl(', 'hsla('));
+          gradient.addColorStop(1, mutedColor.replace(')', ' / 0.3)').replace('hsl(', 'hsla('));
         }
 
         ctx.fillStyle = gradient;
@@ -161,14 +182,15 @@ const AudioWaveformPlayer: React.FC<{
         
         if (isPast) {
           gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
-          gradient.addColorStop(0, 'hsl(var(--secondary))');
-          gradient.addColorStop(0.5, 'hsl(var(--primary))');
-          gradient.addColorStop(1, 'hsl(var(--secondary))');
+          gradient.addColorStop(0, colorsRef.current.secondary);
+          gradient.addColorStop(0.5, colorsRef.current.primary);
+          gradient.addColorStop(1, colorsRef.current.secondary);
         } else {
           gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
-          gradient.addColorStop(0, 'hsl(var(--muted-foreground) / 0.3)');
-          gradient.addColorStop(0.5, 'hsl(var(--muted-foreground) / 0.5)');
-          gradient.addColorStop(1, 'hsl(var(--muted-foreground) / 0.3)');
+          const mutedColor = colorsRef.current.muted;
+          gradient.addColorStop(0, mutedColor.replace(')', ' / 0.3)').replace('hsl(', 'hsla('));
+          gradient.addColorStop(0.5, mutedColor.replace(')', ' / 0.5)').replace('hsl(', 'hsla('));
+          gradient.addColorStop(1, mutedColor.replace(')', ' / 0.3)').replace('hsl(', 'hsla('));
         }
 
         ctx.fillStyle = gradient;
