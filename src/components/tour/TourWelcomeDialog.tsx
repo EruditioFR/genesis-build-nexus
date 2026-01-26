@@ -64,7 +64,7 @@ export const TourWelcomeDialog = ({
               stiffness: 300,
               duration: 0.4 
             }}
-            className="fixed left-1/2 top-1/2 z-[10000] w-[95vw] max-w-md -translate-x-1/2 -translate-y-1/2"
+            className="fixed inset-x-4 top-1/2 z-[10000] mx-auto max-w-md -translate-y-1/2 sm:inset-x-auto sm:left-1/2 sm:w-[95vw] sm:-translate-x-1/2"
           >
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-card to-card/95 border border-border/50 shadow-2xl">
               {/* Decorative gradient overlay */}
