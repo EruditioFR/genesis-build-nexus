@@ -42,6 +42,8 @@ const defaultAcceptedTypes = [
   'audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg'
 ];
 
+const normalizeMimeType = (mimeType: string) => mimeType.split(';')[0]?.trim() || mimeType;
+
 const getFileType = (mimeType: string): 'image' | 'video' | 'audio' => {
   if (mimeType.startsWith('image/')) return 'image';
   if (mimeType.startsWith('video/')) return 'video';
@@ -84,7 +86,9 @@ const MediaUpload = ({
   onFilesChangeRef.current = onFilesChange;
 
   const handleRecordingComplete = useCallback((blob: Blob, fileName: string) => {
-    const file = new File([blob], fileName, { type: blob.type });
+    // Some browsers produce mime types with parameters (e.g. "audio/webm;codecs=opus")
+    // while storage validation expects the base mime type.
+    const file = new File([blob], fileName, { type: normalizeMimeType(blob.type) });
     const mediaFile: MediaFile = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       file,
@@ -106,7 +110,9 @@ const MediaUpload = ({
   };
 
   const validateFile = useCallback((file: File): string | null => {
-    if (!acceptedTypes.includes(file.type)) {
+    const normalizedType = normalizeMimeType(file.type);
+    const normalizedAccepted = acceptedTypes.map(normalizeMimeType);
+    if (!normalizedAccepted.includes(normalizedType)) {
       return t('media.formatNotSupported', { type: file.type });
     }
     if (file.size > maxSizeMb * 1024 * 1024) {
@@ -163,9 +169,12 @@ const MediaUpload = ({
     const fileExt = mediaFile.file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
+    const contentType = normalizeMimeType(mediaFile.file.type);
+
     console.log('[MediaUpload] Starting upload:', {
       fileName: mediaFile.file.name,
       mimeType: mediaFile.file.type,
+      normalizedMimeType: contentType,
       size: mediaFile.file.size,
       sizeFormatted: formatFileSize(mediaFile.file.size),
       targetPath: fileName
@@ -222,7 +231,7 @@ const MediaUpload = ({
 
       xhr.open('POST', uploadUrl);
       xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-      xhr.setRequestHeader('Content-Type', mediaFile.file.type);
+      xhr.setRequestHeader('Content-Type', contentType);
       xhr.setRequestHeader('x-upsert', 'false');
       xhr.timeout = 300000; // 5 minutes timeout for large files
       xhr.send(mediaFile.file);
