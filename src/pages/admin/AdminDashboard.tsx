@@ -505,7 +505,7 @@ export default function AdminDashboard() {
         </Card>
       </motion.div>
 
-      {/* Storage per User */}
+      {/* Storage per User - Bar Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -515,45 +515,113 @@ export default function AdminDashboard() {
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Users className="h-5 w-5 text-blue-500" />
-              Stockage par utilisateur (Top 10)
+              Répartition du stockage par utilisateur (Top 10)
             </CardTitle>
           </CardHeader>
           <CardContent>
             {userStorage.length > 0 ? (
-              <div className="space-y-4">
-                {userStorage.map((user, index) => {
-                  const usagePercent = Math.min((user.storageMb / user.storageLimitMb) * 100, 100);
-                  const isNearLimit = usagePercent >= 80;
-                  return (
-                    <div key={user.userId} className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground w-5">{index + 1}.</span>
-                          <span className="font-medium truncate max-w-[200px]">{user.displayName}</span>
+              <div className="space-y-6">
+                {/* Bar Chart */}
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={userStorage}
+                    layout="vertical"
+                    margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      type="number" 
+                      tickFormatter={(value) => `${value.toFixed(0)} MB`}
+                      tick={{ fontSize: 12 }}
+                      className="text-muted-foreground"
+                    />
+                    <YAxis 
+                      type="category" 
+                      dataKey="displayName" 
+                      tick={{ fontSize: 11 }}
+                      className="text-muted-foreground"
+                      width={90}
+                      tickFormatter={(value) => value.length > 12 ? `${value.slice(0, 12)}...` : value}
+                    />
+                    <Tooltip 
+                      formatter={(value: number, name: string) => {
+                        const label = name === "capsuleStorageMb" 
+                          ? "Capsules" 
+                          : name === "familyStorageMb" 
+                            ? "Arbres généalogiques" 
+                            : "Total";
+                        return [`${value.toFixed(2)} MB`, label];
+                      }}
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                      }}
+                      labelStyle={{ color: "hsl(var(--foreground))" }}
+                    />
+                    <Legend 
+                      formatter={(value) => {
+                        if (value === "capsuleStorageMb") return "Capsules";
+                        if (value === "familyStorageMb") return "Arbres";
+                        return value;
+                      }}
+                    />
+                    <Bar
+                      dataKey="capsuleStorageMb"
+                      name="capsuleStorageMb"
+                      stackId="storage"
+                      fill="#F97316"
+                      radius={[0, 0, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="familyStorageMb"
+                      name="familyStorageMb"
+                      stackId="storage"
+                      fill="#22C55E"
+                      radius={[0, 4, 4, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+
+                {/* Detailed List */}
+                <div className="space-y-3 pt-4 border-t">
+                  <h4 className="text-sm font-medium text-muted-foreground">Détail par utilisateur</h4>
+                  {userStorage.map((user, index) => {
+                    const usagePercent = Math.min((user.storageMb / user.storageLimitMb) * 100, 100);
+                    const isNearLimit = usagePercent >= 80;
+                    return (
+                      <div key={user.userId} className="space-y-1.5">
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground w-5 text-xs">{index + 1}.</span>
+                            <span className="font-medium truncate max-w-[200px]">{user.displayName}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
+                              {user.storageMb.toFixed(1)} MB
+                            </span>
+                            <span className="text-muted-foreground text-xs">
+                              / {user.storageLimitMb} MB
+                            </span>
+                          </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
-                            {user.storageMb.toFixed(1)} MB
-                          </span>
-                          <span className="text-muted-foreground text-xs">
-                            / {user.storageLimitMb} MB
-                          </span>
+                          <Progress 
+                            value={usagePercent} 
+                            className={`h-1.5 flex-1 ${isNearLimit ? "[&>div]:bg-amber-500" : ""}`}
+                          />
+                          <div className="text-xs text-muted-foreground w-28 text-right">
+                            <span className="text-orange-500">{user.capsuleStorageMb.toFixed(1)}</span>
+                            {" / "}
+                            <span className="text-green-500">{user.familyStorageMb.toFixed(1)}</span>
+                            {" MB"}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Progress 
-                          value={usagePercent} 
-                          className={`h-2 flex-1 ${isNearLimit ? "[&>div]:bg-amber-500" : ""}`}
-                        />
-                        <div className="text-xs text-muted-foreground w-24 text-right">
-                          <span className="text-orange-500">{user.capsuleStorageMb.toFixed(1)}</span>
-                          {" / "}
-                          <span className="text-green-500">{user.familyStorageMb.toFixed(1)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+
                 <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-3 rounded bg-orange-500" />
