@@ -222,11 +222,27 @@ const MediaUpload = ({
       });
 
       xhr.addEventListener('error', () => {
-        reject(new Error(t('media.networkError')));
+        console.error('[MediaUpload] Network error during upload:', {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          response: xhr.responseText,
+          fileName: mediaFile.file.name,
+          mimeType: mediaFile.file.type,
+          normalizedMimeType: contentType,
+        });
+        reject(new Error(`${t('media.networkError')} (status: ${xhr.status || 0})`));
       });
 
       xhr.addEventListener('timeout', () => {
-        reject(new Error(t('media.timeoutError')));
+        console.error('[MediaUpload] Upload timeout:', {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          response: xhr.responseText,
+          fileName: mediaFile.file.name,
+          mimeType: mediaFile.file.type,
+          normalizedMimeType: contentType,
+        });
+        reject(new Error(`${t('media.timeoutError')} (status: ${xhr.status || 0})`));
       });
 
       xhr.open('POST', uploadUrl);
