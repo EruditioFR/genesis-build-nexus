@@ -117,7 +117,7 @@ const Signup = () => {
 
     // Combine first name and last name for display
     const fullName = `${firstName} ${displayName}`.trim();
-    const { error } = await signUp(email, password, fullName);
+    const { error } = await signUp(email, password, fullName, country, city);
 
     if (error) {
       // Check for existing email error
