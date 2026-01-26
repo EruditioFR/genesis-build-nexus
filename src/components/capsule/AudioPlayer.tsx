@@ -329,6 +329,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <audio
         ref={audioRef}
         src={src}
+        crossOrigin="anonymous"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
