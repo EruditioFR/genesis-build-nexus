@@ -11,10 +11,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.jpg';
+import { CountrySelector } from '@/components/signup/CountrySelector';
+import { CitySelector } from '@/components/signup/CitySelector';
 
 const Signup = () => {
   const { t } = useTranslation('auth');
+  const [firstName, setFirstName] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -110,7 +115,9 @@ const Signup = () => {
 
     setLoading(true);
 
-    const { error } = await signUp(email, password, displayName);
+    // Combine first name and last name for display
+    const fullName = `${firstName} ${displayName}`.trim();
+    const { error } = await signUp(email, password, fullName);
 
     if (error) {
       // Check for existing email error
@@ -268,19 +275,48 @@ const Signup = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="displayName" className="text-base font-semibold text-[#1a1a2e]">{t('signup.displayName')}</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
-                <Input
-                  id="displayName"
-                  type="text"
-                  placeholder={t('signup.displayNamePlaceholder')}
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
-                  required
-                />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="firstName" className="text-base font-semibold text-[#1a1a2e]">{t('signup.firstName')}</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder={t('signup.firstNamePlaceholder')}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="displayName" className="text-base font-semibold text-[#1a1a2e]">{t('signup.displayName')}</Label>
+                <div className="relative">
+                  <Input
+                    id="displayName"
+                    type="text"
+                    placeholder={t('signup.displayNamePlaceholder')}
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.country')}</Label>
+                <CountrySelector value={country} onChange={setCountry} />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.city')}</Label>
+                <CitySelector value={city} onChange={setCity} countryCode={country} />
               </div>
             </div>
 
