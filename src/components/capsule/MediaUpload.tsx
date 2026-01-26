@@ -39,7 +39,7 @@ interface MediaUploadProps {
 const defaultAcceptedTypes = [
   'image/jpeg', 'image/png', 'image/webp', 'image/gif',
   'video/mp4', 'video/webm', 'video/quicktime',
-  'audio/mpeg', 'audio/wav', 'audio/mp4'
+  'audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg'
 ];
 
 const getFileType = (mimeType: string): 'image' | 'video' | 'audio' => {
