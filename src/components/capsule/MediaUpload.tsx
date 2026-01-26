@@ -207,6 +207,7 @@ const MediaUpload = ({
 
       xhr.open('POST', uploadUrl);
       xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+      xhr.setRequestHeader('Content-Type', mediaFile.file.type);
       xhr.setRequestHeader('x-upsert', 'false');
       xhr.timeout = 300000; // 5 minutes timeout for large files
       xhr.send(mediaFile.file);
