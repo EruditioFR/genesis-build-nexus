@@ -85,6 +85,8 @@
     "updatedAt": "更新于",
     "memoryOf": "回忆",
     "sharedWith": "分享给",
+    "sharedBy": "分享者",
+    "unknownOwner": "未知用户",
     "content": "内容",
     "mediaGallery": "媒体库",
     "viewInStory": "故事模式查看",

@@ -35,6 +35,7 @@ import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
+import SharedCapsulesSection from '@/components/circles/SharedCapsulesSection';
 import { toast } from 'sonner';
 import NoIndex from '@/components/seo/NoIndex';
 
@@ -262,6 +263,21 @@ const CirclesPage = () => {
               {t('circles.newCircle')}
             </Button>
           </div>
+        </motion.div>
+
+        {/* Shared with me section */}
+        <SharedCapsulesSection userId={user.id} />
+
+        {/* Section header for my circles */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="mt-8 mb-4"
+        >
+          <h2 className="text-lg font-display font-semibold text-foreground">
+            {t('circles.myCircles')}
+          </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -252,7 +252,12 @@
     "deleteSuccess": "圈子已删除",
     "deleteError": "删除时出错",
     "memberRemoved": "成员已移除",
-    "memberRemoveError": "移除成员时出错"
+    "memberRemoveError": "移除成员时出错",
+    "myCircles": "我创建的圈子",
+    "sharedWithMe": "与我分享",
+    "sharedWithMeDesc": "亲友分享的回忆",
+    "sharedBy": "分享者",
+    "unknownOwner": "未知"
   },
   "timeline": {
     "title": "我的时间线",

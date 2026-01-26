@@ -85,6 +85,8 @@
     "updatedAt": "Updated on",
     "memoryOf": "Memory of",
     "sharedWith": "Shared with",
+    "sharedBy": "Shared by",
+    "unknownOwner": "Unknown user",
     "content": "Content",
     "mediaGallery": "Media gallery",
     "viewInStory": "View in story mode",

@@ -94,6 +94,10 @@ const CapsuleDetail = () => {
   const [capsuleSubCategories, setCapsuleSubCategories] = useState<CapsuleSubCategoryWithData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [ownerProfile, setOwnerProfile] = useState<{ display_name: string | null } | null>(null);
+
+  // Check if user is the owner of the capsule
+  const isOwner = capsule?.user_id === user?.id;
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -158,6 +162,17 @@ const CapsuleDetail = () => {
       }
 
       setCapsule(capsuleData);
+
+      // If not owner, fetch owner's profile
+      if (capsuleData.user_id !== user.id) {
+        const { data: ownerData } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', capsuleData.user_id)
+          .maybeSingle();
+        
+        if (ownerData) setOwnerProfile(ownerData);
+      }
 
       // Fetch medias
       const { data: mediasData } = await supabase
@@ -424,63 +439,65 @@ const CapsuleDetail = () => {
                 {t('backToList')}
               </Button>
 
-              {/* Actions on hero */}
-              <div className="absolute top-4 right-4 flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setHeaderSelectorOpen(true)}
-                  className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
-                  title={t('detail.changeHeaderImage')}
-                >
-                  <ImagePlus className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShareDialogOpen(true)}
-                  className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
-                >
-                  <Share2 className="w-4 h-4" />
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      disabled={isExporting}
-                      className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
-                    >
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild className="gap-2">
-                      <Link to={`/capsules/${capsule.id}/edit`}>
-                        <Edit className="w-4 h-4" />
-                        {t('detail.edit')}
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
-                      <FileDown className="w-4 h-4" />
-                      {t('detail.exportPdf')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
-                      <FolderArchive className="w-4 h-4" />
-                      {t('detail.exportZip')}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="gap-2 text-destructive"
-                      onClick={() => setDeleteDialogOpen(true)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      {t('detail.delete')}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+              {/* Actions on hero - only for owner */}
+              {isOwner && (
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setHeaderSelectorOpen(true)}
+                    className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                    title={t('detail.changeHeaderImage')}
+                  >
+                    <ImagePlus className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShareDialogOpen(true)}
+                    className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        disabled={isExporting}
+                        className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
+                      >
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild className="gap-2">
+                        <Link to={`/capsules/${capsule.id}/edit`}>
+                          <Edit className="w-4 h-4" />
+                          {t('detail.edit')}
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                        <FileDown className="w-4 h-4" />
+                        {t('detail.exportPdf')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                        <FolderArchive className="w-4 h-4" />
+                        {t('detail.exportZip')}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="gap-2 text-destructive"
+                        onClick={() => setDeleteDialogOpen(true)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        {t('detail.delete')}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              )}
 
               {/* Title overlay on hero */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -585,55 +602,57 @@ const CapsuleDetail = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setHeaderSelectorOpen(true)}
-                      title={t('detail.changeHeaderImage')}
-                    >
-                      <ImagePlus className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setShareDialogOpen(true)}
-                    >
-                      <Share2 className="w-4 h-4" />
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" disabled={isExporting}>
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild className="gap-2">
-                          <Link to={`/capsules/${capsule.id}/edit`}>
-                            <Edit className="w-4 h-4" />
-                            {t('detail.edit')}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
-                          <FileDown className="w-4 h-4" />
-                          {t('detail.exportPdf')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
-                          <FolderArchive className="w-4 h-4" />
-                          {t('detail.exportZip')}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="gap-2 text-destructive"
-                          onClick={() => setDeleteDialogOpen(true)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          {t('detail.delete')}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                  {isOwner && (
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setHeaderSelectorOpen(true)}
+                        title={t('detail.changeHeaderImage')}
+                      >
+                        <ImagePlus className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setShareDialogOpen(true)}
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="icon" disabled={isExporting}>
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild className="gap-2">
+                            <Link to={`/capsules/${capsule.id}/edit`}>
+                              <Edit className="w-4 h-4" />
+                              {t('detail.edit')}
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                            <FileDown className="w-4 h-4" />
+                            {t('detail.exportPdf')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                            <FolderArchive className="w-4 h-4" />
+                            {t('detail.exportZip')}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="gap-2 text-destructive"
+                            onClick={() => setDeleteDialogOpen(true)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            {t('detail.delete')}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  )}
                 </motion.div>
               </div>
             </div>
@@ -642,6 +661,23 @@ const CapsuleDetail = () => {
 
         {/* Main Content */}
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Shared by indicator for non-owner */}
+          {!isOwner && ownerProfile && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 rounded-xl bg-accent/10 border border-accent/20 flex items-center gap-3"
+            >
+              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                <Users className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t('detail.sharedBy')}</p>
+                <p className="font-medium text-foreground">{ownerProfile.display_name || t('detail.unknownOwner')}</p>
+              </div>
+            </motion.div>
+          )}
+
           <div className="grid gap-6 md:grid-cols-3">
             {/* Main Column */}
             <div className="md:col-span-2 space-y-6">

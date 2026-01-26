@@ -85,6 +85,8 @@
     "updatedAt": "수정일",
     "memoryOf": "추억",
     "sharedWith": "공유 대상",
+    "sharedBy": "공유자",
+    "unknownOwner": "알 수 없는 사용자",
     "content": "내용",
     "mediaGallery": "미디어 갤러리",
     "viewInStory": "스토리 모드로 보기",

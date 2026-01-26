@@ -252,7 +252,12 @@
     "deleteSuccess": "Círculo eliminado",
     "deleteError": "Error al eliminar",
     "memberRemoved": "Miembro eliminado",
-    "memberRemoveError": "Error al eliminar miembro"
+    "memberRemoveError": "Error al eliminar miembro",
+    "myCircles": "Mis círculos creados",
+    "sharedWithMe": "Compartidos conmigo",
+    "sharedWithMeDesc": "Recuerdos compartidos por tus seres queridos",
+    "sharedBy": "Compartido por",
+    "unknownOwner": "Desconocido"
   },
   "timeline": {
     "title": "Mi cronología",
