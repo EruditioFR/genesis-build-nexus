@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,8 @@ const Signup = () => {
   const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard?welcome=true';
 
   // Debounced email check
   const checkEmailExists = useCallback(async (emailToCheck: string) => {
@@ -159,7 +161,9 @@ const Signup = () => {
         title: t('signup.success.title'),
         description: t('signup.success.description'),
       });
-      navigate('/dashboard?welcome=true');
+      // Preserve welcome param only if redirecting to dashboard
+      const finalRedirect = redirectTo.includes('/invite/') ? redirectTo : redirectTo;
+      navigate(finalRedirect);
     }
 
     setLoading(false);

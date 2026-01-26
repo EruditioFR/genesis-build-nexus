@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, Shield, Heart, Clock, Sparkles, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,8 @@ const Login = () => {
   const { signIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ const Login = () => {
         title: t('login.success.title'),
         description: t('login.success.description'),
       });
-      navigate('/dashboard');
+      navigate(redirectTo);
     }
 
     setLoading(false);
@@ -233,7 +235,7 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-[#1a1a2e]/80 text-base">
               {t('login.noAccount')}{' '}
-              <Link to="/signup" className="text-secondary font-semibold hover:text-secondary/80 transition-colors">
+              <Link to={`/signup${redirectTo !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-secondary font-semibold hover:text-secondary/80 transition-colors">
                 {t('login.createAccount')}
               </Link>
             </p>
