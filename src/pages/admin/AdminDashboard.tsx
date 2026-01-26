@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTriangle, Cloud } from "lucide-react";
+import { Users, FileText, MessageSquare, HardDrive, TrendingUp, Clock, AlertTriangle, Cloud, ArrowUpDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { format, subDays, eachDayOfInterval } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
@@ -55,6 +56,8 @@ interface UserStorageData {
 // Limite de stockage Lovable Cloud (1 GB pour le plan gratuit)
 const LOVABLE_CLOUD_STORAGE_LIMIT_MB = 1024;
 
+type StorageSortKey = 'total' | 'capsules' | 'trees';
+
 const getQuotaColor = (percentage: number) => {
   if (percentage >= 80) return "text-destructive";
   if (percentage >= 60) return "text-amber-500";
@@ -72,6 +75,22 @@ export default function AdminDashboard() {
   const [storageHistory, setStorageHistory] = useState<StorageDataPoint[]>([]);
   const [userStorage, setUserStorage] = useState<UserStorageData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [storageSortKey, setStorageSortKey] = useState<StorageSortKey>('total');
+
+  // Sorted user storage based on selected key
+  const sortedUserStorage = useMemo(() => {
+    return [...userStorage].sort((a, b) => {
+      switch (storageSortKey) {
+        case 'capsules':
+          return b.capsuleStorageMb - a.capsuleStorageMb;
+        case 'trees':
+          return b.familyStorageMb - a.familyStorageMb;
+        case 'total':
+        default:
+          return b.storageMb - a.storageMb;
+      }
+    }).slice(0, 10);
+  }, [userStorage, storageSortKey]);
 
   useEffect(() => {
     fetchStats();
@@ -512,19 +531,50 @@ export default function AdminDashboard() {
         transition={{ duration: 0.3, delay: 0.5 }}
       >
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
             <CardTitle className="text-lg flex items-center gap-2">
               <Users className="h-5 w-5 text-blue-500" />
               Répartition du stockage par utilisateur (Top 10)
             </CardTitle>
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <ToggleGroup 
+                type="single" 
+                value={storageSortKey} 
+                onValueChange={(value) => value && setStorageSortKey(value as StorageSortKey)}
+                className="bg-muted/50 rounded-lg p-0.5"
+              >
+                <ToggleGroupItem 
+                  value="total" 
+                  aria-label="Trier par total"
+                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                >
+                  Total
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="capsules" 
+                  aria-label="Trier par capsules"
+                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                >
+                  <span className="text-orange-500">●</span> Capsules
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="trees" 
+                  aria-label="Trier par arbres"
+                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                >
+                  <span className="text-green-500">●</span> Arbres
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
           </CardHeader>
           <CardContent>
-            {userStorage.length > 0 ? (
+            {sortedUserStorage.length > 0 ? (
               <div className="space-y-6">
                 {/* Bar Chart */}
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
-                    data={userStorage}
+                    data={sortedUserStorage}
                     layout="vertical"
                     margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
                   >
@@ -586,7 +636,7 @@ export default function AdminDashboard() {
                 {/* Detailed List */}
                 <div className="space-y-3 pt-4 border-t">
                   <h4 className="text-sm font-medium text-muted-foreground">Détail par utilisateur</h4>
-                  {userStorage.map((user, index) => {
+                  {sortedUserStorage.map((user, index) => {
                     const usagePercent = Math.min((user.storageMb / user.storageLimitMb) * 100, 100);
                     const isNearLimit = usagePercent >= 80;
                     return (
