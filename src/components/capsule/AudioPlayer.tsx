@@ -333,7 +333,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         preload="metadata"
-        crossOrigin="anonymous"
       />
 
       {/* File name */}
