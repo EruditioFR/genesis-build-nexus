@@ -155,7 +155,8 @@ const CapsuleCreate = () => {
       if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
-        toast.error(t('create.uploadError'));
+         const firstError = uploadResult.files.find((f) => f.error)?.error;
+         toast.error(firstError || t('create.uploadError'));
         return;
       }
       
