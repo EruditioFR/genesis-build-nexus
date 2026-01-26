@@ -50,12 +50,16 @@ interface Profile {
   suspended_reason: string | null;
 }
 
+interface UserWithStorage extends Profile {
+  realStorageMb: number;
+}
+
 export default function AdminUsers() {
   const { isAdmin } = useAdminAuth();
-  const [users, setUsers] = useState<Profile[]>([]);
+  const [users, setUsers] = useState<UserWithStorage[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserWithStorage | null>(null);
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false);
   const [suspendReason, setSuspendReason] = useState("");
 
@@ -65,14 +69,38 @@ export default function AdminUsers() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .order("created_at", { ascending: false });
+    
+    // Fetch profiles, capsules, and capsule_medias in parallel
+    const [profilesResult, capsulesResult, capsuleMediasResult] = await Promise.all([
+      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("capsules").select("id, user_id"),
+      supabase.from("capsule_medias").select("capsule_id, file_size_bytes"),
+    ]);
 
-    if (!error && data) {
-      setUsers(data);
-    }
+    const profiles = profilesResult.data || [];
+    const capsules = capsulesResult.data || [];
+    const capsuleMedias = capsuleMediasResult.data || [];
+
+    // Create a map of capsule_id -> user_id
+    const capsuleToUser = new Map(capsules.map(c => [c.id, c.user_id]));
+    
+    // Calculate storage per user
+    const userStorageMap = new Map<string, number>();
+    capsuleMedias.forEach(media => {
+      const userId = capsuleToUser.get(media.capsule_id);
+      if (userId) {
+        const current = userStorageMap.get(userId) || 0;
+        userStorageMap.set(userId, current + (media.file_size_bytes || 0));
+      }
+    });
+
+    // Merge profiles with real storage
+    const usersWithStorage: UserWithStorage[] = profiles.map(profile => ({
+      ...profile,
+      realStorageMb: (userStorageMap.get(profile.user_id) || 0) / (1024 * 1024),
+    }));
+
+    setUsers(usersWithStorage);
     setLoading(false);
   };
 
@@ -213,13 +241,17 @@ export default function AdminUsers() {
                       <TableCell>{getSubscriptionBadge(user.subscription_level)}</TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {user.storage_used_mb} / {user.storage_limit_mb} MB
+                          {user.realStorageMb.toFixed(0)} / {user.storage_limit_mb} MB
                         </div>
                         <div className="w-20 h-1.5 bg-muted rounded-full mt-1">
                           <div
-                            className="h-full bg-primary rounded-full"
+                            className={`h-full rounded-full ${
+                              user.realStorageMb / user.storage_limit_mb >= 0.8 
+                                ? "bg-amber-500" 
+                                : "bg-primary"
+                            }`}
                             style={{
-                              width: `${Math.min((user.storage_used_mb / user.storage_limit_mb) * 100, 100)}%`,
+                              width: `${Math.min((user.realStorageMb / user.storage_limit_mb) * 100, 100)}%`,
                             }}
                           />
                         </div>
