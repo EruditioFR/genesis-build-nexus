@@ -1,74 +1,92 @@
 
-# Plan : Corriger l'affichage du stockage dans l'administration
 
-## Problème identifié
+# Plan de correction : Upload audio systématiquement en échec
 
-Les statistiques de stockage affichent 0 MB pour tous les utilisateurs car les **politiques de sécurité (RLS)** sur la table `capsule_medias` ne permettent pas aux administrateurs de voir les médias des autres utilisateurs.
+## Diagnostic
 
-### Données réelles en base :
-| Utilisateur | Stockage réel |
-|------------|---------------|
-| Jean-Baptiste Béjot (compte principal) | 74.06 MB |
-| Jean-Baptiste Béjot (autre compte) | 42.09 MB |
-| Emilie Béjot | 12.27 MB |
+L'erreur survient lors de la publication d'un souvenir audio :
+- L'utilisateur enregistre un message vocal
+- Au clic sur "Publier", l'upload du fichier échoue avec une erreur réseau
 
-### Cause technique
-- La table `capsules` a une politique RLS "Admins can view all capsules"
-- **La table `capsule_medias` n'a PAS de politique équivalente pour les admins**
-- Résultat : l'admin peut voir les capsules mais pas les fichiers médias associés
+### Causes identifiées
 
----
+1. **Types MIME manquants dans CapsuleCreate.tsx**  
+   Le composant `CapsuleCreate.tsx` passe une liste restrictive de types acceptés pour les souvenirs audio :
+   ```typescript
+   ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
+   ```
+   Il manque `audio/ogg` qui peut être généré par certains navigateurs.
 
-## Solution proposée
+2. **Changements non déployés**  
+   Les correctifs précédents (ajout de `audio/webm`, `audio/ogg` dans `MediaUpload.tsx`, header `Content-Type`) ne sont probablement pas encore actifs sur le site publié.
 
-### Étape 1 : Ajouter une politique RLS pour les admins sur `capsule_medias`
-
-Créer une nouvelle politique permettant aux admins/modérateurs de consulter tous les médias :
-
-```sql
-CREATE POLICY "Admins can view all medias"
-ON capsule_medias
-FOR SELECT
-TO authenticated
-USING (is_admin_or_moderator(auth.uid()));
-```
-
-### Étape 2 : Ajouter également la politique sur `family_person_media`
-
-Pour que le stockage des arbres généalogiques soit aussi visible :
-
-```sql
-CREATE POLICY "Admins can view all family media"
-ON family_person_media
-FOR SELECT
-TO authenticated
-USING (is_admin_or_moderator(auth.uid()));
-```
+3. **Erreur `storage_used_mb` en cascade**  
+   L'erreur de type integer sur le Dashboard pouvait interrompre le flux utilisateur après sauvegarde.
 
 ---
 
-## Résultat attendu
+## Plan de correction
 
-Après cette modification :
-- Le tableau des utilisateurs affichera le stockage réel (74 MB, 42 MB, 12 MB...)
-- Les graphiques de répartition fonctionneront correctement
-- La barre de progression du stockage sera précise
+### Étape 1 : Ajouter `audio/ogg` dans CapsuleCreate.tsx
+
+Modifier la liste des types acceptés pour les souvenirs audio (ligne 516) :
+
+```text
+Avant : ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
+Après : ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
+```
+
+### Étape 2 : Ajouter `audio/ogg` dans MobileCapsuleWizard.tsx
+
+Même correction pour la version mobile (ligne 238) :
+
+```text
+Avant : ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
+Après : ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
+```
+
+### Étape 3 : Ajouter un log d'erreur HTTP détaillé dans MediaUpload.tsx
+
+Améliorer le diagnostic en cas d'échec d'upload en loggant le code HTTP et la réponse :
+
+```typescript
+// Dans le gestionnaire d'erreur XHR
+xhr.addEventListener('load', () => {
+  if (xhr.status >= 200 && xhr.status < 300) {
+    resolve(fileName);
+  } else {
+    console.error('[MediaUpload] Upload failed:', {
+      status: xhr.status,
+      statusText: xhr.statusText,
+      response: xhr.responseText
+    });
+    // ...
+  }
+});
+```
+
+### Étape 4 : Publier les changements
+
+Une fois les corrections appliquées, publier le site pour que le site family-garden.lovable.app reflète les mises à jour.
 
 ---
 
-## Sections techniques
+## Résumé des fichiers à modifier
 
-### Politique RLS actuelle de `capsule_medias`
-```
-SELECT: user_can_view_capsule(auth.uid(), capsule_id)
-```
-Cette fonction vérifie uniquement si l'utilisateur est propriétaire ou membre d'un cercle partagé, pas s'il est admin.
+| Fichier | Modification |
+|---------|--------------|
+| `src/pages/CapsuleCreate.tsx` | Ajouter `audio/ogg` aux types acceptés |
+| `src/components/capsule/MobileCapsuleWizard.tsx` | Ajouter `audio/ogg` aux types acceptés |
+| `src/components/capsule/MediaUpload.tsx` | Ajouter log d'erreur HTTP détaillé |
 
-### Fonction `is_admin_or_moderator` existante
-```sql
-SELECT EXISTS (
-  SELECT 1 FROM public.user_roles
-  WHERE user_id = _user_id AND role IN ('admin', 'moderator')
-)
+---
+
+## Détails techniques
+
+Le composant `AudioRecorder` utilise `MediaRecorder` avec :
+```typescript
+mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
 ```
-Cette fonction est déjà utilisée ailleurs et sera réutilisée ici.
+
+Ce MIME type est ensuite utilisé lors de l'upload. Si le navigateur génère un format non listé dans `acceptedTypes`, le fichier sera rejeté avant même l'upload.
+
