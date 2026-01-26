@@ -31,6 +31,7 @@ interface Stats {
   totalStorageUsed: number;
   capsuleStorageMb: number;
   familyStorageMb: number;
+  avatarStorageMb: number;
   recentSignups: number;
   premiumUsers: number;
 }
@@ -88,6 +89,7 @@ export default function AdminDashboard() {
       familyMediasResult,
       familyTreesResult,
       familyPersonsResult,
+      avatarFilesResult,
     ] = await Promise.all([
       supabase.from("profiles").select("*"),
       supabase.from("capsules").select("*"),
@@ -96,6 +98,7 @@ export default function AdminDashboard() {
       supabase.from("family_person_media").select("file_size_bytes, created_at, person_id"),
       supabase.from("family_trees").select("id, user_id"),
       supabase.from("family_persons").select("id, tree_id"),
+      supabase.storage.from("avatars").list("", { limit: 1000 }),
     ]);
 
     const profiles = profilesResult.data || [];
@@ -153,13 +156,18 @@ export default function AdminDashboard() {
 
     setUserStorage(userStorageData);
 
+    // Calculate avatar storage from storage bucket
+    const avatarFiles = avatarFilesResult.data || [];
+    const avatarStorageBytes = avatarFiles.reduce((acc, f) => acc + (f.metadata?.size || 0), 0);
+
     // Calculate real storage from media files
     const capsuleStorageBytes = capsuleMedias.reduce((acc, m) => acc + (m.file_size_bytes || 0), 0);
     const familyStorageBytes = familyMedias.reduce((acc, m) => acc + (Number(m.file_size_bytes) || 0), 0);
-    const totalStorageBytes = capsuleStorageBytes + familyStorageBytes;
+    const totalStorageBytes = capsuleStorageBytes + familyStorageBytes + avatarStorageBytes;
     const totalStorageMb = totalStorageBytes / (1024 * 1024);
     const capsuleStorageMb = capsuleStorageBytes / (1024 * 1024);
     const familyStorageMb = familyStorageBytes / (1024 * 1024);
+    const avatarStorageMb = avatarStorageBytes / (1024 * 1024);
 
     // Calculate storage history (last 30 days)
     const dateRange = eachDayOfInterval({
@@ -202,6 +210,7 @@ export default function AdminDashboard() {
       totalComments: commentsResult.count || 0,
       totalStorageUsed: totalStorageMb,
       capsuleStorageMb,
+      avatarStorageMb,
       familyStorageMb,
       recentSignups: profiles.filter((p) => new Date(p.created_at) > weekAgo).length,
       premiumUsers: profiles.filter((p) => p.subscription_level === "premium").length,
@@ -257,7 +266,7 @@ export default function AdminDashboard() {
       title: "Stockage Total",
       value: `${(stats.totalStorageUsed / 1024).toFixed(2)} GB`,
       icon: HardDrive,
-      description: `Capsules: ${stats.capsuleStorageMb.toFixed(0)} MB · Arbres: ${stats.familyStorageMb.toFixed(0)} MB`,
+      description: `Capsules: ${stats.capsuleStorageMb.toFixed(0)} MB · Arbres: ${stats.familyStorageMb.toFixed(0)} MB · Avatars: ${stats.avatarStorageMb.toFixed(0)} MB`,
       color: "text-orange-500",
     },
     {
@@ -367,7 +376,7 @@ export default function AdminDashboard() {
                   </div>
                   
                   {/* Répartition */}
-                  <div className="grid grid-cols-2 gap-4 text-sm pt-2 border-t">
+                  <div className="grid grid-cols-3 gap-3 text-sm pt-2 border-t">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded bg-orange-500" />
                       <span className="text-muted-foreground">Capsules:</span>
@@ -377,6 +386,11 @@ export default function AdminDashboard() {
                       <div className="w-3 h-3 rounded bg-green-500" />
                       <span className="text-muted-foreground">Arbres:</span>
                       <span className="font-medium">{stats.familyStorageMb.toFixed(0)} MB</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded bg-blue-500" />
+                      <span className="text-muted-foreground">Avatars:</span>
+                      <span className="font-medium">{stats.avatarStorageMb.toFixed(0)} MB</span>
                     </div>
                   </div>
 
