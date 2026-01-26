@@ -163,6 +163,14 @@ const MediaUpload = ({
     const fileExt = mediaFile.file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
+    console.log('[MediaUpload] Starting upload:', {
+      fileName: mediaFile.file.name,
+      mimeType: mediaFile.file.type,
+      size: mediaFile.file.size,
+      sizeFormatted: formatFileSize(mediaFile.file.size),
+      targetPath: fileName
+    });
+
     // Get auth session for the upload
     const { data: sessionData } = await supabase.auth.getSession();
     const accessToken = sessionData?.session?.access_token;
