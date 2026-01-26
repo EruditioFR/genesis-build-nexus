@@ -217,8 +217,8 @@ const Dashboard = () => {
           }
         }
         
-        // Convert bytes to MB for storage display
-        const actualStorageUsedMb = Math.round((actualStorageUsedBytes / (1024 * 1024)) * 100) / 100;
+        // Convert bytes to MB for storage display (round to integer for DB compatibility)
+        const actualStorageUsedMb = Math.round(actualStorageUsedBytes / (1024 * 1024));
         
         // Update profile with actual storage if different
         if (profileData && Math.abs(actualStorageUsedMb - (profileData.storage_used_mb || 0)) > 0.01) {
