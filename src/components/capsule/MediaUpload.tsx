@@ -196,6 +196,13 @@ const MediaUpload = ({
         if (xhr.status >= 200 && xhr.status < 300) {
           resolve(fileName);
         } else {
+          console.error('[MediaUpload] Upload failed:', {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            response: xhr.responseText,
+            fileName: mediaFile.file.name,
+            mimeType: mediaFile.file.type
+          });
           try {
             const response = JSON.parse(xhr.responseText);
             reject(new Error(response.message || t('media.uploadError', { status: xhr.status })));

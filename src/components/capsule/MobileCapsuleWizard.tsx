@@ -308,7 +308,7 @@ const MobileCapsuleWizard = ({
                   : capsuleType === 'video'
                     ? ['video/mp4', 'video/webm', 'video/quicktime']
                     : capsuleType === 'audio'
-                      ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
+                      ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
                       : undefined
               }
               onUploadAll={onUploadAllRef}
