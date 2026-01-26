@@ -834,9 +834,16 @@ const CapsuleDetail = () => {
                     <Users className="w-4 h-4" />
                     {t('detail.sharedWith')}
                   </h3>
-                  <Button variant="ghost" size="sm" onClick={() => setShareDialogOpen(true)} className="h-7 px-2 text-xs">
-                    {t('detail.edit')}
-                  </Button>
+                  {isOwner && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShareDialogOpen(true)}
+                      className="h-7 px-2 text-xs"
+                    >
+                      {t('detail.edit')}
+                    </Button>
+                  )}
                 </div>
 
                 {sharedCircles.length === 0 ? (
@@ -865,17 +872,19 @@ const CapsuleDetail = () => {
           </div>
         </main>
 
-      {/* Share Dialog */}
-      <ShareCapsuleDialog
-        open={shareDialogOpen}
-        onOpenChange={(open) => {
-          setShareDialogOpen(open);
-          if (!open) refreshShares();
-        }}
-        capsuleId={capsule.id}
-        capsuleTitle={capsule.title}
-        userId={user.id}
-      />
+      {/* Share Dialog (owner only) */}
+      {isOwner && (
+        <ShareCapsuleDialog
+          open={shareDialogOpen}
+          onOpenChange={(open) => {
+            setShareDialogOpen(open);
+            if (!open) refreshShares();
+          }}
+          capsuleId={capsule.id}
+          capsuleTitle={capsule.title}
+          userId={user.id}
+        />
+      )}
 
       {/* Delete Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
