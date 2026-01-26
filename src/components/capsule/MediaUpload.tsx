@@ -171,7 +171,7 @@ const MediaUpload = ({
 
     const contentType = normalizeMimeType(mediaFile.file.type);
 
-    console.log('[MediaUpload] Starting upload:', {
+    console.log('[MediaUpload] Starting SDK upload:', {
       fileName: mediaFile.file.name,
       mimeType: mediaFile.file.type,
       normalizedMimeType: contentType,
@@ -180,78 +180,39 @@ const MediaUpload = ({
       targetPath: fileName
     });
 
-    // Get auth session for the upload
-    const { data: sessionData } = await supabase.auth.getSession();
-    const accessToken = sessionData?.session?.access_token;
+    // Create a new File with normalized MIME type for the SDK
+    const normalizedFile = new File([mediaFile.file], mediaFile.file.name, { 
+      type: contentType 
+    });
 
-    if (!accessToken) {
-      throw new Error(t('media.notAuthenticated'));
+    // Use Supabase SDK for upload (handles headers automatically)
+    const { data, error } = await supabase.storage
+      .from('capsule-medias')
+      .upload(fileName, normalizedFile, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: contentType,
+      });
+
+    if (error) {
+      console.error('[MediaUpload] SDK upload failed:', {
+        error: error.message,
+        fileName: mediaFile.file.name,
+        mimeType: mediaFile.file.type,
+        normalizedMimeType: contentType,
+      });
+      throw new Error(error.message || t('media.uploadError', { status: 'SDK' }));
     }
 
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const uploadUrl = `${supabaseUrl}/storage/v1/object/capsule-medias/${fileName}`;
-
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.upload.addEventListener('progress', (event) => {
-        if (event.lengthComputable) {
-          const percentComplete = Math.round((event.loaded / event.total) * 100);
-          onProgress(percentComplete);
-        }
-      });
-
-      xhr.addEventListener('load', () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(fileName);
-        } else {
-          console.error('[MediaUpload] Upload failed:', {
-            status: xhr.status,
-            statusText: xhr.statusText,
-            response: xhr.responseText,
-            fileName: mediaFile.file.name,
-            mimeType: mediaFile.file.type
-          });
-          try {
-            const response = JSON.parse(xhr.responseText);
-            reject(new Error(response.message || t('media.uploadError', { status: xhr.status })));
-          } catch {
-            reject(new Error(t('media.uploadError', { status: xhr.status })));
-          }
-        }
-      });
-
-      xhr.addEventListener('error', () => {
-        console.error('[MediaUpload] Network error during upload:', {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          response: xhr.responseText,
-          fileName: mediaFile.file.name,
-          mimeType: mediaFile.file.type,
-          normalizedMimeType: contentType,
-        });
-        reject(new Error(`${t('media.networkError')} (status: ${xhr.status || 0})`));
-      });
-
-      xhr.addEventListener('timeout', () => {
-        console.error('[MediaUpload] Upload timeout:', {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          response: xhr.responseText,
-          fileName: mediaFile.file.name,
-          mimeType: mediaFile.file.type,
-          normalizedMimeType: contentType,
-        });
-        reject(new Error(`${t('media.timeoutError')} (status: ${xhr.status || 0})`));
-      });
-
-      xhr.open('POST', uploadUrl);
-      xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-      xhr.setRequestHeader('Content-Type', contentType);
-      xhr.setRequestHeader('x-upsert', 'false');
-      xhr.timeout = 300000; // 5 minutes timeout for large files
-      xhr.send(mediaFile.file);
+    console.log('[MediaUpload] SDK upload success:', {
+      path: data.path,
+      fileName: mediaFile.file.name,
     });
+
+    // Signal completion
+    onProgress(100);
+
+    return fileName;
   }, [userId, t]);
 
   const uploadAllFiles = useCallback(async (): Promise<UploadResult> => {
