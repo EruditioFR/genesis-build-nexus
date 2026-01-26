@@ -39,6 +39,9 @@ import AvatarUpload from '@/components/profile/AvatarUpload';
 import GuardiansSection from '@/components/profile/GuardiansSection';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
+import { CountrySelector } from '@/components/signup/CountrySelector';
+import { CitySelector } from '@/components/signup/CitySelector';
+import { getCountryName } from '@/lib/countries';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -48,6 +51,8 @@ type ProfileFormValues = {
   display_name: string;
   bio?: string | null;
   birth_date?: Date | null;
+  country?: string | null;
+  city?: string | null;
 };
 
 
@@ -73,6 +78,8 @@ const Profile = () => {
       .optional()
       .nullable(),
     birth_date: z.date().optional().nullable(),
+    country: z.string().max(2).optional().nullable(),
+    city: z.string().max(255).optional().nullable(),
   });
 
   const subscriptionLabels: Record<string, { label: string; color: string }> = {
@@ -86,12 +93,17 @@ const Profile = () => {
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isManaging, setIsManaging] = useState(false);
   const [realStorageUsedMb, setRealStorageUsedMb] = useState<number>(0);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       display_name: '',
       bio: '',
       birth_date: null,
+      country: '',
+      city: '',
     },
   });
 
@@ -113,10 +125,15 @@ const Profile = () => {
 
     if (!error && data) {
       setProfile(data);
+      const profileData = data as Profile & { country?: string | null; city?: string | null };
+      setSelectedCountry(profileData.country || '');
+      setSelectedCity(profileData.city || '');
       form.reset({
         display_name: data.display_name || '',
         bio: data.bio || '',
         birth_date: data.birth_date ? new Date(data.birth_date) : null,
+        country: profileData.country || '',
+        city: profileData.city || '',
       });
     }
 
@@ -236,7 +253,9 @@ const Profile = () => {
           display_name: values.display_name,
           bio: values.bio || null,
           birth_date: values.birth_date ? format(values.birth_date, 'yyyy-MM-dd') : null,
-        })
+          country: selectedCountry || null,
+          city: selectedCity || null,
+        } as any)
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -246,7 +265,9 @@ const Profile = () => {
         display_name: values.display_name,
         bio: values.bio || null,
         birth_date: values.birth_date ? format(values.birth_date, 'yyyy-MM-dd') : null,
-      } : null);
+        country: selectedCountry || null,
+        city: selectedCity || null,
+      } as Profile : null);
 
       toast.success(t('profile.saveSuccess'));
     } catch (error: any) {
@@ -427,6 +448,32 @@ const Profile = () => {
                     </FormItem>
                   )}
                 />
+
+                {/* Country & City */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <FormItem>
+                    <FormLabel>{t('profile.country')}</FormLabel>
+                    <CountrySelector 
+                      value={selectedCountry} 
+                      onChange={setSelectedCountry} 
+                    />
+                    <FormDescription>
+                      {t('profile.countryHint')}
+                    </FormDescription>
+                  </FormItem>
+
+                  <FormItem>
+                    <FormLabel>{t('profile.city')}</FormLabel>
+                    <CitySelector 
+                      value={selectedCity} 
+                      onChange={setSelectedCity}
+                      countryCode={selectedCountry}
+                    />
+                    <FormDescription>
+                      {t('profile.cityHint')}
+                    </FormDescription>
+                  </FormItem>
+                </div>
 
                 <FormField
                   control={form.control}
