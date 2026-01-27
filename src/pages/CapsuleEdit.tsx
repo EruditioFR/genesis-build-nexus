@@ -41,6 +41,7 @@ import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
 import MediaUpload, { type MediaFile, type UploadResult } from '@/components/capsule/MediaUpload';
+import { AudioRecorder } from '@/components/capsule/AudioRecorder';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
@@ -526,6 +527,32 @@ const CapsuleEdit = () => {
               </div>
             )}
 
+            {/* Audio Recorder for audio capsules */}
+            {capsuleType === 'audio' && (
+              <div className="p-6 rounded-2xl border border-border bg-card">
+                <Label className="text-base font-medium mb-4 block">
+                  {t('edit.recordAudio', 'Enregistrer un audio')}
+                </Label>
+                <AudioRecorder
+                  onRecordingComplete={(blob, fileName) => {
+                    const file = new File([blob], fileName, { type: blob.type });
+                    const mediaFile: MediaFile = {
+                      id: `recording-${Date.now()}`,
+                      file,
+                      preview: URL.createObjectURL(blob),
+                      type: 'audio',
+                      uploading: false,
+                      uploaded: false,
+                      progress: 0,
+                    };
+                    setMediaFiles(prev => [...prev, mediaFile]);
+                    if (mediaError) setMediaError(false);
+                  }}
+                  maxDurationSeconds={300}
+                />
+              </div>
+            )}
+
             {/* New Media Upload */}
             {capsuleType !== 'text' && (
               <div 
@@ -534,7 +561,7 @@ const CapsuleEdit = () => {
                 }`}
               >
                 <Label className="text-base font-medium mb-4 block">
-                  {t('edit.addNewMedia')}
+                  {capsuleType === 'audio' ? t('edit.uploadAudioFile', 'Ou importer un fichier audio') : t('edit.addNewMedia')}
                 </Label>
                 {mediaError && (
                   <p className="text-sm text-destructive mb-4">
@@ -555,7 +582,7 @@ const CapsuleEdit = () => {
                       : capsuleType === 'video'
                         ? ['video/mp4', 'video/webm', 'video/quicktime']
                         : capsuleType === 'audio'
-                          ? ['audio/mpeg', 'audio/wav', 'audio/mp4']
+                          ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
                           : undefined
                   }
                   onUploadAll={(uploadFn) => {
