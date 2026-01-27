@@ -363,12 +363,12 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left Column - 2/3 width */}
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
+            <RecentCapsules capsules={recentCapsules} />
             <StorageProgress
               usedMb={profile?.storage_used_mb || 0}
               limitMb={profile?.storage_limit_mb || 500}
               subscriptionLevel={profile?.subscription_level || 'free'}
             />
-            <RecentCapsules capsules={recentCapsules} />
           </div>
 
           {/* Right Column - 1/3 width */}
