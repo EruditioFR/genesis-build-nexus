@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Send, Edit3, Trash2, CalendarHeart } from 'lucide-react';
+import { ArrowLeft, Save, Send, Edit3, Trash2, CalendarHeart, Music, Play, Pause } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -682,6 +682,8 @@ const ExistingMediaItem = ({
 }) => {
   const { t } = useTranslation('capsules');
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const loadPreview = async () => {
@@ -693,19 +695,66 @@ const ExistingMediaItem = ({
 
   const isImage = media.file_type.startsWith('image/');
   const isVideo = media.file_type.startsWith('video/');
+  const isAudio = media.file_type.startsWith('audio/');
+
+  const toggleAudioPlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleAudioEnded = () => {
+    setIsPlaying(false);
+  };
 
   return (
     <div className="relative group">
-      <div className="aspect-square rounded-lg overflow-hidden bg-muted">
+      <div className={`rounded-lg overflow-hidden bg-muted ${isAudio ? 'p-4' : 'aspect-square'}`}>
         {isImage && previewUrl && (
           <img src={previewUrl} alt={media.file_name || 'Media'} className="w-full h-full object-cover" />
         )}
         {isVideo && previewUrl && (
           <video src={previewUrl} className="w-full h-full object-cover" />
         )}
-        {!isImage && !isVideo && (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-            <span className="text-xs">{media.file_name || 'Audio'}</span>
+        {isAudio && (
+          <div className="flex flex-col items-center gap-3 py-2">
+            <div className="w-14 h-14 rounded-full bg-orange-500/20 flex items-center justify-center">
+              <Music className="w-7 h-7 text-orange-600" />
+            </div>
+            <p className="text-xs text-muted-foreground text-center truncate max-w-full px-2">
+              {media.file_name || 'Audio'}
+            </p>
+            {previewUrl && (
+              <>
+                <audio 
+                  ref={audioRef} 
+                  src={previewUrl} 
+                  onEnded={handleAudioEnded}
+                  className="hidden"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={toggleAudioPlay}
+                  className="gap-2"
+                >
+                  {isPlaying ? (
+                    <><Pause className="w-4 h-4" /> {t('edit.pause', 'Pause')}</>
+                  ) : (
+                    <><Play className="w-4 h-4" /> {t('edit.play', 'Écouter')}</>
+                  )}
+                </Button>
+              </>
+            )}
+          </div>
+        )}
+        {!isImage && !isVideo && !isAudio && (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground aspect-square">
+            <span className="text-xs">{media.file_name || 'Fichier'}</span>
           </div>
         )}
       </div>
@@ -713,10 +762,11 @@ const ExistingMediaItem = ({
         <AlertDialogTrigger asChild>
           <Button
             variant="destructive"
-            size="icon"
-            className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+            size="sm"
+            className={`absolute top-2 right-2 gap-1 ${isAudio ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity`}
           >
             <Trash2 className="w-3.5 h-3.5" />
+            <span className="sr-only sm:not-sr-only">{t('edit.delete', 'Supprimer')}</span>
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
