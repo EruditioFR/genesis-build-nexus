@@ -207,7 +207,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
               height="36"
               loading="eager"
             />
-            <span className="text-lg font-display font-semibold text-white hidden sm:inline">
+            <span className="text-base sm:text-lg font-display font-semibold text-white">
               Family<span className="text-secondary">Garden</span>
             </span>
           </Link>
