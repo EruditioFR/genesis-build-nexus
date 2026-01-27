@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
+import AudioWaveBackground from '@/components/capsule/AudioWaveBackground';
 import { supabase } from '@/integrations/supabase/client';
 import type { Category } from '@/hooks/useCategories';
 
@@ -252,6 +253,15 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                             fallbackIcon={null}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
+                        ) : capsule.type === 'audio' ? (
+                          <div className="w-full h-full relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20">
+                            <AudioWaveBackground animated={false} barCount={35} />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-14 h-14 rounded-full bg-orange-500/20 backdrop-blur-sm flex items-center justify-center">
+                                <Music className="w-7 h-7 text-orange-600 dark:text-orange-400" />
+                              </div>
+                            </div>
+                          </div>
                         ) : capsule.type === 'text' && capsule.content ? (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 p-4">
                             <p className="text-sm text-amber-800 dark:text-amber-200 line-clamp-4 text-center italic leading-relaxed font-serif">
