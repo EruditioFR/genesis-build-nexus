@@ -6,7 +6,11 @@
       "line2": "souvenirs s'effacer,",
       "line3": "faites-en un trésor familial."
     },
-    "subtitle": "Une famille est un jardin qui se cultive chaque jour. Avec FamilyGarden, ne laissez plus vos plus beaux instants s'envoler au vent. Enracinez vos souvenirs — récits, rires enregistrés, vidéos complices — dans un espace protégé qui vous ressemble. Vous êtes le gardien de ce patrimoine : décidez de ce qui reste dans votre jardin secret et de ce que vous souhaitez faire fleurir chez vos proches.",
+    "subtitle": {
+      "line1": "Une famille est un jardin qui se cultive chaque jour. Avec FamilyGarden, ne laissez plus vos plus beaux instants s'envoler au vent.",
+      "line2": "Enracinez vos souvenirs (récits, rires enregistrés, vidéos complices) dans un espace protégé qui vous ressemble.",
+      "line3": "Vous êtes le gardien de ce patrimoine : décidez de ce qui reste dans votre jardin secret et de ce que vous souhaitez faire fleurir chez vos proches."
+    },
     "cta": {
       "primary": "Commencer gratuitement",
       "secondary": "Voir la démo"

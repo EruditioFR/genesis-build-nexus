@@ -6,7 +6,11 @@
       "line2": "memories fade away,",
       "line3": "make them a family treasure."
     },
-    "subtitle": "A family is a garden that grows every day. With FamilyGarden, don't let your most precious moments slip away. Root your memories — stories, recorded laughter, shared videos — in a protected space that reflects who you are. You are the guardian of this heritage: decide what stays in your secret garden and what you wish to share with your loved ones.",
+    "subtitle": {
+      "line1": "A family is a garden that grows every day. With FamilyGarden, don't let your most precious moments slip away.",
+      "line2": "Root your memories (stories, recorded laughter, shared videos) in a protected space that reflects who you are.",
+      "line3": "You are the guardian of this heritage: decide what stays in your secret garden and what you wish to share with your loved ones."
+    },
     "cta": {
       "primary": "Get started free",
       "secondary": "Watch demo"
