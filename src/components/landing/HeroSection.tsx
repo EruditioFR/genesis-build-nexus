@@ -4,7 +4,7 @@ import { Play, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import heroBackground from "@/assets/hero-background.jpg";
+import heroBackground from "@/assets/hero-background.webp";
 const HeroSection = () => {
   const {
     t
