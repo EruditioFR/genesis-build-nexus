@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
-import heroBackground from '@/assets/hero-background.jpg';
+import heroBackground from '@/assets/hero-background.webp';
 
 const Login = () => {
   const { t } = useTranslation('auth');
