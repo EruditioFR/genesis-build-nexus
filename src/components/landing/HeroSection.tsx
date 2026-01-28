@@ -76,7 +76,6 @@ const HeroSection = () => {
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">{t('hero.title.line1')}</span>
             <span className="block">{t('hero.title.line2')}</span>
-            
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
