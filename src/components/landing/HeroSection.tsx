@@ -5,46 +5,39 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import heroBackground from "@/assets/hero-background.jpg";
-
 const HeroSection = () => {
-  const { t } = useTranslation('landing');
+  const {
+    t
+  } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
-  
-  const { scrollYProgress } = useScroll({
+  const {
+    scrollYProgress
+  } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
-  
+
   // Parallax effect: background moves slower than scroll
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
   const floatingElementsY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
   return <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay - Parallax */}
-      <motion.div 
-        className="absolute inset-0 h-[130%] -top-[15%]"
-        style={{ y: backgroundY, scale: backgroundScale }}
-      >
-        <img 
-          src={heroBackground} 
-          alt={t('hero.badge')} 
-          className="w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
+      <motion.div className="absolute inset-0 h-[130%] -top-[15%]" style={{
+      y: backgroundY,
+      scale: backgroundScale
+    }}>
+        <img src={heroBackground} alt={t('hero.badge')} className="w-full h-full object-cover" loading="eager" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/50 to-primary/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/25 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-secondary/15" />
       </motion.div>
 
       {/* Floating Elements - Parallax - Hidden on mobile for cleaner look */}
-      <motion.div 
-        className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block"
-        style={{ y: floatingElementsY }}
-      >
+      <motion.div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block" style={{
+      y: floatingElementsY
+    }}>
         <motion.div animate={{
         y: [0, -20, 0],
         rotate: [0, 5, 0]
@@ -63,33 +56,30 @@ const HeroSection = () => {
       }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/30 blur-2xl" />
       </motion.div>
 
-      <motion.div 
-        className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20"
-        style={{ opacity: contentOpacity }}
-      >
+      <motion.div className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20" style={{
+      opacity: contentOpacity
+    }}>
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-        <motion.div 
-          initial={{
-            opacity: 0,
-            y: 20
-          }} 
-          animate={{
-            opacity: 1,
-            y: 0
-          }} 
-          transition={{
-            duration: 0.6
-          }} 
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/30 mb-5 sm:mb-8"
-        >
-            <motion.div
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
+        <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6
+        }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/30 mb-5 sm:mb-8">
+            <motion.div animate={{
+            rotate: [0, 15, -15, 0]
+          }} transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}>
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
             </motion.div>
-            <span className="text-xs sm:text-sm font-medium text-primary-foreground">{t('hero.badge')}</span>
+            
           </motion.div>
 
           {/* Main Title */}
@@ -105,7 +95,7 @@ const HeroSection = () => {
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">{t('hero.title.line1')}</span>
             <span className="block">{t('hero.title.line2')}</span>
-            <span className="block mt-2 sm:mt-3 text-primary-foreground">{t('hero.title.line3')}</span>
+            
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
@@ -135,38 +125,48 @@ const HeroSection = () => {
           duration: 0.7,
           delay: 0.3
         }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-full sm:w-auto"
-            >
+            <motion.div whileHover={{
+            scale: 1.05,
+            y: -2
+          }} whileTap={{
+            scale: 0.98
+          }} transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 17
+          }} className="w-full sm:w-auto">
               <Button asChild variant="hero" size="xl" className="group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <Link to="/signup">
                   {t('hero.cta.primary')}
-                  <motion.span
-                    className="inline-flex"
-                    whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 400 }}
-                  >
+                  <motion.span className="inline-flex" whileHover={{
+                  x: 4
+                }} transition={{
+                  type: "spring",
+                  stiffness: 400
+                }}>
                     <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
                   </motion.span>
                 </Link>
               </Button>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-full sm:w-auto"
-            >
+            <motion.div whileHover={{
+            scale: 1.05,
+            y: -2
+          }} whileTap={{
+            scale: 0.98
+          }} transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 17
+          }} className="w-full sm:w-auto">
               <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <a href="#how-it-works">
-                  <motion.span 
-                    className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400 }}
-                  >
+                  <motion.span className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors" whileHover={{
+                  scale: 1.1
+                }} transition={{
+                  type: "spring",
+                  stiffness: 400
+                }}>
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                   </motion.span>
                   {t('hero.cta.secondary')}
