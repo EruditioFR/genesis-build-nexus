@@ -61,26 +61,7 @@ const HeroSection = () => {
     }}>
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-        <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6
-        }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/30 mb-5 sm:mb-8">
-            <motion.div animate={{
-            rotate: [0, 15, -15, 0]
-          }} transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}>
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
-            </motion.div>
-            
-          </motion.div>
+        
 
           {/* Main Title */}
           <motion.h1 initial={{
