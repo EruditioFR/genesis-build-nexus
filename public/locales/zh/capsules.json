@@ -159,6 +159,7 @@
       "type": "类型",
       "info": "信息",
       "media": "媒体",
+      "content": "内容",
       "details": "详情",
       "review": "确认"
     },
@@ -166,6 +167,8 @@
     "cancel": "取消",
     "back": "返回",
     "continue": "继续",
+    "contentTitle": "内容",
+    "contentSubtitle": "添加文字、照片、视频或音频",
     "typeTitle": "回忆类型",
     "typeSubtitle": "您想添加什么类型的回忆？",
     "infoTitle": "信息",
@@ -387,5 +390,19 @@
     "error_add": "添加评论时出错",
     "error_update": "修改评论时出错",
     "error_delete": "删除评论时出错"
+  },
+  "unifiedMedia": {
+    "title": "内容",
+    "textTitle": "文字",
+    "photosTitle": "照片",
+    "videosTitle": "视频",
+    "audioTitle": "音频",
+    "noPhotos": "无照片",
+    "noVideos": "无视频",
+    "noAudio": "无音频",
+    "videoLocked": "视频已锁定",
+    "audioLocked": "音频已锁定",
+    "videoRestricted": "视频需要高级版订阅",
+    "audioRestricted": "音频需要高级版订阅"
   }
 }

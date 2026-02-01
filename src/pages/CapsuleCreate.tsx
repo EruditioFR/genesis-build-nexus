@@ -26,16 +26,17 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
-import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
-import MediaUpload, { type MediaFile, type UploadResult } from '@/components/capsule/MediaUpload';
+import UnifiedMediaSection, { type MediaFile, type UploadResult } from '@/components/capsule/UnifiedMediaSection';
 import ScheduleSelector from '@/components/capsule/ScheduleSelector';
 import LegacySettings from '@/components/capsule/LegacySettings';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import MobileCapsuleWizard from '@/components/capsule/MobileCapsuleWizard';
 import { useCategories } from '@/hooks/useCategories';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { captureVideoThumbnail, uploadVideoThumbnail } from '@/lib/videoThumbnail';
+import { determineContentType, validateContentForPlan } from '@/lib/capsuleTypeUtils';
 import MemoryDateSelector, { 
   type MemoryDateValue, 
   memoryDateToStorage,
@@ -56,9 +57,11 @@ const CapsuleCreate = () => {
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
   const { categories, subCategories, setCapsuleCategories, setCapsuleSubCategories, createCustomCategory, getSubCategoriesForCategory } = useCategories();
-  const [capsuleType, setCapsuleType] = useState<CapsuleType>('text');
+  const { canCreateCapsuleType } = useFeatureAccess();
+  
   const [tags, setTags] = useState<string[]>([]);
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
+  const [textContent, setTextContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   
@@ -79,7 +82,7 @@ const CapsuleCreate = () => {
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
   const [mediaError, setMediaError] = useState(false);
   
-  // Reference to the upload function from MediaUpload component
+  // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
 
   // Get prompt from URL if present
@@ -92,9 +95,6 @@ const CapsuleCreate = () => {
     description: z.string()
       .max(500, t('create.descriptionMaxLength'))
       .optional(),
-    content: z.string()
-      .max(10000, t('create.contentMaxLength'))
-      .optional(),
   });
 
   type CapsuleFormValues = z.infer<typeof capsuleSchema>;
@@ -104,7 +104,6 @@ const CapsuleCreate = () => {
     defaultValues: {
       title: promptFromUrl || '',
       description: '',
-      content: '',
     },
   });
 
@@ -134,6 +133,9 @@ const CapsuleCreate = () => {
     navigate('/');
   };
 
+  // Calculate the capsule type based on content
+  const calculatedCapsuleType = determineContentType(textContent, mediaFiles);
+
   const saveCapsule = async (status: CapsuleStatus) => {
     const isValid = await form.trigger();
     if (!isValid) return;
@@ -141,12 +143,25 @@ const CapsuleCreate = () => {
     // Reset media error state
     setMediaError(false);
 
+    // Validate content against user's plan
+    const validation = validateContentForPlan(
+      mediaFiles,
+      undefined,
+      canCreateCapsuleType('video'),
+      canCreateCapsuleType('audio')
+    );
+
+    if (!validation.valid) {
+      toast.error(t(validation.errorKey!));
+      return;
+    }
+
     // Keep track of uploaded files (will be updated after upload)
     let uploadedMediaFiles = mediaFiles;
 
-    // Check if media files need uploading for non-text capsules
+    // Check if media files need uploading
     const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
-    if (capsuleType !== 'text' && pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
+    if (pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
       setIsSaving(true);
       
       // Upload all files and get the updated files with URLs
@@ -155,8 +170,8 @@ const CapsuleCreate = () => {
       if (!uploadResult.success) {
         setIsSaving(false);
         setMediaError(true);
-         const firstError = uploadResult.files.find((f) => f.error)?.error;
-         toast.error(firstError || t('create.uploadError'));
+        const firstError = uploadResult.files.find((f) => f.error)?.error;
+        toast.error(firstError || t('create.uploadError'));
         return;
       }
       
@@ -179,6 +194,9 @@ const CapsuleCreate = () => {
       } else if (status === 'published') {
         publishedAt = new Date().toISOString();
       }
+
+      // Determine the capsule type from content
+      const capsuleType = determineContentType(textContent, uploadedMediaFiles);
 
       // Generate video thumbnail if applicable
       let thumbnailUrl: string | null = null;
@@ -205,7 +223,7 @@ const CapsuleCreate = () => {
           user_id: user!.id,
           title: values.title,
           description: values.description || null,
-          content: values.content || null,
+          content: textContent || null,
           capsule_type: capsuleType,
           status: finalStatus,
           tags: tags.length > 0 ? tags : null,
@@ -240,7 +258,6 @@ const CapsuleCreate = () => {
 
         if (legacyError) {
           console.error('Error creating legacy settings:', legacyError);
-          // Don't throw, just log - the capsule is already created
         }
       }
 
@@ -310,10 +327,8 @@ const CapsuleCreate = () => {
         onTitleChange={(value) => form.setValue('title', value)}
         description={form.watch('description') || ''}
         onDescriptionChange={(value) => form.setValue('description', value)}
-        content={form.watch('content') || ''}
-        onContentChange={(value) => form.setValue('content', value)}
-        capsuleType={capsuleType}
-        onCapsuleTypeChange={setCapsuleType}
+        content={textContent}
+        onContentChange={setTextContent}
         categories={categories}
         subCategories={subCategories}
         primaryCategory={primaryCategory}
@@ -410,14 +425,6 @@ const CapsuleCreate = () => {
               />
             </div>
 
-            {/* Type selector */}
-            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-type">
-              <Label className="text-base font-medium mb-4 block">
-                {t('create.typeLabel')}
-              </Label>
-              <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
-            </div>
-
             {/* Main form */}
             <Form {...form}>
               <form className="p-6 rounded-2xl border border-border bg-card space-y-6" data-tour="capsule-title">
@@ -457,72 +464,29 @@ const CapsuleCreate = () => {
                     </FormItem>
                   )}
                 />
-
-                {capsuleType === 'text' && (
-                  <FormField
-                    control={form.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('create.content')}</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t('create.contentPlaceholder')}
-                            className="resize-none min-h-[200px]"
-                            rows={8}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
               </form>
             </Form>
 
-            {/* Media Upload - shown for non-text types */}
-            {capsuleType !== 'text' && (
-              <div 
-                className={`p-6 rounded-2xl border bg-card transition-all ${
-                  mediaError ? 'border-destructive ring-2 ring-destructive/20' : 'border-border'
-                }`} 
-                data-tour="capsule-media"
-              >
-                <Label className="text-base font-medium mb-4 block">
-                  {t('create.media')}
-                </Label>
-                {mediaError && (
-                  <p className="text-sm text-destructive mb-4">
-                    {t('create.uploadError')}
-                  </p>
-                )}
-                <MediaUpload
-                  userId={user.id}
-                  files={mediaFiles}
-                  onFilesChange={(files) => {
-                    setMediaFiles(files);
-                    // Clear error when files change
-                    if (mediaError) setMediaError(false);
-                  }}
-                  maxFiles={capsuleType === 'mixed' ? 20 : 10}
-                  showAudioRecorder={capsuleType === 'audio' || capsuleType === 'mixed'}
-                  acceptedTypes={
-                    capsuleType === 'photo' 
-                      ? ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-                      : capsuleType === 'video'
-                        ? ['video/mp4', 'video/webm', 'video/quicktime']
-                        : capsuleType === 'audio'
-                          ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
-                          : undefined
-                  }
-                  onUploadAll={(uploadFn) => {
-                    uploadAllFilesRef.current = uploadFn;
-                  }}
-                />
-              </div>
-            )}
+            {/* Unified Media Section */}
+            <div data-tour="capsule-media">
+              <UnifiedMediaSection
+                userId={user.id}
+                content={textContent}
+                onContentChange={setTextContent}
+                showTextSection={true}
+                files={mediaFiles}
+                onFilesChange={(files) => {
+                  setMediaFiles(files);
+                  if (mediaError) setMediaError(false);
+                }}
+                maxFiles={20}
+                onUploadAll={(uploadFn) => {
+                  uploadAllFilesRef.current = uploadFn;
+                }}
+                hasError={mediaError}
+              />
+            </div>
+
             {/* Memory Date */}
             <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-date">
               <Label className="text-base font-medium mb-4 block">
@@ -599,8 +563,8 @@ const CapsuleCreate = () => {
               <CapsulePreview
                 title={watchedValues.title}
                 description={watchedValues.description || ''}
-                content={watchedValues.content || ''}
-                capsuleType={capsuleType}
+                content={textContent}
+                capsuleType={calculatedCapsuleType}
                 tags={tags}
               />
             </div>

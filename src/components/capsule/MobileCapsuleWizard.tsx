@@ -13,7 +13,8 @@ import {
   Tag,
   Calendar,
   Send,
-  Save
+  Save,
+  FileText
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
@@ -25,14 +26,14 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
-import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
-import MediaUpload, { type MediaFile } from '@/components/capsule/MediaUpload';
+import UnifiedMediaSection, { type MediaFile, type UploadResult } from '@/components/capsule/UnifiedMediaSection';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import MemoryDateSelector, { 
   type MemoryDateValue, 
   formatMemoryDate 
 } from '@/components/capsule/MemoryDateSelector';
+import { determineContentType } from '@/lib/capsuleTypeUtils';
 
 import type { Database } from '@/integrations/supabase/types';
 import type { Category, SubCategory } from '@/hooks/useCategories';
@@ -48,9 +49,6 @@ interface MobileCapsuleWizardProps {
   onDescriptionChange: (value: string) => void;
   content: string;
   onContentChange: (value: string) => void;
-  // Type
-  capsuleType: CapsuleType;
-  onCapsuleTypeChange: (type: CapsuleType) => void;
   // Categories
   categories: Category[];
   subCategories: SubCategory[];
@@ -74,11 +72,12 @@ interface MobileCapsuleWizardProps {
   onPublish: () => void;
   onBack: () => void;
   // Upload function ref
-  onUploadAllRef?: (uploadFn: () => Promise<import('./MediaUpload').UploadResult>) => void;
+  onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
 }
 
-const STEP_KEYS = ['type', 'info', 'media', 'details', 'review'] as const;
-const STEP_ICONS = [Sparkles, Type, Image, Tag, Check];
+// New simplified steps: info, content, details, review
+const STEP_KEYS = ['info', 'content', 'details', 'review'] as const;
+const STEP_ICONS = [Type, FileText, Tag, Check];
 
 const MobileCapsuleWizard = ({
   userId,
@@ -88,8 +87,6 @@ const MobileCapsuleWizard = ({
   onDescriptionChange,
   content,
   onContentChange,
-  capsuleType,
-  onCapsuleTypeChange,
   categories,
   subCategories,
   primaryCategory,
@@ -127,38 +124,24 @@ const MobileCapsuleWizard = ({
   // Build steps with translated labels
   const STEPS = STEP_KEYS.map((key, index) => ({
     id: key,
-    label: t(`wizard.steps.${key}`),
+    label: t(`wizard.steps.${key}`, key),
     icon: STEP_ICONS[index],
   }));
 
-  // For text capsules, we skip the media step, so we have 4 steps instead of 5
-  const effectiveSteps = capsuleType === 'text' ? STEPS.filter(s => s.id !== 'media') : STEPS;
-  
-  // Calculate current step number for display (accounting for skipped steps)
-  const getDisplayStepNumber = () => {
-    if (capsuleType === 'text') {
-      // For text: step 0=1, step 1=2, step 3=3, step 4=4
-      if (currentStep <= 1) return currentStep + 1;
-      if (currentStep === 3) return 3;
-      if (currentStep === 4) return 4;
-    }
-    return currentStep + 1;
-  };
+  const progress = ((currentStep + 1) / STEPS.length) * 100;
 
-  const progress = (getDisplayStepNumber() / effectiveSteps.length) * 100;
+  // Calculate capsule type from content
+  const calculatedCapsuleType = determineContentType(content, mediaFiles);
 
   const canGoNext = () => {
     switch (currentStep) {
-      case 0: // Type
-        return true;
-      case 1: // Info
+      case 0: // Info
         return title.trim().length > 0;
-      case 2: // Media
-        if (capsuleType === 'text') return true;
-        return mediaFiles.length > 0; // Remove check for uploaded status - upload happens on publish
-      case 3: // Details
+      case 1: // Content (media + text)
+        return true; // Allow empty content
+      case 2: // Details
         return true;
-      case 4: // Review
+      case 3: // Review
         return true;
       default:
         return true;
@@ -166,19 +149,13 @@ const MobileCapsuleWizard = ({
   };
 
   const goNext = () => {
-    // Skip media step for text capsules
-    if (currentStep === 1 && capsuleType === 'text') {
-      setCurrentStep(3); // Go directly to details
-    } else if (currentStep < STEPS.length - 1) {
+    if (currentStep < STEPS.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const goBack = () => {
-    // Skip media step for text capsules when going back
-    if (currentStep === 3 && capsuleType === 'text') {
-      setCurrentStep(1); // Go back to info
-    } else if (currentStep > 0) {
+    if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     } else {
       onBack();
@@ -199,32 +176,13 @@ const MobileCapsuleWizard = ({
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case 0: // Type selection
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-4 shadow-gold">
-                <Sparkles className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                {t('wizard.typeTitle')}
-              </h2>
-              <p className="text-muted-foreground">
-                {t('wizard.typeSubtitle')}
-              </p>
-            </div>
-            
-            <CapsuleTypeSelector 
-              value={capsuleType} 
-              onChange={onCapsuleTypeChange} 
-            />
-          </div>
-        );
-
-      case 1: // Basic info
+      case 0: // Basic info
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-4 shadow-gold">
+                <Sparkles className="w-8 h-8 text-primary-foreground" />
+              </div>
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
                 {t('wizard.infoTitle')}
               </h2>
@@ -257,33 +215,19 @@ const MobileCapsuleWizard = ({
                   onChange={(e) => onDescriptionChange(e.target.value)}
                 />
               </div>
-
-              {capsuleType === 'text' && (
-                <div>
-                  <Label className="text-lg font-semibold mb-3 block">
-                    {t('wizard.contentLabel')}
-                  </Label>
-                  <Textarea
-                    placeholder={t('wizard.contentPlaceholder')}
-                    className="min-h-[200px] text-base px-4 py-3"
-                    value={content}
-                    onChange={(e) => onContentChange(e.target.value)}
-                  />
-                </div>
-              )}
             </div>
           </div>
         );
 
-      case 2: // Media upload
+      case 1: // Content (unified media + text)
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                {t('wizard.mediaTitle')}
+                {t('wizard.contentTitle', 'Contenus')}
               </h2>
               <p className="text-muted-foreground">
-                {t(`wizard.mediaSubtitle.${capsuleType}`)}
+                {t('wizard.contentSubtitle', 'Ajoutez du texte, des photos, vidéos ou audio')}
               </p>
             </div>
 
@@ -293,30 +237,24 @@ const MobileCapsuleWizard = ({
               </p>
             )}
 
-            <MediaUpload
+            <UnifiedMediaSection
               userId={userId}
+              content={content}
+              onContentChange={onContentChange}
+              showTextSection={true}
               files={mediaFiles}
               onFilesChange={(files) => {
                 onMediaFilesChange(files);
                 if (mediaError) setMediaError(false);
               }}
-              maxFiles={capsuleType === 'mixed' ? 20 : 10}
-              showAudioRecorder={capsuleType === 'audio' || capsuleType === 'mixed'}
-              acceptedTypes={
-                capsuleType === 'photo' 
-                  ? ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-                  : capsuleType === 'video'
-                    ? ['video/mp4', 'video/webm', 'video/quicktime']
-                    : capsuleType === 'audio'
-                      ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
-                      : undefined
-              }
+              maxFiles={20}
               onUploadAll={onUploadAllRef}
+              hasError={mediaError}
             />
           </div>
         );
 
-      case 3: // Details (category, tags, date)
+      case 2: // Details (category, tags, date)
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
@@ -370,8 +308,8 @@ const MobileCapsuleWizard = ({
           </div>
         );
 
-      case 4: // Review
-        const TypeIcon = getTypeIcon(capsuleType);
+      case 3: // Review
+        const TypeIcon = getTypeIcon(calculatedCapsuleType);
         const selectedCategory = categories.find(c => c.id === primaryCategory);
         
         return (
@@ -396,14 +334,14 @@ const MobileCapsuleWizard = ({
                 <p className="text-lg font-semibold text-foreground">{title || t('wizard.noTitle')}</p>
               </div>
 
-              {/* Type */}
+              {/* Type (auto-determined) */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center">
                   <TypeIcon className="w-5 h-5 text-secondary" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">{t('wizard.summaryType')}</p>
-                  <p className="font-medium">{getTypeLabel(capsuleType)}</p>
+                  <p className="font-medium">{getTypeLabel(calculatedCapsuleType)}</p>
                 </div>
               </div>
 
@@ -512,7 +450,7 @@ const MobileCapsuleWizard = ({
             </span>
           </button>
           <span className="text-white font-semibold text-base">
-            {t('wizard.stepOf', { current: getDisplayStepNumber(), total: effectiveSteps.length })}
+            {t('wizard.stepOf', { current: currentStep + 1, total: STEPS.length })}
           </span>
         </div>
         
@@ -525,11 +463,6 @@ const MobileCapsuleWizard = ({
             const Icon = step.icon;
             const isActive = index === currentStep;
             const isCompleted = index < currentStep;
-            
-            // Skip media step indicator for text capsules
-            if (step.id === 'media' && capsuleType === 'text') {
-              return null;
-            }
             
             return (
               <div 

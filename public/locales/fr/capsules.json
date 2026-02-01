@@ -159,6 +159,7 @@
       "type": "Type",
       "info": "Infos",
       "media": "Médias",
+      "content": "Contenus",
       "details": "Détails",
       "review": "Valider"
     },
@@ -166,6 +167,8 @@
     "cancel": "Annuler",
     "back": "Retour",
     "continue": "Continuer",
+    "contentTitle": "Contenus",
+    "contentSubtitle": "Ajoutez du texte, des photos, vidéos ou audio",
     "typeTitle": "Type de souvenir",
     "typeSubtitle": "Quel type de souvenir souhaitez-vous ajouter ?",
     "infoTitle": "Informations",
@@ -387,5 +390,19 @@
     "error_add": "Erreur lors de l'ajout du commentaire",
     "error_update": "Erreur lors de la modification",
     "error_delete": "Erreur lors de la suppression"
+  },
+  "unifiedMedia": {
+    "title": "Contenus",
+    "textTitle": "Texte",
+    "photosTitle": "Photos",
+    "videosTitle": "Vidéos",
+    "audioTitle": "Audio",
+    "noPhotos": "Aucune photo",
+    "noVideos": "Aucune vidéo",
+    "noAudio": "Aucun audio",
+    "videoLocked": "Vidéos verrouillées",
+    "audioLocked": "Audio verrouillé",
+    "videoRestricted": "Les vidéos nécessitent le forfait Premium",
+    "audioRestricted": "L'audio nécessite le forfait Premium"
   }
 }
