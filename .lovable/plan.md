@@ -1,107 +1,192 @@
 
-
-# Plan : Section "Cas d'usage" sur la Landing Page
+# Plan : Suppression de la selection de type et mode multi-contenu
 
 ## Objectif
-Ajouter une nouvelle section visuellement attractive montrant des exemples concrets d'utilisation de FamilyGarden : mariage, anniversaire, voyages, etudes, playlist. Cette section reutilisera les images deja presentes dans le slider du hero.
+Transformer le flux de creation de souvenir pour supprimer l'etape de selection du type. L'utilisateur pourra ajouter librement du texte, des photos, des videos et de l'audio dans un meme souvenir, selon les limites de son forfait.
 
 ---
 
-## Positionnement
-La section sera placee entre **HeroSection** et **FeaturesSection**, car elle presente des cas concrets avant de detailler les fonctionnalites techniques.
+## Changements conceptuels
+
+### Avant
+1. L'utilisateur choisit un type (texte, photo, video, audio, mixte)
+2. Le type limite les medias acceptes
+3. L'etape media est sautee pour les souvenirs "texte"
+
+### Apres
+1. L'utilisateur commence directement par le contenu (titre, description, texte)
+2. Une section "Contenus" unifiee permet d'ajouter tous les types de medias disponibles selon le forfait
+3. Le type de la capsule est determine automatiquement au moment de la sauvegarde selon les contenus ajoutes
 
 ---
 
-## Design propose
+## Regles de determination du type automatique
 
-### Structure visuelle
-- Fond ecru (#f5f0e8) pour continuer le style doux et senior-friendly
-- Grille de 5 cartes interactives avec les images existantes
-- Chaque carte affiche :
-  - L'image en arriere-plan avec overlay gradie
-  - Un titre accrocheur (ex: "Votre Mariage")
-  - Une courte description (1-2 phrases)
-  - Une icone thematique
-
-### Mise en page responsive
-- Desktop : 5 cartes en ligne ou grille 3+2
-- Tablette : grille 2+2+1
-- Mobile : carrousel horizontal ou empilement vertical
+| Contenus ajoutes | Type sauvegarde |
+|------------------|-----------------|
+| Texte uniquement | `text` |
+| Photos uniquement | `photo` |
+| Videos uniquement | `video` |
+| Audio uniquement | `audio` |
+| Mix de plusieurs types | `mixed` |
 
 ---
 
-## Cas d'usage prevus
+## Fichiers a modifier
 
-| Cas | Image existante | Titre FR | Description |
-|-----|-----------------|----------|-------------|
-| Mariage | mariage.jpeg | Votre Mariage | Preservez chaque instant de ce jour unique : la ceremonie, les discours, les rires et les larmes de joie. |
-| Anniversaire | anniversaire.jpeg | Vos Anniversaires | Des bougies soufflees aux cadeaux surprises, gardez la memoire des celebrations familiales. |
-| Voyages | voyages.jpeg | Vos Voyages | Revivez vos aventures familiales : paysages, decouvertes et moments de complicite. |
-| Etudes | etudes.jpeg | Vos Etudes | Diplomes, remises de prix, rentrees scolaires : documentez le parcours de chaque membre. |
-| Playlist | playlist.jpeg | Vos Playlists | Associez musiques et souvenirs : les chansons qui ont marque votre histoire familiale. |
+### 1. `src/components/capsule/MediaUpload.tsx`
+**Modifications :**
+- Ajouter des sections distinctes pour chaque type de media (photos, videos, audio)
+- Afficher les restrictions de forfait avec des cadenas sur les sections non disponibles
+- Permettre l'ajout de texte enrichi directement dans ce composant ou le laisser separe
+- Toujours afficher les zones de depot pour tous les types disponibles
+
+### 2. `src/pages/CapsuleCreate.tsx`
+**Modifications :**
+- Supprimer le state `capsuleType` gere par l'utilisateur
+- Supprimer le composant `CapsuleTypeSelector` de l'interface
+- Supprimer la condition `capsuleType !== 'text'` pour afficher les medias
+- Ajouter une logique `determineContentType()` qui calcule le type automatiquement avant sauvegarde
+- Mettre a jour la logique de sauvegarde pour utiliser le type determine
+
+### 3. `src/components/capsule/MobileCapsuleWizard.tsx`
+**Modifications :**
+- Supprimer l'etape "type" du wizard (passer de 5 a 4 etapes)
+- Fusionner les etapes "info" et "media" en une seule etape "contenu"
+- Adapter la navigation (plus besoin de sauter l'etape media)
+- Supprimer les props `capsuleType` et `onCapsuleTypeChange`
+
+### 4. `src/pages/CapsuleEdit.tsx`
+**Modifications :**
+- Memes changements que `CapsuleCreate.tsx`
+- Supprimer la selection de type
+- Calculer le type au moment de la sauvegarde
+
+### 5. Nouveau composant : `src/components/capsule/UnifiedMediaSection.tsx`
+**Creation :**
+Un nouveau composant qui remplace `MediaUpload` avec :
+- Zone de texte enrichi
+- Section Photos (disponible Free et plus)
+- Section Videos (Premium+ avec cadenas pour Free)
+- Section Audio (Premium+ avec cadenas pour Free)
+- Enregistreur audio integre (Premium+)
+- Messages d'upgrade pour les fonctionnalites bloquees
+
+### 6. Fichiers de traduction
+**Modifications :**
+- Supprimer les cles liees a la selection de type
+- Ajouter des cles pour les sections de contenu unifie
+- Ajouter des messages d'upgrade pour les types restreints
 
 ---
 
-## Fichiers a creer/modifier
+## Interface utilisateur proposee
 
-### 1. Nouveau composant
-**`src/components/landing/UseCasesSection.tsx`**
-- Import des images depuis `src/assets/hero-slides/`
-- Animation Framer Motion au scroll
-- Traductions via react-i18next
+```text
++------------------------------------------+
+| CREER UN SOUVENIR                        |
++------------------------------------------+
+| Categorie    [Voyages v]                 |
++------------------------------------------+
+| Titre *      [Mon voyage en Italie     ] |
+| Description  [3 semaines inoubliables  ] |
++------------------------------------------+
+| CONTENUS                                 |
+|                                          |
+| [+] Texte                                |
+|     [Zone de texte enrichi...]           |
+|                                          |
+| [+] Photos                               |
+|     [Glissez vos photos ici ou cliquez]  |
+|     [photo1.jpg] [photo2.jpg]            |
+|                                          |
+| [+] Videos          [PREMIUM]            |
+|     [Debloquer les videos - Voir forfaits]|
+|                                          |
+| [+] Audio           [PREMIUM]            |
+|     [Debloquer l'audio - Voir forfaits]  |
++------------------------------------------+
+| Date du souvenir   [15 juin 2023]        |
+| Tags               [#voyage #italie]     |
++------------------------------------------+
+| [Brouillon]  [Publier]                   |
++------------------------------------------+
+```
 
-### 2. Fichiers de traduction (5 langues)
-Ajouter une cle `useCases` dans :
-- `public/locales/fr/landing.json`
-- `public/locales/en/landing.json`
-- `public/locales/es/landing.json`
-- `public/locales/zh/landing.json`
-- `public/locales/ko/landing.json`
+---
 
-Structure de traduction :
-```json
-"useCases": {
-  "badge": "Cas d'usage",
-  "title": "Pour tous vos",
-  "titleHighlight": "moments de vie",
-  "subtitle": "Decouvrez comment FamilyGarden vous accompagne...",
-  "items": {
-    "wedding": { "title": "Votre Mariage", "description": "..." },
-    "birthday": { "title": "Vos Anniversaires", "description": "..." },
-    "travels": { "title": "Vos Voyages", "description": "..." },
-    "studies": { "title": "Vos Etudes", "description": "..." },
-    "playlist": { "title": "Vos Playlists", "description": "..." }
-  }
+## Logique de determination du type
+
+```typescript
+const determineContentType = (
+  content: string,
+  mediaFiles: MediaFile[]
+): CapsuleType => {
+  const hasText = content.trim().length > 0;
+  const hasPhotos = mediaFiles.some(f => f.type === 'image');
+  const hasVideos = mediaFiles.some(f => f.type === 'video');
+  const hasAudio = mediaFiles.some(f => f.type === 'audio');
+  
+  const mediaTypeCount = [hasPhotos, hasVideos, hasAudio].filter(Boolean).length;
+  
+  // Multiple media types = mixed
+  if (mediaTypeCount > 1) return 'mixed';
+  
+  // Single media type
+  if (hasVideos) return 'video';
+  if (hasAudio) return 'audio';
+  if (hasPhotos) return 'photo';
+  
+  // Text only
+  return 'text';
+};
+```
+
+---
+
+## Gestion des restrictions de forfait
+
+Le hook `useFeatureAccess` sera utilise pour :
+- Afficher/masquer les sections selon le forfait
+- Afficher des cadenas et boutons d'upgrade
+- Valider a la sauvegarde que l'utilisateur a le droit d'ajouter ce type de contenu
+
+Exemple de validation :
+```typescript
+// Avant sauvegarde
+if (hasVideos && !canCreateCapsuleType('video')) {
+  toast.error("Les videos necessitent le forfait Premium");
+  return;
 }
 ```
 
-### 3. Integration dans la page
-**`src/pages/Index.tsx`**
-- Import lazy du nouveau composant
-- Placement entre HeroSection et FeaturesSection
+---
+
+## Impact sur la base de donnees
+
+**Aucune migration necessaire.**
+- Le champ `capsule_type` reste inchange
+- Le type est simplement determine automatiquement plutot que choisi manuellement
+- Les souvenirs existants conservent leur type
 
 ---
 
-## Details techniques
+## Etapes d'implementation
 
-### Animations
-- Fade-in + slide-up au scroll (viewport: once)
-- Effet hover : leger zoom sur l'image + ombre portee
-- Transition douce sur les cartes (duration: 0.3s)
-
-### Accessibilite
-- Alt text sur chaque image
-- Contraste suffisant texte/fond
-- Focus visible sur les cartes cliquables
-
-### Performance
-- Lazy loading du composant (comme les autres sections)
-- Images deja optimisees (JPEG)
+1. Creer le composant `UnifiedMediaSection.tsx`
+2. Modifier `CapsuleCreate.tsx` pour utiliser le nouveau composant
+3. Modifier `MobileCapsuleWizard.tsx` pour le flux mobile
+4. Modifier `CapsuleEdit.tsx` pour l'edition
+5. Supprimer `CapsuleTypeSelector.tsx` (ou le conserver pour usage futur)
+6. Mettre a jour les traductions
+7. Tester tous les parcours utilisateur
 
 ---
 
-## Estimation
-- 1 nouveau fichier composant (~150 lignes)
-- 5 fichiers de traduction a mettre a jour
-- 1 modification legere dans Index.tsx
+## Avantages de cette approche
 
+- Experience utilisateur simplifiee (moins d'etapes)
+- Plus de flexibilite dans la creation de souvenirs
+- Coherence avec les attentes modernes (comme Instagram, Stories)
+- Le systeme de forfait reste intact et bien visible
+- Retro-compatible avec les souvenirs existants
