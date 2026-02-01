@@ -387,5 +387,27 @@
     "error_add": "Error adding comment",
     "error_update": "Error updating comment",
     "error_delete": "Error deleting comment"
+  },
+  "unifiedMedia": {
+    "sectionTitle": "Contents",
+    "textSection": "Text",
+    "textPlaceholder": "Write your text, letter or story...",
+    "photosSection": "Photos",
+    "photosDescription": "Add your photos and images",
+    "videosSection": "Videos",
+    "videosDescription": "Add your video clips",
+    "audioSection": "Audio",
+    "audioDescription": "Add voice messages or music",
+    "premiumFeature": "Premium feature",
+    "upgradeToPremium": "Upgrade to Premium to add {{type}}",
+    "viewPlans": "View plans",
+    "dropPhotos": "Drop your photos here or click to select",
+    "dropVideos": "Drop your videos here or click to select",
+    "dropAudio": "Drop your audio files here or click to select",
+    "maxFiles": "Max {{max}} files, {{size}}MB each",
+    "restrictions": {
+      "video": "videos",
+      "audio": "audio"
+    }
   }
 }

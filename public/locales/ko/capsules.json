@@ -387,5 +387,27 @@
     "error_add": "댓글 추가 중 오류",
     "error_update": "댓글 수정 중 오류",
     "error_delete": "댓글 삭제 중 오류"
+  },
+  "unifiedMedia": {
+    "sectionTitle": "콘텐츠",
+    "textSection": "텍스트",
+    "textPlaceholder": "텍스트, 편지 또는 이야기를 작성하세요...",
+    "photosSection": "사진",
+    "photosDescription": "사진과 이미지를 추가하세요",
+    "videosSection": "동영상",
+    "videosDescription": "동영상 클립을 추가하세요",
+    "audioSection": "오디오",
+    "audioDescription": "음성 메시지나 음악을 추가하세요",
+    "premiumFeature": "프리미엄 기능",
+    "upgradeToPremium": "{{type}} 추가는 프리미엄으로 업그레이드하세요",
+    "viewPlans": "플랜 보기",
+    "dropPhotos": "여기에 사진을 드롭하거나 클릭하여 선택",
+    "dropVideos": "여기에 동영상을 드롭하거나 클릭하여 선택",
+    "dropAudio": "여기에 오디오 파일을 드롭하거나 클릭하여 선택",
+    "maxFiles": "최대 {{max}}개, 각 {{size}}MB",
+    "restrictions": {
+      "video": "동영상",
+      "audio": "오디오"
+    }
   }
 }

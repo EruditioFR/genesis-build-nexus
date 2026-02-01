@@ -387,5 +387,27 @@
     "error_add": "Error al añadir el comentario",
     "error_update": "Error al modificar el comentario",
     "error_delete": "Error al eliminar el comentario"
+  },
+  "unifiedMedia": {
+    "sectionTitle": "Contenidos",
+    "textSection": "Texto",
+    "textPlaceholder": "Escribe tu texto, carta o historia...",
+    "photosSection": "Fotos",
+    "photosDescription": "Añade tus fotos e imágenes",
+    "videosSection": "Vídeos",
+    "videosDescription": "Añade tus clips de vídeo",
+    "audioSection": "Audio",
+    "audioDescription": "Añade mensajes de voz o música",
+    "premiumFeature": "Función Premium",
+    "upgradeToPremium": "Actualiza a Premium para añadir {{type}}",
+    "viewPlans": "Ver planes",
+    "dropPhotos": "Suelta tus fotos aquí o haz clic para seleccionar",
+    "dropVideos": "Suelta tus vídeos aquí o haz clic para seleccionar",
+    "dropAudio": "Suelta tus archivos de audio aquí o haz clic para seleccionar",
+    "maxFiles": "Máx {{max}} archivos, {{size}}MB cada uno",
+    "restrictions": {
+      "video": "vídeos",
+      "audio": "audio"
+    }
   }
 }
