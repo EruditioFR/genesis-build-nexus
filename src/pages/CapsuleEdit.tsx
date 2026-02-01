@@ -37,18 +37,19 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
-import CapsuleTypeSelector from '@/components/capsule/CapsuleTypeSelector';
 import TagInput from '@/components/capsule/TagInput';
 import CapsulePreview from '@/components/capsule/CapsulePreview';
-import MediaUpload, { type MediaFile, type UploadResult } from '@/components/capsule/MediaUpload';
+import UnifiedMediaSection, { type MediaFile, type UploadResult } from '@/components/capsule/UnifiedMediaSection';
 import { AudioRecorder } from '@/components/capsule/AudioRecorder';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { useCategories, type Category } from '@/hooks/useCategories';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
+import { determineContentType, validateContentForPlan } from '@/lib/capsuleTypeUtils';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -245,7 +246,7 @@ const CapsuleEdit = () => {
 
     // Check if new media files need uploading
     const pendingMediaFiles = mediaFiles.filter(f => !f.uploaded && !f.uploading);
-    if (capsuleType !== 'text' && pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
+    if (pendingMediaFiles.length > 0 && uploadAllFilesRef.current) {
       setIsSaving(true);
       
       // Upload all files and get the updated files with URLs
@@ -265,6 +266,13 @@ const CapsuleEdit = () => {
     const values = form.getValues();
     setIsSaving(true);
 
+    // Determine capsule type from content
+    const calculatedType = determineContentType(
+      values.content,
+      uploadedMediaFiles,
+      existingMedia.map(m => ({ file_type: m.file_type }))
+    );
+
     try {
       // Update the capsule
       const { error: capsuleError } = await supabase
@@ -273,7 +281,7 @@ const CapsuleEdit = () => {
           title: values.title,
           description: values.description || null,
           content: values.content || null,
-          capsule_type: capsuleType,
+          capsule_type: calculatedType,
           status: status,
           tags: tags.length > 0 ? tags : null,
           published_at: status === 'published' ? new Date().toISOString() : null,
@@ -436,79 +444,26 @@ const CapsuleEdit = () => {
               />
             </div>
 
-            {/* Type selector */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
-              <Label className="text-base font-medium mb-4 block">
-                {t('create.typeLabel')}
-              </Label>
-              <CapsuleTypeSelector value={capsuleType} onChange={setCapsuleType} />
-            </div>
-
-            {/* Main form */}
-            <Form {...form}>
-              <form className="p-6 rounded-2xl border border-border bg-card space-y-6">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('create.titleLabel')} *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t('create.titlePlaceholder')}
-                          className="text-lg"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('create.description')}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t('create.descriptionPlaceholder')}
-                          className="resize-none"
-                          rows={3}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {capsuleType === 'text' && (
-                  <FormField
-                    control={form.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('create.content')}</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t('create.contentPlaceholder')}
-                            className="resize-none min-h-[200px]"
-                            rows={8}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </form>
-            </Form>
+            {/* Unified Media Section */}
+            <UnifiedMediaSection
+              userId={user.id}
+              content={form.watch('content') || ''}
+              onContentChange={(value) => form.setValue('content', value)}
+              showTextSection={true}
+              files={mediaFiles}
+              onFilesChange={(files) => {
+                setMediaFiles(files);
+                if (mediaError) setMediaError(false);
+              }}
+              maxFiles={20 - existingMedia.length}
+              onUploadAll={(uploadFn) => {
+                uploadAllFilesRef.current = uploadFn;
+              }}
+              hasError={mediaError}
+            />
 
             {/* Existing Media */}
-            {capsuleType !== 'text' && existingMedia.length > 0 && (
+            {existingMedia.length > 0 && (
               <div className="p-6 rounded-2xl border border-border bg-card">
                 <Label className="text-base font-medium mb-4 block">
                   {t('edit.existingMedia')}
@@ -524,71 +479,6 @@ const CapsuleEdit = () => {
                     />
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Audio Recorder for audio capsules */}
-            {capsuleType === 'audio' && (
-              <div className="p-6 rounded-2xl border border-border bg-card">
-                <Label className="text-base font-medium mb-4 block">
-                  {t('edit.recordAudio', 'Enregistrer un audio')}
-                </Label>
-                <AudioRecorder
-                  onRecordingComplete={(blob, fileName) => {
-                    const file = new File([blob], fileName, { type: blob.type });
-                    const mediaFile: MediaFile = {
-                      id: `recording-${Date.now()}`,
-                      file,
-                      preview: URL.createObjectURL(blob),
-                      type: 'audio',
-                      uploading: false,
-                      uploaded: false,
-                      progress: 0,
-                    };
-                    setMediaFiles(prev => [...prev, mediaFile]);
-                    if (mediaError) setMediaError(false);
-                  }}
-                  maxDurationSeconds={300}
-                />
-              </div>
-            )}
-
-            {/* New Media Upload */}
-            {capsuleType !== 'text' && (
-              <div 
-                className={`p-6 rounded-2xl border bg-card transition-all ${
-                  mediaError ? 'border-destructive ring-2 ring-destructive/20' : 'border-border'
-                }`}
-              >
-                <Label className="text-base font-medium mb-4 block">
-                  {capsuleType === 'audio' ? t('edit.uploadAudioFile', 'Ou importer un fichier audio') : t('edit.addNewMedia')}
-                </Label>
-                {mediaError && (
-                  <p className="text-sm text-destructive mb-4">
-                    {t('create.uploadError')}
-                  </p>
-                )}
-                <MediaUpload
-                  userId={user.id}
-                  files={mediaFiles}
-                  onFilesChange={(files) => {
-                    setMediaFiles(files);
-                    if (mediaError) setMediaError(false);
-                  }}
-                  maxFiles={capsuleType === 'mixed' ? 20 - existingMedia.length : 10 - existingMedia.length}
-                  acceptedTypes={
-                    capsuleType === 'photo' 
-                      ? ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-                      : capsuleType === 'video'
-                        ? ['video/mp4', 'video/webm', 'video/quicktime']
-                        : capsuleType === 'audio'
-                          ? ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm', 'audio/ogg']
-                          : undefined
-                  }
-                  onUploadAll={(uploadFn) => {
-                    uploadAllFilesRef.current = uploadFn;
-                  }}
-                />
               </div>
             )}
 
