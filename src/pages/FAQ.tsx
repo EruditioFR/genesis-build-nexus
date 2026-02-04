@@ -18,15 +18,15 @@ const FAQ = () => {
       title: "Général",
       questions: [
         {
-          question: "Qu'est-ce que MemoriaVita ?",
-          answer: "MemoriaVita est une plateforme sécurisée de capsules temporelles numériques qui vous permet de préserver vos souvenirs, messages et médias pour les transmettre à vos proches à des moments précis dans le futur ou après votre décès."
+          question: "Qu'est-ce que Family Garden ?",
+          answer: "Family Garden est une plateforme sécurisée qui vous permet de préserver vos souvenirs de famille : textes, photos, vidéos et audio. Créez votre journal de famille et transmettez vos moments précieux à vos proches."
         },
         {
-          question: "Comment fonctionne une capsule temporelle ?",
-          answer: "Créez une capsule en ajoutant du texte, des photos, vidéos ou audio. Choisissez une date d'ouverture ou configurez un mode héritage. Vos destinataires recevront une notification le moment venu et pourront découvrir votre message."
+          question: "Comment fonctionne un souvenir ?",
+          answer: "Créez un souvenir en ajoutant du texte, des photos, vidéos ou audio. Choisissez une date associée au moment, reliez-le aux membres de votre famille, et partagez-le avec vos cercles privés."
         },
         {
-          question: "Quels types de fichiers puis-je ajouter à mes capsules ?",
+          question: "Quels types de fichiers puis-je ajouter à mes souvenirs ?",
           answer: "Vous pouvez ajouter des photos (JPG, PNG, GIF), des vidéos (MP4, MOV), des fichiers audio (MP3, WAV) et du texte formaté. La taille maximale par fichier dépend de votre abonnement."
         }
       ]
@@ -37,33 +37,33 @@ const FAQ = () => {
       questions: [
         {
           question: "Mes données sont-elles sécurisées ?",
-          answer: "Absolument. Toutes vos données sont chiffrées de bout en bout avec les standards les plus élevés (AES-256). Seuls vous et vos destinataires autorisés peuvent accéder au contenu de vos capsules."
+          answer: "Absolument. Toutes vos données sont chiffrées de bout en bout avec les standards les plus élevés (AES-256). Seuls vous et vos destinataires autorisés peuvent accéder au contenu de vos souvenirs."
         },
         {
-          question: "Qui peut voir mes capsules ?",
-          answer: "Vous avez un contrôle total. Vous pouvez garder vos capsules privées, les partager avec des cercles spécifiques (famille, amis, collègues) ou désigner des destinataires individuels."
+          question: "Qui peut voir mes souvenirs ?",
+          answer: "Vous avez un contrôle total. Vous pouvez garder vos souvenirs privés, les partager avec des cercles spécifiques (famille, amis, collègues) ou désigner des destinataires individuels."
         },
         {
           question: "Que deviennent mes données si je supprime mon compte ?",
-          answer: "Toutes vos données personnelles et capsules sont définitivement supprimées. Les capsules programmées pour le futur ne seront jamais délivrées. Cette action est irréversible."
+          answer: "Toutes vos données personnelles et souvenirs sont définitivement supprimés. Cette action est irréversible."
         }
       ]
     },
     {
       icon: Clock,
-      title: "Capsules & Programmation",
+      title: "Souvenirs & Organisation",
       questions: [
         {
-          question: "Puis-je modifier une capsule après l'avoir programmée ?",
-          answer: "Oui, vous pouvez modifier ou supprimer une capsule tant qu'elle n'a pas été ouverte par ses destinataires. Une fois ouverte, elle devient un souvenir figé dans le temps."
+          question: "Puis-je modifier un souvenir après l'avoir créé ?",
+          answer: "Oui, vous pouvez modifier ou supprimer un souvenir à tout moment. Vous pouvez également ajouter des médias, changer la date ou modifier les personnes associées."
         },
         {
           question: "Comment fonctionne le mode Héritage ?",
-          answer: "Le mode Héritage permet de transmettre des capsules après votre décès. Vous désignez un gardien de confiance qui confirmera la transmission. Des vérifications régulières d'activité sont effectuées pour s'assurer de votre bien-être."
+          answer: "Le mode Héritage permet de transmettre des souvenirs après votre décès. Vous désignez un gardien de confiance qui confirmera la transmission. Des vérifications régulières d'activité sont effectuées pour s'assurer de votre bien-être."
         },
         {
-          question: "Combien de capsules puis-je créer ?",
-          answer: "Avec l'abonnement gratuit, vous pouvez créer jusqu'à 5 capsules avec 100 Mo de stockage. Les abonnements Premium et Héritage offrent des capsules illimitées avec un stockage étendu."
+          question: "Combien de souvenirs puis-je créer ?",
+          answer: "Avec l'abonnement gratuit, vous pouvez créer jusqu'à 5 souvenirs avec 100 Mo de stockage. Les abonnements Premium et Héritage offrent des souvenirs illimités avec un stockage étendu."
         }
       ]
     },
@@ -73,15 +73,15 @@ const FAQ = () => {
       questions: [
         {
           question: "Qu'est-ce qu'un cercle ?",
-          answer: "Un cercle est un groupe de personnes (famille, amis, collègues) avec qui vous pouvez partager facilement vos capsules. Créez différents cercles pour organiser vos partages."
+          answer: "Un cercle est un groupe de personnes (famille, amis, collègues) avec qui vous pouvez partager facilement vos souvenirs. Créez différents cercles pour organiser vos partages."
         },
         {
           question: "Comment inviter quelqu'un dans mon cercle ?",
           answer: "Depuis la page Cercles, créez un cercle puis cliquez sur 'Ajouter un membre'. Entrez l'email de la personne, elle recevra une invitation pour rejoindre votre cercle."
         },
         {
-          question: "Les membres de mon cercle peuvent-ils voir toutes mes capsules ?",
-          answer: "Non, vous choisissez spécifiquement quelles capsules partager avec chaque cercle. Les membres ne voient que les capsules que vous leur avez explicitement partagées."
+          question: "Les membres de mon cercle peuvent-ils voir tous mes souvenirs ?",
+          answer: "Non, vous choisissez spécifiquement quels souvenirs partager avec chaque cercle. Les membres ne voient que les souvenirs que vous leur avez explicitement partagés."
         }
       ]
     },
@@ -91,15 +91,15 @@ const FAQ = () => {
       questions: [
         {
           question: "Qu'est-ce qu'un gardien ?",
-          answer: "Un gardien est une personne de confiance que vous désignez pour gérer vos capsules en mode Héritage. Il sera contacté pour confirmer et débloquer la transmission de vos capsules le moment venu."
+          answer: "Un gardien est une personne de confiance que vous désignez pour gérer vos souvenirs en mode Héritage. Il sera contacté pour confirmer et débloquer la transmission de vos souvenirs le moment venu."
         },
         {
           question: "Comment choisir un bon gardien ?",
           answer: "Choisissez quelqu'un de confiance, susceptible d'être joignable sur le long terme, et qui comprend l'importance de cette responsabilité. Vous pouvez désigner plusieurs gardiens pour plus de sécurité."
         },
         {
-          question: "Le gardien peut-il accéder au contenu de mes capsules ?",
-          answer: "Non, le gardien ne peut pas voir le contenu de vos capsules. Son rôle est uniquement de confirmer et autoriser leur transmission aux destinataires que vous avez choisis."
+          question: "Le gardien peut-il accéder au contenu de mes souvenirs ?",
+          answer: "Non, le gardien ne peut pas voir le contenu de vos souvenirs. Son rôle est uniquement de confirmer et autoriser leur transmission aux destinataires que vous avez choisis."
         }
       ]
     },
@@ -109,7 +109,7 @@ const FAQ = () => {
       questions: [
         {
           question: "Quels sont les différents abonnements disponibles ?",
-          answer: "Nous proposons trois formules : Gratuit (5 capsules, 100 Mo), Premium (capsules illimitées, 10 Go, 9,99€/mois) et Héritage (toutes les fonctionnalités Premium + mode héritage avancé, 19,99€/mois)."
+          answer: "Nous proposons trois formules : Gratuit (5 souvenirs, 100 Mo), Premium (souvenirs illimités, 10 Go, 9,99€/mois) et Héritage (toutes les fonctionnalités Premium + mode héritage avancé, 19,99€/mois)."
         },
         {
           question: "Puis-je changer d'abonnement à tout moment ?",
@@ -117,7 +117,7 @@ const FAQ = () => {
         },
         {
           question: "Que se passe-t-il si j'arrête mon abonnement ?",
-          answer: "Vos capsules existantes sont conservées et resteront accessibles en lecture seule. Vous ne pourrez plus créer de nouvelles capsules au-delà de la limite gratuite jusqu'à la reprise d'un abonnement."
+          answer: "Vos souvenirs existants sont conservés et resteront accessibles en lecture seule. Vous ne pourrez plus créer de nouveaux souvenirs au-delà de la limite gratuite jusqu'à la reprise d'un abonnement."
         }
       ]
     },
@@ -127,15 +127,15 @@ const FAQ = () => {
       questions: [
         {
           question: "Comment les destinataires sont-ils notifiés ?",
-          answer: "Les destinataires reçoivent un email les informant qu'une capsule leur est destinée. Ils peuvent créer un compte gratuit pour accéder à la capsule et laisser des commentaires."
+          answer: "Les destinataires reçoivent un email les informant qu'un souvenir leur est destiné. Ils peuvent créer un compte gratuit pour accéder au souvenir et laisser des commentaires."
         },
         {
-          question: "Puis-je voir si ma capsule a été ouverte ?",
-          answer: "Oui, vous pouvez suivre le statut de vos capsules : programmée, délivrée, vue. Vous recevez une notification lorsqu'un destinataire ouvre votre capsule."
+          question: "Puis-je voir si mon souvenir a été consulté ?",
+          answer: "Oui, vous pouvez suivre le statut de vos souvenirs : partagé, vu. Vous recevez une notification lorsqu'un destinataire consulte votre souvenir."
         },
         {
-          question: "Les destinataires peuvent-ils répondre à une capsule ?",
-          answer: "Oui, les destinataires peuvent laisser des commentaires et réactions sur les capsules qu'ils reçoivent, créant ainsi un fil de souvenirs partagés."
+          question: "Les destinataires peuvent-ils répondre à un souvenir ?",
+          answer: "Oui, les destinataires peuvent laisser des commentaires et réactions sur les souvenirs qu'ils reçoivent, créant ainsi un fil de souvenirs partagés."
         }
       ]
     },
@@ -144,8 +144,8 @@ const FAQ = () => {
       title: "Export & Sauvegarde",
       questions: [
         {
-          question: "Puis-je télécharger mes capsules ?",
-          answer: "Oui, vous pouvez exporter vos capsules au format PDF ou ZIP contenant tous les médias. Cette fonctionnalité est disponible pour toutes les capsules que vous avez créées."
+          question: "Puis-je télécharger mes souvenirs ?",
+          answer: "Oui, vous pouvez exporter vos souvenirs au format PDF ou ZIP contenant tous les médias. Cette fonctionnalité est disponible pour tous les souvenirs que vous avez créés."
         },
         {
           question: "Mes données sont-elles sauvegardées ?",
@@ -190,7 +190,7 @@ const FAQ = () => {
                 Questions Fréquentes
               </h1>
               <p className="text-lg text-muted-foreground">
-                Trouvez rapidement des réponses à vos questions sur MemoriaVita
+                Trouvez rapidement des réponses à vos questions sur Family Garden
               </p>
             </motion.div>
           </div>
@@ -250,7 +250,7 @@ const FAQ = () => {
                 Notre équipe est là pour vous aider. Contactez-nous et nous vous répondrons dans les plus brefs délais.
               </p>
               <Button asChild className="bg-gradient-gold hover:opacity-90 text-secondary-foreground">
-                <a href="mailto:support@memoriavita.com">
+                <a href="mailto:contact@familygarden.fr">
                   Contacter le support
                 </a>
               </Button>
