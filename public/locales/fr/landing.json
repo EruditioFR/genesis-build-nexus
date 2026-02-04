@@ -3,7 +3,7 @@
     "badge": "Créez votre journal de famille, simplement",
     "title": {
       "prefix": "Tous vos souvenirs ",
-      "rotating": ["de famille", "entre amis", "personnels"],
+      "rotating": ["familiaux", "amicaux", "personnels"],
       "suffix": ", ",
       "highlight": "au même endroit"
     },
