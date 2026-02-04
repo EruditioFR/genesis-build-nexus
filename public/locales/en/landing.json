@@ -22,8 +22,8 @@
   "features": {
     "badge": "Features",
     "title": "Everything you need to",
-    "titleHighlight": "preserve your family legacy",
-    "subtitle": "A complete French platform for memory capsules: create, organize and transmit your memories to future generations safely.",
+    "titleHighlight": "relive your memories every day",
+    "subtitle": "Create complete memories (media + story), organize them in a timeline and share them privately with your family.",
     "mediaTypes": {
       "photos": "Photos",
       "videos": "Videos",
@@ -32,8 +32,8 @@
     },
     "items": {
       "capsules": {
-        "title": "Multimedia Memory Capsules",
-        "description": "Create digital memory capsules combining texts, photos, videos and audio recordings. Each memory is contextualized with date, place and linked people."
+        "title": "Multimedia memories",
+        "description": "Each memory gathers photos, videos, text and audio, with a date, a place and the people involved."
       },
       "timeline": {
         "title": "Interactive Timeline by Decades",
@@ -41,15 +41,15 @@
       },
       "circles": {
         "title": "Secure Sharing Circles",
-        "description": "Create circles of trust (family, friends) with granular permissions: reading, comments or contribution. Controlled intergenerational transmission."
+        "description": "Create circles (close family, grandparents, godparents) and choose who sees what."
       },
       "security": {
-        "title": "AES-256 Security & Posthumous Legacy",
-        "description": "Bank-level AES-256 encryption, storage on GDPR-compliant European servers. Schedule the transmission of your digital legacy to your loved ones."
+        "title": "Privacy & control",
+        "description": "Protected access, controlled sharing, and compliant hosting: you keep control over your memories."
       },
       "export": {
         "title": "PDF Export & Backup",
-        "description": "Export your capsules in high-quality PDF or download all your media. Your data belongs to you, exportable at any time."
+        "description": "Export to PDF and retrieve your media: your memories stay yours."
       }
     }
   },

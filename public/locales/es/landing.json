@@ -22,8 +22,8 @@
   "features": {
     "badge": "Características",
     "title": "Todo lo que necesitas para",
-    "titleHighlight": "preservar tu legado familiar",
-    "subtitle": "Una plataforma francesa completa de cápsulas de memoria: crea, organiza y transmite tus recuerdos a las futuras generaciones de forma segura.",
+    "titleHighlight": "revivir tus recuerdos cada día",
+    "subtitle": "Crea recuerdos completos (medios + relato), organízalos en una línea de tiempo y compártelos en privado con tu familia.",
     "mediaTypes": {
       "photos": "Fotos",
       "videos": "Videos",
@@ -32,8 +32,8 @@
     },
     "items": {
       "capsules": {
-        "title": "Cápsulas de Memoria Multimedia",
-        "description": "Crea cápsulas de memoria digitales combinando textos, fotos, videos y grabaciones de audio. Cada recuerdo está contextualizado con fecha, lugar y personas relacionadas."
+        "title": "Recuerdos multimedia",
+        "description": "Cada recuerdo reúne fotos, vídeos, texto y audio, con una fecha, un lugar y las personas relacionadas."
       },
       "timeline": {
         "title": "Línea de Tiempo Interactiva por Décadas",
@@ -41,15 +41,15 @@
       },
       "circles": {
         "title": "Círculos de Compartir Seguros",
-        "description": "Crea círculos de confianza (familia, amigos) con permisos granulares: lectura, comentarios o contribución. Transmisión intergeneracional controlada."
+        "description": "Crea círculos (familia cercana, abuelos, padrinos) y elige quién ve qué."
       },
       "security": {
-        "title": "Seguridad AES-256 y Legado Póstumo",
-        "description": "Cifrado de nivel bancario AES-256, almacenamiento en servidores europeos conformes con RGPD. Programa la transmisión de tu legado digital a tus seres queridos."
+        "title": "Privacidad y control",
+        "description": "Acceso protegido, uso compartido controlado y alojamiento conforme: tú mantienes el control de tus recuerdos."
       },
       "export": {
         "title": "Exportación PDF y Respaldo",
-        "description": "Exporta tus cápsulas en PDF de alta calidad o descarga todos tus medios. Tus datos te pertenecen, exportables en cualquier momento."
+        "description": "Exporta en PDF y recupera tus medios: tus recuerdos siguen siendo tuyos."
       }
     }
   },

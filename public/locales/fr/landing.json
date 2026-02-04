@@ -22,8 +22,8 @@
   "features": {
     "badge": "Fonctionnalités",
     "title": "Tout ce dont vous avez besoin pour",
-    "titleHighlight": "préserver votre héritage familial",
-    "subtitle": "Une plateforme française complète de capsules mémorielles : créez, organisez et transmettez vos souvenirs aux générations futures en toute sécurité.",
+    "titleHighlight": "revivre vos souvenirs au quotidien",
+    "subtitle": "Créez des souvenirs complets (médias + récit), organisez-les dans une timeline et partagez-les en privé avec votre famille.",
     "mediaTypes": {
       "photos": "Photos",
       "videos": "Vidéos",
@@ -32,8 +32,8 @@
     },
     "items": {
       "capsules": {
-        "title": "Capsules Mémorielles Multimédia",
-        "description": "Créez des capsules mémorielles numériques combinant textes, photos, vidéos et enregistrements audio. Chaque souvenir est contextualisé avec date, lieu et personnes liées."
+        "title": "Souvenirs multimédias",
+        "description": "Chaque souvenir rassemble photos, vidéos, texte et audio, avec une date, un lieu et les personnes liées."
       },
       "timeline": {
         "title": "Chronologie Interactive par Décennies",
@@ -41,15 +41,15 @@
       },
       "circles": {
         "title": "Cercles de Partage Sécurisés",
-        "description": "Créez des cercles de confiance (famille, amis) avec permissions granulaires : lecture, commentaires ou contribution. Transmission intergénérationnelle maîtrisée."
+        "description": "Créez des cercles (famille proche, grands-parents, parrain/marraine) et choisissez qui voit quoi."
       },
       "security": {
-        "title": "Sécurité AES-256 & Legs Posthume",
-        "description": "Chiffrement de niveau bancaire AES-256, stockage sur serveurs européens conformes RGPD. Programmez la transmission de votre héritage numérique à vos proches."
+        "title": "Confidentialité & contrôle",
+        "description": "Accès protégé, partage maîtrisé, et hébergement conforme : vous gardez la main sur vos souvenirs."
       },
       "export": {
         "title": "Export PDF & Sauvegarde",
-        "description": "Exportez vos capsules en PDF haute qualité ou téléchargez l'intégralité de vos médias. Vos données vous appartiennent, exportables à tout moment."
+        "description": "Exportez en PDF et récupérez vos médias : vos souvenirs restent à vous."
       }
     }
   },
