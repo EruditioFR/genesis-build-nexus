@@ -159,7 +159,6 @@ const HeroSection = () => {
         }} className="text-sm sm:text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed space-y-3 sm:space-y-4">
             <p>{t('hero.subtitle.line1')}</p>
             <p>{t('hero.subtitle.line2')}</p>
-            <p>{t('hero.subtitle.line3')}</p>
           </motion.div>
 
           {/* CTA Buttons */}
