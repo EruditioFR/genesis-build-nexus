@@ -1,22 +1,22 @@
 {
   "hero": {
-    "badge": "Preserve your memories forever",
+    "badge": "Create your family journal, simply",
     "title": {
-      "prefix": "Your memories deserve ",
-      "highlight": "to be preserved"
+      "prefix": "Family moments deserve ",
+      "highlight": "to be relived"
     },
     "subtitle": {
-      "line1": "A family is a garden that grows every day. With FamilyGarden, don't let your most precious moments slip away.",
-      "line2": "Root your memories (stories, recorded laughter, shared videos) in a protected space that reflects who you are."
+      "line1": "Photos, videos, texts, audio… gather your memories in one place, with context and emotion.",
+      "line2": "Share privately with grandparents and loved ones, without losing them across 10 apps."
     },
     "cta": {
       "primary": "Get started free",
       "secondary": "Watch demo"
     },
     "trust": {
-      "encryption": "AES-256 Encryption",
-      "gdpr": "GDPR European Servers",
-      "legacy": "Family Legacy"
+      "encryption": "Secure data",
+      "gdpr": "EU Hosting (GDPR)",
+      "legacy": "Private circles"
     }
   },
   "features": {

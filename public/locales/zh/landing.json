@@ -1,22 +1,22 @@
 {
   "hero": {
-    "badge": "永久保存您的回忆",
+    "badge": "轻松创建您的家庭日记",
     "title": {
-      "prefix": "您的回忆值得",
-      "highlight": "被保存"
+      "prefix": "家庭时刻值得",
+      "highlight": "被重温"
     },
     "subtitle": {
-      "line1": "家庭是一座需要日日耕耘的花园。有了FamilyGarden，别再让最美好的时刻随风而逝。",
-      "line2": "将你的回忆（故事、录下的笑声、温馨的视频）根植于一个专属于你的安全空间。"
+      "line1": "照片、视频、文字、音频…将您的回忆汇集在一处，带着背景和情感。",
+      "line2": "私密分享给祖父母和亲人，不再散落在10个应用中。"
     },
     "cta": {
       "primary": "免费开始",
       "secondary": "观看演示"
     },
     "trust": {
-      "encryption": "AES-256加密",
-      "gdpr": "欧洲GDPR服务器",
-      "legacy": "家族遗产"
+      "encryption": "数据安全",
+      "gdpr": "欧盟托管 (GDPR)",
+      "legacy": "私密圈子"
     }
   },
   "features": {

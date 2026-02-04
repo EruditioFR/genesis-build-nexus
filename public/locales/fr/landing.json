@@ -1,22 +1,22 @@
 {
   "hero": {
-    "badge": "Préservez vos souvenirs pour l'éternité",
+    "badge": "Créez votre journal de famille, simplement",
     "title": {
-      "prefix": "Vos souvenirs méritent ",
-      "highlight": "d'être préservés"
+      "prefix": "Les moments en famille méritent ",
+      "highlight": "d'être revécus"
     },
     "subtitle": {
-      "line1": "Une famille est un jardin qui se cultive chaque jour. Avec FamilyGarden, ne laissez plus vos plus beaux instants s'envoler au vent.",
-      "line2": "Enracinez vos souvenirs (récits, rires enregistrés, vidéos complices) dans un espace protégé qui vous ressemble."
+      "line1": "Photos, vidéos, textes, audios… rassemblez vos souvenirs au même endroit, avec du contexte et de l'émotion.",
+      "line2": "Partagez en privé avec les grands-parents et les proches, sans les perdre dans 10 applis."
     },
     "cta": {
       "primary": "Commencer gratuitement",
       "secondary": "Voir la démo"
     },
     "trust": {
-      "encryption": "Chiffrement AES-256",
-      "gdpr": "Serveurs européens RGPD",
-      "legacy": "Héritage familial"
+      "encryption": "Données sécurisées",
+      "gdpr": "Hébergement UE (RGPD)",
+      "legacy": "Cercles privés"
     }
   },
   "features": {
