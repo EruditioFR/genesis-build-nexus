@@ -2,8 +2,8 @@
   "hero": {
     "badge": "永久保存您的回忆",
     "title": {
-      "line1": "您的回忆值得被保存。",
-      "line2": "用FamilyGarden书写它"
+      "prefix": "您的回忆值得",
+      "highlight": "被保存"
     },
     "subtitle": {
       "line1": "家庭是一座需要日日耕耘的花园。有了FamilyGarden，别再让最美好的时刻随风而逝。",

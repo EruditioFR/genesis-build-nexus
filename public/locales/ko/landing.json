@@ -2,8 +2,8 @@
   "hero": {
     "badge": "영원히 추억을 보존하세요",
     "title": {
-      "line1": "당신의 추억은 보존받을 자격이 있습니다.",
-      "line2": "FamilyGarden과 함께 써보세요"
+      "prefix": "당신의 추억은 ",
+      "highlight": "보존받을 자격이 있습니다"
     },
     "subtitle": {
       "line1": "가족은 매일 가꾸어야 하는 정원입니다. FamilyGarden과 함께, 가장 소중한 순간들이 바람에 흩날리지 않게 하세요.",
