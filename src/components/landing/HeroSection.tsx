@@ -69,7 +69,7 @@ const HeroSection = () => {
     if (!Array.isArray(rotatingWords) || rotatingWords.length === 0) return;
     const interval = setInterval(() => {
       setCurrentWordIndex(prev => (prev + 1) % rotatingWords.length);
-    }, 3000);
+    }, 1500);
     return () => clearInterval(interval);
   }, [rotatingWords]);
 
@@ -161,7 +161,7 @@ const HeroSection = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="text-gradient-gold"
+                    className="text-primary-foreground"
                   >
                     {Array.isArray(rotatingWords) ? rotatingWords[currentWordIndex] : ''}
                   </motion.span>
