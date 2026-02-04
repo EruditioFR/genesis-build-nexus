@@ -1,22 +1,22 @@
 {
   "hero": {
-    "badge": "Preserva tus recuerdos para siempre",
+    "badge": "Crea tu diario familiar, simplemente",
     "title": {
-      "prefix": "Tus recuerdos merecen ",
-      "highlight": "ser preservados"
+      "prefix": "Los momentos en familia merecen ",
+      "highlight": "ser revividos"
     },
     "subtitle": {
-      "line1": "Una familia es un jardín que se cultiva cada día. Con FamilyGarden, no dejes que tus mejores momentos se escapen con el viento.",
-      "line2": "Arraiga tus recuerdos (relatos, risas grabadas, vídeos cómplices) en un espacio protegido que te representa."
+      "line1": "Fotos, vídeos, textos, audios… reúne tus recuerdos en un solo lugar, con contexto y emoción.",
+      "line2": "Comparte en privado con los abuelos y seres queridos, sin perderlos en 10 aplicaciones."
     },
     "cta": {
       "primary": "Comenzar gratis",
       "secondary": "Ver demo"
     },
     "trust": {
-      "encryption": "Cifrado AES-256",
-      "gdpr": "Servidores europeos RGPD",
-      "legacy": "Legado familiar"
+      "encryption": "Datos seguros",
+      "gdpr": "Alojamiento UE (RGPD)",
+      "legacy": "Círculos privados"
     }
   },
   "features": {
