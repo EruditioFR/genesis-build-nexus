@@ -9,6 +9,7 @@ import {
   Shield, 
   Users, 
   Leaf, 
+  Sparkles,
   Lock,
   ArrowRight,
   CheckCircle2
@@ -80,7 +81,7 @@ const About = () => {
       description: "Vous gardez la main : export, organisation et continuité. FamilyGarden est conçu pour durer sans vous enfermer."
     },
     {
-      icon: Leaf,
+      icon: Sparkles,
       title: "Simplicité",
       description: "Une interface intuitive accessible à tous, des grands-parents aux petits-enfants, sans compétence technique requise."
     },
