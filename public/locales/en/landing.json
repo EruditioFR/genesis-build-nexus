@@ -110,7 +110,7 @@
         "description": "Perfect for starting to preserve your memories",
         "features": {
           "storage": "250 MB storage",
-          "formats": "Text and photo capsules",
+          "formats": "Text and photo memories",
           "timeline": "Basic timeline",
           "ads": "With ads"
         }
@@ -120,7 +120,7 @@
         "description": "For regular content creators",
         "features": {
           "storage": "10 GB storage",
-          "formats": "Text, photo, video and audio capsules",
+          "formats": "Text, photo, video and audio memories",
           "sharing": "1 memory share with the person of your choice",
           "timeline": "Advanced timeline",
           "noAds": "No ads"
@@ -131,7 +131,7 @@
         "description": "For multigenerational families",
         "features": {
           "storage": "50 GB storage",
-          "formats": "Text, photo, video and audio capsules",
+          "formats": "Text, photo, video and audio memories",
           "sharing": "Unlimited shares",
           "timeline": "Advanced timeline",
           "familyTree": "Interactive family tree",

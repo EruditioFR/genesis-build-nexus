@@ -110,7 +110,7 @@
         "description": "开始保存回忆的完美选择",
         "features": {
           "storage": "250 MB存储空间",
-          "formats": "文字和照片胶囊",
+          "formats": "文字和照片回忆",
           "timeline": "基本时间线",
           "ads": "含广告"
         }
@@ -120,7 +120,7 @@
         "description": "适合经常创作内容的用户",
         "features": {
           "storage": "10 GB存储空间",
-          "formats": "文字、照片、视频和音频胶囊",
+          "formats": "文字、照片、视频和音频回忆",
           "sharing": "与您选择的1人分享回忆",
           "timeline": "高级时间线",
           "noAds": "无广告"
@@ -131,7 +131,7 @@
         "description": "适合多代家庭",
         "features": {
           "storage": "50 GB存储空间",
-          "formats": "文字、照片、视频和音频胶囊",
+          "formats": "文字、照片、视频和音频回忆",
           "sharing": "无限分享",
           "timeline": "高级时间线",
           "familyTree": "互动家谱",
