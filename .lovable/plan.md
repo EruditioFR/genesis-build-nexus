@@ -1,192 +1,77 @@
 
-# Plan : Suppression de la selection de type et mode multi-contenu
 
-## Objectif
-Transformer le flux de creation de souvenir pour supprimer l'etape de selection du type. L'utilisateur pourra ajouter librement du texte, des photos, des videos et de l'audio dans un meme souvenir, selon les limites de son forfait.
+# Plan de modification du Hero
 
----
+## Résumé des modifications
 
-## Changements conceptuels
+Mise à jour du texte du Hero sur la landing page pour un messaging plus clair et orienté utilisateur, dans les 5 langues supportées (FR, EN, ES, KO, ZH).
 
-### Avant
-1. L'utilisateur choisit un type (texte, photo, video, audio, mixte)
-2. Le type limite les medias acceptes
-3. L'etape media est sautee pour les souvenirs "texte"
+## Changements par clé de traduction
 
-### Apres
-1. L'utilisateur commence directement par le contenu (titre, description, texte)
-2. Une section "Contenus" unifiee permet d'ajouter tous les types de medias disponibles selon le forfait
-3. Le type de la capsule est determine automatiquement au moment de la sauvegarde selon les contenus ajoutes
+| Clé | Avant (FR) | Après (FR) |
+|-----|-----------|------------|
+| `hero.badge` | Préservez vos souvenirs pour l'éternité | Créez votre journal de famille, simplement |
+| `hero.title.prefix` | Vos souvenirs méritent | Les moments en famille méritent |
+| `hero.title.highlight` | d'être préservés | d'être revécus |
+| `hero.subtitle.line1` | Une famille est un jardin qui se cultive... | Photos, vidéos, textes, audios… rassemblez vos souvenirs au même endroit, avec du contexte et de l'émotion. |
+| `hero.subtitle.line2` | Enracinez vos souvenirs... | Partagez en privé avec les grands-parents et les proches, sans les perdre dans 10 applis. |
+| `hero.trust.encryption` | Chiffrement AES-256 | Données sécurisées |
+| `hero.trust.gdpr` | Serveurs européens RGPD | Hébergement UE (RGPD) |
+| `hero.trust.legacy` | Héritage familial | Cercles privés |
 
----
+## Fichiers à modifier
 
-## Regles de determination du type automatique
+1. **public/locales/fr/landing.json** - Version française principale
+2. **public/locales/en/landing.json** - Version anglaise
+3. **public/locales/es/landing.json** - Version espagnole
+4. **public/locales/ko/landing.json** - Version coréenne
+5. **public/locales/zh/landing.json** - Version chinoise
 
-| Contenus ajoutes | Type sauvegarde |
-|------------------|-----------------|
-| Texte uniquement | `text` |
-| Photos uniquement | `photo` |
-| Videos uniquement | `video` |
-| Audio uniquement | `audio` |
-| Mix de plusieurs types | `mixed` |
+## Traductions proposées
 
----
+### Anglais (EN)
+- badge: "Create your family journal, simply"
+- prefix: "Family moments deserve"
+- highlight: "to be relived"
+- line1: "Photos, videos, texts, audio… gather your memories in one place, with context and emotion."
+- line2: "Share privately with grandparents and loved ones, without losing them across 10 apps."
+- encryption: "Secure data"
+- gdpr: "EU Hosting (GDPR)"
+- legacy: "Private circles"
 
-## Fichiers a modifier
+### Espagnol (ES)
+- badge: "Crea tu diario familiar, simplemente"
+- prefix: "Los momentos en familia merecen"
+- highlight: "ser revividos"
+- line1: "Fotos, vídeos, textos, audios… reúne tus recuerdos en un solo lugar, con contexto y emoción."
+- line2: "Comparte en privado con los abuelos y seres queridos, sin perderlos en 10 aplicaciones."
+- encryption: "Datos seguros"
+- gdpr: "Alojamiento UE (RGPD)"
+- legacy: "Círculos privados"
 
-### 1. `src/components/capsule/MediaUpload.tsx`
-**Modifications :**
-- Ajouter des sections distinctes pour chaque type de media (photos, videos, audio)
-- Afficher les restrictions de forfait avec des cadenas sur les sections non disponibles
-- Permettre l'ajout de texte enrichi directement dans ce composant ou le laisser separe
-- Toujours afficher les zones de depot pour tous les types disponibles
+### Coréen (KO)
+- badge: "가족 일기를 간단하게 만드세요"
+- prefix: "가족의 순간은"
+- highlight: "다시 경험할 가치가 있습니다"
+- line1: "사진, 동영상, 텍스트, 오디오… 맥락과 감정을 담아 한 곳에 추억을 모으세요."
+- line2: "조부모와 가족에게 비공개로 공유하세요. 10개의 앱에 흩어지지 않게."
+- encryption: "안전한 데이터"
+- gdpr: "EU 호스팅 (GDPR)"
+- legacy: "비공개 서클"
 
-### 2. `src/pages/CapsuleCreate.tsx`
-**Modifications :**
-- Supprimer le state `capsuleType` gere par l'utilisateur
-- Supprimer le composant `CapsuleTypeSelector` de l'interface
-- Supprimer la condition `capsuleType !== 'text'` pour afficher les medias
-- Ajouter une logique `determineContentType()` qui calcule le type automatiquement avant sauvegarde
-- Mettre a jour la logique de sauvegarde pour utiliser le type determine
-
-### 3. `src/components/capsule/MobileCapsuleWizard.tsx`
-**Modifications :**
-- Supprimer l'etape "type" du wizard (passer de 5 a 4 etapes)
-- Fusionner les etapes "info" et "media" en une seule etape "contenu"
-- Adapter la navigation (plus besoin de sauter l'etape media)
-- Supprimer les props `capsuleType` et `onCapsuleTypeChange`
-
-### 4. `src/pages/CapsuleEdit.tsx`
-**Modifications :**
-- Memes changements que `CapsuleCreate.tsx`
-- Supprimer la selection de type
-- Calculer le type au moment de la sauvegarde
-
-### 5. Nouveau composant : `src/components/capsule/UnifiedMediaSection.tsx`
-**Creation :**
-Un nouveau composant qui remplace `MediaUpload` avec :
-- Zone de texte enrichi
-- Section Photos (disponible Free et plus)
-- Section Videos (Premium+ avec cadenas pour Free)
-- Section Audio (Premium+ avec cadenas pour Free)
-- Enregistreur audio integre (Premium+)
-- Messages d'upgrade pour les fonctionnalites bloquees
-
-### 6. Fichiers de traduction
-**Modifications :**
-- Supprimer les cles liees a la selection de type
-- Ajouter des cles pour les sections de contenu unifie
-- Ajouter des messages d'upgrade pour les types restreints
+### Chinois (ZH)
+- badge: "轻松创建您的家庭日记"
+- prefix: "家庭时刻值得"
+- highlight: "被重温"
+- line1: "照片、视频、文字、音频…将您的回忆汇集在一处，带着背景和情感。"
+- line2: "私密分享给祖父母和亲人，不再散落在10个应用中。"
+- encryption: "数据安全"
+- gdpr: "欧盟托管 (GDPR)"
+- legacy: "私密圈子"
 
 ---
 
-## Interface utilisateur proposee
+## Détails techniques
 
-```text
-+------------------------------------------+
-| CREER UN SOUVENIR                        |
-+------------------------------------------+
-| Categorie    [Voyages v]                 |
-+------------------------------------------+
-| Titre *      [Mon voyage en Italie     ] |
-| Description  [3 semaines inoubliables  ] |
-+------------------------------------------+
-| CONTENUS                                 |
-|                                          |
-| [+] Texte                                |
-|     [Zone de texte enrichi...]           |
-|                                          |
-| [+] Photos                               |
-|     [Glissez vos photos ici ou cliquez]  |
-|     [photo1.jpg] [photo2.jpg]            |
-|                                          |
-| [+] Videos          [PREMIUM]            |
-|     [Debloquer les videos - Voir forfaits]|
-|                                          |
-| [+] Audio           [PREMIUM]            |
-|     [Debloquer l'audio - Voir forfaits]  |
-+------------------------------------------+
-| Date du souvenir   [15 juin 2023]        |
-| Tags               [#voyage #italie]     |
-+------------------------------------------+
-| [Brouillon]  [Publier]                   |
-+------------------------------------------+
-```
+Aucune modification de code n'est nécessaire dans le composant `HeroSection.tsx` car les clés de traduction restent identiques. Seul le contenu des fichiers JSON sera modifié.
 
----
-
-## Logique de determination du type
-
-```typescript
-const determineContentType = (
-  content: string,
-  mediaFiles: MediaFile[]
-): CapsuleType => {
-  const hasText = content.trim().length > 0;
-  const hasPhotos = mediaFiles.some(f => f.type === 'image');
-  const hasVideos = mediaFiles.some(f => f.type === 'video');
-  const hasAudio = mediaFiles.some(f => f.type === 'audio');
-  
-  const mediaTypeCount = [hasPhotos, hasVideos, hasAudio].filter(Boolean).length;
-  
-  // Multiple media types = mixed
-  if (mediaTypeCount > 1) return 'mixed';
-  
-  // Single media type
-  if (hasVideos) return 'video';
-  if (hasAudio) return 'audio';
-  if (hasPhotos) return 'photo';
-  
-  // Text only
-  return 'text';
-};
-```
-
----
-
-## Gestion des restrictions de forfait
-
-Le hook `useFeatureAccess` sera utilise pour :
-- Afficher/masquer les sections selon le forfait
-- Afficher des cadenas et boutons d'upgrade
-- Valider a la sauvegarde que l'utilisateur a le droit d'ajouter ce type de contenu
-
-Exemple de validation :
-```typescript
-// Avant sauvegarde
-if (hasVideos && !canCreateCapsuleType('video')) {
-  toast.error("Les videos necessitent le forfait Premium");
-  return;
-}
-```
-
----
-
-## Impact sur la base de donnees
-
-**Aucune migration necessaire.**
-- Le champ `capsule_type` reste inchange
-- Le type est simplement determine automatiquement plutot que choisi manuellement
-- Les souvenirs existants conservent leur type
-
----
-
-## Etapes d'implementation
-
-1. Creer le composant `UnifiedMediaSection.tsx`
-2. Modifier `CapsuleCreate.tsx` pour utiliser le nouveau composant
-3. Modifier `MobileCapsuleWizard.tsx` pour le flux mobile
-4. Modifier `CapsuleEdit.tsx` pour l'edition
-5. Supprimer `CapsuleTypeSelector.tsx` (ou le conserver pour usage futur)
-6. Mettre a jour les traductions
-7. Tester tous les parcours utilisateur
-
----
-
-## Avantages de cette approche
-
-- Experience utilisateur simplifiee (moins d'etapes)
-- Plus de flexibilite dans la creation de souvenirs
-- Coherence avec les attentes modernes (comme Instagram, Stories)
-- Le systeme de forfait reste intact et bien visible
-- Retro-compatible avec les souvenirs existants
