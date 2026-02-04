@@ -12,15 +12,25 @@ import heroMariage from "@/assets/hero-slides/mariage.jpeg";
 import heroPlaylist from "@/assets/hero-slides/playlist.jpeg";
 
 // Each slide has a custom mobile object-position to focus on the relevant subject
-const heroSlides = [
-  { src: heroBackground, mobilePosition: "center 30%" },
-  { src: heroMariage, mobilePosition: "center 25%" },
-  { src: heroAnniversaire, mobilePosition: "center 35%" },
-  { src: heroVoyages, mobilePosition: "center 40%" },
-  { src: heroEtudes, mobilePosition: "center 30%" },
-  { src: heroPlaylist, mobilePosition: "center 20%" },
-];
-
+const heroSlides = [{
+  src: heroBackground,
+  mobilePosition: "center 30%"
+}, {
+  src: heroMariage,
+  mobilePosition: "center 25%"
+}, {
+  src: heroAnniversaire,
+  mobilePosition: "center 35%"
+}, {
+  src: heroVoyages,
+  mobilePosition: "center 40%"
+}, {
+  src: heroEtudes,
+  mobilePosition: "center 30%"
+}, {
+  src: heroPlaylist,
+  mobilePosition: "center 20%"
+}];
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -31,14 +41,16 @@ const useIsMobile = () => {
   }, []);
   return isMobile;
 };
-
 const HeroSection = () => {
   const isMobile = useIsMobile();
-  const { t } = useTranslation('landing');
+  const {
+    t
+  } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  
-  const { scrollYProgress } = useScroll({
+  const {
+    scrollYProgress
+  } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
@@ -46,11 +58,10 @@ const HeroSection = () => {
   // Auto-advance slides
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      setCurrentSlide(prev => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
   }, []);
@@ -60,36 +71,27 @@ const HeroSection = () => {
   const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
   const floatingElementsY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
+  return <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image Slider with Overlay - Parallax */}
-      <motion.div 
-        className="absolute inset-0 h-[130%] -top-[15%]" 
-        style={{
-          y: backgroundY,
-          scale: backgroundScale
-        }}
-      >
+      <motion.div className="absolute inset-0 h-[130%] -top-[15%]" style={{
+      y: backgroundY,
+      scale: backgroundScale
+    }}>
         <AnimatePresence mode="wait">
-          <motion.img
-            key={currentSlide}
-            src={heroSlides[currentSlide].src}
-            alt={t('hero.badge')}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              objectPosition: isMobile 
-                ? heroSlides[currentSlide].mobilePosition 
-                : "center center"
-            }}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
+          <motion.img key={currentSlide} src={heroSlides[currentSlide].src} alt={t('hero.badge')} className="absolute inset-0 w-full h-full object-cover" style={{
+          objectPosition: isMobile ? heroSlides[currentSlide].mobilePosition : "center center"
+        }} initial={{
+          opacity: 0,
+          scale: 1.1
+        }} animate={{
+          opacity: 1,
+          scale: 1
+        }} exit={{
+          opacity: 0
+        }} transition={{
+          duration: 1,
+          ease: "easeInOut"
+        }} loading="eager" fetchPriority="high" decoding="async" />
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/50 to-primary/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/25 to-transparent" />
@@ -98,123 +100,119 @@ const HeroSection = () => {
 
       {/* Slide Indicators */}
       <div className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {heroSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide 
-                ? 'bg-secondary w-6 sm:w-8' 
-                : 'bg-primary-foreground/50 hover:bg-primary-foreground/70'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+        {heroSlides.map((_, index) => <button key={index} onClick={() => goToSlide(index)} className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-secondary w-6 sm:w-8' : 'bg-primary-foreground/50 hover:bg-primary-foreground/70'}`} aria-label={`Go to slide ${index + 1}`} />)}
       </div>
 
       {/* Floating Elements - Parallax - Hidden on mobile for cleaner look */}
-      <motion.div 
-        className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block" 
-        style={{ y: floatingElementsY }}
-      >
-        <motion.div
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-secondary/30 blur-2xl"
-        />
-        <motion.div
-          animate={{
-            y: [0, 20, 0],
-            rotate: [0, -5, 0]
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/30 blur-2xl"
-        />
+      <motion.div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block" style={{
+      y: floatingElementsY
+    }}>
+        <motion.div animate={{
+        y: [0, -20, 0],
+        rotate: [0, 5, 0]
+      }} transition={{
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }} className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-secondary/30 blur-2xl" />
+        <motion.div animate={{
+        y: [0, 20, 0],
+        rotate: [0, -5, 0]
+      }} transition={{
+        duration: 10,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/30 blur-2xl" />
       </motion.div>
 
-      <motion.div 
-        className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20" 
-        style={{ opacity: contentOpacity }}
-      >
+      <motion.div className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20" style={{
+      opacity: contentOpacity
+    }}>
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg"
-          >
+          <motion.h1 initial={{
+          opacity: 0,
+          y: 30
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.7,
+          delay: 0.1
+        }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">{t('hero.title.line1')}</span>
-            <span className="block">{t('hero.title.line2')}</span>
+            
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-sm sm:text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed space-y-3 sm:space-y-4"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.7,
+          delay: 0.2
+        }} className="text-sm sm:text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed space-y-3 sm:space-y-4">
             <p>{t('hero.subtitle.line1')}</p>
             <p>{t('hero.subtitle.line2')}</p>
             <p>{t('hero.subtitle.line3')}</p>
           </motion.div>
 
           {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-full sm:w-auto"
-            >
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.7,
+          delay: 0.3
+        }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <motion.div whileHover={{
+            scale: 1.05,
+            y: -2
+          }} whileTap={{
+            scale: 0.98
+          }} transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 17
+          }} className="w-full sm:w-auto">
               <Button asChild variant="hero" size="xl" className="group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <Link to="/signup">
                   {t('hero.cta.primary')}
-                  <motion.span
-                    className="inline-flex"
-                    whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 400 }}
-                  >
+                  <motion.span className="inline-flex" whileHover={{
+                  x: 4
+                }} transition={{
+                  type: "spring",
+                  stiffness: 400
+                }}>
                     <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
                   </motion.span>
                 </Link>
               </Button>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-full sm:w-auto"
-            >
-              <Button
-                asChild
-                variant="ghost"
-                size="xl"
-                className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg"
-              >
+            <motion.div whileHover={{
+            scale: 1.05,
+            y: -2
+          }} whileTap={{
+            scale: 0.98
+          }} transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 17
+          }} className="w-full sm:w-auto">
+              <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <a href="#how-it-works">
-                  <motion.span
-                    className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400 }}
-                  >
+                  <motion.span className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors" whileHover={{
+                  scale: 1.1
+                }} transition={{
+                  type: "spring",
+                  stiffness: 400
+                }}>
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                   </motion.span>
                   {t('hero.cta.secondary')}
@@ -224,12 +222,14 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Trust indicators - Simplified on mobile */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-6 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} animate={{
+          opacity: 1
+        }} transition={{
+          duration: 0.7,
+          delay: 0.5
+        }} className="mt-6 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80">
             {/* Trust indicators with GEO-optimized factual claims */}
             <div className="flex items-center gap-2 sm:gap-3" title={t('hero.trust.encryption')}>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -254,18 +254,20 @@ const HeroSection = () => {
       </motion.div>
 
       {/* Scroll Indicator - Hidden on mobile */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ duration: 2, delay: 1, repeat: Infinity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
-      >
+      <motion.div initial={{
+      opacity: 0
+    }} animate={{
+      opacity: 1,
+      y: [0, 10, 0]
+    }} transition={{
+      duration: 2,
+      delay: 1,
+      repeat: Infinity
+    }} className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block">
         <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/30 flex items-start justify-center p-2">
           <div className="w-1 h-2 rounded-full bg-primary-foreground/50" />
         </div>
       </motion.div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
