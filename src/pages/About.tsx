@@ -18,13 +18,13 @@ import {
 const About = () => {
   useEffect(() => {
     // Update page title and meta for SEO
-    document.title = "À propos de Family Garden | Notre mission et nos valeurs";
+    document.title = "À propos de FamilyGarden | Le journal de famille privé";
     
     // Add meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 
-        'Découvrez l\'histoire de Family Garden, plateforme française de capsules mémorielles. Notre mission : préserver et transmettre vos souvenirs aux générations futures avec sécurité et respect de la vie privée.'
+        'Découvrez FamilyGarden : un journal de famille privé pour rassembler photos, vidéos, audios et textes, les organiser simplement et les partager en cercles avec vos proches.'
       );
     }
 
@@ -63,22 +63,22 @@ const About = () => {
     {
       icon: Heart,
       title: "Bienveillance",
-      description: "Chaque souvenir est précieux. Nous traitons vos données avec le plus grand respect et la plus grande attention."
+      description: "Les moments de famille comptent. Nous concevons FamilyGarden pour qu'il soit simple, chaleureux et utile au quotidien."
     },
     {
       icon: Shield,
       title: "Sécurité",
-      description: "Chiffrement AES-256 de niveau bancaire, serveurs européens conformes au RGPD, sauvegardes quotidiennes automatiques."
+      description: "Chiffrement et bonnes pratiques de sécurité, hébergement européen, et protection de l'accès à votre espace."
     },
     {
       icon: Users,
-      title: "Transmission",
-      description: "Faciliter le partage intergénérationnel des histoires familiales pour créer des liens durables entre les générations."
+      title: "Partage",
+      description: "Partagez vos souvenirs avec les bonnes personnes grâce aux cercles privés (grands-parents, parrain/marraine, proches)."
     },
     {
       icon: Leaf,
       title: "Pérennité",
-      description: "Vos souvenirs méritent de traverser le temps. Notre infrastructure est conçue pour préserver vos données sur le long terme."
+      description: "Vous gardez la main : export, organisation et continuité. FamilyGarden est conçu pour durer sans vous enfermer."
     },
     {
       icon: Clock,
@@ -88,30 +88,30 @@ const About = () => {
     {
       icon: Lock,
       title: "Confidentialité",
-      description: "Vous gardez le contrôle total sur vos données. Aucune exploitation commerciale, aucun partage avec des tiers."
+      description: "Vous contrôlez qui voit quoi. Pas de revente de données, pas de partage publicitaire."
     }
   ];
 
   const milestones = [
     {
       year: "2024",
-      title: "Naissance de Family Garden",
-      description: "Création de la plateforme avec une vision claire : permettre à chaque famille de préserver son héritage numérique."
+      title: "Naissance de FamilyGarden",
+      description: "L'idée : un endroit simple et privé pour raconter la vie de famille — pas juste stocker des fichiers."
     },
     {
       year: "2024",
-      title: "Lancement des capsules mémorielles",
-      description: "Développement du concept de capsule mémorielle multimédia : textes, photos, vidéos et audio réunis dans un espace sécurisé."
+      title: "Souvenirs multimédias",
+      description: "Chaque souvenir réunit texte, photos, vidéos et audio, avec du contexte (date, lieu, personnes)."
     },
     {
       year: "2025",
-      title: "Fonctionnalité Legacy",
-      description: "Introduction du legs posthume programmé, permettant de transmettre des messages et souvenirs à ses proches selon ses souhaits."
+      title: "Partage par cercles",
+      description: "Ajout des cercles privés pour partager facilement avec les grands-parents et les proches, en gardant le contrôle."
     },
     {
       year: "2025",
-      title: "Arbre généalogique intégré",
-      description: "Liaison des capsules mémorielles à l'arbre généalogique pour une vision complète de l'histoire familiale."
+      title: "Arbre familial intégré",
+      description: "Relier les souvenirs aux personnes : une vision claire de votre famille et des moments partagés."
     }
   ];
 
@@ -135,9 +135,9 @@ const About = () => {
               À propos de <span className="text-primary">Family Garden</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Plateforme française de capsules mémorielles numériques, 
-              Family Garden accompagne les familles dans la préservation et 
-              la transmission de leurs souvenirs les plus précieux.
+              FamilyGarden est un journal de famille privé : un endroit simple pour rassembler 
+              vos souvenirs (photos, vidéos, audios, textes), les organiser, et les partager 
+              en cercle avec vos proches.
             </p>
           </div>
         </div>
@@ -153,19 +153,17 @@ const About = () => {
                   Notre mission
                 </h2>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  Chez Family Garden, nous croyons que chaque histoire familiale mérite d'être préservée. 
-                  Notre mission est de fournir un <strong>coffre-fort numérique sécurisé</strong> où 
-                  les familles peuvent stocker, organiser et transmettre leurs souvenirs aux générations futures.
+                  Chez FamilyGarden, nous croyons que les meilleurs moments se vivent… et se racontent. 
+                  Notre mission : vous offrir un <strong>espace privé et simple</strong> pour créer un 
+                  journal de famille qui donne du sens à vos souvenirs.
                 </p>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  Dans un monde où les photos s'accumulent sur des téléphones perdus et où les histoires 
-                  orales risquent de disparaître, nous offrons une solution pérenne pour 
-                  <strong> l'héritage numérique familial</strong>.
+                  Dans un monde où tout s'éparpille (téléphone, WhatsApp, drive…), FamilyGarden vous aide 
+                  à retrouver vos souvenirs facilement et à les partager avec les bonnes personnes.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Notre plateforme permet de créer des <strong>capsules mémorielles</strong> enrichies 
-                  de textes, photos, vidéos et enregistrements audio, organisées chronologiquement 
-                  et partageables en toute sécurité avec les cercles de confiance que vous définissez.
+                  Concrètement : vous créez un souvenir, vous ajoutez vos contenus (photos/vidéo/texte/audio), 
+                  et vous le partagez (ou non) dans des <strong>cercles privés</strong>.
                 </p>
               </div>
               <Card className="bg-primary/5 border-primary/20">
@@ -266,19 +264,19 @@ const About = () => {
               <CardContent className="p-8 md:p-12">
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-display font-bold text-foreground mb-4">
-                    Pourquoi nous faire confiance ?
+                    Sécurité & confidentialité
                   </h2>
                 </div>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="text-lg font-semibold text-foreground mb-3">
-                      Sécurité de niveau entreprise
+                      Protection de vos données
                     </h3>
                     <ul className="space-y-2 text-muted-foreground text-sm">
-                      <li>• Chiffrement AES-256 des données au repos et en transit</li>
-                      <li>• Hébergement sur serveurs européens conformes RGPD</li>
-                      <li>• Sauvegardes quotidiennes automatiques géo-répliquées</li>
-                      <li>• Authentification sécurisée avec option 2FA</li>
+                      <li>• Connexions chiffrées (HTTPS) et protection de l'accès</li>
+                      <li>• Hébergement européen (RGPD)</li>
+                      <li>• Sauvegardes et mesures de continuité</li>
+                      <li>• Contrôle du partage via les cercles privés</li>
                     </ul>
                   </div>
                   <div>
@@ -304,10 +302,10 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-display font-bold text-foreground mb-4">
-              Prêt à préserver vos souvenirs ?
+              Prêt à créer votre journal de famille ?
             </h2>
             <p className="text-muted-foreground mb-8">
-              Rejoignez Family Garden et commencez à créer votre héritage numérique familial dès aujourd'hui.
+              Commencez en 1 minute : créez votre premier souvenir, ajoutez une photo ou un audio, et invitez vos proches.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="gap-2">
