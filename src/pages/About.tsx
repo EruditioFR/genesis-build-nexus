@@ -128,11 +128,20 @@ const About = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-primary/5 to-background">
-        <div className="container mx-auto px-4">
+      <section className="pt-32 pb-16 bg-gradient-to-br from-primary/10 via-gold/5 to-terracotta/5 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gold/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-terracotta/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+              <Heart className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Votre histoire familiale</span>
+            </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
-              À propos de <span className="text-primary">Family Garden</span>
+              À propos de <span className="bg-gradient-to-r from-primary via-gold to-terracotta bg-clip-text text-transparent">Family Garden</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
               FamilyGarden est un journal de famille privé : un endroit simple pour rassembler 
@@ -166,15 +175,18 @@ const About = () => {
                   et vous le partagez (ou non) dans des <strong>cercles privés</strong>.
                 </p>
               </div>
-              <Card className="bg-primary/5 border-primary/20">
+              <Card className="bg-gradient-to-br from-primary/10 via-gold/5 to-terracotta/5 border-primary/20 shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-semibold text-foreground mb-4">
+                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-gold flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-white" />
+                    </span>
                     Nos domaines d'expertise
                   </h3>
                   <ul className="space-y-3">
                     {expertiseAreas.map((area, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
                         <span className="text-muted-foreground">{area}</span>
                       </li>
                     ))}
@@ -187,10 +199,14 @@ const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-gradient-to-b from-muted/30 via-gold/5 to-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 rounded-full mb-4">
+                <Leaf className="w-4 h-4 text-gold" />
+                <span className="text-sm font-medium text-gold">Ce qui nous guide</span>
+              </div>
               <h2 className="text-3xl font-display font-bold text-foreground mb-4">
                 Nos valeurs
               </h2>
@@ -200,31 +216,48 @@ const About = () => {
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {values.map((value, index) => (
-                <Card key={index} className="bg-background border-border hover:border-primary/30 transition-colors">
-                  <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                      <value.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {value.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+              {values.map((value, index) => {
+                const colorVariants = [
+                  'from-primary to-primary/70',
+                  'from-gold to-gold/70',
+                  'from-terracotta to-terracotta/70',
+                  'from-navy to-navy/70',
+                  'from-primary to-gold',
+                  'from-terracotta to-primary',
+                ];
+                return (
+                  <Card key={index} className="bg-background border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 group">
+                    <CardContent className="p-6">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorVariants[index]} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                        <value.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        {value.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {value.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* Timeline Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-background relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-terracotta/10 rounded-full mb-4">
+                <Clock className="w-4 h-4 text-terracotta" />
+                <span className="text-sm font-medium text-terracotta">Notre parcours</span>
+              </div>
               <h2 className="text-3xl font-display font-bold text-foreground mb-4">
                 Notre histoire
               </h2>
@@ -233,61 +266,104 @@ const About = () => {
               </p>
             </div>
             <div className="space-y-8">
-              {milestones.map((milestone, index) => (
-                <div key={index} className="flex gap-6">
-                  <div className="flex-shrink-0 w-16">
-                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
-                      {milestone.year}
-                    </span>
+              {milestones.map((milestone, index) => {
+                const dotColors = ['bg-primary', 'bg-gold', 'bg-terracotta', 'bg-navy'];
+                const badgeColors = ['bg-primary/10 text-primary', 'bg-gold/10 text-gold', 'bg-terracotta/10 text-terracotta', 'bg-navy/10 text-navy'];
+                return (
+                  <div key={index} className="flex gap-6 group">
+                    <div className="flex-shrink-0 w-16">
+                      <span className={`inline-block px-3 py-1 ${badgeColors[index % 4]} text-sm font-semibold rounded-full`}>
+                        {milestone.year}
+                      </span>
+                    </div>
+                    <div className="flex-1 pb-8 border-l-2 border-gradient-to-b from-primary/40 to-gold/40 pl-6 relative">
+                      <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full ${dotColors[index % 4]} group-hover:scale-125 transition-transform duration-300 shadow-lg`} />
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        {milestone.title}
+                      </h3>
+                      <p className="text-muted-foreground">
+                        {milestone.description}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 pb-8 border-l-2 border-primary/20 pl-6 relative">
-                    <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {milestone.title}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {milestone.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* Trust Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-gradient-to-br from-navy/5 via-primary/5 to-gold/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <Card className="bg-background border-primary/20">
+            <Card className="bg-background border-navy/20 shadow-xl overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-primary via-gold to-terracotta" />
               <CardContent className="p-8 md:p-12">
                 <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy/10 rounded-full mb-4">
+                    <Shield className="w-4 h-4 text-navy" />
+                    <span className="text-sm font-medium text-navy">Votre confiance, notre priorité</span>
+                  </div>
                   <h2 className="text-3xl font-display font-bold text-foreground mb-4">
                     Sécurité & confidentialité
                   </h2>
                 </div>
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">
-                      Protection de vos données
-                    </h3>
-                    <ul className="space-y-2 text-muted-foreground text-sm">
-                      <li>• Connexions chiffrées (HTTPS) et protection de l'accès</li>
-                      <li>• Hébergement européen (RGPD)</li>
-                      <li>• Sauvegardes et mesures de continuité</li>
-                      <li>• Contrôle du partage via les cercles privés</li>
+                  <div className="p-6 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                        <Lock className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        Protection de vos données
+                      </h3>
+                    </div>
+                    <ul className="space-y-3 text-muted-foreground text-sm">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span>Connexions chiffrées (HTTPS) et protection de l'accès</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span>Hébergement européen (RGPD)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span>Sauvegardes et mesures de continuité</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span>Contrôle du partage via les cercles privés</span>
+                      </li>
                     </ul>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">
-                      Engagement éthique
-                    </h3>
-                    <ul className="space-y-2 text-muted-foreground text-sm">
-                      <li>• Aucune exploitation commerciale de vos données</li>
-                      <li>• Aucun partage avec des tiers publicitaires</li>
-                      <li>• Droit à l'export et à la suppression à tout moment</li>
-                      <li>• Transparence totale sur l'utilisation des données</li>
+                  <div className="p-6 rounded-xl bg-gradient-to-br from-gold/5 to-transparent border border-gold/10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold/70 flex items-center justify-center">
+                        <Heart className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        Engagement éthique
+                      </h3>
+                    </div>
+                    <ul className="space-y-3 text-muted-foreground text-sm">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                        <span>Aucune exploitation commerciale de vos données</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                        <span>Aucun partage avec des tiers publicitaires</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                        <span>Droit à l'export et à la suppression à tout moment</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                        <span>Transparence totale sur l'utilisation des données</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -298,9 +374,17 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary/5">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-gradient-to-br from-primary/10 via-gold/10 to-terracotta/10 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-gold/15 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 backdrop-blur-sm rounded-full mb-6 border border-primary/20">
+              <ArrowRight className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Lancez-vous</span>
+            </div>
             <h2 className="text-3xl font-display font-bold text-foreground mb-4">
               Prêt à créer votre journal de famille ?
             </h2>
@@ -308,13 +392,13 @@ const About = () => {
               Commencez en 1 minute : créez votre premier souvenir, ajoutez une photo ou un audio, et invitez vos proches.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="gap-2">
+              <Button asChild size="lg" className="gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg">
                 <Link to="/signup">
                   Créer mon compte gratuit
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="border-primary/30 hover:bg-primary/5">
                 <Link to="/">
                   Découvrir les fonctionnalités
                 </Link>
