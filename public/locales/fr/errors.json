@@ -17,10 +17,10 @@
     "invalidToken": "Lien invalide ou expiré."
   },
   "capsule": {
-    "createFailed": "Impossible de créer la capsule",
-    "updateFailed": "Impossible de mettre à jour la capsule",
-    "deleteFailed": "Impossible de supprimer la capsule",
-    "loadFailed": "Impossible de charger la capsule"
+    "createFailed": "Impossible de créer le souvenir",
+    "updateFailed": "Impossible de mettre à jour le souvenir",
+    "deleteFailed": "Impossible de supprimer le souvenir",
+    "loadFailed": "Impossible de charger le souvenir"
   },
   "circle": {
     "createFailed": "Impossible de créer le cercle",

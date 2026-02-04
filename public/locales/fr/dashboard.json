@@ -38,7 +38,7 @@
   "recentCapsules": {
     "title": "Derniers souvenirs",
     "empty": "Vous n'avez pas encore ajouté de souvenir",
-    "emptySubtitle": "Créez votre première capsule pour commencer à préserver vos souvenirs.",
+    "emptySubtitle": "Créez votre premier souvenir pour commencer à préserver vos moments précieux.",
     "createFirst": "Ajouter mon premier souvenir",
     "viewAll": "Voir tout",
     "noContent": "Aucun contenu"
@@ -78,7 +78,7 @@
     "subtitle": "Complétez ces étapes pour bien démarrer",
     "steps": {
       "profile": "Compléter votre profil",
-      "firstCapsule": "Créer votre première capsule",
+      "firstCapsule": "Créer votre premier souvenir",
       "inviteFamily": "Inviter un membre de la famille",
       "familyTree": "Démarrer l'arbre généalogique"
     }
@@ -89,7 +89,7 @@
   },
   "sidebar": {
     "home": "Accueil",
-    "capsules": "Mes capsules",
+    "capsules": "Mes souvenirs",
     "timeline": "Chronologie",
     "circles": "Cercles",
     "familyTree": "Arbre généalogique",
@@ -121,7 +121,7 @@
     "unlock": "Débloquer",
     "upgradeTitle": "Passez à Premium",
     "upgradeTitleHeritage": "Passez à Héritage",
-    "upgradeDesc": "Débloquez les capsules vidéo/audio et plus d'espace",
+    "upgradeDesc": "Débloquez les souvenirs vidéo/audio et plus d'espace",
     "upgradeDescHeritage": "Débloquez l'arbre généalogique et le partage illimité",
     "discover": "Découvrir",
     "admin": "Admin"
@@ -220,7 +220,7 @@
     "viewInvoice": "Voir en ligne",
     "guardians": "Gardiens",
     "guardianSpace": "Espace Gardien",
-    "guardianSpaceDesc": "Gérez les capsules héritage qui vous sont confiées",
+    "guardianSpaceDesc": "Gérez les souvenirs héritage qui vous sont confiés",
     "guardianAccess": "Accéder",
     "security": "Sécurité",
     "subscriptionSuccess": "🎉 Abonnement activé avec succès !",
@@ -248,7 +248,7 @@
     "statusPending": "En attente",
     "selectCircle": "Sélectionnez un cercle pour voir ses détails",
     "deleteConfirmTitle": "Supprimer ce cercle ?",
-    "deleteConfirmDesc": "Tous les membres seront retirés et les capsules partagées ne seront plus accessibles. Cette action est irréversible.",
+    "deleteConfirmDesc": "Tous les membres seront retirés et les souvenirs partagés ne seront plus accessibles. Cette action est irréversible.",
     "deleteSuccess": "Cercle supprimé",
     "deleteError": "Erreur lors de la suppression",
     "memberRemoved": "Membre retiré",

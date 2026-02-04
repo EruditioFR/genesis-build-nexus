@@ -38,7 +38,7 @@
   "recentCapsules": {
     "title": "Recuerdos recientes",
     "empty": "Aún no has agregado ningún recuerdo",
-    "emptySubtitle": "Crea tu primera cápsula para comenzar a preservar tus recuerdos.",
+    "emptySubtitle": "Crea tu primer recuerdo para comenzar a preservar tus momentos preciosos.",
     "createFirst": "Agregar mi primer recuerdo",
     "viewAll": "Ver todo",
     "noContent": "Sin contenido"
@@ -78,7 +78,7 @@
     "subtitle": "Completa estos pasos para comenzar",
     "steps": {
       "profile": "Completar tu perfil",
-      "firstCapsule": "Crear tu primera cápsula",
+      "firstCapsule": "Crear tu primer recuerdo",
       "inviteFamily": "Invitar a un familiar",
       "familyTree": "Comenzar el árbol genealógico"
     }
@@ -89,7 +89,7 @@
   },
   "sidebar": {
     "home": "Inicio",
-    "capsules": "Mis cápsulas",
+    "capsules": "Mis recuerdos",
     "timeline": "Cronología",
     "circles": "Círculos",
     "familyTree": "Árbol genealógico",

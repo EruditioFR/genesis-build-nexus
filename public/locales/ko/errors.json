@@ -17,10 +17,10 @@
     "invalidToken": "유효하지 않거나 만료된 링크입니다."
   },
   "capsule": {
-    "createFailed": "캡슐을 만들 수 없습니다",
-    "updateFailed": "캡슐을 업데이트할 수 없습니다",
-    "deleteFailed": "캡슐을 삭제할 수 없습니다",
-    "loadFailed": "캡슐을 로드할 수 없습니다"
+    "createFailed": "추억을 만들 수 없습니다",
+    "updateFailed": "추억을 업데이트할 수 없습니다",
+    "deleteFailed": "추억을 삭제할 수 없습니다",
+    "loadFailed": "추억을 로드할 수 없습니다"
   },
   "circle": {
     "createFailed": "서클을 만들 수 없습니다",

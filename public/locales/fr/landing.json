@@ -148,8 +148,8 @@
     "titleHighlight": "fréquentes",
     "items": {
       "q1": {
-        "question": "Qu'est-ce qu'une capsule mémorielle ?",
-        "answer": "Une capsule mémorielle est un conteneur numérique sécurisé qui préserve vos souvenirs sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures. Chaque capsule est privée et accessible uniquement aux personnes que vous autorisez."
+        "question": "Qu'est-ce qu'un souvenir sur FamilyGarden ?",
+        "answer": "Un souvenir est un conteneur numérique sécurisé qui préserve vos moments sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures. Chaque souvenir est privé et accessible uniquement aux personnes que vous autorisez."
       },
       "q2": {
         "question": "Mes données sont-elles sécurisées ?",
@@ -165,7 +165,7 @@
       },
       "q5": {
         "question": "Comment fonctionne le legs posthume ?",
-        "answer": "Avec l'offre Legacy, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certaines capsules selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels."
+        "answer": "Avec l'offre Héritage, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certains souvenirs selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels."
       },
       "q6": {
         "question": "Y a-t-il une application mobile ?",

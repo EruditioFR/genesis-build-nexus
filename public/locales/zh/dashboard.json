@@ -38,7 +38,7 @@
   "recentCapsules": {
     "title": "最近的回忆",
     "empty": "您还没有添加任何回忆",
-    "emptySubtitle": "创建您的第一个胶囊开始保存回忆。",
+    "emptySubtitle": "创建您的第一个回忆开始保存珍贵时刻。",
     "createFirst": "添加我的第一个回忆",
     "viewAll": "查看全部",
     "noContent": "无内容"
@@ -78,7 +78,7 @@
     "subtitle": "完成这些步骤开始使用",
     "steps": {
       "profile": "完善您的资料",
-      "firstCapsule": "创建您的第一个胶囊",
+      "firstCapsule": "创建您的第一个回忆",
       "inviteFamily": "邀请家人",
       "familyTree": "开始家谱"
     }
@@ -89,7 +89,7 @@
   },
   "sidebar": {
     "home": "首页",
-    "capsules": "我的胶囊",
+    "capsules": "我的回忆",
     "timeline": "时间线",
     "circles": "圈子",
     "familyTree": "家谱",
