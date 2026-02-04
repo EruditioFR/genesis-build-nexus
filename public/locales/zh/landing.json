@@ -55,12 +55,12 @@
   },
   "howItWorks": {
     "badge": "如何运作？",
-    "title": "创建您的回忆胶囊",
+    "title": "创建回忆",
     "titleHighlight": "简单4步",
     "stepLabel": "步骤",
     "capsuleExplainer": {
-      "title": "什么是回忆胶囊？",
-      "description": "回忆胶囊是一个安全的数字空间，您可以在其中收集最珍贵的回忆：照片、视频、录音和文字。这是您的数字遗产，一种独特的方式来保存和传递您的家族历史给后代。"
+      "title": "FamilyGarden上的\"回忆\"是什么？",
+      "description": "回忆 = 完整的时刻：照片/视频 + 文字 + 音频，有序整理且可私密分享。"
     },
     "steps": {
       "step1": {
@@ -72,12 +72,12 @@
         "description": "使用我们直观的编辑器上传照片、视频、录音并撰写您的故事。"
       },
       "step3": {
-        "title": "整理与分享",
+        "title": "整理并分享",
         "description": "将胶囊组织成人生章节，邀请家人一起贡献。"
       },
       "step4": {
-        "title": "永久保存",
-        "description": "您的回忆将得到安全保护，准备好传递给后代。"
+        "title": "随时重温",
+        "description": "通过时间线快速找到您的时刻，并与亲人分享。"
       }
     }
   },
