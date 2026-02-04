@@ -168,6 +168,8 @@ const HeroSection = () => {
                 </AnimatePresence>
               </span>
               {t('hero.title.suffix')}
+            </span>
+            <span className="block">
               <span className="text-gradient-gold">{t('hero.title.highlight')}</span>
             </span>
           </motion.h1>
