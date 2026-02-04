@@ -9,7 +9,6 @@ import {
   Shield, 
   Users, 
   Leaf, 
-  Clock, 
   Lock,
   ArrowRight,
   CheckCircle2
@@ -81,7 +80,7 @@ const About = () => {
       description: "Vous gardez la main : export, organisation et continuité. FamilyGarden est conçu pour durer sans vous enfermer."
     },
     {
-      icon: Clock,
+      icon: Leaf,
       title: "Simplicité",
       description: "Une interface intuitive accessible à tous, des grands-parents aux petits-enfants, sans compétence technique requise."
     },
@@ -92,28 +91,6 @@ const About = () => {
     }
   ];
 
-  const milestones = [
-    {
-      year: "2024",
-      title: "Naissance de FamilyGarden",
-      description: "L'idée : un endroit simple et privé pour raconter la vie de famille — pas juste stocker des fichiers."
-    },
-    {
-      year: "2024",
-      title: "Souvenirs multimédias",
-      description: "Chaque souvenir réunit texte, photos, vidéos et audio, avec du contexte (date, lieu, personnes)."
-    },
-    {
-      year: "2025",
-      title: "Partage par cercles",
-      description: "Ajout des cercles privés pour partager facilement avec les grands-parents et les proches, en gardant le contrôle."
-    },
-    {
-      year: "2025",
-      title: "Arbre familial intégré",
-      description: "Relier les souvenirs aux personnes : une vision claire de votre famille et des moments partagés."
-    }
-  ];
 
   const expertiseAreas = [
     "Préservation numérique des souvenirs familiaux",
@@ -246,52 +223,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-16 bg-background relative overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-terracotta/10 rounded-full mb-4">
-                <Clock className="w-4 h-4 text-terracotta" />
-                <span className="text-sm font-medium text-terracotta">Notre parcours</span>
-              </div>
-              <h2 className="text-3xl font-display font-bold text-foreground mb-4">
-                Notre histoire
-              </h2>
-              <p className="text-muted-foreground">
-                Les étapes clés du développement de Family Garden.
-              </p>
-            </div>
-            <div className="space-y-8">
-              {milestones.map((milestone, index) => {
-                const dotColors = ['bg-primary', 'bg-gold', 'bg-terracotta', 'bg-navy'];
-                const badgeColors = ['bg-primary/10 text-primary', 'bg-gold/10 text-gold', 'bg-terracotta/10 text-terracotta', 'bg-navy/10 text-navy'];
-                return (
-                  <div key={index} className="flex gap-6 group">
-                    <div className="flex-shrink-0 w-16">
-                      <span className={`inline-block px-3 py-1 ${badgeColors[index % 4]} text-sm font-semibold rounded-full`}>
-                        {milestone.year}
-                      </span>
-                    </div>
-                    <div className="flex-1 pb-8 border-l-2 border-gradient-to-b from-primary/40 to-gold/40 pl-6 relative">
-                      <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full ${dotColors[index % 4]} group-hover:scale-125 transition-transform duration-300 shadow-lg`} />
-                      <h3 className="text-lg font-semibold text-foreground mb-2">
-                        {milestone.title}
-                      </h3>
-                      <p className="text-muted-foreground">
-                        {milestone.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Trust Section */}
       <section className="py-16 bg-gradient-to-br from-navy/5 via-primary/5 to-gold/5">
