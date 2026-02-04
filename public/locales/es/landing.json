@@ -110,7 +110,7 @@
         "description": "Perfecto para empezar a preservar tus recuerdos",
         "features": {
           "storage": "250 MB de almacenamiento",
-          "formats": "Cápsulas de texto y foto",
+          "formats": "Recuerdos de texto y foto",
           "timeline": "Cronología básica",
           "ads": "Con publicidad"
         }
@@ -120,7 +120,7 @@
         "description": "Para creadores de contenido regulares",
         "features": {
           "storage": "10 GB de almacenamiento",
-          "formats": "Cápsulas de texto, foto, video y audio",
+          "formats": "Recuerdos de texto, foto, video y audio",
           "sharing": "1 recuerdo compartido con la persona de tu elección",
           "timeline": "Cronología avanzada",
           "noAds": "Sin publicidad"
@@ -131,7 +131,7 @@
         "description": "Para familias multigeneracionales",
         "features": {
           "storage": "50 GB de almacenamiento",
-          "formats": "Cápsulas de texto, foto, video y audio",
+          "formats": "Recuerdos de texto, foto, video y audio",
           "sharing": "Compartir ilimitado",
           "timeline": "Cronología avanzada",
           "familyTree": "Árbol genealógico interactivo",

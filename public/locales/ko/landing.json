@@ -110,7 +110,7 @@
         "description": "추억 보존을 시작하기에 완벽",
         "features": {
           "storage": "250 MB 저장공간",
-          "formats": "텍스트 및 사진 캡슐",
+          "formats": "텍스트 및 사진 추억",
           "timeline": "기본 타임라인",
           "ads": "광고 포함"
         }
@@ -120,7 +120,7 @@
         "description": "정기적인 콘텐츠 크리에이터용",
         "features": {
           "storage": "10 GB 저장공간",
-          "formats": "텍스트, 사진, 비디오, 오디오 캡슐",
+          "formats": "텍스트, 사진, 비디오, 오디오 추억",
           "sharing": "원하는 사람과 1개 추억 공유",
           "timeline": "고급 타임라인",
           "noAds": "광고 없음"
@@ -131,7 +131,7 @@
         "description": "다세대 가족용",
         "features": {
           "storage": "50 GB 저장공간",
-          "formats": "텍스트, 사진, 비디오, 오디오 캡슐",
+          "formats": "텍스트, 사진, 비디오, 오디오 추억",
           "sharing": "무제한 공유",
           "timeline": "고급 타임라인",
           "familyTree": "인터랙티브 가계도",

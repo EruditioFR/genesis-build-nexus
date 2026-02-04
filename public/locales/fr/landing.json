@@ -110,7 +110,7 @@
         "description": "Parfait pour commencer à préserver vos souvenirs",
         "features": {
           "storage": "250 Mo de stockage",
-          "formats": "Capsules au format texte et photo",
+          "formats": "Souvenirs au format texte et photo",
           "timeline": "Chronologie basique",
           "ads": "Avec publicité"
         }
@@ -120,7 +120,7 @@
         "description": "Pour les créateurs de contenu réguliers",
         "features": {
           "storage": "10 Go de stockage",
-          "formats": "Capsules au format texte, photo, vidéo et audio",
+          "formats": "Souvenirs au format texte, photo, vidéo et audio",
           "sharing": "1 partage de souvenirs à la personne de votre choix",
           "timeline": "Chronologie avancée",
           "noAds": "Sans publicité"
@@ -131,7 +131,7 @@
         "description": "Pour les familles multigénérationnelles",
         "features": {
           "storage": "50 Go de stockage",
-          "formats": "Capsules au format texte, photo, vidéo et audio",
+          "formats": "Souvenirs au format texte, photo, vidéo et audio",
           "sharing": "Partages illimités",
           "timeline": "Chronologie avancée",
           "familyTree": "Arbre généalogique interactif",
