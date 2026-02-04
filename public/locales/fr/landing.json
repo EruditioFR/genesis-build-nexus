@@ -55,12 +55,12 @@
   },
   "howItWorks": {
     "badge": "Comment ça marche ?",
-    "title": "Créez votre capsule mémorielle",
+    "title": "Créez un souvenir",
     "titleHighlight": "en 4 étapes simples",
     "stepLabel": "Étape",
     "capsuleExplainer": {
-      "title": "Qu'est-ce qu'une capsule mémorielle ?",
-      "description": "Une capsule mémorielle est un espace numérique sécurisé où vous pouvez rassembler vos souvenirs les plus précieux : photos, vidéos, enregistrements audio et textes. C'est votre héritage numérique, une façon unique de préserver et transmettre votre histoire familiale aux générations futures."
+      "title": "Qu'est-ce qu'un \"souvenir\" sur FamilyGarden ?",
+      "description": "Un souvenir = un moment complet : photos/vidéo + texte + audio, organisé et partageable en privé."
     },
     "steps": {
       "step1": {
@@ -76,8 +76,8 @@
         "description": "Structurez vos capsules en chapitres de vie et invitez votre famille à contribuer."
       },
       "step4": {
-        "title": "Préservez pour l'éternité",
-        "description": "Vos souvenirs sont sécurisés et prêts à être transmis aux générations futures."
+        "title": "Revivez quand vous voulez",
+        "description": "Retrouvez vos moments en un clin d'œil grâce à la timeline, et partagez-les avec vos proches."
       }
     }
   },

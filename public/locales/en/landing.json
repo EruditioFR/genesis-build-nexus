@@ -55,12 +55,12 @@
   },
   "howItWorks": {
     "badge": "How it works?",
-    "title": "Create your memory capsule",
+    "title": "Create a memory",
     "titleHighlight": "in 4 simple steps",
     "stepLabel": "Step",
     "capsuleExplainer": {
-      "title": "What is a memory capsule?",
-      "description": "A memory capsule is a secure digital space where you can gather your most precious memories: photos, videos, audio recordings and texts. It's your digital heritage, a unique way to preserve and pass on your family history to future generations."
+      "title": "What is a \"memory\" on FamilyGarden?",
+      "description": "A memory = a complete moment: photos/video + text + audio, organized and privately shareable."
     },
     "steps": {
       "step1": {
@@ -76,8 +76,8 @@
         "description": "Structure your capsules into life chapters and invite your family to contribute."
       },
       "step4": {
-        "title": "Preserve forever",
-        "description": "Your memories are secured and ready to be passed on to future generations."
+        "title": "Relive whenever you want",
+        "description": "Find your moments in a blink thanks to the timeline, and share them with your loved ones."
       }
     }
   },
