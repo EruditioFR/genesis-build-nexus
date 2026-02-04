@@ -43,14 +43,15 @@ const useIsMobile = () => {
 };
 const HeroSection = () => {
   const isMobile = useIsMobile();
-  const {
-    t
-  } = useTranslation('landing');
+  const { t } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const {
-    scrollYProgress
-  } = useScroll({
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  
+  // Get rotating words from translations
+  const rotatingWords = t('hero.title.rotating', { returnObjects: true }) as string[];
+  
+  const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
@@ -62,6 +63,16 @@ const HeroSection = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-advance rotating words
+  useEffect(() => {
+    if (!Array.isArray(rotatingWords) || rotatingWords.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentWordIndex(prev => (prev + 1) % rotatingWords.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [rotatingWords]);
+
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
   }, []);
@@ -142,6 +153,21 @@ const HeroSection = () => {
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
             <span className="block">
               {t('hero.title.prefix')}
+              <span className="relative inline-block min-w-[140px] sm:min-w-[200px] md:min-w-[260px]">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentWordIndex}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="text-gradient-gold"
+                  >
+                    {Array.isArray(rotatingWords) ? rotatingWords[currentWordIndex] : ''}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+              {t('hero.title.suffix')}
               <span className="text-gradient-gold">{t('hero.title.highlight')}</span>
             </span>
           </motion.h1>
