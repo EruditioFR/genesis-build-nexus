@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -25,6 +25,8 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   const isSolid = forceSolid || isScrolled;
 
@@ -95,8 +97,16 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            link.isRoute ? (
+          {navLinks.map((link) => {
+            // For anchor links, redirect to home page if not on home
+            const handleAnchorClick = (e: React.MouseEvent) => {
+              if (!link.isRoute && !isHomePage) {
+                e.preventDefault();
+                navigate("/" + link.href);
+              }
+            };
+
+            return link.isRoute ? (
               <Link
                 key={link.label}
                 to={link.href}
@@ -107,13 +117,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
             ) : (
               <a
                 key={link.label}
-                href={link.href}
+                href={isHomePage ? link.href : "/" + link.href}
+                onClick={handleAnchorClick}
                 className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
               >
                 {link.label}
               </a>
-            )
-          ))}
+            );
+          })}
         </nav>
 
         {/* Desktop CTA / User Menu */}
@@ -195,8 +206,15 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
             className="md:hidden bg-card shadow-elevated"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
-              {navLinks.map((link) => (
-                link.isRoute ? (
+              {navLinks.map((link) => {
+                const handleMobileAnchorClick = () => {
+                  setIsMobileMenuOpen(false);
+                  if (!link.isRoute && !isHomePage) {
+                    navigate("/" + link.href);
+                  }
+                };
+
+                return link.isRoute ? (
                   <Link
                     key={link.label}
                     to={link.href}
@@ -208,14 +226,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 ) : (
                   <a
                     key={link.label}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    href={isHomePage ? link.href : "/" + link.href}
+                    onClick={handleMobileAnchorClick}
                     className="text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
                   >
                     {link.label}
                   </a>
-                )
-              ))}
+                );
+              })}
               <div className="pt-4 mt-2 border-t border-border flex flex-col gap-3">
                 <div className="flex justify-center py-2">
                   <LanguageSelector />
