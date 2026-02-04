@@ -38,7 +38,7 @@
   "recentCapsules": {
     "title": "최근 추억",
     "empty": "아직 추억이 없습니다",
-    "emptySubtitle": "첫 번째 캡슐을 만들어 추억 보존을 시작하세요.",
+    "emptySubtitle": "첫 번째 추억을 만들어 소중한 순간 보존을 시작하세요.",
     "createFirst": "첫 번째 추억 추가하기",
     "viewAll": "모두 보기",
     "noContent": "콘텐츠 없음"
@@ -78,7 +78,7 @@
     "subtitle": "시작하려면 이 단계를 완료하세요",
     "steps": {
       "profile": "프로필 완성하기",
-      "firstCapsule": "첫 번째 캡슐 만들기",
+      "firstCapsule": "첫 번째 추억 만들기",
       "inviteFamily": "가족 초대하기",
       "familyTree": "가계도 시작하기"
     }
@@ -89,7 +89,7 @@
   },
   "sidebar": {
     "home": "홈",
-    "capsules": "내 캡슐",
+    "capsules": "내 추억",
     "timeline": "타임라인",
     "circles": "서클",
     "familyTree": "가계도",

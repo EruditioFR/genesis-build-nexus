@@ -17,10 +17,10 @@
     "invalidToken": "Enlace inválido o expirado."
   },
   "capsule": {
-    "createFailed": "No se pudo crear la cápsula",
-    "updateFailed": "No se pudo actualizar la cápsula",
-    "deleteFailed": "No se pudo eliminar la cápsula",
-    "loadFailed": "No se pudo cargar la cápsula"
+    "createFailed": "No se pudo crear el recuerdo",
+    "updateFailed": "No se pudo actualizar el recuerdo",
+    "deleteFailed": "No se pudo eliminar el recuerdo",
+    "loadFailed": "No se pudo cargar el recuerdo"
   },
   "circle": {
     "createFailed": "No se pudo crear el círculo",

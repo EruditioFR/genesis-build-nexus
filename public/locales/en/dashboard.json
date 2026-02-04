@@ -38,7 +38,7 @@
   "recentCapsules": {
     "title": "Recent memories",
     "empty": "You haven't added any memory yet",
-    "emptySubtitle": "Create your first capsule to start preserving your memories.",
+    "emptySubtitle": "Create your first memory to start preserving your precious moments.",
     "createFirst": "Add my first memory",
     "viewAll": "View all",
     "noContent": "No content"
@@ -78,7 +78,7 @@
     "subtitle": "Complete these steps to get started",
     "steps": {
       "profile": "Complete your profile",
-      "firstCapsule": "Create your first capsule",
+      "firstCapsule": "Create your first memory",
       "inviteFamily": "Invite a family member",
       "familyTree": "Start the family tree"
     }
@@ -89,7 +89,7 @@
   },
   "sidebar": {
     "home": "Home",
-    "capsules": "My capsules",
+    "capsules": "My memories",
     "timeline": "Timeline",
     "circles": "Circles",
     "familyTree": "Family tree",
@@ -121,7 +121,7 @@
     "unlock": "Unlock",
     "upgradeTitle": "Upgrade to Premium",
     "upgradeTitleHeritage": "Upgrade to Heritage",
-    "upgradeDesc": "Unlock video/audio capsules and more space",
+    "upgradeDesc": "Unlock video/audio memories and more space",
     "upgradeDescHeritage": "Unlock family tree and unlimited sharing",
     "discover": "Discover",
     "admin": "Admin"
@@ -220,7 +220,7 @@
     "viewInvoice": "View online",
     "guardians": "Guardians",
     "guardianSpace": "Guardian Space",
-    "guardianSpaceDesc": "Manage legacy capsules entrusted to you",
+    "guardianSpaceDesc": "Manage legacy memories entrusted to you",
     "guardianAccess": "Access",
     "security": "Security",
     "subscriptionSuccess": "🎉 Subscription activated successfully!",
@@ -248,7 +248,7 @@
     "statusPending": "Pending",
     "selectCircle": "Select a circle to view its details",
     "deleteConfirmTitle": "Delete this circle?",
-    "deleteConfirmDesc": "All members will be removed and shared capsules will no longer be accessible. This action is irreversible.",
+    "deleteConfirmDesc": "All members will be removed and shared memories will no longer be accessible. This action is irreversible.",
     "deleteSuccess": "Circle deleted",
     "deleteError": "Error deleting circle",
     "memberRemoved": "Member removed",

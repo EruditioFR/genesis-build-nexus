@@ -148,8 +148,8 @@
     "titleHighlight": "questions",
     "items": {
       "q1": {
-        "question": "What is a memory capsule?",
-        "answer": "A memory capsule is a secure digital container that preserves your memories as texts, photos, videos and audio. It's your personal story, organized chronologically and ready to be passed on to future generations. Each capsule is private and accessible only to people you authorize."
+        "question": "What is a memory on FamilyGarden?",
+        "answer": "A memory is a secure digital container that preserves your moments as texts, photos, videos and audio. It's your personal story, organized chronologically and ready to be passed on to future generations. Each memory is private and accessible only to people you authorize."
       },
       "q2": {
         "question": "Is my data secure?",
@@ -165,7 +165,7 @@
       },
       "q5": {
         "question": "How does the posthumous legacy work?",
-        "answer": "With the Legacy offer, you designate trusted contacts who will be notified and receive access to certain capsules according to your wishes. You can schedule delayed revelations, define access conditions, and leave personal messages."
+        "answer": "With the Heritage offer, you designate trusted contacts who will be notified and receive access to certain memories according to your wishes. You can schedule delayed revelations, define access conditions, and leave personal messages."
       },
       "q6": {
         "question": "Is there a mobile app?",

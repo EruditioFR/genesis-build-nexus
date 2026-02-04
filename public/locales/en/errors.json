@@ -17,10 +17,10 @@
     "invalidToken": "Invalid or expired link."
   },
   "capsule": {
-    "createFailed": "Unable to create capsule",
-    "updateFailed": "Unable to update capsule",
-    "deleteFailed": "Unable to delete capsule",
-    "loadFailed": "Unable to load capsule"
+    "createFailed": "Unable to create memory",
+    "updateFailed": "Unable to update memory",
+    "deleteFailed": "Unable to delete memory",
+    "loadFailed": "Unable to load memory"
   },
   "circle": {
     "createFailed": "Unable to create circle",
