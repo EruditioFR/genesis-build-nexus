@@ -247,25 +247,7 @@ const Signup = () => {
             </div>
 
             {/* Trust indicators */}
-            <motion.div initial={{
-            opacity: 0
-          }} animate={{
-            opacity: 1
-          }} transition={{
-            duration: 0.5,
-            delay: 0.8
-          }} className="mt-10 pt-8 border-t border-white/10">
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-secondary" />
-                  <span className="text-white/70 text-sm">{t('signup.trust.secure')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  
-                  <span className="text-white/70 text-sm">{t('signup.trust.free')}</span>
-                </div>
-              </div>
-            </motion.div>
+            
           </motion.div>
         </div>
       </div>
