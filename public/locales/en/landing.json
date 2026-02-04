@@ -2,8 +2,8 @@
   "hero": {
     "badge": "Preserve your memories forever",
     "title": {
-      "line1": "Your memories deserve to be preserved.",
-      "line2": "Write it with FamilyGarden"
+      "prefix": "Your memories deserve ",
+      "highlight": "to be preserved"
     },
     "subtitle": {
       "line1": "A family is a garden that grows every day. With FamilyGarden, don't let your most precious moments slip away.",

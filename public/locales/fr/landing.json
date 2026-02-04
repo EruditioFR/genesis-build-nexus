@@ -2,8 +2,8 @@
   "hero": {
     "badge": "Préservez vos souvenirs pour l'éternité",
     "title": {
-      "line1": "Vos souvenirs méritent d'être préservés.",
-      "line2": "Écrivez-la avec FamilyGarden"
+      "prefix": "Vos souvenirs méritent ",
+      "highlight": "d'être préservés"
     },
     "subtitle": {
       "line1": "Une famille est un jardin qui se cultive chaque jour. Avec FamilyGarden, ne laissez plus vos plus beaux instants s'envoler au vent.",
