@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/hooks/useAuth";
 import GoogleAnalyticsProvider from "@/components/GoogleAnalyticsProvider";
+import ScrollToTop from "@/components/ScrollToTop";
 
 // Eager load critical pages
 import Index from "./pages/Index";
@@ -69,6 +70,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <GoogleAnalyticsProvider>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
