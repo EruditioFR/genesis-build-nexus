@@ -11,16 +11,21 @@ interface CitySelectorProps {
   className?: string;
 }
 
-interface NominatimResult {
-  place_id: number;
-  display_name: string;
-  name: string;
-  address?: {
+interface PhotonResult {
+  properties: {
+    name: string;
     city?: string;
-    town?: string;
-    village?: string;
-    municipality?: string;
+    state?: string;
+    country?: string;
+    countrycode?: string;
+    osm_key?: string;
+    osm_value?: string;
+    type?: string;
   };
+}
+
+interface PhotonResponse {
+  features: PhotonResult[];
 }
 
 export function CitySelector({ value, onChange, countryCode, className }: CitySelectorProps) {
@@ -32,13 +37,17 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const currentSearchRef = useRef<string>('');
 
-  // Debounced search for cities via Nominatim API
+  // Search for cities via Photon API (OpenStreetMap-based autocomplete)
   const searchCities = useCallback(async (query: string, country: string) => {
     if (!query || query.length < 2 || !country) {
       setCities([]);
       return;
     }
+
+    // Store the current search query to validate response
+    currentSearchRef.current = query;
 
     // Cancel previous request
     if (abortControllerRef.current) {
@@ -49,55 +58,59 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
     setLoading(true);
 
     try {
+      // Photon API supports autocomplete and partial matching
+      // Use layer filter to get only cities/towns/villages
       const params = new URLSearchParams({
         q: query,
-        format: 'json',
-        addressdetails: '1',
-        limit: '10',
-        countrycodes: country.toLowerCase(),
-        'accept-language': 'fr,en',
+        limit: '15',
+        lang: 'fr',
+        layer: 'city',
       });
 
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?${params}`,
+        `https://photon.komoot.io/api/?${params}`,
         {
           signal: abortControllerRef.current.signal,
-          headers: {
-            'User-Agent': 'FamilyGarden/1.0',
-          },
         }
       );
+
+      // Check if this response is still for the current search
+      if (currentSearchRef.current !== query) {
+        return;
+      }
 
       if (!response.ok) {
         throw new Error('Failed to fetch cities');
       }
 
-      const data: NominatimResult[] = await response.json();
+      const data: PhotonResponse = await response.json();
       
-      // Extract city names from results
-      const cityNames = data
-        .map((result) => {
-          // Try to get the most specific city name
-          return (
-            result.address?.city ||
-            result.address?.town ||
-            result.address?.village ||
-            result.address?.municipality ||
-            result.name
-          );
+      // Extract city names from results, filter by country
+      const cityNames = data.features
+        .filter((result) => {
+          // Filter by country code
+          return result.properties.countrycode?.toUpperCase() === country.toUpperCase();
         })
-        .filter((name): name is string => !!name)
+        .map((result) => result.properties.name)
+        .filter((name): name is string => !!name && name.length > 0)
         // Remove duplicates
         .filter((name, index, arr) => arr.indexOf(name) === index);
 
-      setCities(cityNames);
+      // Only update if this is still the current search
+      if (currentSearchRef.current === query) {
+        setCities(cityNames);
+      }
     } catch (error) {
       if ((error as Error).name !== 'AbortError') {
         console.error('Error fetching cities:', error);
-        setCities([]);
+        if (currentSearchRef.current === query) {
+          setCities([]);
+        }
       }
     } finally {
-      setLoading(false);
+      if (currentSearchRef.current === query) {
+        setLoading(false);
+      }
     }
   }, []);
 
@@ -108,8 +121,9 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
         searchCities(search, countryCode);
       } else {
         setCities([]);
+        setLoading(false);
       }
-    }, 300);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [search, countryCode, searchCities]);
