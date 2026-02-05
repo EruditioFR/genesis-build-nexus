@@ -254,50 +254,7 @@ const SeniorFriendlyEditor = ({
     switch (currentStep) {
       // Step 1: Title and Description (Essential info)
       case 0:
-        return <div className="space-y-6">
-            {/* Welcoming header */}
-            <div className="text-center py-6">
-              <motion.div initial={{
-              scale: 0.8,
-              opacity: 0
-            }} animate={{
-              scale: 1,
-              opacity: 1
-            }} className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-secondary to-secondary/70 flex items-center justify-center shadow-lg mb-4">
-                <FileText className="w-10 h-10 text-white" />
-              </motion.div>
-              <h2 className="text-3xl font-display font-bold text-foreground mb-2">
-                {t('seniorEditor.titleStepTitle', 'Donnez un titre à votre souvenir')}
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                {t('seniorEditor.titleStepDesc', "C'est la première chose que vous verrez. Choisissez un titre qui vous parle.")}
-              </p>
-            </div>
-
-            {/* Prompt hint if present */}
-            {promptFromUrl}
-
-            {/* Title input - LARGE */}
-            <div className="space-y-3">
-              <label className="text-xl font-semibold text-foreground flex items-center">
-                {t('seniorEditor.titleLabel', 'Titre du souvenir')}
-                <span className="text-destructive ml-1">*</span>
-              </label>
-              <Input placeholder={t('seniorEditor.titlePlaceholder', 'Ex: Vacances à la mer en 1975')} className="h-16 text-xl px-5 border-2 focus:border-secondary" value={title} onChange={e => onTitleChange(e.target.value)} autoFocus />
-              <p className="text-sm text-muted-foreground">
-                {t('seniorEditor.titleHelp', 'Un titre court et mémorable (maximum 100 caractères)')}
-              </p>
-            </div>
-
-            {/* Description - optional */}
-            <div className="space-y-3">
-              <label className="text-xl font-semibold text-foreground flex items-center">
-                {t('seniorEditor.descLabel', 'Description (optionnel)')}
-                <InfoTip text={t('seniorEditor.descTip', 'Une courte description pour vous rappeler de quoi parle ce souvenir')} />
-              </label>
-              <Textarea placeholder={t('seniorEditor.descPlaceholder', 'Décrivez brièvement ce souvenir...')} className="min-h-[120px] text-lg px-5 py-4 border-2 focus:border-secondary resize-none" value={description} onChange={e => onDescriptionChange(e.target.value)} />
-            </div>
-          </div>;
+        return;
 
       // Step 2: Content (Text, Media, YouTube)
       case 1:
