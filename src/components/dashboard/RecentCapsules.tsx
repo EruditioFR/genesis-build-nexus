@@ -1,13 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, HelpCircle, Play } from 'lucide-react';
+import { Clock, Image, Video, FileText, Plus, ArrowRight, Music, Layers, ChevronLeft, ChevronRight, Play, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
 import AudioWaveBackground from '@/components/capsule/AudioWaveBackground';
 import { supabase } from '@/integrations/supabase/client';
+import { cn } from '@/lib/utils';
 import type { Category } from '@/hooks/useCategories';
 
 interface Capsule {
@@ -91,7 +92,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
   const scroll = (direction: 'left' | 'right') => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 280;
+      const scrollAmount = 300;
       container.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -119,13 +120,13 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
     }
   };
 
-  const getTypeColor = (type: Capsule['type']) => {
+  const getTypeStyles = (type: Capsule['type']) => {
     switch (type) {
-      case 'photo': return 'bg-blue-500/10 text-blue-600';
-      case 'video': return 'bg-purple-500/10 text-purple-600';
-      case 'audio': return 'bg-orange-500/10 text-orange-600';
-      case 'mixed': return 'bg-emerald-500/10 text-emerald-600';
-      case 'text': return 'bg-amber-500/10 text-amber-600';
+      case 'photo': return { bg: 'bg-sky-500', text: 'text-white' };
+      case 'video': return { bg: 'bg-violet-500', text: 'text-white' };
+      case 'audio': return { bg: 'bg-orange-500', text: 'text-white' };
+      case 'mixed': return { bg: 'bg-emerald-500', text: 'text-white' };
+      case 'text': return { bg: 'bg-amber-500', text: 'text-white' };
     }
   };
 
@@ -137,41 +138,56 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       className="relative"
       data-tour="recent-capsules"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-1">
+      {/* Header - Simplified */}
+      <div className="flex items-center justify-between mb-5 px-1">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Clock className="w-5 h-5 text-primary" />
-          </div>
-          <h3 className="text-lg font-semibold text-foreground">
+          <h3 className="text-xl font-bold text-foreground">
             {t('recentCapsules.title')}
           </h3>
+          {capsules.length > 0 && (
+            <span className="px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground text-sm font-medium">
+              {capsules.length}
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-2">
-          {/* Navigation arrows - desktop only */}
-          <div className="hidden md:flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={`w-8 h-8 rounded-full transition-opacity ${canScrollLeft ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}
-              onClick={() => scroll('left')}
-              disabled={!canScrollLeft}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className={`w-8 h-8 rounded-full transition-opacity ${canScrollRight ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}
-              onClick={() => scroll('right')}
-              disabled={!canScrollRight}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
-          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" asChild>
+        <div className="flex items-center gap-1">
+          {/* Navigation arrows */}
+          {capsules.length > 2 && (
+            <div className="hidden sm:flex items-center gap-1 mr-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn(
+                  "w-9 h-9 rounded-full border-border/50 transition-all",
+                  canScrollLeft ? 'opacity-100 hover:bg-muted' : 'opacity-30 cursor-not-allowed'
+                )}
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn(
+                  "w-9 h-9 rounded-full border-border/50 transition-all",
+                  canScrollRight ? 'opacity-100 hover:bg-muted' : 'opacity-30 cursor-not-allowed'
+                )}
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="gap-1.5 text-muted-foreground hover:text-foreground font-medium" 
+            asChild
+          >
             <Link to="/capsules">
-              <span className="hidden sm:inline">{t('recentCapsules.viewAll')}</span>
+              {t('recentCapsules.viewAll')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
@@ -179,12 +195,15 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       </div>
 
       {capsules.length === 0 ? (
-        <div className="text-center py-12 px-4 rounded-2xl border border-dashed border-border bg-muted/30">
-          <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
-            <Clock className="w-8 h-8 text-muted-foreground" />
+        <div className="text-center py-16 px-6 rounded-2xl border-2 border-dashed border-border bg-muted/20">
+          <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-5">
+            <Clock className="w-10 h-10 text-muted-foreground/50" />
           </div>
-          <p className="text-muted-foreground mb-4 text-base">
+          <h4 className="text-lg font-semibold text-foreground mb-2">
             {t('recentCapsules.empty')}
+          </h4>
+          <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+            {t('recentCapsules.emptySubtitle')}
           </p>
           <Button className="gap-2" size="lg" asChild>
             <Link to="/capsules/new">
@@ -194,39 +213,45 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
           </Button>
         </div>
       ) : (
-        <div className="relative">
+        <div className="relative -mx-4 sm:mx-0">
           {/* Scroll container */}
           <div
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+            className="flex gap-4 overflow-x-auto pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {capsules.map((capsule, index) => {
               const Icon = getTypeIcon(capsule.type);
+              const typeStyles = getTypeStyles(capsule.type);
+              const category = capsuleCategories[capsule.id];
+
               return (
-                <Link to={`/capsules/${capsule.id}`} key={capsule.id} className="flex-shrink-0 snap-start">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="w-64 md:w-72 group cursor-pointer"
+                <Link 
+                  to={`/capsules/${capsule.id}`} 
+                  key={capsule.id} 
+                  className="flex-shrink-0 snap-start first:ml-0"
+                >
+                  <motion.article
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    className="w-[280px] sm:w-[300px] group"
                   >
-                    {/* Card */}
-                    <div className="relative rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1">
-                      {/* Thumbnail - Dynamic content based on type */}
-                      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                        {/* Display logic: thumbnail > video preview > firstMedia > text preview > placeholder */}
+                    <div className="relative rounded-2xl bg-card border border-border overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1.5 hover:border-foreground/10">
+                      {/* Visual area */}
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        {/* Content based on type */}
                         {capsule.thumbnail ? (
                           <CapsuleThumbnail
                             thumbnailUrl={capsule.thumbnail}
                             fallbackIcon={null}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         ) : capsule.firstVideoUrl ? (
                           <div className="relative w-full h-full">
                             <video 
                               src={capsule.firstVideoUrl} 
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               muted
                               preload="metadata"
                               onMouseEnter={(e) => {
@@ -240,10 +265,9 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                                 video.currentTime = 0;
                               }}
                             />
-                            {/* Play button overlay */}
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                              <div className="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                                <Play className="w-6 h-6 text-white fill-white ml-1" />
+                              <div className="w-16 h-16 rounded-full bg-foreground/80 backdrop-blur-sm flex items-center justify-center shadow-2xl">
+                                <Play className="w-7 h-7 text-background fill-background ml-1" />
                               </div>
                             </div>
                           </div>
@@ -251,63 +275,75 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                           <CapsuleThumbnail
                             thumbnailUrl={capsule.firstMediaUrl}
                             fallbackIcon={null}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         ) : capsule.type === 'audio' ? (
-                          <div className="w-full h-full relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20">
-                            <AudioWaveBackground animated={false} barCount={35} />
+                          <div className="w-full h-full relative bg-gradient-to-br from-orange-100 to-amber-50">
+                            <AudioWaveBackground animated={false} barCount={40} />
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-14 h-14 rounded-full bg-orange-500/20 backdrop-blur-sm flex items-center justify-center">
-                                <Music className="w-7 h-7 text-orange-600 dark:text-orange-400" />
+                              <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                                <Music className="w-8 h-8 text-white" />
                               </div>
                             </div>
                           </div>
                         ) : capsule.type === 'text' && capsule.content ? (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 p-4">
-                            <p className="text-sm text-amber-800 dark:text-amber-200 line-clamp-4 text-center italic leading-relaxed font-serif">
-                              "{capsule.content.slice(0, 120)}{capsule.content.length > 120 ? '...' : ''}"
-                            </p>
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-6">
+                            <div className="relative">
+                              <Quote className="absolute -top-2 -left-2 w-8 h-8 text-amber-300" />
+                              <p className="text-base text-foreground/80 line-clamp-4 text-center italic leading-relaxed max-w-[200px]">
+                                {capsule.content.slice(0, 100)}{capsule.content.length > 100 ? '…' : ''}
+                              </p>
+                            </div>
                           </div>
                         ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 gap-2">
-                            <HelpCircle className="w-12 h-12 text-muted-foreground/40" strokeWidth={1.5} />
-                            <span className="text-xs text-muted-foreground/60 font-medium">{t('recentCapsules.noContent')}</span>
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 gap-3">
+                            <div className="w-16 h-16 rounded-full bg-muted-foreground/10 flex items-center justify-center">
+                              <Icon className="w-8 h-8 text-muted-foreground/40" />
+                            </div>
+                            <span className="text-sm text-muted-foreground/60 font-medium">
+                              {t('recentCapsules.noContent')}
+                            </span>
                           </div>
                         )}
                         
-                        {/* Type badge overlay */}
+                        {/* Type badge - top left, pill style */}
                         <div className="absolute top-3 left-3">
-                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md bg-background/80 ${getTypeColor(capsule.type)}`}>
+                          <div className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-lg",
+                            typeStyles.bg, typeStyles.text
+                          )}>
                             <Icon className="w-3.5 h-3.5" />
-                            <span className="text-xs font-medium">{getTypeLabel(capsule.type)}</span>
+                            <span className="text-xs font-semibold tracking-wide uppercase">
+                              {getTypeLabel(capsule.type)}
+                            </span>
                           </div>
-                        </div>
-
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-                        
-                        {/* Date on image */}
-                        <div className="absolute bottom-3 left-3 right-3">
-                          <p className="text-white/90 text-xs font-medium">{capsule.date}</p>
                         </div>
                       </div>
 
-                      {/* Content */}
-                      <div className="p-4">
-                        <h4 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors mb-2">
+                      {/* Content section */}
+                      <div className="p-4 space-y-3">
+                        {/* Date - subtle */}
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Clock className="w-3.5 h-3.5" />
+                          <span className="text-xs font-medium">{capsule.date}</span>
+                        </div>
+
+                        {/* Title */}
+                        <h4 className="font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors text-[15px]">
                           {capsule.title}
                         </h4>
                         
-                        {capsuleCategories[capsule.id] && (
+                        {/* Category badge */}
+                        {category && (
                           <CategoryBadge 
-                            category={capsuleCategories[capsule.id]} 
+                            category={category} 
                             size="sm" 
                             showIcon={true}
                           />
                         )}
                       </div>
                     </div>
-                  </motion.div>
+                  </motion.article>
                 </Link>
               );
             })}
@@ -315,32 +351,39 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
             {/* Add new card */}
             <Link to="/capsules/new" className="flex-shrink-0 snap-start">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: capsules.length * 0.05 }}
-                className="w-64 md:w-72 h-full"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: capsules.length * 0.08 }}
+                className="w-[280px] sm:w-[300px] h-full"
               >
-                  <div className="h-full min-h-[280px] rounded-2xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 cursor-pointer group">
-                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Plus className="w-7 h-7 text-primary" />
+                <div className="h-full min-h-[320px] rounded-2xl border-2 border-dashed border-border bg-muted/20 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:border-primary hover:bg-primary/5 cursor-pointer group">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+                    <Plus className="w-8 h-8 text-primary" />
                   </div>
-                  <span className="font-medium text-muted-foreground group-hover:text-primary transition-colors">
-                    {t('quickActions.newCapsule')}
-                  </span>
+                  <div className="text-center">
+                    <span className="font-semibold text-foreground group-hover:text-primary transition-colors block">
+                      {t('quickActions.newCapsule')}
+                    </span>
+                    <span className="text-sm text-muted-foreground mt-1 block">
+                      {t('quickActions.newCapsuleDesc')}
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             </Link>
           </div>
 
-          {/* Scroll indicators for mobile */}
-          <div className="flex justify-center gap-1.5 mt-2 md:hidden">
-            {capsules.slice(0, Math.min(5, capsules.length)).map((_, index) => (
-              <div
-                key={index}
-                className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
-              />
-            ))}
-          </div>
+          {/* Mobile scroll indicator dots */}
+          {capsules.length > 1 && (
+            <div className="flex justify-center gap-1.5 mt-4 sm:hidden">
+              {[...Array(Math.min(5, capsules.length + 1))].map((_, index) => (
+                <div
+                  key={index}
+                  className="w-2 h-2 rounded-full bg-foreground/20"
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </motion.div>
