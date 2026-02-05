@@ -90,14 +90,15 @@ const CapsuleCreate = () => {
   const promptIdFromUrl = searchParams.get('promptId');
   const promptCategoryFromUrl = searchParams.get('category');
   
-  // Mapping from guided prompt categories to database category slugs
-  const promptToCategorySlugMap: Record<string, string> = {
-    'enfance': 'enfance',
-    'ecole': 'etudes-et-formation',
-    'musiques': 'arts-et-culture',
-    'famille': 'famille',
-    'vie-personnelle': 'vie-personnelle',
+  // Mapping from guided prompt categories to category info (for creation if needed)
+  const promptCategoryConfig: Record<string, { slug: string; name: string; icon: string; color: string; description: string }> = {
+    'enfance': { slug: 'enfance', name: 'Enfance', icon: 'baby', color: '#22c55e', description: 'Souvenirs de mon enfance' },
+    'ecole': { slug: 'ecole-adolescence', name: 'École & Adolescence', icon: 'graduation-cap', color: '#3b82f6', description: 'Souvenirs d\'école et d\'adolescence' },
+    'musiques': { slug: 'musiques-films', name: 'Musiques & Films', icon: 'music', color: '#a855f7', description: 'Musiques et films marquants' },
+    'famille': { slug: 'famille-proches', name: 'Famille & Proches', icon: 'users', color: '#f97316', description: 'Souvenirs de famille' },
+    'vie-personnelle': { slug: 'vie-personnelle', name: 'Vie personnelle', icon: 'heart', color: '#ef4444', description: 'Moments personnels importants' },
   };
+
   const capsuleSchema = z.object({
     title: z.string()
       .min(1, t('create.titleRequired'))
@@ -125,18 +126,50 @@ const CapsuleCreate = () => {
     }
   }, [user, loading, navigate]);
   
-  // Auto-select category when coming from guided prompts
+  // Auto-select or create category when coming from guided prompts
   useEffect(() => {
-    if (promptCategoryFromUrl && categories.length > 0 && !primaryCategory) {
-      const targetSlug = promptToCategorySlugMap[promptCategoryFromUrl];
-      if (targetSlug) {
-        const matchingCategory = categories.find(cat => cat.slug === targetSlug);
-        if (matchingCategory) {
-          setPrimaryCategory(matchingCategory.id);
-        }
+    const setupCategory = async () => {
+      if (!promptCategoryFromUrl || categories.length === 0 || primaryCategory || !user) return;
+      
+      const config = promptCategoryConfig[promptCategoryFromUrl];
+      if (!config) return;
+      
+      // Try to find existing category by slug
+      const matchingCategory = categories.find(cat => cat.slug === config.slug);
+      if (matchingCategory) {
+        setPrimaryCategory(matchingCategory.id);
+        return;
       }
-    }
-  }, [promptCategoryFromUrl, categories, primaryCategory]);
+      
+      // Also check by name (in case slug differs slightly)
+      const matchByName = categories.find(cat => 
+        cat.name_fr.toLowerCase() === config.name.toLowerCase() ||
+        cat.slug === 'famille-proches' && promptCategoryFromUrl === 'famille'
+      );
+      if (matchByName) {
+        setPrimaryCategory(matchByName.id);
+        return;
+      }
+      
+      // Category doesn't exist, create it
+      try {
+        const newCategory = await createCustomCategory(
+          user.id,
+          config.name,
+          config.description,
+          config.icon,
+          config.color
+        );
+        if (newCategory) {
+          setPrimaryCategory(newCategory.id);
+        }
+      } catch (error) {
+        console.error('Error creating category:', error);
+      }
+    };
+    
+    setupCategory();
+  }, [promptCategoryFromUrl, categories, primaryCategory, user]);
 
   useEffect(() => {
     const fetchProfile = async () => {
