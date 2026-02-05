@@ -55,7 +55,6 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
         addressdetails: '1',
         limit: '10',
         countrycodes: country.toLowerCase(),
-        featuretype: 'city',
         'accept-language': 'fr,en',
       });
 
