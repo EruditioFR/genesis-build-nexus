@@ -10,74 +10,66 @@ import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
-
 const Login = () => {
-  const { t } = useTranslation('auth');
+  const {
+    t
+  } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
-  const { toast } = useToast();
+  const {
+    signIn
+  } = useAuth();
+  const {
+    toast
+  } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard';
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    const { error } = await signIn(email, password);
-
+    const {
+      error
+    } = await signIn(email, password);
     if (error) {
       toast({
         variant: 'destructive',
         title: t('login.errors.title'),
-        description: error.message === 'Invalid login credentials' 
-          ? t('login.errors.invalidCredentials') 
-          : error.message,
+        description: error.message === 'Invalid login credentials' ? t('login.errors.invalidCredentials') : error.message
       });
     } else {
       toast({
         title: t('login.success.title'),
-        description: t('login.success.description'),
+        description: t('login.success.description')
       });
       navigate(redirectTo);
     }
-
     setLoading(false);
   };
-
-  const tutorialSteps = [
-    {
-      icon: Shield,
-      titleKey: "login.tutorial.secure.title",
-      descriptionKey: "login.tutorial.secure.description"
-    },
-    {
-      icon: Heart,
-      titleKey: "login.tutorial.memories.title",
-      descriptionKey: "login.tutorial.memories.description"
-    },
-    {
-      icon: Users,
-      titleKey: "login.tutorial.family.title",
-      descriptionKey: "login.tutorial.family.description"
-    },
-    {
-      icon: Clock,
-      titleKey: "login.tutorial.continue.title",
-      descriptionKey: "login.tutorial.continue.description"
-    },
-    {
-      icon: Sparkles,
-      titleKey: "login.tutorial.discover.title",
-      descriptionKey: "login.tutorial.discover.description"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+  const tutorialSteps = [{
+    icon: Shield,
+    titleKey: "login.tutorial.secure.title",
+    descriptionKey: "login.tutorial.secure.description"
+  }, {
+    icon: Heart,
+    titleKey: "login.tutorial.memories.title",
+    descriptionKey: "login.tutorial.memories.description"
+  }, {
+    icon: Users,
+    titleKey: "login.tutorial.family.title",
+    descriptionKey: "login.tutorial.family.description"
+  }, {
+    icon: Clock,
+    titleKey: "login.tutorial.continue.title",
+    descriptionKey: "login.tutorial.continue.description"
+  }, {
+    icon: Sparkles,
+    titleKey: "login.tutorial.discover.title",
+    descriptionKey: "login.tutorial.discover.description"
+  }];
+  return <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Mobile Header - Dark background */}
       <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
@@ -91,14 +83,20 @@ const Login = () => {
       {/* Left Panel - Tutorial "Bon retour parmi nous" */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img src={heroBackground} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgb(26 26 46 / 0.88)' }} />
+        <div className="absolute inset-0" style={{
+        backgroundColor: 'rgb(26 26 46 / 0.88)'
+      }} />
         
         <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.8
+        }}>
             <Link to="/" className="flex items-center space-x-3 mb-10">
               <img src={logo} alt="Family Garden" className="w-12 h-12 object-contain" />
               <span className="text-2xl font-display font-bold text-white">
@@ -116,14 +114,16 @@ const Login = () => {
 
             {/* Tutorial steps */}
             <div className="space-y-5">
-              {tutorialSteps.map((step, index) => (
-                <motion.div 
-                  key={step.titleKey}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                  className="flex gap-4 items-start"
-                >
+              {tutorialSteps.map((step, index) => <motion.div key={step.titleKey} initial={{
+              opacity: 0,
+              x: -20
+            }} animate={{
+              opacity: 1,
+              x: 0
+            }} transition={{
+              duration: 0.5,
+              delay: 0.2 + index * 0.1
+            }} className="flex gap-4 items-start">
                   <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
                     <step.icon className="w-5 h-5 text-secondary" />
                   </div>
@@ -131,25 +131,19 @@ const Login = () => {
                     <h3 className="text-white font-semibold mb-1">{t(step.titleKey)}</h3>
                     <p className="text-white/70 text-sm leading-relaxed">{t(step.descriptionKey)}</p>
                   </div>
-                </motion.div>
-              ))}
+                </motion.div>)}
             </div>
 
             {/* Trust indicators */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-10 pt-8 border-t border-white/10"
-            >
-              <div className="flex items-center gap-4 text-white/60 text-sm">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-secondary/30 border-2 border-white/20" />
-                  ))}
-                </div>
-                <span>{t('login.trustIndicator')}</span>
-              </div>
+            <motion.div initial={{
+            opacity: 0
+          }} animate={{
+            opacity: 1
+          }} transition={{
+            duration: 0.5,
+            delay: 0.8
+          }} className="mt-10 pt-8 border-t border-white/10">
+              
             </motion.div>
           </motion.div>
         </div>
@@ -157,12 +151,15 @@ const Login = () => {
 
       {/* Right Panel - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-5 py-8 sm:px-6 sm:py-12 bg-background">
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        x: 20
+      }} animate={{
+        opacity: 1,
+        x: 0
+      }} transition={{
+        duration: 0.6
+      }} className="w-full max-w-md">
 
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#1a1a2e] mb-2">
@@ -178,56 +175,27 @@ const Login = () => {
               <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">{t('login.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder={t('login.emailPlaceholder')}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
-                  required
-                />
+                <Input id="email" type="email" placeholder={t('login.emailPlaceholder')} value={email} onChange={e => setEmail(e.target.value)} className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40" required />
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-base font-semibold text-[#1a1a2e]">{t('login.password')}</Label>
-                <Link 
-                  to="/forgot-password" 
-                  className="text-sm text-secondary hover:text-secondary/80 transition-colors"
-                >
+                <Link to="/forgot-password" className="text-sm text-secondary hover:text-secondary/80 transition-colors">
                   {t('login.forgotPassword')}
                 </Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1a1a2e]/50 hover:text-[#1a1a2e] transition-colors"
-                >
+                <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40" required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1a1a2e]/50 hover:text-[#1a1a2e] transition-colors">
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            <Button 
-              type="submit" 
-              variant="hero" 
-              size="xl" 
-              className="w-full mt-6"
-              disabled={loading}
-            >
+            <Button type="submit" variant="hero" size="xl" className="w-full mt-6" disabled={loading}>
               {loading ? t('login.loading') : t('login.submit')}
             </Button>
           </form>
@@ -260,8 +228,6 @@ const Login = () => {
           </div>
         </motion.div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
