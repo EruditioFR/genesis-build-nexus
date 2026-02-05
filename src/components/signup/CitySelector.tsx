@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { Check, ChevronDown, MapPin, Loader2 } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Check, ChevronDown, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
+import { getCitiesForCountry } from '@/lib/cities';
 
 interface CitySelectorProps {
   value: string;
@@ -11,122 +12,36 @@ interface CitySelectorProps {
   className?: string;
 }
 
-interface PhotonResult {
-  properties: {
-    name: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    countrycode?: string;
-    osm_key?: string;
-    osm_value?: string;
-    type?: string;
-  };
-}
-
-interface PhotonResponse {
-  features: PhotonResult[];
-}
-
 export function CitySelector({ value, onChange, countryCode, className }: CitySelectorProps) {
   const { t } = useTranslation('auth');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [cities, setCities] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const currentSearchRef = useRef<string>('');
 
-  // Search for cities via Photon API (OpenStreetMap-based autocomplete)
-  const searchCities = useCallback(async (query: string, country: string) => {
-    if (!query || query.length < 2 || !country) {
-      setCities([]);
-      return;
-    }
+  // Get all cities for the selected country
+  const allCities = useMemo(() => {
+    return getCitiesForCountry(countryCode);
+  }, [countryCode]);
 
-    // Store the current search query to validate response
-    currentSearchRef.current = query;
-
-    // Cancel previous request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    abortControllerRef.current = new AbortController();
-    setLoading(true);
-
-    try {
-      // Photon API supports autocomplete and partial matching
-      // Use layer filter to get only cities/towns/villages
-      const params = new URLSearchParams({
-        q: query,
-        limit: '15',
-        lang: 'fr',
-        layer: 'city',
-      });
-
-      const response = await fetch(
-        `https://photon.komoot.io/api/?${params}`,
-        {
-          signal: abortControllerRef.current.signal,
-        }
-      );
-
-      // Check if this response is still for the current search
-      if (currentSearchRef.current !== query) {
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const data: PhotonResponse = await response.json();
-      
-      // Extract city names from results, filter by country
-      const cityNames = data.features
-        .filter((result) => {
-          // Filter by country code
-          return result.properties.countrycode?.toUpperCase() === country.toUpperCase();
-        })
-        .map((result) => result.properties.name)
-        .filter((name): name is string => !!name && name.length > 0)
-        // Remove duplicates
-        .filter((name, index, arr) => arr.indexOf(name) === index);
-
-      // Only update if this is still the current search
-      if (currentSearchRef.current === query) {
-        setCities(cityNames);
-      }
-    } catch (error) {
-      if ((error as Error).name !== 'AbortError') {
-        console.error('Error fetching cities:', error);
-        if (currentSearchRef.current === query) {
-          setCities([]);
-        }
-      }
-    } finally {
-      if (currentSearchRef.current === query) {
-        setLoading(false);
-      }
-    }
-  }, []);
-
-  // Debounce the search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (search && countryCode) {
-        searchCities(search, countryCode);
-      } else {
-        setCities([]);
-        setLoading(false);
-      }
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [search, countryCode, searchCities]);
+  // Filter cities based on search input
+  const filteredCities = useMemo(() => {
+    if (!search || search.length < 1) return allCities.slice(0, 10);
+    
+    const searchLower = search.toLowerCase();
+    const matches = allCities.filter(city => 
+      city.toLowerCase().includes(searchLower)
+    );
+    
+    // Sort by relevance: starts with search term first
+    return matches.sort((a, b) => {
+      const aStarts = a.toLowerCase().startsWith(searchLower);
+      const bStarts = b.toLowerCase().startsWith(searchLower);
+      if (aStarts && !bStarts) return -1;
+      if (!aStarts && bStarts) return 1;
+      return a.localeCompare(b);
+    }).slice(0, 15);
+  }, [allCities, search]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -150,7 +65,6 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
     if (value) {
       onChange('');
       setSearch('');
-      setCities([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode]);
@@ -159,7 +73,6 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
     onChange(city);
     setOpen(false);
     setSearch('');
-    setCities([]);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -199,20 +112,18 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
           }}
           className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-          {loading && <Loader2 className="w-4 h-4 text-[#1a1a2e]/50 animate-spin" />}
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-          >
-            <ChevronDown className={cn('w-4 h-4 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="absolute right-3 top-1/2 -translate-y-1/2"
+        >
+          <ChevronDown className={cn('w-4 h-4 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
+        </button>
       </div>
 
-      {open && cities.length > 0 && (
+      {open && filteredCities.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-[#1a1a2e]/20 rounded-md shadow-lg max-h-48 overflow-y-auto">
-          {cities.map((city) => (
+          {filteredCities.map((city) => (
             <button
               key={city}
               type="button"
@@ -229,7 +140,7 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
         </div>
       )}
 
-      {open && search && search.length >= 2 && !loading && cities.length === 0 && (
+      {open && search && search.length >= 1 && filteredCities.length === 0 && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-[#1a1a2e]/20 rounded-md shadow-lg p-3 text-sm text-[#1a1a2e]/60">
           {t('signup.noCityFound', 'Aucune ville trouvée')}
         </div>
