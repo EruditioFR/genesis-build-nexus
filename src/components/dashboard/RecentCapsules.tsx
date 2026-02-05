@@ -20,6 +20,7 @@ interface Capsule {
   content?: string;
   firstMediaUrl?: string;
   firstVideoUrl?: string;
+  youtubeId?: string;
 }
 
 interface RecentCapsulesProps {
@@ -247,6 +248,19 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                             fallbackIcon={null}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
+                        ) : capsule.youtubeId ? (
+                          <div className="relative w-full h-full">
+                            <img 
+                              src={`https://img.youtube.com/vi/${capsule.youtubeId}/hqdefault.jpg`}
+                              alt="YouTube"
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <div className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center shadow-2xl">
+                                <Play className="w-7 h-7 text-white fill-white ml-1" />
+                              </div>
+                            </div>
+                          </div>
                         ) : capsule.firstVideoUrl ? (
                           <div className="relative w-full h-full">
                             <video 
@@ -278,7 +292,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         ) : capsule.type === 'audio' ? (
-                          <div className="w-full h-full relative bg-gradient-to-br from-orange-100 to-amber-50">
+                          <div className="w-full h-full relative bg-gradient-to-br from-orange-100 to-amber-50 dark:from-orange-900/30 dark:to-amber-900/20">
                             <AudioWaveBackground animated={false} barCount={40} />
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
@@ -287,9 +301,9 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                             </div>
                           </div>
                         ) : capsule.type === 'text' && capsule.content ? (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-6">
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/20 dark:to-yellow-900/20 p-6">
                             <div className="relative">
-                              <Quote className="absolute -top-2 -left-2 w-8 h-8 text-amber-300" />
+                              <Quote className="absolute -top-2 -left-2 w-8 h-8 text-amber-300 dark:text-amber-600" />
                               <p className="text-base text-foreground/80 line-clamp-4 text-center italic leading-relaxed max-w-[200px]">
                                 {capsule.content.slice(0, 100)}{capsule.content.length > 100 ? '…' : ''}
                               </p>
