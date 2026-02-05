@@ -85,8 +85,10 @@ const CapsuleCreate = () => {
   // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
 
-  // Get prompt from URL if present
+  // Get prompt from URL if present (guided memory prompts)
   const promptFromUrl = searchParams.get('prompt');
+  const promptIdFromUrl = searchParams.get('promptId');
+  const promptCategoryFromUrl = searchParams.get('category');
 
   const capsuleSchema = z.object({
     title: z.string()
@@ -290,6 +292,21 @@ const CapsuleCreate = () => {
         // Add sub-categories if any selected
         if (selectedSubCategories.length > 0) {
           await setCapsuleSubCategories(capsule.id, selectedSubCategories);
+        }
+      }
+
+      // Mark guided prompt as used if this capsule was created from a prompt
+      if (promptIdFromUrl && promptCategoryFromUrl && capsule) {
+        try {
+          await supabase.from('user_memory_prompts').insert({
+            user_id: user!.id,
+            prompt_id: promptIdFromUrl,
+            category: promptCategoryFromUrl,
+            capsule_id: capsule.id,
+          });
+        } catch (err) {
+          console.error('Error marking prompt as used:', err);
+          // Don't fail the save, just log the error
         }
       }
 
