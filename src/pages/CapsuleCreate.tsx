@@ -45,6 +45,7 @@ import MemoryDateSelector, {
 import { useIsMobile } from '@/hooks/use-mobile';
 import NoIndex from '@/components/seo/NoIndex';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
+import SeniorFriendlyEditor from '@/components/capsule/SeniorFriendlyEditor';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -434,231 +435,47 @@ const CapsuleCreate = () => {
     );
   }
 
-  // Desktop version
+  // Desktop version - Senior-friendly editor
   return (
     <>
       <NoIndex />
-    <div className="min-h-screen bg-gradient-warm">
-      <DashboardHeader
-        user={{
-          id: user.id,
-          email: user.email,
-          displayName: profile?.display_name || undefined,
-          avatarUrl: profile?.avatar_url || undefined,
+      <SeniorFriendlyEditor
+        userId={user.id}
+        title={form.watch('title') || ''}
+        onTitleChange={(value) => form.setValue('title', value)}
+        description={form.watch('description') || ''}
+        onDescriptionChange={(value) => form.setValue('description', value)}
+        content={textContent}
+        onContentChange={setTextContent}
+        categories={categories}
+        subCategories={subCategories}
+        primaryCategory={primaryCategory}
+        onPrimaryCategoryChange={setPrimaryCategory}
+        selectedSubCategories={selectedSubCategories}
+        onSubCategoriesChange={setSelectedSubCategories}
+        onCreateCustomCategory={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
+        mediaFiles={mediaFiles}
+        onMediaFilesChange={(files) => {
+          setMediaFiles(files);
+          if (mediaError) setMediaError(false);
         }}
-        onSignOut={handleSignOut}
+        tags={tags}
+        onTagsChange={setTags}
+        memoryDate={memoryDate}
+        onMemoryDateChange={setMemoryDate}
+        youtubeUrl={youtubeUrl}
+        onYoutubeUrlChange={setYoutubeUrl}
+        isSaving={isSaving}
+        onSaveDraft={() => saveCapsule('draft')}
+        onPublish={() => saveCapsule('published')}
+        onBack={() => navigate('/dashboard')}
+        onUploadAllRef={(uploadFn) => {
+          uploadAllFilesRef.current = uploadFn;
+        }}
+        hasMediaError={mediaError}
+        onMediaErrorReset={() => setMediaError(false)}
+        promptFromUrl={promptFromUrl}
       />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back button and title */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/dashboard')}
-            className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('backToHome')}
-          </Button>
-          
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold">
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-display font-bold text-foreground">
-                {t('create.pageTitle')}
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                {t('create.pageSubtitle')}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Form Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-2 space-y-6"
-          >
-            {/* Category selector */}
-            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-category">
-            <CategorySelector
-                categories={categories}
-                primaryCategory={primaryCategory}
-                onPrimaryChange={(catId) => {
-                  setPrimaryCategory(catId);
-                  setSelectedSubCategories([]);
-                }}
-                onCreateCustom={(name, desc, icon, color) => createCustomCategory(user.id, name, desc, icon, color)}
-                subCategories={subCategories}
-                selectedSubCategories={selectedSubCategories}
-                onSubCategoryChange={setSelectedSubCategories}
-              />
-            </div>
-
-            {/* Main form */}
-            <Form {...form}>
-              <form className="p-6 rounded-2xl border border-border bg-card space-y-6" data-tour="capsule-title">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('create.titleLabel')} *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t('create.titlePlaceholder')}
-                          className="text-lg"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('create.description')}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t('create.descriptionPlaceholder')}
-                          className="resize-none"
-                          rows={3}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
-
-            {/* Unified Media Section */}
-            <div data-tour="capsule-media">
-              <UnifiedMediaSection
-                userId={user.id}
-                content={textContent}
-                onContentChange={setTextContent}
-                showTextSection={true}
-                files={mediaFiles}
-                onFilesChange={(files) => {
-                  setMediaFiles(files);
-                  if (mediaError) setMediaError(false);
-                }}
-                maxFiles={20}
-                onUploadAll={(uploadFn) => {
-                  uploadAllFilesRef.current = uploadFn;
-                }}
-                hasError={mediaError}
-              />
-            </div>
-
-            {/* YouTube Embed */}
-            <YouTubeEmbed
-              value={youtubeUrl}
-              onChange={setYoutubeUrl}
-            />
-
-            {/* Memory Date */}
-            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-date">
-              <Label className="text-base font-medium mb-4 block">
-                <CalendarHeart className="w-4 h-4 inline-block mr-2" />
-                {t('create.memoryDate')}
-              </Label>
-              <p className="text-sm text-muted-foreground mb-4">
-                {t('create.memoryDateDesc')}
-              </p>
-              <MemoryDateSelector
-                value={memoryDate}
-                onChange={setMemoryDate}
-              />
-            </div>
-
-            {/* Tags */}
-            <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-tags">
-              <Label className="text-base font-medium mb-4 block">
-                {t('create.tags')}
-              </Label>
-              <TagInput tags={tags} onChange={setTags} />
-            </div>
-
-            {/* Schedule */}
-            <div className="p-6 rounded-2xl border border-border bg-card">
-              <ScheduleSelector scheduledAt={scheduledAt} onChange={setScheduledAt} />
-            </div>
-
-            {/* Legacy Settings */}
-            <LegacySettings
-              userId={user.id}
-              enabled={legacyEnabled}
-              onEnabledChange={setLegacyEnabled}
-              unlockType={legacyUnlockType}
-              onUnlockTypeChange={setLegacyUnlockType}
-              unlockDate={legacyUnlockDate}
-              onUnlockDateChange={setLegacyUnlockDate}
-              guardianId={legacyGuardianId}
-              onGuardianIdChange={setLegacyGuardianId}
-            />
-
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3" data-tour="capsule-actions">
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex-1 gap-2"
-                onClick={() => saveCapsule('draft')}
-                disabled={isSaving}
-              >
-                <Save className="w-4 h-4" />
-                {t('create.saveDraft')}
-              </Button>
-              <Button
-                size="lg"
-                className="flex-1 gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
-                onClick={() => saveCapsule('published')}
-                disabled={isSaving}
-              >
-                <Send className="w-4 h-4" />
-                {t('create.publish')}
-              </Button>
-            </div>
-          </motion.div>
-
-          {/* Preview Column */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-1"
-          >
-            <div className="sticky top-24">
-              <CapsulePreview
-                title={watchedValues.title}
-                description={watchedValues.description || ''}
-                content={textContent}
-                capsuleType={calculatedCapsuleType}
-                tags={tags}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </main>
-    </div>
     </>
   );
 };

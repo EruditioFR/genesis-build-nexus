@@ -178,39 +178,43 @@ const MobileCapsuleWizard = ({
     switch (currentStep) {
       case 0: // Basic info
         return (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-4 shadow-gold">
-                <Sparkles className="w-8 h-8 text-primary-foreground" />
+          <div className="space-y-8">
+            <div className="text-center mb-8">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-5 shadow-gold">
+                <Sparkles className="w-10 h-10 text-primary-foreground" />
               </div>
-              <h2 className="text-2xl font-display font-bold text-foreground mb-2">
+              <h2 className="text-3xl font-display font-bold text-foreground mb-3">
                 {t('wizard.infoTitle')}
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-lg text-muted-foreground px-4">
                 {t('wizard.infoSubtitle')}
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <Label className="text-lg font-semibold mb-3 block">
+                <Label className="text-xl font-semibold mb-4 block">
                   {t('wizard.titleLabel')}
                 </Label>
                 <Input
                   placeholder={t('wizard.titlePlaceholder')}
-                  className="h-14 text-lg px-4"
+                  className="h-16 text-xl px-5 border-2 focus:border-secondary"
                   value={title}
                   onChange={(e) => onTitleChange(e.target.value)}
+                  autoFocus
                 />
+                <p className="text-sm text-muted-foreground mt-2 px-1">
+                  {t('seniorEditor.titleHelp', 'Un titre court et mémorable')}
+                </p>
               </div>
 
               <div>
-                <Label className="text-lg font-semibold mb-3 block">
+                <Label className="text-xl font-semibold mb-4 block">
                   {t('wizard.descriptionLabel')}
                 </Label>
                 <Textarea
                   placeholder={t('wizard.descriptionPlaceholder')}
-                  className="min-h-[120px] text-base px-4 py-3"
+                  className="min-h-[140px] text-lg px-5 py-4 border-2 focus:border-secondary"
                   value={description}
                   onChange={(e) => onDescriptionChange(e.target.value)}
                 />
@@ -437,28 +441,28 @@ const MobileCapsuleWizard = ({
 
   return (
     <div className="min-h-screen bg-gradient-warm flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#1a1a2e]/95 backdrop-blur-xl border-b border-white/10 px-4 py-3">
-        <div className="flex items-center justify-between mb-3">
+      {/* Header - Larger and more readable */}
+      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-2 border-border shadow-sm px-4 py-4">
+        <div className="flex items-center justify-between mb-4">
           <button 
             onClick={goBack}
-            className="flex items-center gap-2 text-white/80 font-medium"
+            className="flex items-center gap-2 text-foreground font-semibold text-lg p-2 -ml-2 rounded-lg hover:bg-muted/50 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="text-base">
+            <ArrowLeft className="w-6 h-6" />
+            <span>
               {currentStep === 0 ? t('wizard.cancel') : t('wizard.back')}
             </span>
           </button>
-          <span className="text-white font-semibold text-base">
+          <span className="text-lg font-bold text-muted-foreground bg-muted px-3 py-1 rounded-full">
             {t('wizard.stepOf', { current: currentStep + 1, total: STEPS.length })}
           </span>
         </div>
         
-        {/* Progress bar */}
-        <Progress value={progress} className="h-2" />
+        {/* Progress bar - Thicker */}
+        <Progress value={progress} className="h-3 rounded-full" />
         
-        {/* Step indicators */}
-        <div className="flex justify-between mt-3">
+        {/* Step indicators - Larger */}
+        <div className="flex justify-between mt-4">
           {STEPS.map((step, index) => {
             const Icon = step.icon;
             const isActive = index === currentStep;
@@ -468,33 +472,33 @@ const MobileCapsuleWizard = ({
               <div 
                 key={step.id}
                 className={cn(
-                  "flex flex-col items-center gap-1",
+                  "flex flex-col items-center gap-2 transition-all",
                   isActive && "text-secondary",
-                  isCompleted && "text-secondary/60",
-                  !isActive && !isCompleted && "text-white/40"
+                  isCompleted && "text-green-600",
+                  !isActive && !isCompleted && "text-muted-foreground"
                 )}
               >
                 <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center transition-colors",
-                  isActive && "bg-secondary text-primary-foreground",
-                  isCompleted && "bg-secondary/30",
-                  !isActive && !isCompleted && "bg-white/10"
+                  "w-12 h-12 rounded-xl flex items-center justify-center transition-all",
+                  isActive && "bg-secondary text-white shadow-md scale-110",
+                  isCompleted && "bg-green-100 text-green-600",
+                  !isActive && !isCompleted && "bg-muted"
                 )}>
                   {isCompleted ? (
-                    <Check className="w-4 h-4" />
+                    <Check className="w-6 h-6" />
                   ) : (
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-6 h-6" />
                   )}
                 </div>
-                <span className="text-xs font-medium">{step.label}</span>
+                <span className="text-xs font-semibold">{step.label}</span>
               </div>
             );
           })}
         </div>
       </header>
 
-      {/* Content */}
-      <main className="flex-1 px-4 py-6 pb-32">
+      {/* Content - More padding */}
+      <main className="flex-1 px-5 py-8 pb-36">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -508,17 +512,22 @@ const MobileCapsuleWizard = ({
         </AnimatePresence>
       </main>
 
-      {/* Bottom navigation - hidden on review step */}
+      {/* Bottom navigation - MUCH LARGER touch target */}
       {currentStep < STEPS.length - 1 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 safe-area-inset-bottom">
+        <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-2 border-border p-5 safe-area-inset-bottom">
           <Button
-            size="mobileLg"
-            className="w-full gap-3 bg-gradient-gold text-primary-foreground shadow-gold"
+            size="lg"
+            className={cn(
+              "w-full h-16 text-xl gap-3",
+              canGoNext() 
+                ? "bg-secondary hover:bg-secondary/90 text-white shadow-lg" 
+                : "bg-muted text-muted-foreground"
+            )}
             onClick={goNext}
             disabled={!canGoNext()}
           >
             {t('wizard.continue')}
-            <ArrowRight className="w-6 h-6" />
+            <ArrowRight className="w-7 h-7" />
           </Button>
         </div>
       )}
