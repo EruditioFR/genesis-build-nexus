@@ -89,7 +89,15 @@ const CapsuleCreate = () => {
   const promptFromUrl = searchParams.get('prompt');
   const promptIdFromUrl = searchParams.get('promptId');
   const promptCategoryFromUrl = searchParams.get('category');
-
+  
+  // Mapping from guided prompt categories to database category slugs
+  const promptToCategorySlugMap: Record<string, string> = {
+    'enfance': 'enfance',
+    'ecole': 'etudes-et-formation',
+    'musiques': 'arts-et-culture',
+    'famille': 'famille',
+    'vie-personnelle': 'vie-personnelle',
+  };
   const capsuleSchema = z.object({
     title: z.string()
       .min(1, t('create.titleRequired'))
@@ -116,6 +124,19 @@ const CapsuleCreate = () => {
       navigate('/login');
     }
   }, [user, loading, navigate]);
+  
+  // Auto-select category when coming from guided prompts
+  useEffect(() => {
+    if (promptCategoryFromUrl && categories.length > 0 && !primaryCategory) {
+      const targetSlug = promptToCategorySlugMap[promptCategoryFromUrl];
+      if (targetSlug) {
+        const matchingCategory = categories.find(cat => cat.slug === targetSlug);
+        if (matchingCategory) {
+          setPrimaryCategory(matchingCategory.id);
+        }
+      }
+    }
+  }, [promptCategoryFromUrl, categories, primaryCategory]);
 
   useEffect(() => {
     const fetchProfile = async () => {
