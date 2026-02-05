@@ -39,6 +39,7 @@ interface CapsuleRow {
   created_at: string;
   thumbnail_url: string | null;
   content: string | null;
+  metadata: { youtube_id?: string; youtube_url?: string } | null;
 }
 
 interface MediaRow {
@@ -55,6 +56,7 @@ interface RecentCapsule {
   content?: string;
   firstMediaUrl?: string;
   firstVideoUrl?: string;
+  youtubeId?: string;
 }
 
 interface Stats {
@@ -140,10 +142,10 @@ const Dashboard = () => {
           setProfile(profileData);
         }
 
-        // Fetch recent capsules (last 5) with content
+        // Fetch recent capsules (last 5) with content and metadata
         const { data: capsulesData } = await supabase
           .from('capsules')
-          .select('id, title, capsule_type, created_at, thumbnail_url, content')
+          .select('id, title, capsule_type, created_at, thumbnail_url, content, metadata')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(5);
@@ -171,16 +173,20 @@ const Dashboard = () => {
             });
           }
 
-          const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => ({
-            id: capsule.id,
-            title: capsule.title,
-            type: capsule.capsule_type,
-            date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: getDateLocale(i18n.language) }),
-            thumbnail: capsule.thumbnail_url || undefined,
-            content: capsule.content || undefined,
-            firstMediaUrl: firstImageMap[capsule.id] || undefined,
-            firstVideoUrl: firstVideoMap[capsule.id] || undefined,
-          }));
+          const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => {
+            const metadata = capsule.metadata as { youtube_id?: string } | null;
+            return {
+              id: capsule.id,
+              title: capsule.title,
+              type: capsule.capsule_type,
+              date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: getDateLocale(i18n.language) }),
+              thumbnail: capsule.thumbnail_url || undefined,
+              content: capsule.content || undefined,
+              firstMediaUrl: firstImageMap[capsule.id] || undefined,
+              firstVideoUrl: firstVideoMap[capsule.id] || undefined,
+              youtubeId: metadata?.youtube_id || undefined,
+            };
+          });
           setRecentCapsules(formattedCapsules);
         }
 
