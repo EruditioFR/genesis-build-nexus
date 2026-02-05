@@ -92,7 +92,8 @@
     "viewInStory": "View in story mode",
     "changeHeaderImage": "Change header image",
     "deleteSuccess": "Memory deleted",
-    "deleteError": "Error deleting"
+    "deleteError": "Error deleting",
+    "youtubeVideo": "YouTube Video"
   },
   "list": {
     "title": "My memories",
@@ -409,5 +410,12 @@
       "video": "videos",
       "audio": "audio"
     }
+  },
+  "youtube": {
+    "title": "YouTube Video",
+    "description": "Add a YouTube link to embed a video in your memory",
+    "placeholder": "https://www.youtube.com/watch?v=...",
+    "invalidUrl": "Invalid YouTube URL. Accepted formats: youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...",
+    "hint": "Paste a YouTube link to enrich your memory with a music video, movie clip, or special moment."
   }
 }

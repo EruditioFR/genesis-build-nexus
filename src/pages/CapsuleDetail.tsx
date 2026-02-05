@@ -705,6 +705,29 @@ const CapsuleDetail = () => {
                 </motion.div>
               )}
 
+              {/* YouTube Video */}
+              {capsule.metadata && typeof capsule.metadata === 'object' && 'youtube_id' in capsule.metadata && capsule.metadata.youtube_id && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.18 }}
+                >
+                  <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                    <Video className="w-5 h-5 text-red-500" />
+                    {t('detail.youtubeVideo', 'Vidéo YouTube')}
+                  </h2>
+                  <div className="relative rounded-xl overflow-hidden bg-muted aspect-video shadow-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${capsule.metadata.youtube_id}`}
+                      title="YouTube video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                </motion.div>
+              )}
+
               {/* Media Gallery */}
               {medias.length > 0 && (
                 <motion.div
