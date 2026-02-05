@@ -92,7 +92,8 @@
     "viewInStory": "Voir en mode story",
     "changeHeaderImage": "Changer l'image d'en-tête",
     "deleteSuccess": "Souvenir supprimé",
-    "deleteError": "Erreur lors de la suppression"
+    "deleteError": "Erreur lors de la suppression",
+    "youtubeVideo": "Vidéo YouTube"
   },
   "list": {
     "title": "Mes souvenirs",
@@ -404,5 +405,12 @@
     "audioLocked": "Audio verrouillé",
     "videoRestricted": "Les vidéos nécessitent le forfait Premium",
     "audioRestricted": "L'audio nécessite le forfait Premium"
+  },
+  "youtube": {
+    "title": "Vidéo YouTube",
+    "description": "Ajoutez un lien YouTube pour intégrer une vidéo à votre souvenir",
+    "placeholder": "https://www.youtube.com/watch?v=...",
+    "invalidUrl": "URL YouTube non valide. Formats acceptés : youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...",
+    "hint": "Collez un lien YouTube pour enrichir votre souvenir avec une vidéo musicale, un film, ou un moment particulier."
   }
 }

@@ -44,6 +44,7 @@ import MemoryDateSelector, {
 } from '@/components/capsule/MemoryDateSelector';
 import { useIsMobile } from '@/hooks/use-mobile';
 import NoIndex from '@/components/seo/NoIndex';
+import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -81,6 +82,7 @@ const CapsuleCreate = () => {
   const [legacyUnlockDate, setLegacyUnlockDate] = useState<Date | null>(null);
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
   const [mediaError, setMediaError] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
   
   // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -272,6 +274,13 @@ const CapsuleCreate = () => {
       // Prepare memory date storage values
       const memoryDateStorage = memoryDateToStorage(memoryDate);
 
+      // Prepare metadata with YouTube URL if present
+      const metadata: Record<string, any> = {};
+      if (youtubeUrl) {
+        metadata.youtube_url = youtubeUrl;
+        metadata.youtube_id = extractYouTubeId(youtubeUrl);
+      }
+
       // Create the capsule
       const { data: capsule, error: capsuleError } = await supabase
         .from('capsules')
@@ -289,6 +298,7 @@ const CapsuleCreate = () => {
           memory_date: memoryDateStorage.memory_date,
           memory_date_precision: memoryDateStorage.memory_date_precision,
           memory_date_year_end: memoryDateStorage.memory_date_year_end,
+          metadata: Object.keys(metadata).length > 0 ? metadata : null,
         } as any)
         .select('id')
         .single();
@@ -557,6 +567,12 @@ const CapsuleCreate = () => {
                 hasError={mediaError}
               />
             </div>
+
+            {/* YouTube Embed */}
+            <YouTubeEmbed
+              value={youtubeUrl}
+              onChange={setYoutubeUrl}
+            />
 
             {/* Memory Date */}
             <div className="p-6 rounded-2xl border border-border bg-card" data-tour="capsule-date">

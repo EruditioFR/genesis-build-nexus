@@ -50,6 +50,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
 import { determineContentType, validateContentForPlan } from '@/lib/capsuleTypeUtils';
+import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -96,6 +97,7 @@ const CapsuleEdit = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   const [mediaError, setMediaError] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
   
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -166,6 +168,11 @@ const CapsuleEdit = () => {
         // Set memory date if exists
         if (capsule.memory_date) {
           setMemoryDate(parseISO(capsule.memory_date));
+        }
+
+        // Set YouTube URL if exists in metadata
+        if (capsule.metadata && typeof capsule.metadata === 'object' && 'youtube_url' in capsule.metadata) {
+          setYoutubeUrl(capsule.metadata.youtube_url as string);
         }
 
         // Fetch existing media
@@ -274,6 +281,13 @@ const CapsuleEdit = () => {
     );
 
     try {
+      // Prepare metadata with YouTube URL if present
+      const metadata: Record<string, any> = {};
+      if (youtubeUrl) {
+        metadata.youtube_url = youtubeUrl;
+        metadata.youtube_id = extractYouTubeId(youtubeUrl);
+      }
+
       // Update the capsule
       const { error: capsuleError } = await supabase
         .from('capsules')
@@ -286,6 +300,7 @@ const CapsuleEdit = () => {
           tags: tags.length > 0 ? tags : null,
           published_at: status === 'published' ? new Date().toISOString() : null,
           memory_date: memoryDate ? format(memoryDate, 'yyyy-MM-dd') : null,
+          metadata: Object.keys(metadata).length > 0 ? metadata : null,
         })
         .eq('id', id);
 
@@ -526,6 +541,12 @@ const CapsuleEdit = () => {
                 </Button>
               )}
             </div>
+
+            {/* YouTube Embed */}
+            <YouTubeEmbed
+              value={youtubeUrl}
+              onChange={setYoutubeUrl}
+            />
 
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
