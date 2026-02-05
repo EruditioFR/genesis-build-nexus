@@ -724,7 +724,7 @@ const SeniorFriendlyEditor = ({
                     )}
                   </div>
                   <span className="text-sm font-medium hidden sm:block">
-                    {t(`seniorEditor.step${step.id.charAt(0).toUpperCase() + step.id.slice(1)}`, step.id)}
+                    {t(`capsules:seniorEditor.step${step.id.charAt(0).toUpperCase() + step.id.slice(1)}`)}
                   </span>
                 </div>
               );
