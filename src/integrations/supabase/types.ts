@@ -956,6 +956,41 @@ export type Database = {
           },
         ]
       }
+      user_memory_prompts: {
+        Row: {
+          capsule_id: string | null
+          category: string
+          created_at: string
+          id: string
+          prompt_id: string
+          user_id: string
+        }
+        Insert: {
+          capsule_id?: string | null
+          category: string
+          created_at?: string
+          id?: string
+          prompt_id: string
+          user_id: string
+        }
+        Update: {
+          capsule_id?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          prompt_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_memory_prompts_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

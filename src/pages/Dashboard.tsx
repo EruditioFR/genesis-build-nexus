@@ -15,6 +15,7 @@ import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
+import GuidedMemoryPrompts from '@/components/dashboard/GuidedMemoryPrompts';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import NoIndex from '@/components/seo/NoIndex';
@@ -337,7 +338,7 @@ const Dashboard = () => {
                 localStorage.setItem('onboarding_dismissed', 'true');
               }}
             />
-          </div>
+        </div>
         )}
 
         {/* Quick Actions */}
@@ -350,14 +351,12 @@ const Dashboard = () => {
           <StatsCards stats={stats} />
         </div>
 
-        {/* Memory Prompts - for users without capsules and not showing onboarding */}
-        {stats.totalCapsules === 0 && !showOnboarding && (
-          <div className="mb-6 md:mb-8">
-            <div className="p-6 rounded-2xl bg-card border border-border">
-              <MemoryPrompts />
-            </div>
+        {/* Guided Memory Prompts - Always visible, prominent placement */}
+        <div className="mb-6 md:mb-8">
+          <div className="p-6 rounded-2xl bg-card border border-border">
+            <GuidedMemoryPrompts />
           </div>
-        )}
+        </div>
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
