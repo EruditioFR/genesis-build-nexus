@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { Check, ChevronDown, MapPin } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Check, ChevronDown, MapPin, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
@@ -12,24 +12,93 @@ interface CitySelectorProps {
   className?: string;
 }
 
+interface FrenchApiResult {
+  properties: {
+    city?: string;
+    name: string;
+    label: string;
+    type: string;
+    postcode?: string;
+  };
+}
+
+interface FrenchApiResponse {
+  features: FrenchApiResult[];
+}
+
 export function CitySelector({ value, onChange, countryCode, className }: CitySelectorProps) {
   const { t } = useTranslation('auth');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [cities, setCities] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const currentSearchRef = useRef<string>('');
 
-  // Get all cities for the selected country
-  const allCities = useMemo(() => {
-    return getCitiesForCountry(countryCode);
-  }, [countryCode]);
+  // Get static cities for non-French countries
+  const staticCities = getCitiesForCountry(countryCode);
 
-  // Filter cities based on search input
-  const filteredCities = useMemo(() => {
-    if (!search || search.length < 1) return allCities.slice(0, 10);
+  // Search for French cities via api-adresse.data.gouv.fr
+  const searchFrenchCities = useCallback(async (query: string) => {
+    if (!query || query.length < 2) {
+      return [];
+    }
+
+    currentSearchRef.current = query;
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const params = new URLSearchParams({
+        q: query,
+        type: 'municipality',
+        limit: '15',
+      });
+
+      const response = await fetch(
+        `https://api-adresse.data.gouv.fr/search/?${params}`,
+        {
+          signal: abortControllerRef.current.signal,
+        }
+      );
+
+      if (currentSearchRef.current !== query) {
+        return [];
+      }
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch cities');
+      }
+
+      const data: FrenchApiResponse = await response.json();
+      
+      // Extract unique city names
+      const cityNames = data.features
+        .map((result) => result.properties.city || result.properties.name)
+        .filter((name): name is string => !!name && name.length > 0)
+        .filter((name, index, arr) => arr.indexOf(name) === index);
+
+      return cityNames;
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        console.error('Error fetching French cities:', error);
+      }
+      return [];
+    }
+  }, []);
+
+  // Filter static cities for non-French countries
+  const filterStaticCities = useCallback((query: string): string[] => {
+    if (!query || query.length < 1) return staticCities.slice(0, 10);
     
-    const searchLower = search.toLowerCase();
-    const matches = allCities.filter(city => 
+    const searchLower = query.toLowerCase();
+    const matches = staticCities.filter(city => 
       city.toLowerCase().includes(searchLower)
     );
     
@@ -41,7 +110,38 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
       if (!aStarts && bStarts) return 1;
       return a.localeCompare(b);
     }).slice(0, 15);
-  }, [allCities, search]);
+  }, [staticCities]);
+
+  // Handle search based on country
+  useEffect(() => {
+    if (!countryCode) {
+      setCities([]);
+      return;
+    }
+
+    // For France, use the API
+    if (countryCode === 'FR') {
+      const timer = setTimeout(async () => {
+        if (search && search.length >= 2) {
+          setLoading(true);
+          const results = await searchFrenchCities(search);
+          if (currentSearchRef.current === search) {
+            setCities(results);
+            setLoading(false);
+          }
+        } else {
+          setCities([]);
+          setLoading(false);
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      // For other countries, use static list
+      setCities(filterStaticCities(search));
+      setLoading(false);
+    }
+  }, [search, countryCode, searchFrenchCities, filterStaticCities]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,6 +165,7 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
     if (value) {
       onChange('');
       setSearch('');
+      setCities([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode]);
@@ -73,12 +174,12 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
     onChange(city);
     setOpen(false);
     setSearch('');
+    setCities([]);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearch(newValue);
-    // Allow free text input
     onChange(newValue);
     if (!open) {
       setOpen(true);
@@ -112,18 +213,20 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
           }}
           className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
         />
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          className="absolute right-3 top-1/2 -translate-y-1/2"
-        >
-          <ChevronDown className={cn('w-4 h-4 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
-        </button>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          {loading && <Loader2 className="w-4 h-4 text-[#1a1a2e]/50 animate-spin" />}
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+          >
+            <ChevronDown className={cn('w-4 h-4 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
+          </button>
+        </div>
       </div>
 
-      {open && filteredCities.length > 0 && (
+      {open && cities.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-[#1a1a2e]/20 rounded-md shadow-lg max-h-48 overflow-y-auto">
-          {filteredCities.map((city) => (
+          {cities.map((city) => (
             <button
               key={city}
               type="button"
@@ -140,7 +243,7 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
         </div>
       )}
 
-      {open && search && search.length >= 1 && filteredCities.length === 0 && (
+      {open && search && search.length >= 2 && !loading && cities.length === 0 && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-[#1a1a2e]/20 rounded-md shadow-lg p-3 text-sm text-[#1a1a2e]/60">
           {t('signup.noCityFound', 'Aucune ville trouvée')}
         </div>
