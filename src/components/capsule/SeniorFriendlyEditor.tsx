@@ -125,6 +125,117 @@ const pulseVariants = {
   }
 };
 
+// Video section component with toggle
+const VideoSection = ({
+  userId,
+  mediaFiles,
+  onMediaFilesChange,
+  youtubeUrl,
+  onYoutubeUrlChange,
+  onUploadAllRef,
+  hasMediaError,
+}: {
+  userId: string;
+  mediaFiles: MediaFile[];
+  onMediaFilesChange: (files: MediaFile[]) => void;
+  youtubeUrl: string | null;
+  onYoutubeUrlChange: (url: string | null) => void;
+  onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
+  hasMediaError: boolean;
+}) => {
+  const { t } = useTranslation('capsules');
+  const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrl ? 'youtube' : 'upload');
+  const videoFiles = mediaFiles.filter(f => f.type === 'video');
+  const hasContent = videoFiles.length > 0 || youtubeUrl;
+
+  return (
+    <div className={cn(
+      "bg-card border-2 rounded-2xl p-6 space-y-4",
+      hasContent ? "border-primary/40 bg-primary/5" : "border-border"
+    )}>
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center">
+          <Video className="w-6 h-6 text-destructive" />
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-foreground">
+            {t('seniorEditor.videosTitle', 'Vidéos')}
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            {t('seniorEditor.videosDesc', 'Ajoutez une vidéo depuis votre appareil ou YouTube')}
+          </p>
+        </div>
+        {hasContent && (
+          <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
+            <Check className="w-3 h-3 mr-1" /> {t('seniorEditor.added', 'Ajouté')}
+          </Badge>
+        )}
+      </div>
+
+      {/* Toggle buttons */}
+      <div className="flex gap-2 p-1 bg-muted rounded-xl">
+        <button
+          type="button"
+          onClick={() => setVideoMode('upload')}
+          className={cn(
+            "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
+            videoMode === 'upload' 
+              ? "bg-card text-foreground shadow-sm" 
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Video className="w-5 h-5" />
+          {t('seniorEditor.uploadVideo', 'Charger une vidéo')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setVideoMode('youtube')}
+          className={cn(
+            "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
+            videoMode === 'youtube' 
+              ? "bg-card text-foreground shadow-sm" 
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Youtube className="w-5 h-5 text-destructive" />
+          {t('seniorEditor.youtubeLink', 'Lien YouTube')}
+        </button>
+      </div>
+
+      {/* Content based on mode */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={videoMode}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          {videoMode === 'upload' ? (
+            <UnifiedMediaSection
+              userId={userId}
+              content=""
+              onContentChange={() => {}}
+              showTextSection={false}
+              files={mediaFiles}
+              onFilesChange={onMediaFilesChange}
+              maxFiles={20}
+              onUploadAll={onUploadAllRef}
+              hasError={hasMediaError}
+            />
+          ) : (
+            <YouTubeEmbed
+              value={youtubeUrl}
+              onChange={onYoutubeUrlChange}
+              className="border-0 p-0 bg-transparent"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const SeniorFriendlyEditor = ({
   userId,
   title,
@@ -396,7 +507,7 @@ const SeniorFriendlyEditor = ({
               />
             </div>
 
-            {/* Media section */}
+            {/* Media section - All files */}
             <div className={cn(
               "bg-card border-2 rounded-2xl p-6 space-y-4",
               mediaFiles.length > 0 ? "border-primary/40 bg-primary/5" : "border-border"
@@ -407,15 +518,15 @@ const SeniorFriendlyEditor = ({
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-foreground">
-                    {t('seniorEditor.mediaTitle', 'Ajouter des médias')}
+                    {t('seniorEditor.photosTitle', 'Photos')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {t('seniorEditor.mediaDesc', 'Photos, vidéos ou lien YouTube')}
+                    {t('seniorEditor.photosDesc', 'Ajoutez vos photos souvenirs')}
                   </p>
                 </div>
-                {mediaFiles.length > 0 && (
+                {mediaFiles.filter(f => f.type === 'image').length > 0 && (
                   <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
-                    {mediaFiles.length} {t('seniorEditor.files', 'fichier(s)')}
+                    {mediaFiles.filter(f => f.type === 'image').length} photo(s)
                   </Badge>
                 )}
               </div>
@@ -431,24 +542,18 @@ const SeniorFriendlyEditor = ({
                 onUploadAll={onUploadAllRef}
                 hasError={hasMediaError}
               />
-
-              {/* YouTube section */}
-              <div className="pt-4 border-t border-border">
-                <div className="flex items-center gap-2 mb-3">
-                  <Youtube className="w-5 h-5 text-destructive" />
-                  <span className="font-medium">{t('seniorEditor.youtubeLabel', 'Vidéo YouTube')}</span>
-                  {youtubeUrl && (
-                    <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
-                      <Check className="w-3 h-3 mr-1" /> {t('seniorEditor.added', 'Ajouté')}
-                    </Badge>
-                  )}
-                </div>
-                <YouTubeEmbed
-                  value={youtubeUrl}
-                  onChange={onYoutubeUrlChange}
-                />
-              </div>
             </div>
+
+            {/* Video section with toggle: Upload or YouTube */}
+            <VideoSection 
+              userId={userId}
+              mediaFiles={mediaFiles}
+              onMediaFilesChange={onMediaFilesChange}
+              youtubeUrl={youtubeUrl}
+              onYoutubeUrlChange={onYoutubeUrlChange}
+              onUploadAllRef={onUploadAllRef}
+              hasMediaError={hasMediaError}
+            />
           </div>
         );
 
