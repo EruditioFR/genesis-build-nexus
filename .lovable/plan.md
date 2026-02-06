@@ -1,77 +1,238 @@
 
+# Refonte complète de l'éditeur de souvenir
 
-# Plan de modification du Hero
+## Problemes identifies
 
-## Résumé des modifications
+### Problemes UX
+1. **Etapes horizontales peu lisibles** : Les indicateurs d'etapes sont en ligne horizontale avec de petites icones, difficiles a suivre pour les personnes agees
+2. **Absence de branding** : Aucun rappel du logo ou du nom "FamilyGarden", l'utilisateur peut se sentir perdu
+3. **Sections accordeon complexes** : Les accordeons a l'interieur des etapes ajoutent de la confusion
+4. **Boutons de navigation peu visibles** : Le bouton "Continuer" en bas est standard, pas assez mis en valeur
 
-Mise à jour du texte du Hero sur la landing page pour un messaging plus clair et orienté utilisateur, dans les 5 langues supportées (FR, EN, ES, KO, ZH).
+### Problemes UI
+1. **Design terne** : Fond gris/blanc uniforme, manque de couleur et de chaleur
+2. **Icones generiques** : Les icones d'etapes sont toutes dans des carres identiques sans distinction visuelle
+3. **Pas d'animation engageante** : Les transitions sont minimales et peu encourageantes
+4. **Manque de retour visuel** : Peu de feedback quand une section est completee
 
-## Changements par clé de traduction
+### Bug potentiel
+- La propagation d'evenements dans les accordeons peut encore causer des problemes de focus
 
-| Clé | Avant (FR) | Après (FR) |
-|-----|-----------|------------|
-| `hero.badge` | Préservez vos souvenirs pour l'éternité | Créez votre journal de famille, simplement |
-| `hero.title.prefix` | Vos souvenirs méritent | Les moments en famille méritent |
-| `hero.title.highlight` | d'être préservés | d'être revécus |
-| `hero.subtitle.line1` | Une famille est un jardin qui se cultive... | Photos, vidéos, textes, audios… rassemblez vos souvenirs au même endroit, avec du contexte et de l'émotion. |
-| `hero.subtitle.line2` | Enracinez vos souvenirs... | Partagez en privé avec les grands-parents et les proches, sans les perdre dans 10 applis. |
-| `hero.trust.encryption` | Chiffrement AES-256 | Données sécurisées |
-| `hero.trust.gdpr` | Serveurs européens RGPD | Hébergement UE (RGPD) |
-| `hero.trust.legacy` | Héritage familial | Cercles privés |
+## Solution proposee
 
-## Fichiers à modifier
+### 1. Nouvelle structure de navigation verticale
 
-1. **public/locales/fr/landing.json** - Version française principale
-2. **public/locales/en/landing.json** - Version anglaise
-3. **public/locales/es/landing.json** - Version espagnole
-4. **public/locales/ko/landing.json** - Version coréenne
-5. **public/locales/zh/landing.json** - Version chinoise
+```text
++------------------------------------------+
+|  [Logo] FamilyGarden                     |
+|  "Nouveau souvenir"                      |
++------------------------------------------+
+|                                          |
+|  Etapes (verticales, a gauche)           |
+|  =====================================   |
+|                                          |
+|   [1] Titre        ← Etape active        |
+|       ✓ Complete                         |
+|       |                                  |
+|   [2] Ajouter des medias                 |
+|       |                                  |
+|   [3] Organiser                          |
+|       |                                  |
+|   [4] Terminer                           |
+|                                          |
++------------------------------------------+
+|                                          |
+|    Zone de contenu principal             |
+|    (formulaire de l'etape active)        |
+|                                          |
++------------------------------------------+
+|  [Retour]          [Continuer →]         |
++------------------------------------------+
+```
 
-## Traductions proposées
+### 2. Refonte du header avec branding
 
-### Anglais (EN)
-- badge: "Create your family journal, simply"
-- prefix: "Family moments deserve"
-- highlight: "to be relived"
-- line1: "Photos, videos, texts, audio… gather your memories in one place, with context and emotion."
-- line2: "Share privately with grandparents and loved ones, without losing them across 10 apps."
-- encryption: "Secure data"
-- gdpr: "EU Hosting (GDPR)"
-- legacy: "Private circles"
+- **Logo + "FamilyGarden"** toujours visible en haut
+- **Titre contextuel** : "Nouveau souvenir" avec l'etape actuelle
+- **Barre de progression** coloree et animee (degrade or/terracotta)
+- **Couleur d'arriere-plan chaleureuse** : gradient-warm du design system
 
-### Espagnol (ES)
-- badge: "Crea tu diario familiar, simplemente"
-- prefix: "Los momentos en familia merecen"
-- highlight: "ser revividos"
-- line1: "Fotos, vídeos, textos, audios… reúne tus recuerdos en un solo lugar, con contexto y emoción."
-- line2: "Comparte en privado con los abuelos y seres queridos, sin perderlos en 10 aplicaciones."
-- encryption: "Datos seguros"
-- gdpr: "Alojamiento UE (RGPD)"
-- legacy: "Círculos privados"
+### 3. Indicateurs d'etapes verticaux (sidebar ou en haut sur mobile)
 
-### Coréen (KO)
-- badge: "가족 일기를 간단하게 만드세요"
-- prefix: "가족의 순간은"
-- highlight: "다시 경험할 가치가 있습니다"
-- line1: "사진, 동영상, 텍스트, 오디오… 맥락과 감정을 담아 한 곳에 추억을 모으세요."
-- line2: "조부모와 가족에게 비공개로 공유하세요. 10개의 앱에 흩어지지 않게."
-- encryption: "안전한 데이터"
-- gdpr: "EU 호스팅 (GDPR)"
-- legacy: "비공개 서클"
+- **Numeros cerclés** avec couleur de fond dynamique
+- **Labels explicites** pour chaque etape
+- **Badge de completion** (checkmark vert quand valide)
+- **Ligne de connexion** entre les etapes pour visualiser la progression
+- **Animation de pulse** sur l'etape active
 
-### Chinois (ZH)
-- badge: "轻松创建您的家庭日记"
-- prefix: "家庭时刻值得"
-- highlight: "被重温"
-- line1: "照片、视频、文字、音频…将您的回忆汇集在一处，带着背景和情感。"
-- line2: "私密分享给祖父母和亲人，不再散落在10个应用中。"
-- encryption: "数据安全"
-- gdpr: "欧盟托管 (GDPR)"
-- legacy: "私密圈子"
+### 4. Palette de couleurs et animations
 
----
+- **Etape 1 (Titre)** : Bleu nuit `--primary` avec animation fade-in
+- **Etape 2 (Medias)** : Terracotta `--accent` avec animation slide-up
+- **Etape 3 (Details)** : Or chaud `--secondary` avec animation slide-up
+- **Etape 4 (Terminer)** : Vert validation avec confetti subtil
 
-## Détails techniques
+### 5. Simplification du contenu des etapes
 
-Aucune modification de code n'est nécessaire dans le composant `HeroSection.tsx` car les clés de traduction restent identiques. Seul le contenu des fichiers JSON sera modifié.
+- **Suppression des accordeons** dans les etapes de contenu
+- **Affichage direct** des champs de formulaire avec espacement genereux
+- **Cartes distinctes** pour chaque type de contenu (texte / photos / YouTube)
+- **Transitions fluides** entre les sections
 
+### 6. Boutons d'action ameliores
+
+- **Bouton principal** : Grand, colore avec gradient, icone animee
+- **Bouton secondaire** : Style outline clair
+- **Bouton de retour** : Texte simple avec fleche
+- **Feedback au survol** : Effet de scale et shadow
+
+## Fichiers a modifier
+
+### `src/components/capsule/SeniorFriendlyEditor.tsx`
+Refonte complete du composant avec :
+- Header avec logo et branding
+- Navigation verticale des etapes
+- Suppression des accordeons internes
+- Nouvelles couleurs par etape
+- Animations Framer Motion ameliorees
+- Correction des bugs de focus
+
+### Nouveaux tokens de traduction
+Ajout dans `public/locales/*/capsules.json` :
+- `seniorEditor.createMemory` : "Nouveau souvenir"
+- `seniorEditor.step1Label` : "Donnez un titre"
+- `seniorEditor.step2Label` : "Ajoutez du contenu"
+- `seniorEditor.step3Label` : "Organisez"
+- `seniorEditor.step4Label` : "Verifiez et publiez"
+
+## Details techniques
+
+### Structure du nouveau composant
+
+```tsx
+// Header avec branding
+<header className="...">
+  <div className="flex items-center gap-3">
+    <img src={logo} alt="FamilyGarden" className="w-10 h-10" />
+    <span className="font-display font-semibold">
+      Family<span className="text-secondary">Garden</span>
+    </span>
+  </div>
+  <h1>{t('seniorEditor.createMemory')}</h1>
+</header>
+
+// Navigation verticale des etapes
+<nav className="flex flex-col gap-4">
+  {STEPS.map((step, i) => (
+    <StepIndicator 
+      number={i + 1}
+      label={step.label}
+      isActive={currentStep === i}
+      isCompleted={i < currentStep}
+      color={step.color}
+    />
+  ))}
+</nav>
+
+// Contenu de l'etape (sans accordeons)
+<main className="flex-1">
+  <AnimatePresence mode="wait">
+    <motion.div key={currentStep}>
+      {renderStepContent()}
+    </motion.div>
+  </AnimatePresence>
+</main>
+```
+
+### Configuration des etapes avec couleurs
+
+```tsx
+const STEPS = [
+  { 
+    id: 'title', 
+    icon: FileText, 
+    labelKey: 'seniorEditor.step1Label',
+    color: 'primary',      // Bleu nuit
+    bgClass: 'bg-primary/10'
+  },
+  { 
+    id: 'media', 
+    icon: Image, 
+    labelKey: 'seniorEditor.step2Label',
+    color: 'accent',       // Terracotta
+    bgClass: 'bg-accent/10'
+  },
+  { 
+    id: 'organize', 
+    icon: FolderOpen, 
+    labelKey: 'seniorEditor.step3Label',
+    color: 'secondary',    // Or chaud
+    bgClass: 'bg-secondary/10'
+  },
+  { 
+    id: 'finish', 
+    icon: Check, 
+    labelKey: 'seniorEditor.step4Label',
+    color: 'green-600',
+    bgClass: 'bg-green-100'
+  },
+];
+```
+
+### Animations Framer Motion
+
+```tsx
+// Animation d'entree pour chaque etape
+const stepVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" }
+  },
+  exit: { opacity: 0, y: -10 }
+};
+
+// Pulse sur l'etape active
+const pulseVariants = {
+  initial: { scale: 1 },
+  pulse: { 
+    scale: [1, 1.05, 1],
+    transition: { duration: 1.5, repeat: Infinity }
+  }
+};
+```
+
+### Correction du bug de focus
+
+```tsx
+// Isoler completement les evenements dans les zones de saisie
+<div 
+  className="space-y-6"
+  onKeyDown={(e) => {
+    // Empecher la propagation des touches speciales
+    if (['Enter', ' ', 'Tab'].includes(e.key)) {
+      e.stopPropagation();
+    }
+  }}
+>
+  <Textarea 
+    value={content}
+    onChange={(e) => onContentChange(e.target.value)}
+    onFocus={() => setIsTyping(true)}
+    onBlur={() => setIsTyping(false)}
+  />
+</div>
+```
+
+## Resume des ameliorations
+
+| Aspect | Avant | Apres |
+|--------|-------|-------|
+| Navigation | Horizontale, petites icones | Verticale, numeros et labels clairs |
+| Branding | Absent | Logo + "FamilyGarden" toujours visible |
+| Couleurs | Grises uniformes | Palette chaude (or, terracotta, bleu nuit) |
+| Animations | Basiques | Transitions fluides, feedback visuel |
+| Structure | Accordeons imbriques | Contenu direct, cartes distinctes |
+| Boutons | Standards | Grands, colores, avec icones animees |
+| Accessibilite | Basique | Optimisee seniors (grandes cibles, contraste) |
