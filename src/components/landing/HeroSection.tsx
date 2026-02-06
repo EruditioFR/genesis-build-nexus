@@ -109,9 +109,9 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-secondary/15" />
       </motion.div>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {heroSlides.map((_, index) => <button key={index} onClick={() => goToSlide(index)} className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-secondary w-6 sm:w-8' : 'bg-primary-foreground/50 hover:bg-primary-foreground/70'}`} aria-label={`Go to slide ${index + 1}`} />)}
+      {/* Slide Indicators - Hidden on mobile */}
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
+        {heroSlides.map((_, index) => <button key={index} onClick={() => goToSlide(index)} className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-secondary w-8' : 'bg-primary-foreground/50 hover:bg-primary-foreground/70'}`} aria-label={`Go to slide ${index + 1}`} />)}
       </div>
 
       {/* Floating Elements - Parallax - Hidden on mobile for cleaner look */}
