@@ -8,16 +8,19 @@ import {
   ChevronRight,
   Image,
   Video,
-  Music,
+  Mic,
   FileText,
   Calendar,
   Tag,
   FolderOpen,
   Check,
   Info,
-  Youtube
+  Youtube,
+  Lock,
+  PenLine
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +39,9 @@ import UnifiedMediaSection, { type MediaFile, type UploadResult } from './Unifie
 import CategorySelector from './CategorySelector';
 import MemoryDateSelector, { type MemoryDateValue } from './MemoryDateSelector';
 import YouTubeEmbed from './YouTubeEmbed';
+import { AudioRecorder } from './AudioRecorder';
 
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import logo from '@/assets/logo.png';
 
 import type { Category, SubCategory } from '@/hooks/useCategories';
@@ -74,7 +79,7 @@ interface SeniorFriendlyEditorProps {
   promptFromUrl?: string | null;
 }
 
-// Step configuration with distinct colors per step
+// Step configuration with 5 steps
 const STEPS = [
   { 
     id: 'title', 
@@ -84,29 +89,36 @@ const STEPS = [
     borderClass: 'border-primary/30'
   },
   { 
-    id: 'content', 
-    icon: Image, 
+    id: 'text', 
+    icon: PenLine, 
     colorClass: 'bg-accent text-accent-foreground',
     bgClass: 'bg-accent/10',
     borderClass: 'border-accent/30'
   },
   { 
-    id: 'details', 
-    icon: FolderOpen, 
+    id: 'media', 
+    icon: Image, 
     colorClass: 'bg-secondary text-secondary-foreground',
     bgClass: 'bg-secondary/10',
     borderClass: 'border-secondary/30'
   },
   { 
-    id: 'finish', 
-    icon: Check, 
+    id: 'details', 
+    icon: FolderOpen, 
     colorClass: 'bg-primary text-primary-foreground',
     bgClass: 'bg-primary/10',
     borderClass: 'border-primary/30'
   },
+  { 
+    id: 'finish', 
+    icon: Check, 
+    colorClass: 'bg-secondary text-secondary-foreground',
+    bgClass: 'bg-secondary/10',
+    borderClass: 'border-secondary/30'
+  },
 ] as const;
 
-// Animation variants - use type-safe easing
+// Animation variants
 const stepVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -125,8 +137,91 @@ const pulseVariants = {
   }
 };
 
+// Media Card component for the media menu
+interface MediaCardProps {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  count: number;
+  locked: boolean;
+  onClick: () => void;
+  iconColor: string;
+  iconBg: string;
+}
+
+const MediaCard = ({ icon: Icon, title, description, count, locked, onClick, iconColor, iconBg }: MediaCardProps) => {
+  const { t } = useTranslation('capsules');
+  
+  return (
+    <motion.button
+      type="button"
+      onClick={locked ? undefined : onClick}
+      disabled={locked}
+      whileHover={locked ? undefined : { scale: 1.02, y: -2 }}
+      whileTap={locked ? undefined : { scale: 0.98 }}
+      className={cn(
+        "relative flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border-2 min-h-[160px] transition-all text-left w-full",
+        locked 
+          ? "bg-muted/50 border-muted cursor-not-allowed opacity-70"
+          : count > 0
+            ? "bg-primary/5 border-primary/40 hover:border-primary/60 hover:shadow-md cursor-pointer"
+            : "bg-card border-border hover:border-primary/30 hover:shadow-md cursor-pointer"
+      )}
+    >
+      {/* Lock overlay for premium features */}
+      {locked && (
+        <div className="absolute top-3 right-3">
+          <Badge variant="secondary" className="gap-1 text-xs">
+            <Lock className="w-3 h-3" />
+            Premium
+          </Badge>
+        </div>
+      )}
+      
+      {/* Icon */}
+      <div className={cn(
+        "w-16 h-16 rounded-2xl flex items-center justify-center transition-colors",
+        locked ? "bg-muted" : iconBg
+      )}>
+        <Icon className={cn("w-8 h-8", locked ? "text-muted-foreground" : iconColor)} />
+      </div>
+      
+      {/* Title and description */}
+      <div className="text-center space-y-1">
+        <h3 className={cn(
+          "text-xl font-semibold",
+          locked ? "text-muted-foreground" : "text-foreground"
+        )}>
+          {title}
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          {description}
+        </p>
+      </div>
+      
+      {/* Counter badge */}
+      {count > 0 && !locked && (
+        <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
+          <Check className="w-3 h-3 mr-1" /> {count}
+        </Badge>
+      )}
+      
+      {/* Premium upgrade link */}
+      {locked && (
+        <Link 
+          to="/premium" 
+          className="text-sm text-primary hover:underline font-medium"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {t('seniorEditor.mediaMenu.upgrade', 'Passer Premium →')}
+        </Link>
+      )}
+    </motion.button>
+  );
+};
+
 // Video section component with toggle
-const VideoSection = ({
+const VideoEditorSection = ({
   userId,
   mediaFiles,
   onMediaFilesChange,
@@ -134,6 +229,7 @@ const VideoSection = ({
   onYoutubeUrlChange,
   onUploadAllRef,
   hasMediaError,
+  onBack,
 }: {
   userId: string;
   mediaFiles: MediaFile[];
@@ -142,96 +238,288 @@ const VideoSection = ({
   onYoutubeUrlChange: (url: string | null) => void;
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
   hasMediaError: boolean;
+  onBack: () => void;
 }) => {
   const { t } = useTranslation('capsules');
   const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrl ? 'youtube' : 'upload');
+  
+  // Filter only video files
   const videoFiles = mediaFiles.filter(f => f.type === 'video');
-  const hasContent = videoFiles.length > 0 || youtubeUrl;
+  const nonVideoFiles = mediaFiles.filter(f => f.type !== 'video');
+
+  const handleVideoFilesChange = (newFiles: MediaFile[]) => {
+    // Keep non-video files, replace video files
+    const videoOnlyFiles = newFiles.filter(f => f.type === 'video');
+    onMediaFilesChange([...nonVideoFiles, ...videoOnlyFiles]);
+  };
 
   return (
-    <div className={cn(
-      "bg-card border-2 rounded-2xl p-6 space-y-4",
-      hasContent ? "border-primary/40 bg-primary/5" : "border-border"
-    )}>
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center">
-          <Video className="w-6 h-6 text-destructive" />
+    <div className="space-y-4">
+      {/* Back button */}
+      <Button
+        variant="ghost"
+        size="lg"
+        className="gap-2 text-lg"
+        onClick={onBack}
+      >
+        <ArrowLeft className="w-5 h-5" />
+        {t('seniorEditor.mediaMenu.backToMenu', 'Retour au menu')}
+      </Button>
+
+      <div className="bg-card border-2 border-border rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center">
+            <Video className="w-6 h-6 text-destructive" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-foreground">
+              {t('seniorEditor.videosTitle', 'Vidéos')}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t('seniorEditor.videosDesc', 'Ajoutez une vidéo depuis votre appareil ou YouTube')}
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-xl font-semibold text-foreground">
-            {t('seniorEditor.videosTitle', 'Vidéos')}
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            {t('seniorEditor.videosDesc', 'Ajoutez une vidéo depuis votre appareil ou YouTube')}
-          </p>
+
+        {/* Toggle buttons */}
+        <div className="flex gap-2 p-1 bg-muted rounded-xl">
+          <button
+            type="button"
+            onClick={() => setVideoMode('upload')}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
+              videoMode === 'upload' 
+                ? "bg-card text-foreground shadow-sm" 
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Video className="w-5 h-5" />
+            {t('seniorEditor.uploadVideo', 'Charger une vidéo')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setVideoMode('youtube')}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
+              videoMode === 'youtube' 
+                ? "bg-card text-foreground shadow-sm" 
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Youtube className="w-5 h-5 text-destructive" />
+            {t('seniorEditor.youtubeLink', 'Lien YouTube')}
+          </button>
         </div>
-        {hasContent && (
-          <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
-            <Check className="w-3 h-3 mr-1" /> {t('seniorEditor.added', 'Ajouté')}
-          </Badge>
+
+        {/* Content based on mode */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={videoMode}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {videoMode === 'upload' ? (
+              <UnifiedMediaSection
+                userId={userId}
+                content=""
+                onContentChange={() => {}}
+                showTextSection={false}
+                files={videoFiles}
+                onFilesChange={handleVideoFilesChange}
+                maxFiles={5}
+                onUploadAll={onUploadAllRef}
+                hasError={hasMediaError}
+              />
+            ) : (
+              <YouTubeEmbed
+                value={youtubeUrl}
+                onChange={onYoutubeUrlChange}
+                className="border-0 p-0 bg-transparent"
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+// Photo editor section
+const PhotoEditorSection = ({
+  userId,
+  mediaFiles,
+  onMediaFilesChange,
+  onUploadAllRef,
+  hasMediaError,
+  onBack,
+}: {
+  userId: string;
+  mediaFiles: MediaFile[];
+  onMediaFilesChange: (files: MediaFile[]) => void;
+  onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
+  hasMediaError: boolean;
+  onBack: () => void;
+}) => {
+  const { t } = useTranslation('capsules');
+  
+  // Filter only image files
+  const imageFiles = mediaFiles.filter(f => f.type === 'image');
+  const nonImageFiles = mediaFiles.filter(f => f.type !== 'image');
+
+  const handleImageFilesChange = (newFiles: MediaFile[]) => {
+    // Keep non-image files, replace image files
+    const imageOnlyFiles = newFiles.filter(f => f.type === 'image');
+    onMediaFilesChange([...nonImageFiles, ...imageOnlyFiles]);
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Back button */}
+      <Button
+        variant="ghost"
+        size="lg"
+        className="gap-2 text-lg"
+        onClick={onBack}
+      >
+        <ArrowLeft className="w-5 h-5" />
+        {t('seniorEditor.mediaMenu.backToMenu', 'Retour au menu')}
+      </Button>
+
+      <div className="bg-card border-2 border-border rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+            <Image className="w-6 h-6 text-accent" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-foreground">
+              {t('seniorEditor.photosTitle', 'Photos')}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t('seniorEditor.photosDesc', 'Ajoutez vos photos souvenirs')}
+            </p>
+          </div>
+          {imageFiles.length > 0 && (
+            <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
+              {imageFiles.length} photo{imageFiles.length > 1 ? 's' : ''}
+            </Badge>
+          )}
+        </div>
+        
+        <UnifiedMediaSection
+          userId={userId}
+          content=""
+          onContentChange={() => {}}
+          showTextSection={false}
+          files={imageFiles}
+          onFilesChange={handleImageFilesChange}
+          maxFiles={20}
+          onUploadAll={onUploadAllRef}
+          hasError={hasMediaError}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Audio editor section
+const AudioEditorSection = ({
+  userId,
+  mediaFiles,
+  onMediaFilesChange,
+  onBack,
+}: {
+  userId: string;
+  mediaFiles: MediaFile[];
+  onMediaFilesChange: (files: MediaFile[]) => void;
+  onBack: () => void;
+}) => {
+  const { t } = useTranslation('capsules');
+  
+  // Filter only audio files
+  const audioFiles = mediaFiles.filter(f => f.type === 'audio');
+  const nonAudioFiles = mediaFiles.filter(f => f.type !== 'audio');
+
+  const handleAudioRecorded = (audioBlob: Blob, fileName: string) => {
+    const file = new File([audioBlob], fileName, { type: audioBlob.type });
+    
+    const newAudioFile: MediaFile = {
+      id: `audio-${Date.now()}`,
+      file,
+      preview: URL.createObjectURL(audioBlob),
+      type: 'audio',
+      uploading: false,
+      uploaded: false
+    };
+    
+    onMediaFilesChange([...mediaFiles, newAudioFile]);
+  };
+
+  const handleRemoveAudio = (id: string) => {
+    onMediaFilesChange(mediaFiles.filter(f => f.id !== id));
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Back button */}
+      <Button
+        variant="ghost"
+        size="lg"
+        className="gap-2 text-lg"
+        onClick={onBack}
+      >
+        <ArrowLeft className="w-5 h-5" />
+        {t('seniorEditor.mediaMenu.backToMenu', 'Retour au menu')}
+      </Button>
+
+      <div className="bg-card border-2 border-border rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Mic className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-foreground">
+              {t('seniorEditor.audioTitle', 'Audio')}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t('seniorEditor.audioDesc', 'Enregistrez un message vocal')}
+            </p>
+          </div>
+          {audioFiles.length > 0 && (
+            <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
+              {audioFiles.length} enregistrement{audioFiles.length > 1 ? 's' : ''}
+            </Badge>
+          )}
+        </div>
+        
+        {/* Audio Recorder */}
+        <AudioRecorder onRecordingComplete={handleAudioRecorded} />
+        
+        {/* List of recorded audio files */}
+        {audioFiles.length > 0 && (
+          <div className="space-y-3 pt-4 border-t">
+            <p className="text-sm font-medium text-muted-foreground">
+              {t('seniorEditor.recordedAudio', 'Enregistrements ajoutés :')}
+            </p>
+            {audioFiles.map((file) => (
+              <div key={file.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
+                <Mic className="w-5 h-5 text-primary" />
+                <span className="flex-1 text-sm truncate">{file.file?.name || 'Enregistrement'}</span>
+                <audio src={file.preview} controls className="h-8 max-w-[200px]" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive hover:text-destructive"
+                  onClick={() => handleRemoveAudio(file.id)}
+                >
+                  ✕
+                </Button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
-
-      {/* Toggle buttons */}
-      <div className="flex gap-2 p-1 bg-muted rounded-xl">
-        <button
-          type="button"
-          onClick={() => setVideoMode('upload')}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
-            videoMode === 'upload' 
-              ? "bg-card text-foreground shadow-sm" 
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <Video className="w-5 h-5" />
-          {t('seniorEditor.uploadVideo', 'Charger une vidéo')}
-        </button>
-        <button
-          type="button"
-          onClick={() => setVideoMode('youtube')}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-all",
-            videoMode === 'youtube' 
-              ? "bg-card text-foreground shadow-sm" 
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <Youtube className="w-5 h-5 text-destructive" />
-          {t('seniorEditor.youtubeLink', 'Lien YouTube')}
-        </button>
-      </div>
-
-      {/* Content based on mode */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={videoMode}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-        >
-          {videoMode === 'upload' ? (
-            <UnifiedMediaSection
-              userId={userId}
-              content=""
-              onContentChange={() => {}}
-              showTextSection={false}
-              files={mediaFiles}
-              onFilesChange={onMediaFilesChange}
-              maxFiles={20}
-              onUploadAll={onUploadAllRef}
-              hasError={hasMediaError}
-            />
-          ) : (
-            <YouTubeEmbed
-              value={youtubeUrl}
-              onChange={onYoutubeUrlChange}
-              className="border-0 p-0 bg-transparent"
-            />
-          )}
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 };
@@ -269,8 +557,19 @@ const SeniorFriendlyEditor = ({
 }: SeniorFriendlyEditorProps) => {
   const { t } = useTranslation('capsules');
   const [currentStep, setCurrentStep] = useState(0);
+  const [activeMediaSection, setActiveMediaSection] = useState<'menu' | 'photos' | 'videos' | 'audio'>('menu');
+  
+  // Feature access for premium gating
+  const { limits, isPremiumOrHigher } = useFeatureAccess();
+  const canUseVideo = limits.canCreateVideoCapsule;
+  const canUseAudio = limits.canCreateAudioCapsule;
 
   const progress = ((currentStep + 1) / STEPS.length) * 100;
+
+  // Count media by type
+  const photoCount = mediaFiles.filter(f => f.type === 'image').length;
+  const videoCount = mediaFiles.filter(f => f.type === 'video').length + (youtubeUrl ? 1 : 0);
+  const audioCount = mediaFiles.filter(f => f.type === 'audio').length;
 
   const canContinue = () => {
     switch (currentStep) {
@@ -278,6 +577,7 @@ const SeniorFriendlyEditor = ({
       case 1: return true;
       case 2: return true;
       case 3: return true;
+      case 4: return true;
       default: return true;
     }
   };
@@ -285,18 +585,21 @@ const SeniorFriendlyEditor = ({
   const nextStep = () => {
     if (currentStep < STEPS.length - 1 && canContinue()) {
       setCurrentStep(prev => prev + 1);
+      setActiveMediaSection('menu'); // Reset media section when leaving step 3
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
+      setActiveMediaSection('menu');
     }
   };
 
   const goToStep = (index: number) => {
     if (index <= currentStep) {
       setCurrentStep(index);
+      setActiveMediaSection('menu');
     }
   };
 
@@ -317,6 +620,15 @@ const SeniorFriendlyEditor = ({
     </Tooltip>
   );
 
+  // Step labels for navigation
+  const stepLabels = [
+    t('seniorEditor.step1Label', 'Donnez un titre'),
+    t('seniorEditor.step2Label', 'Ajoutez du texte'),
+    t('seniorEditor.step3Label', 'Ajoutez des médias'),
+    t('seniorEditor.step4Label', 'Organisez'),
+    t('seniorEditor.step5Label', 'Vérifiez et publiez')
+  ];
+
   // Step indicator component for vertical navigation
   const StepIndicator = ({ 
     step, 
@@ -331,14 +643,6 @@ const SeniorFriendlyEditor = ({
     isCompleted: boolean;
     isLast: boolean;
   }) => {
-    const StepIcon = step.icon;
-    const stepLabels = [
-      t('seniorEditor.step1Label', 'Donnez un titre'),
-      t('seniorEditor.step2Label', 'Ajoutez du contenu'),
-      t('seniorEditor.step3Label', 'Organisez'),
-      t('seniorEditor.step4Label', 'Vérifiez et publiez')
-    ];
-
     return (
       <div className="flex items-start gap-3">
         {/* Vertical line connector */}
@@ -468,7 +772,7 @@ const SeniorFriendlyEditor = ({
           </div>
         );
 
-      // Step 2: Content (Text, Media, YouTube)
+      // Step 2: Text only
       case 1:
         return (
           <div 
@@ -476,21 +780,20 @@ const SeniorFriendlyEditor = ({
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
-            {/* Text section */}
             <div className={cn(
               "bg-card border-2 rounded-2xl p-6 space-y-4",
               content.trim() ? "border-primary/40 bg-primary/5" : "border-border"
             )}>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-primary" />
+                  <PenLine className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-foreground">
-                    {t('seniorEditor.textTitle', 'Écrire un texte')}
+                    {t('seniorEditor.textStepTitle', 'Écrivez votre texte')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {t('seniorEditor.textDesc', 'Lettre, histoire, anecdote...')}
+                    {t('seniorEditor.textStepDesc', 'Lettre, histoire, anecdote, réflexion...')}
                   </p>
                 </div>
                 {content.trim() && (
@@ -501,51 +804,33 @@ const SeniorFriendlyEditor = ({
               </div>
               <Textarea
                 placeholder={t('seniorEditor.textPlaceholder', 'Écrivez votre texte ici...')}
-                className="min-h-[180px] text-lg px-4 py-3 border-2 focus:border-primary resize-none"
+                className="min-h-[250px] text-lg px-4 py-3 border-2 focus:border-primary resize-none"
                 value={content}
                 onChange={(e) => onContentChange(e.target.value)}
               />
             </div>
+          </div>
+        );
 
-            {/* Media section - All files */}
-            <div className={cn(
-              "bg-card border-2 rounded-2xl p-6 space-y-4",
-              mediaFiles.length > 0 ? "border-primary/40 bg-primary/5" : "border-border"
-            )}>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                  <Image className="w-6 h-6 text-accent" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground">
-                    {t('seniorEditor.photosTitle', 'Photos')}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('seniorEditor.photosDesc', 'Ajoutez vos photos souvenirs')}
-                  </p>
-                </div>
-                {mediaFiles.filter(f => f.type === 'image').length > 0 && (
-                  <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
-                    {mediaFiles.filter(f => f.type === 'image').length} photo(s)
-                  </Badge>
-                )}
-              </div>
-              
-              <UnifiedMediaSection
-                userId={userId}
-                content=""
-                onContentChange={() => {}}
-                showTextSection={false}
-                files={mediaFiles}
-                onFilesChange={onMediaFilesChange}
-                maxFiles={20}
-                onUploadAll={onUploadAllRef}
-                hasError={hasMediaError}
-              />
-            </div>
-
-            {/* Video section with toggle: Upload or YouTube */}
-            <VideoSection 
+      // Step 3: Media Menu
+      case 2:
+        // Show specific editor if a section is selected
+        if (activeMediaSection === 'photos') {
+          return (
+            <PhotoEditorSection
+              userId={userId}
+              mediaFiles={mediaFiles}
+              onMediaFilesChange={onMediaFilesChange}
+              onUploadAllRef={onUploadAllRef}
+              hasMediaError={hasMediaError}
+              onBack={() => setActiveMediaSection('menu')}
+            />
+          );
+        }
+        
+        if (activeMediaSection === 'videos') {
+          return (
+            <VideoEditorSection
               userId={userId}
               mediaFiles={mediaFiles}
               onMediaFilesChange={onMediaFilesChange}
@@ -553,12 +838,71 @@ const SeniorFriendlyEditor = ({
               onYoutubeUrlChange={onYoutubeUrlChange}
               onUploadAllRef={onUploadAllRef}
               hasMediaError={hasMediaError}
+              onBack={() => setActiveMediaSection('menu')}
             />
+          );
+        }
+        
+        if (activeMediaSection === 'audio') {
+          return (
+            <AudioEditorSection
+              userId={userId}
+              mediaFiles={mediaFiles}
+              onMediaFilesChange={onMediaFilesChange}
+              onBack={() => setActiveMediaSection('menu')}
+            />
+          );
+        }
+
+        // Default: Show media menu
+        return (
+          <div 
+            className="space-y-6"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <MediaCard
+                icon={Image}
+                title={t('seniorEditor.mediaMenu.photos', 'Photos')}
+                description={t('seniorEditor.mediaMenu.photosDesc', 'Images et albums')}
+                count={photoCount}
+                locked={false}
+                onClick={() => setActiveMediaSection('photos')}
+                iconColor="text-accent"
+                iconBg="bg-accent/10"
+              />
+              <MediaCard
+                icon={Video}
+                title={t('seniorEditor.mediaMenu.videos', 'Vidéos')}
+                description={t('seniorEditor.mediaMenu.videosDesc', 'Clips ou YouTube')}
+                count={videoCount}
+                locked={!canUseVideo}
+                onClick={() => setActiveMediaSection('videos')}
+                iconColor="text-destructive"
+                iconBg="bg-destructive/10"
+              />
+              <MediaCard
+                icon={Mic}
+                title={t('seniorEditor.mediaMenu.audio', 'Audio')}
+                description={t('seniorEditor.mediaMenu.audioDesc', 'Message vocal')}
+                count={audioCount}
+                locked={!canUseAudio}
+                onClick={() => setActiveMediaSection('audio')}
+                iconColor="text-primary"
+                iconBg="bg-primary/10"
+              />
+            </div>
+            
+            {/* Info message */}
+            <div className="text-center text-sm text-muted-foreground">
+              {t('seniorEditor.mediaMenu.hint', 'Cliquez sur une carte pour ajouter ce type de contenu')}
+            </div>
           </div>
         );
 
-      // Step 3: Details (Category, Date, Tags)
-      case 2:
+      // Step 4: Details (Category, Date, Tags)
+      case 3:
         return (
           <div 
             className="space-y-5"
@@ -656,12 +1000,9 @@ const SeniorFriendlyEditor = ({
           </div>
         );
 
-      // Step 4: Review and Publish
-      case 3:
+      // Step 5: Review and Publish
+      case 4:
         const selectedCategory = categories.find(c => c.id === primaryCategory);
-        const photoCount = mediaFiles.filter(f => f.type === 'image').length;
-        const videoCount = mediaFiles.filter(f => f.type === 'video').length;
-        const audioCount = mediaFiles.filter(f => f.type === 'audio').length;
         
         return (
           <div className="space-y-6">
@@ -710,7 +1051,7 @@ const SeniorFriendlyEditor = ({
                   <div className="flex flex-wrap gap-2 mt-1">
                     {content.trim() && (
                       <Badge variant="outline" className="text-base">
-                        <FileText className="w-4 h-4 mr-1" /> {t('seniorEditor.text', 'Texte')}
+                        <PenLine className="w-4 h-4 mr-1" /> {t('seniorEditor.text', 'Texte')}
                       </Badge>
                     )}
                     {photoCount > 0 && (
@@ -725,7 +1066,7 @@ const SeniorFriendlyEditor = ({
                     )}
                     {audioCount > 0 && (
                       <Badge variant="outline" className="text-base">
-                        <Music className="w-4 h-4 mr-1" /> {audioCount} audio
+                        <Mic className="w-4 h-4 mr-1" /> {audioCount} audio
                       </Badge>
                     )}
                     {youtubeUrl && (
@@ -890,7 +1231,7 @@ const SeniorFriendlyEditor = ({
                       isCompleted && "text-primary",
                       !isActive && !isCompleted && "text-muted-foreground"
                     )}>
-                      {t(`seniorEditor.step${step.id.charAt(0).toUpperCase() + step.id.slice(1)}`, step.id)}
+                      {stepLabels[index]}
                     </span>
                   </motion.button>
                 );
@@ -936,15 +1277,17 @@ const SeniorFriendlyEditor = ({
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-display font-bold text-foreground">
                     {currentStep === 0 && t('seniorEditor.titleStepTitle', 'Donnez un titre à votre souvenir')}
-                    {currentStep === 1 && t('seniorEditor.contentStepTitle', 'Ajoutez votre contenu')}
-                    {currentStep === 2 && t('seniorEditor.detailsStepTitle', 'Organisez votre souvenir')}
-                    {currentStep === 3 && t('seniorEditor.reviewStepTitle', 'Vérifiez avant de publier')}
+                    {currentStep === 1 && t('seniorEditor.textStepTitle', 'Écrivez votre texte')}
+                    {currentStep === 2 && t('seniorEditor.mediaStepTitle', 'Ajoutez des médias')}
+                    {currentStep === 3 && t('seniorEditor.detailsStepTitle', 'Organisez votre souvenir')}
+                    {currentStep === 4 && t('seniorEditor.reviewStepTitle', 'Vérifiez avant de publier')}
                   </h2>
                   <p className="text-base text-muted-foreground mt-1">
                     {currentStep === 0 && t('seniorEditor.titleStepDesc', "C'est la première chose que vous verrez. Choisissez un titre qui vous parle.")}
-                    {currentStep === 1 && t('seniorEditor.contentStepDesc', 'Texte, photos, vidéos, audio... Ajoutez ce que vous souhaitez !')}
-                    {currentStep === 2 && t('seniorEditor.detailsStepDesc', 'Ces informations vous aideront à retrouver ce souvenir plus tard')}
-                    {currentStep === 3 && t('seniorEditor.reviewStepDesc', 'Relisez les informations ci-dessous avant de sauvegarder')}
+                    {currentStep === 1 && t('seniorEditor.textStepDesc', 'Lettre, histoire, anecdote, réflexion...')}
+                    {currentStep === 2 && t('seniorEditor.mediaStepDesc', 'Enrichissez votre souvenir avec des photos, vidéos ou audio')}
+                    {currentStep === 3 && t('seniorEditor.detailsStepDesc', 'Ces informations vous aideront à retrouver ce souvenir plus tard')}
+                    {currentStep === 4 && t('seniorEditor.reviewStepDesc', 'Relisez les informations ci-dessous avant de sauvegarder')}
                   </p>
                 </div>
               </div>
@@ -953,7 +1296,7 @@ const SeniorFriendlyEditor = ({
             {/* Step content with animation */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentStep}
+                key={`${currentStep}-${activeMediaSection}`}
                 variants={stepVariants}
                 initial="hidden"
                 animate="visible"
@@ -967,7 +1310,7 @@ const SeniorFriendlyEditor = ({
       </div>
 
       {/* Fixed bottom navigation - LARGE buttons */}
-      {currentStep < 3 && (
+      {currentStep < 4 && activeMediaSection === 'menu' && (
         <div className="fixed bottom-0 left-0 right-0 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
           <div className="max-w-5xl mx-auto flex gap-4">
             {currentStep > 0 && (
