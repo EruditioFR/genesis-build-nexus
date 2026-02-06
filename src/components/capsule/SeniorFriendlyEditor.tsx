@@ -206,7 +206,11 @@ const SeniorFriendlyEditor = ({
       >
         <button
           type="button"
-          onClick={() => toggleSection(id)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSection(id);
+          }}
           className={cn(
             "w-full flex items-center gap-4 p-5 text-left transition-colors",
             "hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
