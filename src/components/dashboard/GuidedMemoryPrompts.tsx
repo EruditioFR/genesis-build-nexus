@@ -220,64 +220,42 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Header with overall progress - Playful design */}
-      <motion.div 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-50 via-rose-50 to-violet-50 dark:from-amber-950/30 dark:via-rose-950/30 dark:to-violet-950/30 p-6 border border-amber-200/50 dark:border-amber-800/30"
-      >
-        {/* Decorative floating elements */}
-        <div className="absolute top-2 right-8 text-2xl animate-bounce" style={{ animationDelay: '0.1s' }}>✨</div>
-        <div className="absolute top-6 right-24 text-xl animate-bounce" style={{ animationDelay: '0.3s' }}>🌟</div>
-        <div className="absolute bottom-4 right-16 text-lg animate-bounce" style={{ animationDelay: '0.5s' }}>💫</div>
-        
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
-          <div className="flex items-center gap-4">
-            <motion.div 
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 via-orange-400 to-rose-400 text-white shadow-lg shadow-orange-200 dark:shadow-orange-900/30"
-            >
-              <Sparkles className="h-8 w-8" />
-            </motion.div>
-            <div>
-              <h2 className="text-2xl font-display font-bold bg-gradient-to-r from-amber-600 via-orange-500 to-rose-500 bg-clip-text text-transparent">
-                Inspirez-vous ! 🎨
-              </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                50 questions magiques pour réveiller vos souvenirs
-              </p>
-            </div>
+      {/* Header with overall progress */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-secondary/5 via-primary/5 to-secondary/5 border border-border">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-primary text-white shadow-lg">
+            <Sparkles className="h-7 w-7" />
           </div>
-
-          {/* Playful progress badge */}
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/80 dark:bg-black/20 backdrop-blur-sm border-2 border-amber-300 dark:border-amber-700 shadow-lg"
-          >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Trophy className="h-6 w-6 text-amber-500" />
-            </motion.div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold text-foreground">
-                {totalProgress.used} / {totalProgress.total} 🎯
-              </span>
-              <Progress value={completionPercentage} className="h-2 w-28" />
-            </div>
-            {completionPercentage >= 100 && (
-              <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white border-0 animate-pulse">
-                <Star className="h-3 w-3 mr-1" />
-                Champion ! 🏆
-              </Badge>
-            )}
-          </motion.div>
+          <div>
+            <h2 className="text-xl font-display font-bold text-foreground">
+              Inspirez-vous pour écrire
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              50 questions pour guider vos souvenirs
+            </p>
+          </div>
         </div>
-      </motion.div>
 
-      {/* Categories grid - Playful cards */}
-      <div className="grid grid-cols-1 gap-4">
+        {/* Progress badge */}
+        <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-background border border-border">
+          <Trophy className="h-5 w-5 text-amber-500" />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-foreground">
+              {totalProgress.used} / {totalProgress.total} souvenirs
+            </span>
+            <Progress value={completionPercentage} className="h-1.5 w-24" />
+          </div>
+          {completionPercentage >= 100 && (
+            <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
+              <Star className="h-3 w-3 mr-1" />
+              Complet !
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      {/* Categories grid */}
+      <div className="grid grid-cols-1 gap-3">
         {memoryCategories.map((category, categoryIndex) => {
           const progress = getCategoryProgress(category);
           const nextPrompt = getNextPrompt(category);
@@ -287,188 +265,142 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
           return (
             <motion.div
               key={category.id}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: categoryIndex * 0.1 }}
-              whileHover={{ scale: 1.01, y: -2 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: categoryIndex * 0.05 }}
               className={cn(
-                'rounded-3xl border-2 overflow-hidden transition-all shadow-md hover:shadow-xl',
+                'rounded-2xl border overflow-hidden transition-all',
                 category.bgColor,
-                isComplete 
-                  ? 'border-green-300 dark:border-green-700 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30' 
-                  : 'border-transparent hover:border-secondary/30'
+                isComplete ? 'border-green-200 dark:border-green-800' : 'border-border hover:border-secondary/30'
               )}
             >
               {/* Category header */}
               <button
                 onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                className="w-full p-5 flex items-center gap-4 hover:bg-background/30 transition-all group"
+                className="w-full p-4 flex items-center gap-4 hover:bg-background/30 transition-colors group"
               >
-                <motion.div
-                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                  transition={{ duration: 0.4 }}
+                <div
                   className={cn(
-                    'flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg flex-shrink-0 relative',
+                    'flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-md flex-shrink-0',
                     category.gradient
                   )}
                 >
-                  <span className="text-3xl">{category.emoji}</span>
-                  {isComplete && (
-                    <motion.div 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 h-6 w-6 bg-green-500 rounded-full flex items-center justify-center shadow-md"
-                    >
-                      <Check className="h-4 w-4 text-white" />
-                    </motion.div>
-                  )}
-                </motion.div>
+                  <span className="text-2xl">{category.emoji}</span>
+                </div>
 
                 <div className="flex-1 min-w-0 text-left">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-lg font-bold text-foreground">
+                    <h3 className="font-semibold text-foreground">
                       {category.title}
                     </h3>
                     {isComplete && (
-                      <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-sm">
-                        <Star className="h-3 w-3 mr-1" />
-                        Bravo ! 🎉
+                      <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                        <Check className="h-3 w-3 mr-1" />
+                        Terminé
                       </Badge>
                     )}
                   </div>
                   
                   {/* Preview of first 2 prompts when collapsed */}
                   {!isExpanded && nextPrompt && (
-                    <div className="mt-2 space-y-1.5">
+                    <div className="mt-1.5 space-y-1">
                       {category.prompts
                         .filter((p) => !usedPromptIds.has(p.id))
                         .slice(0, 2)
-                        .map((prompt, idx) => (
+                        .map((prompt) => (
                           <Link
                             key={prompt.id}
                             to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-all group/link"
+                            className="block text-sm text-muted-foreground hover:text-secondary transition-colors truncate max-w-[280px] sm:max-w-md"
                           >
-                            <span className="text-lg">{idx === 0 ? '💡' : '✏️'}</span>
-                            <span className="truncate max-w-[240px] sm:max-w-md group-hover/link:underline">
-                              {prompt.question}
-                            </span>
+                            <span className="text-secondary/70 mr-1">•</span>
+                            {prompt.question}
                           </Link>
                         ))}
                     </div>
                   )}
                   
-                  {/* Fun progress bar */}
-                  <div className="flex items-center gap-3 mt-3">
-                    <div className="flex-1 max-w-36 h-3 bg-muted/50 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progress.percentage}%` }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className={cn(
-                          'h-full rounded-full bg-gradient-to-r',
-                          progress.percentage >= 100 
-                            ? 'from-green-400 to-emerald-500' 
-                            : 'from-secondary to-primary'
-                        )}
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-muted-foreground">
-                      {progress.used}/{progress.total} {progress.percentage >= 100 ? '🌟' : ''}
+                  <div className="flex items-center gap-2 mt-2">
+                    <Progress value={progress.percentage} className="h-2 flex-1 max-w-32" />
+                    <span className="text-xs text-muted-foreground">
+                      {progress.used}/{progress.total}
                     </span>
                   </div>
                 </div>
 
-                {/* Playful accordion arrow */}
-                <motion.div
-                  animate={{ 
-                    rotate: isExpanded ? 180 : 0,
-                    scale: isExpanded ? 1.1 : 1
-                  }}
-                  whileHover={{ scale: 1.15 }}
+                {/* Accordion arrow */}
+                <div
                   className={cn(
-                    'flex h-12 w-12 items-center justify-center rounded-2xl transition-all flex-shrink-0 shadow-md',
+                    'flex h-10 w-10 items-center justify-center rounded-xl transition-all flex-shrink-0',
                     isExpanded 
-                      ? 'bg-gradient-to-br from-secondary to-primary text-white' 
-                      : 'bg-white dark:bg-muted group-hover:bg-secondary/10'
+                      ? 'bg-secondary text-secondary-foreground' 
+                      : 'bg-muted/50 group-hover:bg-secondary/10'
                   )}
                 >
                   <ChevronDown
                     className={cn(
-                      'h-6 w-6 transition-transform duration-300',
-                      isExpanded ? 'text-white' : 'text-secondary'
+                      'h-5 w-5 transition-transform duration-200',
+                      isExpanded ? 'rotate-180' : 'text-muted-foreground group-hover:text-secondary'
                     )}
                   />
-                </motion.div>
+                </div>
               </button>
 
-              {/* Expanded prompts list - Playful design */}
+              {/* Expanded prompts list */}
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-5 space-y-3">
+                    <div className="px-4 pb-4 space-y-2">
                       {category.prompts.map((prompt, index) => {
                         const isUsed = usedPromptIds.has(prompt.id);
 
                         return (
-                          <motion.div
+                          <div
                             key={prompt.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
                             className={cn(
-                              'flex items-center gap-4 p-4 rounded-2xl transition-all',
+                              'flex items-center gap-3 p-3 rounded-xl transition-all',
                               isUsed
-                                ? 'bg-green-50 dark:bg-green-950/30 border-2 border-green-200 dark:border-green-800'
-                                : 'bg-white dark:bg-muted/50 hover:bg-secondary/5 border-2 border-transparent hover:border-secondary/30 shadow-sm hover:shadow-md'
+                                ? 'bg-muted/50 opacity-60'
+                                : 'bg-background/80 hover:bg-background border border-border/50 hover:border-secondary/50 hover:shadow-sm'
                             )}
                           >
-                            <motion.div
-                              whileHover={!isUsed ? { scale: 1.1, rotate: 10 } : {}}
+                            <div
                               className={cn(
-                                'flex h-10 w-10 items-center justify-center rounded-xl text-base font-bold flex-shrink-0',
+                                'flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium flex-shrink-0',
                                 isUsed
-                                  ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-md'
-                                  : 'bg-gradient-to-br from-secondary/20 to-primary/20 text-secondary'
+                                  ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
+                                  : 'bg-muted text-muted-foreground'
                               )}
                             >
-                              {isUsed ? <Check className="h-5 w-5" /> : <span>{index + 1}</span>}
-                            </motion.div>
+                              {isUsed ? <Check className="h-4 w-4" /> : index + 1}
+                            </div>
 
                             <p
                               className={cn(
-                                'flex-1 text-base',
-                                isUsed ? 'text-muted-foreground line-through' : 'text-foreground font-medium'
+                                'flex-1 text-sm',
+                                isUsed ? 'text-muted-foreground line-through' : 'text-foreground'
                               )}
                             >
                               {prompt.question}
                             </p>
 
                             {!isUsed && (
-                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Link
-                                  to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
-                                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white hover:opacity-90 transition-all text-sm font-semibold shadow-md hover:shadow-lg"
-                                >
-                                  <span>Écrire</span>
-                                  <span>✍️</span>
-                                </Link>
-                              </motion.div>
+                              <Link
+                                to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors text-xs font-medium"
+                              >
+                                Écrire
+                                <ChevronRight className="h-3 w-3" />
+                              </Link>
                             )}
-
-                            {isUsed && (
-                              <span className="text-green-600 dark:text-green-400 text-sm font-medium">
-                                Fait ! ✅
-                              </span>
-                            )}
-                          </motion.div>
+                          </div>
                         );
                       })}
                     </div>
