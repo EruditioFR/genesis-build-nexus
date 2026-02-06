@@ -230,6 +230,7 @@ const VideoEditorSection = ({
   onUploadAllRef,
   hasMediaError,
   onBack,
+  onContinue,
 }: {
   userId: string;
   mediaFiles: MediaFile[];
@@ -239,6 +240,7 @@ const VideoEditorSection = ({
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
   hasMediaError: boolean;
   onBack: () => void;
+  onContinue: () => void;
 }) => {
   const { t } = useTranslation('capsules');
   const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrl ? 'youtube' : 'upload');
@@ -342,6 +344,19 @@ const VideoEditorSection = ({
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Continue button */}
+        <div className="pt-4 border-t">
+          <Button
+            variant="gold"
+            size="lg"
+            className="w-full gap-2 text-lg min-h-[52px]"
+            onClick={onContinue}
+          >
+            <ChevronRight className="w-5 h-5" />
+            {t('seniorEditor.continueEditing', 'Continuer la rédaction de votre souvenir')}
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -355,6 +370,7 @@ const PhotoEditorSection = ({
   onUploadAllRef,
   hasMediaError,
   onBack,
+  onContinue,
 }: {
   userId: string;
   mediaFiles: MediaFile[];
@@ -362,6 +378,7 @@ const PhotoEditorSection = ({
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
   hasMediaError: boolean;
   onBack: () => void;
+  onContinue: () => void;
 }) => {
   const { t } = useTranslation('capsules');
   
@@ -420,6 +437,19 @@ const PhotoEditorSection = ({
           hasError={hasMediaError}
           acceptedMediaTypes={['image']}
         />
+
+        {/* Continue button */}
+        <div className="pt-4 border-t">
+          <Button
+            variant="gold"
+            size="lg"
+            className="w-full gap-2 text-lg min-h-[52px]"
+            onClick={onContinue}
+          >
+            <ChevronRight className="w-5 h-5" />
+            {t('seniorEditor.continueEditing', 'Continuer la rédaction de votre souvenir')}
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -431,11 +461,13 @@ const AudioEditorSection = ({
   mediaFiles,
   onMediaFilesChange,
   onBack,
+  onContinue,
 }: {
   userId: string;
   mediaFiles: MediaFile[];
   onMediaFilesChange: (files: MediaFile[]) => void;
   onBack: () => void;
+  onContinue: () => void;
 }) => {
   const { t } = useTranslation('capsules');
   
@@ -521,6 +553,19 @@ const AudioEditorSection = ({
             ))}
           </div>
         )}
+
+        {/* Continue button */}
+        <div className="pt-4 border-t">
+          <Button
+            variant="gold"
+            size="lg"
+            className="w-full gap-2 text-lg min-h-[52px]"
+            onClick={onContinue}
+          >
+            <ChevronRight className="w-5 h-5" />
+            {t('seniorEditor.continueEditing', 'Continuer la rédaction de votre souvenir')}
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -826,6 +871,7 @@ const SeniorFriendlyEditor = ({
               onUploadAllRef={onUploadAllRef}
               hasMediaError={hasMediaError}
               onBack={() => setActiveMediaSection('menu')}
+              onContinue={nextStep}
             />
           );
         }
@@ -841,6 +887,7 @@ const SeniorFriendlyEditor = ({
               onUploadAllRef={onUploadAllRef}
               hasMediaError={hasMediaError}
               onBack={() => setActiveMediaSection('menu')}
+              onContinue={nextStep}
             />
           );
         }
@@ -852,6 +899,7 @@ const SeniorFriendlyEditor = ({
               mediaFiles={mediaFiles}
               onMediaFilesChange={onMediaFilesChange}
               onBack={() => setActiveMediaSection('menu')}
+              onContinue={nextStep}
             />
           );
         }
