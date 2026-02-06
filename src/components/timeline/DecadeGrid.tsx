@@ -1,8 +1,5 @@
 import { motion } from 'framer-motion';
-import { 
-  Camera, Radio, Disc3, Sparkles, 
-  Tv, Smartphone, Leaf, Music2, ChevronRight, ImageIcon
-} from 'lucide-react';
+import { ChevronRight, ImageIcon, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface DecadeGridProps {
@@ -12,65 +9,21 @@ interface DecadeGridProps {
   onDecadeClick: (decade: string) => void;
 }
 
-// Configuration des icônes et styles par décennie
-const decadeConfig: Record<string, { 
-  icon: typeof Camera; 
-  emoji: string;
-  gradient: string;
-}> = {
-  '1940': { 
-    icon: Camera, 
-    emoji: '📷',
-    gradient: 'from-amber-700 to-amber-900',
-  },
-  '1950': { 
-    icon: Radio, 
-    emoji: '📻',
-    gradient: 'from-amber-600 to-amber-800',
-  },
-  '1960': { 
-    icon: Sparkles, 
-    emoji: '✌️',
-    gradient: 'from-pink-500 to-orange-400',
-  },
-  '1970': { 
-    icon: Disc3, 
-    emoji: '🕺',
-    gradient: 'from-orange-500 to-yellow-500',
-  },
-  '1980': { 
-    icon: Tv, 
-    emoji: '📼',
-    gradient: 'from-purple-500 to-pink-500',
-  },
-  '1990': { 
-    icon: Music2, 
-    emoji: '💿',
-    gradient: 'from-cyan-500 to-teal-500',
-  },
-  '2000': { 
-    icon: Smartphone, 
-    emoji: '📱',
-    gradient: 'from-indigo-500 to-blue-500',
-  },
-  '2010': { 
-    icon: Camera, 
-    emoji: '📸',
-    gradient: 'from-pink-500 to-purple-500',
-  },
-  '2020': { 
-    icon: Leaf, 
-    emoji: '🌿',
-    gradient: 'from-emerald-500 to-teal-500',
-  },
+// Simplified decade colors - high contrast, easy to distinguish
+const decadeColors: Record<string, string> = {
+  '1940': 'from-amber-600 to-amber-700',
+  '1950': 'from-orange-500 to-orange-600',
+  '1960': 'from-rose-500 to-rose-600',
+  '1970': 'from-amber-500 to-orange-500',
+  '1980': 'from-purple-500 to-purple-600',
+  '1990': 'from-teal-500 to-teal-600',
+  '2000': 'from-blue-500 to-blue-600',
+  '2010': 'from-pink-500 to-pink-600',
+  '2020': 'from-emerald-500 to-emerald-600',
 };
 
-const getDecadeConfig = (decade: string) => {
-  return decadeConfig[decade] || {
-    icon: Camera,
-    emoji: '📅',
-    gradient: 'from-secondary to-primary',
-  };
+const getDecadeColor = (decade: string): string => {
+  return decadeColors[decade] || 'from-secondary to-secondary/80';
 };
 
 const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: DecadeGridProps) => {
@@ -83,118 +36,70 @@ const DecadeGrid = ({ decades, decadeCounts, decadeThumbnails, onDecadeClick }: 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {decades.map((decade, index) => {
-        const config = getDecadeConfig(decade);
-        const Icon = config.icon;
         const count = decadeCounts[decade] || 0;
         const thumbnails = decadeThumbnails[decade] || [];
+        const gradient = getDecadeColor(decade);
 
         return (
           <motion.button
             key={decade}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            whileHover={{ scale: 1.02, y: -4 }}
-            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
             onClick={() => onDecadeClick(decade)}
-            className="relative overflow-hidden rounded-2xl text-left shadow-lg hover:shadow-xl transition-shadow group"
+            className="relative overflow-hidden rounded-2xl text-left shadow-md hover:shadow-lg transition-shadow group min-h-[140px] focus:outline-none focus:ring-4 focus:ring-secondary/50"
+            aria-label={`${getDecadeLabel(decade)}, ${count} ${t('timeline.memories', { count })}`}
           >
-            {/* Fond avec vignettes ou gradient - adapté au nombre d'images */}
+            {/* Background with thumbnails or gradient */}
             {thumbnails.length > 0 ? (
               <div className="absolute inset-0">
-                {/* Grille adaptative selon le nombre d'images */}
                 {thumbnails.length === 1 ? (
-                  <div className="absolute inset-0">
-                    <img 
-                      src={thumbnails[0]} 
-                      alt="" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : thumbnails.length === 2 ? (
-                  <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
-                    {thumbnails.map((url, i) => (
-                      <div key={i} className="relative overflow-hidden">
-                        <img 
-                          src={url} 
-                          alt="" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : thumbnails.length === 3 ? (
-                  <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
-                    <div className="relative overflow-hidden row-span-2">
-                      <img 
-                        src={thumbnails[0]} 
-                        alt="" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="relative overflow-hidden">
-                      <img 
-                        src={thumbnails[1]} 
-                        alt="" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="relative overflow-hidden">
-                      <img 
-                        src={thumbnails[2]} 
-                        alt="" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
+                  <img src={thumbnails[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5">
+                  <div className="w-full h-full grid grid-cols-2 gap-0.5">
                     {thumbnails.slice(0, 4).map((url, i) => (
-                      <div key={i} className="relative overflow-hidden">
-                        <img 
-                          src={url} 
-                          alt="" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                      <img key={i} src={url} alt="" className="w-full h-full object-cover" />
                     ))}
                   </div>
                 )}
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
               </div>
             ) : (
-              <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient}`}>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
-              </div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
             )}
             
-            {/* Contenu */}
-            <div className="relative z-10 p-5 sm:p-6 text-white min-h-[180px] flex flex-col">
-              <div className="flex items-start justify-end mb-auto">
-                <span className="text-2xl">{config.emoji}</span>
+            {/* Content - large text for readability */}
+            <div className="relative z-10 p-5 sm:p-6 text-white h-full flex flex-col justify-end">
+              {/* Decade number - very prominent */}
+              <div className="mb-2">
+                <span className="text-3xl sm:text-4xl font-bold drop-shadow-lg">
+                  {decade}'s
+                </span>
               </div>
               
-              <div className="mt-4">
-                <h3 className="font-display font-bold text-xl sm:text-2xl mb-3">
-                  {getDecadeLabel(decade)}
-                </h3>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium">
-                      {count} {t('timeline.memories', { count })}
+              {/* Label */}
+              <p className="text-base sm:text-lg font-medium text-white/90 mb-3 drop-shadow">
+                {getDecadeLabel(decade)}
+              </p>
+              
+              {/* Count and navigation */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-base font-semibold">
+                    <Calendar className="w-5 h-5" />
+                    {count} {t('timeline.memories', { count })}
+                  </span>
+                  {thumbnails.length > 0 && (
+                    <span className="flex items-center gap-1 text-sm text-white/80">
+                      <ImageIcon className="w-4 h-4" />
+                      {thumbnails.length > 4 ? '4+' : thumbnails.length}
                     </span>
-                    {thumbnails.length > 0 && (
-                      <span className="flex items-center gap-1 text-xs text-white/70">
-                        <ImageIcon className="w-3 h-3" />
-                        {thumbnails.length > 4 ? '4+' : thumbnails.length}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronRight className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  )}
+                </div>
+                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                  <ChevronRight className="w-7 h-7 text-white" />
                 </div>
               </div>
             </div>

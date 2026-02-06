@@ -56,12 +56,13 @@ const YearModal = ({
   const capsuleTypeConfig: Record<CapsuleType, { 
     icon: typeof FileText; 
     color: string;
+    label: string;
   }> = {
-    text: { icon: FileText, color: 'bg-blue-500' },
-    photo: { icon: Image, color: 'bg-emerald-500' },
-    video: { icon: Video, color: 'bg-purple-500' },
-    audio: { icon: Music, color: 'bg-orange-500' },
-    mixed: { icon: Layers, color: 'bg-pink-500' },
+    text: { icon: FileText, color: 'bg-blue-500', label: 'Texte' },
+    photo: { icon: Image, color: 'bg-emerald-500', label: 'Photo' },
+    video: { icon: Video, color: 'bg-purple-500', label: 'Vidéo' },
+    audio: { icon: Music, color: 'bg-orange-500', label: 'Audio' },
+    mixed: { icon: Layers, color: 'bg-pink-500', label: 'Mixte' },
   };
 
   // Group by month
@@ -76,33 +77,33 @@ const YearModal = ({
   return (
     <Dialog open={!!year} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-lg p-0 gap-0 overflow-hidden max-h-[90vh]">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-primary to-secondary p-6 text-white">
+        {/* Header - clear and readable */}
+        <div className="bg-secondary p-6 text-secondary-foreground">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-display font-bold text-white flex items-center gap-2">
-              <Calendar className="w-6 h-6" />
+            <DialogTitle className="text-2xl sm:text-3xl font-bold text-secondary-foreground flex items-center gap-3">
+              <Calendar className="w-8 h-8" />
               {year}
             </DialogTitle>
           </DialogHeader>
-          <p className="text-white/80 mt-2">
+          <p className="text-lg text-secondary-foreground/80 mt-3">
             {capsules.length} {t('timeline.decade.memoriesThisYear', { count: capsules.length })}
           </p>
         </div>
 
-        {/* Liste des souvenirs par mois */}
+        {/* Capsule list by month - large touch targets */}
         <ScrollArea className="flex-1 max-h-[50vh]">
           <div className="p-4 space-y-6">
             {Object.entries(groupedByMonth).map(([month, monthCapsules], monthIndex) => (
               <div key={month}>
-                {/* En-tête du mois */}
-                <div className="flex items-center gap-2 mb-3 px-1">
-                  <div className="w-2 h-2 rounded-full bg-secondary" />
-                  <span className="text-sm font-semibold text-secondary capitalize">{month}</span>
-                  <span className="text-xs text-muted-foreground">({monthCapsules.length})</span>
+                {/* Month header - clear */}
+                <div className="flex items-center gap-3 mb-4 px-2">
+                  <div className="w-3 h-3 rounded-full bg-secondary" />
+                  <span className="text-lg font-bold text-secondary capitalize">{month}</span>
+                  <span className="text-base text-muted-foreground">({monthCapsules.length})</span>
                 </div>
 
-                {/* Capsules du mois */}
-                <div className="space-y-2">
+                {/* Month capsules */}
+                <div className="space-y-3">
                   {monthCapsules.map((capsule, index) => {
                     const config = capsuleTypeConfig[capsule.capsule_type];
                     const Icon = config.icon;
@@ -119,71 +120,70 @@ const YearModal = ({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: (monthIndex * 0.1) + (index * 0.03) }}
                         onClick={() => onCapsuleClick(capsule.id)}
-                        className="w-full text-left p-3 rounded-xl bg-card border border-border hover:border-secondary/50 hover:shadow-md transition-all group"
+                        className="w-full text-left p-4 rounded-xl bg-card border-2 border-border hover:border-secondary/50 hover:shadow-md transition-all group focus:outline-none focus:ring-4 focus:ring-secondary/50"
+                        aria-label={capsule.title}
                       >
-                        <div className="flex items-start gap-3">
-                          {/* Vignette ou icône */}
+                        <div className="flex items-start gap-4">
+                          {/* Thumbnail or icon - larger */}
                           {media ? (
-                            <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
-                              <img 
-                                src={media.file_url} 
-                                alt="" 
-                                className="w-full h-full object-cover"
-                              />
+                            <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
+                              <img src={media.file_url} alt="" className="w-full h-full object-cover" />
                               {isVideo && (
-                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                                  <Play className="w-5 h-5 text-white fill-white" />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                  <Play className="w-6 h-6 text-white fill-white" />
                                 </div>
                               )}
                             </div>
                           ) : (
-                            <div className={`w-14 h-14 rounded-xl ${config.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                              <Icon className="w-6 h-6 text-white" />
+                            <div className={`w-16 h-16 rounded-xl ${config.color} flex items-center justify-center flex-shrink-0`}>
+                              <Icon className="w-8 h-8 text-white" />
                             </div>
                           )}
 
-                          {/* Contenu */}
+                          {/* Content - larger text */}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-foreground line-clamp-1 group-hover:text-secondary transition-colors">
+                            <h4 className="font-bold text-lg text-foreground line-clamp-2 group-hover:text-secondary transition-colors leading-snug">
                               {capsule.title}
                             </h4>
                             
-                            {/* Dates */}
-                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                            {/* Dates - more readable */}
+                            <div className="flex items-center gap-3 mt-2 flex-wrap">
                               {memoryDate && (
-                                <p className="text-xs text-secondary flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
+                                <p className="text-base text-secondary flex items-center gap-2 font-medium">
+                                  <Calendar className="w-4 h-4" />
                                   {format(memoryDate, 'd MMM', { locale: getLocale() })}
                                 </p>
                               )}
-                              <p className={`text-xs flex items-center gap-1 ${memoryDate ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
-                                <Clock className="w-3 h-3" />
+                              <p className={`text-sm flex items-center gap-1 ${memoryDate ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                                <Clock className="w-3.5 h-3.5" />
                                 {format(createdDate, 'd MMM', { locale: getLocale() })}
                               </p>
                             </div>
 
-                            {/* Badges */}
-                            <div className="flex flex-wrap items-center gap-1 mt-2">
+                            {/* Badges - larger */}
+                            <div className="flex flex-wrap items-center gap-2 mt-3">
                               {category && (
                                 <CategoryBadge category={category} size="sm" />
                               )}
                               <Badge
                                 variant={capsule.status === 'published' ? 'default' : 'secondary'}
-                                className={`text-xs ${
+                                className={`text-sm py-1 ${
                                   capsule.status === 'published' 
-                                    ? 'bg-emerald-500/10 text-emerald-600 border-emerald-200' 
+                                    ? 'bg-emerald-500/10 text-emerald-700 border-emerald-200' 
                                     : ''
                                 }`}
                               >
                                 {capsule.status === 'published' ? (
-                                  <><Eye className="w-3 h-3 mr-1" />{t('timeline.statuses.published')}</>
+                                  <><Eye className="w-4 h-4 mr-1" />{t('timeline.statuses.published')}</>
                                 ) : t('timeline.statuses.draft')}
                               </Badge>
                             </div>
                           </div>
 
-                          {/* Flèche */}
-                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-secondary group-hover:translate-x-1 transition-all flex-shrink-0 mt-4" />
+                          {/* Navigation arrow - larger */}
+                          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center group-hover:bg-secondary/10 transition-colors flex-shrink-0 mt-2">
+                            <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-secondary transition-colors" />
+                          </div>
                         </div>
                       </motion.button>
                     );
@@ -194,13 +194,23 @@ const YearModal = ({
           </div>
         </ScrollArea>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-border bg-muted/30 flex gap-2">
-          <Button variant="outline" onClick={onBackToDecade} className="flex-1 gap-2">
-            <ArrowLeft className="w-4 h-4" />
+        {/* Footer - large buttons */}
+        <div className="p-4 border-t-2 border-border bg-muted/30 flex gap-3">
+          <Button 
+            variant="outline" 
+            onClick={onBackToDecade} 
+            size="lg"
+            className="flex-1 h-14 text-base font-semibold gap-2 border-2"
+          >
+            <ArrowLeft className="w-5 h-5" />
             {t('timeline.year.backToYears', { decade })}
           </Button>
-          <Button variant="ghost" onClick={onClose} className="gap-2">
+          <Button 
+            variant="ghost" 
+            onClick={onClose} 
+            size="lg"
+            className="h-14 px-6 text-base font-semibold"
+          >
             {t('timeline.year.close')}
           </Button>
         </div>
