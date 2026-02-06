@@ -4,7 +4,7 @@
     "title": {
       "prefix": "Tous vos souvenirs ",
       "rotating": ["familiaux", "amicaux", "personnels"],
-      "suffix": ", ",
+      "suffix": " ",
       "highlight": "au même endroit"
     },
     "subtitle": {
