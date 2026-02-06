@@ -276,7 +276,7 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
               {/* Category header */}
               <button
                 onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                className="w-full p-4 flex items-center gap-4 hover:bg-background/50 transition-colors"
+                className="w-full p-4 flex items-center gap-4 hover:bg-background/50 transition-colors group"
               >
                 <div
                   className={cn(
@@ -299,9 +299,27 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {category.description}
-                  </p>
+                  
+                  {/* Preview of first 2 prompts when collapsed */}
+                  {!isExpanded && nextPrompt && (
+                    <div className="mt-1.5 space-y-1">
+                      {category.prompts
+                        .filter((p) => !usedPromptIds.has(p.id))
+                        .slice(0, 2)
+                        .map((prompt) => (
+                          <Link
+                            key={prompt.id}
+                            to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="block text-sm text-muted-foreground hover:text-secondary transition-colors truncate max-w-[280px] sm:max-w-md"
+                          >
+                            <span className="text-secondary/70 mr-1">•</span>
+                            {prompt.question}
+                          </Link>
+                        ))}
+                    </div>
+                  )}
+                  
                   <div className="flex items-center gap-2 mt-2">
                     <Progress value={progress.percentage} className="h-2 flex-1 max-w-32" />
                     <span className="text-xs text-muted-foreground">
@@ -310,24 +328,21 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
                   </div>
                 </div>
 
-                {/* Quick action for next prompt */}
-                {nextPrompt && !isExpanded && (
-                  <Link
-                    to={`/capsules/new?prompt=${encodeURIComponent(nextPrompt.question)}&promptId=${nextPrompt.id}&category=${category.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors text-sm font-medium"
-                  >
-                    <Gift className="h-4 w-4" />
-                    Commencer
-                  </Link>
-                )}
-
-                <ChevronDown
+                {/* Prominent accordion arrow */}
+                <div
                   className={cn(
-                    'h-5 w-5 text-muted-foreground transition-transform flex-shrink-0',
-                    isExpanded && 'rotate-180'
+                    'flex h-10 w-10 items-center justify-center rounded-full transition-all flex-shrink-0',
+                    'bg-secondary/10 group-hover:bg-secondary/20',
+                    isExpanded && 'bg-secondary text-secondary-foreground'
                   )}
-                />
+                >
+                  <ChevronDown
+                    className={cn(
+                      'h-5 w-5 transition-transform duration-200',
+                      isExpanded ? 'rotate-180 text-secondary-foreground' : 'text-secondary'
+                    )}
+                  />
+                </div>
               </button>
 
               {/* Expanded prompts list */}
