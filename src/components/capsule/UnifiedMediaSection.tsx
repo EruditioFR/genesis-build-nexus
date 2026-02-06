@@ -62,6 +62,8 @@ interface UnifiedMediaSectionProps {
   onUploadAll?: (uploadFn: () => Promise<UploadResult>) => void;
   // Error state
   hasError?: boolean;
+  // Filter which media types to show (if undefined, show all)
+  acceptedMediaTypes?: ('image' | 'video' | 'audio')[];
 }
 
 const normalizeMimeType = (mimeType: string) => mimeType.split(';')[0]?.trim() || mimeType;
@@ -101,6 +103,7 @@ const UnifiedMediaSection = ({
   maxSizeMb = 100,
   onUploadAll,
   hasError = false,
+  acceptedMediaTypes,
 }: UnifiedMediaSectionProps) => {
   const { t } = useTranslation('capsules');
   const { canCreateCapsuleType, getUpgradePathForFeature } = useFeatureAccess();
@@ -119,6 +122,14 @@ const UnifiedMediaSection = ({
   const canUseAudio = canCreateCapsuleType('audio');
   const videoUpgradePath = getUpgradePathForFeature('canCreateVideoCapsule');
   const audioUpgradePath = getUpgradePathForFeature('canCreateAudioCapsule');
+
+  // Determine which sections to show
+  const showPhotos = !acceptedMediaTypes || acceptedMediaTypes.includes('image');
+  const showVideos = !acceptedMediaTypes || acceptedMediaTypes.includes('video');
+  const showAudio = !acceptedMediaTypes || acceptedMediaTypes.includes('audio');
+  
+  // Single mode: only one type selected, render without Collapsible
+  const isSingleMode = acceptedMediaTypes?.length === 1;
 
   // Keep refs for upload function
   const filesRef = useRef(files);
@@ -484,104 +495,129 @@ const UnifiedMediaSection = ({
       )}
 
       {/* Photos Section */}
-      <Collapsible open={openSections.photos} onOpenChange={() => toggleSection('photos')}>
-        {renderSectionHeader(
-          <Image className="w-5 h-5 text-green-500" />,
-          t('unifiedMedia.photosTitle', 'Photos'),
-          photoFiles.length,
-          'photos'
-        )}
-        <CollapsibleContent className="pt-2">
-          {renderDropZone(imageAcceptedTypes, false, null, '')}
-          {renderFileList(photoFiles, t('unifiedMedia.noPhotos', 'Aucune photo'))}
-        </CollapsibleContent>
-      </Collapsible>
+      {showPhotos && (
+        isSingleMode ? (
+          <div className="space-y-3">
+            {renderDropZone(imageAcceptedTypes, false, null, '')}
+            {renderFileList(photoFiles, t('unifiedMedia.noPhotos', 'Aucune photo'))}
+          </div>
+        ) : (
+          <Collapsible open={openSections.photos} onOpenChange={() => toggleSection('photos')}>
+            {renderSectionHeader(
+              <Image className="w-5 h-5 text-green-500" />,
+              t('unifiedMedia.photosTitle', 'Photos'),
+              photoFiles.length,
+              'photos'
+            )}
+            <CollapsibleContent className="pt-2">
+              {renderDropZone(imageAcceptedTypes, false, null, '')}
+              {renderFileList(photoFiles, t('unifiedMedia.noPhotos', 'Aucune photo'))}
+            </CollapsibleContent>
+          </Collapsible>
+        )
+      )}
 
       {/* Videos Section */}
-      <Collapsible open={openSections.videos} onOpenChange={() => toggleSection('videos')}>
-        {renderSectionHeader(
-          <Video className="w-5 h-5 text-purple-500" />,
-          t('unifiedMedia.videosTitle', 'Vidéos'),
-          videoFiles.length,
-          'videos',
-          !canUseVideo
-        )}
-        <CollapsibleContent className="pt-2">
-          {renderDropZone(
-            videoAcceptedTypes, 
-            !canUseVideo, 
-            videoUpgradePath,
-            t('unifiedMedia.videoLocked', 'Vidéos verrouillées')
-          )}
-          {canUseVideo && renderFileList(videoFiles, t('unifiedMedia.noVideos', 'Aucune vidéo'))}
-        </CollapsibleContent>
-      </Collapsible>
+      {showVideos && (
+        isSingleMode ? (
+          <div className="space-y-3">
+            {renderDropZone(
+              videoAcceptedTypes, 
+              !canUseVideo, 
+              videoUpgradePath,
+              t('unifiedMedia.videoLocked', 'Vidéos verrouillées')
+            )}
+            {canUseVideo && renderFileList(videoFiles, t('unifiedMedia.noVideos', 'Aucune vidéo'))}
+          </div>
+        ) : (
+          <Collapsible open={openSections.videos} onOpenChange={() => toggleSection('videos')}>
+            {renderSectionHeader(
+              <Video className="w-5 h-5 text-purple-500" />,
+              t('unifiedMedia.videosTitle', 'Vidéos'),
+              videoFiles.length,
+              'videos',
+              !canUseVideo
+            )}
+            <CollapsibleContent className="pt-2">
+              {renderDropZone(
+                videoAcceptedTypes, 
+                !canUseVideo, 
+                videoUpgradePath,
+                t('unifiedMedia.videoLocked', 'Vidéos verrouillées')
+              )}
+              {canUseVideo && renderFileList(videoFiles, t('unifiedMedia.noVideos', 'Aucune vidéo'))}
+            </CollapsibleContent>
+          </Collapsible>
+        )
+      )}
 
       {/* Audio Section */}
-      <Collapsible open={openSections.audio} onOpenChange={() => toggleSection('audio')}>
-        {renderSectionHeader(
-          <Music className="w-5 h-5 text-orange-500" />,
-          t('unifiedMedia.audioTitle', 'Audio'),
-          audioFiles.length,
-          'audio',
-          !canUseAudio
-        )}
-        <CollapsibleContent className="pt-2 space-y-3">
-          {!canUseAudio ? (
-            renderDropZone(
-              audioAcceptedTypes, 
-              true, 
-              audioUpgradePath,
-              t('unifiedMedia.audioLocked', 'Audio verrouillé')
-            )
-          ) : (
-            <>
-              {/* Audio Recorder */}
-              {!showRecorder ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowRecorder(true)}
-                  className="w-full gap-2 h-12 border-primary/30 hover:border-primary"
-                >
-                  <Mic className="w-5 h-5 text-primary" />
-                  {t('media.recordVoice')}
-                </Button>
-              ) : (
-                <div className="space-y-3">
-                  <AudioRecorder
-                    onRecordingComplete={handleRecordingComplete}
-                    maxDurationSeconds={300}
-                  />
+      {showAudio && (
+        <Collapsible open={openSections.audio} onOpenChange={() => toggleSection('audio')}>
+          {renderSectionHeader(
+            <Music className="w-5 h-5 text-orange-500" />,
+            t('unifiedMedia.audioTitle', 'Audio'),
+            audioFiles.length,
+            'audio',
+            !canUseAudio
+          )}
+          <CollapsibleContent className="pt-2 space-y-3">
+            {!canUseAudio ? (
+              renderDropZone(
+                audioAcceptedTypes, 
+                true, 
+                audioUpgradePath,
+                t('unifiedMedia.audioLocked', 'Audio verrouillé')
+              )
+            ) : (
+              <>
+                {/* Audio Recorder */}
+                {!showRecorder ? (
                   <Button
                     type="button"
-                    variant="ghost"
-                    onClick={() => setShowRecorder(false)}
-                    className="w-full text-muted-foreground"
+                    variant="outline"
+                    onClick={() => setShowRecorder(true)}
+                    className="w-full gap-2 h-12 border-primary/30 hover:border-primary"
                   >
-                    {t('media.cancelRecording')}
+                    <Mic className="w-5 h-5 text-primary" />
+                    {t('media.recordVoice')}
                   </Button>
-                </div>
-              )}
-              
-              {!showRecorder && (
-                <>
-                  <div className="relative flex items-center justify-center">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-border" />
-                    </div>
-                    <span className="relative bg-card px-3 text-sm text-muted-foreground">
-                      {t('media.orImportFile')}
-                    </span>
+                ) : (
+                  <div className="space-y-3">
+                    <AudioRecorder
+                      onRecordingComplete={handleRecordingComplete}
+                      maxDurationSeconds={300}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setShowRecorder(false)}
+                      className="w-full text-muted-foreground"
+                    >
+                      {t('media.cancelRecording')}
+                    </Button>
                   </div>
-                  {renderDropZone(audioAcceptedTypes, false, null, '')}
-                </>
-              )}
-              {renderFileList(audioFiles, t('unifiedMedia.noAudio', 'Aucun audio'))}
-            </>
-          )}
-        </CollapsibleContent>
-      </Collapsible>
+                )}
+                
+                {!showRecorder && (
+                  <>
+                    <div className="relative flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-border" />
+                      </div>
+                      <span className="relative bg-card px-3 text-sm text-muted-foreground">
+                        {t('media.orImportFile')}
+                      </span>
+                    </div>
+                    {renderDropZone(audioAcceptedTypes, false, null, '')}
+                  </>
+                )}
+                {renderFileList(audioFiles, t('unifiedMedia.noAudio', 'Aucun audio'))}
+              </>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
       {/* Total file count */}
       <p className="text-xs text-muted-foreground text-right">
