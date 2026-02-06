@@ -248,21 +248,22 @@ const SeniorFriendlyEditor = ({
           />
         </button>
         
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div 
+              className="p-5 pt-0 border-t border-border bg-muted/20"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
             >
-              <div className="p-5 pt-0 border-t border-border bg-muted/20">
-                {children}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {children}
+            </div>
+          </motion.div>
+        )}
       </motion.div>
     );
   };
