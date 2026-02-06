@@ -1,238 +1,216 @@
 
-# Refonte complète de l'éditeur de souvenir
+# Restructuration de l'éditeur de souvenirs en 5 étapes
 
-## Problemes identifies
+## Résumé des changements
 
-### Problemes UX
-1. **Etapes horizontales peu lisibles** : Les indicateurs d'etapes sont en ligne horizontale avec de petites icones, difficiles a suivre pour les personnes agees
-2. **Absence de branding** : Aucun rappel du logo ou du nom "FamilyGarden", l'utilisateur peut se sentir perdu
-3. **Sections accordeon complexes** : Les accordeons a l'interieur des etapes ajoutent de la confusion
-4. **Boutons de navigation peu visibles** : Le bouton "Continuer" en bas est standard, pas assez mis en valeur
+L'éditeur passera de 4 étapes à **5 étapes** avec une nouvelle organisation :
 
-### Problemes UI
-1. **Design terne** : Fond gris/blanc uniforme, manque de couleur et de chaleur
-2. **Icones generiques** : Les icones d'etapes sont toutes dans des carres identiques sans distinction visuelle
-3. **Pas d'animation engageante** : Les transitions sont minimales et peu encourageantes
-4. **Manque de retour visuel** : Peu de feedback quand une section est completee
+| Étape | Nom actuel | Nouveau nom | Contenu |
+|-------|------------|-------------|---------|
+| 1 | Donnez un titre | **Donnez un titre** (inchangé) | Titre + description |
+| 2 | Ajoutez du contenu | **Ajoutez du texte** | Uniquement le champ texte |
+| 3 | *(nouveau)* | **Ajoutez des médias** | Menu visuel avec icônes (Photos, Vidéos, Audio) |
+| 4 | Organisez | **Organisez** (inchangé) | Catégorie, date, mots-clés |
+| 5 | Vérifiez et publiez | **Vérifiez et publiez** (inchangé) | Récapitulatif |
 
-### Bug potentiel
-- La propagation d'evenements dans les accordeons peut encore causer des problemes de focus
+---
 
-## Solution proposee
+## Nouvelle étape 3 : Menu des médias
 
-### 1. Nouvelle structure de navigation verticale
+### Interface utilisateur
+
+Un menu visuel avec 3 cartes cliquables :
 
 ```text
++--------------------------------------------------+
+|  Ajoutez des médias                              |
+|  Enrichissez votre souvenir avec des fichiers    |
++--------------------------------------------------+
+|                                                  |
+|  +-----------+  +-----------+  +-----------+     |
+|  |   📷      |  |   🎬      |  |   🎙️      |     |
+|  |  Photos   |  |  Vidéos   |  |   Audio   |     |
+|  | (libre)   |  | (Premium) |  | (Premium) |     |
+|  +-----------+  +-----------+  +-----------+     |
+|                                                  |
+|  [Cartes grisées avec cadenas si non abonné]     |
+|                                                  |
++--------------------------------------------------+
+```
+
+### Comportement des cartes
+
+1. **Photos** (toujours accessible)
+   - Au clic → Ouvre la zone de dépôt de photos
+   - Affiche un compteur si des photos sont déjà ajoutées
+
+2. **Vidéos** (Premium requis)
+   - Si abonné → Ouvre le sélecteur vidéo (upload ou YouTube)
+   - Si non abonné → Carte grisée avec badge "Premium" et lien "Passer Premium"
+
+3. **Audio** (Premium requis)
+   - Si abonné → Ouvre l'enregistreur audio
+   - Si non abonné → Carte grisée avec badge "Premium" et lien "Passer Premium"
+
+### États visuels
+
+- **Carte accessible** : fond blanc, hover animé, icône colorée
+- **Carte verrouillée** : fond grisé, icône cadenas, badge "Premium", lien de mise à niveau
+- **Carte avec contenu** : badge vert avec compteur ("3 photos", "1 vidéo")
+
+---
+
+## Sections médias épurées
+
+Quand l'utilisateur clique sur une carte média, une section s'ouvre avec **uniquement le composant pertinent** :
+
+### Section Photos (au clic sur la carte Photos)
+```text
 +------------------------------------------+
-|  [Logo] FamilyGarden                     |
-|  "Nouveau souvenir"                      |
+|  ← Retour au menu                        |
 +------------------------------------------+
 |                                          |
-|  Etapes (verticales, a gauche)           |
-|  =====================================   |
+|  [Zone de dépôt de fichiers images]      |
+|  Glissez-déposez ou cliquez              |
 |                                          |
-|   [1] Titre        ← Etape active        |
-|       ✓ Complete                         |
-|       |                                  |
-|   [2] Ajouter des medias                 |
-|       |                                  |
-|   [3] Organiser                          |
-|       |                                  |
-|   [4] Terminer                           |
+|  [Liste des photos ajoutées]             |
 |                                          |
-+------------------------------------------+
-|                                          |
-|    Zone de contenu principal             |
-|    (formulaire de l'etape active)        |
-|                                          |
-+------------------------------------------+
-|  [Retour]          [Continuer →]         |
 +------------------------------------------+
 ```
 
-### 2. Refonte du header avec branding
-
-- **Logo + "FamilyGarden"** toujours visible en haut
-- **Titre contextuel** : "Nouveau souvenir" avec l'etape actuelle
-- **Barre de progression** coloree et animee (degrade or/terracotta)
-- **Couleur d'arriere-plan chaleureuse** : gradient-warm du design system
-
-### 3. Indicateurs d'etapes verticaux (sidebar ou en haut sur mobile)
-
-- **Numeros cerclés** avec couleur de fond dynamique
-- **Labels explicites** pour chaque etape
-- **Badge de completion** (checkmark vert quand valide)
-- **Ligne de connexion** entre les etapes pour visualiser la progression
-- **Animation de pulse** sur l'etape active
-
-### 4. Palette de couleurs et animations
-
-- **Etape 1 (Titre)** : Bleu nuit `--primary` avec animation fade-in
-- **Etape 2 (Medias)** : Terracotta `--accent` avec animation slide-up
-- **Etape 3 (Details)** : Or chaud `--secondary` avec animation slide-up
-- **Etape 4 (Terminer)** : Vert validation avec confetti subtil
-
-### 5. Simplification du contenu des etapes
-
-- **Suppression des accordeons** dans les etapes de contenu
-- **Affichage direct** des champs de formulaire avec espacement genereux
-- **Cartes distinctes** pour chaque type de contenu (texte / photos / YouTube)
-- **Transitions fluides** entre les sections
-
-### 6. Boutons d'action ameliores
-
-- **Bouton principal** : Grand, colore avec gradient, icone animee
-- **Bouton secondaire** : Style outline clair
-- **Bouton de retour** : Texte simple avec fleche
-- **Feedback au survol** : Effet de scale et shadow
-
-## Fichiers a modifier
-
-### `src/components/capsule/SeniorFriendlyEditor.tsx`
-Refonte complete du composant avec :
-- Header avec logo et branding
-- Navigation verticale des etapes
-- Suppression des accordeons internes
-- Nouvelles couleurs par etape
-- Animations Framer Motion ameliorees
-- Correction des bugs de focus
-
-### Nouveaux tokens de traduction
-Ajout dans `public/locales/*/capsules.json` :
-- `seniorEditor.createMemory` : "Nouveau souvenir"
-- `seniorEditor.step1Label` : "Donnez un titre"
-- `seniorEditor.step2Label` : "Ajoutez du contenu"
-- `seniorEditor.step3Label` : "Organisez"
-- `seniorEditor.step4Label` : "Verifiez et publiez"
-
-## Details techniques
-
-### Structure du nouveau composant
-
-```tsx
-// Header avec branding
-<header className="...">
-  <div className="flex items-center gap-3">
-    <img src={logo} alt="FamilyGarden" className="w-10 h-10" />
-    <span className="font-display font-semibold">
-      Family<span className="text-secondary">Garden</span>
-    </span>
-  </div>
-  <h1>{t('seniorEditor.createMemory')}</h1>
-</header>
-
-// Navigation verticale des etapes
-<nav className="flex flex-col gap-4">
-  {STEPS.map((step, i) => (
-    <StepIndicator 
-      number={i + 1}
-      label={step.label}
-      isActive={currentStep === i}
-      isCompleted={i < currentStep}
-      color={step.color}
-    />
-  ))}
-</nav>
-
-// Contenu de l'etape (sans accordeons)
-<main className="flex-1">
-  <AnimatePresence mode="wait">
-    <motion.div key={currentStep}>
-      {renderStepContent()}
-    </motion.div>
-  </AnimatePresence>
-</main>
+### Section Vidéos (au clic sur la carte Vidéos)
+```text
++------------------------------------------+
+|  ← Retour au menu                        |
++------------------------------------------+
+|                                          |
+|  [Toggle: Charger une vidéo | YouTube]   |
+|                                          |
+|  Si "Charger" :                          |
+|     [Zone de dépôt vidéo uniquement]     |
+|                                          |
+|  Si "YouTube" :                          |
+|     [Champ de saisie URL YouTube]        |
+|                                          |
++------------------------------------------+
 ```
 
-### Configuration des etapes avec couleurs
+### Section Audio (au clic sur la carte Audio)
+```text
++------------------------------------------+
+|  ← Retour au menu                        |
++------------------------------------------+
+|                                          |
+|  [Composant AudioRecorder]               |
+|     - Bouton d'enregistrement            |
+|     - Visualisation de forme d'onde      |
+|     - Contrôles de lecture               |
+|                                          |
+|  [Liste des enregistrements ajoutés]     |
+|                                          |
++------------------------------------------+
+```
+
+---
+
+## Détails techniques
+
+### Fichiers modifiés
+
+1. **`src/components/capsule/SeniorFriendlyEditor.tsx`**
+   - Ajouter une 5e étape dans le tableau `STEPS`
+   - Modifier l'étape 2 pour ne garder que le champ texte
+   - Créer le nouveau composant `MediaMenuStep` pour l'étape 3
+   - Créer les sous-composants `PhotoEditor`, `VideoEditor`, `AudioEditor`
+   - Utiliser `useFeatureAccess` pour griser les options Premium
+   - État local `activeMediaSection` pour gérer la section ouverte
+
+2. **`public/locales/*/capsules.json`** (FR, EN, ES, KO, ZH)
+   - Nouvelles clés de traduction :
+     - `seniorEditor.step2Label` → "Ajoutez du texte"
+     - `seniorEditor.step3Label` → "Ajoutez des médias"
+     - `seniorEditor.step4Label` → "Organisez"
+     - `seniorEditor.step5Label` → "Vérifiez et publiez"
+     - `seniorEditor.textStepTitle` → "Écrivez votre texte"
+     - `seniorEditor.textStepDesc` → description de l'étape texte
+     - `seniorEditor.mediaStepTitle` → "Ajoutez des médias"
+     - `seniorEditor.mediaStepDesc` → description de l'étape médias
+     - `seniorEditor.mediaMenu.photos/videos/audio` → titres et descriptions
+     - `seniorEditor.mediaMenu.locked` → message pour fonctionnalités verrouillées
+     - `seniorEditor.mediaMenu.backToMenu` → "Retour au menu"
+
+### Structure du code
 
 ```tsx
+// Nouveau tableau STEPS avec 5 étapes
 const STEPS = [
-  { 
-    id: 'title', 
-    icon: FileText, 
-    labelKey: 'seniorEditor.step1Label',
-    color: 'primary',      // Bleu nuit
-    bgClass: 'bg-primary/10'
-  },
-  { 
-    id: 'media', 
-    icon: Image, 
-    labelKey: 'seniorEditor.step2Label',
-    color: 'accent',       // Terracotta
-    bgClass: 'bg-accent/10'
-  },
-  { 
-    id: 'organize', 
-    icon: FolderOpen, 
-    labelKey: 'seniorEditor.step3Label',
-    color: 'secondary',    // Or chaud
-    bgClass: 'bg-secondary/10'
-  },
-  { 
-    id: 'finish', 
-    icon: Check, 
-    labelKey: 'seniorEditor.step4Label',
-    color: 'green-600',
-    bgClass: 'bg-green-100'
-  },
+  { id: 'title', icon: FileText, ... },
+  { id: 'text', icon: PenLine, ... },     // Nouveau
+  { id: 'media', icon: Image, ... },      // Nouveau
+  { id: 'details', icon: FolderOpen, ... },
+  { id: 'finish', icon: Check, ... },
 ];
+
+// État pour gérer la section média active
+const [activeMediaSection, setActiveMediaSection] = useState<
+  'menu' | 'photos' | 'videos' | 'audio'
+>('menu');
+
+// Composant MediaMenu avec cartes cliquables
+const MediaMenu = () => (
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <MediaCard 
+      icon={Image} 
+      title="Photos" 
+      count={photoFiles.length}
+      locked={false}
+      onClick={() => setActiveMediaSection('photos')}
+    />
+    <MediaCard 
+      icon={Video} 
+      title="Vidéos" 
+      count={videoFiles.length + (youtubeUrl ? 1 : 0)}
+      locked={!canUseVideo}
+      upgradePath="premium"
+      onClick={() => setActiveMediaSection('videos')}
+    />
+    <MediaCard 
+      icon={Mic} 
+      title="Audio" 
+      count={audioFiles.length}
+      locked={!canUseAudio}
+      upgradePath="premium"
+      onClick={() => setActiveMediaSection('audio')}
+    />
+  </div>
+);
 ```
 
-### Animations Framer Motion
+### Filtrage des fichiers par type
+
+Dans `UnifiedMediaSection`, on utilisera un nouveau prop `filterType` pour n'afficher que les fichiers du type concerné :
 
 ```tsx
-// Animation d'entree pour chaque etape
-const stepVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" }
-  },
-  exit: { opacity: 0, y: -10 }
-};
-
-// Pulse sur l'etape active
-const pulseVariants = {
-  initial: { scale: 1 },
-  pulse: { 
-    scale: [1, 1.05, 1],
-    transition: { duration: 1.5, repeat: Infinity }
-  }
-};
-```
-
-### Correction du bug de focus
-
-```tsx
-// Isoler completement les evenements dans les zones de saisie
-<div 
-  className="space-y-6"
-  onKeyDown={(e) => {
-    // Empecher la propagation des touches speciales
-    if (['Enter', ' ', 'Tab'].includes(e.key)) {
-      e.stopPropagation();
-    }
+// Pour la section Photos uniquement
+<UnifiedMediaSection
+  userId={userId}
+  files={mediaFiles.filter(f => f.type === 'image')}
+  onFilesChange={(newFiles) => {
+    // Garder les autres types, remplacer les images
+    const otherFiles = mediaFiles.filter(f => f.type !== 'image');
+    onMediaFilesChange([...otherFiles, ...newFiles]);
   }}
->
-  <Textarea 
-    value={content}
-    onChange={(e) => onContentChange(e.target.value)}
-    onFocus={() => setIsTyping(true)}
-    onBlur={() => setIsTyping(false)}
-  />
-</div>
+  acceptedTypes={['image/*']}
+  showTextSection={false}
+/>
 ```
 
-## Resume des ameliorations
+---
 
-| Aspect | Avant | Apres |
-|--------|-------|-------|
-| Navigation | Horizontale, petites icones | Verticale, numeros et labels clairs |
-| Branding | Absent | Logo + "FamilyGarden" toujours visible |
-| Couleurs | Grises uniformes | Palette chaude (or, terracotta, bleu nuit) |
-| Animations | Basiques | Transitions fluides, feedback visuel |
-| Structure | Accordeons imbriques | Contenu direct, cartes distinctes |
-| Boutons | Standards | Grands, colores, avec icones animees |
-| Accessibilite | Basique | Optimisee seniors (grandes cibles, contraste) |
+## Accessibilité et UX seniors
+
+- **Grandes cartes** (min-h-32) avec icônes de 48px
+- **Labels clairs** en police large (text-xl)
+- **Feedback visuel** : badge vert avec compteur quand du contenu est ajouté
+- **Bouton retour** bien visible en haut de chaque section média
+- **Transitions douces** avec Framer Motion entre le menu et les sections
