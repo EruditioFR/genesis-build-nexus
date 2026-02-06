@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, Filter, Plus, X, Sparkles } from 'lucide-react';
+import { Clock, Filter, Plus, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -18,46 +18,34 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-16 bg-card rounded-2xl border border-border"
+        className="text-center py-12 sm:py-16 px-6 bg-card rounded-2xl border-2 border-border"
       >
-        <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-secondary/20 to-primary/20 mx-auto mb-6 flex items-center justify-center">
-          <Clock className="w-10 h-10 text-secondary" />
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.5, 1, 0.5]
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute inset-0 rounded-2xl border-2 border-secondary/30"
-          />
+        {/* Large icon */}
+        <div className="w-24 h-24 rounded-2xl bg-secondary/10 border-2 border-secondary/20 mx-auto mb-6 flex items-center justify-center">
+          <Clock className="w-12 h-12 text-secondary" />
         </div>
         
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-3">
+        {/* Large text */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
           {t('timeline.emptyTitle')}
         </h2>
-        <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
+        <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
           {t('timeline.emptySubtitle')}
         </p>
         
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <Button
-            onClick={() => navigate('/capsules/new')}
-            size="lg"
-            className="gap-2 bg-gradient-to-r from-secondary to-primary hover:opacity-90 text-primary-foreground shadow-lg"
-          >
-            <Plus className="w-5 h-5" />
-            {t('timeline.createFirst')}
-          </Button>
-        </motion.div>
+        {/* Large touch target button */}
+        <Button
+          onClick={() => navigate('/capsules/new')}
+          size="lg"
+          className="h-14 px-8 text-lg font-semibold gap-3 bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-md"
+        >
+          <Plus className="w-6 h-6" />
+          {t('timeline.createFirst')}
+        </Button>
         
-        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <Sparkles className="w-4 h-4 text-secondary" />
-          <span>{t('timeline.emptyAutoOrganized')}</span>
-        </div>
+        <p className="mt-8 text-base text-muted-foreground">
+          {t('timeline.emptyAutoOrganized')}
+        </p>
       </motion.div>
     );
   }
@@ -66,25 +54,29 @@ const TimelineEmpty = ({ type, onClearFilters }: TimelineEmptyProps) => {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="text-center py-16 bg-card rounded-2xl border border-border"
+      className="text-center py-12 sm:py-16 px-6 bg-card rounded-2xl border-2 border-border"
     >
-      <div className="w-16 h-16 rounded-2xl bg-muted mx-auto mb-6 flex items-center justify-center">
-        <Filter className="w-8 h-8 text-muted-foreground" />
+      {/* Large icon */}
+      <div className="w-20 h-20 rounded-2xl bg-muted border-2 border-border mx-auto mb-6 flex items-center justify-center">
+        <Filter className="w-10 h-10 text-muted-foreground" />
       </div>
       
-      <h2 className="text-xl font-semibold text-foreground mb-3">
+      {/* Large text */}
+      <h2 className="text-2xl font-bold text-foreground mb-4">
         {t('timeline.noResults')}
       </h2>
-      <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+      <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
         {t('timeline.noResultsSubtitle')}
       </p>
       
+      {/* Large touch target button */}
       <Button
         variant="outline"
         onClick={onClearFilters}
-        className="gap-2"
+        size="lg"
+        className="h-14 px-8 text-lg font-semibold gap-3 border-2"
       >
-        <X className="w-4 h-4" />
+        <X className="w-6 h-6" />
         {t('timeline.clearFilters')}
       </Button>
     </motion.div>

@@ -31,22 +31,22 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
   return (
     <Dialog open={!!decade} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden">
-        {/* Header avec gradient */}
-        <div className="bg-gradient-to-r from-secondary to-primary p-6 text-white">
+        {/* Header - clear and readable */}
+        <div className="bg-secondary p-6 text-secondary-foreground">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-display font-bold text-white flex items-center gap-2">
-              <Calendar className="w-6 h-6" />
+            <DialogTitle className="text-2xl sm:text-3xl font-bold text-secondary-foreground flex items-center gap-3">
+              <Calendar className="w-8 h-8" />
               {t('timeline.decadeTitle', { decade })}
             </DialogTitle>
           </DialogHeader>
-          <p className="text-white/80 mt-2">
+          <p className="text-lg text-secondary-foreground/80 mt-3">
             {totalCapsules} {t('timeline.decade.memoriesInDecade', { count: totalCapsules })}
           </p>
         </div>
 
-        {/* Liste des années */}
-        <ScrollArea className="max-h-[60vh]">
-          <div className="p-4 space-y-2">
+        {/* Year list - large touch targets */}
+        <ScrollArea className="max-h-[55vh]">
+          <div className="p-4 space-y-3">
             {sortedYears.map(([year, data], index) => (
               <motion.button
                 key={year}
@@ -54,63 +54,57 @@ const DecadeModal = ({ decade, years, onClose, onYearClick }: DecadeModalProps) 
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => onYearClick(year)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-secondary/50 hover:bg-secondary/5 transition-all group"
+                className="w-full flex items-center gap-4 p-4 rounded-xl bg-card border-2 border-border hover:border-secondary/50 hover:bg-secondary/5 transition-all group focus:outline-none focus:ring-4 focus:ring-secondary/50"
+                aria-label={`${year}, ${data.count} ${t('timeline.memories', { count: data.count })}`}
               >
-                {/* Vignettes - adapté au nombre d'images */}
-                <div className="flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden bg-muted">
+                {/* Thumbnail - larger */}
+                <div className="flex-shrink-0 w-18 h-14 rounded-lg overflow-hidden bg-muted">
                   {data.thumbnails.length === 0 ? (
                     <div className="w-full h-full bg-secondary/10 flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-secondary/50" />
+                      <Calendar className="w-6 h-6 text-secondary/50" />
                     </div>
                   ) : data.thumbnails.length === 1 ? (
-                    // 1 image : pleine largeur
-                    <img 
-                      src={data.thumbnails[0]} 
-                      alt="" 
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={data.thumbnails[0]} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    // 2+ images : grille 2 colonnes
                     <div className="w-full h-full grid grid-cols-2 gap-px">
                       {data.thumbnails.slice(0, 2).map((url, i) => (
-                        <div key={i} className="relative overflow-hidden bg-muted">
-                          <img 
-                            src={url} 
-                            alt="" 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
+                        <img key={i} src={url} alt="" className="w-full h-full object-cover" />
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* Infos */}
+                {/* Year info - larger text */}
                 <div className="flex-1 text-left min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg text-foreground">{year}</span>
+                    <span className="font-bold text-2xl text-foreground">{year}</span>
                     {data.hasVideo && (
-                      <Video className="w-3.5 h-3.5 text-purple-500" />
+                      <Video className="w-5 h-5 text-purple-500" />
                     )}
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-base text-muted-foreground">
                     {t('timeline.memories', { count: data.count })}
-                    {data.thumbnails.length > 0 && (
-                      <span className="text-secondary"> · {t('timeline.decade.media', { count: data.thumbnails.length })}</span>
-                    )}
                   </span>
                 </div>
 
-                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-secondary group-hover:translate-x-1 transition-all flex-shrink-0" />
+                {/* Navigation arrow - larger */}
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center group-hover:bg-secondary/10 transition-colors">
+                  <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-secondary transition-colors" />
+                </div>
               </motion.button>
             ))}
           </div>
         </ScrollArea>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-border bg-muted/30">
-          <Button variant="outline" onClick={onClose} className="w-full gap-2">
-            <ArrowLeft className="w-4 h-4" />
+        {/* Footer - large button */}
+        <div className="p-4 border-t-2 border-border bg-muted/30">
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            size="lg"
+            className="w-full h-14 text-lg font-semibold gap-3 border-2"
+          >
+            <ArrowLeft className="w-6 h-6" />
             {t('timeline.decade.backToDecades')}
           </Button>
         </div>
