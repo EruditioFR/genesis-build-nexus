@@ -331,6 +331,7 @@ const VideoEditorSection = ({
                 maxFiles={5}
                 onUploadAll={onUploadAllRef}
                 hasError={hasMediaError}
+                acceptedMediaTypes={['video']}
               />
             ) : (
               <YouTubeEmbed
@@ -417,6 +418,7 @@ const PhotoEditorSection = ({
           maxFiles={20}
           onUploadAll={onUploadAllRef}
           hasError={hasMediaError}
+          acceptedMediaTypes={['image']}
         />
       </div>
     </div>
