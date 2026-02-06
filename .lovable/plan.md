@@ -1,216 +1,144 @@
 
-# Restructuration de l'éditeur de souvenirs en 5 étapes
+# Correction des éditeurs Photo et Vidéo
 
-## Résumé des changements
+## Problème identifié
 
-L'éditeur passera de 4 étapes à **5 étapes** avec une nouvelle organisation :
+Le composant `UnifiedMediaSection` affiche **toujours les 4 sections** (Texte, Photos, Vidéos, Audio) via des `Collapsible`. Même si `PhotoEditorSection` et `VideoEditorSection` filtrent les fichiers par type avant de les passer au composant, `UnifiedMediaSection` réaffiche toutes les sections internes.
 
-| Étape | Nom actuel | Nouveau nom | Contenu |
-|-------|------------|-------------|---------|
-| 1 | Donnez un titre | **Donnez un titre** (inchangé) | Titre + description |
-| 2 | Ajoutez du contenu | **Ajoutez du texte** | Uniquement le champ texte |
-| 3 | *(nouveau)* | **Ajoutez des médias** | Menu visuel avec icônes (Photos, Vidéos, Audio) |
-| 4 | Organisez | **Organisez** (inchangé) | Catégorie, date, mots-clés |
-| 5 | Vérifiez et publiez | **Vérifiez et publiez** (inchangé) | Récapitulatif |
+## Solution
 
----
+Ajouter une nouvelle prop `acceptedMediaTypes` au composant `UnifiedMediaSection` pour contrôler quelles sections sont visibles :
 
-## Nouvelle étape 3 : Menu des médias
+| Éditeur | Prop `acceptedMediaTypes` | Sections affichées |
+|---------|--------------------------|-------------------|
+| Photos | `['image']` | Zone de dépôt photos uniquement |
+| Vidéos | `['video']` | Zone de dépôt vidéos uniquement |
+| Audio | *(non concerné, utilise `AudioRecorder` directement)* | - |
 
-### Interface utilisateur
+## Fichiers à modifier
 
-Un menu visuel avec 3 cartes cliquables :
+### 1. `src/components/capsule/UnifiedMediaSection.tsx`
 
-```text
-+--------------------------------------------------+
-|  Ajoutez des médias                              |
-|  Enrichissez votre souvenir avec des fichiers    |
-+--------------------------------------------------+
-|                                                  |
-|  +-----------+  +-----------+  +-----------+     |
-|  |   📷      |  |   🎬      |  |   🎙️      |     |
-|  |  Photos   |  |  Vidéos   |  |   Audio   |     |
-|  | (libre)   |  | (Premium) |  | (Premium) |     |
-|  +-----------+  +-----------+  +-----------+     |
-|                                                  |
-|  [Cartes grisées avec cadenas si non abonné]     |
-|                                                  |
-+--------------------------------------------------+
+**Ajout d'une nouvelle prop :**
+```tsx
+interface UnifiedMediaSectionProps {
+  // ... props existantes
+  acceptedMediaTypes?: ('image' | 'video' | 'audio')[];
+}
 ```
 
-### Comportement des cartes
+**Modification du rendu :**
+- Si `acceptedMediaTypes` est défini, n'afficher que les sections correspondantes
+- Par défaut (prop absente), afficher toutes les sections comme actuellement
 
-1. **Photos** (toujours accessible)
-   - Au clic → Ouvre la zone de dépôt de photos
-   - Affiche un compteur si des photos sont déjà ajoutées
+### 2. `src/components/capsule/SeniorFriendlyEditor.tsx`
 
-2. **Vidéos** (Premium requis)
-   - Si abonné → Ouvre le sélecteur vidéo (upload ou YouTube)
-   - Si non abonné → Carte grisée avec badge "Premium" et lien "Passer Premium"
+**PhotoEditorSection :**
+- Passer `acceptedMediaTypes={['image']}` à `UnifiedMediaSection`
+- Résultat : seule la zone de dépôt photos s'affiche
 
-3. **Audio** (Premium requis)
-   - Si abonné → Ouvre l'enregistreur audio
-   - Si non abonné → Carte grisée avec badge "Premium" et lien "Passer Premium"
-
-### États visuels
-
-- **Carte accessible** : fond blanc, hover animé, icône colorée
-- **Carte verrouillée** : fond grisé, icône cadenas, badge "Premium", lien de mise à niveau
-- **Carte avec contenu** : badge vert avec compteur ("3 photos", "1 vidéo")
-
----
-
-## Sections médias épurées
-
-Quand l'utilisateur clique sur une carte média, une section s'ouvre avec **uniquement le composant pertinent** :
-
-### Section Photos (au clic sur la carte Photos)
-```text
-+------------------------------------------+
-|  ← Retour au menu                        |
-+------------------------------------------+
-|                                          |
-|  [Zone de dépôt de fichiers images]      |
-|  Glissez-déposez ou cliquez              |
-|                                          |
-|  [Liste des photos ajoutées]             |
-|                                          |
-+------------------------------------------+
-```
-
-### Section Vidéos (au clic sur la carte Vidéos)
-```text
-+------------------------------------------+
-|  ← Retour au menu                        |
-+------------------------------------------+
-|                                          |
-|  [Toggle: Charger une vidéo | YouTube]   |
-|                                          |
-|  Si "Charger" :                          |
-|     [Zone de dépôt vidéo uniquement]     |
-|                                          |
-|  Si "YouTube" :                          |
-|     [Champ de saisie URL YouTube]        |
-|                                          |
-+------------------------------------------+
-```
-
-### Section Audio (au clic sur la carte Audio)
-```text
-+------------------------------------------+
-|  ← Retour au menu                        |
-+------------------------------------------+
-|                                          |
-|  [Composant AudioRecorder]               |
-|     - Bouton d'enregistrement            |
-|     - Visualisation de forme d'onde      |
-|     - Contrôles de lecture               |
-|                                          |
-|  [Liste des enregistrements ajoutés]     |
-|                                          |
-+------------------------------------------+
-```
-
----
+**VideoEditorSection :**
+- Passer `acceptedMediaTypes={['video']}` à `UnifiedMediaSection`
+- Résultat : seule la zone de dépôt vidéos s'affiche (sans les Collapsibles)
 
 ## Détails techniques
 
-### Fichiers modifiés
-
-1. **`src/components/capsule/SeniorFriendlyEditor.tsx`**
-   - Ajouter une 5e étape dans le tableau `STEPS`
-   - Modifier l'étape 2 pour ne garder que le champ texte
-   - Créer le nouveau composant `MediaMenuStep` pour l'étape 3
-   - Créer les sous-composants `PhotoEditor`, `VideoEditor`, `AudioEditor`
-   - Utiliser `useFeatureAccess` pour griser les options Premium
-   - État local `activeMediaSection` pour gérer la section ouverte
-
-2. **`public/locales/*/capsules.json`** (FR, EN, ES, KO, ZH)
-   - Nouvelles clés de traduction :
-     - `seniorEditor.step2Label` → "Ajoutez du texte"
-     - `seniorEditor.step3Label` → "Ajoutez des médias"
-     - `seniorEditor.step4Label` → "Organisez"
-     - `seniorEditor.step5Label` → "Vérifiez et publiez"
-     - `seniorEditor.textStepTitle` → "Écrivez votre texte"
-     - `seniorEditor.textStepDesc` → description de l'étape texte
-     - `seniorEditor.mediaStepTitle` → "Ajoutez des médias"
-     - `seniorEditor.mediaStepDesc` → description de l'étape médias
-     - `seniorEditor.mediaMenu.photos/videos/audio` → titres et descriptions
-     - `seniorEditor.mediaMenu.locked` → message pour fonctionnalités verrouillées
-     - `seniorEditor.mediaMenu.backToMenu` → "Retour au menu"
-
-### Structure du code
+### Modification de UnifiedMediaSection.tsx
 
 ```tsx
-// Nouveau tableau STEPS avec 5 étapes
-const STEPS = [
-  { id: 'title', icon: FileText, ... },
-  { id: 'text', icon: PenLine, ... },     // Nouveau
-  { id: 'media', icon: Image, ... },      // Nouveau
-  { id: 'details', icon: FolderOpen, ... },
-  { id: 'finish', icon: Check, ... },
-];
+// Interface mise à jour
+interface UnifiedMediaSectionProps {
+  // ... autres props
+  acceptedMediaTypes?: ('image' | 'video' | 'audio')[];
+}
 
-// État pour gérer la section média active
-const [activeMediaSection, setActiveMediaSection] = useState<
-  'menu' | 'photos' | 'videos' | 'audio'
->('menu');
+// Dans le composant
+const UnifiedMediaSection = ({
+  // ... autres props
+  acceptedMediaTypes,
+}: UnifiedMediaSectionProps) => {
+  
+  // Helpers pour savoir quoi afficher
+  const showPhotos = !acceptedMediaTypes || acceptedMediaTypes.includes('image');
+  const showVideos = !acceptedMediaTypes || acceptedMediaTypes.includes('video');
+  const showAudio = !acceptedMediaTypes || acceptedMediaTypes.includes('audio');
+  
+  // Mode simplifié : une seule section sans Collapsible
+  const isSingleMode = acceptedMediaTypes?.length === 1;
 
-// Composant MediaMenu avec cartes cliquables
-const MediaMenu = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <MediaCard 
-      icon={Image} 
-      title="Photos" 
-      count={photoFiles.length}
-      locked={false}
-      onClick={() => setActiveMediaSection('photos')}
-    />
-    <MediaCard 
-      icon={Video} 
-      title="Vidéos" 
-      count={videoFiles.length + (youtubeUrl ? 1 : 0)}
-      locked={!canUseVideo}
-      upgradePath="premium"
-      onClick={() => setActiveMediaSection('videos')}
-    />
-    <MediaCard 
-      icon={Mic} 
-      title="Audio" 
-      count={audioFiles.length}
-      locked={!canUseAudio}
-      upgradePath="premium"
-      onClick={() => setActiveMediaSection('audio')}
-    />
-  </div>
-);
+  return (
+    <div className="...">
+      {/* Photos - Affichage simple si mode unique */}
+      {showPhotos && (
+        isSingleMode ? (
+          <>
+            {renderDropZone(imageAcceptedTypes, false, null, '')}
+            {renderFileList(photoFiles, '')}
+          </>
+        ) : (
+          <Collapsible>...</Collapsible>
+        )
+      )}
+      
+      {/* Vidéos */}
+      {showVideos && (
+        isSingleMode ? (
+          <>
+            {renderDropZone(videoAcceptedTypes, !canUseVideo, videoUpgradePath, '...')}
+            {canUseVideo && renderFileList(videoFiles, '')}
+          </>
+        ) : (
+          <Collapsible>...</Collapsible>
+        )
+      )}
+      
+      {/* Audio */}
+      {showAudio && (
+        // ... logique existante
+      )}
+    </div>
+  );
+};
 ```
 
-### Filtrage des fichiers par type
+### Modification de SeniorFriendlyEditor.tsx
 
-Dans `UnifiedMediaSection`, on utilisera un nouveau prop `filterType` pour n'afficher que les fichiers du type concerné :
-
+**PhotoEditorSection :**
 ```tsx
-// Pour la section Photos uniquement
 <UnifiedMediaSection
   userId={userId}
-  files={mediaFiles.filter(f => f.type === 'image')}
-  onFilesChange={(newFiles) => {
-    // Garder les autres types, remplacer les images
-    const otherFiles = mediaFiles.filter(f => f.type !== 'image');
-    onMediaFilesChange([...otherFiles, ...newFiles]);
-  }}
-  acceptedTypes={['image/*']}
+  content=""
+  onContentChange={() => {}}
   showTextSection={false}
+  files={imageFiles}
+  onFilesChange={handleImageFilesChange}
+  maxFiles={20}
+  onUploadAll={onUploadAllRef}
+  hasError={hasMediaError}
+  acceptedMediaTypes={['image']}  // ← Nouveau
 />
 ```
 
----
+**VideoEditorSection :**
+```tsx
+<UnifiedMediaSection
+  userId={userId}
+  content=""
+  onContentChange={() => {}}
+  showTextSection={false}
+  files={videoFiles}
+  onFilesChange={handleVideoFilesChange}
+  maxFiles={5}
+  onUploadAll={onUploadAllRef}
+  hasError={hasMediaError}
+  acceptedMediaTypes={['video']}  // ← Nouveau
+/>
+```
 
-## Accessibilité et UX seniors
+## Résultat attendu
 
-- **Grandes cartes** (min-h-32) avec icônes de 48px
-- **Labels clairs** en police large (text-xl)
-- **Feedback visuel** : badge vert avec compteur quand du contenu est ajouté
-- **Bouton retour** bien visible en haut de chaque section média
-- **Transitions douces** avec Framer Motion entre le menu et les sections
+| Éditeur | Avant | Après |
+|---------|-------|-------|
+| Photos | 4 sections affichées | Zone de dépôt photos uniquement |
+| Vidéos | 4 sections affichées | Toggle YouTube/Upload + zone vidéo |
+| Audio | ✓ OK | ✓ Inchangé |
