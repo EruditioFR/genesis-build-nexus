@@ -131,10 +131,7 @@ const SeniorFriendlyEditor = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     text: true,
-    photos: false,
-    videos: false,
-    audio: false,
-    youtube: false,
+    media: false,
     category: false,
     date: false,
     tags: false,
@@ -402,42 +399,62 @@ const SeniorFriendlyEditor = ({
                 />
               </Section>
 
-              {/* Photos section */}
+              {/* Media section (photos, videos, YouTube) */}
               <Section
-                id="photos"
+                id="media"
                 icon={Image}
-                title={t('seniorEditor.photosTitle', 'Ajouter des photos')}
-                description={t('seniorEditor.photosDesc', 'Glissez vos photos ou cliquez pour les sélectionner')}
-                badge={mediaFiles.filter(f => f.type === 'image').length > 0 
-                  ? `${mediaFiles.filter(f => f.type === 'image').length}` 
-                  : undefined
+                title={t('seniorEditor.mediaTitle', 'Ajouter des médias')}
+                description={t('seniorEditor.mediaDesc', 'Photos, vidéos ou lien YouTube')}
+                badge={
+                  (mediaFiles.length > 0 || youtubeUrl) 
+                    ? (mediaFiles.length > 0 ? `${mediaFiles.length}` : '✓')
+                    : undefined
                 }
               >
-                <UnifiedMediaSection
-                  userId={userId}
-                  content=""
-                  onContentChange={() => {}}
-                  showTextSection={false}
-                  files={mediaFiles}
-                  onFilesChange={onMediaFilesChange}
-                  maxFiles={20}
-                  onUploadAll={onUploadAllRef}
-                  hasError={hasMediaError}
-                />
-              </Section>
+                <div className="space-y-6">
+                  {/* File upload section */}
+                  <div>
+                    <h4 className="text-lg font-medium text-foreground mb-3 flex items-center gap-2">
+                      <Image className="w-5 h-5 text-secondary" />
+                      {t('seniorEditor.uploadMediaLabel', 'Photos et vidéos')}
+                    </h4>
+                    <UnifiedMediaSection
+                      userId={userId}
+                      content=""
+                      onContentChange={() => {}}
+                      showTextSection={false}
+                      files={mediaFiles}
+                      onFilesChange={onMediaFilesChange}
+                      maxFiles={20}
+                      onUploadAll={onUploadAllRef}
+                      hasError={hasMediaError}
+                    />
+                  </div>
 
-              {/* YouTube section */}
-              <Section
-                id="youtube"
-                icon={Youtube}
-                title={t('seniorEditor.youtubeTitle', 'Ajouter une vidéo YouTube')}
-                description={t('seniorEditor.youtubeDesc', 'Collez un lien YouTube pour intégrer une vidéo')}
-                badge={youtubeUrl ? '✓' : undefined}
-              >
-                <YouTubeEmbed
-                  value={youtubeUrl}
-                  onChange={onYoutubeUrlChange}
-                />
+                  {/* Separator */}
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-border" />
+                    </div>
+                    <div className="relative flex justify-center">
+                      <span className="bg-muted/20 px-4 text-sm text-muted-foreground">
+                        {t('seniorEditor.orLabel', 'ou')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* YouTube section */}
+                  <div>
+                    <h4 className="text-lg font-medium text-foreground mb-3 flex items-center gap-2">
+                      <Youtube className="w-5 h-5 text-red-500" />
+                      {t('seniorEditor.youtubeLabel', 'Vidéo YouTube')}
+                    </h4>
+                    <YouTubeEmbed
+                      value={youtubeUrl}
+                      onChange={onYoutubeUrlChange}
+                    />
+                  </div>
+                </div>
               </Section>
             </div>
           </div>
