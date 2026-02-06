@@ -687,16 +687,16 @@ const SeniorFriendlyEditor = ({
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      {/* Header with branding */}
-      <header className="sticky top-0 z-50 bg-card/98 backdrop-blur-sm border-b border-border shadow-sm">
+      {/* Header with branding - Dark navy theme */}
+      <header className="sticky top-0 z-50 bg-[hsl(215_50%_18%)] shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-3">
           {/* Top row: Logo and back button */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <img src={logo} alt="FamilyGarden" className="w-10 h-10 rounded-xl" />
               <div className="hidden sm:block">
-                <span className="font-display font-semibold text-lg text-foreground">
-                  Family<span className="text-secondary">Garden</span>
+                <span className="font-display font-semibold text-lg text-white">
+                  Family<span className="text-gold">Garden</span>
                 </span>
               </div>
             </div>
@@ -704,7 +704,7 @@ const SeniorFriendlyEditor = ({
             <Button
               variant="ghost"
               size="sm"
-              className="gap-2 text-muted-foreground hover:text-foreground"
+              className="gap-2 text-white/70 hover:text-white hover:bg-white/10"
               onClick={currentStep === 0 ? onBack : prevStep}
             >
               <ArrowLeft className="w-4 h-4" />
@@ -719,10 +719,10 @@ const SeniorFriendlyEditor = ({
 
           {/* Title and progress */}
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl sm:text-2xl font-display font-bold text-foreground">
+            <h1 className="text-xl sm:text-2xl font-display font-bold text-white">
               {t('seniorEditor.createMemory', 'Nouveau souvenir')}
             </h1>
-            <span className="text-sm font-medium text-muted-foreground px-3 py-1 bg-muted rounded-full">
+            <span className="text-sm font-medium text-white/80 px-3 py-1 bg-white/10 rounded-full">
               {t('seniorEditor.stepOf', 'Étape {{current}} sur {{total}}', { 
                 current: currentStep + 1, 
                 total: STEPS.length 
@@ -731,9 +731,9 @@ const SeniorFriendlyEditor = ({
           </div>
 
           {/* Progress bar with gradient */}
-          <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+          <div className="relative h-2 bg-white/20 rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent"
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-gold via-terracotta to-gold-light"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.4, ease: "easeOut" }}
