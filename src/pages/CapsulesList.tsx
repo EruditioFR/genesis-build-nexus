@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Plus, Search, Filter, Clock, Image, Video, Music, FileText, Layers,
-  MoreHorizontal, Edit, Trash2, Share2, Eye, ArrowLeft
+  Plus, Search, Filter, Clock, ArrowLeft,
+  MoreHorizontal, Edit, Trash2, Share2, Eye
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
@@ -13,39 +13,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import { toast } from 'sonner';
-import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
-import VideoPreviewCard from '@/components/capsule/VideoPreviewCard';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
+import { CapsuleVisual, TypeBadge, getTypeIcon, getTypeStyles } from '@/components/capsule/CapsuleCardVisuals';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
+import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -68,6 +55,200 @@ const getDateLocale = (lang: string) => {
   }
 };
 
+// --- Actions dropdown (shared between cards) ---
+
+const CardActions = ({ capsule, onDelete, t, navigate }: {
+  capsule: Capsule;
+  onDelete: (capsule: Capsule) => void;
+  t: (key: string) => string;
+  navigate: (path: string) => void;
+}) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+      <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 hover:bg-black/40 backdrop-blur-sm">
+        <MoreHorizontal className="w-4 h-4 text-white" />
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
+        <Eye className="w-4 h-4" />
+        {t('list.actions.view')}
+      </DropdownMenuItem>
+      <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
+        <Edit className="w-4 h-4" />
+        {t('list.actions.edit')}
+      </DropdownMenuItem>
+      <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
+        <Share2 className="w-4 h-4" />
+        {t('list.actions.share')}
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        className="gap-2 text-destructive"
+        onClick={(e) => { e.stopPropagation(); onDelete(capsule); }}
+      >
+        <Trash2 className="w-4 h-4" />
+        {t('list.actions.delete')}
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
+// --- Status badge ---
+
+const StatusBadge = ({ status, t }: { status: CapsuleStatus; t: (key: string) => string }) => {
+  const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
+    draft: { label: t('status.draft'), color: 'bg-muted text-muted-foreground' },
+    published: { label: t('status.published'), color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
+    scheduled: { label: t('status.scheduled'), color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
+    archived: { label: t('status.archived'), color: 'bg-muted text-muted-foreground' },
+  };
+  const info = statusConfig[status];
+  return <Badge variant="outline" className={info.color}>{info.label}</Badge>;
+};
+
+// --- Featured hero card ---
+
+const FeaturedListCard = ({ capsule, category, t, navigate, onDelete }: {
+  capsule: CapsuleWithMedia;
+  category?: Category;
+  t: (key: string) => string;
+  navigate: (path: string) => void;
+  onDelete: (capsule: Capsule) => void;
+}) => {
+  const metadata = capsule.metadata as { youtube_id?: string } | null;
+  const visualData = {
+    type: capsule.capsule_type,
+    thumbnail: capsule.thumbnail_url || undefined,
+    content: capsule.content || undefined,
+    firstMediaUrl: capsule.firstMediaUrl,
+    firstVideoUrl: capsule.firstVideoUrl,
+    youtubeId: metadata?.youtube_id,
+  };
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative rounded-2xl border-2 border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1 hover:border-foreground/10 cursor-pointer group"
+      onClick={() => navigate(`/capsules/${capsule.id}`)}
+    >
+      <div className="relative aspect-[16/9] sm:aspect-[2.5/1] overflow-hidden">
+        <CapsuleVisual capsule={visualData} />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+        {/* Top bar */}
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <TypeBadge type={capsule.capsule_type} t={t} />
+            <StatusBadge status={capsule.status} t={t} />
+          </div>
+          <CardActions capsule={capsule} onDelete={onDelete} t={t} navigate={navigate} />
+        </div>
+
+        {/* Bottom content */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+          <h3 className="font-bold text-white text-xl sm:text-2xl line-clamp-2 leading-snug mb-2 drop-shadow-lg">
+            {capsule.title}
+          </h3>
+          {capsule.content && capsule.capsule_type === 'text' && (
+            <p className="text-white/80 text-sm sm:text-base line-clamp-2 leading-relaxed mb-3 max-w-lg">
+              {capsule.content.slice(0, 150)}{capsule.content.length > 150 ? '…' : ''}
+            </p>
+          )}
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-1.5 text-white/70">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
+              </span>
+            </div>
+            {category && <CategoryBadge category={category} size="sm" showIcon />}
+            {capsule.tags && capsule.tags.length > 0 && (
+              <div className="flex gap-1">
+                {capsule.tags.slice(0, 2).map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs capitalize bg-white/20 text-white border-0">
+                    {tag}
+                  </Badge>
+                ))}
+                {capsule.tags.length > 2 && (
+                  <Badge variant="secondary" className="text-xs bg-white/20 text-white border-0">+{capsule.tags.length - 2}</Badge>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+};
+
+// --- Compact card ---
+
+const CompactListCard = ({ capsule, category, index, t, navigate, onDelete }: {
+  capsule: CapsuleWithMedia;
+  category?: Category;
+  index: number;
+  t: (key: string) => string;
+  navigate: (path: string) => void;
+  onDelete: (capsule: Capsule) => void;
+}) => {
+  const Icon = getTypeIcon(capsule.capsule_type);
+  const styles = getTypeStyles(capsule.capsule_type);
+  const metadata = capsule.metadata as { youtube_id?: string } | null;
+  const visualData = {
+    type: capsule.capsule_type,
+    thumbnail: capsule.thumbnail_url || undefined,
+    content: capsule.content || undefined,
+    firstMediaUrl: capsule.firstMediaUrl,
+    firstVideoUrl: capsule.firstVideoUrl,
+    youtubeId: metadata?.youtube_id,
+  };
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.1 + index * 0.05 }}
+      className="flex items-center gap-4 p-3 rounded-xl border border-border bg-card hover:shadow-md hover:border-foreground/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer group"
+      onClick={() => navigate(`/capsules/${capsule.id}`)}
+    >
+      {/* Square thumbnail */}
+      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden flex-shrink-0 relative">
+        <CapsuleVisual capsule={visualData} iconSize="sm" />
+        <div className={cn("absolute bottom-1 right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-sm", styles.bg)}>
+          <Icon className="w-3 h-3 text-white" />
+        </div>
+      </div>
+
+      {/* Text content */}
+      <div className="flex-1 min-w-0 py-1">
+        <h4 className="font-semibold text-foreground text-[15px] sm:text-base line-clamp-2 leading-snug group-hover:text-primary transition-colors mb-1.5">
+          {capsule.title}
+        </h4>
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          <div className="flex items-center gap-1.5 text-muted-foreground">
+            <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-medium">
+              {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
+            </span>
+          </div>
+          <StatusBadge status={capsule.status} t={t} />
+        </div>
+        {category && <CategoryBadge category={category} size="sm" showIcon />}
+      </div>
+
+      {/* Actions */}
+      <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+        <CardActions capsule={capsule} onDelete={onDelete} t={t} navigate={navigate} />
+      </div>
+    </motion.article>
+  );
+};
+
+// --- Main component ---
+
 const CapsulesList = () => {
   const { t, i18n } = useTranslation('capsules');
   const { user, loading, signOut } = useAuth();
@@ -88,21 +269,6 @@ const CapsulesList = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [capsuleToDelete, setCapsuleToDelete] = useState<Capsule | null>(null);
 
-  const typeConfig: Record<CapsuleType, { icon: typeof FileText; label: string; color: string }> = {
-    text: { icon: FileText, label: t('types.text'), color: 'bg-primary/10 text-primary' },
-    photo: { icon: Image, label: t('types.photo'), color: 'bg-secondary/10 text-secondary' },
-    video: { icon: Video, label: t('types.video'), color: 'bg-accent/10 text-accent' },
-    audio: { icon: Music, label: t('types.audio'), color: 'bg-navy-light/10 text-navy-light' },
-    mixed: { icon: Layers, label: t('types.mixed'), color: 'bg-terracotta/10 text-terracotta' },
-  };
-
-  const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
-    draft: { label: t('status.draft'), color: 'bg-muted text-muted-foreground' },
-    published: { label: t('status.published'), color: 'bg-green-100 text-green-700' },
-    scheduled: { label: t('status.scheduled'), color: 'bg-blue-100 text-blue-700' },
-    archived: { label: t('status.archived'), color: 'bg-gray-100 text-gray-600' },
-  };
-
   useEffect(() => {
     if (!loading && !user) {
       navigate('/login');
@@ -113,7 +279,6 @@ const CapsulesList = () => {
     const fetchData = async () => {
       if (!user) return;
 
-      // Fetch profile
       const { data: profileData } = await supabase
         .from('profiles')
         .select('display_name, avatar_url')
@@ -122,7 +287,6 @@ const CapsulesList = () => {
       
       if (profileData) setProfile(profileData);
 
-      // Fetch capsules
       const { data: capsulesData, error } = await supabase
         .from('capsules')
         .select('*')
@@ -132,14 +296,12 @@ const CapsulesList = () => {
       if (!error && capsulesData) {
         const capsuleIds = capsulesData.map(c => c.id);
         
-        // Fetch first media for each capsule (for photo display)
         const { data: mediasData } = await supabase
           .from('capsule_medias')
           .select('capsule_id, file_url, file_type')
           .in('capsule_id', capsuleIds)
           .order('position', { ascending: true });
 
-        // Build map of first image and first video per capsule
         const firstImageMap: Record<string, string> = {};
         const firstVideoMap: Record<string, string> = {};
         if (mediasData) {
@@ -153,7 +315,6 @@ const CapsulesList = () => {
           });
         }
 
-        // Merge first media URLs into capsules
         const capsulesWithMedia: CapsuleWithMedia[] = capsulesData.map(capsule => ({
           ...capsule,
           firstMediaUrl: firstImageMap[capsule.id],
@@ -161,24 +322,17 @@ const CapsulesList = () => {
         }));
         setCapsules(capsulesWithMedia);
         
-        // Fetch categories for all capsules
         if (capsulesData.length > 0) {
           const { data: categoriesData } = await supabase
             .from('capsule_categories')
-            .select(`
-              capsule_id,
-              is_primary,
-              category:categories(*)
-            `)
+            .select(`capsule_id, is_primary, category:categories(*)`)
             .in('capsule_id', capsuleIds)
             .eq('is_primary', true);
 
           if (categoriesData) {
             const categoryMap: Record<string, Category> = {};
             (categoriesData as any[]).forEach((item) => {
-              if (item.category) {
-                categoryMap[item.capsule_id] = item.category;
-              }
+              if (item.category) categoryMap[item.capsule_id] = item.category;
             });
             setCapsuleCategories(categoryMap);
           }
@@ -197,21 +351,20 @@ const CapsulesList = () => {
 
   const handleDelete = async () => {
     if (!capsuleToDelete) return;
-
-    const { error } = await supabase
-      .from('capsules')
-      .delete()
-      .eq('id', capsuleToDelete.id);
-
+    const { error } = await supabase.from('capsules').delete().eq('id', capsuleToDelete.id);
     if (error) {
       toast.error(t('detail.deleteError'));
     } else {
       setCapsules(prev => prev.filter(c => c.id !== capsuleToDelete.id));
       toast.success(t('detail.deleteSuccess'));
     }
-    
     setDeleteDialogOpen(false);
     setCapsuleToDelete(null);
+  };
+
+  const openDeleteDialog = (capsule: Capsule) => {
+    setCapsuleToDelete(capsule);
+    setDeleteDialogOpen(true);
   };
 
   // Filter capsules
@@ -220,12 +373,10 @@ const CapsulesList = () => {
       capsule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       capsule.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       capsule.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
     const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
     const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
     const matchesCategory = categoryFilter === 'all' || 
       (capsuleCategories[capsule.id]?.id === categoryFilter);
-    
     return matchesSearch && matchesType && matchesStatus && matchesCategory;
   });
 
@@ -242,6 +393,9 @@ const CapsulesList = () => {
 
   if (!user) return null;
 
+  const featured = filteredCapsules[0];
+  const rest = filteredCapsules.slice(1);
+
   return (
     <>
       <NoIndex />
@@ -254,13 +408,13 @@ const CapsulesList = () => {
         }}
         onSignOut={handleSignOut}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="mb-8"
+          className="mb-6"
         >
           <Button
             variant="ghost"
@@ -314,7 +468,7 @@ const CapsulesList = () => {
               />
             </div>
             
-            <div className="flex gap-3">
+            <div className="flex gap-3 overflow-x-auto">
               <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as CapsuleType | 'all')}>
                 <SelectTrigger className="w-[140px]">
                   <Filter className="w-4 h-4 mr-2" />
@@ -363,25 +517,23 @@ const CapsulesList = () => {
           </div>
         </motion.div>
 
-        {/* Capsules Grid */}
+        {/* Capsules - Featured + Grid */}
         {filteredCapsules.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="text-center py-16"
+            className="text-center py-16 px-6 rounded-2xl border-2 border-dashed border-border bg-muted/20"
           >
-            <div className="w-20 h-20 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
-              <Clock className="w-10 h-10 text-muted-foreground" />
+            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-5">
+              <Clock className="w-10 h-10 text-muted-foreground/50" />
             </div>
             {capsules.length === 0 ? (
               <>
                 <h2 className="text-xl font-display font-semibold text-foreground mb-2">
                   {t('list.empty')}
                 </h2>
-                <p className="text-muted-foreground mb-6">
-                  {t('list.emptySubtitle')}
-                </p>
+                <p className="text-muted-foreground mb-6">{t('list.emptySubtitle')}</p>
                 <Button asChild className="gap-2">
                   <Link to="/capsules/new">
                     <Plus className="w-4 h-4" />
@@ -394,127 +546,37 @@ const CapsulesList = () => {
                 <h2 className="text-xl font-display font-semibold text-foreground mb-2">
                   {t('list.noResults')}
                 </h2>
-                <p className="text-muted-foreground">
-                  {t('list.noResultsSubtitle')}
-                </p>
+                <p className="text-muted-foreground">{t('list.noResultsSubtitle')}</p>
               </>
             )}
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredCapsules.map((capsule, index) => {
-              const typeInfo = typeConfig[capsule.capsule_type];
-              const statusInfo = statusConfig[capsule.status];
-              const Icon = typeInfo.icon;
+          <div className="space-y-4">
+            {/* Featured hero card */}
+            <FeaturedListCard
+              capsule={featured}
+              category={capsuleCategories[featured.id]}
+              t={t}
+              navigate={(path) => navigate(path)}
+              onDelete={openDeleteDialog}
+            />
 
-              return (
-                <motion.div
-                  key={capsule.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                  className="group rounded-2xl border border-border bg-card hover:shadow-card transition-all duration-300 cursor-pointer overflow-hidden"
-                  onClick={() => navigate(`/capsules/${capsule.id}`)}
-                >
-                  {/* Thumbnail - Display video preview for video type, or image for others */}
-                  {capsule.capsule_type === 'video' && capsule.firstVideoUrl ? (
-                    <VideoPreviewCard
-                      videoUrl={capsule.firstVideoUrl}
-                      thumbnailUrl={capsule.thumbnail_url || capsule.firstMediaUrl}
-                      className="w-full h-48 bg-muted"
-                    />
-                  ) : (capsule.thumbnail_url || capsule.firstMediaUrl) ? (
-                    <CapsuleThumbnail
-                      thumbnailUrl={capsule.thumbnail_url || capsule.firstMediaUrl || ''}
-                      fallbackIcon={null}
-                      className="w-full h-48 bg-muted"
-                    />
-                  ) : null}
-                  
-                  <div className="p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`w-10 h-10 rounded-xl ${typeInfo.color} flex items-center justify-center`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <MoreHorizontal className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}`); }}>
-                            <Eye className="w-4 h-4" />
-                            {t('list.actions.view')}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2" onClick={(e) => { e.stopPropagation(); navigate(`/capsules/${capsule.id}/edit`); }}>
-                            <Edit className="w-4 h-4" />
-                            {t('list.actions.edit')}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2" onClick={(e) => e.stopPropagation()}>
-                            <Share2 className="w-4 h-4" />
-                            {t('list.actions.share')}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem 
-                            className="gap-2 text-destructive"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCapsuleToDelete(capsule);
-                              setDeleteDialogOpen(true);
-                            }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            {t('list.actions.delete')}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-
-                    <h3 className="text-lg font-display font-semibold text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-                      {capsule.title}
-                    </h3>
-                    
-                    {capsule.description && (
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                        {capsule.description}
-                      </p>
-                    )}
-
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="outline" className={statusInfo.color}>
-                        {statusInfo.label}
-                      </Badge>
-                      {capsuleCategories[capsule.id] && (
-                        <CategoryBadge 
-                          category={capsuleCategories[capsule.id]} 
-                          size="sm"
-                        />
-                      )}
-                      <span className="text-xs text-muted-foreground">
-                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale(i18n.language) })}
-                      </span>
-                    </div>
-
-                    {capsule.tags && capsule.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {capsule.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                            {tag}
-                          </Badge>
-                        ))}
-                        {capsule.tags.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{capsule.tags.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
+            {/* Grid of remaining capsules */}
+            {rest.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {rest.map((capsule, index) => (
+                  <CompactListCard
+                    key={capsule.id}
+                    capsule={capsule}
+                    category={capsuleCategories[capsule.id]}
+                    index={index}
+                    t={t}
+                    navigate={(path) => navigate(path)}
+                    onDelete={openDeleteDialog}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -523,9 +585,7 @@ const CapsulesList = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t('delete.description')}
-              </AlertDialogDescription>
+              <AlertDialogDescription>{t('delete.description')}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
