@@ -26,6 +26,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.familygarden.fr/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.familygarden.fr/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>

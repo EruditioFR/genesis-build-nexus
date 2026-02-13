@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const PrivacyPolicy = () => {
   const { t, i18n } = useTranslation('legal');
@@ -33,6 +35,14 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Politique de confidentialité | Family Garden"
+        description="Découvrez comment Family Garden protège vos données personnelles. Chiffrement AES-256, hébergement européen RGPD, contrôle total de vos souvenirs."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Accueil", url: "/" },
+          { name: "Confidentialité", url: "/privacy" },
+        ])}
+      />
       <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">

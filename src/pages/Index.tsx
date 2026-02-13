@@ -4,6 +4,8 @@ import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import SEOHead from "@/components/seo/SEOHead";
+import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 
 // Lazy load below-the-fold components to improve LCP
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
@@ -41,6 +43,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Family Garden — Journal de famille privé et sécurisé"
+        description="Créez votre journal de famille privé : rassemblez photos, vidéos, audio et textes, organisez-les simplement et partagez-les en cercles avec vos proches. Hébergement européen RGPD."
+        jsonLd={[websiteSchema, howToSchema]}
+      />
       {/* JSON-LD Structured Data for GEO optimization */}
       <JsonLdSchema type="all" />
       <Header />

@@ -1,9 +1,10 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { 
   Heart, 
   Shield, 
@@ -16,48 +17,15 @@ import {
 } from "lucide-react";
 
 const About = () => {
-  useEffect(() => {
-    // Update page title and meta for SEO
-    document.title = "À propos de FamilyGarden | Le journal de famille privé";
-    
-    // Add meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 
-        'Découvrez FamilyGarden : un journal de famille privé pour rassembler photos, vidéos, audios et textes, les organiser simplement et les partager en cercles avec vos proches.'
-      );
-    }
-
-    // Add AboutPage JSON-LD schema
-    const aboutSchema = {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      "@id": "https://www.familygarden.fr/about#aboutpage",
-      "name": "À propos de Family Garden",
-      "description": "Découvrez l'histoire, la mission et les valeurs de Family Garden, plateforme française dédiée à la préservation des souvenirs familiaux.",
-      "mainEntity": {
-        "@type": "Organization",
-        "@id": "https://www.familygarden.fr/#organization"
-      },
-      "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://www.familygarden.fr/#website"
-      }
-    };
-
-    const script = document.createElement('script');
-    script.id = 'about-jsonld';
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(aboutSchema);
-    document.head.appendChild(script);
-
-    return () => {
-      const existingScript = document.getElementById('about-jsonld');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
-      }
-    };
-  }, []);
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": "https://www.familygarden.fr/about#aboutpage",
+    "name": "À propos de Family Garden",
+    "description": "Découvrez l'histoire, la mission et les valeurs de Family Garden, plateforme française dédiée à la préservation des souvenirs familiaux.",
+    "mainEntity": { "@id": "https://www.familygarden.fr/#organization" },
+    "isPartOf": { "@id": "https://www.familygarden.fr/#website" },
+  };
 
   const values = [
     {
@@ -103,6 +71,17 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="À propos de Family Garden | Le journal de famille privé"
+        description="Découvrez FamilyGarden : un journal de famille privé pour rassembler photos, vidéos, audios et textes, les organiser simplement et les partager en cercles avec vos proches."
+        jsonLd={[
+          aboutSchema,
+          createBreadcrumbSchema([
+            { name: "Accueil", url: "/" },
+            { name: "À propos", url: "/about" },
+          ]),
+        ]}
+      />
       <Header forceSolid />
       
       {/* Hero Section */}

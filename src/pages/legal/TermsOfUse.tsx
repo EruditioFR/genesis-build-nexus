@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const TermsOfUse = () => {
   const { t, i18n } = useTranslation('legal');
@@ -26,6 +28,14 @@ const TermsOfUse = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Conditions Générales d'Utilisation | Family Garden"
+        description="Consultez les conditions générales d'utilisation de Family Garden : inscription, utilisation du service, propriété intellectuelle et responsabilités."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Accueil", url: "/" },
+          { name: "CGU", url: "/terms" },
+        ])}
+      />
       <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">

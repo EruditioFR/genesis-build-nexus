@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { lovable } from '@/integrations/lovable';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
+import SEOHead from '@/components/seo/SEOHead';
+
 const Login = () => {
   const {
     t
@@ -84,6 +86,10 @@ const Login = () => {
     descriptionKey: "login.tutorial.discover.description"
   }];
   return <div className="min-h-screen flex flex-col lg:flex-row">
+      <SEOHead
+        title="Connexion | Family Garden"
+        description="Connectez-vous à votre espace Family Garden pour retrouver et partager vos souvenirs de famille."
+      />
       {/* Mobile Header - Dark background */}
       <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">

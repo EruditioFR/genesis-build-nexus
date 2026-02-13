@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo.png";
 
@@ -11,26 +11,18 @@ const Footer = () => {
     product: [
       { labelKey: "footer.links.features", href: "#features" },
       { labelKey: "footer.links.pricing", href: "#pricing" },
-      { labelKey: "footer.links.roadmap", href: "#" },
-      { labelKey: "footer.links.changelog", href: "#" },
     ],
     company: [
       { labelKey: "footer.links.about", href: "/about", isRoute: true },
-      { labelKey: "footer.links.blog", href: "#" },
-      { labelKey: "footer.links.careers", href: "#" },
-      { labelKey: "footer.links.partners", href: "#" },
     ],
     resources: [
       { labelKey: "footer.links.helpCenter", href: "/faq", isRoute: true },
       { labelKey: "footer.links.faq", href: "/faq", isRoute: true },
-      { labelKey: "footer.links.guides", href: "#" },
-      { labelKey: "footer.links.community", href: "#" },
     ],
     legal: [
       { labelKey: "footer.links.privacy", href: "/privacy", isRoute: true },
       { labelKey: "footer.links.terms", href: "/cgv", isRoute: true },
       { labelKey: "footer.links.legalNotice", href: "/mentions-legales", isRoute: true },
-      { labelKey: "footer.links.gdpr", href: "/privacy", isRoute: true },
     ],
   };
 
@@ -48,12 +40,12 @@ const Footer = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-8 sm:gap-12">
           {/* Brand Column */}
           <div className="col-span-2 lg:col-span-2">
-            <a href="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
               <img src={logo} alt="Family Garden" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               <span className="text-lg sm:text-xl font-display font-semibold">
                 Family<span className="text-secondary">Garden</span>
               </span>
-            </a>
+            </Link>
             <p className="text-sm sm:text-base text-primary-foreground/70 leading-relaxed mb-4 sm:mb-6 max-w-xs">
               {t('footer.description')}
             </p>

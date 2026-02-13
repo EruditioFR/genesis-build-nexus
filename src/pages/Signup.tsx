@@ -14,6 +14,8 @@ import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
 import { CountrySelector } from '@/components/signup/CountrySelector';
 import { CitySelector } from '@/components/signup/CitySelector';
+import SEOHead from '@/components/seo/SEOHead';
+
 const Signup = () => {
   const {
     t
@@ -197,6 +199,10 @@ const Signup = () => {
     descriptionKey: "signup.tutorial.ai.description"
   }];
   return <div className="min-h-screen flex flex-col lg:flex-row">
+      <SEOHead
+        title="Inscription gratuite | Family Garden"
+        description="Créez votre compte Family Garden gratuitement et commencez à préserver vos souvenirs de famille en toute sécurité."
+      />
       {/* Mobile Header - Dark background */}
       <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
