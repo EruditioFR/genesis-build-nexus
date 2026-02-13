@@ -14,22 +14,28 @@ import heroPlaylist from "@/assets/hero-slides/playlist.jpeg";
 // Each slide has a custom mobile object-position to focus on the relevant subject
 const heroSlides = [{
   src: heroBackground,
-  mobilePosition: "center 30%"
+  mobilePosition: "center 30%",
+  alt: "Famille réunie autour de souvenirs partagés sur Family Garden"
 }, {
   src: heroMariage,
-  mobilePosition: "center 25%"
+  mobilePosition: "center 25%",
+  alt: "Souvenir de mariage préservé dans une capsule mémorielle Family Garden"
 }, {
   src: heroAnniversaire,
-  mobilePosition: "center 35%"
+  mobilePosition: "center 35%",
+  alt: "Anniversaire en famille immortalisé sur Family Garden"
 }, {
   src: heroVoyages,
-  mobilePosition: "center 40%"
+  mobilePosition: "center 40%",
+  alt: "Souvenirs de voyages en famille préservés sur Family Garden"
 }, {
   src: heroEtudes,
-  mobilePosition: "center 30%"
+  mobilePosition: "center 30%",
+  alt: "Moments d'études et de vie scolaire capturés sur Family Garden"
 }, {
   src: heroPlaylist,
-  mobilePosition: "center 20%"
+  mobilePosition: "center 20%",
+  alt: "Playlist musicale familiale partagée via Family Garden"
 }];
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -89,7 +95,7 @@ const HeroSection = () => {
       scale: backgroundScale
     }}>
         <AnimatePresence mode="wait">
-          <motion.img key={currentSlide} src={heroSlides[currentSlide].src} alt={t('hero.badge')} className="absolute inset-0 w-full h-full object-cover" style={{
+          <motion.img key={currentSlide} src={heroSlides[currentSlide].src} alt={heroSlides[currentSlide].alt} className="absolute inset-0 w-full h-full object-cover" style={{
           objectPosition: isMobile ? heroSlides[currentSlide].mobilePosition : "center center"
         }} initial={{
           opacity: 0,

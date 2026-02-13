@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const LegalNotice = () => {
   const { t } = useTranslation('legal');
@@ -43,6 +45,14 @@ const LegalNotice = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Mentions légales | Family Garden"
+        description="Mentions légales de Family Garden : éditeur, hébergement, sous-traitants, protection des données et informations de contact."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Accueil", url: "/" },
+          { name: "Mentions légales", url: "/mentions-legales" },
+        ])}
+      />
       <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">

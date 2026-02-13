@@ -8,6 +8,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { toast } from 'sonner';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import SEOHead from '@/components/seo/SEOHead';
+import { createBreadcrumbSchema } from '@/lib/seoSchemas';
 
 const Premium = () => {
   const { user } = useAuth();
@@ -62,6 +64,14 @@ const Premium = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
+      <SEOHead
+        title="Tarifs et abonnements | Family Garden"
+        description="Découvrez les forfaits Family Garden : Gratuit, Premium (9,99€/mois) et Héritage (19,99€/mois). Préservez vos souvenirs sans limite."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Accueil", url: "/" },
+          { name: "Tarifs", url: "/premium" },
+        ])}
+      />
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

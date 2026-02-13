@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/accordion";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createFaqSchema, createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const FAQ = () => {
   const faqCategories = [
@@ -159,8 +161,24 @@ const FAQ = () => {
     }
   ];
 
+  // Build FAQ items for JSON-LD
+  const allFaqItems = faqCategories.flatMap((cat) =>
+    cat.questions.map((q) => ({ question: q.question, answer: q.answer }))
+  );
+
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="FAQ — Questions fréquentes | Family Garden"
+        description="Trouvez rapidement des réponses à vos questions sur Family Garden : sécurité, partage familial, abonnements, gardiens, export et sauvegarde."
+        jsonLd={[
+          createFaqSchema(allFaqItems),
+          createBreadcrumbSchema([
+            { name: "Accueil", url: "/" },
+            { name: "FAQ", url: "/faq" },
+          ]),
+        ]}
+      />
       <Header />
       
       <main className="pt-20">
