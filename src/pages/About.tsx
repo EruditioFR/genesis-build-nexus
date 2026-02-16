@@ -84,6 +84,7 @@ const About = () => {
       />
       <Header forceSolid />
       
+      <main>
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-primary/10 via-gold/5 to-terracotta/5 relative overflow-hidden">
         {/* Decorative elements */}
@@ -319,6 +320,7 @@ const About = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );
