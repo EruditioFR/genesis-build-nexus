@@ -15,7 +15,7 @@ import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
 import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
-import GuidedMemoryPrompts from '@/components/dashboard/GuidedMemoryPrompts';
+import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import NoIndex from '@/components/seo/NoIndex';
@@ -362,7 +362,7 @@ const Dashboard = () => {
           {/* Left Column - 2/3 width */}
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
             <RecentCapsules capsules={recentCapsules} />
-            <GuidedMemoryPrompts />
+            <DashboardInspirationWidget />
             <StorageProgress
               usedMb={profile?.storage_used_mb || 0}
               limitMb={profile?.storage_limit_mb || 500}
