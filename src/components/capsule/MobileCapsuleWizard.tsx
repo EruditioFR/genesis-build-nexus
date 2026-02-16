@@ -4,7 +4,6 @@ import {
   ArrowLeft, 
   ArrowRight, 
   Check, 
-  Sparkles, 
   Type, 
   Image, 
   Video, 
@@ -14,7 +13,6 @@ import {
   Calendar,
   Send,
   Save,
-  FileText
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
@@ -23,7 +21,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
 import TagInput from '@/components/capsule/TagInput';
@@ -42,14 +39,12 @@ type CapsuleType = Database['public']['Enums']['capsule_type'];
 
 interface MobileCapsuleWizardProps {
   userId: string;
-  // Form values
   title: string;
   onTitleChange: (value: string) => void;
   description: string;
   onDescriptionChange: (value: string) => void;
   content: string;
   onContentChange: (value: string) => void;
-  // Categories
   categories: Category[];
   subCategories: SubCategory[];
   primaryCategory: string | null;
@@ -57,27 +52,20 @@ interface MobileCapsuleWizardProps {
   selectedSubCategories: string[];
   onSubCategoriesChange: (ids: string[]) => void;
   onCreateCustomCategory: (name: string, desc: string, icon: string, color: string) => Promise<Category>;
-  // Media
   mediaFiles: MediaFile[];
   onMediaFilesChange: (files: MediaFile[]) => void;
-  // Tags
   tags: string[];
   onTagsChange: (tags: string[]) => void;
-  // Memory date
   memoryDate: MemoryDateValue | null;
   onMemoryDateChange: (date: MemoryDateValue | null) => void;
-  // Actions
   isSaving: boolean;
   onSaveDraft: () => void;
   onPublish: () => void;
   onBack: () => void;
-  // Upload function ref
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
 }
 
-// New simplified steps: info, content, details, review
-const STEP_KEYS = ['info', 'content', 'details', 'review'] as const;
-const STEP_ICONS = [Type, FileText, Tag, Check];
+const STEP_COUNT = 4;
 
 const MobileCapsuleWizard = ({
   userId,
@@ -111,55 +99,25 @@ const MobileCapsuleWizard = ({
   const [mediaError, setMediaError] = useState(false);
 
   const getLocale = useMemo((): Locale => {
-    const localeMap: Record<string, Locale> = {
-      fr,
-      en: enUS,
-      es,
-      ko,
-      zh: zhCN,
-    };
+    const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
     return localeMap[i18n.language] || fr;
   }, [i18n.language]);
 
-  // Build steps with translated labels
-  const STEPS = STEP_KEYS.map((key, index) => ({
-    id: key,
-    label: t(`wizard.steps.${key}`, key),
-    icon: STEP_ICONS[index],
-  }));
-
-  const progress = ((currentStep + 1) / STEPS.length) * 100;
-
-  // Calculate capsule type from content
+  const progress = ((currentStep + 1) / STEP_COUNT) * 100;
   const calculatedCapsuleType = determineContentType(content, mediaFiles);
 
   const canGoNext = () => {
-    switch (currentStep) {
-      case 0: // Info
-        return title.trim().length > 0;
-      case 1: // Content (media + text)
-        return true; // Allow empty content
-      case 2: // Details
-        return true;
-      case 3: // Review
-        return true;
-      default:
-        return true;
-    }
+    if (currentStep === 0) return title.trim().length > 0;
+    return true;
   };
 
   const goNext = () => {
-    if (currentStep < STEPS.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
+    if (currentStep < STEP_COUNT - 1) setCurrentStep(currentStep + 1);
   };
 
   const goBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    } else {
-      onBack();
-    }
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+    else onBack();
   };
 
   const getTypeIcon = (type: CapsuleType) => {
@@ -174,69 +132,74 @@ const MobileCapsuleWizard = ({
 
   const getTypeLabel = (type: CapsuleType) => t(`types.${type}`);
 
+  // Inline continue button rendered after each step's content (except review)
+  const renderContinueButton = () => (
+    <Button
+      size="lg"
+      className={cn(
+        "w-full h-14 text-lg gap-2 mt-6",
+        canGoNext()
+          ? "bg-secondary hover:bg-secondary/90 text-white shadow-md"
+          : "bg-muted text-muted-foreground"
+      )}
+      onClick={goNext}
+      disabled={!canGoNext()}
+    >
+      {t('wizard.continue')}
+      <ArrowRight className="w-5 h-5" />
+    </Button>
+  );
+
   const renderStepContent = () => {
     switch (currentStep) {
-      case 0: // Basic info
+      case 0:
         return (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-5 shadow-gold">
-                <Sparkles className="w-10 h-10 text-primary-foreground" />
-              </div>
-              <h2 className="text-3xl font-display font-bold text-foreground mb-3">
-                {t('wizard.infoTitle')}
-              </h2>
-              <p className="text-lg text-muted-foreground px-4">
-                {t('wizard.infoSubtitle')}
+          <div className="space-y-4">
+            <h2 className="text-xl font-display font-bold text-foreground">
+              {t('wizard.infoTitle')}
+            </h2>
+
+            <div>
+              <Label className="text-base font-semibold mb-2 block">
+                {t('wizard.titleLabel')}
+              </Label>
+              <Input
+                placeholder={t('wizard.titlePlaceholder')}
+                className="h-14 text-lg px-4 border-2 focus:border-secondary"
+                value={title}
+                onChange={(e) => onTitleChange(e.target.value)}
+                autoFocus
+              />
+              <p className="text-sm text-muted-foreground mt-1.5">
+                {t('seniorEditor.titleHelp', 'Un titre court et mémorable')}
               </p>
             </div>
 
-            <div className="space-y-6">
-              <div>
-                <Label className="text-xl font-semibold mb-4 block">
-                  {t('wizard.titleLabel')}
-                </Label>
-                <Input
-                  placeholder={t('wizard.titlePlaceholder')}
-                  className="h-16 text-xl px-5 border-2 focus:border-secondary"
-                  value={title}
-                  onChange={(e) => onTitleChange(e.target.value)}
-                  autoFocus
-                />
-                <p className="text-sm text-muted-foreground mt-2 px-1">
-                  {t('seniorEditor.titleHelp', 'Un titre court et mémorable')}
-                </p>
-              </div>
-
-              <div>
-                <Label className="text-xl font-semibold mb-4 block">
-                  {t('wizard.descriptionLabel')}
-                </Label>
-                <Textarea
-                  placeholder={t('wizard.descriptionPlaceholder')}
-                  className="min-h-[140px] text-lg px-5 py-4 border-2 focus:border-secondary"
-                  value={description}
-                  onChange={(e) => onDescriptionChange(e.target.value)}
-                />
-              </div>
+            <div>
+              <Label className="text-base font-semibold mb-2 block">
+                {t('wizard.descriptionLabel')}
+              </Label>
+              <Textarea
+                placeholder={t('wizard.descriptionPlaceholder')}
+                className="min-h-[120px] text-base px-4 py-3 border-2 focus:border-secondary"
+                value={description}
+                onChange={(e) => onDescriptionChange(e.target.value)}
+              />
             </div>
+
+            {renderContinueButton()}
           </div>
         );
 
-      case 1: // Content (unified media + text)
+      case 1:
         return (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                {t('wizard.contentTitle', 'Contenus')}
-              </h2>
-              <p className="text-muted-foreground">
-                {t('wizard.contentSubtitle', 'Ajoutez du texte, des photos, vidéos ou audio')}
-              </p>
-            </div>
+          <div className="space-y-4">
+            <h2 className="text-xl font-display font-bold text-foreground">
+              {t('wizard.contentTitle', 'Contenus')}
+            </h2>
 
             {mediaError && (
-              <p className="text-sm text-destructive text-center mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
+              <p className="text-sm text-destructive text-center p-3 rounded-lg bg-destructive/10 border border-destructive/30">
                 {t('wizard.mediaError')}
               </p>
             )}
@@ -255,24 +218,20 @@ const MobileCapsuleWizard = ({
               onUploadAll={onUploadAllRef}
               hasError={mediaError}
             />
+
+            {renderContinueButton()}
           </div>
         );
 
-      case 2: // Details (category, tags, date)
+      case 2:
         return (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                {t('wizard.detailsTitle')}
-              </h2>
-              <p className="text-muted-foreground">
-                {t('wizard.detailsSubtitle')}
-              </p>
-            </div>
+          <div className="space-y-4">
+            <h2 className="text-xl font-display font-bold text-foreground">
+              {t('wizard.detailsTitle')}
+            </h2>
 
-            {/* Category */}
-            <div className="p-4 rounded-2xl border border-border bg-card">
-              <Label className="text-lg font-semibold mb-4 block">
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <Label className="text-base font-semibold mb-3 block">
                 {t('wizard.categoryLabel')}
               </Label>
               <CategorySelector
@@ -286,121 +245,100 @@ const MobileCapsuleWizard = ({
               />
             </div>
 
-            {/* Memory date */}
-            <div className="p-4 rounded-2xl border border-border bg-card">
-              <Label className="text-lg font-semibold mb-3 block">
-                <Calendar className="w-5 h-5 inline-block mr-2" />
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <Label className="text-base font-semibold mb-2 block">
+                <Calendar className="w-4 h-4 inline-block mr-1.5" />
                 {t('wizard.memoryDateLabel')}
               </Label>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground mb-3">
                 {t('wizard.memoryDateHelp')}
               </p>
-              <MemoryDateSelector
-                value={memoryDate}
-                onChange={onMemoryDateChange}
-              />
+              <MemoryDateSelector value={memoryDate} onChange={onMemoryDateChange} />
             </div>
 
-            {/* Tags */}
-            <div className="p-4 rounded-2xl border border-border bg-card">
-              <Label className="text-lg font-semibold mb-4 block">
-                <Tag className="w-5 h-5 inline-block mr-2" />
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <Label className="text-base font-semibold mb-3 block">
+                <Tag className="w-4 h-4 inline-block mr-1.5" />
                 {t('wizard.tagsLabel')}
               </Label>
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
+
+            {renderContinueButton()}
           </div>
         );
 
-      case 3: // Review
+      case 3: {
         const TypeIcon = getTypeIcon(calculatedCapsuleType);
         const selectedCategory = categories.find(c => c.id === primaryCategory);
-        
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-4 shadow-gold">
-                <Check className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-                {t('wizard.reviewTitle')}
-              </h2>
-              <p className="text-muted-foreground">
-                {t('wizard.reviewSubtitle')}
-              </p>
-            </div>
 
-            {/* Summary card */}
-            <div className="p-5 rounded-2xl border border-border bg-card space-y-4">
-              {/* Title */}
+        return (
+          <div className="space-y-4">
+            <h2 className="text-xl font-display font-bold text-foreground text-center">
+              {t('wizard.reviewTitle')}
+            </h2>
+
+            <div className="p-4 rounded-xl border border-border bg-card space-y-3">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">{t('wizard.summaryTitle')}</p>
+                <p className="text-sm text-muted-foreground mb-0.5">{t('wizard.summaryTitle')}</p>
                 <p className="text-lg font-semibold text-foreground">{title || t('wizard.noTitle')}</p>
               </div>
 
-              {/* Type (auto-determined) */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center">
-                  <TypeIcon className="w-5 h-5 text-secondary" />
+                <div className="w-9 h-9 rounded-lg bg-secondary/20 flex items-center justify-center">
+                  <TypeIcon className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">{t('wizard.summaryType')}</p>
-                  <p className="font-medium">{getTypeLabel(calculatedCapsuleType)}</p>
+                  <p className="text-xs text-muted-foreground">{t('wizard.summaryType')}</p>
+                  <p className="text-sm font-medium">{getTypeLabel(calculatedCapsuleType)}</p>
                 </div>
               </div>
 
-              {/* Category */}
               {selectedCategory && (
                 <div className="flex items-center gap-3">
-                  <div 
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: `${selectedCategory.color}20` }}
                   >
-                    <span className="text-lg">{selectedCategory.icon}</span>
+                    <span className="text-base">{selectedCategory.icon}</span>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{t('wizard.summaryCategory')}</p>
-                    <p className="font-medium">{selectedCategory.name_fr}</p>
+                    <p className="text-xs text-muted-foreground">{t('wizard.summaryCategory')}</p>
+                    <p className="text-sm font-medium">{selectedCategory.name_fr}</p>
                   </div>
                 </div>
               )}
 
-              {/* Media count */}
               {mediaFiles.length > 0 && (
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-                    <Image className="w-5 h-5 text-accent" />
+                  <div className="w-9 h-9 rounded-lg bg-accent/20 flex items-center justify-center">
+                    <Image className="w-4 h-4 text-accent" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{t('wizard.summaryFiles')}</p>
-                    <p className="font-medium">{t('wizard.fileCount', { count: mediaFiles.length })}</p>
+                    <p className="text-xs text-muted-foreground">{t('wizard.summaryFiles')}</p>
+                    <p className="text-sm font-medium">{t('wizard.fileCount', { count: mediaFiles.length })}</p>
                   </div>
                 </div>
               )}
 
-              {/* Memory date */}
               {memoryDate && (
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-primary" />
+                  <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center">
+                    <Calendar className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{t('wizard.summaryDate')}</p>
-                    <p className="font-medium">{formatMemoryDate(memoryDate, t, getLocale)}</p>
+                    <p className="text-xs text-muted-foreground">{t('wizard.summaryDate')}</p>
+                    <p className="text-sm font-medium">{formatMemoryDate(memoryDate, t, getLocale)}</p>
                   </div>
                 </div>
               )}
 
-              {/* Tags */}
               {tags.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">{t('wizard.summaryTags')}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-xs text-muted-foreground mb-1.5">{t('wizard.summaryTags')}</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {tags.map((tag) => (
-                      <span 
-                        key={tag}
-                        className="px-3 py-1 rounded-full bg-muted text-sm font-medium"
-                      >
+                      <span key={tag} className="px-2.5 py-0.5 rounded-full bg-muted text-xs font-medium">
                         #{tag}
                       </span>
                     ))}
@@ -409,15 +347,14 @@ const MobileCapsuleWizard = ({
               )}
             </div>
 
-            {/* Action buttons */}
-            <div className="space-y-3 pt-4">
+            <div className="space-y-2.5 pt-2">
               <Button
                 size="mobileLg"
                 className="w-full gap-3 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
                 onClick={onPublish}
                 disabled={isSaving}
               >
-                <Send className="w-6 h-6" />
+                <Send className="w-5 h-5" />
                 {t('wizard.publish')}
               </Button>
               <Button
@@ -433,6 +370,7 @@ const MobileCapsuleWizard = ({
             </div>
           </div>
         );
+      }
 
       default:
         return null;
@@ -441,96 +379,62 @@ const MobileCapsuleWizard = ({
 
   return (
     <div className="min-h-screen bg-gradient-warm flex flex-col">
-      {/* Header - Larger and more readable */}
-      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-2 border-border shadow-sm px-4 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <button 
+      {/* Compact header: back + dots + counter + thin progress */}
+      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border shadow-sm px-4 py-2.5">
+        <div className="flex items-center justify-between">
+          <button
             onClick={goBack}
-            className="flex items-center gap-2 text-foreground font-semibold text-lg p-2 -ml-2 rounded-lg hover:bg-muted/50 transition-colors"
+            className="p-2 -ml-2 rounded-lg hover:bg-muted/50 transition-colors text-foreground"
+            aria-label={currentStep === 0 ? t('wizard.cancel') : t('wizard.back')}
           >
-            <ArrowLeft className="w-6 h-6" />
-            <span>
-              {currentStep === 0 ? t('wizard.cancel') : t('wizard.back')}
-            </span>
+            <ArrowLeft className="w-5 h-5" />
           </button>
-          <span className="text-lg font-bold text-muted-foreground bg-muted px-3 py-1 rounded-full">
-            {t('wizard.stepOf', { current: currentStep + 1, total: STEPS.length })}
+
+          {/* Step dots */}
+          <div className="flex items-center gap-2">
+            {Array.from({ length: STEP_COUNT }).map((_, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "rounded-full transition-all",
+                  i === currentStep
+                    ? "w-3 h-3 bg-secondary shadow-sm"
+                    : i < currentStep
+                      ? "w-2 h-2 bg-green-500"
+                      : "w-2 h-2 bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+
+          <span className="text-sm font-semibold text-muted-foreground">
+            {currentStep + 1}/{STEP_COUNT}
           </span>
         </div>
-        
-        {/* Progress bar - Thicker */}
-        <Progress value={progress} className="h-3 rounded-full" />
-        
-        {/* Step indicators - Larger */}
-        <div className="flex justify-between mt-4">
-          {STEPS.map((step, index) => {
-            const Icon = step.icon;
-            const isActive = index === currentStep;
-            const isCompleted = index < currentStep;
-            
-            return (
-              <div 
-                key={step.id}
-                className={cn(
-                  "flex flex-col items-center gap-2 transition-all",
-                  isActive && "text-secondary",
-                  isCompleted && "text-green-600",
-                  !isActive && !isCompleted && "text-muted-foreground"
-                )}
-              >
-                <div className={cn(
-                  "w-12 h-12 rounded-xl flex items-center justify-center transition-all",
-                  isActive && "bg-secondary text-white shadow-md scale-110",
-                  isCompleted && "bg-green-100 text-green-600",
-                  !isActive && !isCompleted && "bg-muted"
-                )}>
-                  {isCompleted ? (
-                    <Check className="w-6 h-6" />
-                  ) : (
-                    <Icon className="w-6 h-6" />
-                  )}
-                </div>
-                <span className="text-xs font-semibold">{step.label}</span>
-              </div>
-            );
-          })}
+
+        {/* Thin progress bar */}
+        <div className="mt-2 h-1.5 w-full rounded-full bg-muted overflow-hidden">
+          <div
+            className="h-full bg-secondary rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </header>
 
-      {/* Content - More padding */}
-      <main className="flex-1 px-5 py-8 pb-36">
+      {/* Content */}
+      <main className="flex-1 px-4 py-4 pb-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
             {renderStepContent()}
           </motion.div>
         </AnimatePresence>
       </main>
-
-      {/* Bottom navigation - MUCH LARGER touch target */}
-      {currentStep < STEPS.length - 1 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-2 border-border p-5 safe-area-inset-bottom">
-          <Button
-            size="lg"
-            className={cn(
-              "w-full h-16 text-xl gap-3",
-              canGoNext() 
-                ? "bg-secondary hover:bg-secondary/90 text-white shadow-lg" 
-                : "bg-muted text-muted-foreground"
-            )}
-            onClick={goNext}
-            disabled={!canGoNext()}
-          >
-            {t('wizard.continue')}
-            <ArrowRight className="w-7 h-7" />
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
