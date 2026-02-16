@@ -63,8 +63,10 @@ const CategoryBadge = ({
     };
   }, []);
 
-  // Get translated name, fallback to name_fr if translation not found
-  const translatedName = t(`categoryNames.${category.slug}`, { defaultValue: category.name_fr });
+  // For standard categories, use i18n translation; for custom categories, show name_fr as-is (user's input in their language)
+  const translatedName = category.is_standard
+    ? t(`categoryNames.${category.slug}`, { defaultValue: category.name_fr })
+    : category.name_fr;
 
   return (
     <Badge
