@@ -54,6 +54,13 @@
     --pearl: 40 10% 96%;
     --cream: 40 20% 94%;
 
+    /* Capsule type colors - complementary palette */
+    --capsule-photo: 155 35% 42%;
+    --capsule-video: 280 30% 45%;
+    --capsule-audio: 190 40% 40%;
+    --capsule-text: 345 30% 52%;
+    --capsule-mixed: 230 20% 50%;
+
     /* Gradients - plus subtils */
     --gradient-hero: linear-gradient(135deg, hsl(215 50% 23%) 0%, hsl(215 45% 32%) 50%, hsl(16 55% 55% / 0.7) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(38 45% 42%) 0%, hsl(38 50% 50%) 100%);
