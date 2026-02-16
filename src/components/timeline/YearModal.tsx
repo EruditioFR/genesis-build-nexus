@@ -58,11 +58,11 @@ const YearModal = ({
     color: string;
     label: string;
   }> = {
-    text: { icon: FileText, color: 'bg-secondary', label: 'Texte' },
-    photo: { icon: Image, color: 'bg-primary', label: 'Photo' },
-    video: { icon: Video, color: 'bg-accent', label: 'Vidéo' },
-    audio: { icon: Music, color: 'bg-[hsl(var(--navy-light))]', label: 'Audio' },
-    mixed: { icon: Layers, color: 'bg-[hsl(var(--gold-light))]', label: 'Mixte' },
+    text: { icon: FileText, color: 'bg-[hsl(var(--capsule-text))]', label: 'Texte' },
+    photo: { icon: Image, color: 'bg-[hsl(var(--capsule-photo))]', label: 'Photo' },
+    video: { icon: Video, color: 'bg-[hsl(var(--capsule-video))]', label: 'Vidéo' },
+    audio: { icon: Music, color: 'bg-[hsl(var(--capsule-audio))]', label: 'Audio' },
+    mixed: { icon: Layers, color: 'bg-[hsl(var(--capsule-mixed))]', label: 'Mixte' },
   };
 
   // Group by month

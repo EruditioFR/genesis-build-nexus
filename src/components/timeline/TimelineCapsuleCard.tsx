@@ -26,32 +26,32 @@ const capsuleTypeConfig: Record<CapsuleType, {
   text: { 
     icon: FileText, 
     labelKey: 'types.text', 
-    color: 'bg-secondary',
-    bgLight: 'bg-secondary/10 text-secondary'
+    color: 'bg-[hsl(var(--capsule-text))]',
+    bgLight: 'bg-[hsl(var(--capsule-text)/0.1)] text-[hsl(var(--capsule-text))]'
   },
   photo: { 
     icon: Image, 
     labelKey: 'types.photo', 
-    color: 'bg-primary',
-    bgLight: 'bg-primary/10 text-primary'
+    color: 'bg-[hsl(var(--capsule-photo))]',
+    bgLight: 'bg-[hsl(var(--capsule-photo)/0.1)] text-[hsl(var(--capsule-photo))]'
   },
   video: { 
     icon: Video, 
     labelKey: 'types.video', 
-    color: 'bg-accent',
-    bgLight: 'bg-accent/10 text-accent'
+    color: 'bg-[hsl(var(--capsule-video))]',
+    bgLight: 'bg-[hsl(var(--capsule-video)/0.1)] text-[hsl(var(--capsule-video))]'
   },
   audio: { 
     icon: Music, 
     labelKey: 'types.audio', 
-    color: 'bg-[hsl(var(--navy-light))]',
-    bgLight: 'bg-[hsl(var(--navy-light)/0.1)] text-[hsl(var(--navy-light))]'
+    color: 'bg-[hsl(var(--capsule-audio))]',
+    bgLight: 'bg-[hsl(var(--capsule-audio)/0.1)] text-[hsl(var(--capsule-audio))]'
   },
   mixed: { 
     icon: Layers, 
     labelKey: 'types.mixed', 
-    color: 'bg-[hsl(var(--gold-light))]',
-    bgLight: 'bg-[hsl(var(--gold-light)/0.1)] text-[hsl(var(--gold-light))]'
+    color: 'bg-[hsl(var(--capsule-mixed))]',
+    bgLight: 'bg-[hsl(var(--capsule-mixed)/0.1)] text-[hsl(var(--capsule-mixed))]'
   },
 };
 
