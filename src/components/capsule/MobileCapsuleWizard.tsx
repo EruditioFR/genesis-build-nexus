@@ -410,7 +410,12 @@ const MobileCapsuleWizard = ({
             <ArrowLeft className="w-5 h-5" />
           </button>
 
-          {/* Step dots */}
+          {/* Page title */}
+          <span className="text-sm font-display font-semibold text-foreground truncate">
+            {t('create.pageTitle')}
+          </span>
+
+          {/* Step dots + counter */}
           <div className="flex items-center gap-2">
             {Array.from({ length: STEP_COUNT }).map((_, i) => (
               <div
@@ -425,11 +430,10 @@ const MobileCapsuleWizard = ({
                 )}
               />
             ))}
+            <span className="text-xs font-semibold text-muted-foreground ml-1">
+              {currentStep + 1}/{STEP_COUNT}
+            </span>
           </div>
-
-          <span className="text-sm font-semibold text-muted-foreground">
-            {currentStep + 1}/{STEP_COUNT}
-          </span>
         </div>
 
         {/* Thin progress bar */}
