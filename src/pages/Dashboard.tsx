@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import StatsCards from '@/components/dashboard/StatsCards';
-import StorageProgress from '@/components/dashboard/StorageProgress';
+
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
@@ -363,11 +363,6 @@ const Dashboard = () => {
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
             <RecentCapsules capsules={recentCapsules} />
             <DashboardInspirationWidget />
-            <StorageProgress
-              usedMb={profile?.storage_used_mb || 0}
-              limitMb={profile?.storage_limit_mb || 500}
-              subscriptionLevel={profile?.subscription_level || 'free'}
-            />
           </div>
 
           {/* Right Column - 1/3 width */}
