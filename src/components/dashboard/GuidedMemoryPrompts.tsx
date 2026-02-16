@@ -220,35 +220,32 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Header with overall progress */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-secondary/5 via-primary/5 to-secondary/5 border border-border">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-primary text-white shadow-lg">
-            <Sparkles className="h-7 w-7" />
+      {/* Header with overall progress - compact */}
+      <div className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-secondary/5 via-primary/5 to-secondary/5 border border-border">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-primary text-white shadow-md">
+            <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-display font-bold text-foreground">
+            <h2 className="text-base font-display font-bold text-foreground">
               Inspirez-vous pour écrire
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground hidden sm:block">
               50 questions pour guider vos souvenirs
             </p>
           </div>
         </div>
 
-        {/* Progress badge */}
-        <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-background border border-border">
-          <Trophy className="h-5 w-5 text-amber-500" />
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-foreground">
-              {totalProgress.used} / {totalProgress.total} souvenirs
-            </span>
-            <Progress value={completionPercentage} className="h-1.5 w-24" />
-          </div>
+        {/* Progress badge - compact */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-border">
+          <Trophy className="h-4 w-4 text-amber-500" />
+          <span className="text-xs font-medium text-foreground">
+            {totalProgress.used}/{totalProgress.total}
+          </span>
           {completionPercentage >= 100 && (
-            <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
-              <Star className="h-3 w-3 mr-1" />
-              Complet !
+            <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 text-xs px-1.5 py-0">
+              <Star className="h-2.5 w-2.5 mr-0.5" />
+              ✓
             </Badge>
           )}
         </div>
@@ -277,15 +274,15 @@ const GuidedMemoryPrompts = ({ className }: GuidedMemoryPromptsProps) => {
               {/* Category header */}
               <button
                 onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                className="w-full p-4 flex items-center gap-4 hover:bg-background/30 transition-colors group"
+                className="w-full p-3 flex items-center gap-3 hover:bg-background/30 transition-colors group"
               >
                 <div
                   className={cn(
-                    'flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-md flex-shrink-0',
+                    'flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br text-white shadow-sm flex-shrink-0',
                     category.gradient
                   )}
                 >
-                  <span className="text-2xl">{category.emoji}</span>
+                  <span className="text-lg">{category.emoji}</span>
                 </div>
 
                 <div className="flex-1 min-w-0 text-left">

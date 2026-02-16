@@ -357,18 +357,12 @@ const Dashboard = () => {
           <StatsCards stats={stats} />
         </div>
 
-        {/* Guided Memory Prompts - Always visible, prominent placement */}
-        <div className="mb-6 md:mb-8">
-          <div className="p-6 rounded-2xl bg-card border border-border">
-            <GuidedMemoryPrompts />
-          </div>
-        </div>
-
-        {/* Main Grid */}
+        {/* Main Grid - RecentCapsules first */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left Column - 2/3 width */}
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
             <RecentCapsules capsules={recentCapsules} />
+            <GuidedMemoryPrompts />
             <StorageProgress
               usedMb={profile?.storage_used_mb || 0}
               limitMb={profile?.storage_limit_mb || 500}
