@@ -1,103 +1,63 @@
 
 
-# Audit SEO & GEO complet de FamilyGarden.fr
+# Simplifier le parcours de creation mobile
 
-## Etat des lieux : ce qui est bien fait
+## Probleme actuel
 
-- **JSON-LD structuré** : 3 schemas (Organization, SoftwareApplication, FAQPage) dans `index.html` + composant `JsonLdSchema` dynamique
-- **NoIndex sur les pages privées** : 11 pages authentifiées protégées via le composant `<NoIndex />`
-- **robots.txt + sitemap.xml** : configurés avec les bonnes exclusions
-- **Open Graph + Twitter Cards** : image 1200x630 et balises complètes
-- **Canonical URL** : presente dans `index.html`
-- **FAQ riche** : contenu dense, bon pour les featured snippets
-- **i18n** : 5 langues (fr, en, es, ko, zh) -- bon signal international
-- **Google Analytics** : RGPD-compliant avec consentement cookies
-- **Balise hreflang** : absente (probleme)
+Le wizard mobile (`MobileCapsuleWizard.tsx`) utilise actuellement :
+- **Header ~130px** : bouton retour, compteur d'etapes, barre de progression epaisse (h-3), puis 4 indicateurs d'etapes avec icones 48x48 et labels texte
+- **Footer fixe ~80px** : bouton "Continuer" pleine largeur, hauteur 64px
+- **Sur un ecran de ~700px avec clavier (~300px)**, il reste environ **190px** pour le contenu -- quasi inutilisable
 
----
+## Solution proposee : header compact + bouton inline
 
-## Problemes identifies (par priorite)
+### 1. Header ultra-compact (une seule ligne, ~48px)
 
-### P1 -- Critiques
+Remplacer le header actuel (bouton retour + compteur + barre de progression + 4 icones avec labels) par une seule ligne :
 
-| # | Probleme | Impact |
-|---|----------|--------|
-| 1 | **Aucun title/description dynamique par page** : Seule la page About change `document.title`. Login, Signup, FAQ, Premium, legal pages gardent toutes le title par defaut de `index.html`. | Google affiche le meme titre pour toutes les pages indexees |
-| 2 | **Pas de balises hreflang** : Le site est en 5 langues mais aucun signal n'est envoye aux moteurs de recherche pour indiquer les versions linguistiques. | Contenu duplique inter-langues, mauvais ciblage geographique |
-| 3 | **URL canonique statique** : Le `<link rel="canonical">` dans `index.html` pointe toujours vers `/` quelle que soit la page visitee. | Toutes les pages signalent `/` comme URL canonique -- confusion pour Google |
-| 4 | **SPA non-rendue cote serveur** : En tant que SPA React, le HTML envoye au crawler ne contient que `<div id="root"></div>`. Les balises meta injectees dynamiquement par `useEffect` ne sont pas visibles par les crawlers. | Le contenu JSON-LD dynamique, les FAQ, et le contenu texte sont invisibles pour les moteurs |
+```
+[<- Retour]   ● ● ○ ○   [2/4]
+              ━━━━━━━━━
+```
 
-### P2 -- Importants
+- Bouton retour a gauche (icone seule, sans texte)
+- 4 petits dots (8px) au centre : remplis = fait, vide = a venir, actif = accent
+- Compteur "2/4" a droite
+- Fine barre de progression en dessous (h-1.5 au lieu de h-3)
+- Suppression des icones 48x48 et des labels texte des etapes
 
-| # | Probleme | Impact |
-|---|----------|--------|
-| 5 | **Liens morts dans le footer** : Roadmap, Changelog, Blog, Carrieres, Partenaires, Guides, Communaute, RGPD pointent vers `#` | Mauvais signal E-E-A-T, UX degradee |
-| 6 | **Sitemap incomplet** : Manque `/about`, `/faq` (la page dediee). Le sitemap ne contient que 9 URLs. | Pages publiques non decouvertes |
-| 7 | **Images hero sans alt descriptif** : Les 6 slides du hero utilisent toutes le meme alt generique (`hero.badge`). | Opportunite SEO images manquee |
-| 8 | **Page FAQ dediee (`/faq`) sans JSON-LD FAQPage** : Le schema FAQPage est uniquement injecte sur la landing, pas sur `/faq` qui contient 24 questions detaillees. | Manque de rich snippets sur la page la plus pertinente |
-| 9 | **Footer logo : `<a>` au lieu de `<Link>`** : Le logo du footer utilise un `<a href="/">` natif au lieu de React Router, causant un rechargement complet. | UX degradee, pas critique SEO |
-| 10 | **Pas de page 404 avec bon status HTTP** : La SPA renvoie toujours un status 200, meme pour les pages inexistantes. | Soft 404, pollution de l'index Google |
+### 2. Supprimer le footer fixe
 
-### P3 -- Ameliorations GEO
+Le bouton "Continuer" ne sera plus fixe en bas de l'ecran. Il sera place **directement apres le contenu de l'etape**, dans le flux normal de la page.
 
-| # | Probleme | Impact |
-|---|----------|--------|
-| 11 | **Pas de BreadcrumbList schema** sur les pages profondes (FAQ, Premium, About, Legal) | Manque de rich snippets breadcrumb |
-| 12 | **Pas de WebSite schema avec SearchAction** | Manque de sitelinks searchbox dans Google |
-| 13 | **Pas de HowTo schema** pour la section "Comment ca marche" | Opportunite de rich snippet perdue |
-| 14 | **Contenu About non internationalise** : Tout est en dur en francais, pas de traduction | Incoherence avec les 5 langues du site |
+- Quand le clavier est ouvert, l'utilisateur scrolle naturellement vers le bouton
+- Quand le clavier est ferme, le bouton est visible sous les champs
+- Le bouton reste grand (h-14) pour les seniors
 
----
+### 3. Reduire les titres d'etapes
 
-## Plan d'optimisation
+- Supprimer les blocs "titre + sous-titre + icone decorative" en haut de chaque etape (case 0 : le bloc de 100px avec l'icone Sparkles 80x80)
+- Les remplacer par un simple titre en une ligne
 
-### Phase 1 : SEO Meta dynamique (impact le plus fort)
+### 4. Padding reduit
 
-**Creer un composant `<SEOHead />`** reutilisable qui gere :
-- `document.title` dynamique par page
-- Meta description dynamique
-- Canonical URL dynamique (basee sur `location.pathname`)
-- Balises Open Graph par page
+- Passer le padding du contenu de `px-5 py-8 pb-36` a `px-4 py-4 pb-8`
+- Reduire les `space-y-8` a `space-y-4` dans les formulaires
 
-Pages a mettre a jour :
-- `/` : "Family Garden -- Journal de famille prive et securise"
-- `/login` : "Connexion | Family Garden"
-- `/signup` : "Inscription gratuite | Family Garden"
-- `/premium` : "Tarifs et abonnements | Family Garden"
-- `/faq` : "FAQ -- Questions frequentes | Family Garden"
-- `/about` : "A propos | Family Garden"
-- `/privacy`, `/cgv`, `/terms`, `/mentions-legales` : titres specifiques
+## Fichiers modifies
 
-### Phase 2 : Schemas JSON-LD enrichis
+| Fichier | Modification |
+|---------|-------------|
+| `src/components/capsule/MobileCapsuleWizard.tsx` | Refonte du header (dots), bouton inline, titres compacts, padding reduit |
 
-- Ajouter **FAQPage schema** sur `/faq` (24 questions)
-- Ajouter **BreadcrumbList** sur les pages About, FAQ, Premium, Legal
-- Ajouter **WebSite schema** avec `potentialAction` SearchAction
-- Ajouter **HowTo schema** pour la section "Comment ca marche"
+## Gains d'espace estimes
 
-### Phase 3 : Corrections techniques
+| Element | Avant | Apres |
+|---------|-------|-------|
+| Header | ~130px | ~48px |
+| Footer fixe | ~80px | 0px |
+| Titre decoratif etape 1 | ~100px | ~30px |
+| **Total economise** | | **~230px** |
 
-- **Mettre a jour le sitemap** : ajouter `/about` et `/faq`
-- **Corriger les liens morts du footer** : soit les retirer, soit les pointer vers de vraies pages ou des ancres
-- **Ajouter des alt descriptifs uniques** aux images du hero slider (mariage, anniversaire, voyages, etudes, playlist)
-- **Corriger le lien logo footer** : utiliser `<Link to="/">` au lieu de `<a href="/">`
-
-### Phase 4 : Internationalisation SEO
-
-- **Ajouter des balises hreflang** dynamiques via le composant `<SEOHead />` pour les 5 langues
-- **Internationaliser la page About** via les fichiers de traduction i18n
-- **Ajouter les meta descriptions** dans chaque fichier de locale
-
----
-
-## Estimation technique
-
-| Phase | Fichiers impactes | Complexite |
-|-------|-------------------|------------|
-| Phase 1 | Nouveau composant `SEOHead.tsx` + toutes les pages publiques (environ 10) | Moyenne |
-| Phase 2 | Extension de `JsonLdSchema.tsx` + pages FAQ/About/Premium | Faible |
-| Phase 3 | `sitemap.xml`, `Footer.tsx`, `HeroSection.tsx`, locales FR/EN | Faible |
-| Phase 4 | `SEOHead.tsx`, locales x5, `About.tsx` | Moyenne |
-
-Les phases 1 et 3 auront l'impact le plus immediat sur le referencement. La phase 4 est importante pour le ciblage international.
+Avec le clavier ouvert (~300px sur iPhone), l'espace disponible pour le contenu passe de **~190px a ~420px** -- suffisant pour voir le champ actif et le bouton "Continuer".
 
