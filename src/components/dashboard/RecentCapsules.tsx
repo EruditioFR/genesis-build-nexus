@@ -45,9 +45,6 @@ const FeaturedCard = ({ capsule, category, t }: { capsule: Capsule; category?: C
       <div className="relative aspect-[16/9] sm:aspect-[2/1] overflow-hidden">
         <CapsuleVisual capsule={capsule} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute top-4 left-4">
-          <TypeBadge type={capsule.type} t={t} />
-        </div>
         <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
           <h4 className="font-bold text-white text-xl sm:text-2xl line-clamp-2 leading-snug mb-2 drop-shadow-lg">
             {capsule.title}
