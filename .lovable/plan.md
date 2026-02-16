@@ -1,57 +1,56 @@
 
 
-# Reorganiser le dashboard : souvenirs en priorite, interface allegee
+# Harmoniser les couleurs des souvenirs avec la charte graphique
 
-## Probleme actuel
+## Probleme identifie
 
-L'ordre actuel du dashboard est :
-1. Message de bienvenue
-2. Checklist d'onboarding (conditionnel)
-3. **QuickActions** -- 4 grosses cartes colorees en grille 2x2 sur mobile (~250px)
-4. **StatsCards** -- barre de statistiques
-5. **GuidedMemoryPrompts** -- gros bloc avec 5 categories (~400px+)
-6. **RecentCapsules** -- liste des souvenirs (trop bas dans la page)
-7. StorageProgress + FamilyTreeCard/PremiumPromo
+La palette du projet est "Bleu nuit, Or chaud, Terracotta, Gris perle" (definie dans `index.css`), mais les couleurs associees aux types de souvenirs utilisent des couleurs Tailwind generiques qui ne s'integrent pas :
 
-Les souvenirs sont enfouis sous ~700px de cartes et suggestions. "Mes partages" (Cercles) occupe une carte QuickActions alors qu'il est deja dans le menu Profil du bottom nav.
+| Type | CapsuleCardVisuals | TimelineCapsuleCard | YearModal |
+|------|-------------------|---------------------|-----------|
+| Texte | sky-500 | blue-500 | blue-500 |
+| Photo | amber-500 | emerald-500 | emerald-500 |
+| Video | violet-500 | purple-500 | purple-500 |
+| Audio | orange-500 | orange-500 | orange-500 |
+| Mixte | emerald-500 | pink-500 | pink-500 |
 
-## Modifications prevues
+Trois problemes :
+1. Les couleurs ne respectent pas la charte (bleu nuit, or, terracotta, perle)
+2. Les definitions sont incoherentes entre les fichiers
+3. Trop de teintes vives differentes creent un effet "arc-en-ciel" peu harmonieux
 
-### 1. Retirer "Mes partages" des QuickActions
+## Solution
 
-Supprimer la carte "Cercles" de `QuickActions.tsx`. Elle est deja accessible via le bottom nav (onglet Profil > Mes cercles). Les 3 actions restantes : Nouveau souvenir, Chronologie, Arbre genealogique.
+Adopter une palette unique basee sur les tokens du design system, avec des teintes sobres et coherentes :
 
-### 2. Simplifier les QuickActions (moins voyantes)
-
-Remplacer les grosses cartes colorees 2x2 sur mobile par une **ligne horizontale scrollable** de boutons compacts (icone + label, sans description, sans decorations). Hauteur reduite de ~250px a ~60px.
-
-### 3. Remonter les souvenirs recents
-
-Nouvel ordre dans `Dashboard.tsx` :
-1. Message de bienvenue
-2. Onboarding (conditionnel)
-3. **QuickActions** (ligne compacte)
-4. **StatsCards** (barre de stats)
-5. **RecentCapsules** (remonte ici, directement visible)
-6. **GuidedMemoryPrompts** (descend ici)
-7. StorageProgress + FamilyTreeCard/PremiumPromo
-
-### 4. Rendre les suggestions plus discretes
-
-Dans `Dashboard.tsx`, retirer le wrapper `p-6 rounded-2xl bg-card border` autour de `GuidedMemoryPrompts` et dans le composant lui-meme :
-- Reduire le header (icone 14x14 vers 10x10, titre plus petit)
-- Masquer la barre de progression globale par defaut sur mobile
-- Reduire les cartes de categories (icones 14x14 vers 10x10, padding reduit)
+| Type | Nouvelle couleur | Justification |
+|------|-----------------|---------------|
+| Texte | `--secondary` (or chaud) | L'ecriture evoque le parchemin, la chaleur |
+| Photo | `--primary` (bleu nuit) | Couleur principale sobre et elegante |
+| Video | `--accent` (terracotta) | Couleur d'accent vive mais douce |
+| Audio | `--navy-light` (bleu clair) | Variante du bleu, distingue de photo |
+| Mixte | `--gold-light` (or clair) | Variante de l'or, distingue de texte |
 
 ## Fichiers modifies
 
 | Fichier | Modification |
 |---------|-------------|
-| `src/components/dashboard/QuickActions.tsx` | Retirer "Cercles", transformer le mobile en ligne horizontale compacte |
-| `src/pages/Dashboard.tsx` | Reordonner : RecentCapsules avant GuidedMemoryPrompts, alleger le wrapper des suggestions |
-| `src/components/dashboard/GuidedMemoryPrompts.tsx` | Header et categories plus compacts |
+| `src/components/capsule/CapsuleCardVisuals.tsx` | Mettre a jour `getTypeStyles` avec les couleurs harmonisees, ajuster les fallback visuels (audio wave bg, text bg) |
+| `src/components/timeline/TimelineCapsuleCard.tsx` | Aligner `capsuleTypeConfig` sur les memes couleurs |
+| `src/components/timeline/YearModal.tsx` | Aligner `capsuleTypeConfig` sur les memes couleurs |
 
-## Resultat attendu
+## Detail technique
 
-Sur mobile, l'utilisateur verra ses souvenirs recents des le premier scroll, sans avoir a traverser de grosses cartes colorees. Les suggestions restent accessibles mais ne dominent plus la page.
+Les couleurs utiliseront les variables CSS du design system via des classes Tailwind personnalisees ou les tokens HSL existants. Par exemple :
+
+```text
+getTypeStyles:
+  photo  -> bg-[hsl(var(--primary))]
+  video  -> bg-[hsl(var(--accent))]
+  text   -> bg-[hsl(var(--secondary))]
+  audio  -> bg-[hsl(var(--navy-light))]  (215 40% 38%)
+  mixed  -> bg-[hsl(var(--gold-light))]  (38 40% 60%)
+```
+
+Les backgrounds de fallback (audio wave, text quote) seront aussi ajustes pour utiliser les memes teintes en version legere.
 
