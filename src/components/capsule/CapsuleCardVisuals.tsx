@@ -26,11 +26,11 @@ export const getTypeIcon = (type: CapsuleCardType) => {
 
 export const getTypeStyles = (type: CapsuleCardType) => {
   switch (type) {
-    case 'photo': return { bg: 'bg-sky-500', text: 'text-white' };
-    case 'video': return { bg: 'bg-violet-500', text: 'text-white' };
-    case 'audio': return { bg: 'bg-orange-500', text: 'text-white' };
-    case 'mixed': return { bg: 'bg-emerald-500', text: 'text-white' };
-    case 'text': return { bg: 'bg-amber-500', text: 'text-white' };
+    case 'photo': return { bg: 'bg-primary', text: 'text-primary-foreground' };
+    case 'video': return { bg: 'bg-accent', text: 'text-accent-foreground' };
+    case 'audio': return { bg: 'bg-[hsl(var(--navy-light))]', text: 'text-white' };
+    case 'mixed': return { bg: 'bg-[hsl(var(--gold-light))]', text: 'text-white' };
+    case 'text': return { bg: 'bg-secondary', text: 'text-secondary-foreground' };
   }
 };
 
@@ -96,10 +96,10 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
   }
   if (capsule.type === 'audio') {
     return (
-      <div className="w-full h-full relative bg-gradient-to-br from-orange-100 to-amber-50 dark:from-orange-900/30 dark:to-amber-900/20">
+      <div className="w-full h-full relative bg-gradient-to-br from-[hsl(var(--navy-light)/0.1)] to-[hsl(var(--primary)/0.05)] dark:from-[hsl(var(--navy-light)/0.3)] dark:to-[hsl(var(--primary)/0.2)]">
         <AudioWaveBackground animated={false} barCount={40} />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={cn("rounded-full bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30", iconClasses)}>
+          <div className={cn("rounded-full bg-[hsl(var(--navy-light))] flex items-center justify-center shadow-lg shadow-[hsl(var(--navy-light)/0.3)]", iconClasses)}>
             <Music className={cn("text-white", innerIconClasses)} />
           </div>
         </div>
@@ -108,9 +108,9 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
   }
   if (capsule.type === 'text' && capsule.content) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/20 dark:to-yellow-900/20 p-6">
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[hsl(var(--gold-light)/0.15)] via-[hsl(var(--secondary)/0.1)] to-[hsl(var(--gold-light)/0.1)] dark:from-[hsl(var(--secondary)/0.2)] dark:via-[hsl(var(--gold-light)/0.15)] dark:to-[hsl(var(--secondary)/0.1)] p-6">
         <div className="relative">
-          <Quote className="absolute -top-2 -left-2 w-8 h-8 text-amber-300 dark:text-amber-600" />
+          <Quote className="absolute -top-2 -left-2 w-8 h-8 text-[hsl(var(--gold-light))] dark:text-[hsl(var(--secondary))]" />
           <p className="text-base text-foreground/80 line-clamp-4 text-center italic leading-relaxed max-w-[240px]">
             {capsule.content.slice(0, 120)}{capsule.content.length > 120 ? '…' : ''}
           </p>

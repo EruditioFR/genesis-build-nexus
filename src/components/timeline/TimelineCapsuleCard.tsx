@@ -26,32 +26,32 @@ const capsuleTypeConfig: Record<CapsuleType, {
   text: { 
     icon: FileText, 
     labelKey: 'types.text', 
-    color: 'bg-blue-500',
-    bgLight: 'bg-blue-500/10 text-blue-700'
+    color: 'bg-secondary',
+    bgLight: 'bg-secondary/10 text-secondary'
   },
   photo: { 
     icon: Image, 
     labelKey: 'types.photo', 
-    color: 'bg-emerald-500',
-    bgLight: 'bg-emerald-500/10 text-emerald-700'
+    color: 'bg-primary',
+    bgLight: 'bg-primary/10 text-primary'
   },
   video: { 
     icon: Video, 
     labelKey: 'types.video', 
-    color: 'bg-purple-500',
-    bgLight: 'bg-purple-500/10 text-purple-700'
+    color: 'bg-accent',
+    bgLight: 'bg-accent/10 text-accent'
   },
   audio: { 
     icon: Music, 
     labelKey: 'types.audio', 
-    color: 'bg-orange-500',
-    bgLight: 'bg-orange-500/10 text-orange-700'
+    color: 'bg-[hsl(var(--navy-light))]',
+    bgLight: 'bg-[hsl(var(--navy-light)/0.1)] text-[hsl(var(--navy-light))]'
   },
   mixed: { 
     icon: Layers, 
     labelKey: 'types.mixed', 
-    color: 'bg-pink-500',
-    bgLight: 'bg-pink-500/10 text-pink-700'
+    color: 'bg-[hsl(var(--gold-light))]',
+    bgLight: 'bg-[hsl(var(--gold-light)/0.1)] text-[hsl(var(--gold-light))]'
   },
 };
 
