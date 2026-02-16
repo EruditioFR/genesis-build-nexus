@@ -1,47 +1,57 @@
 
-# Simplifier le parcours de creation mobile
+
+# Reorganiser le dashboard : souvenirs en priorite, interface allegee
 
 ## Probleme actuel
 
-Le wizard mobile utilise ~130px de header (bouton retour + compteur + barre h-3 + 4 icones 48x48 avec labels) et ~80px de footer fixe. Avec le clavier ouvert (~300px), il ne reste que ~190px pour le contenu.
+L'ordre actuel du dashboard est :
+1. Message de bienvenue
+2. Checklist d'onboarding (conditionnel)
+3. **QuickActions** -- 4 grosses cartes colorees en grille 2x2 sur mobile (~250px)
+4. **StatsCards** -- barre de statistiques
+5. **GuidedMemoryPrompts** -- gros bloc avec 5 categories (~400px+)
+6. **RecentCapsules** -- liste des souvenirs (trop bas dans la page)
+7. StorageProgress + FamilyTreeCard/PremiumPromo
 
-## Modifications sur `MobileCapsuleWizard.tsx`
+Les souvenirs sont enfouis sous ~700px de cartes et suggestions. "Mes partages" (Cercles) occupe une carte QuickActions alors qu'il est deja dans le menu Profil du bottom nav.
 
-### 1. Header compact (une seule ligne ~48px)
+## Modifications prevues
 
-Remplacer le header actuel par :
-- Bouton retour (icone seule) a gauche
-- 4 dots (8px) au centre : rempli = fait, vide = a venir, actif = couleur accent
-- Compteur "2/4" a droite
-- Fine barre de progression h-1.5 en dessous
-- Suppression des icones 48x48 et labels texte
+### 1. Retirer "Mes partages" des QuickActions
 
-### 2. Supprimer le footer fixe
+Supprimer la carte "Cercles" de `QuickActions.tsx`. Elle est deja accessible via le bottom nav (onglet Profil > Mes cercles). Les 3 actions restantes : Nouveau souvenir, Chronologie, Arbre genealogique.
 
-Le bloc `fixed bottom-0` avec le bouton "Continuer" sera supprime. Le bouton sera place directement apres le contenu de chaque etape (inline dans le flux). Il reste grand (h-14) pour l'accessibilite seniors.
+### 2. Simplifier les QuickActions (moins voyantes)
 
-### 3. Titres d'etapes compacts
+Remplacer les grosses cartes colorees 2x2 sur mobile par une **ligne horizontale scrollable** de boutons compacts (icone + label, sans description, sans decorations). Hauteur reduite de ~250px a ~60px.
 
-- Etape 0 : supprimer le bloc decoratif (icone Sparkles 80x80 + titre + sous-titre). Garder juste un titre en une ligne.
-- Etapes 1, 2 : supprimer les blocs titre/sous-titre centres, garder un simple titre.
-- Etape 3 (review) : reduire le bloc decoratif.
+### 3. Remonter les souvenirs recents
 
-### 4. Padding reduit
+Nouvel ordre dans `Dashboard.tsx` :
+1. Message de bienvenue
+2. Onboarding (conditionnel)
+3. **QuickActions** (ligne compacte)
+4. **StatsCards** (barre de stats)
+5. **RecentCapsules** (remonte ici, directement visible)
+6. **GuidedMemoryPrompts** (descend ici)
+7. StorageProgress + FamilyTreeCard/PremiumPromo
 
-- Contenu : de `px-5 py-8 pb-36` a `px-4 py-4 pb-8`
-- Espacements internes : de `space-y-8` a `space-y-4`
+### 4. Rendre les suggestions plus discretes
 
-## Gains estimes
+Dans `Dashboard.tsx`, retirer le wrapper `p-6 rounded-2xl bg-card border` autour de `GuidedMemoryPrompts` et dans le composant lui-meme :
+- Reduire le header (icone 14x14 vers 10x10, titre plus petit)
+- Masquer la barre de progression globale par defaut sur mobile
+- Reduire les cartes de categories (icones 14x14 vers 10x10, padding reduit)
 
-| Element | Avant | Apres |
-|---------|-------|-------|
-| Header | ~130px | ~48px |
-| Footer fixe | ~80px | 0px |
-| Titre decoratif | ~100px | ~24px |
-| **Total economise** | | **~240px** |
+## Fichiers modifies
 
-Espace disponible avec clavier : ~190px vers ~430px.
+| Fichier | Modification |
+|---------|-------------|
+| `src/components/dashboard/QuickActions.tsx` | Retirer "Cercles", transformer le mobile en ligne horizontale compacte |
+| `src/pages/Dashboard.tsx` | Reordonner : RecentCapsules avant GuidedMemoryPrompts, alleger le wrapper des suggestions |
+| `src/components/dashboard/GuidedMemoryPrompts.tsx` | Header et categories plus compacts |
 
-## Fichier modifie
+## Resultat attendu
 
-`src/components/capsule/MobileCapsuleWizard.tsx`
+Sur mobile, l'utilisateur verra ses souvenirs recents des le premier scroll, sans avoir a traverser de grosses cartes colorees. Les suggestions restent accessibles mais ne dominent plus la page.
+
