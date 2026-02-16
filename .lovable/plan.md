@@ -1,63 +1,47 @@
 
-
 # Simplifier le parcours de creation mobile
 
 ## Probleme actuel
 
-Le wizard mobile (`MobileCapsuleWizard.tsx`) utilise actuellement :
-- **Header ~130px** : bouton retour, compteur d'etapes, barre de progression epaisse (h-3), puis 4 indicateurs d'etapes avec icones 48x48 et labels texte
-- **Footer fixe ~80px** : bouton "Continuer" pleine largeur, hauteur 64px
-- **Sur un ecran de ~700px avec clavier (~300px)**, il reste environ **190px** pour le contenu -- quasi inutilisable
+Le wizard mobile utilise ~130px de header (bouton retour + compteur + barre h-3 + 4 icones 48x48 avec labels) et ~80px de footer fixe. Avec le clavier ouvert (~300px), il ne reste que ~190px pour le contenu.
 
-## Solution proposee : header compact + bouton inline
+## Modifications sur `MobileCapsuleWizard.tsx`
 
-### 1. Header ultra-compact (une seule ligne, ~48px)
+### 1. Header compact (une seule ligne ~48px)
 
-Remplacer le header actuel (bouton retour + compteur + barre de progression + 4 icones avec labels) par une seule ligne :
-
-```
-[<- Retour]   ● ● ○ ○   [2/4]
-              ━━━━━━━━━
-```
-
-- Bouton retour a gauche (icone seule, sans texte)
-- 4 petits dots (8px) au centre : remplis = fait, vide = a venir, actif = accent
+Remplacer le header actuel par :
+- Bouton retour (icone seule) a gauche
+- 4 dots (8px) au centre : rempli = fait, vide = a venir, actif = couleur accent
 - Compteur "2/4" a droite
-- Fine barre de progression en dessous (h-1.5 au lieu de h-3)
-- Suppression des icones 48x48 et des labels texte des etapes
+- Fine barre de progression h-1.5 en dessous
+- Suppression des icones 48x48 et labels texte
 
 ### 2. Supprimer le footer fixe
 
-Le bouton "Continuer" ne sera plus fixe en bas de l'ecran. Il sera place **directement apres le contenu de l'etape**, dans le flux normal de la page.
+Le bloc `fixed bottom-0` avec le bouton "Continuer" sera supprime. Le bouton sera place directement apres le contenu de chaque etape (inline dans le flux). Il reste grand (h-14) pour l'accessibilite seniors.
 
-- Quand le clavier est ouvert, l'utilisateur scrolle naturellement vers le bouton
-- Quand le clavier est ferme, le bouton est visible sous les champs
-- Le bouton reste grand (h-14) pour les seniors
+### 3. Titres d'etapes compacts
 
-### 3. Reduire les titres d'etapes
-
-- Supprimer les blocs "titre + sous-titre + icone decorative" en haut de chaque etape (case 0 : le bloc de 100px avec l'icone Sparkles 80x80)
-- Les remplacer par un simple titre en une ligne
+- Etape 0 : supprimer le bloc decoratif (icone Sparkles 80x80 + titre + sous-titre). Garder juste un titre en une ligne.
+- Etapes 1, 2 : supprimer les blocs titre/sous-titre centres, garder un simple titre.
+- Etape 3 (review) : reduire le bloc decoratif.
 
 ### 4. Padding reduit
 
-- Passer le padding du contenu de `px-5 py-8 pb-36` a `px-4 py-4 pb-8`
-- Reduire les `space-y-8` a `space-y-4` dans les formulaires
+- Contenu : de `px-5 py-8 pb-36` a `px-4 py-4 pb-8`
+- Espacements internes : de `space-y-8` a `space-y-4`
 
-## Fichiers modifies
-
-| Fichier | Modification |
-|---------|-------------|
-| `src/components/capsule/MobileCapsuleWizard.tsx` | Refonte du header (dots), bouton inline, titres compacts, padding reduit |
-
-## Gains d'espace estimes
+## Gains estimes
 
 | Element | Avant | Apres |
 |---------|-------|-------|
 | Header | ~130px | ~48px |
 | Footer fixe | ~80px | 0px |
-| Titre decoratif etape 1 | ~100px | ~30px |
-| **Total economise** | | **~230px** |
+| Titre decoratif | ~100px | ~24px |
+| **Total economise** | | **~240px** |
 
-Avec le clavier ouvert (~300px sur iPhone), l'espace disponible pour le contenu passe de **~190px a ~420px** -- suffisant pour voir le champ actif et le bouton "Continuer".
+Espace disponible avec clavier : ~190px vers ~430px.
 
+## Fichier modifie
+
+`src/components/capsule/MobileCapsuleWizard.tsx`
