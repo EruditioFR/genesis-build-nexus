@@ -56,22 +56,12 @@ const CategoryBadge = ({
   // If color is light: dark text on white background
   // If color is dark: light text on dark background
   const badgeStyles = useMemo(() => {
-    if (isLight) {
-      // Light category color -> use dark text on white/light background
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: `${category.color}`,
-        color: '#1a1a2e', // Dark navy text
-      };
-    } else {
-      // Dark category color -> use light text on dark background
-      return {
-        backgroundColor: category.color,
-        borderColor: category.color,
-        color: '#ffffff', // White text
-      };
-    }
-  }, [category.color, isLight]);
+    return {
+      backgroundColor: 'hsl(var(--muted))',
+      borderColor: 'hsl(var(--border))',
+      color: 'hsl(var(--foreground))',
+    };
+  }, []);
 
   // Get translated name, fallback to name_fr if translation not found
   const translatedName = t(`categoryNames.${category.slug}`, { defaultValue: category.name_fr });
