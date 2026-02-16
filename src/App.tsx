@@ -35,6 +35,7 @@ const CategoriesPage = lazy(() => import("./pages/CategoriesPage"));
 const CategoryDetailPage = lazy(() => import("./pages/CategoryDetailPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const About = lazy(() => import("./pages/About"));
+const InspirationsPage = lazy(() => import("./pages/InspirationsPage"));
 
 // Legal pages - lazy loaded
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -95,6 +96,7 @@ const App = () => (
                   <Route path="/guardian-dashboard" element={<GuardianDashboard />} />
                   <Route path="/categories" element={<CategoriesPage />} />
                   <Route path="/categories/:slug" element={<CategoryDetailPage />} />
+                  <Route path="/inspirations" element={<InspirationsPage />} />
                   
                   {/* Legal pages */}
                   <Route path="/privacy" element={<PrivacyPolicy />} />
