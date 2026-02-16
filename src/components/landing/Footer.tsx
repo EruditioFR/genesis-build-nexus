@@ -49,21 +49,6 @@ const Footer = () => {
             <p className="text-sm sm:text-base text-primary-foreground/70 leading-relaxed mb-4 sm:mb-6 max-w-xs">
               {t('footer.description')}
             </p>
-            {/* Social Links */}
-            <div className="flex gap-3 sm:gap-4">
-              {["facebook", "twitter", "instagram", "linkedin"].map((social) => (
-                <a
-                  key={social}
-                  href="#"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary/20 transition-colors"
-                >
-                  <span className="sr-only">{social}</span>
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="4" />
-                  </svg>
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Link Columns */}

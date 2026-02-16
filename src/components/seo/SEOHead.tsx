@@ -8,6 +8,7 @@ interface SEOHeadProps {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
   noIndex?: boolean;
   jsonLd?: object | object[];
 }
@@ -15,12 +16,21 @@ interface SEOHeadProps {
 const SITE_URL = 'https://www.familygarden.fr';
 const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ko', 'zh'];
 
+const LANG_TO_LOCALE: Record<string, string> = {
+  fr: 'fr_FR',
+  en: 'en_US',
+  es: 'es_ES',
+  ko: 'ko_KR',
+  zh: 'zh_CN',
+};
+
 const SEOHead = ({
   title,
   description,
   ogTitle,
   ogDescription,
   ogImage,
+  ogType = 'website',
   noIndex = false,
   jsonLd,
 }: SEOHeadProps) => {
@@ -58,6 +68,23 @@ const SEOHead = ({
     setMeta('property', 'og:title', ogTitle || title);
     setMeta('property', 'og:description', ogDescription || description);
     setMeta('property', 'og:url', `${SITE_URL}${canonicalPath}`);
+    setMeta('property', 'og:type', ogType);
+    setMeta('property', 'og:site_name', 'Family Garden');
+    
+    // og:locale — current language + alternates
+    const currentLang = i18n.language?.substring(0, 2) || 'fr';
+    setMeta('property', 'og:locale', LANG_TO_LOCALE[currentLang] || 'fr_FR');
+    
+    // og:locale:alternate for other languages
+    const alternateLocaleEls: HTMLMetaElement[] = [];
+    SUPPORTED_LANGS.filter(l => l !== currentLang).forEach(lang => {
+      const el = document.createElement('meta');
+      el.setAttribute('property', 'og:locale:alternate');
+      el.content = LANG_TO_LOCALE[lang] || lang;
+      document.head.appendChild(el);
+      alternateLocaleEls.push(el);
+    });
+
     if (ogImage) {
       setMeta('property', 'og:image', ogImage);
     }
@@ -105,10 +132,11 @@ const SEOHead = ({
 
     return () => {
       hreflangLinks.forEach((link) => link.parentNode?.removeChild(link));
+      alternateLocaleEls.forEach((el) => el.parentNode?.removeChild(el));
       if (robotsMeta) robotsMeta.parentNode?.removeChild(robotsMeta);
       jsonLdScripts.forEach((s) => s.parentNode?.removeChild(s));
     };
-  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, noIndex, jsonLd]);
+  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogType, noIndex, jsonLd]);
 
   return null;
 };
