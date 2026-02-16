@@ -83,8 +83,25 @@
   },
   "testimonials": {
     "badge": "用户评价",
-    "title": "他们信任我们",
-    "subtitle": "了解用户对Family Garden的评价。"
+    "title": "他们保存自己的",
+    "titleHighlight": "传承",
+    "items": {
+      "t1": {
+        "quote": "我保存了祖母的所有故事。我的孙辈们将发现她令人难以置信的人生旅程。",
+        "author": "Marie D.",
+        "role": "退休人员，68岁"
+      },
+      "t2": {
+        "quote": "作为企业家，记录我的旅程至关重要。Family Garden为我提供了一个优雅的平台来激励后代。",
+        "author": "David L.",
+        "role": "企业家，45岁"
+      },
+      "t3": {
+        "quote": "多亏了协作功能，我们全家都能为父亲的胶囊做出贡献。这是一份无价的礼物。",
+        "author": "Sophie M.",
+        "role": "家庭看护者，35岁"
+      }
+    }
   },
   "pricing": {
     "badge": "价格",

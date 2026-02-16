@@ -83,8 +83,25 @@
   },
   "testimonials": {
     "badge": "후기",
-    "title": "고객들의 신뢰",
-    "subtitle": "Family Garden에 대한 사용자들의 이야기를 확인하세요."
+    "title": "그들은 자신의",
+    "titleHighlight": "유산을 보존합니다",
+    "items": {
+      "t1": {
+        "quote": "할머니의 모든 이야기를 보존할 수 있었습니다. 손자들이 할머니의 놀라운 여정을 발견하게 될 것입니다.",
+        "author": "Marie D.",
+        "role": "은퇴자, 68세"
+      },
+      "t2": {
+        "quote": "기업가로서 제 여정을 기록하는 것은 필수적이었습니다. Family Garden은 미래 세대에게 영감을 주기 위한 우아한 플랫폼을 제공합니다.",
+        "author": "David L.",
+        "role": "기업가, 45세"
+      },
+      "t3": {
+        "quote": "협업 기능 덕분에 온 가족이 아버지의 캡슐에 기여할 수 있었습니다. 값을 수 없는 선물입니다.",
+        "author": "Sophie M.",
+        "role": "가족 간병인, 35세"
+      }
+    }
   },
   "pricing": {
     "badge": "요금제",
