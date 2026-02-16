@@ -83,8 +83,25 @@
   },
   "testimonials": {
     "badge": "Testimonials",
-    "title": "They trust us",
-    "subtitle": "Discover what our users say about Family Garden."
+    "title": "They preserve their",
+    "titleHighlight": "legacy",
+    "items": {
+      "t1": {
+        "quote": "I was able to preserve all my grandmother's stories. My grandchildren will discover her incredible journey.",
+        "author": "Marie D.",
+        "role": "Retired, 68 years old"
+      },
+      "t2": {
+        "quote": "As an entrepreneur, documenting my journey was essential. Family Garden gives me an elegant platform to inspire future generations.",
+        "author": "David L.",
+        "role": "Entrepreneur, 45 years old"
+      },
+      "t3": {
+        "quote": "Thanks to the collaborative features, my whole family was able to contribute to our father's capsule. A priceless gift.",
+        "author": "Sophie M.",
+        "role": "Family caregiver, 35 years old"
+      }
+    }
   },
   "pricing": {
     "badge": "Pricing",
