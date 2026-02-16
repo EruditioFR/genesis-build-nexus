@@ -1,56 +1,70 @@
 
 
-# Harmoniser les couleurs des souvenirs avec la charte graphique
+# Nouvelles couleurs complementaires pour les types de souvenirs
 
-## Probleme identifie
+## Constat
 
-La palette du projet est "Bleu nuit, Or chaud, Terracotta, Gris perle" (definie dans `index.css`), mais les couleurs associees aux types de souvenirs utilisent des couleurs Tailwind generiques qui ne s'integrent pas :
+Actuellement, les types de souvenirs reutilisent les couleurs principales du site (bleu nuit, or chaud, terracotta). Cela les rend peu distinctifs et "fond dans le decor". L'objectif est de trouver des couleurs **complementaires** qui s'harmonisent avec la charte sans la repeter.
 
-| Type | CapsuleCardVisuals | TimelineCapsuleCard | YearModal |
-|------|-------------------|---------------------|-----------|
-| Texte | sky-500 | blue-500 | blue-500 |
-| Photo | amber-500 | emerald-500 | emerald-500 |
-| Video | violet-500 | purple-500 | purple-500 |
-| Audio | orange-500 | orange-500 | orange-500 |
-| Mixte | emerald-500 | pink-500 | pink-500 |
+## Charte actuelle du site
 
-Trois problemes :
-1. Les couleurs ne respectent pas la charte (bleu nuit, or, terracotta, perle)
-2. Les definitions sont incoherentes entre les fichiers
-3. Trop de teintes vives differentes creent un effet "arc-en-ciel" peu harmonieux
+| Token | Teinte | HSL |
+|-------|--------|-----|
+| Primary (Bleu nuit) | 215 degres | 215 50% 23% |
+| Secondary (Or chaud) | 38 degres | 38 45% 42% |
+| Accent (Terracotta) | 16 degres | 16 55% 55% |
 
-## Solution
+## Nouvelle palette complementaire proposee
 
-Adopter une palette unique basee sur les tokens du design system, avec des teintes sobres et coherentes :
+En utilisant les principes de complementarite et de triades sur le cercle chromatique :
 
-| Type | Nouvelle couleur | Justification |
-|------|-----------------|---------------|
-| Texte | `--secondary` (or chaud) | L'ecriture evoque le parchemin, la chaleur |
-| Photo | `--primary` (bleu nuit) | Couleur principale sobre et elegante |
-| Video | `--accent` (terracotta) | Couleur d'accent vive mais douce |
-| Audio | `--navy-light` (bleu clair) | Variante du bleu, distingue de photo |
-| Mixte | `--gold-light` (or clair) | Variante de l'or, distingue de texte |
+| Type | Couleur | HSL | Justification |
+|------|---------|-----|---------------|
+| Photo | Sauge / Vert doux | 155 35% 42% | Complementaire du terracotta (16 degres), evoque la nature, les paysages |
+| Video | Prune / Mauve | 280 30% 45% | Complementaire de l'or (38 degres), evoque le cinema, le spectacle |
+| Audio | Sarcelle / Teal | 190 40% 40% | Complementaire chaud du terracotta, evoque la profondeur sonore |
+| Texte | Rose ancien | 345 30% 52% | Triadique du bleu nuit, evoque le papier ancien, l'ecriture |
+| Mixte | Ardoise / Slate | 230 20% 50% | Analogue adouci du bleu nuit, neutre pour le "melange" |
+
+Ces teintes sont **desaturees** (30-40% de saturation) pour rester sobres et elegantes, en accord avec l'esprit du site.
 
 ## Fichiers modifies
 
 | Fichier | Modification |
 |---------|-------------|
-| `src/components/capsule/CapsuleCardVisuals.tsx` | Mettre a jour `getTypeStyles` avec les couleurs harmonisees, ajuster les fallback visuels (audio wave bg, text bg) |
-| `src/components/timeline/TimelineCapsuleCard.tsx` | Aligner `capsuleTypeConfig` sur les memes couleurs |
-| `src/components/timeline/YearModal.tsx` | Aligner `capsuleTypeConfig` sur les memes couleurs |
+| `src/index.css` | Ajouter 5 nouveaux tokens CSS (`--capsule-photo`, `--capsule-video`, etc.) dans `:root` et `.dark` |
+| `src/components/capsule/CapsuleCardVisuals.tsx` | Mettre a jour `getTypeStyles` pour utiliser les nouveaux tokens |
+| `src/components/timeline/TimelineCapsuleCard.tsx` | Aligner `capsuleTypeConfig` sur les nouveaux tokens |
+| `src/components/timeline/YearModal.tsx` | Aligner `capsuleTypeConfig` sur les nouveaux tokens |
 
 ## Detail technique
 
-Les couleurs utiliseront les variables CSS du design system via des classes Tailwind personnalisees ou les tokens HSL existants. Par exemple :
+Nouveaux tokens CSS dans `index.css` :
+
+```text
+:root {
+  --capsule-photo: 155 35% 42%;
+  --capsule-video: 280 30% 45%;
+  --capsule-audio: 190 40% 40%;
+  --capsule-text: 345 30% 52%;
+  --capsule-mixed: 230 20% 50%;
+}
+```
+
+Utilisation dans les composants :
 
 ```text
 getTypeStyles:
-  photo  -> bg-[hsl(var(--primary))]
-  video  -> bg-[hsl(var(--accent))]
-  text   -> bg-[hsl(var(--secondary))]
-  audio  -> bg-[hsl(var(--navy-light))]  (215 40% 38%)
-  mixed  -> bg-[hsl(var(--gold-light))]  (38 40% 60%)
+  photo -> bg-[hsl(var(--capsule-photo))]  text-white
+  video -> bg-[hsl(var(--capsule-video))]  text-white
+  audio -> bg-[hsl(var(--capsule-audio))]  text-white
+  text  -> bg-[hsl(var(--capsule-text))]   text-white
+  mixed -> bg-[hsl(var(--capsule-mixed))]  text-white
 ```
 
-Les backgrounds de fallback (audio wave, text quote) seront aussi ajustes pour utiliser les memes teintes en version legere.
+Les backgrounds de fallback (audio wave, text quote) utiliseront aussi ces tokens en version legere (opacity 10-15%).
+
+## Variantes mode sombre
+
+Les tokens seront legerement ajustes en mode sombre pour maintenir la lisibilite (luminosite augmentee de ~10%).
 
