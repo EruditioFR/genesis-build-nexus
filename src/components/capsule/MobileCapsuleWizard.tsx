@@ -155,9 +155,14 @@ const MobileCapsuleWizard = ({
       case 0:
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-display font-bold text-foreground">
-              {t('wizard.infoTitle')}
-            </h2>
+            <div>
+              <h2 className="text-xl font-display font-bold text-foreground">
+                {t('wizard.infoTitle')}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t('wizard.infoHelper')}
+              </p>
+            </div>
 
             <div>
               <Label className="text-base font-semibold mb-2 block">
@@ -194,9 +199,14 @@ const MobileCapsuleWizard = ({
       case 1:
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-display font-bold text-foreground">
-              {t('wizard.contentTitle', 'Contenus')}
-            </h2>
+            <div>
+              <h2 className="text-xl font-display font-bold text-foreground">
+                {t('wizard.contentTitle', 'Contenus')}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t('wizard.contentHelper')}
+              </p>
+            </div>
 
             {mediaError && (
               <p className="text-sm text-destructive text-center p-3 rounded-lg bg-destructive/10 border border-destructive/30">
@@ -226,9 +236,14 @@ const MobileCapsuleWizard = ({
       case 2:
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-display font-bold text-foreground">
-              {t('wizard.detailsTitle')}
-            </h2>
+            <div>
+              <h2 className="text-xl font-display font-bold text-foreground">
+                {t('wizard.detailsTitle')}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t('wizard.detailsHelper')}
+              </p>
+            </div>
 
             <div className="p-3 rounded-xl border border-border bg-card">
               <Label className="text-base font-semibold mb-3 block">
@@ -274,9 +289,14 @@ const MobileCapsuleWizard = ({
 
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-display font-bold text-foreground text-center">
-              {t('wizard.reviewTitle')}
-            </h2>
+            <div>
+              <h2 className="text-xl font-display font-bold text-foreground text-center">
+                {t('wizard.reviewTitle')}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1 text-center">
+                {t('wizard.reviewHelper')}
+              </p>
+            </div>
 
             <div className="p-4 rounded-xl border border-border bg-card space-y-3">
               <div>
