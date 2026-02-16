@@ -1,70 +1,131 @@
 
 
-# Nouvelles couleurs complementaires pour les types de souvenirs
+# Audit SEO complet -- Family Garden
 
-## Constat
+## Ce qui est deja bien fait
 
-Actuellement, les types de souvenirs reutilisent les couleurs principales du site (bleu nuit, or chaud, terracotta). Cela les rend peu distinctifs et "fond dans le decor". L'objectif est de trouver des couleurs **complementaires** qui s'harmonisent avec la charte sans la repeter.
+- SEOHead dynamique sur toutes les pages publiques (title, description, canonical, OG, hreflang)
+- JSON-LD riche : Organization, SoftwareApplication, WebSite, HowTo, FAQPage, BreadcrumbList, AboutPage
+- NoIndex sur toutes les pages authentifiees (dashboard, capsules, timeline, profile, etc.)
+- robots.txt bien configure avec Disallow sur les pages privees
+- sitemap.xml avec toutes les pages publiques
+- Images hero avec alt descriptifs et optimises
+- Preload du hero background
+- DNS prefetch pour le backend
+- Lazy loading des sections below-the-fold
+- Open Graph avec image custom 1200x630
 
-## Charte actuelle du site
+---
 
-| Token | Teinte | HSL |
-|-------|--------|-----|
-| Primary (Bleu nuit) | 215 degres | 215 50% 23% |
-| Secondary (Or chaud) | 38 degres | 38 45% 42% |
-| Accent (Terracotta) | 16 degres | 16 55% 55% |
+## Problemes identifies et optimisations proposees
 
-## Nouvelle palette complementaire proposee
+### 1. SPA et indexation : pre-rendering manquant (CRITIQUE)
 
-En utilisant les principes de complementarite et de triades sur le cercle chromatique :
+**Probleme** : En tant que SPA React, le HTML envoye au crawler est une page vide (`<div id="root"></div>`). Googlebot execute le JS mais avec des limites. Les meta tags injectes dynamiquement par SEOHead ne sont pas dans le HTML initial.
 
-| Type | Couleur | HSL | Justification |
-|------|---------|-----|---------------|
-| Photo | Sauge / Vert doux | 155 35% 42% | Complementaire du terracotta (16 degres), evoque la nature, les paysages |
-| Video | Prune / Mauve | 280 30% 45% | Complementaire de l'or (38 degres), evoque le cinema, le spectacle |
-| Audio | Sarcelle / Teal | 190 40% 40% | Complementaire chaud du terracotta, evoque la profondeur sonore |
-| Texte | Rose ancien | 345 30% 52% | Triadique du bleu nuit, evoque le papier ancien, l'ecriture |
-| Mixte | Ardoise / Slate | 230 20% 50% | Analogue adouci du bleu nuit, neutre pour le "melange" |
+**Solution** : Pas realisable directement dans Lovable (necessite un serveur de pre-rendering). Mais on peut ameliorer le HTML statique de `index.html` pour que les metadonnees par defaut soient presentes.
 
-Ces teintes sont **desaturees** (30-40% de saturation) pour rester sobres et elegantes, en accord avec l'esprit du site.
+**Action** : Verifier que le `index.html` contient deja les bonnes meta par defaut (c'est le cas). Aucune modification requise ici -- la config actuelle est le maximum possible dans une SPA.
 
-## Fichiers modifies
+### 2. Page 404 non optimisee
 
-| Fichier | Modification |
-|---------|-------------|
-| `src/index.css` | Ajouter 5 nouveaux tokens CSS (`--capsule-photo`, `--capsule-video`, etc.) dans `:root` et `.dark` |
-| `src/components/capsule/CapsuleCardVisuals.tsx` | Mettre a jour `getTypeStyles` pour utiliser les nouveaux tokens |
-| `src/components/timeline/TimelineCapsuleCard.tsx` | Aligner `capsuleTypeConfig` sur les nouveaux tokens |
-| `src/components/timeline/YearModal.tsx` | Aligner `capsuleTypeConfig` sur les nouveaux tokens |
+**Probleme** : La page NotFound affiche un texte en anglais ("Oops! Page not found", "Return to Home") et n'a pas de SEOHead avec noIndex.
 
-## Detail technique
+**Actions** :
+- Ajouter `<SEOHead title="Page non trouvee | Family Garden" noIndex={true} />`
+- Traduire le contenu en francais
+- Ajouter un lien vers les pages principales (FAQ, About)
 
-Nouveaux tokens CSS dans `index.css` :
+### 3. Liens sociaux du footer pointent vers "#"
 
-```text
-:root {
-  --capsule-photo: 155 35% 42%;
-  --capsule-video: 280 30% 45%;
-  --capsule-audio: 190 40% 40%;
-  --capsule-text: 345 30% 52%;
-  --capsule-mixed: 230 20% 50%;
-}
-```
+**Probleme** : Les icones Facebook, Twitter, Instagram, LinkedIn dans le Footer ont `href="#"` et affichent des cercles generiques au lieu de vraies icones. Cela nuit a l'E-E-A-T et a l'experience.
 
-Utilisation dans les composants :
+**Actions** :
+- Soit retirer les icones sociales si aucun compte n'existe
+- Soit les remplacer par les vrais liens une fois les comptes crees
 
-```text
-getTypeStyles:
-  photo -> bg-[hsl(var(--capsule-photo))]  text-white
-  video -> bg-[hsl(var(--capsule-video))]  text-white
-  audio -> bg-[hsl(var(--capsule-audio))]  text-white
-  text  -> bg-[hsl(var(--capsule-text))]   text-white
-  mixed -> bg-[hsl(var(--capsule-mixed))]  text-white
-```
+### 4. Section Temoignages non internationalisee
 
-Les backgrounds de fallback (audio wave, text quote) utiliseront aussi ces tokens en version legere (opacity 10-15%).
+**Probleme** : `TestimonialsSection.tsx` a tout le contenu en dur en francais (pas de `useTranslation`). Les badges "Temoignages" et "heritage" ne passent pas par i18n.
 
-## Variantes mode sombre
+**Action** : Internationaliser cette section via le namespace `landing`.
 
-Les tokens seront legerement ajustes en mode sombre pour maintenir la lisibilite (luminosite augmentee de ~10%).
+### 5. Balises semantiques manquantes sur certaines pages
+
+**Probleme** : Certaines pages publiques n'utilisent pas de balise `<main>` :
+- `About.tsx` : pas de `<main>`
+- `Premium.tsx` : utilise `<main>` (OK)
+- `FAQ.tsx` : utilise `<main>` (OK)
+
+**Action** : Ajouter `<main>` sur la page About pour ameliorer la semantique HTML.
+
+### 6. Attributs d'accessibilite manquants (impact SEO indirect)
+
+**Probleme** : 
+- Le toggle mensuel/annuel sur PricingSection et Premium n'a pas de `role="switch"` ni `aria-checked`
+- Le menu mobile du Header n'a pas d'`aria-expanded`
+
+**Actions** : Ajouter les attributs ARIA manquants.
+
+### 7. Sitemap incomplet
+
+**Probleme** : Le sitemap ne contient pas la page `/inspirations` qui est une page publique potentielle. Il manque aussi les `<lastmod>` sur toutes les URLs.
+
+**Actions** :
+- Ajouter `/inspirations` si c'est une page publique
+- Ajouter des `<lastmod>` avec une date recente sur chaque URL
+
+### 8. Page Signup sans SEOHead
+
+**Probleme** : La page `/signup` n'a probablement pas de SEOHead (elle n'apparait pas dans la recherche).
+
+**Action** : Ajouter `<SEOHead>` avec title/description pertinents sur la page Signup.
+
+### 9. Image preload incorrecte
+
+**Probleme** : Le `index.html` fait un preload de `/src/assets/hero-background.jpg` mais le fichier reel est `hero-background.webp`. Le preload ne fonctionne donc pas.
+
+**Action** : Corriger le chemin du preload ou le retirer (Vite transforme les imports de toute facon).
+
+### 10. Pas de meta `og:type` dynamique
+
+**Probleme** : Le `og:type` est defini statiquement comme "website" dans `index.html` mais n'est jamais mis a jour par SEOHead. Les pages comme FAQ ou About devraient avoir `og:type: article`.
+
+**Action** : Ajouter la gestion de `og:type` dans SEOHead.
+
+### 11. Pas de `og:locale` ni `og:site_name`
+
+**Probleme** : Les meta OG ne contiennent pas `og:locale` (devrait etre `fr_FR`) ni `og:site_name` (devrait etre "Family Garden").
+
+**Action** : Ajouter ces deux meta dans SEOHead.
+
+### 12. Mot-cle "capsule memorielle" vs "souvenir"
+
+**Observation** : Le site utilise les deux termes de facon inconsistante. Le JSON-LD parle de "capsules memorielles" tandis que les pages utilisent "souvenir". Pour le SEO, il faut choisir un terme principal et l'utiliser de facon coherente dans les titles et descriptions.
+
+**Recommandation** : Pas de modification de code mais uniformiser la terminologie dans les prochaines iterations.
+
+---
+
+## Fichiers a modifier
+
+| Fichier | Modifications |
+|---------|---------------|
+| `src/pages/NotFound.tsx` | Ajouter SEOHead avec noIndex, traduire en francais, ameliorer le design |
+| `index.html` | Corriger le preload (jpg -> webp ou retirer), ajouter og:locale et og:site_name |
+| `src/components/seo/SEOHead.tsx` | Ajouter og:type, og:locale, og:site_name |
+| `src/components/landing/TestimonialsSection.tsx` | Internationaliser via i18n |
+| `src/components/landing/Footer.tsx` | Retirer les liens sociaux factices ou les masquer |
+| `public/sitemap.xml` | Ajouter lastmod et page /inspirations si publique |
+| `src/pages/About.tsx` | Ajouter balise `<main>` semantique |
+| `src/pages/Signup.tsx` | Ajouter SEOHead si manquant |
+
+## Priorite d'implementation
+
+1. **Haute** : Corriger preload index.html, ajouter og:locale/og:site_name/og:type dans SEOHead
+2. **Haute** : Page 404 en francais + noIndex
+3. **Moyenne** : Sitemap avec lastmod
+4. **Moyenne** : Retirer liens sociaux factices du footer
+5. **Basse** : Internationaliser les temoignages
+6. **Basse** : Attributs ARIA d'accessibilite
 
