@@ -342,7 +342,7 @@ const PrivacyPolicy = () => {
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               {t('privacy.sections.contact.contactTitle')}{" "}
-              <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
+              <a href="mailto:contact@familygarden.fr" className="text-primary hover:underline">contact@familygarden.fr</a>
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-4">
               <p className="font-semibold text-foreground mb-2">{t('privacy.sections.contact.dpo')}</p>
