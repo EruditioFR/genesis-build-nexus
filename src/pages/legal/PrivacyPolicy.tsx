@@ -17,10 +17,10 @@ const PrivacyPolicy = () => {
   }, []);
 
   const internationalTransfers = [
-  { name: "Stripe", purpose: t('privacy.sections.transfers.stripe'), guarantees: "CCT + Data Privacy Framework" },
-  { name: "Resend", purpose: t('privacy.sections.transfers.resend'), guarantees: "CCT" },
-  { name: "Google Analytics", purpose: t('privacy.sections.transfers.analytics'), guarantees: "CCT + Anonymisation IP" }];
-
+    { name: "Stripe", purpose: t('privacy.sections.transfers.stripe'), guarantees: "CCT + Data Privacy Framework" },
+    { name: "Resend", purpose: t('privacy.sections.transfers.resend'), guarantees: "CCT" },
+    { name: "Google Analytics", purpose: t('privacy.sections.transfers.analytics'), guarantees: "CCT + Anonymisation IP" },
+  ];
 
   const getLocale = () => {
     const localeMap: Record<string, string> = {
@@ -39,10 +39,10 @@ const PrivacyPolicy = () => {
         title="Politique de confidentialité | Family Garden"
         description="Découvrez comment Family Garden protège vos données personnelles. Chiffrement AES-256, hébergement européen RGPD, contrôle total de vos souvenirs."
         jsonLd={createBreadcrumbSchema([
-        { name: "Accueil", url: "/" },
-        { name: "Confidentialité", url: "/privacy" }]
-        )} />
-
+          { name: "Accueil", url: "/" },
+          { name: "Confidentialité", url: "/privacy" },
+        ])}
+      />
       <Header forceSolid />
       <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
         <Button variant="ghost" asChild className="mb-6">
@@ -70,8 +70,8 @@ const PrivacyPolicy = () => {
               {t('privacy.sections.introduction.content')}
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
-              <p className="text-sm text-muted-foreground">Responsable du traitement : Jean-Baptiste BEJOT
-Email : privacy@familygarden.fr<strong>{t('privacy.sections.introduction.controller')}</strong> Family Garden SAS<br />
+              <p className="text-sm text-muted-foreground">
+                <strong>{t('privacy.sections.introduction.controller')}</strong> Family Garden SAS<br />
                 <strong>Email :</strong> <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
@@ -101,9 +101,9 @@ Email : privacy@familygarden.fr<strong>{t('privacy.sections.introduction.control
               {t('privacy.sections.dataUsage.intro')}
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              {(t('privacy.sections.dataUsage.items', { returnObjects: true }) as string[]).map((item, index) =>
-              <li key={index}>{item}</li>
-              )}
+              {(t('privacy.sections.dataUsage.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </section>
 
@@ -219,18 +219,18 @@ Email : privacy@familygarden.fr<strong>{t('privacy.sections.introduction.control
                   {t('privacy.sections.security.technical.title')}
                 </h3>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-1">
-                  {(t('privacy.sections.security.technical.items', { returnObjects: true }) as string[]).map((item, index) =>
-                  <li key={index}>{item}</li>
-                  )}
+                  {(t('privacy.sections.security.technical.items', { returnObjects: true }) as string[]).map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
 
               <div>
                 <h3 className="font-semibold text-foreground mb-3">{t('privacy.sections.security.organizational.title')}</h3>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-1">
-                  {(t('privacy.sections.security.organizational.items', { returnObjects: true }) as string[]).map((item, index) =>
-                  <li key={index}>{item}</li>
-                  )}
+                  {(t('privacy.sections.security.organizational.items', { returnObjects: true }) as string[]).map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -302,13 +302,13 @@ Email : privacy@familygarden.fr<strong>{t('privacy.sections.introduction.control
                     </tr>
                   </thead>
                   <tbody>
-                    {internationalTransfers.map((transfer, index) =>
-                    <tr key={index} className="hover:bg-muted/50">
+                    {internationalTransfers.map((transfer, index) => (
+                      <tr key={index} className="hover:bg-muted/50">
                         <td className="border border-border px-4 py-3 text-muted-foreground font-medium">{transfer.name}</td>
                         <td className="border border-border px-4 py-3 text-muted-foreground">{transfer.purpose}</td>
                         <td className="border border-border px-4 py-3 text-muted-foreground">{transfer.guarantees}</td>
                       </tr>
-                    )}
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -363,8 +363,8 @@ Email : privacy@familygarden.fr<strong>{t('privacy.sections.introduction.control
         </div>
       </div>
       <Footer />
-    </div>);
-
+    </div>
+  );
 };
 
 export default PrivacyPolicy;
