@@ -1,23 +1,23 @@
 
 
-# Retirer l'icone du type de media sur le souvenir mis en avant
-
-## Contexte
-
-Sur le dashboard, le souvenir mis en avant (FeaturedCard) affiche un badge de type (Photo, Video, Audio, etc.) en haut a gauche via le composant `TypeBadge`. Ce badge contient une icone + un texte.
+# Supprimer le bouton "Voir la demo" du Hero
 
 ## Modification
 
-**Fichier** : `src/components/dashboard/RecentCapsules.tsx`
+**Fichier** : `src/components/landing/HeroSection.tsx`
 
-Dans le composant `FeaturedCard`, retirer la ligne qui affiche `<TypeBadge>` :
+Retirer le second bouton CTA (le `motion.div` contenant le bouton "ghost" avec l'icone Play qui pointe vers `#how-it-works`). Cela correspond au bloc suivant (environ lignes 155-178) :
 
 ```text
-// Supprimer cette partie dans FeaturedCard :
-<div className="absolute top-4 left-4">
-  <TypeBadge type={capsule.type} t={t} />
-</div>
+<motion.div whileHover={...} className="w-full sm:w-auto">
+  <Button asChild variant="ghost" size="xl" ...>
+    <a href="#how-it-works">
+      <motion.span ...><Play ... /></motion.span>
+      {t('hero.cta.secondary')}
+    </a>
+  </Button>
+</motion.div>
 ```
 
-Cela concerne uniquement le souvenir mis en avant (le premier de la liste). Les cartes compactes en dessous conservent leur petite icone de type.
+Le bouton principal "Creer mon journal" reste inchange. L'import `Play` de lucide-react pourra aussi etre retire s'il n'est plus utilise ailleurs dans le fichier.
 
