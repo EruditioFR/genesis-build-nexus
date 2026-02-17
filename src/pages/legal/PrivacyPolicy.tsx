@@ -71,7 +71,7 @@ const PrivacyPolicy = () => {
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-muted-foreground">
-                <strong>{t('privacy.sections.introduction.controller')}</strong> Family Garden SAS<br />
+                <strong>{t('privacy.sections.introduction.controller')}</strong> Jean-Baptiste BEJOT<br />
                 <strong>Email :</strong> <a href="mailto:privacy@familygarden.fr" className="text-primary hover:underline">privacy@familygarden.fr</a>
               </p>
             </div>
