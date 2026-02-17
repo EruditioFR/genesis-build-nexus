@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Play, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -228,30 +228,6 @@ const HeroSection = () => {
                     <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
                   </motion.span>
                 </Link>
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{
-            scale: 1.05,
-            y: -2
-          }} whileTap={{
-            scale: 0.98
-          }} transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 17
-          }} className="w-full sm:w-auto">
-              <Button asChild variant="ghost" size="xl" className="text-primary-foreground hover:bg-primary-foreground/10 group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
-                <a href="#how-it-works">
-                  <motion.span className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-primary-foreground/30 transition-colors" whileHover={{
-                  scale: 1.1
-                }} transition={{
-                  type: "spring",
-                  stiffness: 400
-                }}>
-                    <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-                  </motion.span>
-                  {t('hero.cta.secondary')}
-                </a>
               </Button>
             </motion.div>
           </motion.div>
