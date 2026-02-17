@@ -339,8 +339,8 @@ const LegalNotice = () => {
               <p className="font-semibold text-foreground mb-2">{t('legalNotice.sections.dataProtection.dpo')}</p>
               <p className="text-muted-foreground">
                 {t('legalNotice.sections.dataProtection.email')}{" "}
-                <a href="mailto:dpo@familygarden.fr" className="text-primary hover:underline">
-                  dpo@familygarden.fr
+                <a href="mailto:contact@familygarden.fr" className="text-primary hover:underline">
+                  contact@familygarden.fr
                 </a>
               </p>
               <p className="text-muted-foreground mt-2">
