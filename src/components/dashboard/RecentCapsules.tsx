@@ -8,6 +8,7 @@ import CategoryBadge from '@/components/capsule/CategoryBadge';
 import { CapsuleVisual, TypeBadge, getTypeIcon, getTypeStyles } from '@/components/capsule/CapsuleCardVisuals';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import AdBanner from '@/components/ads/AdBanner';
 import type { Category } from '@/hooks/useCategories';
 
 interface Capsule {
@@ -176,6 +177,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       ) : (
         <div className="space-y-4">
           <FeaturedCard capsule={featured} category={capsuleCategories[featured.id]} t={t} />
+          <AdBanner className="my-3" />
           {rest.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {rest.map((capsule, index) => (

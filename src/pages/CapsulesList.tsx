@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -33,6 +33,7 @@ import { CapsuleVisual, TypeBadge, getTypeIcon, getTypeStyles } from '@/componen
 import { useCategories, type Category } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
 import { cn } from '@/lib/utils';
+import AdBanner from '@/components/ads/AdBanner';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -562,18 +563,28 @@ const CapsulesList = () => {
             />
 
             {/* Grid of remaining capsules */}
+            {/* Ad after featured card */}
+            <AdBanner className="my-4" />
+
             {rest.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {rest.map((capsule, index) => (
-                  <CompactListCard
-                    key={capsule.id}
-                    capsule={capsule}
-                    category={capsuleCategories[capsule.id]}
-                    index={index}
-                    t={t}
-                    navigate={(path) => navigate(path)}
-                    onDelete={openDeleteDialog}
-                  />
+                  <React.Fragment key={capsule.id}>
+                    <CompactListCard
+                      capsule={capsule}
+                      category={capsuleCategories[capsule.id]}
+                      index={index}
+                      t={t}
+                      navigate={(path) => navigate(path)}
+                      onDelete={openDeleteDialog}
+                    />
+                    {/* Ad every 4 capsules */}
+                    {(index + 1) % 4 === 0 && index < rest.length - 1 && (
+                      <div className="col-span-1 sm:col-span-2">
+                        <AdBanner className="my-2" />
+                      </div>
+                    )}
+                  </React.Fragment>
                 ))}
               </div>
             )}

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CategoryBadge from '@/components/capsule/CategoryBadge';
+import AdBanner from '@/components/ads/AdBanner';
 import type { Database } from '@/integrations/supabase/types';
 import type { Category } from '@/hooks/useCategories';
 
@@ -189,6 +190,10 @@ const YearModal = ({
                     );
                   })}
                 </div>
+                {/* Ad after every 2nd month group */}
+                {(monthIndex + 1) % 2 === 0 && monthIndex < Object.keys(groupedByMonth).length - 1 && (
+                  <AdBanner className="my-3" />
+                )}
               </div>
             ))}
           </div>
