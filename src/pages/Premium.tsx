@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Check, X, Crown, Sparkles, Loader2, Shield, Zap, Users, HardDrive, Building2, TreePine, Mic } from 'lucide-react';
+import { ArrowLeft, Check, X, Crown, Sparkles, Loader2, Shield, Zap, Users, HardDrive, Building2, TreePine, Mic, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -18,6 +19,8 @@ const Premium = () => {
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState<'premium' | 'heritage' | null>(null);
   const [isYearly, setIsYearly] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoApplied, setPromoApplied] = useState(false);
   
   // Determine which plan to highlight based on URL parameter
   const requestedTier = searchParams.get('tier');
@@ -32,7 +35,7 @@ const Premium = () => {
     setIsLoading(selectedTier);
     try {
       const billing = isYearly ? 'yearly' : 'monthly';
-      await createCheckout(selectedTier, billing);
+      await createCheckout(selectedTier, billing, promoApplied ? promoCode : undefined);
     } catch (error: any) {
       toast.error(error.message || 'Erreur lors de la création du paiement');
     } finally {
@@ -149,6 +152,47 @@ const Premium = () => {
           )}
         </motion.div>
 
+        {/* Promo Code */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="flex items-center justify-center gap-3 mb-10"
+        >
+          <div className="relative flex items-center gap-2">
+            <Tag className="w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Code promo"
+              value={promoCode}
+              onChange={(e) => {
+                setPromoCode(e.target.value);
+                setPromoApplied(false);
+              }}
+              className="w-44 h-9 text-sm"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if (promoCode.toLowerCase() === 'mamie') {
+                  setPromoApplied(true);
+                  toast.success('Code promo "Mamie" appliqué : -50% !');
+                } else {
+                  setPromoApplied(false);
+                  toast.error('Code promo invalide');
+                }
+              }}
+              disabled={!promoCode.trim()}
+            >
+              Appliquer
+            </Button>
+          </div>
+          {promoApplied && (
+            <Badge variant="outline" className="border-secondary text-secondary">
+              -50%
+            </Badge>
+          )}
+        </motion.div>
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8 mb-12">
           {/* Premium Card */}
@@ -191,7 +235,11 @@ const Premium = () => {
                 <span className={`text-5xl font-display font-bold ${
                   highlightHeritage ? 'text-foreground' : 'text-primary-foreground'
                 }`}>
-                  {isYearly ? '99' : '9,99'}€
+                  {promoApplied ? (
+                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">9,99€</s> 4,99</>}€</>
+                  ) : (
+                    <>{isYearly ? '99' : '9,99'}€</>
+                  )}
                 </span>
                 <span className={highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/70'}>
                   /{isYearly ? 'an' : 'mois'}
@@ -285,7 +333,11 @@ const Premium = () => {
                 <span className={`text-5xl font-display font-bold ${
                   highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
                 }`}>
-                  {isYearly ? '199' : '19,99'}€
+                  {promoApplied ? (
+                    <>{isYearly ? <><s className="text-3xl opacity-50">199€</s> 99,50</> : <><s className="text-3xl opacity-50">19,99€</s> 9,99</>}€</>
+                  ) : (
+                    <>{isYearly ? '199' : '19,99'}€</>
+                  )}
                 </span>
                 <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
                   /{isYearly ? 'an' : 'mois'}

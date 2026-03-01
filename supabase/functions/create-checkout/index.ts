@@ -49,7 +49,7 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { tier, billing = "monthly" } = await req.json();
+    const { tier, billing = "monthly", promoCode } = await req.json();
     if (!tier || !SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS]) {
       throw new Error("Invalid subscription tier");
     }
@@ -81,6 +81,13 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "https://fngbrxoblmbukqzzdwxp.lovable.app";
 
+    // Handle promo code "Mamie" (case-insensitive) -> 50% off
+    let discounts: Array<{ coupon: string }> | undefined;
+    if (promoCode && promoCode.toLowerCase() === "mamie") {
+      discounts = [{ coupon: "TjuFD7gh" }];
+      logStep("Promo code applied", { code: promoCode });
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -91,6 +98,7 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
+      ...(discounts ? { discounts } : { allow_promotion_codes: true }),
       success_url: `${origin}/profile?subscription=success`,
       cancel_url: `${origin}/profile?subscription=canceled`,
       metadata: {
