@@ -130,10 +130,10 @@ export const useSubscription = () => {
     return () => clearInterval(interval);
   }, [checkSubscription]);
 
-  const createCheckout = async (tier: 'premium' | 'heritage', billing: 'monthly' | 'yearly' = 'monthly') => {
+  const createCheckout = async (tier: 'premium' | 'heritage', billing: 'monthly' | 'yearly' = 'monthly', promoCode?: string) => {
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier, billing },
+        body: { tier, billing, promoCode },
       });
 
       if (error) throw error;
