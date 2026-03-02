@@ -53,7 +53,7 @@ const handler = async (req: Request): Promise<Response> => {
     const logoUrl = "https://www.familygarden.fr/logo.png";
 
     const emailResponse = await resend.emails.send({
-      from: "FamilyGarden <contact@familygarden.fr>",
+      from: "FamilyGarden <web@familygarden.fr>",
       to: [guardianEmail],
       subject: `${ownerName} vous désigne comme gardien de ses souvenirs`,
       html: `

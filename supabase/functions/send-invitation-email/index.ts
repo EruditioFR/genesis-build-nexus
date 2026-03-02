@@ -59,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
     const logoUrl = `${appUrl}/logo.png`;
 
     const emailResponse = await resend.emails.send({
-      from: "FamilyGarden <contact@familygarden.fr>",
+      from: "FamilyGarden <web@familygarden.fr>",
       to: [memberEmail],
       subject: `${inviterName} vous invite à rejoindre le cercle "${circleName}"`,
       html: `

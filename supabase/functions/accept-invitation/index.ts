@@ -181,7 +181,7 @@ serve(async (req: Request) => {
             const logoUrl = "https://www.familygarden.fr/logo.png";
 
             await resend.emails.send({
-              from: "FamilyGarden <contact@familygarden.fr>",
+              from: "FamilyGarden <web@familygarden.fr>",
               to: [ownerEmail],
               subject: `${memberName} a rejoint votre cercle "${circleName}"`,
               html: `
