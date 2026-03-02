@@ -53,6 +53,7 @@ const AdminComments = lazy(() => import("./pages/admin/AdminComments"));
 const AdminSubscriptions = lazy(() => import("./pages/admin/AdminSubscriptions"));
 const AdminRoles = lazy(() => import("./pages/admin/AdminRoles"));
 const AdminStats = lazy(() => import("./pages/admin/AdminStats"));
+const AdminContactMessages = lazy(() => import("./pages/admin/AdminContactMessages"));
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,7 @@ const App = () => (
                     <Route path="subscriptions" element={<AdminSubscriptions />} />
                     <Route path="roles" element={<AdminRoles />} />
                     <Route path="stats" element={<AdminStats />} />
+                    <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
