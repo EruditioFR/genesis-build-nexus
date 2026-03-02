@@ -37,8 +37,8 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "FamilyGarden <noreply@familygarden.fr>",
-        to: ["contact@familygarden.fr"],
+        from: "FamilyGarden <web@familygarden.fr>",
+        to: ["web@familygarden.fr"],
         reply_to: email,
         subject: `[Contact] ${subject || "Nouveau message"}`,
         html: `
