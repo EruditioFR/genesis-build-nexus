@@ -190,6 +190,18 @@
       }
     }
   },
+  "contact": {
+    "badge": "문의",
+    "title": "질문이 있으신가요?",
+    "titleHighlight": "문의하세요",
+    "subtitle": "48시간 이내에 답변드립니다. 언제든지 문의해 주세요.",
+    "fields": { "name": "이름", "email": "이메일", "subject": "제목", "message": "메시지" },
+    "placeholders": { "name": "홍길동", "email": "hong@example.com", "subject": "FamilyGarden 관련 문의", "message": "안녕하세요..." },
+    "submit": "메시지 보내기",
+    "sending": "전송 중...",
+    "success": "메시지가 전송되었습니다! 곧 답변드리겠습니다.",
+    "error": "오류가 발생했습니다. 다시 시도해 주세요."
+  },
   "cta": {
     "title": "당신의 추억은",
     "titleHighlight": "보존받을 자격이 있습니다",

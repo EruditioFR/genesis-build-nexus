@@ -13,6 +13,7 @@ const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSect
 const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
+const ContactSection = lazy(() => import("@/components/landing/ContactSection"));
 const CTASection = lazy(() => import("@/components/landing/CTASection"));
 const Footer = lazy(() => import("@/components/landing/Footer"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
@@ -59,6 +60,7 @@ const Index = () => {
           <TestimonialsSection />
           <PricingSection />
           <FAQSection />
+          <ContactSection />
           <CTASection />
         </Suspense>
       </main>

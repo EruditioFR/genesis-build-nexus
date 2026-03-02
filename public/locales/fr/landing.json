@@ -192,6 +192,28 @@
       }
     }
   },
+  "contact": {
+    "badge": "Contact",
+    "title": "Une question ?",
+    "titleHighlight": "Écrivez-nous",
+    "subtitle": "Notre équipe vous répond sous 48h. N'hésitez pas à nous contacter pour toute question.",
+    "fields": {
+      "name": "Votre nom",
+      "email": "Votre email",
+      "subject": "Sujet",
+      "message": "Votre message"
+    },
+    "placeholders": {
+      "name": "Jean Dupont",
+      "email": "jean@exemple.fr",
+      "subject": "Question sur FamilyGarden",
+      "message": "Bonjour, je souhaiterais..."
+    },
+    "submit": "Envoyer le message",
+    "sending": "Envoi en cours...",
+    "success": "Message envoyé ! Nous vous répondrons rapidement.",
+    "error": "Une erreur est survenue. Veuillez réessayer."
+  },
   "cta": {
     "title": "Vos souvenirs méritent",
     "titleHighlight": "d'être préservés",

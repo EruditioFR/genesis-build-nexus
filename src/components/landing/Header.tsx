@@ -50,6 +50,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     { label: t('nav.howItWorks'), href: "#how-it-works" },
     { label: t('nav.pricing'), href: "#pricing" },
     { label: t('nav.about'), href: "/about", isRoute: true },
+    { label: t('nav.contact'), href: "#contact" },
   ];
 
   const getInitials = () => {

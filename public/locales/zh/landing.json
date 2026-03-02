@@ -190,6 +190,18 @@
       }
     }
   },
+  "contact": {
+    "badge": "联系我们",
+    "title": "有问题？",
+    "titleHighlight": "联系我们",
+    "subtitle": "我们的团队会在48小时内回复。请随时联系我们。",
+    "fields": { "name": "您的姓名", "email": "您的邮箱", "subject": "主题", "message": "您的消息" },
+    "placeholders": { "name": "张三", "email": "zhang@example.com", "subject": "关于FamilyGarden的问题", "message": "您好，我想..." },
+    "submit": "发送消息",
+    "sending": "发送中...",
+    "success": "消息已发送！我们会尽快回复。",
+    "error": "发生错误，请重试。"
+  },
   "cta": {
     "title": "您的回忆值得",
     "titleHighlight": "被保存",

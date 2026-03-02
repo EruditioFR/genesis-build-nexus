@@ -190,6 +190,18 @@
       }
     }
   },
+  "contact": {
+    "badge": "Contacto",
+    "title": "¿Tienes alguna pregunta?",
+    "titleHighlight": "Escríbenos",
+    "subtitle": "Nuestro equipo responde en 48 horas. No dudes en contactarnos.",
+    "fields": { "name": "Tu nombre", "email": "Tu email", "subject": "Asunto", "message": "Tu mensaje" },
+    "placeholders": { "name": "Juan Pérez", "email": "juan@ejemplo.com", "subject": "Pregunta sobre FamilyGarden", "message": "Hola, me gustaría..." },
+    "submit": "Enviar mensaje",
+    "sending": "Enviando...",
+    "success": "¡Mensaje enviado! Te responderemos pronto.",
+    "error": "Ocurrió un error. Por favor, inténtalo de nuevo."
+  },
   "cta": {
     "title": "Tus recuerdos merecen",
     "titleHighlight": "ser preservados",

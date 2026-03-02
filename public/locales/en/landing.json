@@ -190,6 +190,28 @@
       }
     }
   },
+  "contact": {
+    "badge": "Contact",
+    "title": "Have a question?",
+    "titleHighlight": "Get in touch",
+    "subtitle": "Our team responds within 48 hours. Feel free to reach out with any questions.",
+    "fields": {
+      "name": "Your name",
+      "email": "Your email",
+      "subject": "Subject",
+      "message": "Your message"
+    },
+    "placeholders": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "subject": "Question about FamilyGarden",
+      "message": "Hello, I would like to..."
+    },
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": "Message sent! We'll get back to you soon.",
+    "error": "An error occurred. Please try again."
+  },
   "cta": {
     "title": "Your memories deserve",
     "titleHighlight": "to be preserved",
