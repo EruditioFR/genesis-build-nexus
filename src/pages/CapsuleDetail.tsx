@@ -102,7 +102,8 @@ const CapsuleDetail = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+  const [heroImageUrls, setHeroImageUrls] = useState<string[]>([]);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
 
   // Parallax effect for hero image
