@@ -46,7 +46,7 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
       <CapsuleThumbnail
         thumbnailUrl={capsule.thumbnail}
         fallbackIcon={null}
-        className={cn("w-full h-full object-cover transition-transform duration-700 group-hover:scale-105", className)}
+        className={cn("w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105", className)}
       />
     );
   }
