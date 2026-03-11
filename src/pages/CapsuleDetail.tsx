@@ -799,6 +799,19 @@ const CapsuleDetail = () => {
                     </div>
                   </div>
 
+                  {/* Updated date */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">{t('detail.updatedAt', 'Modifié le')}</p>
+                      <p className="font-medium text-foreground">
+                        {format(new Date(capsule.updated_at), 'd MMM yyyy', { locale: dateLocale })}
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Sub-categories */}
                   {capsuleSubCategories.length > 0 &&
                   <div className="pt-3 border-t border-border">
