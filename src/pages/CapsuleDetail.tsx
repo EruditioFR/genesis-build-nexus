@@ -681,6 +681,42 @@ const CapsuleDetail = () => {
           <div className="grid gap-6 md:grid-cols-3">
             {/* Main Column */}
             <div className="md:col-span-2 space-y-6">
+              {/* Media Gallery - Prominent position */}
+              {medias.length > 0 &&
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.08 }}
+                className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-xl font-display font-bold text-foreground flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-lg bg-secondary/15 flex items-center justify-center">
+                        <Image className="w-5 h-5 text-secondary" />
+                      </div>
+                      {t('detail.mediaGallery')}
+                      <Badge variant="secondary" className="ml-1 text-xs">{medias.length}</Badge>
+                    </h2>
+                    <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => capsule && openStory([capsule])}
+                    disabled={storyLoading}
+                    className="gap-2 rounded-lg">
+                    
+                      <Play className="w-4 h-4" />
+                      {t('detail.viewInStory')}
+                    </Button>
+                  </div>
+                  <MediaGallery
+                  medias={medias}
+                  capsuleId={capsule.id}
+                  thumbnailUrl={capsule.thumbnail_url}
+                  onThumbnailChange={(url) => setCapsule((prev) => prev ? { ...prev, thumbnail_url: url } : null)} />
+                
+                </motion.div>
+              }
+
               {/* Description */}
               {capsule.description &&
               <motion.div
@@ -725,39 +761,6 @@ const CapsuleDetail = () => {
                     className="w-full h-full" />
                   
                   </div>
-                </motion.div>
-              }
-
-              {/* Media Gallery */}
-              {medias.length > 0 &&
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 }}>
-                
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      <Image className="w-5 h-5 text-secondary" />
-                      {t('detail.mediaGallery')}
-                      <span className="text-sm font-normal text-muted-foreground">({medias.length})</span>
-                    </h2>
-                    <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => capsule && openStory([capsule])}
-                    disabled={storyLoading}
-                    className="gap-2">
-                    
-                      <Play className="w-4 h-4" />
-                      {t('detail.viewInStory')}
-                    </Button>
-                  </div>
-                  <MediaGallery
-                  medias={medias}
-                  capsuleId={capsule.id}
-                  thumbnailUrl={capsule.thumbnail_url}
-                  onThumbnailChange={(url) => setCapsule((prev) => prev ? { ...prev, thumbnail_url: url } : null)} />
-                
                 </motion.div>
               }
 
