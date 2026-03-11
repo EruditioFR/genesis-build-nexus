@@ -780,7 +780,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.2 }}
                 className="p-5 rounded-2xl border border-border bg-card">
                 
-                <div className="space-y-4">
+                <div className="space-y-4 flex flex-col items-center">
 
 
 
