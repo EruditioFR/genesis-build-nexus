@@ -419,7 +419,7 @@ const CapsuleDetail = () => {
               <motion.img
                 src={heroImageUrl}
                 alt={capsule.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-[center_25%]"
                 style={{ 
                   y: heroY, 
                   scale: heroScale,
