@@ -781,12 +781,6 @@ const CapsuleDetail = () => {
                 className="p-5 rounded-2xl border border-border bg-card">
                 
                 <div className="space-y-4">
-                  {/* Type */}
-                  
-
-
-
-
 
 
 
@@ -801,6 +795,19 @@ const CapsuleDetail = () => {
                       <p className="text-xs text-muted-foreground">{t('detail.createdAt')}</p>
                       <p className="font-medium text-foreground">
                         {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: dateLocale })}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Updated date */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">{t('detail.updatedAt', 'Modifié le')}</p>
+                      <p className="font-medium text-foreground">
+                        {format(new Date(capsule.updated_at), 'd MMM yyyy', { locale: dateLocale })}
                       </p>
                     </div>
                   </div>
