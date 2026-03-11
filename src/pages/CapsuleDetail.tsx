@@ -429,21 +429,45 @@ const CapsuleDetail = () => {
           onSignOut={handleSignOut} />
         
 
-        {/* Hero Section with Image and Parallax Effect */}
+        {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
-          {heroImageUrl ?
+          {heroImageUrls.length > 0 ?
           <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-              <motion.img
-              src={heroImageUrl}
-              alt={capsule.title}
-              className="w-full h-full object-cover object-[center_25%]"
-              style={{
-                y: heroY,
-                scale: heroScale,
-                transformOrigin: 'center center'
-              }} />
+              <AnimatePresence mode="wait">
+                <motion.img
+                key={heroSlideIndex}
+                src={heroImageUrls[heroSlideIndex]}
+                alt={capsule.title}
+                className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+                style={{
+                  y: heroY,
+                  scale: heroScale,
+                  transformOrigin: 'center center'
+                }} />
+              </AnimatePresence>
             
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+              {/* Slider dots */}
+              {heroImageUrls.length > 1 && (
+                <div className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {heroImageUrls.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setHeroSlideIndex(i)}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        i === heroSlideIndex
+                          ? 'bg-white w-6'
+                          : 'bg-white/50 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
               
               {/* Back button on hero */}
               <Button
