@@ -452,22 +452,8 @@ const CapsuleDetail = () => {
             
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-              {/* Slider dots */}
-              {heroImageUrls.length > 1 && (
-                <div className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                  {heroImageUrls.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setHeroSlideIndex(i)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        i === heroSlideIndex
-                          ? 'bg-white w-6'
-                          : 'bg-white/50 hover:bg-white/80'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
+
+
               
               {/* Back button on hero */}
               <Button
