@@ -781,12 +781,6 @@ const CapsuleDetail = () => {
                 className="p-5 rounded-2xl border border-border bg-card">
                 
                 <div className="space-y-4">
-                  {/* Type */}
-                  
-
-
-
-
 
 
 
