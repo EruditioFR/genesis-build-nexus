@@ -238,29 +238,45 @@ const CapsuleDetail = () => {
     if (user && id) fetchData();
   }, [user, id, navigate, t]);
 
-  // Load hero image URL - prioritize thumbnail_url, then first image
+  // Load hero image URLs - all images for slider
   useEffect(() => {
-    const loadHeroImage = async () => {
+    const loadHeroImages = async () => {
       const { getSignedUrl } = await import('@/lib/signedUrlCache');
-
-      // First try thumbnail_url (manually selected header)
-      if (capsule?.thumbnail_url) {
-        const url = await getSignedUrl('capsule-medias', capsule.thumbnail_url, 3600);
-        setHeroImageUrl(url);
+      const imageMedias = medias.filter((m) => m.file_type.startsWith('image/'));
+      
+      if (imageMedias.length === 0) {
+        setHeroImageUrls([]);
         return;
       }
 
-      // Fallback to first image in medias
-      const heroMedia = medias.find((m) => m.file_type.startsWith('image/'));
-      if (heroMedia) {
-        const url = await getSignedUrl('capsule-medias', heroMedia.file_url, 3600);
-        setHeroImageUrl(url);
-      } else {
-        setHeroImageUrl(null);
+      const urls: string[] = [];
+      
+      // If thumbnail is set, put it first
+      if (capsule?.thumbnail_url) {
+        const thumbUrl = await getSignedUrl('capsule-medias', capsule.thumbnail_url, 3600);
+        if (thumbUrl) urls.push(thumbUrl);
       }
+
+      for (const media of imageMedias) {
+        // Skip if already added as thumbnail
+        if (capsule?.thumbnail_url && media.file_url === capsule.thumbnail_url) continue;
+        const url = await getSignedUrl('capsule-medias', media.file_url, 3600);
+        if (url) urls.push(url);
+      }
+
+      setHeroImageUrls(urls);
     };
-    loadHeroImage();
+    loadHeroImages();
   }, [medias, capsule?.thumbnail_url]);
+
+  // Auto-advance hero slider
+  useEffect(() => {
+    if (heroImageUrls.length <= 1) return;
+    const interval = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % heroImageUrls.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImageUrls.length]);
 
   const handleSignOut = async () => {
     await signOut();
