@@ -56,7 +56,7 @@ const CapsuleThumbnail = ({ thumbnailUrl, fallbackIcon, className = '' }: Capsul
       <img
         src={signedUrl || ''}
         alt="Thumbnail"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover object-top"
         onError={() => setError(true)}
       />
     </div>
