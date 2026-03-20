@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard";
 
 // Lazy load non-critical pages to reduce initial bundle size
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const EmailConfirmation = lazy(() => import("./pages/EmailConfirmation"));
 const CapsuleCreate = lazy(() => import("./pages/CapsuleCreate"));
 const CapsuleEdit = lazy(() => import("./pages/CapsuleEdit"));
 const CapsuleDetail = lazy(() => import("./pages/CapsuleDetail"));
