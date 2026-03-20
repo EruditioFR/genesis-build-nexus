@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { HelpCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
