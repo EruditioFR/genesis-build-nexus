@@ -13,7 +13,7 @@ const EmailConfirmation = () => {
 
   return (
     <>
-      <SEOHead title={t('emailConfirmation.title')} noIndex />
+      <SEOHead title={t('emailConfirmation.title')} description="" noIndex />
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
