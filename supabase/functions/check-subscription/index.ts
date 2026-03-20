@@ -94,6 +94,27 @@ serve(async (req) => {
     
     logStep("User authenticated", { email: user.email });
 
+    // Check for admin override BEFORE calling Stripe
+    const { data: profileData } = await supabaseClient
+      .from("profiles")
+      .select("subscription_level, storage_limit_mb, admin_override")
+      .eq("user_id", user.id)
+      .single();
+
+    if (profileData?.admin_override === true) {
+      const tier = profileData.subscription_level === "legacy" ? "heritage" : profileData.subscription_level;
+      logStep("Admin override active - skipping Stripe", { tier, subscription_level: profileData.subscription_level });
+      return new Response(JSON.stringify({
+        subscribed: tier !== "free",
+        tier,
+        subscription_end: null,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
+
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
 

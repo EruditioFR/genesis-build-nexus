@@ -34,6 +34,7 @@ interface Profile {
   avatar_url: string | null;
   subscription_level: string;
   storage_limit_mb: number;
+  admin_override: boolean;
   created_at: string;
 }
 
