@@ -153,13 +153,7 @@ const Signup = () => {
         description: isEmailExists ? t('signup.errors.emailExistsDescription') : error.message
       });
     } else {
-      toast({
-        title: t('signup.success.title'),
-        description: t('signup.success.description')
-      });
-      // Preserve welcome param only if redirecting to dashboard
-      const finalRedirect = redirectTo.includes('/invite/') ? redirectTo : redirectTo;
-      navigate(finalRedirect);
+      navigate('/email-confirmation', { state: { email } });
     }
     setLoading(false);
   };
