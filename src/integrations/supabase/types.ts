@@ -893,6 +893,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          admin_override: boolean
           avatar_url: string | null
           bio: string | null
           birth_date: string | null
@@ -911,6 +912,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          admin_override?: boolean
           avatar_url?: string | null
           bio?: string | null
           birth_date?: string | null
@@ -929,6 +931,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          admin_override?: boolean
           avatar_url?: string | null
           bio?: string | null
           birth_date?: string | null
