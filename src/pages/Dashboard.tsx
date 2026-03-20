@@ -323,7 +323,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Welcome Section for empty accounts */}
-        {stats.totalCapsules === 0 && !hideWelcome && (
+        {!hideWelcome && (
           <div className="mb-6 md:mb-8">
             <WelcomeSection
               onHide={() => {
