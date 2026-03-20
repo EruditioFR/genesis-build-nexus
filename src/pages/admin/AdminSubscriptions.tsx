@@ -251,7 +251,32 @@ export default function AdminSubscriptions() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{getSubscriptionBadge(user.subscription_level)}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1.5">
+                          {getSubscriptionBadge(user.subscription_level)}
+                          {user.admin_override && (
+                            <Badge variant="outline" className="gap-1 text-xs border-amber-500 text-amber-600">
+                              <Gift className="h-3 w-3" />
+                              Offert
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant={user.admin_override ? "destructive" : "outline"}
+                          size="sm"
+                          className="gap-1 text-xs"
+                          onClick={() => handleToggleOverride(user.id, user.admin_override)}
+                          disabled={updating === user.id}
+                        >
+                          {user.admin_override ? (
+                            <><RotateCcw className="h-3 w-3" /> Stripe</>
+                          ) : (
+                            <><Gift className="h-3 w-3" /> Offrir</>
+                          )}
+                        </Button>
+                      </TableCell>
                       <TableCell>
                         <span className="text-sm">{user.storage_limit_mb} MB</span>
                       </TableCell>
