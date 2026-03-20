@@ -117,21 +117,41 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, displayName, locale, redirectTo } = await req.json();
+    const { email, password, displayName, locale, country, city, redirectTo } = await req.json();
 
-    if (!email) {
+    if (!email || !password) {
       return new Response(
-        JSON.stringify({ error: "Missing email" }),
+        JSON.stringify({ error: "Missing email or password" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Use admin client to generate a proper confirmation link
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Generate the real email confirmation link using the admin API
+    // 1. Create the user via admin API (does NOT send any email)
+    const { data: userData, error: createError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: false, // Email not confirmed yet
+      user_metadata: {
+        display_name: displayName,
+        country,
+        city,
+        locale: locale || 'fr',
+      },
+    });
+
+    if (createError) {
+      console.error("Create user error:", createError);
+      return new Response(
+        JSON.stringify({ error: createError.message }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // 2. Generate the confirmation link (does NOT send email)
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: 'signup',
       email,
@@ -140,7 +160,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
 
-    if (linkError || !linkData) {
+    if (linkError || !linkData?.properties?.action_link) {
       console.error("Generate link error:", linkError);
       return new Response(
         JSON.stringify({ error: linkError?.message || "Failed to generate confirmation link" }),
@@ -148,17 +168,9 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // The properties.action_link contains the actual confirmation URL
-    const confirmationUrl = linkData.properties?.action_link;
+    const confirmationUrl = linkData.properties.action_link;
 
-    if (!confirmationUrl) {
-      console.error("No action_link in generated link data");
-      return new Response(
-        JSON.stringify({ error: "No confirmation URL generated" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
+    // 3. Send localized email via Resend
     const t = getTranslation(locale || 'fr');
     const name = displayName || email.split("@")[0];
     const html = buildEmailHtml(t, confirmationUrl, name);
@@ -172,14 +184,15 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (resendError) {
       console.error("Resend error:", resendError);
+      // User is created but email failed - they can request a resend
       return new Response(
-        JSON.stringify({ error: resendError.message }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ success: true, emailSent: false, error: resendError.message }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({ success: true, emailSent: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
