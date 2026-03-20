@@ -93,7 +93,8 @@
     "shareTitle": "分享",
     "shareDesc": "邀请亲人加入私密圈子，一起分享家庭回忆。",
     "cta": "创建我的第一个回忆",
-    "hide": "隐藏"
+    "hide": "隐藏",
+    "showGuide": "使用指南"
   },
   "prompts": {
     "title": "回忆灵感",

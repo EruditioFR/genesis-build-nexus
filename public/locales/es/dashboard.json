@@ -93,7 +93,8 @@
     "shareTitle": "Comparte",
     "shareDesc": "Invita a tus seres queridos a círculos privados para compartir tus recuerdos en familia.",
     "cta": "Crear mi primer recuerdo",
-    "hide": "Ocultar"
+    "hide": "Ocultar",
+    "showGuide": "¿Cómo funciona?"
   },
   "prompts": {
     "title": "Ideas de recuerdos",

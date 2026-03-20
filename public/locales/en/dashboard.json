@@ -93,7 +93,8 @@
     "shareTitle": "Share",
     "shareDesc": "Invite your loved ones into private circles to share your memories together.",
     "cta": "Create my first memory",
-    "hide": "Hide"
+    "hide": "Hide",
+    "showGuide": "How it works"
   },
   "prompts": {
     "title": "Memory ideas",

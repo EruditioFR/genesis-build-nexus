@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { HelpCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
@@ -312,18 +313,35 @@ const Dashboard = () => {
           className="mb-6 md:mb-8"
           data-tour="welcome"
         >
-          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
-            {t('welcome', { name: profile?.display_name?.split(' ')[0] || '' })} 👋
-          </h1>
-          <p className="text-muted-foreground text-base">
-            {stats.totalCapsules === 0 
-              ? t('subtitleEmpty')
-              : t('subtitle')}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
+                {t('welcome', { name: profile?.display_name?.split(' ')[0] || '' })} 👋
+              </h1>
+              <p className="text-muted-foreground text-base">
+                {stats.totalCapsules === 0 
+                  ? t('subtitleEmpty')
+                  : t('subtitle')}
+              </p>
+            </div>
+            {hideWelcome && (
+              <button
+                onClick={() => {
+                  setHideWelcome(false);
+                  localStorage.removeItem('welcome_section_hidden');
+                }}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-secondary transition-colors"
+                title={t('welcomeSection.showGuide')}
+              >
+                <HelpCircle className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('welcomeSection.showGuide')}</span>
+              </button>
+            )}
+          </div>
         </motion.div>
 
         {/* Welcome Section for empty accounts */}
-        {stats.totalCapsules === 0 && !hideWelcome && (
+        {!hideWelcome && (
           <div className="mb-6 md:mb-8">
             <WelcomeSection
               onHide={() => {
