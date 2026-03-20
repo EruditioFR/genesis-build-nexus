@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Search, CreditCard, Check } from "lucide-react";
+import { Search, CreditCard, Check, Gift, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ interface Profile {
   avatar_url: string | null;
   subscription_level: string;
   storage_limit_mb: number;
+  admin_override: boolean;
   created_at: string;
 }
 
@@ -89,13 +90,34 @@ export default function AdminSubscriptions() {
       .update({
         subscription_level: newLevel as "free" | "premium" | "legacy",
         storage_limit_mb: newStorageLimit,
+        admin_override: true,
       })
       .eq("id", profileId);
 
     if (error) {
       toast.error("Erreur lors de la mise à jour");
     } else {
-      toast.success("Abonnement mis à jour");
+      toast.success("Abonnement mis à jour (override admin activé)");
+      fetchUsers();
+    }
+
+    setUpdating(null);
+  };
+
+  const handleToggleOverride = async (profileId: string, currentOverride: boolean) => {
+    if (!isAdmin) return;
+
+    setUpdating(profileId);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ admin_override: !currentOverride })
+      .eq("id", profileId);
+
+    if (error) {
+      toast.error("Erreur lors de la mise à jour");
+    } else {
+      toast.success(!currentOverride ? "Override admin activé" : "Override désactivé — Stripe reprend le contrôle");
       fetchUsers();
     }
 
@@ -194,6 +216,7 @@ export default function AdminSubscriptions() {
                 <TableRow>
                   <TableHead>Utilisateur</TableHead>
                   <TableHead>Niveau actuel</TableHead>
+                  <TableHead>Override</TableHead>
                   <TableHead>Stockage</TableHead>
                   <TableHead>Inscrit le</TableHead>
                   {isAdmin && <TableHead>Changer</TableHead>}
@@ -228,7 +251,32 @@ export default function AdminSubscriptions() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{getSubscriptionBadge(user.subscription_level)}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1.5">
+                          {getSubscriptionBadge(user.subscription_level)}
+                          {user.admin_override && (
+                            <Badge variant="outline" className="gap-1 text-xs border-amber-500 text-amber-600">
+                              <Gift className="h-3 w-3" />
+                              Offert
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant={user.admin_override ? "destructive" : "outline"}
+                          size="sm"
+                          className="gap-1 text-xs"
+                          onClick={() => handleToggleOverride(user.id, user.admin_override)}
+                          disabled={updating === user.id}
+                        >
+                          {user.admin_override ? (
+                            <><RotateCcw className="h-3 w-3" /> Stripe</>
+                          ) : (
+                            <><Gift className="h-3 w-3" /> Offrir</>
+                          )}
+                        </Button>
+                      </TableCell>
                       <TableCell>
                         <span className="text-sm">{user.storage_limit_mb} MB</span>
                       </TableCell>
