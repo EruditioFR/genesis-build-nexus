@@ -123,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const signUp = async (email: string, password: string, displayName?: string, country?: string, city?: string) => {
+  const signUp = async (email: string, password: string, displayName?: string, country?: string, city?: string, locale?: string) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -133,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           display_name: displayName,
           country: country,
           city: city,
+          locale: locale || 'fr',
         },
       },
     });
