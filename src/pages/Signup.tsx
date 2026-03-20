@@ -154,6 +154,19 @@ const Signup = () => {
         description: isEmailExists ? t('signup.errors.emailExistsDescription') : error.message
       });
     } else {
+      // Send localized confirmation email with real confirmation link
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            email,
+            displayName: fullName,
+            locale: i18n.language,
+            redirectTo: `${window.location.origin}/login?confirmed=true`,
+          },
+        });
+      } catch (emailErr) {
+        console.warn('Custom confirmation email failed:', emailErr);
+      }
       navigate('/email-confirmation', { state: { email } });
     }
     setLoading(false);
