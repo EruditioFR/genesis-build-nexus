@@ -322,19 +322,16 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
-        {/* Onboarding Checklist */}
-        {showOnboarding && (
+        {/* Welcome Section for empty accounts */}
+        {stats.totalCapsules === 0 && !hideWelcome && (
           <div className="mb-6 md:mb-8">
-            <OnboardingChecklist
-              hasProfile={!!(profile?.display_name && profile?.avatar_url)}
-              hasCapsule={stats.totalCapsules > 0}
-              hasCircle={stats.sharedCircles > 0}
-              onDismiss={() => {
-                setShowOnboarding(false);
-                localStorage.setItem('onboarding_dismissed', 'true');
+            <WelcomeSection
+              onHide={() => {
+                setHideWelcome(true);
+                localStorage.setItem('welcome_section_hidden', 'true');
               }}
             />
-        </div>
+          </div>
         )}
 
         {/* Quick Actions */}

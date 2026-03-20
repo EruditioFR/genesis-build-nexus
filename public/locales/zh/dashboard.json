@@ -83,6 +83,18 @@
       "familyTree": "开始家谱"
     }
   },
+  "welcomeSection": {
+    "title": "欢迎来到 Family Garden！🌱",
+    "subtitle": "您的回忆花园，保存珍贵时刻并传递给亲人。",
+    "createTitle": "创建",
+    "createDesc": "用照片、视频、文字或音频保存您的回忆。每一刻都值得珍藏。",
+    "organizeTitle": "整理",
+    "organizeDesc": "在按年代整理的互动时间线中找到每一段回忆。",
+    "shareTitle": "分享",
+    "shareDesc": "邀请亲人加入私密圈子，一起分享家庭回忆。",
+    "cta": "创建我的第一个回忆",
+    "hide": "隐藏"
+  },
   "prompts": {
     "title": "回忆灵感",
     "subtitle": "从这些建议中获取灵感"

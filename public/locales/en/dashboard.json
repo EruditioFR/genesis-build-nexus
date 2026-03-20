@@ -83,6 +83,18 @@
       "familyTree": "Start the family tree"
     }
   },
+  "welcomeSection": {
+    "title": "Welcome to Family Garden! 🌱",
+    "subtitle": "Your memory garden to preserve and pass on your precious moments to loved ones.",
+    "createTitle": "Create",
+    "createDesc": "Preserve your memories as photos, videos, text or audio. Every moment matters.",
+    "organizeTitle": "Organize",
+    "organizeDesc": "Find every memory in an interactive timeline, organized by decade.",
+    "shareTitle": "Share",
+    "shareDesc": "Invite your loved ones into private circles to share your memories together.",
+    "cta": "Create my first memory",
+    "hide": "Hide"
+  },
   "prompts": {
     "title": "Memory ideas",
     "subtitle": "Get inspired by these suggestions"

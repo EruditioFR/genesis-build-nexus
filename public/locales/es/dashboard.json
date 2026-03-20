@@ -83,6 +83,18 @@
       "familyTree": "Comenzar el árbol genealógico"
     }
   },
+  "welcomeSection": {
+    "title": "¡Bienvenido a Family Garden! 🌱",
+    "subtitle": "Tu jardín de recuerdos para preservar y transmitir tus momentos preciosos a tus seres queridos.",
+    "createTitle": "Crea",
+    "createDesc": "Preserva tus recuerdos en fotos, videos, textos o audio. Cada momento cuenta.",
+    "organizeTitle": "Organiza",
+    "organizeDesc": "Encuentra cada recuerdo en una cronología interactiva, organizada por década.",
+    "shareTitle": "Comparte",
+    "shareDesc": "Invita a tus seres queridos a círculos privados para compartir tus recuerdos en familia.",
+    "cta": "Crear mi primer recuerdo",
+    "hide": "Ocultar"
+  },
   "prompts": {
     "title": "Ideas de recuerdos",
     "subtitle": "Inspírate con estas sugerencias"
