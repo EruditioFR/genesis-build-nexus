@@ -154,6 +154,21 @@ const Signup = () => {
         description: isEmailExists ? t('signup.errors.emailExistsDescription') : error.message
       });
     } else {
+      // Send localized confirmation email via edge function
+      try {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const confirmationUrl = `${window.location.origin}/login`;
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            email,
+            confirmationUrl,
+            displayName: fullName,
+            locale: i18n.language,
+          },
+        });
+      } catch (emailErr) {
+        console.warn('Custom confirmation email failed, default will be sent:', emailErr);
+      }
       navigate('/email-confirmation', { state: { email } });
     }
     setLoading(false);
