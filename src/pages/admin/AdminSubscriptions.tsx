@@ -216,6 +216,7 @@ export default function AdminSubscriptions() {
                 <TableRow>
                   <TableHead>Utilisateur</TableHead>
                   <TableHead>Niveau actuel</TableHead>
+                  <TableHead>Override</TableHead>
                   <TableHead>Stockage</TableHead>
                   <TableHead>Inscrit le</TableHead>
                   {isAdmin && <TableHead>Changer</TableHead>}
