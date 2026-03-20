@@ -144,7 +144,7 @@ const Signup = () => {
     const fullName = `${firstName} ${displayName}`.trim();
     const {
       error
-    } = await signUp(email, password, fullName, country, city);
+    } = await signUp(email, password, fullName, country, city, i18n.language);
     if (error) {
       // Check for existing email error
       const isEmailExists = error.message?.toLowerCase().includes('already registered') || error.message?.toLowerCase().includes('already been registered') || error.message?.toLowerCase().includes('user already exists') || error.message?.toLowerCase().includes('email already') || error.message?.toLowerCase().includes('duplicate') || error.message?.toLowerCase().includes('already in use');
