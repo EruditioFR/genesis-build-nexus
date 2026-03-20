@@ -1,50 +1,54 @@
 
 
-## Constat
+## Plan : Admin Override pour abonnements manuels
 
-La checklist d'onboarding s'affiche sur mobile ET desktop, mais uniquement si :
-- Le parametre `?welcome=true` est present, OU
-- `localStorage('onboarding_dismissed')` n'est pas defini ET `totalCapsules === 0`
+### Probleme
 
-Si vous l'avez deja fermee une fois (clic sur "Passer pour l'instant" ou X), elle est definitivement masquee via `localStorage`. C'est probablement ce qui s'est passe sur PC.
+Quand un admin upgrade manuellement un utilisateur (ex: Legacy offert), la fonction `check-subscription` ecrase ce choix toutes les 60 secondes si l'utilisateur a un abonnement Stripe actif d'un niveau different.
 
-De plus, la checklist actuelle :
-- Est entierement en francais en dur (pas traduite)
-- N'explique pas le concept de Family Garden, elle liste juste 3 taches
+### Solution
+
+Ajouter un champ `admin_override` (boolean) dans `profiles`. Quand il est `true`, la fonction `check-subscription` ne modifie pas le `subscription_level` du profil et retourne directement le niveau stocke en base.
 
 ---
 
-## Plan : Ameliorer l'onboarding dashboard
+### 1. Migration : ajouter `admin_override` a `profiles`
 
-### 1. Remplacer la checklist par une section d'accueil explicative
+```sql
+ALTER TABLE public.profiles 
+  ADD COLUMN admin_override boolean NOT NULL DEFAULT false;
+```
 
-Quand `totalCapsules === 0`, afficher une **section d'accueil integree au dashboard** (pas une modale) avec :
+### 2. Modifier `check-subscription` edge function
 
-- Un titre accrocheur : "Family Garden, c'est votre jardin de souvenirs"
-- 3 cartes visuelles expliquant le fonctionnement :
-  - **Creez** — Preservez photos, videos, textes, audio
-  - **Organisez** — Retrouvez vos souvenirs dans une chronologie
-  - **Partagez** — Invitez vos proches dans des cercles prives
-- Un bouton CTA "Creer mon premier souvenir"
-- Un lien discret "Masquer" pour fermer
+Apres l'authentification de l'utilisateur, avant de requeter Stripe :
 
-Cette section remplace a la fois la checklist et les stats/capsules vides. Elle disparait naturellement des que l'utilisateur a cree un souvenir.
+- Lire le profil (`subscription_level`, `admin_override`)
+- Si `admin_override = true` : retourner immediatement `{ subscribed: true, tier: profile.subscription_level, subscription_end: null }` sans appeler Stripe
+- Si `admin_override = false` : continuer le flux Stripe normal (comportement actuel)
 
-### 2. Traduire dans les 5 langues
+Cela garantit qu'un override admin n'est jamais ecrase.
 
-Ajouter les cles dans `dashboard.json` (fr, en, es, ko, zh).
+### 3. Adapter `AdminSubscriptions.tsx`
 
-### 3. Corriger la persistance
+- Afficher un badge "Offert" (ou icone cadeau) a cote du niveau pour les utilisateurs ayant `admin_override = true`
+- Quand un admin change le niveau d'abonnement via le select :
+  - Activer automatiquement `admin_override = true` (le changement admin doit persister)
+  - Mettre a jour `subscription_level` + `storage_limit_mb` + `admin_override` en une seule requete
+- Ajouter un bouton/toggle pour desactiver l'override (remettre `admin_override = false`), ce qui permet a Stripe de reprendre le controle
 
-Utiliser `totalCapsules === 0` comme condition principale (pas seulement localStorage), pour que la section reapparaisse si le compte est vide, meme sur un autre navigateur.
+### 4. Adapter `useSubscription` hook
+
+- Mapper `tier: 'legacy'` quand le profil retourne `subscription_level = 'legacy'` (deja fait dans le fallback actuel)
+- Aucun changement majeur cote hook, le edge function gere tout
+
+---
 
 ### Fichiers modifies
 
 | Fichier | Modification |
 |---|---|
-| `src/components/dashboard/WelcomeSection.tsx` | Nouveau composant — 3 cartes explicatives + CTA |
-| `src/pages/Dashboard.tsx` | Remplacer OnboardingChecklist par WelcomeSection quand 0 capsules |
-| `public/locales/*/dashboard.json` (x5) | Ajouter les traductions welcome section |
-
-L'OnboardingChecklist existante reste dans le code mais ne sera plus affichee (remplacement propre).
+| Migration SQL | Ajouter colonne `admin_override` |
+| `supabase/functions/check-subscription/index.ts` | Short-circuit si `admin_override = true` |
+| `src/pages/admin/AdminSubscriptions.tsx` | Badge "Offert", toggle override, update groupé |
 
