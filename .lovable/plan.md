@@ -1,23 +1,50 @@
 
 
-# Supprimer le bouton "Voir la demo" du Hero
+## Constat
 
-## Modification
+La checklist d'onboarding s'affiche sur mobile ET desktop, mais uniquement si :
+- Le parametre `?welcome=true` est present, OU
+- `localStorage('onboarding_dismissed')` n'est pas defini ET `totalCapsules === 0`
 
-**Fichier** : `src/components/landing/HeroSection.tsx`
+Si vous l'avez deja fermee une fois (clic sur "Passer pour l'instant" ou X), elle est definitivement masquee via `localStorage`. C'est probablement ce qui s'est passe sur PC.
 
-Retirer le second bouton CTA (le `motion.div` contenant le bouton "ghost" avec l'icone Play qui pointe vers `#how-it-works`). Cela correspond au bloc suivant (environ lignes 155-178) :
+De plus, la checklist actuelle :
+- Est entierement en francais en dur (pas traduite)
+- N'explique pas le concept de Family Garden, elle liste juste 3 taches
 
-```text
-<motion.div whileHover={...} className="w-full sm:w-auto">
-  <Button asChild variant="ghost" size="xl" ...>
-    <a href="#how-it-works">
-      <motion.span ...><Play ... /></motion.span>
-      {t('hero.cta.secondary')}
-    </a>
-  </Button>
-</motion.div>
-```
+---
 
-Le bouton principal "Creer mon journal" reste inchange. L'import `Play` de lucide-react pourra aussi etre retire s'il n'est plus utilise ailleurs dans le fichier.
+## Plan : Ameliorer l'onboarding dashboard
+
+### 1. Remplacer la checklist par une section d'accueil explicative
+
+Quand `totalCapsules === 0`, afficher une **section d'accueil integree au dashboard** (pas une modale) avec :
+
+- Un titre accrocheur : "Family Garden, c'est votre jardin de souvenirs"
+- 3 cartes visuelles expliquant le fonctionnement :
+  - **Creez** — Preservez photos, videos, textes, audio
+  - **Organisez** — Retrouvez vos souvenirs dans une chronologie
+  - **Partagez** — Invitez vos proches dans des cercles prives
+- Un bouton CTA "Creer mon premier souvenir"
+- Un lien discret "Masquer" pour fermer
+
+Cette section remplace a la fois la checklist et les stats/capsules vides. Elle disparait naturellement des que l'utilisateur a cree un souvenir.
+
+### 2. Traduire dans les 5 langues
+
+Ajouter les cles dans `dashboard.json` (fr, en, es, ko, zh).
+
+### 3. Corriger la persistance
+
+Utiliser `totalCapsules === 0` comme condition principale (pas seulement localStorage), pour que la section reapparaisse si le compte est vide, meme sur un autre navigateur.
+
+### Fichiers modifies
+
+| Fichier | Modification |
+|---|---|
+| `src/components/dashboard/WelcomeSection.tsx` | Nouveau composant — 3 cartes explicatives + CTA |
+| `src/pages/Dashboard.tsx` | Remplacer OnboardingChecklist par WelcomeSection quand 0 capsules |
+| `public/locales/*/dashboard.json` (x5) | Ajouter les traductions welcome section |
+
+L'OnboardingChecklist existante reste dans le code mais ne sera plus affichee (remplacement propre).
 
