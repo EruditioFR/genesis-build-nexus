@@ -93,7 +93,8 @@
     "shareTitle": "공유하기",
     "shareDesc": "비공개 서클에 가족을 초대하여 함께 추억을 공유하세요.",
     "cta": "첫 번째 추억 만들기",
-    "hide": "숨기기"
+    "hide": "숨기기",
+    "showGuide": "이용 방법"
   },
   "prompts": {
     "title": "추억 아이디어",
