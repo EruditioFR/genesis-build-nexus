@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard";
 
 // Lazy load non-critical pages to reduce initial bundle size
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const EmailConfirmation = lazy(() => import("./pages/EmailConfirmation"));
 const CapsuleCreate = lazy(() => import("./pages/CapsuleCreate"));
 const CapsuleEdit = lazy(() => import("./pages/CapsuleEdit"));
 const CapsuleDetail = lazy(() => import("./pages/CapsuleDetail"));
@@ -80,6 +81,7 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/email-confirmation" element={<EmailConfirmation />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/capsules" element={<CapsulesList />} />
                   <Route path="/timeline" element={<Timeline />} />
