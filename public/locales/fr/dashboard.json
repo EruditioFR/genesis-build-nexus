@@ -93,7 +93,8 @@
     "shareTitle": "Partagez",
     "shareDesc": "Invitez vos proches dans des cercles privés pour partager vos souvenirs en famille.",
     "cta": "Créer mon premier souvenir",
-    "hide": "Masquer"
+    "hide": "Masquer",
+    "showGuide": "Comment ça marche ?"
   },
   "prompts": {
     "title": "Idées de souvenirs",
