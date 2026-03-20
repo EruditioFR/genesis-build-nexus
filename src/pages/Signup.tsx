@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import i18n from '@/lib/i18n';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles } from 'lucide-react';
