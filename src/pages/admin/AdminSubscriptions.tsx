@@ -90,13 +90,34 @@ export default function AdminSubscriptions() {
       .update({
         subscription_level: newLevel as "free" | "premium" | "legacy",
         storage_limit_mb: newStorageLimit,
+        admin_override: true,
       })
       .eq("id", profileId);
 
     if (error) {
       toast.error("Erreur lors de la mise à jour");
     } else {
-      toast.success("Abonnement mis à jour");
+      toast.success("Abonnement mis à jour (override admin activé)");
+      fetchUsers();
+    }
+
+    setUpdating(null);
+  };
+
+  const handleToggleOverride = async (profileId: string, currentOverride: boolean) => {
+    if (!isAdmin) return;
+
+    setUpdating(profileId);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ admin_override: !currentOverride })
+      .eq("id", profileId);
+
+    if (error) {
+      toast.error("Erreur lors de la mise à jour");
+    } else {
+      toast.success(!currentOverride ? "Override admin activé" : "Override désactivé — Stripe reprend le contrôle");
       fetchUsers();
     }
 
