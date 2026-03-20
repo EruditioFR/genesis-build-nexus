@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import i18n from '@/lib/i18n';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles } from 'lucide-react';
@@ -143,7 +144,7 @@ const Signup = () => {
     const fullName = `${firstName} ${displayName}`.trim();
     const {
       error
-    } = await signUp(email, password, fullName, country, city);
+    } = await signUp(email, password, fullName, country, city, i18n.language);
     if (error) {
       // Check for existing email error
       const isEmailExists = error.message?.toLowerCase().includes('already registered') || error.message?.toLowerCase().includes('already been registered') || error.message?.toLowerCase().includes('user already exists') || error.message?.toLowerCase().includes('email already') || error.message?.toLowerCase().includes('duplicate') || error.message?.toLowerCase().includes('already in use');
@@ -153,6 +154,21 @@ const Signup = () => {
         description: isEmailExists ? t('signup.errors.emailExistsDescription') : error.message
       });
     } else {
+      // Send localized confirmation email via edge function
+      try {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const confirmationUrl = `${window.location.origin}/login`;
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: {
+            email,
+            confirmationUrl,
+            displayName: fullName,
+            locale: i18n.language,
+          },
+        });
+      } catch (emailErr) {
+        console.warn('Custom confirmation email failed, default will be sent:', emailErr);
+      }
       navigate('/email-confirmation', { state: { email } });
     }
     setLoading(false);
