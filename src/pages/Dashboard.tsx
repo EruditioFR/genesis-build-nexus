@@ -13,7 +13,7 @@ import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
-import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
+import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
