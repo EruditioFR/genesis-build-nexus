@@ -92,18 +92,8 @@ const Dashboard = () => {
     upcomingEvents: 0,
   });
   const [dataLoading, setDataLoading] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [hideWelcome, setHideWelcome] = useState(() => localStorage.getItem('welcome_section_hidden') === 'true');
   const [tourTriggered, setTourTriggered] = useState(false);
-
-  // Check if user just signed up (show onboarding checklist)
-  useEffect(() => {
-    const isNewUser = searchParams.get('welcome') === 'true';
-    const onboardingDismissed = localStorage.getItem('onboarding_dismissed');
-    
-    if (isNewUser || (!onboardingDismissed && stats.totalCapsules === 0)) {
-      setShowOnboarding(true);
-    }
-  }, [searchParams, stats.totalCapsules]);
 
   // Auto-start tour for new users
   useEffect(() => {
