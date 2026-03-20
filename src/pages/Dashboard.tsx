@@ -13,7 +13,7 @@ import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
 import QuickActions from '@/components/dashboard/QuickActions';
-import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist';
+import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
@@ -92,18 +92,8 @@ const Dashboard = () => {
     upcomingEvents: 0,
   });
   const [dataLoading, setDataLoading] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [hideWelcome, setHideWelcome] = useState(() => localStorage.getItem('welcome_section_hidden') === 'true');
   const [tourTriggered, setTourTriggered] = useState(false);
-
-  // Check if user just signed up (show onboarding checklist)
-  useEffect(() => {
-    const isNewUser = searchParams.get('welcome') === 'true';
-    const onboardingDismissed = localStorage.getItem('onboarding_dismissed');
-    
-    if (isNewUser || (!onboardingDismissed && stats.totalCapsules === 0)) {
-      setShowOnboarding(true);
-    }
-  }, [searchParams, stats.totalCapsules]);
 
   // Auto-start tour for new users
   useEffect(() => {
@@ -332,19 +322,16 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
-        {/* Onboarding Checklist */}
-        {showOnboarding && (
+        {/* Welcome Section for empty accounts */}
+        {stats.totalCapsules === 0 && !hideWelcome && (
           <div className="mb-6 md:mb-8">
-            <OnboardingChecklist
-              hasProfile={!!(profile?.display_name && profile?.avatar_url)}
-              hasCapsule={stats.totalCapsules > 0}
-              hasCircle={stats.sharedCircles > 0}
-              onDismiss={() => {
-                setShowOnboarding(false);
-                localStorage.setItem('onboarding_dismissed', 'true');
+            <WelcomeSection
+              onHide={() => {
+                setHideWelcome(true);
+                localStorage.setItem('welcome_section_hidden', 'true');
               }}
             />
-        </div>
+          </div>
         )}
 
         {/* Quick Actions */}

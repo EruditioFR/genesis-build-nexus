@@ -83,6 +83,18 @@
       "familyTree": "가계도 시작하기"
     }
   },
+  "welcomeSection": {
+    "title": "Family Garden에 오신 것을 환영합니다! 🌱",
+    "subtitle": "소중한 순간을 보존하고 사랑하는 사람들에게 전하는 추억의 정원입니다.",
+    "createTitle": "만들기",
+    "createDesc": "사진, 영상, 텍스트, 오디오로 추억을 보존하세요. 모든 순간이 소중합니다.",
+    "organizeTitle": "정리하기",
+    "organizeDesc": "연대별로 정리된 인터랙티브 타임라인에서 모든 추억을 찾으세요.",
+    "shareTitle": "공유하기",
+    "shareDesc": "비공개 서클에 가족을 초대하여 함께 추억을 공유하세요.",
+    "cta": "첫 번째 추억 만들기",
+    "hide": "숨기기"
+  },
   "prompts": {
     "title": "추억 아이디어",
     "subtitle": "이 제안에서 영감을 얻으세요"
