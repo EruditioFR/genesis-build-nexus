@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, Shield, Heart, Clock, Sparkles, Users } from 'lucide-react';
@@ -30,6 +30,16 @@ const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const isConfirmed = searchParams.get('confirmed') === 'true';
+
+  useEffect(() => {
+    if (isConfirmed) {
+      toast({
+        title: t('login.emailConfirmed.title', { defaultValue: '✅ Email confirmé !' }),
+        description: t('login.emailConfirmed.description', { defaultValue: 'Votre adresse email a été vérifiée. Vous pouvez maintenant vous connecter.' }),
+      });
+    }
+  }, [isConfirmed]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
