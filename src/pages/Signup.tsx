@@ -142,33 +142,52 @@ const Signup = () => {
 
     // Combine first name and last name for display
     const fullName = `${firstName} ${displayName}`.trim();
-    const {
-      error
-    } = await signUp(email, password, fullName, country, city, i18n.language);
-    if (error) {
-      // Check for existing email error
-      const isEmailExists = error.message?.toLowerCase().includes('already registered') || error.message?.toLowerCase().includes('already been registered') || error.message?.toLowerCase().includes('user already exists') || error.message?.toLowerCase().includes('email already') || error.message?.toLowerCase().includes('duplicate') || error.message?.toLowerCase().includes('already in use');
+
+    try {
+      // Use edge function to create user + send localized confirmation email (single email, no duplicate)
+      const { data, error: fnError } = await supabase.functions.invoke('send-confirmation-email', {
+        body: {
+          email,
+          password,
+          displayName: fullName,
+          locale: i18n.language,
+          country,
+          city,
+          redirectTo: `${window.location.origin}/login?confirmed=true`,
+        },
+      });
+
+      if (fnError) {
+        throw new Error(fnError.message || 'Signup failed');
+      }
+
+      const result = typeof data === 'string' ? JSON.parse(data) : data;
+
+      if (result?.error) {
+        const errorMsg = result.error;
+        const isEmailExists = errorMsg.toLowerCase().includes('already registered') ||
+          errorMsg.toLowerCase().includes('already been registered') ||
+          errorMsg.toLowerCase().includes('user already exists') ||
+          errorMsg.toLowerCase().includes('email already') ||
+          errorMsg.toLowerCase().includes('duplicate') ||
+          errorMsg.toLowerCase().includes('already in use');
+
+        toast({
+          variant: 'destructive',
+          title: isEmailExists ? t('signup.errors.emailExistsTitle') : t('signup.errors.title'),
+          description: isEmailExists ? t('signup.errors.emailExistsDescription') : errorMsg,
+        });
+      } else {
+        navigate('/email-confirmation', { state: { email } });
+      }
+    } catch (err: any) {
       toast({
         variant: 'destructive',
-        title: isEmailExists ? t('signup.errors.emailExistsTitle') : t('signup.errors.title'),
-        description: isEmailExists ? t('signup.errors.emailExistsDescription') : error.message
+        title: t('signup.errors.title'),
+        description: err.message || 'An error occurred',
       });
-    } else {
-      // Send localized confirmation email with real confirmation link
-      try {
-        await supabase.functions.invoke('send-confirmation-email', {
-          body: {
-            email,
-            displayName: fullName,
-            locale: i18n.language,
-            redirectTo: `${window.location.origin}/login?confirmed=true`,
-          },
-        });
-      } catch (emailErr) {
-        console.warn('Custom confirmation email failed:', emailErr);
-      }
-      navigate('/email-confirmation', { state: { email } });
     }
+
     setLoading(false);
   };
 
