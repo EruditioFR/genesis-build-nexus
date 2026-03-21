@@ -135,6 +135,10 @@
       "premium": {
         "name": "Premium",
         "description": "For regular content creators",
+        "promo": "Launch offer",
+        "promoDetail": "-50% for 3 months",
+        "promoAfter": "then {{price}}€/month after 3 months",
+        "originalPrice": "9.99",
         "features": {
           "storage": "10 GB storage",
           "formats": "Text, photo, video and audio memories",

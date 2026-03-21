@@ -231,23 +231,39 @@ const Premium = () => {
             </div>
 
             <div className="text-center mb-6">
+              {/* Launch promo badge for monthly */}
+              {!isYearly && (
+                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
+                  highlightHeritage ? 'bg-accent/10 text-accent' : 'bg-secondary/20 text-secondary'
+                }`}>
+                  🔥 Offre de lancement : -50% pendant 3 mois
+                </div>
+              )}
               <div className="flex items-baseline justify-center gap-1">
                 <span className={`text-5xl font-display font-bold ${
                   highlightHeritage ? 'text-foreground' : 'text-primary-foreground'
                 }`}>
                   {promoApplied ? (
-                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">9,99€</s> 4,99</>}€</>
+                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">4,99€</s> 2,49</>}€</>
                   ) : (
-                    <>{isYearly ? '99' : '9,99'}€</>
+                    <>
+                      {isYearly ? '99' : (
+                        <><s className="text-3xl opacity-50">9,99€</s> 4,99</>
+                      )}€
+                    </>
                   )}
                 </span>
                 <span className={highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/70'}>
                   /{isYearly ? 'an' : 'mois'}
                 </span>
               </div>
-              {isYearly && (
+              {isYearly ? (
                 <p className={`text-sm mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
                   soit 8,25€/mois
+                </p>
+              ) : (
+                <p className={`text-xs mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
+                  puis 9,99€/mois après 3 mois
                 </p>
               )}
             </div>
