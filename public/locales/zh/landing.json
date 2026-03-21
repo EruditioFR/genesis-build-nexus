@@ -135,6 +135,10 @@
       "premium": {
         "name": "高级版",
         "description": "适合经常创作内容的用户",
+        "promo": "上线优惠",
+        "promoDetail": "3个月-50%",
+        "promoAfter": "3个月后{{price}}€/月",
+        "originalPrice": "9.99",
         "features": {
           "storage": "10 GB存储空间",
           "formats": "文字、照片、视频和音频回忆",

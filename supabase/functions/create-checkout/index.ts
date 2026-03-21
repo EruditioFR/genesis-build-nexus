@@ -88,6 +88,12 @@ serve(async (req) => {
       logStep("Promo code applied", { code: promoCode });
     }
 
+    // Auto-apply launch promo for premium monthly: -5€ for 3 months
+    if (tier === "premium" && billingPeriod === "monthly" && !discounts) {
+      discounts = [{ coupon: "U3dOnzFj" }];
+      logStep("Auto-applied premium launch promo coupon");
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,

@@ -135,6 +135,10 @@
       "premium": {
         "name": "프리미엄",
         "description": "정기적인 콘텐츠 크리에이터용",
+        "promo": "런칭 오퍼",
+        "promoDetail": "3개월 -50%",
+        "promoAfter": "3개월 후 {{price}}€/월",
+        "originalPrice": "9.99",
         "features": {
           "storage": "10 GB 저장공간",
           "formats": "텍스트, 사진, 비디오, 오디오 추억",
