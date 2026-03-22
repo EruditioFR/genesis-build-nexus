@@ -431,7 +431,8 @@ export function useFamilyTree() {
   ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number; failedCount?: number; errorMessage?: string }> => {
     if (!user) return { success: false, personsCreated: 0, relationsCreated: 0, errorMessage: 'Utilisateur non connecté' };
 
-    const BATCH_SIZE = 50;
+    // Adaptive batch size: larger batches for big imports
+    const BATCH_SIZE = individuals.length > 1000 ? 100 : 50;
     setLoading(true);
     try {
       const gedcomToDbId: Record<string, string> = {};

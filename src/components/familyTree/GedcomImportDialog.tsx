@@ -128,7 +128,7 @@ export function GedcomImportDialog({
     onDrop,
     onDropRejected,
     maxFiles: 1,
-    maxSize: 10 * 1024 * 1024,
+    maxSize: 30 * 1024 * 1024,
   });
 
   const handleCheckDuplicates = () => {
