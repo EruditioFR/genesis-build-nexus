@@ -179,13 +179,8 @@ export function GedcomImportDialog({
         .filter(([, decision]) => decision === 'skip')
         .map(([id]) => id);
 
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 10, 90));
-      }, 200);
-
       await onImport(parseResult, skipIds);
 
-      clearInterval(progressInterval);
       setProgress(100);
       
       const created = parseResult.individuals.length - skipIds.length;
