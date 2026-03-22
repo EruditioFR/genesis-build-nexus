@@ -55,7 +55,6 @@ export function GedcomImportDialog({
     setStep('upload');
     setParseResult(null);
     setError(null);
-    setProgress(0);
     setFileName('');
     setDuplicateMatches([]);
     setDecisions({});
