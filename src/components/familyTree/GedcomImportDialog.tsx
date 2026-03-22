@@ -472,8 +472,12 @@ export function GedcomImportDialog({
               <p className="text-sm text-muted-foreground mt-1">
                 {t('gedcom.doNotClose')}
               </p>
+              {importDetail && (
+                <p className="text-xs text-muted-foreground mt-2">{importDetail}</p>
+              )}
             </div>
-            <Progress value={progress} className="w-full" />
+            <Progress value={importProgress} className="w-full" />
+            <p className="text-center text-xs text-muted-foreground">{importProgress}%</p>
           </div>
         )}
 
