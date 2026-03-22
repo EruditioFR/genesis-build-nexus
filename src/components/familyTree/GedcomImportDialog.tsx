@@ -26,6 +26,8 @@ interface GedcomImportDialogProps {
   onOpenChange: (open: boolean) => void;
   onImport: (result: GedcomParseResult, skipIds: string[]) => Promise<void>;
   existingPersons: FamilyPerson[];
+  importProgress?: number;
+  importDetail?: string;
 }
 
 type ImportStep = 'upload' | 'preview' | 'duplicates' | 'importing' | 'complete';

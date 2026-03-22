@@ -852,6 +852,8 @@ export default function FamilyTreePage() {
         onOpenChange={setShowGedcomImport}
         onImport={handleGedcomImport}
         existingPersons={persons}
+        importProgress={importProgress}
+        importDetail={importDetail}
       />
 
       {mergeSourcePerson && (
