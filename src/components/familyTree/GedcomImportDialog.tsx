@@ -98,13 +98,8 @@ export function GedcomImportDialog({
         setError(null);
 
         try {
-          const progressInterval = setInterval(() => {
-            setProgress((prev) => Math.min(prev + 10, 90));
-          }, 200);
-
           await onImport(result, []);
 
-          clearInterval(progressInterval);
           setProgress(100);
           setImportStats({ created: result.individuals.length, skipped: 0 });
           setStep('complete');
