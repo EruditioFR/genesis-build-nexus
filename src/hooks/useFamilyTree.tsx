@@ -423,150 +423,179 @@ export function useFamilyTree() {
     }
   }, []);
 
-  // Import from GEDCOM
+  // Import from GEDCOM (batch mode)
   const importFromGedcom = useCallback(async (
     treeId: string,
-    gedcomData: GedcomParseResult
+    gedcomData: GedcomParseResult,
+    onProgress?: (percent: number, detail?: string) => void
   ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number; failedCount?: number; errorMessage?: string }> => {
     if (!user) return { success: false, personsCreated: 0, relationsCreated: 0, errorMessage: 'Utilisateur non connecté' };
 
+    const BATCH_SIZE = 50;
     setLoading(true);
     try {
-      // Map GEDCOM IDs to database IDs
       const gedcomToDbId: Record<string, string> = {};
       let personsCreated = 0;
       let relationsCreated = 0;
       let failedCount = 0;
       const insertErrors: Array<{ name: string; error: string }> = [];
 
-      // Create all individuals first
-      for (const individual of gedcomData.individuals) {
-        // Person is alive only if no death date AND not marked as deceased (DEAT Y)
-        const isAlive = !individual.deathDate && !individual.isDeceased;
+      // Phase 1: Create persons in batches (0-60%)
+      const individuals = gedcomData.individuals;
+      for (let i = 0; i < individuals.length; i += BATCH_SIZE) {
+        const batch = individuals.slice(i, i + BATCH_SIZE);
+        const rows = batch.map(individual => ({
+          tree_id: treeId,
+          first_names: individual.firstName || 'Inconnu',
+          last_name: individual.lastName || '',
+          maiden_name: individual.maidenName || null,
+          gender: individual.gender || null,
+          birth_date: individual.birthDate || null,
+          birth_date_precision: 'exact',
+          birth_place: individual.birthPlace || null,
+          death_date: individual.deathDate || null,
+          death_date_precision: individual.deathDate ? 'exact' : null,
+          death_place: individual.deathPlace || null,
+          occupation: individual.occupation || null,
+          biography: individual.notes || null,
+          is_alive: !individual.deathDate && !individual.isDeceased,
+          privacy_level: 'private',
+          created_by: user.id,
+        }));
 
-        const { data: person, error } = await supabase
+        const { data: created, error } = await supabase
           .from('family_persons')
-          .insert({
-            tree_id: treeId,
-            first_names: individual.firstName || 'Inconnu',
-            last_name: individual.lastName || '',
-            maiden_name: individual.maidenName,
-            gender: individual.gender,
-            birth_date: individual.birthDate,
-            birth_date_precision: 'exact',
-            birth_place: individual.birthPlace,
-            death_date: individual.deathDate,
-            death_date_precision: individual.deathDate ? 'exact' : undefined,
-            death_place: individual.deathPlace,
-            occupation: individual.occupation,
-            biography: individual.notes,
-            is_alive: isAlive,
-            privacy_level: 'private',
-            created_by: user.id,
-          })
-          .select()
-          .single();
+          .insert(rows)
+          .select('id');
 
         if (error) {
-          console.error('Error creating person:', individual.firstName, individual.lastName, error);
-          failedCount++;
+          console.error('Batch insert error:', error);
+          failedCount += batch.length;
           if (insertErrors.length < 3) {
-            insertErrors.push({
-              name: `${individual.firstName || ''} ${individual.lastName || ''}`.trim() || 'Sans nom',
-              error: error.message,
-            });
+            insertErrors.push({ name: `Lot ${Math.floor(i / BATCH_SIZE) + 1}`, error: error.message });
           }
-          continue;
+        } else if (created) {
+          created.forEach((person, idx) => {
+            gedcomToDbId[batch[idx].id] = person.id;
+            personsCreated++;
+          });
         }
 
-        if (person) {
-          gedcomToDbId[individual.id] = person.id;
-          personsCreated++;
-        }
+        const percent = Math.round(((i + batch.length) / individuals.length) * 60);
+        onProgress?.(percent, `${personsCreated}/${individuals.length} personnes`);
       }
 
       // Check if all insertions failed
-      if (personsCreated === 0 && gedcomData.individuals.length > 0) {
+      if (personsCreated === 0 && individuals.length > 0) {
         const errorDetails = insertErrors.length > 0 
           ? `Exemples d'erreurs: ${insertErrors.map(e => `${e.name}: ${e.error}`).join('; ')}`
           : 'Erreur inconnue lors de l\'insertion';
         
         setLoading(false);
         return { 
-          success: false, 
-          personsCreated: 0, 
-          relationsCreated: 0,
-          failedCount,
+          success: false, personsCreated: 0, relationsCreated: 0, failedCount,
           errorMessage: `Aucune personne n'a pu être importée (${failedCount} échec(s)). ${errorDetails}`,
         };
       }
 
-      // Create unions (marriages) and parent-child relationships
-      for (const family of gedcomData.families) {
+      // Phase 2: Create unions in batches (60-75%)
+      const unionRows: Array<{
+        person1_id: string; person2_id: string; union_type: string;
+        start_date: string | null; start_place: string | null;
+        end_date: string | null; end_reason: string | null; is_current: boolean;
+      }> = [];
+      // Track which family index maps to which union for parent-child linking
+      const familyUnionMap: Record<number, string | null> = {};
+
+      for (let fi = 0; fi < gedcomData.families.length; fi++) {
+        const family = gedcomData.families[fi];
         const husband = family.husbandId ? gedcomToDbId[family.husbandId] : undefined;
         const wife = family.wifeId ? gedcomToDbId[family.wifeId] : undefined;
-        let unionId: string | null = null;
+        familyUnionMap[fi] = null;
 
-        // Create union between spouses if both exist
         if (husband && wife) {
-          const { data: union, error: unionError } = await supabase
-            .from('family_unions')
-            .insert({
-              person1_id: husband,
-              person2_id: wife,
-              union_type: 'marriage',
-              start_date: family.marriageDate,
-              start_place: family.marriagePlace,
-              end_date: family.divorceDate,
-              end_reason: family.divorceDate ? 'divorce' : null,
-              is_current: !family.divorceDate,
-            })
-            .select()
-            .single();
-
-          if (!unionError && union) {
-            unionId = union.id;
-            relationsCreated++;
-          }
+          unionRows.push({
+            person1_id: husband, person2_id: wife, union_type: 'marriage',
+            start_date: family.marriageDate || null, start_place: family.marriagePlace || null,
+            end_date: family.divorceDate || null,
+            end_reason: family.divorceDate ? 'divorce' : null,
+            is_current: !family.divorceDate,
+          });
         }
+      }
 
-        // Create parent-child relationships
+      // Insert unions in batches
+      const insertedUnionIds: string[] = [];
+      for (let i = 0; i < unionRows.length; i += BATCH_SIZE) {
+        const batch = unionRows.slice(i, i + BATCH_SIZE);
+        const { data: created, error } = await supabase
+          .from('family_unions')
+          .insert(batch)
+          .select('id');
+
+        if (!error && created) {
+          created.forEach(u => insertedUnionIds.push(u.id));
+          relationsCreated += created.length;
+        }
+      }
+
+      // Map union IDs back to families
+      let unionIdx = 0;
+      for (let fi = 0; fi < gedcomData.families.length; fi++) {
+        const family = gedcomData.families[fi];
+        const husband = family.husbandId ? gedcomToDbId[family.husbandId] : undefined;
+        const wife = family.wifeId ? gedcomToDbId[family.wifeId] : undefined;
+        if (husband && wife && unionIdx < insertedUnionIds.length) {
+          familyUnionMap[fi] = insertedUnionIds[unionIdx];
+          unionIdx++;
+        }
+      }
+
+      onProgress?.(75, 'Unions créées');
+
+      // Phase 3: Create parent-child relationships in batches (75-95%)
+      const pcRows: Array<{
+        parent_id: string; child_id: string; relationship_type: string; union_id: string | null;
+      }> = [];
+
+      for (let fi = 0; fi < gedcomData.families.length; fi++) {
+        const family = gedcomData.families[fi];
+        const husband = family.husbandId ? gedcomToDbId[family.husbandId] : undefined;
+        const wife = family.wifeId ? gedcomToDbId[family.wifeId] : undefined;
+        const unionId = familyUnionMap[fi] || null;
+
         for (const childGedcomId of family.childrenIds) {
           const childDbId = gedcomToDbId[childGedcomId];
           if (!childDbId) continue;
 
-          // Link to father
           if (husband) {
-            const { error } = await supabase
-              .from('family_parent_child')
-              .insert({
-                parent_id: husband,
-                child_id: childDbId,
-                relationship_type: 'biological',
-                union_id: unionId,
-              });
-
-            if (!error) relationsCreated++;
+            pcRows.push({ parent_id: husband, child_id: childDbId, relationship_type: 'biological', union_id: unionId });
           }
-
-          // Link to mother
           if (wife) {
-            const { error } = await supabase
-              .from('family_parent_child')
-              .insert({
-                parent_id: wife,
-                child_id: childDbId,
-                relationship_type: 'biological',
-                union_id: unionId,
-              });
-
-            if (!error) relationsCreated++;
+            pcRows.push({ parent_id: wife, child_id: childDbId, relationship_type: 'biological', union_id: unionId });
           }
         }
       }
 
+      for (let i = 0; i < pcRows.length; i += BATCH_SIZE) {
+        const batch = pcRows.slice(i, i + BATCH_SIZE);
+        const { data: created, error } = await supabase
+          .from('family_parent_child')
+          .insert(batch)
+          .select('id');
+
+        if (!error && created) {
+          relationsCreated += created.length;
+        }
+
+        const percent = 75 + Math.round(((i + batch.length) / Math.max(pcRows.length, 1)) * 20);
+        onProgress?.(percent, `Relations...`);
+      }
+
+      onProgress?.(100, 'Terminé');
+
       toast.success(`Import réussi : ${personsCreated} personnes importées`);
-      return { success: true, personsCreated, relationsCreated };
+      return { success: true, personsCreated, relationsCreated, failedCount: failedCount > 0 ? failedCount : undefined };
     } catch (error) {
       console.error('Error importing GEDCOM:', error);
       toast.error('Erreur lors de l\'import GEDCOM');

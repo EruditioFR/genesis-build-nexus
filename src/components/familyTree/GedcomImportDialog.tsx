@@ -26,6 +26,8 @@ interface GedcomImportDialogProps {
   onOpenChange: (open: boolean) => void;
   onImport: (result: GedcomParseResult, skipIds: string[]) => Promise<void>;
   existingPersons: FamilyPerson[];
+  importProgress?: number;
+  importDetail?: string;
 }
 
 type ImportStep = 'upload' | 'preview' | 'duplicates' | 'importing' | 'complete';
@@ -35,12 +37,14 @@ export function GedcomImportDialog({
   onOpenChange,
   onImport,
   existingPersons,
+  importProgress = 0,
+  importDetail = '',
 }: GedcomImportDialogProps) {
   const { t } = useTranslation('familyTree');
   const [step, setStep] = useState<ImportStep>('upload');
   const [parseResult, setParseResult] = useState<GedcomParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
+  
   const [fileName, setFileName] = useState<string>('');
   const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>([]);
   const [decisions, setDecisions] = useState<Record<string, MergeDecision>>({});
@@ -51,7 +55,6 @@ export function GedcomImportDialog({
     setStep('upload');
     setParseResult(null);
     setError(null);
-    setProgress(0);
     setFileName('');
     setDuplicateMatches([]);
     setDecisions({});
@@ -90,18 +93,11 @@ export function GedcomImportDialog({
 
       if (directImport) {
         setStep('importing');
-        setProgress(0);
         setError(null);
 
         try {
-          const progressInterval = setInterval(() => {
-            setProgress((prev) => Math.min(prev + 10, 90));
-          }, 200);
-
           await onImport(result, []);
 
-          clearInterval(progressInterval);
-          setProgress(100);
           setImportStats({ created: result.individuals.length, skipped: 0 });
           setStep('complete');
         } catch (err) {
@@ -172,7 +168,6 @@ export function GedcomImportDialog({
     if (!parseResult) return;
 
     setStep('importing');
-    setProgress(0);
     setError(null);
 
     try {
@@ -180,14 +175,8 @@ export function GedcomImportDialog({
         .filter(([, decision]) => decision === 'skip')
         .map(([id]) => id);
 
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 10, 90));
-      }, 200);
-
       await onImport(parseResult, skipIds);
 
-      clearInterval(progressInterval);
-      setProgress(100);
       
       const created = parseResult.individuals.length - skipIds.length;
       setImportStats({ created, skipped: skipIds.length });
@@ -478,8 +467,12 @@ export function GedcomImportDialog({
               <p className="text-sm text-muted-foreground mt-1">
                 {t('gedcom.doNotClose')}
               </p>
+              {importDetail && (
+                <p className="text-xs text-muted-foreground mt-2">{importDetail}</p>
+              )}
             </div>
-            <Progress value={progress} className="w-full" />
+            <Progress value={importProgress} className="w-full" />
+            <p className="text-center text-xs text-muted-foreground">{importProgress}%</p>
           </div>
         )}
 
