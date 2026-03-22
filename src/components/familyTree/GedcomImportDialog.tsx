@@ -168,7 +168,6 @@ export function GedcomImportDialog({
     if (!parseResult) return;
 
     setStep('importing');
-    setProgress(0);
     setError(null);
 
     try {
@@ -178,7 +177,6 @@ export function GedcomImportDialog({
 
       await onImport(parseResult, skipIds);
 
-      setProgress(100);
       
       const created = parseResult.individuals.length - skipIds.length;
       setImportStats({ created, skipped: skipIds.length });
