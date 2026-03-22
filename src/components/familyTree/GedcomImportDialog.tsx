@@ -98,7 +98,6 @@ export function GedcomImportDialog({
         try {
           await onImport(result, []);
 
-          setProgress(100);
           setImportStats({ created: result.individuals.length, skipped: 0 });
           setStep('complete');
         } catch (err) {
