@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { parseGedcom, isValidGedcomFile, type GedcomParseResult, type GedcomIndividual } from '@/lib/gedcomParser';
+import { parseGedcomAsync, isValidGedcomFile, type GedcomParseResult, type GedcomIndividual } from '@/lib/gedcomParser';
 import { detectDuplicates, type DuplicateMatch, type MergeDecision } from '@/lib/duplicateDetection';
 import type { FamilyPerson } from '@/types/familyTree';
 
@@ -82,7 +82,7 @@ export function GedcomImportDialog({
         return;
       }
 
-      const result = parseGedcom(content);
+      const result = await parseGedcomAsync(content);
 
       if (result.errors.length > 0 && result.individuals.length === 0) {
         setError(result.errors.join('\n'));
@@ -128,7 +128,7 @@ export function GedcomImportDialog({
     onDrop,
     onDropRejected,
     maxFiles: 1,
-    maxSize: 10 * 1024 * 1024,
+    maxSize: 30 * 1024 * 1024,
   });
 
   const handleCheckDuplicates = () => {

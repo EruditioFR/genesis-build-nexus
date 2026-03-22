@@ -317,6 +317,145 @@ export function parseGedcom(content: string): GedcomParseResult {
   return result;
 }
 
+// Async version that yields to the main thread for large files
+// Prevents UI freezing on files with 3000+ persons
+export async function parseGedcomAsync(content: string): Promise<GedcomParseResult> {
+  const lines = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  
+  // For small files, just parse synchronously
+  if (lines.length < 5000) {
+    return parseGedcom(content);
+  }
+
+  // For large files, parse in chunks with UI yields
+  const result: GedcomParseResult = {
+    individuals: [],
+    families: [],
+    errors: [],
+    warnings: [],
+  };
+
+  let currentIndividual: Partial<GedcomIndividual> | null = null;
+  let currentFamily: Partial<GedcomFamily> | null = null;
+  let currentTag: string | null = null;
+  let currentSubTag: string | null = null;
+
+  const CHUNK_SIZE = 2000;
+
+  for (let chunk = 0; chunk < lines.length; chunk += CHUNK_SIZE) {
+    const end = Math.min(chunk + CHUNK_SIZE, lines.length);
+    
+    for (let i = chunk; i < end; i++) {
+      const parsedLine = parseLine(lines[i]);
+      if (!parsedLine) continue;
+
+      const { level, tag, value, pointer } = parsedLine;
+
+      if (level === 0) {
+        if (currentIndividual?.id) {
+          result.individuals.push(currentIndividual as GedcomIndividual);
+        }
+        if (currentFamily?.id) {
+          result.families.push(currentFamily as GedcomFamily);
+        }
+        currentIndividual = null;
+        currentFamily = null;
+        currentTag = null;
+        currentSubTag = null;
+
+        if (tag === 'INDI' && pointer) {
+          currentIndividual = { id: pointer, firstName: '', lastName: '', gender: 'unknown' };
+        } else if (tag === 'FAM' && pointer) {
+          currentFamily = { id: pointer, childrenIds: [] };
+        }
+      } else if (level === 1) {
+        currentTag = tag;
+        currentSubTag = null;
+
+        if (currentIndividual) {
+          switch (tag) {
+            case 'NAME': {
+              const { firstName, lastName, maidenName } = parseName(value);
+              currentIndividual.firstName = firstName;
+              currentIndividual.lastName = lastName;
+              if (maidenName) currentIndividual.maidenName = maidenName;
+              break;
+            }
+            case 'SEX':
+              currentIndividual.gender = value === 'M' ? 'male' : value === 'F' ? 'female' : 'unknown';
+              break;
+            case 'DEAT':
+              if (value === 'Y') currentIndividual.isDeceased = true;
+              break;
+            case 'OCCU':
+              if (value) currentIndividual.occupation = value;
+              break;
+            case 'NOTE':
+              currentIndividual.notes = value;
+              break;
+          }
+        }
+
+        if (currentFamily) {
+          switch (tag) {
+            case 'HUSB': currentFamily.husbandId = value.replace(/@/g, ''); break;
+            case 'WIFE': currentFamily.wifeId = value.replace(/@/g, ''); break;
+            case 'CHIL':
+              currentFamily.childrenIds = currentFamily.childrenIds || [];
+              currentFamily.childrenIds.push(value.replace(/@/g, ''));
+              break;
+          }
+        }
+      } else if (level === 2) {
+        currentSubTag = tag;
+
+        if (currentIndividual) {
+          if (currentTag === 'BIRT') {
+            if (tag === 'DATE') currentIndividual.birthDate = parseGedcomDate(value);
+            else if (tag === 'PLAC') currentIndividual.birthPlace = value;
+          } else if (currentTag === 'DEAT') {
+            if (tag === 'DATE') currentIndividual.deathDate = parseGedcomDate(value);
+            else if (tag === 'PLAC') currentIndividual.deathPlace = value;
+          } else if (currentTag === 'OCCU' && tag === 'TYPE') {
+            currentIndividual.occupation = value;
+          }
+        }
+
+        if (currentFamily) {
+          if (currentTag === 'MARR') {
+            if (tag === 'DATE') currentFamily.marriageDate = parseGedcomDate(value);
+            else if (tag === 'PLAC') currentFamily.marriagePlace = value;
+          } else if (currentTag === 'DIV' && tag === 'DATE') {
+            currentFamily.divorceDate = parseGedcomDate(value);
+          }
+        }
+      }
+    }
+
+    // Yield to the main thread between chunks
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+
+  if (currentIndividual?.id) {
+    result.individuals.push(currentIndividual as GedcomIndividual);
+  }
+  if (currentFamily?.id) {
+    result.families.push(currentFamily as GedcomFamily);
+  }
+
+  if (result.individuals.length === 0) {
+    result.errors.push('Aucun individu trouvé dans le fichier GEDCOM');
+  }
+
+  result.individuals.forEach((ind) => {
+    if (!ind.firstName && !ind.lastName) {
+      result.warnings.push(`Individu ${ind.id} n'a pas de nom`);
+    }
+  });
+
+  return result;
+}
+
 // Utility to check file validity before full parsing
 export function isValidGedcomFile(content: string): boolean {
   const lines = content.split('\n');

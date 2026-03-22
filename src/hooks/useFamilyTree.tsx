@@ -431,7 +431,6 @@ export function useFamilyTree() {
   ): Promise<{ success: boolean; personsCreated: number; relationsCreated: number; failedCount?: number; errorMessage?: string }> => {
     if (!user) return { success: false, personsCreated: 0, relationsCreated: 0, errorMessage: 'Utilisateur non connecté' };
 
-    const BATCH_SIZE = 50;
     setLoading(true);
     try {
       const gedcomToDbId: Record<string, string> = {};
@@ -442,6 +441,8 @@ export function useFamilyTree() {
 
       // Phase 1: Create persons in batches (0-60%)
       const individuals = gedcomData.individuals;
+      // Adaptive batch size: larger batches for big imports
+      const BATCH_SIZE = individuals.length > 1000 ? 100 : 50;
       for (let i = 0; i < individuals.length; i += BATCH_SIZE) {
         const batch = individuals.slice(i, i + BATCH_SIZE);
         const rows = batch.map(individual => ({
