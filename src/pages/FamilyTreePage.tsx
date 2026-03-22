@@ -334,24 +334,28 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
+  const [importProgress, setImportProgress] = useState(0);
+  const [importDetail, setImportDetail] = useState('');
+
   const handleGedcomImport = async (gedcomData: GedcomParseResult, skipIds: string[] = []) => {
     if (!tree?.id) {
       throw new Error(t('noTreeSelected'));
     }
     
-    // Filter out skipped persons
     const filteredData: GedcomParseResult = {
       ...gedcomData,
       individuals: gedcomData.individuals.filter(ind => !skipIds.includes(ind.id)),
     };
     
-    const result = await importFromGedcom(tree.id, filteredData);
+    const result = await importFromGedcom(tree.id, filteredData, (percent, detail) => {
+      setImportProgress(percent);
+      if (detail) setImportDetail(detail);
+    });
     
     if (!result.success) {
       throw new Error(result.errorMessage || t('importError'));
     }
     
-    // Partial success: some persons imported, some failed
     if (result.failedCount && result.failedCount > 0) {
       toast.warning(t('importPartial', { created: result.personsCreated, failed: result.failedCount }));
     } else if (result.personsCreated > 0) {
