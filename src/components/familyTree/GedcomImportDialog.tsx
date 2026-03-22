@@ -93,7 +93,6 @@ export function GedcomImportDialog({
 
       if (directImport) {
         setStep('importing');
-        setProgress(0);
         setError(null);
 
         try {
