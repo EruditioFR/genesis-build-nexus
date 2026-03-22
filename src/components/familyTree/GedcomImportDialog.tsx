@@ -37,6 +37,8 @@ export function GedcomImportDialog({
   onOpenChange,
   onImport,
   existingPersons,
+  importProgress = 0,
+  importDetail = '',
 }: GedcomImportDialogProps) {
   const { t } = useTranslation('familyTree');
   const [step, setStep] = useState<ImportStep>('upload');
