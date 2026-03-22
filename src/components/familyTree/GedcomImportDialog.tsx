@@ -82,7 +82,7 @@ export function GedcomImportDialog({
         return;
       }
 
-      const result = parseGedcom(content);
+      const result = await parseGedcomAsync(content);
 
       if (result.errors.length > 0 && result.individuals.length === 0) {
         setError(result.errors.join('\n'));
