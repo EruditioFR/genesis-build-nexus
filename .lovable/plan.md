@@ -1,46 +1,72 @@
 
 
-## Plan : Promotion Premium 4,99€/mois pendant 3 mois
+## Diagnostic : Import GEDCOM volumineux
 
-### Contexte actuel
-- Prix Premium mensuel : 9,99€ (price_id: `price_1SrzsNRc375UxOm0w9dJmRFf`)
-- Un coupon Stripe existe deja ("Mamie", 50% forever) — non lie a cette promo
-- La promo demandee : 4,99€/mois pendant 3 mois = **5,00€ de reduction pendant 3 mois**
+### Problemes identifies
 
-### Etapes
+L'import GEDCOM actuel effectue **une requete Supabase par personne et par relation**, de maniere sequentielle :
 
-#### 1. Creer un coupon Stripe
-- Nom : "Lancement Premium -50%"
-- amount_off : 500 (5,00€ en centimes)
-- currency : EUR
-- duration : repeating
-- duration_in_months : 3
+1. **Personnes** : boucle `for...of` avec un `INSERT ... .single()` par individu (ligne 447-486)
+2. **Unions** : un `INSERT` par famille (ligne 512-525)
+3. **Relations parent-enfant** : un `INSERT` par lien (lignes 540-563)
 
-#### 2. Modifier `create-checkout` (edge function)
-- Pour le tier `premium` en mode `monthly`, appliquer automatiquement le coupon de lancement via `discounts: [{ coupon: "<ID_DU_COUPON>" }]`
-- Le coupon Stripe gerera nativement la reduction sur les 3 premiers mois, puis le prix normal reprendra
-- Ne pas afficher `allow_promotion_codes` quand le coupon auto est applique (deja le cas dans le code actuel)
+Pour un fichier de 500 personnes et 200 familles, cela represente facilement **1000+ requetes HTTP sequentielles**. Chacune prend ~50-200ms, soit un import de **2 a 5 minutes** qui peut timeout ou bloquer l'UI.
 
-#### 3. Modifier l'affichage du pricing (PricingSection + Premium page)
+Autres problemes :
+- La fausse barre de progression (`setProgress(prev + 10)` toutes les 200ms) ne reflete pas l'avancement reel
+- Limite de 10 Mo sur le fichier (suffisant, mais un gros GEDCOM peut depasser)
+- Le parsing synchrone (`parseGedcom`) bloque le thread principal sur les gros fichiers
 
-Sur la carte Premium mensuel :
-- Afficher le prix barre : ~~9,99€~~ **4,99€**/mois
-- Ajouter un badge promo : "Offre de lancement : -50% pendant 3 mois"
-- Apres 3 mois, retour automatique a 9,99€ (gere par Stripe)
+---
 
-#### 4. Traduire les textes promo dans les 5 langues
-Ajouter dans `landing.json` et `dashboard.json` les cles :
-- `pricing.plans.premium.promo` : "Offre de lancement"
-- `pricing.plans.premium.promoDetail` : "-50% pendant 3 mois"
-- `pricing.plans.premium.originalPrice` : "9,99"
+## Plan : Import par lots (batch) avec progression reelle
+
+### 1. Modifier `importFromGedcom` dans `useFamilyTree.tsx`
+
+Remplacer les inserts un par un par des **inserts par lots de 50** :
+
+```text
+Avant : 500 personnes = 500 requetes (sequentielles)
+Apres : 500 personnes = 10 requetes (lots de 50)
+```
+
+- Utiliser `.insert([...batch])` de Supabase qui accepte un tableau
+- Traiter les personnes par lots de 50
+- Traiter les unions par lots de 50
+- Traiter les relations parent-enfant par lots de 50
+- Apres chaque lot, appeler un callback de progression pour mettre a jour l'UI
+
+### 2. Ajouter un callback de progression reel
+
+Modifier la signature de `importFromGedcom` pour accepter un `onProgress?: (percent: number) => void` :
+
+- Phase 1 (0-60%) : creation des personnes, progression proportionnelle au nombre de lots traites
+- Phase 2 (60-90%) : creation des unions et relations
+- Phase 3 (90-100%) : finalisation
+
+### 3. Adapter `GedcomImportDialog.tsx`
+
+- Passer le callback de progression a `onImport`
+- Supprimer le faux `setInterval` de progression
+- Afficher le pourcentage reel et le nombre de personnes traitees
+
+### 4. Parser asynchrone pour les gros fichiers
+
+Ajouter un `setTimeout` / chunking dans `parseGedcom` pour ne pas bloquer l'UI sur les fichiers > 5000 lignes (optionnel, priorite basse).
+
+---
 
 ### Fichiers modifies
 
 | Fichier | Modification |
 |---|---|
-| Stripe (coupon) | Creation via outil Stripe |
-| `supabase/functions/create-checkout/index.ts` | Auto-appliquer le coupon pour premium monthly |
-| `src/components/landing/PricingSection.tsx` | Prix barre + badge promo |
-| `src/pages/Premium.tsx` | Prix barre + badge promo |
-| `public/locales/*/landing.json` (x5) | Traductions promo |
+| `src/hooks/useFamilyTree.tsx` | `importFromGedcom` : inserts par lots de 50 + callback progression |
+| `src/components/familyTree/GedcomImportDialog.tsx` | Progression reelle, suppression du faux interval |
+| `src/pages/FamilyTreePage.tsx` | Adapter l'appel `onImport` pour passer la progression |
+
+### Impact attendu
+
+- Import de 500 personnes : ~10 requetes au lieu de 500 → **~5-10 secondes au lieu de 2-5 minutes**
+- Barre de progression fiable
+- Pas de timeout ni blocage UI
 
