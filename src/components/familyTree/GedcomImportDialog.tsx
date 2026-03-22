@@ -44,7 +44,7 @@ export function GedcomImportDialog({
   const [step, setStep] = useState<ImportStep>('upload');
   const [parseResult, setParseResult] = useState<GedcomParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
+  
   const [fileName, setFileName] = useState<string>('');
   const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>([]);
   const [decisions, setDecisions] = useState<Record<string, MergeDecision>>({});
