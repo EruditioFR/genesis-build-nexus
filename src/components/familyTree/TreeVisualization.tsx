@@ -617,6 +617,29 @@ export function TreeVisualization({
       currentX = maxX + COMPONENT_GAP;
     }
 
+    // Safety net: place any persons not yet positioned (e.g. isolated persons or
+    // persons missed by the layout algorithm due to complex graph paths)
+    const missingPersons = persons.filter(p => !allPositions.has(p.id));
+    if (missingPersons.length > 0) {
+      // Find the bottom of the current layout
+      let maxY = 0;
+      for (const pos of allPositions.values()) {
+        maxY = Math.max(maxY, pos.y);
+      }
+      const orphanY = maxY + CARD_HEIGHT + COMPONENT_GAP;
+      let orphanX = currentX > 0 ? 0 : 0; // Start from left for orphans
+
+      for (const p of missingPersons) {
+        allPositions.set(p.id, {
+          personId: p.id,
+          x: orphanX,
+          y: orphanY,
+          generation: 99, // Special generation for orphans
+        });
+        orphanX += CARD_WIDTH + H_GAP;
+      }
+    }
+
     // Resolve overlaps (pass 3b)
     resolveOverlaps(allPositions);
 

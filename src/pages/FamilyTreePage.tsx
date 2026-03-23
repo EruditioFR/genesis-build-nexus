@@ -77,7 +77,7 @@ export default function FamilyTreePage() {
   const [unions, setUnions] = useState<FamilyUnion[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
   
-  const [viewMode, setViewMode] = useState<TreeViewMode>('descendant');
+  const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
   const [zoom, setZoom] = useState(1);
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
