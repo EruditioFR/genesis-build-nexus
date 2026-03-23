@@ -501,7 +501,7 @@ export function TreeVisualization({
         : component[0];
 
       // Use the unified layout engine
-      const result = layoutUnified(componentRoot, graph, persons, unions, viewMode);
+      const result = layoutUnified(componentRoot, graph, persons, relationships, unions, viewMode);
 
       // Shift positions by currentX offset
       for (const [id, pos] of result.positions) {
