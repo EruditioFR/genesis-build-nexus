@@ -21,7 +21,8 @@ import {
   Link2,
   Pencil,
   GitMerge,
-  Focus
+  Focus,
+  Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -836,41 +837,118 @@ export function PersonDetailPanel({
               </div>
               {spousesWithUnions.length > 0 ? (
                 <div className="space-y-3">
-                  {spousesWithUnions.map(({ spouse, union, commonChildren }) => (
-                    <div key={spouse.id} className="space-y-1">
-                      <RelatedPersonCard relatedPerson={spouse} unionInfo={union} showEditButton />
-                      {commonChildren.length > 0 && (
-                        <div className="ml-6 pl-3 border-l-2 border-muted space-y-1">
-                          <p className="text-xs text-muted-foreground flex items-center gap-1 py-1">
-                            <Baby className="w-3 h-3" />
-                            Enfants communs ({commonChildren.length})
-                          </p>
-                          {commonChildren.map(child => (
-                            <button
-                              key={child.id}
-                              onClick={() => onPersonClick(child)}
-                              className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
-                            >
-                              <Avatar className="w-6 h-6">
-                                <AvatarImage src={child.profile_photo_url || undefined} />
-                                <AvatarFallback className="text-[10px]">
-                                  {`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span className="text-xs truncate">
-                                {child.first_names} {child.last_name}
-                              </span>
-                              {child.birth_date && (
-                                <span className="text-[10px] text-muted-foreground ml-auto">
-                                  {new Date(child.birth_date).getFullYear()}
+                  {spousesWithUnions.map(({ spouse, union, commonChildren }) => {
+                    // Find spouse's parents (in-laws)
+                    const spouseParents = allPersons.filter(p => 
+                      relationships.some(r => r.parent_id === p.id && r.child_id === spouse.id)
+                    );
+                    // Find spouse's siblings
+                    const spouseSiblingIds = new Set(
+                      relationships
+                        .filter(r => spouseParents.some(p => p.id === r.parent_id) && r.child_id !== spouse.id)
+                        .map(r => r.child_id)
+                    );
+                    const spouseSiblings = allPersons.filter(p => spouseSiblingIds.has(p.id));
+
+                    return (
+                      <div key={spouse.id} className="space-y-1">
+                        <RelatedPersonCard relatedPerson={spouse} unionInfo={union} showEditButton />
+                        {commonChildren.length > 0 && (
+                          <div className="ml-6 pl-3 border-l-2 border-muted space-y-1">
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 py-1">
+                              <Baby className="w-3 h-3" />
+                              Enfants communs ({commonChildren.length})
+                            </p>
+                            {commonChildren.map(child => (
+                              <button
+                                key={child.id}
+                                onClick={() => onPersonClick(child)}
+                                className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
+                              >
+                                <Avatar className="w-6 h-6">
+                                  <AvatarImage src={child.profile_photo_url || undefined} />
+                                  <AvatarFallback className="text-[10px]">
+                                    {`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="text-xs truncate">
+                                  {child.first_names} {child.last_name}
                                 </span>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                                {child.birth_date && (
+                                  <span className="text-[10px] text-muted-foreground ml-auto">
+                                    {new Date(child.birth_date).getFullYear()}
+                                  </span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        {/* In-laws section */}
+                        {(spouseParents.length > 0 || spouseSiblings.length > 0) && (
+                          <div className="ml-6 pl-3 border-l-2 border-accent/40 space-y-1">
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 py-1">
+                              <Users className="w-3 h-3" />
+                              Belle-famille
+                            </p>
+                            {spouseParents.map(parent => (
+                              <button
+                                key={parent.id}
+                                onClick={() => onPersonClick(parent)}
+                                className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
+                              >
+                                <Avatar className="w-6 h-6">
+                                  <AvatarImage src={parent.profile_photo_url || undefined} />
+                                  <AvatarFallback className="text-[10px]">
+                                    {`${parent.first_names[0] || ''}${parent.last_name[0] || ''}`}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="text-xs truncate">
+                                  {parent.first_names} {parent.last_name}
+                                </span>
+                                <Badge variant="outline" className="text-[9px] px-1 py-0 h-3.5 ml-auto shrink-0">
+                                  {parent.gender === 'male' ? 'Beau-père' : parent.gender === 'female' ? 'Belle-mère' : 'Beau-parent'}
+                                </Badge>
+                              </button>
+                            ))}
+                            {spouseSiblings.slice(0, 5).map(sibling => (
+                              <button
+                                key={sibling.id}
+                                onClick={() => onPersonClick(sibling)}
+                                className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
+                              >
+                                <Avatar className="w-6 h-6">
+                                  <AvatarImage src={sibling.profile_photo_url || undefined} />
+                                  <AvatarFallback className="text-[10px]">
+                                    {`${sibling.first_names[0] || ''}${sibling.last_name[0] || ''}`}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="text-xs truncate">
+                                  {sibling.first_names} {sibling.last_name}
+                                </span>
+                                <Badge variant="outline" className="text-[9px] px-1 py-0 h-3.5 ml-auto shrink-0">
+                                  {sibling.gender === 'male' ? 'Beau-frère' : sibling.gender === 'female' ? 'Belle-sœur' : 'Beau-frère/sœur'}
+                                </Badge>
+                              </button>
+                            ))}
+                            {spouseSiblings.length > 5 && (
+                              <p className="text-[10px] text-muted-foreground pl-8">
+                                +{spouseSiblings.length - 5} autres
+                              </p>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 text-xs w-full gap-1 mt-1"
+                              onClick={() => onPersonClick(spouse)}
+                            >
+                              <Focus className="w-3 h-3" />
+                              Voir la famille de {spouse.first_names}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground italic">Aucun conjoint renseigné</p>
