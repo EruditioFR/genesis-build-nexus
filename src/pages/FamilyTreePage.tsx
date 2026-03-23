@@ -103,6 +103,49 @@ export default function FamilyTreePage() {
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
 
+  // Compute active branch (ancestors + descendants of selected person)
+  const activeBranchIds = useMemo(() => {
+    if (!selectedPerson || !showDetailPanel) return undefined;
+    const ids = new Set<string>();
+    ids.add(selectedPerson.id);
+
+    // Ancestors (go up)
+    const addAncestors = (personId: string, visited: Set<string>) => {
+      const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
+      for (const pid of parentIds) {
+        if (!visited.has(pid)) {
+          visited.add(pid);
+          ids.add(pid);
+          addAncestors(pid, visited);
+        }
+      }
+    };
+
+    // Descendants (go down)
+    const addDescendants = (personId: string, visited: Set<string>) => {
+      const childIds = relationships.filter(r => r.parent_id === personId).map(r => r.child_id);
+      for (const cid of childIds) {
+        if (!visited.has(cid)) {
+          visited.add(cid);
+          ids.add(cid);
+          addDescendants(cid, visited);
+        }
+      }
+    };
+
+    // Spouses
+    const spouseIds = unions
+      .filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)
+      .map(u => u.person1_id === selectedPerson.id ? u.person2_id : u.person1_id);
+    spouseIds.forEach(id => ids.add(id));
+
+    const visited = new Set<string>([selectedPerson.id]);
+    addAncestors(selectedPerson.id, visited);
+    addDescendants(selectedPerson.id, visited);
+
+    return ids;
+  }, [selectedPerson, showDetailPanel, relationships, unions]);
+
   const canAccessFamilyTree = limits.canAccessFamilyTree;
 
   // Initialize: fetch or create the single tree
