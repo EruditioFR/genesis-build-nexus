@@ -46,6 +46,13 @@
     "title": "Importar",
     "gedcom": "Importar GEDCOM"
   },
+  "breadcrumb": {
+    "root": "Raíz",
+    "here": "Aquí"
+  },
+  "navigation": {
+    "backToRoot": "Volver a la raíz"
+  },
   "empty": {
     "title": "Tu árbol está vacío",
     "description": "Comienza añadiendo la primera persona o importa un árbol existente.",
