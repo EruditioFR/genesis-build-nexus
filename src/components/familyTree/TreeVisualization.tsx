@@ -558,13 +558,32 @@ export function TreeVisualization({
       if (component.length === 0) continue;
 
       // Pick best root for this component
-      const componentRoot = component.includes(rootPerson.id)
-        ? rootPerson.id
-        : component.reduce((best, id) => {
+      let componentRoot: string;
+      if (component.includes(rootPerson.id)) {
+        componentRoot = rootPerson.id;
+      } else {
+        // Find the person with no parents (topmost ancestor) or most connections
+        const topAncestor = component.find(id => graph.getParentIds(id).length === 0);
+        componentRoot = topAncestor || component.reduce((best, id) => {
             const conns = graph.getChildIds(id).length + graph.getParentIds(id).length + graph.getSpouseIds(id).length;
             const bestConns = graph.getChildIds(best).length + graph.getParentIds(best).length + graph.getSpouseIds(best).length;
             return conns > bestConns ? id : best;
           }, component[0]);
+      }
+
+      // For descendant view, find the topmost ancestor to start from
+      let layoutRoot = componentRoot;
+      if (viewMode === 'descendant') {
+        let current = componentRoot;
+        const seen = new Set<string>();
+        while (!seen.has(current)) {
+          seen.add(current);
+          const parentIds = graph.getParentIds(current);
+          if (parentIds.length === 0) break;
+          current = parentIds[0]; // Follow first parent up
+        }
+        layoutRoot = current;
+      }
 
       let engine: LayoutEngine;
 
