@@ -11,7 +11,8 @@ import {
   Shield, 
   ChevronLeft,
   Settings,
-  BarChart3
+  BarChart3,
+  TreePine
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useAuth } from "@/hooks/useAuth";
