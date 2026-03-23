@@ -352,15 +352,102 @@ export function TreeVisualization({
     };
 
     // Build tree based on view mode
-    if (viewMode === 'descendant') {
-      buildDescendantsTree(rootPerson, 0, 0);
-    } else if (viewMode === 'ascendant') {
-      buildAscendantsTree(rootPerson, 3, 0); // Start at generation 3 to have room for ancestors above
-    } else {
-      // Hourglass: both directions
-      buildAscendantsTree(rootPerson, 3, 0);
-      visitedDescendants.add(rootPerson.id); // Mark root as visited for descendants
-      buildDescendantsTree(rootPerson, 3, positionsMap.get(rootPerson.id)?.x || 0);
+    const buildFromRoot = (root: FamilyPerson, xOffset: number) => {
+      if (viewMode === 'descendant') {
+        buildDescendantsTree(root, 0, xOffset);
+      } else if (viewMode === 'ascendant') {
+        buildAscendantsTree(root, 3, xOffset);
+      } else {
+        // Hourglass: both directions
+        buildAscendantsTree(root, 3, xOffset);
+        visitedDescendants.add(root.id);
+        buildDescendantsTree(root, 3, positionsMap.get(root.id)?.x || xOffset);
+      }
+    };
+
+    // Build from root person first
+    buildFromRoot(rootPerson, 0);
+
+    // Find and layout disconnected components
+    // Build a connectivity map using relationships and unions
+    const getConnectedPersons = (startId: string, visited: Set<string>): Set<string> => {
+      const connected = new Set<string>();
+      const queue = [startId];
+      while (queue.length > 0) {
+        const currentId = queue.shift()!;
+        if (connected.has(currentId)) continue;
+        connected.add(currentId);
+        // Via parent-child relationships
+        for (const r of relationships) {
+          if (r.parent_id === currentId && !connected.has(r.child_id)) queue.push(r.child_id);
+          if (r.child_id === currentId && !connected.has(r.parent_id)) queue.push(r.parent_id);
+        }
+        // Via unions
+        for (const u of unions) {
+          if (u.person1_id === currentId && !connected.has(u.person2_id)) queue.push(u.person2_id);
+          if (u.person2_id === currentId && !connected.has(u.person1_id)) queue.push(u.person1_id);
+        }
+      }
+      return connected;
+    };
+
+    // Find persons not yet positioned (disconnected from root)
+    const positionedIds = new Set(positionsMap.keys());
+    const unpositioned = persons.filter(p => !positionedIds.has(p.id));
+
+    if (unpositioned.length > 0) {
+      // Group unpositioned persons into connected components
+      const processedIds = new Set<string>();
+      const components: FamilyPerson[][] = [];
+
+      for (const p of unpositioned) {
+        if (processedIds.has(p.id)) continue;
+        const connectedIds = getConnectedPersons(p.id, processedIds);
+        const component = persons.filter(pp => connectedIds.has(pp.id) && !positionedIds.has(pp.id));
+        component.forEach(pp => processedIds.add(pp.id));
+        if (component.length > 0) components.push(component);
+      }
+
+      // Calculate current max X to place disconnected trees to the right
+      let currentMaxX = 0;
+      for (const pos of positionsMap.values()) {
+        currentMaxX = Math.max(currentMaxX, pos.x + CARD_WIDTH);
+      }
+
+      // Layout each disconnected component
+      for (const component of components) {
+        currentMaxX += HORIZONTAL_GAP * 3; // Extra gap between components
+        
+        // Find the best root for this component (person with most connections or first)
+        const componentRoot = component.reduce((best, p) => {
+          const connections = relationships.filter(r => r.parent_id === p.id || r.child_id === p.id).length +
+            unions.filter(u => u.person1_id === p.id || u.person2_id === p.id).length;
+          const bestConnections = relationships.filter(r => r.parent_id === best.id || r.child_id === best.id).length +
+            unions.filter(u => u.person1_id === best.id || u.person2_id === best.id).length;
+          return connections > bestConnections ? p : best;
+        }, component[0]);
+
+        // Reset visited sets for this component
+        visitedDescendants.clear();
+        visitedAscendants.clear();
+        // Re-mark all already-positioned persons as visited
+        for (const id of positionedIds) {
+          visitedDescendants.add(id);
+          visitedAscendants.add(id);
+        }
+
+        buildFromRoot(componentRoot, currentMaxX);
+
+        // Update positionedIds with newly positioned persons
+        for (const [id] of positionsMap) {
+          positionedIds.add(id);
+        }
+
+        // Recalculate max X
+        for (const pos of positionsMap.values()) {
+          currentMaxX = Math.max(currentMaxX, pos.x + CARD_WIDTH);
+        }
+      }
     }
 
     // Calculate bounds
