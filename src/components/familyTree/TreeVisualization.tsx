@@ -588,7 +588,7 @@ export function TreeVisualization({
       let engine: LayoutEngine;
 
       if (viewMode === 'descendant') {
-        engine = layoutDescendant(componentRoot, graph, persons, 0, currentX);
+        engine = layoutDescendant(layoutRoot, graph, persons, 0, currentX);
         if (componentRoot === rootPerson.id) detectedRootGen = 0;
       } else if (viewMode === 'ascendant') {
         // Calculate max depth for ascendant
