@@ -30,6 +30,7 @@ const navItems = [
   { to: "/admin/subscriptions", label: "Abonnements", icon: CreditCard },
   { to: "/admin/roles", label: "Rôles", icon: Shield },
   { to: "/admin/stats", label: "Statistiques", icon: BarChart3 },
+  { to: "/admin/family-trees", label: "Arbres", icon: TreePine },
   { to: "/admin/contact", label: "Contact", icon: Mail },
 ];
 

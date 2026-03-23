@@ -119,6 +119,7 @@ const App = () => (
                     <Route path="subscriptions" element={<AdminSubscriptions />} />
                     <Route path="roles" element={<AdminRoles />} />
                     <Route path="stats" element={<AdminStats />} />
+                    <Route path="family-trees" element={<AdminFamilyTrees />} />
                     <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   
