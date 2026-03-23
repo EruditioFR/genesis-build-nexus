@@ -5,12 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from '@/components/ui/drawer';
+import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { FamilyPerson } from '@/types/familyTree';
@@ -118,6 +126,100 @@ export function LinkCapsuleDialog({
     return types[type] || type;
   };
 
+  const isMobile = useIsMobile();
+
+  const capsuleList = (
+    <div className="space-y-4">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Input
+          placeholder="Rechercher une capsule..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+
+      <ScrollArea className={isMobile ? "h-[50vh]" : "h-[300px]"}>
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : filteredCapsules.length === 0 ? (
+          <div className="text-center py-8">
+            <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
+            <p className="text-sm text-muted-foreground">
+              {search ? 'Aucune capsule trouvée' : 'Aucune capsule disponible'}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2 pr-4">
+            {filteredCapsules.map((capsule) => (
+              <div
+                key={capsule.id}
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
+              >
+                {capsule.thumbnail_url ? (
+                  <img
+                    src={capsule.thumbnail_url}
+                    alt=""
+                    className="w-12 h-12 rounded object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                    <Package className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm truncate">{capsule.title}</p>
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                    <Badge variant="secondary" className="text-xs">
+                      {getCapsuleTypeLabel(capsule.capsule_type)}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {format(new Date(capsule.created_at), 'dd MMM yyyy', { locale: fr })}
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  className="flex-shrink-0"
+                  onClick={() => handleLink(capsule.id)}
+                  disabled={linking === capsule.id}
+                >
+                  {linking === capsule.id ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Link2 className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </ScrollArea>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="px-4 pb-6">
+          <DrawerHeader className="text-left px-0">
+            <DrawerTitle className="flex items-center gap-2">
+              <Link2 className="w-5 h-5" />
+              Lier une capsule
+            </DrawerTitle>
+            <DrawerDescription>
+              Sélectionnez une capsule à lier à {person.first_names} {person.last_name}
+            </DrawerDescription>
+          </DrawerHeader>
+          {capsuleList}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
@@ -130,76 +232,7 @@ export function LinkCapsuleDialog({
             Sélectionnez une capsule à lier à {person.first_names} {person.last_name}
           </DialogDescription>
         </DialogHeader>
-
-        <div className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Rechercher une capsule..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-
-          <ScrollArea className="h-[300px]">
-            {loading ? (
-              <div className="flex items-center justify-center h-full">
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-              </div>
-            ) : filteredCapsules.length === 0 ? (
-              <div className="text-center py-8">
-                <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">
-                  {search ? 'Aucune capsule trouvée' : 'Aucune capsule disponible'}
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-2 pr-4">
-                {filteredCapsules.map((capsule) => (
-                  <div
-                    key={capsule.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
-                  >
-                    {capsule.thumbnail_url ? (
-                      <img
-                        src={capsule.thumbnail_url}
-                        alt=""
-                        className="w-12 h-12 rounded object-cover"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded bg-muted flex items-center justify-center">
-                        <Package className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{capsule.title}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="secondary" className="text-xs">
-                          {getCapsuleTypeLabel(capsule.capsule_type)}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {format(new Date(capsule.created_at), 'dd MMM yyyy', { locale: fr })}
-                        </span>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={() => handleLink(capsule.id)}
-                      disabled={linking === capsule.id}
-                    >
-                      {linking === capsule.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Link2 className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-        </div>
+        {capsuleList}
       </DialogContent>
     </Dialog>
   );
