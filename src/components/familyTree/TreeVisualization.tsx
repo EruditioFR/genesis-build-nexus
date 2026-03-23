@@ -144,6 +144,7 @@ function layoutUnified(
   rootId: string,
   graph: ReturnType<typeof buildFamilyGraph>,
   persons: FamilyPerson[],
+  relationships: ParentChildRelationship[],
   unions: FamilyUnion[],
   viewMode: TreeViewMode,
 ): { positions: Map<string, LayoutNode>; connections: Connection[]; rootGeneration: number } {
