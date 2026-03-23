@@ -868,7 +868,7 @@ interface TreePersonCardProps {
   generation: number;
 }
 
-function TreePersonCard({ person, isSelected, isHighlighted, onClick }: TreePersonCardProps) {
+function TreePersonCard({ person, isSelected, isHighlighted, isRoot, isDimmed, onClick }: TreePersonCardProps) {
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
   const getBirthYear = () => {
