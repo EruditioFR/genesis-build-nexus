@@ -717,12 +717,15 @@ export function TreeVisualization({
           const fromY = conn.from.y + offsetY;
           const toX = conn.to.x + offsetX;
           const toY = conn.to.y + offsetY;
+          
+          const isActive = !activeBranchIds || (activeBranchIds.has(conn.fromPersonId) && activeBranchIds.has(conn.toPersonId));
+          const connOpacity = isActive ? 1 : 0.15;
 
           if (conn.type === 'spouse') {
             const midX = (fromX + toX) / 2;
             const midY = fromY;
             return (
-              <g key={`conn-${index}`}>
+              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
                 <motion.line
                   x1={fromX} y1={fromY} x2={toX} y2={toY}
                   stroke="hsl(var(--accent))"
@@ -739,29 +742,25 @@ export function TreeVisualization({
             // T-shape genealogical connection
             const midY = fromY + (toY - fromY) / 2;
             return (
-              <g key={`conn-${index}`}>
-                {/* Vertical from parent down to horizontal bar */}
+              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
                 <motion.line
                   x1={fromX} y1={fromY} x2={fromX} y2={midY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 }}
                 />
-                {/* Horizontal bar */}
                 <motion.line
                   x1={fromX} y1={midY} x2={toX} y2={midY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 + 0.1 }}
                 />
-                {/* Vertical down to child */}
                 <motion.line
                   x1={toX} y1={midY} x2={toX} y2={toY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 + 0.2 }}
                 />
-                {/* Junction dot at horizontal bar */}
                 <circle cx={toX} cy={midY} r="3" fill="hsl(var(--secondary))" fillOpacity="0.4" />
               </g>
             );
