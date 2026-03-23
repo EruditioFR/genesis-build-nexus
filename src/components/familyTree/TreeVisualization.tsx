@@ -862,6 +862,8 @@ interface TreePersonCardProps {
   person: FamilyPerson;
   isSelected: boolean;
   isHighlighted?: boolean;
+  isRoot?: boolean;
+  isDimmed?: boolean;
   onClick: () => void;
   generation: number;
 }
