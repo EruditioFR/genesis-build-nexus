@@ -1,63 +1,112 @@
 
 
-## Plan : Audit et correction des fuites de donnees inter-utilisateurs
+## Plan: Refonte complete de la visualisation de l'arbre genealogique
 
-### Problemes identifies
+### Diagnostic des problemes actuels
 
-**1. BUG CRITIQUE — `useFamilyTree.tsx` (lignes 135-136)**
-Les requetes `family_parent_child.select('*')` et `family_unions.select('*')` sont executees **sans aucun filtre**. Toutes les relations et unions de tous les utilisateurs sont chargees, puis filtrees cote client. Meme si les politiques RLS limitent les resultats, cette approche est:
-- Inefficace (charge inutile)
-- Fragile (si un admin utilise le meme hook, il voit tout)
-- Risquee (le filtrage client ne doit jamais etre la seule barriere)
+1. **Algorithme de layout naif** : recursion simple qui ne gere pas les cas complexes (mariages multiples, demi-freres, familles recomposees)
+2. **Concept de "famille" absent** : les couples ne sont pas traites comme une unite atomique de positionnement
+3. **Chevauchements** : le decalage des descendants est fragile et casse avec les arbres larges
+4. **Composants deconnectes** : traites en afterthought, places arbitrairement a droite
+5. **Vue ascendante** : generation de base hardcodee a 3
+6. **Requetes sans filtre** : `family_parent_child` et `family_unions` chargees sans scope (deja identifie)
 
-**2. Requetes sans filtre dans `Statistics.tsx` (lignes 75-79)**
-`capsule_medias`, `comments`, `capsule_shares`, `capsule_categories` sont chargees sans filtre `user_id`, puis filtrees cote client par capsule IDs. Les politiques RLS protegent les donnees, mais les requetes devraient etre scopees aux capsules de l'utilisateur via `.in('capsule_id', capsuleIds)` pour eviter de charger des donnees inutiles.
+### Architecture cible
 
-**3. Autres pages verifiees — OK**
-- `CapsuleDetail.tsx` : charge par ID, protege par RLS `user_can_view_capsule` (correct pour les capsules partagees)
-- `CapsuleEdit.tsx` : filtre `.eq('user_id', user.id)` present
-- `CapsulesList.tsx` : filtre `.eq('user_id', user.id)` present
-- `CategoryDetailPage.tsx` : filtre `.eq('user_id', user.id)` present
-- `Dashboard.tsx` : filtre `.eq('user_id', user.id)` present
-- `Timeline.tsx` : filtre `.eq('user_id', user.id)` present
-- `PersonCapsuleLink.tsx` : corrige precedemment, filtre present
-- Pages admin : pas de filtre user_id, ce qui est normal (acces admin)
+L'algorithme sera restructure en 3 passes distinctes, inspire de l'approche Walker/Buchheim adaptee a la genealogie :
+
+```text
+Passe 1: Construction du graphe
+  - Indexer persons, relationships, unions
+  - Construire des "FamilyUnit" (union + enfants)
+  - Detecter le root et les composants deconnectes
+
+Passe 2: Calcul des largeurs (bottom-up)
+  - Chaque noeud-feuille = CARD_WIDTH
+  - Chaque couple = 2 * CARD_WIDTH + SPOUSE_GAP
+  - Chaque parent = max(largeur couple, somme largeurs enfants)
+
+Passe 3: Positionnement (top-down)
+  - Centrer les enfants sous le point d'union des parents
+  - Resoudre les chevauchements entre sous-arbres voisins
+  - Placer les composants deconnectes en dessous avec separation
+```
 
 ### Corrections a appliquer
 
-#### 1. `src/hooks/useFamilyTree.tsx` — Filtrer relationships et unions par tree
+#### 1. `src/hooks/useFamilyTree.tsx` — Requetes filtrees
 
-Remplacer les lignes 135-136 :
+Remplacer les requetes `select('*')` sans filtre sur `family_parent_child` et `family_unions` par des requetes filtrees via les person IDs du tree :
+
 ```typescript
-// AVANT (dangereux)
-supabase.from('family_parent_child').select('*'),
-supabase.from('family_unions').select('*')
+// Charger persons d'abord, puis filtrer relationships/unions
+const personsResult = await supabase.from('family_persons').select('*').eq('tree_id', treeId);
+const personIds = (personsResult.data || []).map(p => p.id);
 
-// APRES (scope au tree via les person IDs du tree)
+// Requetes filtrees en parallele
+const [relationshipsResult, unionsResult] = await Promise.all([
+  supabase.from('family_parent_child').select('*')
+    .or(`parent_id.in.(${personIds.join(',')}),child_id.in.(${personIds.join(',')})`),
+  supabase.from('family_unions').select('*')
+    .or(`person1_id.in.(${personIds.join(',')}),person2_id.in.(${personIds.join(',')})`),
+]);
 ```
-Approche : d'abord charger les persons du tree, puis utiliser leurs IDs pour filtrer relationships et unions. Reorganiser en 2 etapes :
-1. Charger tree + persons
-2. Avec les person IDs, charger relationships (`.in('parent_id', personIds)`) et unions (`.in('person1_id', personIds)`)
 
-#### 2. `src/pages/Statistics.tsx` — Ajouter des filtres `.in('capsule_id', ...)`
+#### 2. `src/components/familyTree/TreeVisualization.tsx` — Refonte complete du layout
 
-Charger d'abord les capsules de l'utilisateur, puis utiliser les IDs pour filtrer les requetes dependantes :
+**Nouveau moteur de layout** avec les concepts suivants :
+
+- **FamilyUnit** : structure `{ couple: [person1, person2?], children: FamilyPerson[], unionId?: string }`. C'est l'unite atomique de positionnement.
+- **Graphe de familles** : index bidirectionnel `personId → FamilyUnit[]` pour naviguer efficacement
+- **Algorithme en 3 passes** :
+  1. `measureSubtree(personId)` : retourne la largeur necessaire (recursif, bottom-up)
+  2. `positionSubtree(personId, x, y)` : place chaque personne (top-down), centre les enfants sous le point d'union
+  3. `resolveOverlaps()` : detecte et corrige les chevauchements entre sous-arbres adjacents
+- **Gestion des mariages multiples** : chaque union genere un groupe d'enfants distinct, positionne sous le point d'union correspondant
+- **Composants deconnectes** : detectes par BFS sur le graphe complet, positionnes en dessous du sous-arbre principal avec un separateur visuel
+- **Vue ascendante** : generation de base dynamique (calculee depuis le root, pas hardcodee)
+- **Vue sablier** : combine ascendant + descendant depuis le root, generation 0 = root
+
+**Structure du code refactorise** :
+
 ```typescript
-// Etape 1 : capsules de l'utilisateur
-const capsulesRes = await supabase.from('capsules').select('*').eq('user_id', user.id);
-const capsuleIds = capsulesRes.data?.map(c => c.id) || [];
+// Types internes
+interface FamilyUnit {
+  id: string;          // union ID ou generated
+  partners: string[];  // 1 ou 2 person IDs
+  childIds: string[];  // enfants de cette union
+}
 
-// Etape 2 : requetes filtrees
-supabase.from('capsule_medias').select('id, capsule_id').in('capsule_id', capsuleIds),
-supabase.from('comments').select('id, capsule_id').in('capsule_id', capsuleIds),
-supabase.from('capsule_shares').select('id, capsule_id').in('capsule_id', capsuleIds),
-supabase.from('capsule_categories').select('...').in('capsule_id', capsuleIds),
+interface LayoutNode {
+  personId: string;
+  x: number;
+  y: number;
+  width: number;       // largeur du sous-arbre
+}
+
+// Fonctions principales
+function buildFamilyGraph(persons, relationships, unions): Map<string, FamilyUnit[]>
+function measureSubtree(personId, graph, visited): number
+function positionSubtree(personId, x, y, graph, visited, positions): void
+function resolveOverlaps(positions: Map<string, LayoutNode>): void
+function layoutDisconnected(components, mainBounds): void
 ```
+
+**Ameliorations visuelles** :
+- Lignes de connexion parent-enfant passant par un "T" horizontal quand il y a plusieurs enfants (standard genealogique)
+- Point d'union (petit cercle ou coeur) centre entre les conjoints
+- Les enfants se connectent au T horizontal, pas directement au point d'union
+
+#### 3. Rendu SVG des connexions
+
+Remplacer les paths courbes par le standard genealogique :
+- Conjoints : ligne horizontale avec symbole d'union au centre
+- Parent → enfants : ligne verticale depuis le point d'union jusqu'a une barre horizontale, puis lignes verticales vers chaque enfant (motif en "T" ou "peigne")
 
 ### Fichiers modifies
 
-| Fichier | Correction |
+| Fichier | Modification |
 |---|---|
-| `src/hooks/useFamilyTree.tsx` | Filtrer `family_parent_child` et `family_unions` par person IDs du tree |
-| `src/pages/Statistics.tsx` | Ajouter `.in('capsule_id', capsuleIds)` sur 4 requetes |
+| `src/hooks/useFamilyTree.tsx` | Requetes `family_parent_child` et `family_unions` filtrees par person IDs |
+| `src/components/familyTree/TreeVisualization.tsx` | Refonte complete : algorithme 3 passes, FamilyUnit, gestion mariages multiples, composants deconnectes, connexions en T |
 
