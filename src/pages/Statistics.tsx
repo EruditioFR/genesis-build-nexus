@@ -95,21 +95,21 @@ const Statistics = () => {
           if (commentsRes.data) setTotalComments(commentsRes.data.length);
           if (sharesRes.data) setTotalShares(sharesRes.data.length);
 
-        // Count capsules by category (only primary categories)
-        if (capsuleCategoriesRes.data && capsulesRes.data) {
-          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
-          const userCapsuleCategories = capsuleCategoriesRes.data.filter(
-            cc => capsuleIds.has(cc.capsule_id) && cc.is_primary
-          );
-          
-          const catCounts: Record<string, number> = {};
-          userCapsuleCategories.forEach(cc => {
-            catCounts[cc.category_id] = (catCounts[cc.category_id] || 0) + 1;
-          });
-          
-          setCategoryStats(
-            Object.entries(catCounts).map(([categoryId, count]) => ({ categoryId, count }))
-          );
+          // Count capsules by category (only primary categories)
+          if (capsuleCategoriesRes.data) {
+            const userCapsuleCategories = capsuleCategoriesRes.data.filter(
+              cc => cc.is_primary
+            );
+            
+            const catCounts: Record<string, number> = {};
+            userCapsuleCategories.forEach(cc => {
+              catCounts[cc.category_id] = (catCounts[cc.category_id] || 0) + 1;
+            });
+            
+            setCategoryStats(
+              Object.entries(catCounts).map(([categoryId, count]) => ({ categoryId, count }))
+            );
+          }
         }
       } catch (error) {
         console.error('Error fetching statistics:', error);
