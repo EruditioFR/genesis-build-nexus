@@ -833,6 +833,25 @@ export default function FamilyTreePage() {
                   />
                 </div>
               )}
+
+              {/* Back to root floating button */}
+              {tree?.root_person_id && persons.length > 0 && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="absolute bottom-4 left-4 z-10 gap-2 shadow-lg"
+                  onClick={() => {
+                    if (tree.root_person_id) {
+                      const rootPerson = persons.find(p => p.id === tree.root_person_id);
+                      if (rootPerson) handleSearchSelect(rootPerson);
+                    }
+                  }}
+                >
+                  <Home className="w-4 h-4" />
+                  {t('navigation.backToRoot')}
+                </Button>
+              )}
+              </div>
             </div>
 
             {/* Detail panel */}
