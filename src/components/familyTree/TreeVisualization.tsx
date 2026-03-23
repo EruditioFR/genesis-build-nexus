@@ -518,6 +518,7 @@ export function TreeVisualization({
   viewMode,
   selectedPersonId,
   highlightedPersonId,
+  activeBranchIds,
   onPersonClick,
   onAddPerson,
   onPositionsCalculated,
