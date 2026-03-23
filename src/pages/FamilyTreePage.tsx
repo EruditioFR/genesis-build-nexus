@@ -45,6 +45,7 @@ import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
 import { PersonsListSheet } from '@/components/familyTree/PersonsListSheet';
 import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
+import { TreeBreadcrumb } from '@/components/familyTree/TreeBreadcrumb';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
