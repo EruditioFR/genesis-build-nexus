@@ -1,112 +1,56 @@
 
 
-## Plan: Refonte complete de la visualisation de l'arbre genealogique
+## Plan: Navigation intuitive entre branches et reperage dans l'arbre
 
-### Diagnostic des problemes actuels
+### Probleme
+L'utilisateur se perd dans un arbre de 105+ personnes. Pas de fil d'Ariane, pas de moyen rapide de sauter d'une branche a l'autre, et les labels de generation sont statiques et peu utiles.
 
-1. **Algorithme de layout naif** : recursion simple qui ne gere pas les cas complexes (mariages multiples, demi-freres, familles recomposees)
-2. **Concept de "famille" absent** : les couples ne sont pas traites comme une unite atomique de positionnement
-3. **Chevauchements** : le decalage des descendants est fragile et casse avec les arbres larges
-4. **Composants deconnectes** : traites en afterthought, places arbitrairement a droite
-5. **Vue ascendante** : generation de base hardcodee a 3
-6. **Requetes sans filtre** : `family_parent_child` et `family_unions` chargees sans scope (deja identifie)
+### Solutions proposees
 
-### Architecture cible
-
-L'algorithme sera restructure en 3 passes distinctes, inspire de l'approche Walker/Buchheim adaptee a la genealogie :
+#### 1. Fil d'Ariane (Breadcrumb) — position de la personne selectionnee
+Un bandeau horizontal en haut de la zone de visualisation montrant le chemin genealogique depuis la racine jusqu'a la personne selectionnee :
 
 ```text
-Passe 1: Construction du graphe
-  - Indexer persons, relationships, unions
-  - Construire des "FamilyUnit" (union + enfants)
-  - Detecter le root et les composants deconnectes
-
-Passe 2: Calcul des largeurs (bottom-up)
-  - Chaque noeud-feuille = CARD_WIDTH
-  - Chaque couple = 2 * CARD_WIDTH + SPOUSE_GAP
-  - Chaque parent = max(largeur couple, somme largeurs enfants)
-
-Passe 3: Positionnement (top-down)
-  - Centrer les enfants sous le point d'union des parents
-  - Resoudre les chevauchements entre sous-arbres voisins
-  - Placer les composants deconnectes en dessous avec separation
+Jean Dupont > Marie Dupont > Pierre Martin > [Vous etes ici]
 ```
 
-### Corrections a appliquer
+Chaque element est cliquable pour centrer + selectionner cette personne. Affiché uniquement quand une personne est selectionnee.
 
-#### 1. `src/hooks/useFamilyTree.tsx` — Requetes filtrees
+**Fichier** : `src/components/familyTree/TreeBreadcrumb.tsx` (nouveau)
+- Calcule le chemin ascendant depuis la personne selectionnee vers la racine via `relationships`
+- Affiche les ancetres en ordre, chacun cliquable
+- Badge "Vous" sur le root person
 
-Remplacer les requetes `select('*')` sans filtre sur `family_parent_child` et `family_unions` par des requetes filtrees via les person IDs du tree :
+#### 2. Navigation rapide par branches dans le panneau de detail
+Ameliorer le panneau lateral (`PersonDetailPanel`) pour que les liens familiaux (parents, conjoints, enfants) soient tous des boutons qui centrent et selectionnent la personne cible. Deja partiellement en place via `onPersonClick` — s'assurer que ca fonctionne pour TOUS les liens du panneau.
 
-```typescript
-// Charger persons d'abord, puis filtrer relationships/unions
-const personsResult = await supabase.from('family_persons').select('*').eq('tree_id', treeId);
-const personIds = (personsResult.data || []).map(p => p.id);
+#### 3. Indicateur visuel "Vous etes ici" sur la carte
+Ajouter un marqueur visuel distinct (pin/etoile) sur la carte de la personne racine de l'arbre pour que l'utilisateur sache toujours ou est le point de reference.
 
-// Requetes filtrees en parallele
-const [relationshipsResult, unionsResult] = await Promise.all([
-  supabase.from('family_parent_child').select('*')
-    .or(`parent_id.in.(${personIds.join(',')}),child_id.in.(${personIds.join(',')})`),
-  supabase.from('family_unions').select('*')
-    .or(`person1_id.in.(${personIds.join(',')}),person2_id.in.(${personIds.join(',')})`),
-]);
-```
+**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
+- Ajouter une prop `rootPersonId` au `TreePersonCard` et afficher un petit badge "Racine" ou icone Home
 
-#### 2. `src/components/familyTree/TreeVisualization.tsx` — Refonte complete du layout
+#### 4. Bouton "Retour a la racine"
+Un bouton flottant toujours visible qui recentre sur la personne racine en un clic.
 
-**Nouveau moteur de layout** avec les concepts suivants :
+**Fichier** : `src/pages/FamilyTreePage.tsx`
+- Ajouter un bouton flottant en bas a gauche avec icone Home
+- Clic → `centerOnPerson(tree.root_person_id)` + selection
 
-- **FamilyUnit** : structure `{ couple: [person1, person2?], children: FamilyPerson[], unionId?: string }`. C'est l'unite atomique de positionnement.
-- **Graphe de familles** : index bidirectionnel `personId → FamilyUnit[]` pour naviguer efficacement
-- **Algorithme en 3 passes** :
-  1. `measureSubtree(personId)` : retourne la largeur necessaire (recursif, bottom-up)
-  2. `positionSubtree(personId, x, y)` : place chaque personne (top-down), centre les enfants sous le point d'union
-  3. `resolveOverlaps()` : detecte et corrige les chevauchements entre sous-arbres adjacents
-- **Gestion des mariages multiples** : chaque union genere un groupe d'enfants distinct, positionne sous le point d'union correspondant
-- **Composants deconnectes** : detectes par BFS sur le graphe complet, positionnes en dessous du sous-arbre principal avec un separateur visuel
-- **Vue ascendante** : generation de base dynamique (calculee depuis le root, pas hardcodee)
-- **Vue sablier** : combine ascendant + descendant depuis le root, generation 0 = root
+#### 5. Highlight de la branche active
+Quand une personne est selectionnee, mettre en surbrillance la branche (ancetres + descendants directs) pour qu'elle ressorte visuellement du reste de l'arbre.
 
-**Structure du code refactorise** :
-
-```typescript
-// Types internes
-interface FamilyUnit {
-  id: string;          // union ID ou generated
-  partners: string[];  // 1 ou 2 person IDs
-  childIds: string[];  // enfants de cette union
-}
-
-interface LayoutNode {
-  personId: string;
-  x: number;
-  y: number;
-  width: number;       // largeur du sous-arbre
-}
-
-// Fonctions principales
-function buildFamilyGraph(persons, relationships, unions): Map<string, FamilyUnit[]>
-function measureSubtree(personId, graph, visited): number
-function positionSubtree(personId, x, y, graph, visited, positions): void
-function resolveOverlaps(positions: Map<string, LayoutNode>): void
-function layoutDisconnected(components, mainBounds): void
-```
-
-**Ameliorations visuelles** :
-- Lignes de connexion parent-enfant passant par un "T" horizontal quand il y a plusieurs enfants (standard genealogique)
-- Point d'union (petit cercle ou coeur) centre entre les conjoints
-- Les enfants se connectent au T horizontal, pas directement au point d'union
-
-#### 3. Rendu SVG des connexions
-
-Remplacer les paths courbes par le standard genealogique :
-- Conjoints : ligne horizontale avec symbole d'union au centre
-- Parent → enfants : ligne verticale depuis le point d'union jusqu'a une barre horizontale, puis lignes verticales vers chaque enfant (motif en "T" ou "peigne")
+**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
+- Calculer les IDs de la branche active (ancetres + descendants de la personne selectionnee)
+- Appliquer une opacite reduite aux cartes et connexions hors branche
+- Les cartes de la branche restent a pleine opacite
 
 ### Fichiers modifies
 
 | Fichier | Modification |
 |---|---|
-| `src/hooks/useFamilyTree.tsx` | Requetes `family_parent_child` et `family_unions` filtrees par person IDs |
-| `src/components/familyTree/TreeVisualization.tsx` | Refonte complete : algorithme 3 passes, FamilyUnit, gestion mariages multiples, composants deconnectes, connexions en T |
+| `src/components/familyTree/TreeBreadcrumb.tsx` | **Nouveau** — fil d'Ariane genealogique cliquable |
+| `src/components/familyTree/TreeVisualization.tsx` | Badge racine sur la carte root, highlight de la branche active (opacite reduite hors branche) |
+| `src/pages/FamilyTreePage.tsx` | Integration du breadcrumb, bouton "retour racine" flottant, passage des props de branche active |
+| `public/locales/*/familyTree.json` | Cles i18n : `breadcrumb.root`, `navigation.backToRoot` |
 
