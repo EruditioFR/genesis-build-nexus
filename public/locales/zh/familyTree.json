@@ -46,6 +46,13 @@
     "title": "导入",
     "gedcom": "导入 GEDCOM"
   },
+  "breadcrumb": {
+    "root": "根节点",
+    "here": "当前"
+  },
+  "navigation": {
+    "backToRoot": "返回根节点"
+  },
   "empty": {
     "title": "您的家谱是空的",
     "description": "从添加第一个人开始，或导入现有的家谱。",

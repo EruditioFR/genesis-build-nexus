@@ -52,6 +52,13 @@
     "addPerson": "Ajouter une personne",
     "importGedcom": "Importer GEDCOM"
   },
+  "breadcrumb": {
+    "root": "Racine",
+    "here": "Ici"
+  },
+  "navigation": {
+    "backToRoot": "Retour à la racine"
+  },
   "createTree": {
     "title": "Créer un arbre généalogique",
     "step": "Étape {{current}} sur {{total}}",

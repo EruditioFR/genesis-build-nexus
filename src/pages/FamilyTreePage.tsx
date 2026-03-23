@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -45,6 +45,7 @@ import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
 import { PersonsListSheet } from '@/components/familyTree/PersonsListSheet';
 import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
+import { TreeBreadcrumb } from '@/components/familyTree/TreeBreadcrumb';
 import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
@@ -101,6 +102,49 @@ export default function FamilyTreePage() {
   const [personPositions, setPersonPositions] = useState<PersonPositionData[]>([]);
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
+
+  // Compute active branch (ancestors + descendants of selected person)
+  const activeBranchIds = useMemo(() => {
+    if (!selectedPerson || !showDetailPanel) return undefined;
+    const ids = new Set<string>();
+    ids.add(selectedPerson.id);
+
+    // Ancestors (go up)
+    const addAncestors = (personId: string, visited: Set<string>) => {
+      const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
+      for (const pid of parentIds) {
+        if (!visited.has(pid)) {
+          visited.add(pid);
+          ids.add(pid);
+          addAncestors(pid, visited);
+        }
+      }
+    };
+
+    // Descendants (go down)
+    const addDescendants = (personId: string, visited: Set<string>) => {
+      const childIds = relationships.filter(r => r.parent_id === personId).map(r => r.child_id);
+      for (const cid of childIds) {
+        if (!visited.has(cid)) {
+          visited.add(cid);
+          ids.add(cid);
+          addDescendants(cid, visited);
+        }
+      }
+    };
+
+    // Spouses
+    const spouseIds = unions
+      .filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)
+      .map(u => u.person1_id === selectedPerson.id ? u.person2_id : u.person1_id);
+    spouseIds.forEach(id => ids.add(id));
+
+    const visited = new Set<string>([selectedPerson.id]);
+    addAncestors(selectedPerson.id, visited);
+    addDescendants(selectedPerson.id, visited);
+
+    return ids;
+  }, [selectedPerson, showDetailPanel, relationships, unions]);
 
   const canAccessFamilyTree = limits.canAccessFamilyTree;
 
@@ -521,7 +565,7 @@ export default function FamilyTreePage() {
               className="min-w-max p-8"
               style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
             >
-              <TreeVisualization
+               <TreeVisualization
                 persons={persons}
                 relationships={relationships}
                 unions={unions}
@@ -529,6 +573,7 @@ export default function FamilyTreePage() {
                 viewMode={viewMode}
                 selectedPersonId={selectedPerson?.id}
                 highlightedPersonId={highlightedPersonId || undefined}
+                activeBranchIds={activeBranchIds}
                 onPersonClick={handlePersonClick}
                 onAddPerson={handleAddPerson}
                 onPositionsCalculated={setPersonPositions}
@@ -717,11 +762,23 @@ export default function FamilyTreePage() {
           {/* Main content */}
           <div className="flex-1 flex overflow-hidden">
             {/* Tree visualization */}
-            <div 
-              ref={scrollContainerRef}
-              className="flex-1 overflow-auto bg-muted/20 relative"
-              data-tour="tree-visualization"
-            >
+            <div className="flex-1 flex flex-col overflow-hidden relative">
+              {/* Breadcrumb */}
+              {selectedPerson && showDetailPanel && (
+                <TreeBreadcrumb
+                  selectedPerson={selectedPerson}
+                  rootPersonId={tree?.root_person_id || undefined}
+                  persons={persons}
+                  relationships={relationships}
+                  onPersonClick={handleSearchSelect}
+                />
+              )}
+
+              <div 
+                ref={scrollContainerRef}
+                className="flex-1 overflow-auto bg-muted/20 relative"
+                data-tour="tree-visualization"
+              >
               {persons.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center space-y-4 p-8">
@@ -755,6 +812,7 @@ export default function FamilyTreePage() {
                     viewMode={viewMode}
                     selectedPersonId={selectedPerson?.id}
                     highlightedPersonId={highlightedPersonId || undefined}
+                    activeBranchIds={activeBranchIds}
                     onPersonClick={handlePersonClick}
                     onAddPerson={handleAddPerson}
                     onPositionsCalculated={setPersonPositions}
@@ -775,6 +833,25 @@ export default function FamilyTreePage() {
                   />
                 </div>
               )}
+
+              {/* Back to root floating button */}
+              {tree?.root_person_id && persons.length > 0 && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="absolute bottom-4 left-4 z-10 gap-2 shadow-lg"
+                  onClick={() => {
+                    if (tree.root_person_id) {
+                      const rootPerson = persons.find(p => p.id === tree.root_person_id);
+                      if (rootPerson) handleSearchSelect(rootPerson);
+                    }
+                  }}
+                >
+                  <Home className="w-4 h-4" />
+                  {t('navigation.backToRoot')}
+                </Button>
+              )}
+              </div>
             </div>
 
             {/* Detail panel */}

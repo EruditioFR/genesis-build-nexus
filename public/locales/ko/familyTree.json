@@ -46,6 +46,13 @@
     "title": "가져오기",
     "gedcom": "GEDCOM 가져오기"
   },
+  "breadcrumb": {
+    "root": "루트",
+    "here": "여기"
+  },
+  "navigation": {
+    "backToRoot": "루트로 돌아가기"
+  },
   "empty": {
     "title": "가계도가 비어 있습니다",
     "description": "첫 번째 사람을 추가하거나 기존 가계도를 가져오세요.",

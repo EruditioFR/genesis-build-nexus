@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Home } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -504,6 +505,7 @@ interface TreeVisualizationProps {
   viewMode: TreeViewMode;
   selectedPersonId?: string;
   highlightedPersonId?: string;
+  activeBranchIds?: Set<string>;
   onPersonClick: (person: FamilyPerson) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
@@ -517,6 +519,7 @@ export function TreeVisualization({
   viewMode,
   selectedPersonId,
   highlightedPersonId,
+  activeBranchIds,
   onPersonClick,
   onAddPerson,
   onPositionsCalculated,
@@ -715,12 +718,15 @@ export function TreeVisualization({
           const fromY = conn.from.y + offsetY;
           const toX = conn.to.x + offsetX;
           const toY = conn.to.y + offsetY;
+          
+          const isActive = !activeBranchIds || (activeBranchIds.has(conn.fromPersonId) && activeBranchIds.has(conn.toPersonId));
+          const connOpacity = isActive ? 1 : 0.15;
 
           if (conn.type === 'spouse') {
             const midX = (fromX + toX) / 2;
             const midY = fromY;
             return (
-              <g key={`conn-${index}`}>
+              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
                 <motion.line
                   x1={fromX} y1={fromY} x2={toX} y2={toY}
                   stroke="hsl(var(--accent))"
@@ -737,29 +743,25 @@ export function TreeVisualization({
             // T-shape genealogical connection
             const midY = fromY + (toY - fromY) / 2;
             return (
-              <g key={`conn-${index}`}>
-                {/* Vertical from parent down to horizontal bar */}
+              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
                 <motion.line
                   x1={fromX} y1={fromY} x2={fromX} y2={midY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 }}
                 />
-                {/* Horizontal bar */}
                 <motion.line
                   x1={fromX} y1={midY} x2={toX} y2={midY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 + 0.1 }}
                 />
-                {/* Vertical down to child */}
                 <motion.line
                   x1={toX} y1={midY} x2={toX} y2={toY}
                   stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.02 + 0.2 }}
                 />
-                {/* Junction dot at horizontal bar */}
                 <circle cx={toX} cy={midY} r="3" fill="hsl(var(--secondary))" fillOpacity="0.4" />
               </g>
             );
@@ -790,6 +792,8 @@ export function TreeVisualization({
             person={pos.person}
             isSelected={selectedPersonId === pos.person.id}
             isHighlighted={highlightedPersonId === pos.person.id}
+            isRoot={rootPersonId === pos.person.id}
+            isDimmed={!!activeBranchIds && !activeBranchIds.has(pos.person.id)}
             onClick={() => onPersonClick(pos.person)}
             generation={pos.generation}
           />
@@ -862,11 +866,13 @@ interface TreePersonCardProps {
   person: FamilyPerson;
   isSelected: boolean;
   isHighlighted?: boolean;
+  isRoot?: boolean;
+  isDimmed?: boolean;
   onClick: () => void;
   generation: number;
 }
 
-function TreePersonCard({ person, isSelected, isHighlighted, onClick }: TreePersonCardProps) {
+function TreePersonCard({ person, isSelected, isHighlighted, isRoot, isDimmed, onClick }: TreePersonCardProps) {
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
   const getBirthYear = () => {
@@ -883,16 +889,25 @@ function TreePersonCard({ person, isSelected, isHighlighted, onClick }: TreePers
     <button
       onClick={onClick}
       className={cn(
-        "w-full h-full rounded-xl p-2 flex items-center gap-2 transition-all duration-200",
+        "w-full h-full rounded-xl p-2 flex items-center gap-2 transition-all duration-300",
         "border-2 bg-card shadow-md hover:shadow-lg",
         "hover:-translate-y-0.5",
         isSelected
           ? "border-secondary ring-2 ring-secondary/20 shadow-secondary/20"
           : "border-border hover:border-secondary/50",
         isHighlighted && "animate-highlight-pulse",
-        !person.is_alive && "opacity-80"
+        isDimmed && "opacity-20 scale-[0.97]",
+        !person.is_alive && !isDimmed && "opacity-80"
       )}
     >
+      {isRoot && (
+        <div className="absolute -top-2 -left-2 z-10">
+          <div className="w-5 h-5 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center shadow-sm">
+            <Home className="w-3 h-3" />
+          </div>
+        </div>
+      )}
+
       <Avatar className={cn(
         "w-12 h-12 border-2",
         person.gender === 'male' ? 'border-blue-400/50' :
