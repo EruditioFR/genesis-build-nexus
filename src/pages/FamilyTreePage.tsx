@@ -800,6 +800,7 @@ export default function FamilyTreePage() {
                     viewMode={viewMode}
                     selectedPersonId={selectedPerson?.id}
                     highlightedPersonId={highlightedPersonId || undefined}
+                    activeBranchIds={activeBranchIds}
                     onPersonClick={handlePersonClick}
                     onAddPerson={handleAddPerson}
                     onPositionsCalculated={setPersonPositions}
