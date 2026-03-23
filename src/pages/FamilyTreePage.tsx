@@ -607,7 +607,7 @@ export default function FamilyTreePage() {
                   children={getPersonChildren(selectedPerson.id)}
                   spouses={getPersonSpouses(selectedPerson.id)}
                   unions={unions.filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)}
-                  relationships={relationships.filter(r => r.parent_id === selectedPerson.id || r.child_id === selectedPerson.id)}
+                  relationships={relationships}
                   allPersons={persons}
                   onClose={() => setShowDetailPanel(false)}
                   onAddParent={() => handleAddPerson('parent', selectedPerson)}
