@@ -888,16 +888,25 @@ function TreePersonCard({ person, isSelected, isHighlighted, isRoot, isDimmed, o
     <button
       onClick={onClick}
       className={cn(
-        "w-full h-full rounded-xl p-2 flex items-center gap-2 transition-all duration-200",
+        "w-full h-full rounded-xl p-2 flex items-center gap-2 transition-all duration-300",
         "border-2 bg-card shadow-md hover:shadow-lg",
         "hover:-translate-y-0.5",
         isSelected
           ? "border-secondary ring-2 ring-secondary/20 shadow-secondary/20"
           : "border-border hover:border-secondary/50",
         isHighlighted && "animate-highlight-pulse",
-        !person.is_alive && "opacity-80"
+        isDimmed && "opacity-20 scale-[0.97]",
+        !person.is_alive && !isDimmed && "opacity-80"
       )}
     >
+      {isRoot && (
+        <div className="absolute -top-2 -left-2 z-10">
+          <div className="w-5 h-5 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center shadow-sm">
+            <Home className="w-3 h-3" />
+          </div>
+        </div>
+      )}
+
       <Avatar className={cn(
         "w-12 h-12 border-2",
         person.gender === 'male' ? 'border-blue-400/50' :
