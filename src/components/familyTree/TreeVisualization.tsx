@@ -558,18 +558,37 @@ export function TreeVisualization({
       if (component.length === 0) continue;
 
       // Pick best root for this component
-      const componentRoot = component.includes(rootPerson.id)
-        ? rootPerson.id
-        : component.reduce((best, id) => {
+      let componentRoot: string;
+      if (component.includes(rootPerson.id)) {
+        componentRoot = rootPerson.id;
+      } else {
+        // Find the person with no parents (topmost ancestor) or most connections
+        const topAncestor = component.find(id => graph.getParentIds(id).length === 0);
+        componentRoot = topAncestor || component.reduce((best, id) => {
             const conns = graph.getChildIds(id).length + graph.getParentIds(id).length + graph.getSpouseIds(id).length;
             const bestConns = graph.getChildIds(best).length + graph.getParentIds(best).length + graph.getSpouseIds(best).length;
             return conns > bestConns ? id : best;
           }, component[0]);
+      }
+
+      // For descendant view, find the topmost ancestor to start from
+      let layoutRoot = componentRoot;
+      if (viewMode === 'descendant') {
+        let current = componentRoot;
+        const seen = new Set<string>();
+        while (!seen.has(current)) {
+          seen.add(current);
+          const parentIds = graph.getParentIds(current);
+          if (parentIds.length === 0) break;
+          current = parentIds[0]; // Follow first parent up
+        }
+        layoutRoot = current;
+      }
 
       let engine: LayoutEngine;
 
       if (viewMode === 'descendant') {
-        engine = layoutDescendant(componentRoot, graph, persons, 0, currentX);
+        engine = layoutDescendant(layoutRoot, graph, persons, 0, currentX);
         if (componentRoot === rootPerson.id) detectedRootGen = 0;
       } else if (viewMode === 'ascendant') {
         // Calculate max depth for ascendant
@@ -615,6 +634,29 @@ export function TreeVisualization({
         maxX = Math.max(maxX, pos.x + CARD_WIDTH);
       }
       currentX = maxX + COMPONENT_GAP;
+    }
+
+    // Safety net: place any persons not yet positioned (e.g. isolated persons or
+    // persons missed by the layout algorithm due to complex graph paths)
+    const missingPersons = persons.filter(p => !allPositions.has(p.id));
+    if (missingPersons.length > 0) {
+      // Find the bottom of the current layout
+      let maxY = 0;
+      for (const pos of allPositions.values()) {
+        maxY = Math.max(maxY, pos.y);
+      }
+      const orphanY = maxY + CARD_HEIGHT + COMPONENT_GAP;
+      let orphanX = currentX > 0 ? 0 : 0; // Start from left for orphans
+
+      for (const p of missingPersons) {
+        allPositions.set(p.id, {
+          personId: p.id,
+          x: orphanX,
+          y: orphanY,
+          generation: 99, // Special generation for orphans
+        });
+        orphanX += CARD_WIDTH + H_GAP;
+      }
     }
 
     // Resolve overlaps (pass 3b)
