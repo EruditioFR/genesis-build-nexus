@@ -762,11 +762,23 @@ export default function FamilyTreePage() {
           {/* Main content */}
           <div className="flex-1 flex overflow-hidden">
             {/* Tree visualization */}
-            <div 
-              ref={scrollContainerRef}
-              className="flex-1 overflow-auto bg-muted/20 relative"
-              data-tour="tree-visualization"
-            >
+            <div className="flex-1 flex flex-col overflow-hidden relative">
+              {/* Breadcrumb */}
+              {selectedPerson && showDetailPanel && (
+                <TreeBreadcrumb
+                  selectedPerson={selectedPerson}
+                  rootPersonId={tree?.root_person_id || undefined}
+                  persons={persons}
+                  relationships={relationships}
+                  onPersonClick={handleSearchSelect}
+                />
+              )}
+
+              <div 
+                ref={scrollContainerRef}
+                className="flex-1 overflow-auto bg-muted/20 relative"
+                data-tour="tree-visualization"
+              >
               {persons.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center space-y-4 p-8">
