@@ -157,7 +157,7 @@ export function LinkCapsuleDialog({
             {filteredCapsules.map((capsule) => (
               <div
                 key={capsule.id}
-                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors overflow-hidden"
               >
                 {capsule.thumbnail_url ? (
                   <img
