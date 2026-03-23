@@ -129,31 +129,34 @@ export function useFamilyTree() {
   }> => {
     setLoading(true);
     try {
-      const [treeResult, personsResult, relationshipsResult, unionsResult] = await Promise.all([
+      // Step 1: Load tree and persons
+      const [treeResult, personsResult] = await Promise.all([
         supabase.from('family_trees').select('*').eq('id', treeId).single(),
         supabase.from('family_persons').select('*').eq('tree_id', treeId),
-        supabase.from('family_parent_child').select('*'),
-        supabase.from('family_unions').select('*')
       ]);
 
       if (treeResult.error) throw treeResult.error;
 
-      // Filter relationships and unions to only those involving persons in this tree
-      const personIds = new Set((personsResult.data || []).map(p => p.id));
-      
-      const filteredRelationships = (relationshipsResult.data || []).filter(
-        r => personIds.has(r.parent_id) && personIds.has(r.child_id)
-      );
-      
-      const filteredUnions = (unionsResult.data || []).filter(
-        u => personIds.has(u.person1_id) && personIds.has(u.person2_id)
-      );
+      const personIds = (personsResult.data || []).map(p => p.id);
+
+      // Step 2: Load relationships and unions scoped to this tree's persons
+      let relationships: ParentChildRelationship[] = [];
+      let unions: FamilyUnion[] = [];
+
+      if (personIds.length > 0) {
+        const [relationshipsResult, unionsResult] = await Promise.all([
+          supabase.from('family_parent_child').select('*').in('parent_id', personIds),
+          supabase.from('family_unions').select('*').in('person1_id', personIds),
+        ]);
+        relationships = (relationshipsResult.data || []) as ParentChildRelationship[];
+        unions = (unionsResult.data || []) as FamilyUnion[];
+      }
 
       return {
         tree: treeResult.data as FamilyTree,
         persons: (personsResult.data || []) as FamilyPerson[],
-        relationships: filteredRelationships as ParentChildRelationship[],
-        unions: filteredUnions as FamilyUnion[]
+        relationships,
+        unions
       };
     } catch (error) {
       console.error('Error fetching tree:', error);

@@ -69,54 +69,47 @@ const Statistics = () => {
       if (!user) return;
 
       try {
-        const [profileRes, capsulesRes, mediasRes, commentsRes, circlesRes, sharesRes, capsuleCategoriesRes] = await Promise.all([
+        // Step 1: Load profile and capsules first
+        const [profileRes, capsulesRes, circlesRes] = await Promise.all([
           supabase.from('profiles').select('display_name, avatar_url').eq('user_id', user.id).maybeSingle(),
           supabase.from('capsules').select('*').eq('user_id', user.id),
-          supabase.from('capsule_medias').select('id, capsule_id'),
-          supabase.from('comments').select('id, capsule_id'),
           supabase.from('circles').select('id').eq('owner_id', user.id),
-          supabase.from('capsule_shares').select('id, capsule_id'),
-          supabase.from('capsule_categories').select('capsule_id, category_id, is_primary'),
         ]);
 
         if (profileRes.data) setProfile(profileRes.data);
         if (capsulesRes.data) setCapsules(capsulesRes.data);
-        
-        // Count medias for user's capsules
-        if (mediasRes.data && capsulesRes.data) {
-          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
-          setTotalMedias(mediasRes.data.filter(m => capsuleIds.has(m.capsule_id)).length);
-        }
-        
-        // Count comments on user's capsules
-        if (commentsRes.data && capsulesRes.data) {
-          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
-          setTotalComments(commentsRes.data.filter(c => capsuleIds.has(c.capsule_id)).length);
-        }
-        
         if (circlesRes.data) setTotalCircles(circlesRes.data.length);
-        
-        // Count shares for user's capsules
-        if (sharesRes.data && capsulesRes.data) {
-          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
-          setTotalShares(sharesRes.data.filter(s => capsuleIds.has(s.capsule_id)).length);
-        }
 
-        // Count capsules by category (only primary categories)
-        if (capsuleCategoriesRes.data && capsulesRes.data) {
-          const capsuleIds = new Set(capsulesRes.data.map(c => c.id));
-          const userCapsuleCategories = capsuleCategoriesRes.data.filter(
-            cc => capsuleIds.has(cc.capsule_id) && cc.is_primary
-          );
-          
-          const catCounts: Record<string, number> = {};
-          userCapsuleCategories.forEach(cc => {
-            catCounts[cc.category_id] = (catCounts[cc.category_id] || 0) + 1;
-          });
-          
-          setCategoryStats(
-            Object.entries(catCounts).map(([categoryId, count]) => ({ categoryId, count }))
-          );
+        // Step 2: Load dependent data scoped to user's capsules
+        const capsuleIds = (capsulesRes.data || []).map(c => c.id);
+        
+        if (capsuleIds.length > 0) {
+          const [mediasRes, commentsRes, sharesRes, capsuleCategoriesRes] = await Promise.all([
+            supabase.from('capsule_medias').select('id, capsule_id').in('capsule_id', capsuleIds),
+            supabase.from('comments').select('id, capsule_id').in('capsule_id', capsuleIds),
+            supabase.from('capsule_shares').select('id, capsule_id').in('capsule_id', capsuleIds),
+            supabase.from('capsule_categories').select('capsule_id, category_id, is_primary').in('capsule_id', capsuleIds),
+          ]);
+
+          if (mediasRes.data) setTotalMedias(mediasRes.data.length);
+          if (commentsRes.data) setTotalComments(commentsRes.data.length);
+          if (sharesRes.data) setTotalShares(sharesRes.data.length);
+
+          // Count capsules by category (only primary categories)
+          if (capsuleCategoriesRes.data) {
+            const userCapsuleCategories = capsuleCategoriesRes.data.filter(
+              cc => cc.is_primary
+            );
+            
+            const catCounts: Record<string, number> = {};
+            userCapsuleCategories.forEach(cc => {
+              catCounts[cc.category_id] = (catCounts[cc.category_id] || 0) + 1;
+            });
+            
+            setCategoryStats(
+              Object.entries(catCounts).map(([categoryId, count]) => ({ categoryId, count }))
+            );
+          }
         }
       } catch (error) {
         console.error('Error fetching statistics:', error);
