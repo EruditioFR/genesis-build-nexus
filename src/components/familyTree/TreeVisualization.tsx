@@ -659,7 +659,60 @@ export function TreeVisualization({
       }
     }
 
-    // Resolve overlaps (pass 3b)
+    // Post-layout pass: add missing spouse connections for unions where both
+    // persons are positioned but no spouse connection was created (happens when
+    // spouses are reached via different graph paths)
+    const existingSpouseConns = new Set(
+      allConnections
+        .filter(c => c.type === 'spouse')
+        .map(c => [c.fromPersonId, c.toPersonId].sort().join('|'))
+    );
+
+    for (const u of unions) {
+      const key = [u.person1_id, u.person2_id].sort().join('|');
+      if (existingSpouseConns.has(key)) continue;
+
+      const pos1 = allPositions.get(u.person1_id);
+      const pos2 = allPositions.get(u.person2_id);
+      if (!pos1 || !pos2) continue;
+
+      const left = pos1.x < pos2.x ? pos1 : pos2;
+      const right = pos1.x < pos2.x ? pos2 : pos1;
+      const leftId = pos1.x < pos2.x ? u.person1_id : u.person2_id;
+      const rightId = pos1.x < pos2.x ? u.person2_id : u.person1_id;
+
+      allConnections.push({
+        type: 'spouse',
+        from: { x: left.x + CARD_WIDTH, y: left.y + CARD_HEIGHT / 2 },
+        to: { x: right.x, y: right.y + CARD_HEIGHT / 2 },
+        fromPersonId: leftId,
+        toPersonId: rightId,
+      });
+    }
+
+    // Also add missing parent-child connections
+    const existingPCConns = new Set(
+      allConnections
+        .filter(c => c.type === 'parent-child')
+        .map(c => `${c.fromPersonId}→${c.toPersonId}`)
+    );
+
+    for (const r of relationships) {
+      const key = `${r.parent_id}→${r.child_id}`;
+      if (existingPCConns.has(key)) continue;
+
+      const parentPos = allPositions.get(r.parent_id);
+      const childPos = allPositions.get(r.child_id);
+      if (!parentPos || !childPos) continue;
+
+      allConnections.push({
+        type: 'parent-child',
+        from: { x: parentPos.x + CARD_WIDTH / 2, y: parentPos.y + CARD_HEIGHT },
+        to: { x: childPos.x + CARD_WIDTH / 2, y: childPos.y },
+        fromPersonId: r.parent_id,
+        toPersonId: r.child_id,
+      });
+    }
     resolveOverlaps(allPositions);
 
     // Convert to PersonPosition array
