@@ -191,6 +191,26 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // 4. Notify admin by email
+    try {
+      await resend.emails.send({
+        from: "Family Garden <web@familygarden.fr>",
+        to: ["jbbejot@gmail.com"],
+        subject: `🌱 Nouvelle inscription : ${name}`,
+        html: `<div style="font-family:Arial,sans-serif;padding:20px;">
+          <h2 style="color:#2D5A3D;">Nouvelle inscription sur Family Garden</h2>
+          <p><strong>Nom :</strong> ${name}</p>
+          <p><strong>Email :</strong> ${email}</p>
+          <p><strong>Pays :</strong> ${country || 'Non renseigné'}</p>
+          <p><strong>Ville :</strong> ${city || 'Non renseignée'}</p>
+          <p><strong>Langue :</strong> ${locale || 'fr'}</p>
+          <p style="color:#888;font-size:12px;margin-top:20px;">Email automatique — Backoffice Family Garden</p>
+        </div>`,
+      });
+    } catch (adminEmailErr) {
+      console.error("Admin notification email error:", adminEmailErr);
+    }
+
     return new Response(
       JSON.stringify({ success: true, emailSent: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
