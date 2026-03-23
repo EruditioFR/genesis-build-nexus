@@ -1,62 +1,63 @@
 
 
-## Plan : Gestion des arbres genealogiques dans le backoffice
+## Plan : Audit et correction des fuites de donnees inter-utilisateurs
 
-### Objectif
+### Problemes identifies
 
-Ajouter une page **Admin Family Trees** dans le backoffice permettant de visualiser, rechercher et gerer les arbres genealogiques de tous les utilisateurs.
+**1. BUG CRITIQUE — `useFamilyTree.tsx` (lignes 135-136)**
+Les requetes `family_parent_child.select('*')` et `family_unions.select('*')` sont executees **sans aucun filtre**. Toutes les relations et unions de tous les utilisateurs sont chargees, puis filtrees cote client. Meme si les politiques RLS limitent les resultats, cette approche est:
+- Inefficace (charge inutile)
+- Fragile (si un admin utilise le meme hook, il voit tout)
+- Risquee (le filtrage client ne doit jamais etre la seule barriere)
 
-### Fonctionnalites
+**2. Requetes sans filtre dans `Statistics.tsx` (lignes 75-79)**
+`capsule_medias`, `comments`, `capsule_shares`, `capsule_categories` sont chargees sans filtre `user_id`, puis filtrees cote client par capsule IDs. Les politiques RLS protegent les donnees, mais les requetes devraient etre scopees aux capsules de l'utilisateur via `.in('capsule_id', capsuleIds)` pour eviter de charger des donnees inutiles.
 
-- **Liste des arbres** : tableau avec nom de l'arbre, proprietaire (display_name), nombre de personnes, nombre d'unions, date de creation
-- **Recherche** par nom d'arbre ou nom d'utilisateur
-- **Actions par arbre** :
-  - Voir le detail (nombre de personnes, unions, relations)
-  - Supprimer un arbre (avec confirmation) — supprime en cascade personnes, unions, relations
-  - Exporter les stats d'un arbre
-- **Stats globales en haut** : nombre total d'arbres, total de personnes, arbre le plus volumineux
+**3. Autres pages verifiees — OK**
+- `CapsuleDetail.tsx` : charge par ID, protege par RLS `user_can_view_capsule` (correct pour les capsules partagees)
+- `CapsuleEdit.tsx` : filtre `.eq('user_id', user.id)` present
+- `CapsulesList.tsx` : filtre `.eq('user_id', user.id)` present
+- `CategoryDetailPage.tsx` : filtre `.eq('user_id', user.id)` present
+- `Dashboard.tsx` : filtre `.eq('user_id', user.id)` present
+- `Timeline.tsx` : filtre `.eq('user_id', user.id)` present
+- `PersonCapsuleLink.tsx` : corrige precedemment, filtre present
+- Pages admin : pas de filtre user_id, ce qui est normal (acces admin)
 
-### Acces aux donnees
+### Corrections a appliquer
 
-Les tables `family_trees`, `family_persons`, `family_unions`, `family_parent_child` ont des RLS restreintes au proprietaire. Il faut ajouter des **policies SELECT pour les admins** sur ces 4 tables, en utilisant la fonction `is_admin_or_moderator` existante. Ajouter egalement une policy DELETE admin sur `family_trees` pour permettre la suppression.
+#### 1. `src/hooks/useFamilyTree.tsx` — Filtrer relationships et unions par tree
 
-### Implementation
+Remplacer les lignes 135-136 :
+```typescript
+// AVANT (dangereux)
+supabase.from('family_parent_child').select('*'),
+supabase.from('family_unions').select('*')
 
-#### 1. Migration SQL — Policies admin sur les tables family
+// APRES (scope au tree via les person IDs du tree)
+```
+Approche : d'abord charger les persons du tree, puis utiliser leurs IDs pour filtrer relationships et unions. Reorganiser en 2 etapes :
+1. Charger tree + persons
+2. Avec les person IDs, charger relationships (`.in('parent_id', personIds)`) et unions (`.in('person1_id', personIds)`)
 
-```sql
--- SELECT admin sur family_trees, family_persons, family_unions, family_parent_child
-CREATE POLICY "Admins can view all trees" ON family_trees FOR SELECT TO authenticated
-  USING (is_admin_or_moderator(auth.uid()));
+#### 2. `src/pages/Statistics.tsx` — Ajouter des filtres `.in('capsule_id', ...)`
 
-CREATE POLICY "Admins can view all persons" ON family_persons FOR SELECT TO authenticated
-  USING (is_admin_or_moderator(auth.uid()));
+Charger d'abord les capsules de l'utilisateur, puis utiliser les IDs pour filtrer les requetes dependantes :
+```typescript
+// Etape 1 : capsules de l'utilisateur
+const capsulesRes = await supabase.from('capsules').select('*').eq('user_id', user.id);
+const capsuleIds = capsulesRes.data?.map(c => c.id) || [];
 
-CREATE POLICY "Admins can view all unions" ON family_unions FOR SELECT TO authenticated
-  USING (is_admin_or_moderator(auth.uid()));
-
-CREATE POLICY "Admins can view all relations" ON family_parent_child FOR SELECT TO authenticated
-  USING (is_admin_or_moderator(auth.uid()));
-
--- DELETE admin sur family_trees (cascade supprimera le reste)
-CREATE POLICY "Admins can delete trees" ON family_trees FOR DELETE TO authenticated
-  USING (has_role(auth.uid(), 'admin'));
+// Etape 2 : requetes filtrees
+supabase.from('capsule_medias').select('id, capsule_id').in('capsule_id', capsuleIds),
+supabase.from('comments').select('id, capsule_id').in('capsule_id', capsuleIds),
+supabase.from('capsule_shares').select('id, capsule_id').in('capsule_id', capsuleIds),
+supabase.from('capsule_categories').select('...').in('capsule_id', capsuleIds),
 ```
 
-#### 2. Nouvelle page `src/pages/admin/AdminFamilyTrees.tsx`
+### Fichiers modifies
 
-- Charge tous les arbres avec un count de personnes via une requete jointe
-- Joint les profiles pour afficher le nom du proprietaire
-- Tableau avec colonnes : Proprietaire, Nom arbre, Personnes, Unions, Cree le, Actions
-- Dialogue de confirmation pour la suppression
-- Barre de recherche
-
-#### 3. Ajouter la route et le lien navigation
-
-| Fichier | Modification |
+| Fichier | Correction |
 |---|---|
-| Migration SQL | 6 policies admin (SELECT x4 + DELETE x1) |
-| `src/pages/admin/AdminFamilyTrees.tsx` | Nouvelle page |
-| `src/pages/admin/AdminLayout.tsx` | Ajouter l'entree nav "Arbres" avec icone `TreePine` |
-| `src/App.tsx` | Ajouter route `/admin/family-trees` + lazy import |
+| `src/hooks/useFamilyTree.tsx` | Filtrer `family_parent_child` et `family_unions` par person IDs du tree |
+| `src/pages/Statistics.tsx` | Ajouter `.in('capsule_id', capsuleIds)` sur 4 requetes |
 
