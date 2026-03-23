@@ -5,19 +5,27 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson, ParentChildRelationship, FamilyUnion, TreeViewMode } from '@/types/familyTree';
 
-// Constants for layout
+// Layout constants
 const CARD_WIDTH = 160;
 const CARD_HEIGHT = 80;
-const HORIZONTAL_GAP = 40;
-const VERTICAL_GAP = 100;
+const H_GAP = 40;
+const V_GAP = 100;
 const SPOUSE_GAP = 20;
+const COMPONENT_GAP = 120;
 
-interface PersonPosition {
-  person: FamilyPerson;
+// ─── Internal types ─────────────────────────────────────────────────────────
+
+interface FamilyUnit {
+  id: string;
+  partners: string[];   // 1 or 2 person IDs
+  childIds: string[];   // children of this specific union
+}
+
+interface LayoutNode {
+  personId: string;
   x: number;
   y: number;
   generation: number;
-  spouses: FamilyPerson[];
 }
 
 interface Connection {
@@ -33,6 +41,460 @@ export interface PersonPositionData {
   x: number;
   y: number;
 }
+
+interface PersonPosition {
+  person: FamilyPerson;
+  x: number;
+  y: number;
+  generation: number;
+  spouses: FamilyPerson[];
+}
+
+// ─── Graph builder ──────────────────────────────────────────────────────────
+
+function buildFamilyGraph(
+  persons: FamilyPerson[],
+  relationships: ParentChildRelationship[],
+  unions: FamilyUnion[],
+) {
+  const personMap = new Map<string, FamilyPerson>();
+  persons.forEach(p => personMap.set(p.id, p));
+
+  // Index: parentId → childIds
+  const childrenOf = new Map<string, Set<string>>();
+  // Index: childId → parentIds
+  const parentsOf = new Map<string, Set<string>>();
+  // Index: personId → union[]
+  const unionsOf = new Map<string, FamilyUnion[]>();
+  // Index: unionId → childIds (from relationship.union_id)
+  const childrenOfUnion = new Map<string, Set<string>>();
+
+  for (const r of relationships) {
+    if (!childrenOf.has(r.parent_id)) childrenOf.set(r.parent_id, new Set());
+    childrenOf.get(r.parent_id)!.add(r.child_id);
+    if (!parentsOf.has(r.child_id)) parentsOf.set(r.child_id, new Set());
+    parentsOf.get(r.child_id)!.add(r.parent_id);
+
+    if (r.union_id) {
+      if (!childrenOfUnion.has(r.union_id)) childrenOfUnion.set(r.union_id, new Set());
+      childrenOfUnion.get(r.union_id)!.add(r.child_id);
+    }
+  }
+
+  for (const u of unions) {
+    if (!unionsOf.has(u.person1_id)) unionsOf.set(u.person1_id, []);
+    unionsOf.get(u.person1_id)!.push(u);
+    if (!unionsOf.has(u.person2_id)) unionsOf.set(u.person2_id, []);
+    unionsOf.get(u.person2_id)!.push(u);
+  }
+
+  // Build FamilyUnits for a person (one per union + one for children without union)
+  function getFamilyUnits(personId: string): FamilyUnit[] {
+    const units: FamilyUnit[] = [];
+    const personUnions = unionsOf.get(personId) || [];
+    const allChildIds = childrenOf.get(personId) || new Set<string>();
+    const assignedChildren = new Set<string>();
+
+    for (const u of personUnions) {
+      const partnerId = u.person1_id === personId ? u.person2_id : u.person1_id;
+      const unionChildren = childrenOfUnion.get(u.id) || new Set<string>();
+
+      // Also find children shared with this partner but not tagged to a union
+      const partnerChildren = childrenOf.get(partnerId) || new Set<string>();
+      const sharedChildren = new Set<string>();
+      for (const cid of allChildIds) {
+        if (unionChildren.has(cid) || partnerChildren.has(cid)) {
+          sharedChildren.add(cid);
+        }
+      }
+
+      const unitChildIds = Array.from(sharedChildren);
+      unitChildIds.forEach(c => assignedChildren.add(c));
+
+      units.push({
+        id: u.id,
+        partners: [personId, partnerId],
+        childIds: unitChildIds,
+      });
+    }
+
+    // Children not assigned to any union
+    const unassigned = Array.from(allChildIds).filter(c => !assignedChildren.has(c));
+    if (unassigned.length > 0 || (personUnions.length === 0 && allChildIds.size === 0)) {
+      // Only create solo unit if person has no unions, or has unassigned children
+      if (unassigned.length > 0) {
+        units.push({
+          id: `solo-${personId}`,
+          partners: [personId],
+          childIds: unassigned,
+        });
+      }
+    }
+
+    // If person has no unions and no children, still create a unit for them
+    if (units.length === 0) {
+      units.push({
+        id: `solo-${personId}`,
+        partners: [personId],
+        childIds: [],
+      });
+    }
+
+    return units;
+  }
+
+  // Get spouse IDs for a person
+  function getSpouseIds(personId: string): string[] {
+    const personUnions = unionsOf.get(personId) || [];
+    return personUnions.map(u => u.person1_id === personId ? u.person2_id : u.person1_id);
+  }
+
+  // Get parent IDs for a person
+  function getParentIds(personId: string): string[] {
+    return Array.from(parentsOf.get(personId) || []);
+  }
+
+  // Get child IDs for a person
+  function getChildIds(personId: string): string[] {
+    return Array.from(childrenOf.get(personId) || []);
+  }
+
+  // Find connected components via BFS
+  function findComponents(rootId?: string): string[][] {
+    const visited = new Set<string>();
+    const components: string[][] = [];
+
+    const bfs = (startId: string): string[] => {
+      const component: string[] = [];
+      const queue = [startId];
+      while (queue.length > 0) {
+        const id = queue.shift()!;
+        if (visited.has(id)) continue;
+        visited.add(id);
+        component.push(id);
+
+        // Traverse relationships
+        for (const cid of getChildIds(id)) if (!visited.has(cid)) queue.push(cid);
+        for (const pid of getParentIds(id)) if (!visited.has(pid)) queue.push(pid);
+        for (const sid of getSpouseIds(id)) if (!visited.has(sid)) queue.push(sid);
+      }
+      return component;
+    };
+
+    // Process root component first
+    if (rootId && personMap.has(rootId)) {
+      components.push(bfs(rootId));
+    }
+
+    // Process remaining components
+    for (const p of persons) {
+      if (!visited.has(p.id)) {
+        components.push(bfs(p.id));
+      }
+    }
+
+    return components;
+  }
+
+  return {
+    personMap,
+    childrenOf,
+    parentsOf,
+    unionsOf,
+    getFamilyUnits,
+    getSpouseIds,
+    getParentIds,
+    getChildIds,
+    findComponents,
+  };
+}
+
+// ─── Layout engine (3-pass Walker-inspired) ─────────────────────────────────
+
+interface LayoutEngine {
+  positions: Map<string, LayoutNode>;
+  connections: Connection[];
+}
+
+function layoutDescendant(
+  rootId: string,
+  graph: ReturnType<typeof buildFamilyGraph>,
+  persons: FamilyPerson[],
+  baseGeneration: number,
+  xStart: number,
+): LayoutEngine {
+  const positions = new Map<string, LayoutNode>();
+  const connections: Connection[] = [];
+  const visited = new Set<string>();
+
+  // Pass 1 & 2: measure + position (combined recursive)
+  function measure(personId: string): number {
+    if (visited.has(personId)) return 0;
+    // Peek: don't mark visited yet for measurement
+    const spouseIds = graph.getSpouseIds(personId).filter(s => !visited.has(s));
+    const childIds = graph.getChildIds(personId).filter(c => !visited.has(c) && c !== personId);
+
+    // Unit width (person + spouses)
+    const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
+
+    // Children width
+    // We need to temporarily mark visited to avoid infinite loops
+    const tempVisited = new Set<string>();
+    tempVisited.add(personId);
+    spouseIds.forEach(s => tempVisited.add(s));
+
+    let childrenWidth = 0;
+    const uniqueChildren = [...new Set(childIds)];
+    // Filter children that are also spouses (to avoid double counting)
+    const actualChildren = uniqueChildren.filter(c => !tempVisited.has(c));
+
+    if (actualChildren.length > 0) {
+      for (const cid of actualChildren) {
+        childrenWidth += measureDeep(cid, new Set([...visited, personId, ...spouseIds]));
+      }
+      childrenWidth += (actualChildren.length - 1) * H_GAP;
+    }
+
+    return Math.max(unitWidth, childrenWidth);
+  }
+
+  function measureDeep(personId: string, parentVisited: Set<string>): number {
+    if (parentVisited.has(personId)) return CARD_WIDTH;
+    const localVisited = new Set(parentVisited);
+    localVisited.add(personId);
+
+    const spouseIds = graph.getSpouseIds(personId).filter(s => !localVisited.has(s));
+    spouseIds.forEach(s => localVisited.add(s));
+
+    const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
+
+    const childIds = graph.getChildIds(personId).filter(c => !localVisited.has(c));
+    let childrenWidth = 0;
+    if (childIds.length > 0) {
+      for (const cid of childIds) {
+        childrenWidth += measureDeep(cid, localVisited);
+      }
+      childrenWidth += (childIds.length - 1) * H_GAP;
+    }
+
+    return Math.max(unitWidth, childrenWidth);
+  }
+
+  // Pass 3: position
+  function position(personId: string, x: number, generation: number): number {
+    if (visited.has(personId)) {
+      return positions.get(personId) ? CARD_WIDTH : 0;
+    }
+    visited.add(personId);
+
+    const spouseIds = graph.getSpouseIds(personId).filter(s => !visited.has(s));
+    // Mark spouses visited before processing children
+    spouseIds.forEach(s => visited.add(s));
+
+    const childIds = graph.getChildIds(personId).filter(c => !visited.has(c));
+    // Deduplicate: a child might appear from multiple parents
+    const uniqueChildIds = [...new Set(childIds)];
+
+    // Measure children width
+    let childrenWidth = 0;
+    const childWidths: number[] = [];
+    for (const cid of uniqueChildIds) {
+      const w = measureDeep(cid, new Set(visited));
+      childWidths.push(w);
+      childrenWidth += w;
+    }
+    if (uniqueChildIds.length > 1) {
+      childrenWidth += (uniqueChildIds.length - 1) * H_GAP;
+    }
+
+    const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
+    const totalWidth = Math.max(unitWidth, childrenWidth);
+
+    // Center the couple unit within totalWidth
+    const unitX = x + (totalWidth - unitWidth) / 2;
+    const y = generation * (CARD_HEIGHT + V_GAP);
+
+    // Place person
+    positions.set(personId, { personId, x: unitX, y, generation });
+
+    // Place spouses
+    let spouseX = unitX + CARD_WIDTH + SPOUSE_GAP;
+    for (const sid of spouseIds) {
+      positions.set(sid, { personId: sid, x: spouseX, y, generation });
+
+      // Spouse connection
+      connections.push({
+        type: 'spouse',
+        from: { x: unitX + CARD_WIDTH, y: y + CARD_HEIGHT / 2 },
+        to: { x: spouseX, y: y + CARD_HEIGHT / 2 },
+        fromPersonId: personId,
+        toPersonId: sid,
+      });
+      spouseX += CARD_WIDTH + SPOUSE_GAP;
+    }
+
+    // Calculate union center for child connections
+    let unionCenterX: number;
+    if (spouseIds.length > 0) {
+      const firstSpousePos = positions.get(spouseIds[0])!;
+      unionCenterX = (unitX + CARD_WIDTH / 2 + firstSpousePos.x + CARD_WIDTH / 2) / 2;
+    } else {
+      unionCenterX = unitX + CARD_WIDTH / 2;
+    }
+
+    // Place children centered under union point
+    if (uniqueChildIds.length > 0) {
+      const childrenStartX = x + (totalWidth - childrenWidth) / 2;
+      let cx = childrenStartX;
+
+      for (let i = 0; i < uniqueChildIds.length; i++) {
+        const cid = uniqueChildIds[i];
+        const cw = position(cid, cx, generation + 1);
+        const childPos = positions.get(cid);
+
+        if (childPos) {
+          connections.push({
+            type: 'parent-child',
+            from: { x: unionCenterX, y: y + CARD_HEIGHT },
+            to: { x: childPos.x + CARD_WIDTH / 2, y: childPos.y },
+            fromPersonId: personId,
+            toPersonId: cid,
+          });
+        }
+
+        cx += childWidths[i] + H_GAP;
+      }
+    }
+
+    return totalWidth;
+  }
+
+  position(rootId, xStart, baseGeneration);
+  return { positions, connections };
+}
+
+function layoutAscendant(
+  rootId: string,
+  graph: ReturnType<typeof buildFamilyGraph>,
+  persons: FamilyPerson[],
+  baseGeneration: number,
+  xStart: number,
+): LayoutEngine {
+  const positions = new Map<string, LayoutNode>();
+  const connections: Connection[] = [];
+  const visited = new Set<string>();
+
+  function measureUp(personId: string, localVisited: Set<string>): number {
+    if (localVisited.has(personId)) return CARD_WIDTH;
+    const lv = new Set(localVisited);
+    lv.add(personId);
+
+    const parentIds = graph.getParentIds(personId).filter(p => !lv.has(p));
+    if (parentIds.length === 0) return CARD_WIDTH;
+
+    // Parents are a couple unit
+    let parentsWidth = 0;
+    if (parentIds.length >= 2) {
+      // Two parents form a unit; each may have their own ancestors
+      const p1w = measureUp(parentIds[0], lv);
+      lv.add(parentIds[0]);
+      const p2w = measureUp(parentIds[1], lv);
+      parentsWidth = p1w + SPOUSE_GAP + p2w;
+    } else {
+      parentsWidth = measureUp(parentIds[0], lv);
+    }
+
+    return Math.max(CARD_WIDTH, parentsWidth);
+  }
+
+  function positionUp(personId: string, x: number, generation: number): number {
+    if (visited.has(personId)) return CARD_WIDTH;
+    visited.add(personId);
+
+    const parentIds = graph.getParentIds(personId).filter(p => !visited.has(p));
+
+    // Measure parents to know total width
+    let parentsWidth = 0;
+    const parentWidths: number[] = [];
+    const tempVisited = new Set(visited);
+
+    for (const pid of parentIds) {
+      const w = measureUp(pid, tempVisited);
+      parentWidths.push(w);
+      parentsWidth += w;
+      tempVisited.add(pid);
+    }
+    if (parentIds.length > 1) {
+      parentsWidth += SPOUSE_GAP;
+    }
+
+    const totalWidth = Math.max(CARD_WIDTH, parentsWidth);
+    const personX = x + (totalWidth - CARD_WIDTH) / 2;
+    const y = generation * (CARD_HEIGHT + V_GAP);
+
+    positions.set(personId, { personId, x: personX, y, generation });
+
+    // Position parents above
+    if (parentIds.length > 0) {
+      const parentsStartX = x + (totalWidth - parentsWidth) / 2;
+      let px = parentsStartX;
+
+      for (let i = 0; i < parentIds.length; i++) {
+        const pid = parentIds[i];
+        const pw = positionUp(pid, px, generation - 1);
+        px += parentWidths[i] + SPOUSE_GAP;
+      }
+
+      // Spouse connection between parents
+      if (parentIds.length >= 2) {
+        const p1Pos = positions.get(parentIds[0]);
+        const p2Pos = positions.get(parentIds[1]);
+        if (p1Pos && p2Pos) {
+          const left = p1Pos.x < p2Pos.x ? p1Pos : p2Pos;
+          const right = p1Pos.x < p2Pos.x ? p2Pos : p1Pos;
+          const leftId = p1Pos.x < p2Pos.x ? parentIds[0] : parentIds[1];
+          const rightId = p1Pos.x < p2Pos.x ? parentIds[1] : parentIds[0];
+
+          connections.push({
+            type: 'spouse',
+            from: { x: left.x + CARD_WIDTH, y: left.y + CARD_HEIGHT / 2 },
+            to: { x: right.x, y: right.y + CARD_HEIGHT / 2 },
+            fromPersonId: leftId,
+            toPersonId: rightId,
+          });
+
+          // Parent-child connection from union center
+          const unionCenterX = (left.x + CARD_WIDTH / 2 + right.x + CARD_WIDTH / 2) / 2;
+          connections.push({
+            type: 'parent-child',
+            from: { x: unionCenterX, y: left.y + CARD_HEIGHT },
+            to: { x: personX + CARD_WIDTH / 2, y },
+            fromPersonId: leftId,
+            toPersonId: personId,
+          });
+        }
+      } else if (parentIds.length === 1) {
+        const parentPos = positions.get(parentIds[0]);
+        if (parentPos) {
+          connections.push({
+            type: 'parent-child',
+            from: { x: parentPos.x + CARD_WIDTH / 2, y: parentPos.y + CARD_HEIGHT },
+            to: { x: personX + CARD_WIDTH / 2, y },
+            fromPersonId: parentIds[0],
+            toPersonId: personId,
+          });
+        }
+      }
+    }
+
+    return totalWidth;
+  }
+
+  positionUp(rootId, xStart, baseGeneration);
+  return { positions, connections };
+}
+
+// ─── Main component ─────────────────────────────────────────────────────────
 
 interface TreeVisualizationProps {
   persons: FamilyPerson[];
@@ -62,374 +524,118 @@ export function TreeVisualization({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  // Helper functions
-  const getPersonChildren = (personId: string): FamilyPerson[] => {
-    const childIds = relationships.filter(r => r.parent_id === personId).map(r => r.child_id);
-    return persons.filter(p => childIds.includes(p.id));
-  };
+  const { positions, connections, bounds, rootGeneration } = useMemo(() => {
+    if (persons.length === 0) {
+      return {
+        positions: [] as PersonPosition[],
+        connections: [] as Connection[],
+        bounds: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
+        rootGeneration: 0,
+      };
+    }
 
-  const getPersonParents = (personId: string): FamilyPerson[] => {
-    const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
-    return persons.filter(p => parentIds.includes(p.id));
-  };
-
-  const getPersonSpouses = (personId: string): FamilyPerson[] => {
-    const spouseIds = unions
-      .filter(u => u.person1_id === personId || u.person2_id === personId)
-      .map(u => u.person1_id === personId ? u.person2_id : u.person1_id);
-    return persons.filter(p => spouseIds.includes(p.id));
-  };
-
-  // Calculate positions for all persons
-  const { positions, connections, bounds } = useMemo(() => {
-    const positionsMap = new Map<string, PersonPosition>();
-    const allConnections: Connection[] = [];
-    const visitedDescendants = new Set<string>();
-    const visitedAscendants = new Set<string>();
+    const graph = buildFamilyGraph(persons, relationships, unions);
+    const personMap = graph.personMap;
 
     // Find root person
     const rootPerson = rootPersonId
-      ? persons.find(p => p.id === rootPersonId)
+      ? persons.find(p => p.id === rootPersonId) || persons[0]
       : persons[0];
 
-    if (!rootPerson) {
-      return { positions: [], connections: [], bounds: { minX: 0, maxX: 0, minY: 0, maxY: 0 } };
+    // Find connected components
+    const components = graph.findComponents(rootPerson.id);
+
+    const allPositions = new Map<string, LayoutNode>();
+    const allConnections: Connection[] = [];
+    let currentX = 0;
+    let detectedRootGen = 0;
+
+    for (let ci = 0; ci < components.length; ci++) {
+      const component = components[ci];
+      if (component.length === 0) continue;
+
+      // Pick best root for this component
+      const componentRoot = component.includes(rootPerson.id)
+        ? rootPerson.id
+        : component.reduce((best, id) => {
+            const conns = graph.getChildIds(id).length + graph.getParentIds(id).length + graph.getSpouseIds(id).length;
+            const bestConns = graph.getChildIds(best).length + graph.getParentIds(best).length + graph.getSpouseIds(best).length;
+            return conns > bestConns ? id : best;
+          }, component[0]);
+
+      let engine: LayoutEngine;
+
+      if (viewMode === 'descendant') {
+        engine = layoutDescendant(componentRoot, graph, persons, 0, currentX);
+        if (componentRoot === rootPerson.id) detectedRootGen = 0;
+      } else if (viewMode === 'ascendant') {
+        // Calculate max depth for ascendant
+        const maxDepth = calculateMaxAscendantDepth(componentRoot, graph);
+        engine = layoutAscendant(componentRoot, graph, persons, maxDepth, currentX);
+        if (componentRoot === rootPerson.id) detectedRootGen = maxDepth;
+      } else {
+        // Hourglass: ascendant + descendant combined
+        const maxDepth = calculateMaxAscendantDepth(componentRoot, graph);
+        const ascEngine = layoutAscendant(componentRoot, graph, persons, maxDepth, currentX);
+        
+        // Get root position from ascendant layout
+        const rootPos = ascEngine.positions.get(componentRoot);
+        const rootX = rootPos ? rootPos.x : currentX;
+
+        // Build descendant from root (skip root itself, it's already positioned)
+        const descEngine = layoutDescendant(componentRoot, graph, persons, maxDepth, currentX);
+
+        // Merge: use ascendant positions for ancestors, descendant for descendants
+        // Ascendant takes priority for the root and ancestors
+        engine = {
+          positions: new Map([...descEngine.positions, ...ascEngine.positions]),
+          connections: [...ascEngine.connections, ...descEngine.connections.filter(c => {
+            // Remove duplicate connections
+            return !ascEngine.connections.some(ac => 
+              ac.fromPersonId === c.fromPersonId && ac.toPersonId === c.toPersonId
+            );
+          })],
+        };
+
+        if (componentRoot === rootPerson.id) detectedRootGen = maxDepth;
+      }
+
+      // Merge into allPositions
+      for (const [id, pos] of engine.positions) {
+        allPositions.set(id, pos);
+      }
+      allConnections.push(...engine.connections);
+
+      // Calculate max X for next component offset
+      let maxX = 0;
+      for (const pos of engine.positions.values()) {
+        maxX = Math.max(maxX, pos.x + CARD_WIDTH);
+      }
+      currentX = maxX + COMPONENT_GAP;
     }
 
-    // Build descendants tree (generation increases downward)
-    const buildDescendantsTree = (
-      person: FamilyPerson,
-      generation: number,
-      xOffset: number
-    ): { width: number; centerX: number } => {
-      if (visitedDescendants.has(person.id)) {
-        const existing = positionsMap.get(person.id);
-        return { width: CARD_WIDTH, centerX: existing?.x || xOffset };
-      }
-      visitedDescendants.add(person.id);
+    // Resolve overlaps (pass 3b)
+    resolveOverlaps(allPositions);
 
-      const spouses = getPersonSpouses(person.id);
-      const children = getPersonChildren(person.id);
-      
-      // Filter spouses that will actually be positioned (not already placed)
-      const spousesToPosition = spouses.filter(spouse => !visitedDescendants.has(spouse.id));
-      
-      // Mark spouses as visited BEFORE processing children to prevent them from being counted again
-      for (const spouse of spousesToPosition) {
-        visitedDescendants.add(spouse.id);
-      }
-      
-      // Calculate width needed for children (skip already visited ones - they're positioned as spouses)
-      let childrenTotalWidth = 0;
-      const childPositions: { centerX: number; width: number }[] = [];
-      const childrenToProcess = children.filter(child => !visitedDescendants.has(child.id));
-
-      if (childrenToProcess.length > 0) {
-        let currentX = xOffset;
-        for (const child of childrenToProcess) {
-          const childResult = buildDescendantsTree(child, generation + 1, currentX);
-          childPositions.push(childResult);
-          childrenTotalWidth += childResult.width;
-          currentX += childResult.width + HORIZONTAL_GAP;
-        }
-        childrenTotalWidth += (childrenToProcess.length - 1) * HORIZONTAL_GAP;
-      }
-
-      // Calculate unit width (person + spouses that will be positioned)
-      const unitWidth = CARD_WIDTH + spousesToPosition.length * (CARD_WIDTH + SPOUSE_GAP);
-
-      // Final width is max of unit width and children width
-      const totalWidth = Math.max(unitWidth, childrenTotalWidth);
-
-      // Center X for this person
-      const centerX = xOffset + totalWidth / 2 - unitWidth / 2;
-
-      // Store position
-      positionsMap.set(person.id, {
-        person,
-        x: centerX,
-        y: generation * (CARD_HEIGHT + VERTICAL_GAP),
-        generation,
-        spouses,
-      });
-
-      // Position spouses and calculate union center point
-      let spouseX = centerX + CARD_WIDTH + SPOUSE_GAP;
-      let unionCenterX = centerX + CARD_WIDTH / 2; // Default: center of person
-      let firstSpousePositioned = false;
-      
-      // Use spousesToPosition already calculated above
-      
-      for (const spouse of spousesToPosition) {
-        positionsMap.set(spouse.id, {
-          person: spouse,
-          x: spouseX,
-          y: generation * (CARD_HEIGHT + VERTICAL_GAP),
-          generation,
-          spouses: [],
-        });
-
-        // Spouse connection
-        allConnections.push({
-          type: 'spouse',
-          from: { x: centerX + CARD_WIDTH, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
-          to: { x: spouseX, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT / 2 },
-          fromPersonId: person.id,
-          toPersonId: spouse.id,
-        });
-        
-        // Calculate union center (midpoint between centers of person and first spouse cards)
-        if (!firstSpousePositioned) {
-          const personCenterX = centerX + CARD_WIDTH / 2;
-          const spouseCenterX = spouseX + CARD_WIDTH / 2;
-          unionCenterX = (personCenterX + spouseCenterX) / 2;
-          firstSpousePositioned = true;
-        }
-        
-        spouseX += CARD_WIDTH + SPOUSE_GAP;
-      }
-      
-      // If spouse already positioned, still calculate union center for child connections
-      if (!firstSpousePositioned && spouses.length > 0) {
-        const existingSpousePos = positionsMap.get(spouses[0].id);
-        if (existingSpousePos) {
-          const personCenterX = centerX + CARD_WIDTH / 2;
-          const spouseCenterX = existingSpousePos.x + CARD_WIDTH / 2;
-          unionCenterX = (personCenterX + spouseCenterX) / 2;
-        }
-      }
-
-      // Update child positions to be centered under union point (between both parents)
-      if (childrenToProcess.length > 0) {
-        const childrenSpan = childPositions.reduce((sum, cp) => sum + cp.width, 0) + (childrenToProcess.length - 1) * HORIZONTAL_GAP;
-        const childrenStartX = unionCenterX - childrenSpan / 2;
-
-        let currentChildX = childrenStartX;
-        for (let i = 0; i < childrenToProcess.length; i++) {
-          const child = childrenToProcess[i];
-          const childPos = positionsMap.get(child.id);
-          if (childPos) {
-            const shiftX = currentChildX - (childPos.x - CARD_WIDTH / 2);
-            // Shift this child and all its descendants
-            const shiftDescendants = (id: string, shift: number) => {
-              const pos = positionsMap.get(id);
-              if (pos) {
-                pos.x += shift;
-                for (const c of getPersonChildren(id)) {
-                  shiftDescendants(c.id, shift);
-                }
-              }
-            };
-            shiftDescendants(child.id, shiftX);
-          }
-          currentChildX += childPositions[i].width + HORIZONTAL_GAP;
-
-          // Parent-child connection: connect to union point (between both parents)
-          const childPosition = positionsMap.get(child.id);
-          if (childPosition) {
-            allConnections.push({
-              type: 'parent-child',
-              from: { x: unionCenterX, y: generation * (CARD_HEIGHT + VERTICAL_GAP) + CARD_HEIGHT },
-              to: { x: childPosition.x + CARD_WIDTH / 2, y: childPosition.y },
-              fromPersonId: person.id,
-              toPersonId: child.id,
-            });
-          }
-        }
-      }
-
-      return { width: totalWidth, centerX };
-    };
-
-    // Build ascendants tree (generation decreases upward)
-    const buildAscendantsTree = (
-      person: FamilyPerson,
-      generation: number,
-      xOffset: number
-    ): { width: number; centerX: number } => {
-      if (visitedAscendants.has(person.id)) {
-        const existing = positionsMap.get(person.id);
-        return { width: CARD_WIDTH, centerX: existing?.x || xOffset };
-      }
-      visitedAscendants.add(person.id);
-
-      const parents = getPersonParents(person.id);
-      
-      let parentsWidth = 0;
-      if (parents.length > 0) {
-        let currentX = xOffset;
-        for (const parent of parents) {
-          const parentResult = buildAscendantsTree(parent, generation - 1, currentX);
-          parentsWidth += parentResult.width;
-          currentX += parentResult.width + HORIZONTAL_GAP;
-        }
-        parentsWidth += (parents.length - 1) * HORIZONTAL_GAP;
-      }
-
-      const totalWidth = Math.max(CARD_WIDTH, parentsWidth);
-      const centerX = xOffset + totalWidth / 2 - CARD_WIDTH / 2;
-
-      // Update or set position
-      const existingPos = positionsMap.get(person.id);
-      if (!existingPos) {
-        const spouses = getPersonSpouses(person.id);
-        positionsMap.set(person.id, {
+    // Convert to PersonPosition array
+    const positionsArray: PersonPosition[] = [];
+    for (const [id, node] of allPositions) {
+      const person = personMap.get(id);
+      if (person) {
+        positionsArray.push({
           person,
-          x: centerX,
-          y: generation * (CARD_HEIGHT + VERTICAL_GAP),
-          generation,
-          spouses,
+          x: node.x,
+          y: node.y,
+          generation: node.generation,
+          spouses: graph.getSpouseIds(id)
+            .map(sid => personMap.get(sid))
+            .filter((p): p is FamilyPerson => !!p),
         });
-      }
-
-      // Create spouse connection between parents if both exist
-      if (parents.length >= 2) {
-        const parent1Pos = positionsMap.get(parents[0].id);
-        const parent2Pos = positionsMap.get(parents[1].id);
-        
-        if (parent1Pos && parent2Pos) {
-          // Check if spouse connection doesn't already exist
-          const spouseConnectionExists = allConnections.some(
-            conn => conn.type === 'spouse' && 
-            ((conn.fromPersonId === parents[0].id && conn.toPersonId === parents[1].id) ||
-             (conn.fromPersonId === parents[1].id && conn.toPersonId === parents[0].id))
-          );
-          
-          if (!spouseConnectionExists) {
-            // Determine which parent is on the left
-            const leftParent = parent1Pos.x < parent2Pos.x ? parent1Pos : parent2Pos;
-            const rightParent = parent1Pos.x < parent2Pos.x ? parent2Pos : parent1Pos;
-            const leftParentId = parent1Pos.x < parent2Pos.x ? parents[0].id : parents[1].id;
-            const rightParentId = parent1Pos.x < parent2Pos.x ? parents[1].id : parents[0].id;
-            
-            allConnections.push({
-              type: 'spouse',
-              from: { x: leftParent.x + CARD_WIDTH, y: leftParent.y + CARD_HEIGHT / 2 },
-              to: { x: rightParent.x, y: rightParent.y + CARD_HEIGHT / 2 },
-              fromPersonId: leftParentId,
-              toPersonId: rightParentId,
-            });
-          }
-        }
-      }
-
-      // Create connection to parents - connect to union point if both parents exist
-      if (parents.length >= 2) {
-        const parent1Pos = positionsMap.get(parents[0].id);
-        const parent2Pos = positionsMap.get(parents[1].id);
-        const personPos = positionsMap.get(person.id);
-        
-        if (parent1Pos && parent2Pos && personPos) {
-          // Calculate union center point (midpoint between centers of both parent cards)
-          const parent1CenterX = parent1Pos.x + CARD_WIDTH / 2;
-          const parent2CenterX = parent2Pos.x + CARD_WIDTH / 2;
-          const unionCenterX = (parent1CenterX + parent2CenterX) / 2;
-          
-          allConnections.push({
-            type: 'parent-child',
-            from: { x: unionCenterX, y: parent1Pos.y + CARD_HEIGHT },
-            to: { x: personPos.x + CARD_WIDTH / 2, y: personPos.y },
-            fromPersonId: parents[0].id,
-            toPersonId: person.id,
-          });
-        }
-      } else if (parents.length === 1) {
-        // Single parent case
-        const parentPos = positionsMap.get(parents[0].id);
-        const personPos = positionsMap.get(person.id);
-        if (parentPos && personPos) {
-          allConnections.push({
-            type: 'parent-child',
-            from: { x: parentPos.x + CARD_WIDTH / 2, y: parentPos.y + CARD_HEIGHT },
-            to: { x: personPos.x + CARD_WIDTH / 2, y: personPos.y },
-            fromPersonId: parents[0].id,
-            toPersonId: person.id,
-          });
-        }
-      }
-
-      return { width: totalWidth, centerX };
-    };
-
-    // Build tree based on view mode
-    const buildFromRoot = (root: FamilyPerson, xOffset: number) => {
-      if (viewMode === 'descendant') {
-        buildDescendantsTree(root, 0, xOffset);
-      } else if (viewMode === 'ascendant') {
-        buildAscendantsTree(root, 3, xOffset);
-      } else {
-        // Hourglass: both directions
-        buildAscendantsTree(root, 3, xOffset);
-        visitedDescendants.add(root.id);
-        buildDescendantsTree(root, 3, positionsMap.get(root.id)?.x || xOffset);
-      }
-    };
-
-    // Build from root person first
-    buildFromRoot(rootPerson, 0);
-
-    // Handle disconnected components - persons not reachable from root
-    const positionedIds = new Set(positionsMap.keys());
-    const unpositioned = persons.filter(p => !positionedIds.has(p.id));
-
-    if (unpositioned.length > 0) {
-      // Group unpositioned persons into connected components via BFS
-      const processedIds = new Set<string>();
-      const components: FamilyPerson[][] = [];
-
-      for (const p of unpositioned) {
-        if (processedIds.has(p.id)) continue;
-        const connected = new Set<string>();
-        const queue = [p.id];
-        while (queue.length > 0) {
-          const currentId = queue.shift()!;
-          if (connected.has(currentId) || positionedIds.has(currentId)) continue;
-          connected.add(currentId);
-          for (const r of relationships) {
-            if (r.parent_id === currentId && !connected.has(r.child_id)) queue.push(r.child_id);
-            if (r.child_id === currentId && !connected.has(r.parent_id)) queue.push(r.parent_id);
-          }
-          for (const u of unions) {
-            if (u.person1_id === currentId && !connected.has(u.person2_id)) queue.push(u.person2_id);
-            if (u.person2_id === currentId && !connected.has(u.person1_id)) queue.push(u.person1_id);
-          }
-        }
-        const component = persons.filter(pp => connected.has(pp.id));
-        component.forEach(pp => processedIds.add(pp.id));
-        if (component.length > 0) components.push(component);
-      }
-
-      // Place each component to the right of existing content
-      let currentMaxX = 0;
-      for (const pos of positionsMap.values()) {
-        currentMaxX = Math.max(currentMaxX, pos.x + CARD_WIDTH);
-      }
-
-      for (const component of components) {
-        currentMaxX += HORIZONTAL_GAP * 3;
-
-        // Pick component root: person with most connections
-        const componentRoot = component.reduce((best, p) => {
-          const conns = relationships.filter(r => r.parent_id === p.id || r.child_id === p.id).length +
-            unions.filter(u => u.person1_id === p.id || u.person2_id === p.id).length;
-          const bestConns = relationships.filter(r => r.parent_id === best.id || r.child_id === best.id).length +
-            unions.filter(u => u.person1_id === best.id || u.person2_id === best.id).length;
-          return conns > bestConns ? p : best;
-        }, component[0]);
-
-        buildFromRoot(componentRoot, currentMaxX);
-
-        for (const [id] of positionsMap) positionedIds.add(id);
-        for (const pos of positionsMap.values()) {
-          currentMaxX = Math.max(currentMaxX, pos.x + CARD_WIDTH);
-        }
       }
     }
 
     // Calculate bounds
-    const positionsArray = Array.from(positionsMap.values());
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    
     for (const pos of positionsArray) {
       minX = Math.min(minX, pos.x);
       maxX = Math.max(maxX, pos.x + CARD_WIDTH);
@@ -440,7 +646,13 @@ export function TreeVisualization({
     return {
       positions: positionsArray,
       connections: allConnections,
-      bounds: { minX: minX || 0, maxX: maxX || 800, minY: minY || 0, maxY: maxY || 600 },
+      bounds: {
+        minX: isFinite(minX) ? minX : 0,
+        maxX: isFinite(maxX) ? maxX : 800,
+        minY: isFinite(minY) ? minY : 0,
+        maxY: isFinite(maxY) ? maxY : 600,
+      },
+      rootGeneration: detectedRootGen,
     };
   }, [persons, relationships, unions, rootPersonId, viewMode]);
 
@@ -453,11 +665,10 @@ export function TreeVisualization({
     });
   }, [bounds]);
 
-  // Calculate offset to center the tree
   const offsetX = 50 - bounds.minX;
   const offsetY = 50 - bounds.minY;
 
-  // Report positions with offset applied
+  // Report positions
   useEffect(() => {
     if (onPositionsCalculated && positions.length > 0) {
       const positionsData: PersonPositionData[] = positions.map(pos => ({
@@ -470,30 +681,27 @@ export function TreeVisualization({
   }, [positions, offsetX, offsetY, onPositionsCalculated]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative"
-      style={{ 
-        width: dimensions.width, 
+      style={{
+        width: dimensions.width,
         height: dimensions.height,
         minWidth: '100%',
         minHeight: '100%',
       }}
     >
-      {/* SVG Layer for connections */}
+      {/* SVG connections layer */}
       <svg
         className="absolute inset-0 pointer-events-none"
         width={dimensions.width}
         height={dimensions.height}
       >
         <defs>
-          {/* Gradient for connections */}
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="hsl(var(--secondary))" stopOpacity="0.6" />
             <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.3" />
           </linearGradient>
-          
-          {/* Heart symbol for spouse connections */}
           <symbol id="heartSymbol" viewBox="0 0 24 24" width="12" height="12">
             <path
               fill="hsl(var(--accent))"
@@ -502,7 +710,6 @@ export function TreeVisualization({
           </symbol>
         </defs>
 
-        {/* Render connections */}
         {connections.map((conn, index) => {
           const fromX = conn.from.x + offsetX;
           const fromY = conn.from.y + offsetY;
@@ -510,53 +717,57 @@ export function TreeVisualization({
           const toY = conn.to.y + offsetY;
 
           if (conn.type === 'spouse') {
-            // Horizontal line with heart in the middle
             const midX = (fromX + toX) / 2;
             const midY = fromY;
             return (
               <g key={`conn-${index}`}>
                 <motion.line
-                  x1={fromX}
-                  y1={fromY}
-                  x2={toX}
-                  y2={toY}
+                  x1={fromX} y1={fromY} x2={toX} y2={toY}
                   stroke="hsl(var(--accent))"
                   strokeWidth="2"
                   strokeDasharray="4 2"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  transition={{ duration: 0.5, delay: index * 0.02 }}
                 />
                 <use href="#heartSymbol" x={midX - 6} y={midY - 6} />
               </g>
             );
           } else {
-            // Parent-child: curved path
-            const midY = (fromY + toY) / 2;
-            const path = `M ${fromX} ${fromY} 
-                          L ${fromX} ${midY - 10}
-                          Q ${fromX} ${midY}, ${(fromX + toX) / 2} ${midY}
-                          Q ${toX} ${midY}, ${toX} ${midY + 10}
-                          L ${toX} ${toY}`;
-            
+            // T-shape genealogical connection
+            const midY = fromY + (toY - fromY) / 2;
             return (
-              <motion.path
-                key={`conn-${index}`}
-                d={path}
-                fill="none"
-                stroke="url(#connectionGradient)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.03 }}
-              />
+              <g key={`conn-${index}`}>
+                {/* Vertical from parent down to horizontal bar */}
+                <motion.line
+                  x1={fromX} y1={fromY} x2={fromX} y2={midY}
+                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
+                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.02 }}
+                />
+                {/* Horizontal bar */}
+                <motion.line
+                  x1={fromX} y1={midY} x2={toX} y2={midY}
+                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
+                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.02 + 0.1 }}
+                />
+                {/* Vertical down to child */}
+                <motion.line
+                  x1={toX} y1={midY} x2={toX} y2={toY}
+                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
+                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.02 + 0.2 }}
+                />
+                {/* Junction dot at horizontal bar */}
+                <circle cx={toX} cy={midY} r="3" fill="hsl(var(--secondary))" fillOpacity="0.4" />
+              </g>
             );
           }
         })}
       </svg>
 
-      {/* Person Cards Layer */}
+      {/* Person cards */}
       {positions.map((pos, index) => (
         <motion.div
           key={pos.person.id}
@@ -569,10 +780,10 @@ export function TreeVisualization({
           }}
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ 
-            duration: 0.4, 
-            delay: index * 0.05,
-            ease: [0.23, 1, 0.32, 1]
+          transition={{
+            duration: 0.4,
+            delay: Math.min(index * 0.03, 1.5),
+            ease: [0.23, 1, 0.32, 1],
           }}
         >
           <TreePersonCard
@@ -586,17 +797,67 @@ export function TreeVisualization({
       ))}
 
       {/* Generation labels */}
-      <GenerationLabels 
-        positions={positions} 
-        offsetX={offsetX} 
+      <GenerationLabels
+        positions={positions}
+        offsetX={offsetX}
         offsetY={offsetY}
-        viewMode={viewMode}
+        rootGeneration={rootGeneration}
       />
     </div>
   );
 }
 
-// Person Card Component
+// ─── Overlap resolver ───────────────────────────────────────────────────────
+
+function resolveOverlaps(positions: Map<string, LayoutNode>): void {
+  // Group by generation (same y level)
+  const byGeneration = new Map<number, LayoutNode[]>();
+  for (const node of positions.values()) {
+    if (!byGeneration.has(node.generation)) byGeneration.set(node.generation, []);
+    byGeneration.get(node.generation)!.push(node);
+  }
+
+  // For each generation, sort by x and fix overlaps
+  for (const [, nodes] of byGeneration) {
+    nodes.sort((a, b) => a.x - b.x);
+
+    for (let i = 1; i < nodes.length; i++) {
+      const prev = nodes[i - 1];
+      const curr = nodes[i];
+      const minX = prev.x + CARD_WIDTH + SPOUSE_GAP;
+
+      if (curr.x < minX) {
+        const shift = minX - curr.x;
+        // Shift this node and all nodes to its right
+        for (let j = i; j < nodes.length; j++) {
+          nodes[j].x += shift;
+        }
+      }
+    }
+  }
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+function calculateMaxAscendantDepth(
+  personId: string,
+  graph: ReturnType<typeof buildFamilyGraph>,
+): number {
+  const visited = new Set<string>();
+
+  function depth(id: string): number {
+    if (visited.has(id)) return 0;
+    visited.add(id);
+    const parentIds = graph.getParentIds(id);
+    if (parentIds.length === 0) return 0;
+    return 1 + Math.max(...parentIds.map(pid => depth(pid)));
+  }
+
+  return depth(personId);
+}
+
+// ─── Person Card ────────────────────────────────────────────────────────────
+
 interface TreePersonCardProps {
   person: FamilyPerson;
   isSelected: boolean;
@@ -605,9 +866,9 @@ interface TreePersonCardProps {
   generation: number;
 }
 
-function TreePersonCard({ person, isSelected, isHighlighted, onClick, generation }: TreePersonCardProps) {
+function TreePersonCard({ person, isSelected, isHighlighted, onClick }: TreePersonCardProps) {
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
-  
+
   const getBirthYear = () => {
     if (!person.birth_date) return null;
     return new Date(person.birth_date).getFullYear();
@@ -634,8 +895,8 @@ function TreePersonCard({ person, isSelected, isHighlighted, onClick, generation
     >
       <Avatar className={cn(
         "w-12 h-12 border-2",
-        person.gender === 'male' ? 'border-blue-400/50' : 
-        person.gender === 'female' ? 'border-pink-400/50' : 
+        person.gender === 'male' ? 'border-blue-400/50' :
+        person.gender === 'female' ? 'border-pink-400/50' :
         'border-secondary/30'
       )}>
         <AvatarImage src={person.profile_photo_url || undefined} />
@@ -648,7 +909,7 @@ function TreePersonCard({ person, isSelected, isHighlighted, onClick, generation
           {initials}
         </AvatarFallback>
       </Avatar>
-      
+
       <div className="flex-1 min-w-0 text-left">
         <p className="text-xs font-semibold truncate leading-tight">
           {person.first_names}
@@ -672,15 +933,16 @@ function TreePersonCard({ person, isSelected, isHighlighted, onClick, generation
   );
 }
 
-// Generation Labels Component
+// ─── Generation Labels ──────────────────────────────────────────────────────
+
 interface GenerationLabelsProps {
   positions: PersonPosition[];
   offsetX: number;
   offsetY: number;
-  viewMode: TreeViewMode;
+  rootGeneration: number;
 }
 
-function GenerationLabels({ positions, offsetX, offsetY, viewMode }: GenerationLabelsProps) {
+function GenerationLabels({ positions, offsetX, offsetY, rootGeneration }: GenerationLabelsProps) {
   const generations = useMemo(() => {
     const genMap = new Map<number, number>();
     for (const pos of positions) {
@@ -691,8 +953,8 @@ function GenerationLabels({ positions, offsetX, offsetY, viewMode }: GenerationL
     return Array.from(genMap.entries()).sort((a, b) => a[0] - b[0]);
   }, [positions]);
 
-  const getGenerationLabel = (gen: number, baseGen: number) => {
-    const diff = gen - baseGen;
+  const getGenerationLabel = (gen: number) => {
+    const diff = gen - rootGeneration;
     if (diff === 0) return 'Vous';
     if (diff === 1) return 'Enfants';
     if (diff === -1) return 'Parents';
@@ -704,9 +966,6 @@ function GenerationLabels({ positions, offsetX, offsetY, viewMode }: GenerationL
     return `Génération ${diff}`;
   };
 
-  // Find the base generation (where the root person is)
-  const baseGeneration = viewMode === 'descendant' ? 0 : 3;
-
   return (
     <>
       {generations.map(([gen, y]) => (
@@ -715,11 +974,11 @@ function GenerationLabels({ positions, offsetX, offsetY, viewMode }: GenerationL
           className="absolute left-2 flex items-center"
           style={{ top: y + offsetY + CARD_HEIGHT / 2 - 12 }}
         >
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className="text-[10px] bg-background/80 backdrop-blur-sm border-dashed"
           >
-            {getGenerationLabel(gen, baseGeneration)}
+            {getGenerationLabel(gen)}
           </Badge>
         </div>
       ))}
