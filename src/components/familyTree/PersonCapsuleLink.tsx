@@ -142,7 +142,7 @@ export function LinkCapsuleDialog({
             />
           </div>
 
-          <ScrollArea className="h-[300px]">
+          <ScrollArea className="flex-1 min-h-0 max-h-[50vh]">
             {loading ? (
               <div className="flex items-center justify-center h-full">
                 <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
