@@ -60,9 +60,13 @@ export function LinkCapsuleDialog({
   const fetchCapsules = async () => {
     setLoading(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       const { data, error } = await supabase
         .from('capsules')
         .select('id, title, description, capsule_type, status, created_at, thumbnail_url')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
