@@ -129,7 +129,7 @@ export function LinkCapsuleDialog({
   const isMobile = useIsMobile();
 
   const capsuleList = (
-    <div className="space-y-4">
+    <div className="space-y-4 overflow-hidden min-w-0">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
@@ -157,7 +157,7 @@ export function LinkCapsuleDialog({
             {filteredCapsules.map((capsule) => (
               <div
                 key={capsule.id}
-                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors overflow-hidden"
               >
                 {capsule.thumbnail_url ? (
                   <img
@@ -222,7 +222,7 @@ export function LinkCapsuleDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg overflow-hidden mx-4 sm:mx-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link2 className="w-5 h-5" />
