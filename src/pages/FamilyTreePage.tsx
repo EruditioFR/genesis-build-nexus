@@ -565,7 +565,7 @@ export default function FamilyTreePage() {
               className="min-w-max p-8"
               style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
             >
-              <TreeVisualization
+               <TreeVisualization
                 persons={persons}
                 relationships={relationships}
                 unions={unions}
@@ -573,6 +573,7 @@ export default function FamilyTreePage() {
                 viewMode={viewMode}
                 selectedPersonId={selectedPerson?.id}
                 highlightedPersonId={highlightedPersonId || undefined}
+                activeBranchIds={activeBranchIds}
                 onPersonClick={handlePersonClick}
                 onAddPerson={handleAddPerson}
                 onPositionsCalculated={setPersonPositions}
