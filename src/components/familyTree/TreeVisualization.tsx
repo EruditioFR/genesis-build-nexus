@@ -504,6 +504,7 @@ interface TreeVisualizationProps {
   viewMode: TreeViewMode;
   selectedPersonId?: string;
   highlightedPersonId?: string;
+  activeBranchIds?: Set<string>;
   onPersonClick: (person: FamilyPerson) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
