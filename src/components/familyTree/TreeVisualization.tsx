@@ -791,6 +791,8 @@ export function TreeVisualization({
             person={pos.person}
             isSelected={selectedPersonId === pos.person.id}
             isHighlighted={highlightedPersonId === pos.person.id}
+            isRoot={rootPersonId === pos.person.id}
+            isDimmed={!!activeBranchIds && !activeBranchIds.has(pos.person.id)}
             onClick={() => onPersonClick(pos.person)}
             generation={pos.generation}
           />
