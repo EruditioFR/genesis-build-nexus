@@ -442,6 +442,8 @@ interface LayoutResult {
     isRoot: boolean;
     appearDelay: number;
     generationLabel: string;
+    ghostCount: number;
+    ghostLabel: string;
   }>;
   /** Edges (structural, not dependent on selection) */
   structuralEdges: Edge[];
