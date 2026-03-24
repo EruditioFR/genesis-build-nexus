@@ -154,7 +154,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
         onClick={() => !isUploading && fileInputRef.current?.click()}
       >
         <Avatar className="w-20 h-20 border-2 border-secondary transition-opacity group-hover:opacity-80">
-          <AvatarImage src={person.profile_photo_url || undefined} />
+          <AvatarImage src={photoUrl || undefined} />
           <AvatarFallback className="bg-secondary/20 text-secondary text-xl font-medium">
             {initials}
           </AvatarFallback>
