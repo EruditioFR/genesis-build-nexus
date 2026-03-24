@@ -493,6 +493,30 @@ function buildFlowElements(
     }
   }
 
+  // Build generation distance map for progressive loading
+  const genDistanceFromRoot = new Map<string, number>();
+  for (const [id, pos] of allPositions) {
+    const rootPos = allPositions.get(rootPerson.id);
+    if (rootPos) {
+      const dist = Math.abs(pos.generation - rootPos.generation);
+      genDistanceFromRoot.set(id, dist);
+    }
+  }
+
+  // Also compute distance from expanded nodes
+  const getMinDistance = (id: string): number => {
+    let minDist = genDistanceFromRoot.get(id) ?? Infinity;
+    for (const expandedId of expandedNodeIds) {
+      const expandedPos = allPositions.get(expandedId);
+      const nodePos = allPositions.get(id);
+      if (expandedPos && nodePos) {
+        const dist = Math.abs(nodePos.generation - expandedPos.generation);
+        minDist = Math.min(minDist, dist);
+      }
+    }
+    return minDist;
+  };
+
   // Build React Flow nodes
   const nodes: Node<PersonNodeData>[] = [];
   const positionData: PersonPositionData[] = [];
@@ -501,8 +525,17 @@ function buildFlowElements(
     const person = graph.personMap.get(id);
     if (!person) continue;
 
+    const minDist = getMinDistance(id);
+    const isGhost = isFinite(maxVisibleGenerations) && minDist === maxVisibleGenerations + 1;
+    const isExcluded = isFinite(maxVisibleGenerations) && minDist > maxVisibleGenerations + 1;
+
+    if (isExcluded) continue;
+
     const isDimmed = !!activeBranchIds && !activeBranchIds.has(id);
     const genDiff = pos.generation - (rootGeneration ?? detectedRootGen);
+
+    // Stagger delay based on distance for newly appeared nodes
+    const appearDelay = isGhost ? 0 : Math.max(0, (minDist - 1) * 0.08);
 
     nodes.push({
       id,
@@ -514,6 +547,8 @@ function buildFlowElements(
         isHighlighted: highlightedPersonId === id,
         isRoot: rootPersonId === id,
         isDimmed,
+        isGhost,
+        appearDelay,
         generation: pos.generation,
         generationLabel: getGenerationLabel(genDiff),
       },
