@@ -193,7 +193,12 @@ export default function FamilyTreePage() {
         if (isAdminViewing && viewTreeId) {
           const data = await fetchTree(viewTreeId);
           setTree(data.tree);
-          setTotalPersonsCount(data.persons.length);
+          // Fetch real total count from DB
+          const { count: realCount } = await supabase
+            .from('family_persons')
+            .select('*', { count: 'exact', head: true })
+            .eq('tree_id', viewTreeId);
+          setTotalPersonsCount(realCount || data.persons.length);
           if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
             // Large tree: load only nearby branch
             const branch = await fetchBranch(viewTreeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
@@ -216,7 +221,12 @@ export default function FamilyTreePage() {
             const treeId = trees[0].id;
             const data = await fetchTree(treeId);
             setTree(data.tree);
-            setTotalPersonsCount(data.persons.length);
+            // Fetch real total count from DB
+            const { count: realCount2 } = await supabase
+              .from('family_persons')
+              .select('*', { count: 'exact', head: true })
+              .eq('tree_id', treeId);
+            setTotalPersonsCount(realCount2 || data.persons.length);
             if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
               // Large tree: load only nearby branch
               const branch = await fetchBranch(treeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
@@ -706,7 +716,7 @@ export default function FamilyTreePage() {
                 <TreeDeciduous className="w-5 h-5 text-secondary" />
                 <h1 className="font-semibold">{tree?.name || t('toolbar.myTree')}</h1>
                 <Badge variant="outline" className="text-xs">
-                  {t('toolbar.persons', { count: persons.length })}
+                  {t('toolbar.persons', { count: totalPersonsCount || persons.length })}
                 </Badge>
               </div>
 
@@ -757,7 +767,11 @@ export default function FamilyTreePage() {
                   <TreeDeciduous className="w-6 h-6 text-secondary" />
                   <div>
                     <h1 className="font-semibold">{tree?.name || t('defaultTreeName')}</h1>
-                    <p className="text-sm text-muted-foreground">{t('toolbar.persons', { count: persons.length })}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {totalPersonsCount > persons.length 
+                        ? `${t('toolbar.persons', { count: totalPersonsCount })} (${persons.length} ${t('toolbar.loaded', { defaultValue: 'chargées' })})`
+                        : t('toolbar.persons', { count: totalPersonsCount })}
+                    </p>
                   </div>
                 </div>
 
