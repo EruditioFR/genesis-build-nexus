@@ -272,7 +272,7 @@ export default function FamilyTreePage() {
     setRelationships(data.relationships);
     setUnions(data.unions);
     if (data.persons.length >= LARGE_TREE_THRESHOLD) {
-      setViewMode(prev => prev === 'hourglass' ? 'ascendant' : prev);
+      setViewMode('ascendant');
     }
   }, [tree?.id, fetchTree]);
 
