@@ -82,7 +82,9 @@ export default function FamilyTreePage() {
   const [isInitializing, setIsInitializing] = useState(true);
   
   const LARGE_TREE_THRESHOLD = 500;
+  const MAX_VISIBLE_GENERATIONS = 3;
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
+  const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set());
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   
@@ -334,6 +336,22 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
+  const handleExpandGhost = useCallback((personId: string) => {
+    setExpandedNodeIds(prev => {
+      const next = new Set(prev);
+      next.add(personId);
+      return next;
+    });
+  }, []);
+
+  // Compute effective maxVisibleGenerations
+  const effectiveMaxGenerations = useMemo(() => {
+    if (persons.length < LARGE_TREE_THRESHOLD && viewMode === 'hourglass') {
+      return Infinity;
+    }
+    return MAX_VISIBLE_GENERATIONS;
+  }, [persons.length, viewMode]);
+
   const [importProgress, setImportProgress] = useState(0);
   const [importDetail, setImportDetail] = useState('');
 
@@ -467,10 +485,13 @@ export default function FamilyTreePage() {
       highlightedPersonId={highlightedPersonId || undefined}
       activeBranchIds={activeBranchIds}
       onPersonClick={handlePersonClick}
+      onExpandGhost={handleExpandGhost}
       onAddPerson={handleAddPerson}
       onPositionsCalculated={setPersonPositions}
       showMinimap={showMinimap}
       onCenterOnPerson={pendingCenterId}
+      maxVisibleGenerations={effectiveMaxGenerations}
+      expandedNodeIds={expandedNodeIds}
     />
   );
 

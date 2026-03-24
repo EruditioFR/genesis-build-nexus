@@ -443,6 +443,8 @@ function buildFlowElements(
   highlightedPersonId: string | undefined,
   activeBranchIds: Set<string> | undefined,
   rootGeneration: number,
+  maxVisibleGenerations: number,
+  expandedNodeIds: Set<string>,
 ): { nodes: Node<PersonNodeData>[]; edges: Edge[]; positionData: PersonPositionData[] } {
   if (persons.length === 0) {
     return { nodes: [], edges: [], positionData: [] };
@@ -491,6 +493,30 @@ function buildFlowElements(
     }
   }
 
+  // Build generation distance map for progressive loading
+  const genDistanceFromRoot = new Map<string, number>();
+  for (const [id, pos] of allPositions) {
+    const rootPos = allPositions.get(rootPerson.id);
+    if (rootPos) {
+      const dist = Math.abs(pos.generation - rootPos.generation);
+      genDistanceFromRoot.set(id, dist);
+    }
+  }
+
+  // Also compute distance from expanded nodes
+  const getMinDistance = (id: string): number => {
+    let minDist = genDistanceFromRoot.get(id) ?? Infinity;
+    for (const expandedId of expandedNodeIds) {
+      const expandedPos = allPositions.get(expandedId);
+      const nodePos = allPositions.get(id);
+      if (expandedPos && nodePos) {
+        const dist = Math.abs(nodePos.generation - expandedPos.generation);
+        minDist = Math.min(minDist, dist);
+      }
+    }
+    return minDist;
+  };
+
   // Build React Flow nodes
   const nodes: Node<PersonNodeData>[] = [];
   const positionData: PersonPositionData[] = [];
@@ -499,8 +525,17 @@ function buildFlowElements(
     const person = graph.personMap.get(id);
     if (!person) continue;
 
+    const minDist = getMinDistance(id);
+    const isGhost = isFinite(maxVisibleGenerations) && minDist === maxVisibleGenerations + 1;
+    const isExcluded = isFinite(maxVisibleGenerations) && minDist > maxVisibleGenerations + 1;
+
+    if (isExcluded) continue;
+
     const isDimmed = !!activeBranchIds && !activeBranchIds.has(id);
     const genDiff = pos.generation - (rootGeneration ?? detectedRootGen);
+
+    // Stagger delay based on distance for newly appeared nodes
+    const appearDelay = isGhost ? 0 : Math.max(0, (minDist - 1) * 0.08);
 
     nodes.push({
       id,
@@ -512,6 +547,8 @@ function buildFlowElements(
         isHighlighted: highlightedPersonId === id,
         isRoot: rootPersonId === id,
         isDimmed,
+        isGhost,
+        appearDelay,
         generation: pos.generation,
         generationLabel: getGenerationLabel(genDiff),
       },
@@ -655,10 +692,13 @@ interface TreeVisualizationProps {
   highlightedPersonId?: string;
   activeBranchIds?: Set<string>;
   onPersonClick: (person: FamilyPerson) => void;
+  onExpandGhost?: (personId: string) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
   showMinimap?: boolean;
   onCenterOnPerson?: string | null;
+  maxVisibleGenerations?: number;
+  expandedNodeIds?: Set<string>;
 }
 
 function TreeVisualizationInner({
@@ -671,9 +711,12 @@ function TreeVisualizationInner({
   highlightedPersonId,
   activeBranchIds,
   onPersonClick,
+  onExpandGhost,
   onPositionsCalculated,
   showMinimap = true,
   onCenterOnPerson,
+  maxVisibleGenerations = Infinity,
+  expandedNodeIds = new Set(),
 }: TreeVisualizationProps) {
   const { fitView, setCenter } = useReactFlow();
   const lastPositionsRef = useRef<string>('');
@@ -689,8 +732,10 @@ function TreeVisualizationInner({
       highlightedPersonId,
       activeBranchIds,
       0,
+      maxVisibleGenerations,
+      expandedNodeIds,
     );
-  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds]);
+  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds, maxVisibleGenerations, expandedNodeIds]);
 
   // Report positions
   useEffect(() => {
@@ -738,8 +783,20 @@ function TreeVisualizationInner({
   }, [onCenterOnPerson, nodes, setCenter]);
 
   const onNodeClick: NodeMouseHandler<Node<PersonNodeData>> = useCallback((_event, node) => {
+    if (node.data.isGhost && onExpandGhost) {
+      onExpandGhost(node.data.person.id);
+      // Animated fitView on the expanded ghost node
+      setTimeout(() => {
+        setCenter(
+          node.position.x + CARD_WIDTH / 2,
+          node.position.y + CARD_HEIGHT / 2,
+          { zoom: 1, duration: 600 }
+        );
+      }, 50);
+      return;
+    }
     onPersonClick(node.data.person);
-  }, [onPersonClick]);
+  }, [onPersonClick, onExpandGhost, setCenter]);
 
   const minimapNodeColor = useCallback((node: Node<PersonNodeData>) => {
     if (node.data.isSelected) return 'hsl(var(--secondary))';

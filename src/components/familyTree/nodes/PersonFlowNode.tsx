@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
-import { Home } from 'lucide-react';
+import { Home, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,8 @@ export type PersonNodeData = {
   isHighlighted: boolean;
   isRoot: boolean;
   isDimmed: boolean;
+  isGhost: boolean;
+  appearDelay: number;
   generation: number;
   generationLabel: string;
 };
@@ -19,7 +21,7 @@ export type PersonNodeData = {
 export type PersonNode = Node<PersonNodeData, 'person'>;
 
 export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
-  const { person, isSelected, isHighlighted, isRoot, isDimmed } = data;
+  const { person, isSelected, isHighlighted, isRoot, isDimmed, isGhost, appearDelay } = data;
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
   const getBirthYear = () => {
@@ -59,20 +61,21 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{
-          opacity: isDimmed ? 0.2 : 1,
-          scale: isDimmed ? 0.97 : 1,
+          opacity: isGhost ? 0.35 : isDimmed ? 0.2 : 1,
+          scale: isGhost ? 0.95 : isDimmed ? 0.97 : 1,
         }}
-        whileHover={!isDimmed ? { y: -2, boxShadow: 'var(--tree-card-hover-shadow)' } : undefined}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        whileHover={!isDimmed && !isGhost ? { y: -2, boxShadow: 'var(--tree-card-hover-shadow)' } : isGhost ? { opacity: 0.55 } : undefined}
+        transition={{ duration: 0.3, ease: 'easeOut', delay: appearDelay || 0 }}
         className={cn(
           "w-full h-full rounded-2xl p-2.5 flex items-center gap-2.5 cursor-pointer font-tree",
           "border-2 shadow-[var(--tree-card-shadow)]",
           "bg-[hsl(var(--tree-card-bg))]",
+          isGhost && "border-dashed",
           isSelected
             ? "border-[hsl(var(--terracotta))] ring-2 ring-[hsl(var(--terracotta)/0.25)]"
             : cn("hover:border-[hsl(var(--gold-light))]", genderBorderColor),
           isHighlighted && "ring-2 ring-[hsl(var(--gold))] animate-pulse",
-          !person.is_alive && !isDimmed && "opacity-80"
+          !person.is_alive && !isDimmed && !isGhost && "opacity-80"
         )}
       >
         {/* Root badge */}
@@ -121,8 +124,17 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
           )}
         </div>
 
+        {/* Ghost expansion badge */}
+        {isGhost && (
+          <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10">
+            <div className="w-5 h-5 rounded-full bg-[hsl(var(--gold))] text-white flex items-center justify-center shadow-md">
+              <Plus className="w-3 h-3" />
+            </div>
+          </div>
+        )}
+
         {/* Deceased indicator */}
-        {!person.is_alive && (
+        {!person.is_alive && !isGhost && (
           <div className="absolute top-1 right-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--sepia-light)/0.4)]" />
           </div>
