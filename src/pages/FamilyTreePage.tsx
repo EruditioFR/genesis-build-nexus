@@ -4,20 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
-  ZoomIn, 
-  ZoomOut, 
   Home, 
   Maximize2,
   Minimize2,
   TreeDeciduous,
   Download,
   Upload,
-  Map,
   Lock,
   List,
   FileText,
   FileDown,
-  Focus
+  Focus,
+  Map,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -46,7 +44,6 @@ import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
 import { PersonsListSheet } from '@/components/familyTree/PersonsListSheet';
 import { TreeVisualization, type PersonPositionData } from '@/components/familyTree/TreeVisualization';
 import { TreeBreadcrumb } from '@/components/familyTree/TreeBreadcrumb';
-import { TreeMinimap } from '@/components/familyTree/TreeMinimap';
 import { TreeSearchCommand } from '@/components/familyTree/TreeSearchCommand';
 import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
 import { MergePersonsDialog } from '@/components/familyTree/MergePersonsDialog';
@@ -78,7 +75,6 @@ export default function FamilyTreePage() {
   const [isInitializing, setIsInitializing] = useState(true);
   
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
-  const [zoom, setZoom] = useState(1);
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   
@@ -95,10 +91,6 @@ export default function FamilyTreePage() {
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
-  const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 });
-  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
-  const [contentSize, setContentSize] = useState({ width: 800, height: 600 });
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [personPositions, setPersonPositions] = useState<PersonPositionData[]>([]);
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
@@ -109,7 +101,6 @@ export default function FamilyTreePage() {
     const ids = new Set<string>();
     ids.add(selectedPerson.id);
 
-    // Ancestors (go up)
     const addAncestors = (personId: string, visited: Set<string>) => {
       const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
       for (const pid of parentIds) {
@@ -121,7 +112,6 @@ export default function FamilyTreePage() {
       }
     };
 
-    // Descendants (go down)
     const addDescendants = (personId: string, visited: Set<string>) => {
       const childIds = relationships.filter(r => r.parent_id === personId).map(r => r.child_id);
       for (const cid of childIds) {
@@ -133,7 +123,6 @@ export default function FamilyTreePage() {
       }
     };
 
-    // Spouses
     const spouseIds = unions
       .filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)
       .map(u => u.person1_id === selectedPerson.id ? u.person2_id : u.person1_id);
@@ -202,39 +191,6 @@ export default function FamilyTreePage() {
     setUnions(data.unions);
   }, [tree?.id, fetchTree]);
 
-  // Track scroll position and viewport size for minimap
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      setScrollPosition({ x: container.scrollLeft, y: container.scrollTop });
-    };
-
-    const handleResize = () => {
-      setViewportSize({ width: container.clientWidth, height: container.clientHeight });
-      if (container.scrollWidth > 0 && container.scrollHeight > 0) {
-        setContentSize({ 
-          width: Math.max(container.scrollWidth, 800), 
-          height: Math.max(container.scrollHeight, 600) 
-        });
-      }
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    const observer = new MutationObserver(handleResize);
-    observer.observe(container, { childList: true, subtree: true });
-
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-      observer.disconnect();
-    };
-  }, [persons, isFullscreen]);
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreen) {
@@ -245,46 +201,15 @@ export default function FamilyTreePage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isFullscreen]);
 
-  const handleMinimapNavigation = (x: number, y: number) => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.scrollTo({ left: x, top: y, behavior: 'smooth' });
-    }
-  };
-
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
 
   const centerOnPerson = useCallback((personId: string) => {
-    const container = scrollContainerRef.current;
-    if (!container || personPositions.length === 0) {
-      setPendingCenterId(personId);
-      return;
-    }
-
-    const position = personPositions.find(p => p.personId === personId);
-    if (!position) return;
-
-    const cardWidth = 160;
-    const cardHeight = 80;
-    const scrollX = (position.x + cardWidth / 2) * zoom - container.clientWidth / 2;
-    const scrollY = (position.y + cardHeight / 2) * zoom - container.clientHeight / 2;
-
-    container.scrollTo({
-      left: Math.max(0, scrollX),
-      top: Math.max(0, scrollY),
-      behavior: 'smooth',
-    });
-
-    setPendingCenterId(null);
-  }, [personPositions, zoom]);
-
-  useEffect(() => {
-    if (pendingCenterId && personPositions.length > 0) {
-      centerOnPerson(pendingCenterId);
-    }
-  }, [pendingCenterId, personPositions, centerOnPerson]);
+    setPendingCenterId(personId);
+    // Clear after a short delay to allow re-triggering
+    setTimeout(() => setPendingCenterId(null), 1000);
+  }, []);
 
   const handleSearchSelect = useCallback((person: FamilyPerson) => {
     setSelectedPerson(person);
@@ -423,7 +348,6 @@ export default function FamilyTreePage() {
   const handleMergeSubmit = async (keepPersonId: string, mergePersonId: string, fieldsToMerge: string[]) => {
     const success = await mergePersons(keepPersonId, mergePersonId, fieldsToMerge);
     if (success) {
-      // If we merged the selected person, select the kept person
       if (selectedPerson?.id === mergePersonId) {
         const keptPerson = persons.find(p => p.id === keepPersonId);
         if (keptPerson) {
@@ -468,7 +392,7 @@ export default function FamilyTreePage() {
     );
   }
 
-  // Heritage gate - Family tree is only for Heritage subscribers
+  // Heritage gate
   if (!canAccessFamilyTree) {
     const isPremiumUser = tier === 'premium';
     return (
@@ -505,7 +429,119 @@ export default function FamilyTreePage() {
     );
   }
 
-  // Fullscreen view
+  // ── Tree visualization (shared between normal and fullscreen) ──────────
+  const renderTreeVisualization = () => (
+    <TreeVisualization
+      persons={persons}
+      relationships={relationships}
+      unions={unions}
+      rootPersonId={tree?.root_person_id || undefined}
+      viewMode={viewMode}
+      selectedPersonId={selectedPerson?.id}
+      highlightedPersonId={highlightedPersonId || undefined}
+      activeBranchIds={activeBranchIds}
+      onPersonClick={handlePersonClick}
+      onAddPerson={handleAddPerson}
+      onPositionsCalculated={setPersonPositions}
+      showMinimap={showMinimap}
+      onCenterOnPerson={pendingCenterId}
+    />
+  );
+
+  // ── Detail panel (shared) ──────────────────────────────────────────────
+  const renderDetailPanel = () => (
+    <AnimatePresence>
+      {showDetailPanel && selectedPerson && (
+        <motion.div
+          initial={{ x: 384, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 384, opacity: 0 }}
+          className="fixed top-0 right-0 bottom-0 w-96 bg-card border-l shadow-lg z-50 overflow-auto"
+        >
+          <PersonDetailPanel
+            person={selectedPerson}
+            parents={getPersonParents(selectedPerson.id)}
+            children={getPersonChildren(selectedPerson.id)}
+            spouses={getPersonSpouses(selectedPerson.id)}
+            unions={unions.filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)}
+            relationships={relationships}
+            allPersons={persons}
+            onClose={() => setShowDetailPanel(false)}
+            onAddParent={() => handleAddPerson('parent', selectedPerson)}
+            onAddChild={() => handleAddPerson('child', selectedPerson)}
+            onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
+            onLinkPerson={() => handleLinkPerson(selectedPerson)}
+            onMergePerson={() => handleMergePerson(selectedPerson)}
+            onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
+            onDelete={() => handleDeletePerson(selectedPerson.id)}
+            onUpdate={loadTree}
+            onPersonClick={handleSearchSelect}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  // ── Toolbar controls (shared) ─────────────────────────────────────────
+  const renderToolbarControls = (compact = false) => (
+    <>
+      <div data-tour="tree-search">
+        <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
+      </div>
+
+      <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2" data-tour="tree-persons-list">
+        <List className="w-4 h-4" />
+        {!compact && <span className="hidden sm:inline">{t('toolbar.list')}</span>}
+      </Button>
+
+      {persons.length > 0 && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2" data-tour="tree-center">
+              <Focus className="w-4 h-4" />
+              {!compact && <span className="hidden sm:inline">{t('toolbar.centerOn')}</span>}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
+            {persons.slice(0, 50).map((p) => (
+              <DropdownMenuItem 
+                key={p.id} 
+                onClick={() => handleSearchSelect(p)}
+                className="gap-2"
+              >
+                {p.first_names} {p.last_name}
+              </DropdownMenuItem>
+            ))}
+            {persons.length > 50 && (
+              <DropdownMenuItem disabled className="text-muted-foreground text-xs">
+                {t('toolbar.andOthers', { count: persons.length - 50 })}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+
+      <div data-tour="tree-view-mode">
+        <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
+          <SelectTrigger className={compact ? "w-[130px] h-8" : "w-[140px]"}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
+            <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
+            <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
+        <Map className="w-4 h-4 text-muted-foreground" />
+        <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
+      </div>
+    </>
+  );
+
+  // ── Fullscreen view ───────────────────────────────────────────────────
   const renderFullscreenView = () => (
     <AnimatePresence>
       {isFullscreen && (
@@ -515,6 +551,7 @@ export default function FamilyTreePage() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 bg-background"
         >
+          {/* Fullscreen toolbar */}
           <div className="absolute top-0 left-0 right-0 z-10 bg-card/95 backdrop-blur-sm border-b">
             <div className="flex items-center justify-between px-4 py-2">
               <div className="flex items-center gap-3">
@@ -526,37 +563,7 @@ export default function FamilyTreePage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
-
-                <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
-                  <SelectTrigger className="w-[140px] h-8">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
-                    <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
-                    <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex items-center gap-1 border rounded-lg p-1">
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setZoom(Math.max(0.3, zoom - 0.1))}>
-                    <ZoomOut className="w-4 h-4" />
-                  </Button>
-                  <span className="text-xs w-12 text-center">{Math.round(zoom * 100)}%</span>
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setZoom(Math.min(2, zoom + 0.1))}>
-                    <ZoomIn className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setZoom(1)}>
-                    <Home className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
-                  <Map className="w-4 h-4 text-muted-foreground" />
-                  <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
-                </div>
-
+                {renderToolbarControls(true)}
                 <Button variant="outline" size="sm" onClick={toggleFullscreen} className="gap-2">
                   <Minimize2 className="w-4 h-4" />
                   {t('fullscreen.exit')}
@@ -565,68 +572,12 @@ export default function FamilyTreePage() {
             </div>
           </div>
 
-          <div ref={scrollContainerRef} className="absolute inset-0 top-12 overflow-auto bg-muted/20">
-            <motion.div 
-              className="min-w-max p-8"
-              style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
-            >
-               <TreeVisualization
-                persons={persons}
-                relationships={relationships}
-                unions={unions}
-                rootPersonId={tree?.root_person_id || undefined}
-                viewMode={viewMode}
-                selectedPersonId={selectedPerson?.id}
-                highlightedPersonId={highlightedPersonId || undefined}
-                activeBranchIds={activeBranchIds}
-                onPersonClick={handlePersonClick}
-                onAddPerson={handleAddPerson}
-                onPositionsCalculated={setPersonPositions}
-              />
-            </motion.div>
+          {/* Canvas area */}
+          <div className="absolute inset-0 top-12">
+            {renderTreeVisualization()}
           </div>
 
-          {showMinimap && persons.length > 0 && (
-            <TreeMinimap
-              persons={persons}
-              relationships={relationships}
-              unions={unions}
-              selectedPersonId={selectedPerson?.id}
-              viewportRect={{ ...scrollPosition, width: viewportSize.width / zoom, height: viewportSize.height / zoom }}
-              contentBounds={contentSize}
-              onViewportChange={handleMinimapNavigation}
-            />
-          )}
-
-          <AnimatePresence>
-            {showDetailPanel && selectedPerson && (
-              <motion.div
-                initial={{ x: 400, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 400, opacity: 0 }}
-                className="fixed top-0 right-0 bottom-0 w-96 bg-card border-l shadow-lg overflow-auto z-50"
-              >
-                <PersonDetailPanel
-                  person={selectedPerson}
-                  parents={getPersonParents(selectedPerson.id)}
-                  children={getPersonChildren(selectedPerson.id)}
-                  spouses={getPersonSpouses(selectedPerson.id)}
-                  unions={unions.filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)}
-                  relationships={relationships}
-                  allPersons={persons}
-                  onClose={() => setShowDetailPanel(false)}
-                  onAddParent={() => handleAddPerson('parent', selectedPerson)}
-                  onAddChild={() => handleAddPerson('child', selectedPerson)}
-                  onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
-                  onLinkPerson={() => handleLinkPerson(selectedPerson)}
-                  onMergePerson={() => handleMergePerson(selectedPerson)}
-                  onDelete={() => handleDeletePerson(selectedPerson.id)}
-                  onUpdate={loadTree}
-                  onPersonClick={handleSearchSelect}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {renderDetailPanel()}
         </motion.div>
       )}
     </AnimatePresence>
@@ -653,68 +604,7 @@ export default function FamilyTreePage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <div data-tour="tree-search">
-                    <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
-                  </div>
-
-                  <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2" data-tour="tree-persons-list">
-                    <List className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t('toolbar.list')}</span>
-                  </Button>
-
-                  {/* Centrer sur... dropdown */}
-                  {persons.length > 0 && (
-                    <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="gap-2" data-tour="tree-center">
-                          <Focus className="w-4 h-4" />
-                          <span className="hidden sm:inline">{t('toolbar.centerOn')}</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
-                        {persons.slice(0, 50).map((p) => (
-                          <DropdownMenuItem 
-                            key={p.id} 
-                            onClick={() => handleSearchSelect(p)}
-                            className="gap-2"
-                          >
-                            {p.first_names} {p.last_name}
-                          </DropdownMenuItem>
-                        ))}
-                        {persons.length > 50 && (
-                          <DropdownMenuItem disabled className="text-muted-foreground text-xs">
-                            {t('toolbar.andOthers', { count: persons.length - 50 })}
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-
-                  <div data-tour="tree-view-mode">
-                    <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
-                      <SelectTrigger className="w-[140px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
-                        <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
-                        <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="hidden sm:flex items-center gap-1 border rounded-lg p-1" data-tour="tree-zoom">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(Math.max(0.3, zoom - 0.1))}>
-                      <ZoomOut className="w-4 h-4" />
-                    </Button>
-                    <span className="text-sm w-12 text-center">{Math.round(zoom * 100)}%</span>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(Math.min(2, zoom + 0.1))}>
-                      <ZoomIn className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(1)}>
-                      <Home className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  {renderToolbarControls()}
 
                   <Button variant="outline" size="icon" onClick={toggleFullscreen}>
                     <Maximize2 className="w-4 h-4" />
@@ -765,25 +655,20 @@ export default function FamilyTreePage() {
           </div>
 
           {/* Main content */}
-          <div className="flex-1 flex overflow-hidden">
-            {/* Tree visualization */}
-            <div className="flex-1 flex flex-col overflow-hidden relative">
-              {/* Breadcrumb */}
-              {selectedPerson && showDetailPanel && (
-                <TreeBreadcrumb
-                  selectedPerson={selectedPerson}
-                  rootPersonId={tree?.root_person_id || undefined}
-                  persons={persons}
-                  relationships={relationships}
-                  onPersonClick={handleSearchSelect}
-                />
-              )}
+          <div className="flex-1 flex flex-col overflow-hidden relative">
+            {/* Breadcrumb */}
+            {selectedPerson && showDetailPanel && (
+              <TreeBreadcrumb
+                selectedPerson={selectedPerson}
+                rootPersonId={tree?.root_person_id || undefined}
+                persons={persons}
+                relationships={relationships}
+                onPersonClick={handleSearchSelect}
+              />
+            )}
 
-              <div 
-                ref={scrollContainerRef}
-                className="flex-1 overflow-auto bg-muted/20 relative"
-                data-tour="tree-visualization"
-              >
+            {/* Tree canvas area */}
+            <div className="flex-1 relative" data-tour="tree-visualization">
               {persons.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center space-y-4 p-8">
@@ -805,38 +690,7 @@ export default function FamilyTreePage() {
                   </div>
                 </div>
               ) : (
-                <motion.div 
-                  className="min-w-max p-8"
-                  style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
-                >
-                  <TreeVisualization
-                    persons={persons}
-                    relationships={relationships}
-                    unions={unions}
-                    rootPersonId={tree?.root_person_id || undefined}
-                    viewMode={viewMode}
-                    selectedPersonId={selectedPerson?.id}
-                    highlightedPersonId={highlightedPersonId || undefined}
-                    activeBranchIds={activeBranchIds}
-                    onPersonClick={handlePersonClick}
-                    onAddPerson={handleAddPerson}
-                    onPositionsCalculated={setPersonPositions}
-                  />
-                </motion.div>
-              )}
-
-              {showMinimap && persons.length > 3 && (
-                <div data-tour="tree-minimap">
-                  <TreeMinimap
-                    persons={persons}
-                    relationships={relationships}
-                    unions={unions}
-                    selectedPersonId={selectedPerson?.id}
-                    viewportRect={{ ...scrollPosition, width: viewportSize.width / zoom, height: viewportSize.height / zoom }}
-                    contentBounds={contentSize}
-                    onViewportChange={handleMinimapNavigation}
-                  />
-                </div>
+                renderTreeVisualization()
               )}
 
               {/* Back to root floating button */}
@@ -856,40 +710,9 @@ export default function FamilyTreePage() {
                   {t('navigation.backToRoot')}
                 </Button>
               )}
-              </div>
             </div>
 
-            {/* Detail panel */}
-            <AnimatePresence>
-              {showDetailPanel && selectedPerson && (
-                <motion.div
-                  initial={{ x: 384, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 384, opacity: 0 }}
-                  className="fixed top-0 right-0 bottom-0 w-96 bg-card border-l shadow-lg z-50 overflow-auto"
-                >
-                    <PersonDetailPanel
-                      person={selectedPerson}
-                      parents={getPersonParents(selectedPerson.id)}
-                      children={getPersonChildren(selectedPerson.id)}
-                      spouses={getPersonSpouses(selectedPerson.id)}
-                      unions={unions.filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)}
-                      relationships={relationships}
-                      allPersons={persons}
-                      onClose={() => setShowDetailPanel(false)}
-                      onAddParent={() => handleAddPerson('parent', selectedPerson)}
-                      onAddChild={() => handleAddPerson('child', selectedPerson)}
-                      onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
-                      onLinkPerson={() => handleLinkPerson(selectedPerson)}
-                      onMergePerson={() => handleMergePerson(selectedPerson)}
-                      onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
-                      onDelete={() => handleDeletePerson(selectedPerson.id)}
-                      onUpdate={loadTree}
-                      onPersonClick={handleSearchSelect}
-                    />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {renderDetailPanel()}
           </div>
 
           <MobileBottomNav />
