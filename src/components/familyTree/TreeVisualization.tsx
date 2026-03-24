@@ -748,11 +748,13 @@ function TreeVisualizationInner({
   const { fitView, setCenter } = useReactFlow();
   const lastPositionsRef = useRef<string>('');
 
+  const filtered = useMemo(() => filterByViewMode(persons, relationships, unions, rootPersonId, viewMode), [persons, relationships, unions, rootPersonId, viewMode]);
+
   const { nodes, edges, positionData } = useMemo(() => {
     return buildFlowElements(
-      persons,
-      relationships,
-      unions,
+      filtered.persons,
+      filtered.relationships,
+      filtered.unions,
       rootPersonId,
       viewMode,
       selectedPersonId,
@@ -760,7 +762,7 @@ function TreeVisualizationInner({
       activeBranchIds,
       0,
     );
-  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds]);
+  }, [filtered, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds]);
 
   // Report positions
   useEffect(() => {
