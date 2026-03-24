@@ -1062,6 +1062,47 @@ export type Database = {
         }
         Returns: string
       }
+      get_tree_relationships: {
+        Args: { p_tree_id: string }
+        Returns: {
+          birth_order: number | null
+          child_id: string
+          created_at: string
+          id: string
+          parent_id: string
+          relationship_type: string | null
+          union_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "family_parent_child"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_tree_unions: {
+        Args: { p_tree_id: string }
+        Returns: {
+          created_at: string
+          end_date: string | null
+          end_reason: string | null
+          id: string
+          is_current: boolean | null
+          notes: string | null
+          person1_id: string
+          person2_id: string
+          start_date: string | null
+          start_place: string | null
+          union_type: string | null
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "family_unions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_user_email: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {

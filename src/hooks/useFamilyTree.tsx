@@ -129,66 +129,61 @@ export function useFamilyTree() {
   }> => {
     setLoading(true);
     try {
-      // Step 1: Load tree + persons
-      const [treeResult, personsResult] = await Promise.all([
-        supabase.from('family_trees').select('*').eq('id', treeId).single(),
-        supabase.from('family_persons').select('*').eq('tree_id', treeId),
-      ]);
+      // Helper to fetch all rows with pagination (PostgREST default limit is 1000)
+      async function fetchAllRows<T>(
+        queryFn: (from: number, to: number) => Promise<{ data: T[] | null; error: any }>
+      ): Promise<T[]> {
+        const PAGE_SIZE = 1000;
+        const allRows: T[] = [];
+        let from = 0;
+        let hasMore = true;
+        while (hasMore) {
+          const { data, error } = await queryFn(from, from + PAGE_SIZE - 1);
+          if (error) throw error;
+          const rows = data || [];
+          allRows.push(...rows);
+          hasMore = rows.length === PAGE_SIZE;
+          from += PAGE_SIZE;
+        }
+        return allRows;
+      }
 
+      // Step 1: Load tree + all persons (paginated)
+      const treeResult = await supabase.from('family_trees').select('*').eq('id', treeId).single();
       if (treeResult.error) throw treeResult.error;
 
-      const personIds = (personsResult.data || []).map(p => p.id);
+      const allPersons = await fetchAllRows<FamilyPerson>((from, to) =>
+        supabase.from('family_persons').select('*').eq('tree_id', treeId).range(from, to) as any
+      );
 
-      // Step 2: Load relationships and unions filtered by person IDs
+      const personIds = allPersons.map(p => p.id);
+
+      // Step 2: Load relationships and unions via RPC (paginated)
       let filteredRelationships: ParentChildRelationship[] = [];
       let filteredUnions: FamilyUnion[] = [];
 
       if (personIds.length > 0) {
-        const CHUNK_SIZE = 40;
-        const chunks: string[][] = [];
-        for (let i = 0; i < personIds.length; i += CHUNK_SIZE) {
-          chunks.push(personIds.slice(i, i + CHUNK_SIZE));
-        }
-
-        const [relResults, unionResults] = await Promise.all([
-          Promise.all(chunks.map(chunk => {
-            const idList = chunk.join(',');
-            return supabase.from('family_parent_child').select('*')
-              .or(`parent_id.in.(${idList}),child_id.in.(${idList})`);
-          })),
-          Promise.all(chunks.map(chunk => {
-            const idList = chunk.join(',');
-            return supabase.from('family_unions').select('*')
-              .or(`person1_id.in.(${idList}),person2_id.in.(${idList})`);
-          })),
+        const personIdSet = new Set(personIds);
+        const [allRels, allUnions] = await Promise.all([
+          fetchAllRows<ParentChildRelationship>((from, to) =>
+            supabase.rpc('get_tree_relationships', { p_tree_id: treeId }).range(from, to) as any
+          ),
+          fetchAllRows<FamilyUnion>((from, to) =>
+            supabase.rpc('get_tree_unions', { p_tree_id: treeId }).range(from, to) as any
+          ),
         ]);
 
-        const personIdSet = new Set(personIds);
-        const relSeen = new Set<string>();
-        const unionSeen = new Set<string>();
-
-        for (const result of relResults) {
-          for (const r of (result.data || []) as ParentChildRelationship[]) {
-            if (!relSeen.has(r.id) && personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)) {
-              relSeen.add(r.id);
-              filteredRelationships.push(r);
-            }
-          }
-        }
-
-        for (const result of unionResults) {
-          for (const u of (result.data || []) as FamilyUnion[]) {
-            if (!unionSeen.has(u.id) && personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)) {
-              unionSeen.add(u.id);
-              filteredUnions.push(u);
-            }
-          }
-        }
+        filteredRelationships = allRels.filter(
+          r => personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)
+        );
+        filteredUnions = allUnions.filter(
+          u => personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)
+        );
       }
 
       return {
         tree: treeResult.data as FamilyTree,
-        persons: (personsResult.data || []) as FamilyPerson[],
+        persons: allPersons as FamilyPerson[],
         relationships: filteredRelationships,
         unions: filteredUnions
       };
