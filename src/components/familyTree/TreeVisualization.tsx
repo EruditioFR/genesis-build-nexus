@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import { Home } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
