@@ -180,6 +180,9 @@ export default function FamilyTreePage() {
             setPersons(data.persons);
             setRelationships(data.relationships);
             setUnions(data.unions);
+            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+              setViewMode('ascendant');
+            }
           } else {
             const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
             if (newTree) {
