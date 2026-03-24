@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import { supabase } from '@/integrations/supabase/client';
 import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
+import NoIndex from '@/components/seo/NoIndex';
 
 interface CategoryWithCount extends Category {
   capsuleCount: number;
