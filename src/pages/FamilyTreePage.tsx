@@ -384,6 +384,24 @@ export default function FamilyTreePage() {
     setShowGedcomImport(false);
   };
 
+  const handleSetAsRoot = useCallback(async (personId: string) => {
+    if (!tree?.id) return;
+    try {
+      const { error } = await supabase
+        .from('family_trees')
+        .update({ root_person_id: personId })
+        .eq('id', tree.id);
+      if (error) throw error;
+      setTree(prev => prev ? { ...prev, root_person_id: personId } : prev);
+      setExpandedNodeIds(new Set());
+      toast.success(t('detail.rootUpdated', 'Personne racine mise à jour'));
+      centerOnPerson(personId);
+    } catch (error) {
+      console.error('Error setting root person:', error);
+      toast.error(t('detail.rootUpdateError', 'Erreur lors de la mise à jour'));
+    }
+  }, [tree?.id, t, centerOnPerson]);
+
   const handleMergePerson = (person: FamilyPerson) => {
     setMergeSourcePerson(person);
     setShowMergeDialog(true);
