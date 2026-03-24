@@ -783,16 +783,32 @@ export function useFamilyTree() {
         return { persons: [], relationships: [], unions: [] };
       }
 
-      // Fetch relationships and unions for this tree, then filter to branch
+      // Fetch relationships and unions for this tree with pagination, then filter to branch
+      const PAGE_SIZE = 1000;
+      async function fetchAllRowsRpc<T>(
+        rpcFn: (from: number, to: number) => Promise<{ data: T[] | null; error: any }>
+      ): Promise<T[]> {
+        const allRows: T[] = [];
+        let from = 0;
+        let hasMore = true;
+        while (hasMore) {
+          const { data, error } = await rpcFn(from, from + PAGE_SIZE - 1);
+          if (error) throw error;
+          const rows = data || [];
+          allRows.push(...rows);
+          hasMore = rows.length === PAGE_SIZE;
+          from += PAGE_SIZE;
+        }
+        return allRows;
+      }
+
       const [allRels, allUnions] = await Promise.all([
-        supabase.rpc('get_tree_relationships', { p_tree_id: treeId }).then(r => {
-          if (r.error) throw r.error;
-          return (r.data || []) as ParentChildRelationship[];
-        }),
-        supabase.rpc('get_tree_unions', { p_tree_id: treeId }).then(r => {
-          if (r.error) throw r.error;
-          return (r.data || []) as FamilyUnion[];
-        }),
+        fetchAllRowsRpc<ParentChildRelationship>((from, to) =>
+          supabase.rpc('get_tree_relationships', { p_tree_id: treeId }).range(from, to) as any
+        ),
+        fetchAllRowsRpc<FamilyUnion>((from, to) =>
+          supabase.rpc('get_tree_unions', { p_tree_id: treeId }).range(from, to) as any
+        ),
       ]);
 
       const relationships = allRels.filter(
