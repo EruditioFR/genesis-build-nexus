@@ -38,6 +38,7 @@ import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
