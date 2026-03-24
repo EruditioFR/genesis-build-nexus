@@ -129,31 +129,54 @@ export function useFamilyTree() {
   }> => {
     setLoading(true);
     try {
-      // Step 1: Load tree + persons
-      const [treeResult, personsResult] = await Promise.all([
-        supabase.from('family_trees').select('*').eq('id', treeId).single(),
-        supabase.from('family_persons').select('*').eq('tree_id', treeId),
-      ]);
+      // Helper to fetch all rows with pagination (PostgREST default limit is 1000)
+      async function fetchAllRows<T>(
+        queryFn: (from: number, to: number) => Promise<{ data: T[] | null; error: any }>
+      ): Promise<T[]> {
+        const PAGE_SIZE = 1000;
+        const allRows: T[] = [];
+        let from = 0;
+        let hasMore = true;
+        while (hasMore) {
+          const { data, error } = await queryFn(from, from + PAGE_SIZE - 1);
+          if (error) throw error;
+          const rows = data || [];
+          allRows.push(...rows);
+          hasMore = rows.length === PAGE_SIZE;
+          from += PAGE_SIZE;
+        }
+        return allRows;
+      }
 
+      // Step 1: Load tree + all persons (paginated)
+      const treeResult = await supabase.from('family_trees').select('*').eq('id', treeId).single();
       if (treeResult.error) throw treeResult.error;
 
-      const personIds = (personsResult.data || []).map(p => p.id);
+      const allPersons = await fetchAllRows<FamilyPerson>((from, to) =>
+        supabase.from('family_persons').select('*').eq('tree_id', treeId).range(from, to) as any
+      );
 
-      // Step 2: Load relationships and unions via RPC (handles large trees efficiently)
+      const personIds = allPersons.map(p => p.id);
+
+      // Step 2: Load relationships and unions via RPC (paginated)
       let filteredRelationships: ParentChildRelationship[] = [];
       let filteredUnions: FamilyUnion[] = [];
 
       if (personIds.length > 0) {
         const personIdSet = new Set(personIds);
-        const [relationshipsResult, unionsResult] = await Promise.all([
-          supabase.rpc('get_tree_relationships', { p_tree_id: treeId }),
-          supabase.rpc('get_tree_unions', { p_tree_id: treeId }),
+        const [allRels, allUnions] = await Promise.all([
+          fetchAllRows<ParentChildRelationship>((from, to) =>
+            supabase.rpc('get_tree_relationships', { p_tree_id: treeId }).range(from, to) as any
+          ),
+          fetchAllRows<FamilyUnion>((from, to) =>
+            supabase.rpc('get_tree_unions', { p_tree_id: treeId }).range(from, to) as any
+          ),
         ]);
 
-        filteredRelationships = ((relationshipsResult.data || []) as ParentChildRelationship[]).filter(
+        filteredRelationships = allRels.filter(
           r => personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)
         );
-        filteredUnions = ((unionsResult.data || []) as FamilyUnion[]).filter(
+        filteredUnions = allUnions.filter(
           u => personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)
         );
       }
