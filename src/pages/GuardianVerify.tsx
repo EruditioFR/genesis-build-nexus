@@ -26,6 +26,15 @@ const GuardianVerify = () => {
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Prevent indexing
+  useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'robots';
+    meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+    return () => { document.head.removeChild(meta); };
+  }, []);
+
   useEffect(() => {
     const fetchGuardian = async () => {
       if (!token) {
