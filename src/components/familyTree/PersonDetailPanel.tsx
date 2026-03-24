@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { 
@@ -22,7 +23,8 @@ import {
   Pencil,
   GitMerge,
   Focus,
-  Users
+  Users,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
@@ -85,6 +87,7 @@ interface PersonDetailPanelProps {
   onLinkPerson?: () => void;
   onMergePerson?: () => void;
   onCenterOnPerson?: () => void;
+  onSetAsRoot?: () => void;
   onDelete?: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
@@ -106,11 +109,13 @@ export function PersonDetailPanel({
   onLinkPerson,
   onMergePerson,
   onCenterOnPerson,
+  onSetAsRoot,
   onDelete,
   onPersonClick,
   onUpdate,
   readOnly = false,
 }: PersonDetailPanelProps) {
+  const { t } = useTranslation('familyTree');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -535,6 +540,16 @@ export function PersonDetailPanel({
                   title="Centrer l'arbre sur cette personne"
                 >
                   <Focus className="w-3 h-3" />
+                </Button>
+              )}
+              {onSetAsRoot && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={onSetAsRoot}
+                  title={t('detail.setAsRoot', 'Définir comme personne racine')}
+                >
+                  <Home className="w-3 h-3" />
                 </Button>
               )}
               {onDelete && (

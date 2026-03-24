@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Plus, 
   Home, 
@@ -384,6 +385,24 @@ export default function FamilyTreePage() {
     setShowGedcomImport(false);
   };
 
+  const handleSetAsRoot = useCallback(async (personId: string) => {
+    if (!tree?.id) return;
+    try {
+      const { error } = await supabase
+        .from('family_trees')
+        .update({ root_person_id: personId })
+        .eq('id', tree.id);
+      if (error) throw error;
+      setTree(prev => prev ? { ...prev, root_person_id: personId } : prev);
+      setExpandedNodeIds(new Set());
+      toast.success(t('detail.rootUpdated', 'Personne racine mise à jour'));
+      centerOnPerson(personId);
+    } catch (error) {
+      console.error('Error setting root person:', error);
+      toast.error(t('detail.rootUpdateError', 'Erreur lors de la mise à jour'));
+    }
+  }, [tree?.id, t, centerOnPerson]);
+
   const handleMergePerson = (person: FamilyPerson) => {
     setMergeSourcePerson(person);
     setShowMergeDialog(true);
@@ -520,6 +539,7 @@ export default function FamilyTreePage() {
             onLinkPerson={isAdminViewing ? undefined : () => handleLinkPerson(selectedPerson)}
             onMergePerson={isAdminViewing ? undefined : () => handleMergePerson(selectedPerson)}
             onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
+            onSetAsRoot={isAdminViewing ? undefined : () => handleSetAsRoot(selectedPerson.id)}
             onDelete={isAdminViewing ? undefined : () => handleDeletePerson(selectedPerson.id)}
             onUpdate={isAdminViewing ? () => {} : loadTree}
             onPersonClick={handleSearchSelect}
