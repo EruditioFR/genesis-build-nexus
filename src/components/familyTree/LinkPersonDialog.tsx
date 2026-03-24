@@ -133,12 +133,12 @@ export function LinkPersonDialog({
                       selectedPerson?.id === person.id && "bg-secondary/10 border border-secondary"
                     )}
                   >
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage src={person.profile_photo_url || undefined} />
-                      <AvatarFallback className="text-sm">
-                        {person.first_names[0]}{person.last_name[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                    <FamilyAvatar
+                      photoUrl={person.profile_photo_url}
+                      fallback={`${person.first_names[0]}${person.last_name[0]}`}
+                      className="w-10 h-10"
+                      fallbackClassName="text-sm"
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">
                         {person.first_names} {person.last_name}
