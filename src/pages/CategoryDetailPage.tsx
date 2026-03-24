@@ -407,6 +407,7 @@ const CategoryDetailPage = () => {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </>
   );
 };
 

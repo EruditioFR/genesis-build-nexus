@@ -422,6 +422,7 @@ const GuardianDashboard = () => {
         <MobileBottomNav />
       </div>
     </div>
+    </>
   );
 };
 

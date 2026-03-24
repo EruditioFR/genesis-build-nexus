@@ -271,6 +271,7 @@ const CategoriesPage = () => {
         )}
       </div>
     </AuthenticatedLayout>
+    </>
   );
 };
 
