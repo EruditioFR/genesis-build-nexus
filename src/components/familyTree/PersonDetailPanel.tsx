@@ -489,64 +489,81 @@ export function PersonDetailPanel({
       </div>
 
       {/* Action buttons */}
-      <div className="p-4 border-b flex gap-2">
-        {isEditing ? (
-          <>
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="flex-1 gap-1"
-              onClick={handleSave}
-              disabled={isSaving}
-            >
-              {isSaving ? (
-                <Loader2 className="w-3 h-3 animate-spin" />
-              ) : (
-                <Check className="w-3 h-3" />
-              )}
-              Enregistrer
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleCancelEdit}
-              disabled={isSaving}
-            >
-              <XCircle className="w-3 h-3" />
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex-1 gap-1"
-              onClick={handleStartEdit}
-            >
-              <Edit className="w-3 h-3" />
-              Modifier
-            </Button>
-            {onCenterOnPerson && (
+      {!readOnly && (
+        <div className="p-4 border-b flex gap-2">
+          {isEditing ? (
+            <>
+              <Button 
+                variant="default" 
+                size="sm" 
+                className="flex-1 gap-1"
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Check className="w-3 h-3" />
+                )}
+                Enregistrer
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={onCenterOnPerson}
-                title="Centrer l'arbre sur cette personne"
+                onClick={handleCancelEdit}
+                disabled={isSaving}
               >
-                <Focus className="w-3 h-3" />
+                <XCircle className="w-3 h-3" />
               </Button>
-            )}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-destructive hover:bg-destructive/10"
-              onClick={() => setShowDeleteDialog(true)}
-            >
-              <Trash2 className="w-3 h-3" />
-            </Button>
-          </>
-        )}
-      </div>
+            </>
+          ) : (
+            <>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 gap-1"
+                onClick={handleStartEdit}
+              >
+                <Edit className="w-3 h-3" />
+                Modifier
+              </Button>
+              {onCenterOnPerson && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={onCenterOnPerson}
+                  title="Centrer l'arbre sur cette personne"
+                >
+                  <Focus className="w-3 h-3" />
+                </Button>
+              )}
+              {onDelete && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-destructive hover:bg-destructive/10"
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+      )}
+      {readOnly && onCenterOnPerson && (
+        <div className="p-4 border-b flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={onCenterOnPerson}
+            title="Centrer l'arbre sur cette personne"
+          >
+            <Focus className="w-3 h-3 mr-1" />
+            Centrer
+          </Button>
+        </div>
+      )}
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
