@@ -193,7 +193,12 @@ export default function FamilyTreePage() {
         if (isAdminViewing && viewTreeId) {
           const data = await fetchTree(viewTreeId);
           setTree(data.tree);
-          setTotalPersonsCount(data.persons.length);
+          // Fetch real total count from DB
+          const { count: realCount } = await supabase
+            .from('family_persons')
+            .select('*', { count: 'exact', head: true })
+            .eq('tree_id', viewTreeId);
+          setTotalPersonsCount(realCount || data.persons.length);
           if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
             // Large tree: load only nearby branch
             const branch = await fetchBranch(viewTreeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
