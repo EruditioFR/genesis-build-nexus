@@ -112,7 +112,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
 
     try {
       // Delete from storage
-      const oldPath = person.profile_photo_url.split('/family-photos/')[1];
+      const oldPath = getRelativePath(person.profile_photo_url);
       if (oldPath) {
         await supabase.storage.from('family-photos').remove([oldPath]);
       }
