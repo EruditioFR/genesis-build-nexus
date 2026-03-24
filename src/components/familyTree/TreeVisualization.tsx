@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useEffect, useRef } from 'react';
+import { memo as reactMemo, useMemo, useCallback, useEffect, useRef } from 'react';
 import {
   ReactFlow,
   Node,
@@ -581,7 +581,7 @@ function getGenerationLabel(diff: number): string {
 }
 
 // Invisible junction node for union midpoints
-const UnionJunctionNode = memo(() => (
+const UnionJunctionNode = reactMemo(() => (
   <div style={{ width: 2, height: 2 }}>
     <Handle type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
   </div>
