@@ -130,15 +130,22 @@ function buildFamilyGraph(
   };
 }
 
-// ─── Unified layout engine ──────────────────────────────────────────────────
+// ─── Lineage-based layout engine (genealogical standard) ────────────────────
 //
-// Follows genealogical conventions:
-// 1. BFS from root assigns generations (spouse = same, parent = gen-1, child = gen+1)
-// 2. Filter by view mode (descendant/ascendant/hourglass)
-// 3. Identify root ancestors (persons with no parents in active set)
-// 4. Top-down recursive layout: each person + spouse(s) form a unit;
-//    children are centered below their parents' union point.
-// 5. Post-processing adds connections for converging branches.
+// Each bloodline forms an independent vertical column. Spouses with ancestry
+// get their own column. Cross-lineage marriages are shown as horizontal lines.
+//
+// Algorithm:
+// 1. BFS from root through parent-child links only → main lineage
+// 2. Spouses with parents → separate lineages (recursively)
+// 3. Spouses without parents → same lineage as partner
+// 4. Layout each lineage as an independent subtree column
+// 5. Post-processing: cross-lineage marriage + parent-child connections
+
+interface Lineage {
+  members: Set<string>;
+  rootAncestorId: string;
+}
 
 function layoutUnified(
   rootId: string,
@@ -150,25 +157,78 @@ function layoutUnified(
 ): { positions: Map<string, LayoutNode>; connections: Connection[]; rootGeneration: number } {
   const positions = new Map<string, LayoutNode>();
   const connections: Connection[] = [];
-  const placed = new Set<string>();
 
-  // ── Step 1: BFS generation assignment ────────────────────────────────────
+  // ── Phase 1: Build lineages by blood connection ─────────────────────────
   const genOf = new Map<string, number>();
-  {
-    const q: { id: string; gen: number }[] = [{ id: rootId, gen: 0 }];
-    const v = new Set<string>();
-    while (q.length > 0) {
-      const { id, gen } = q.shift()!;
-      if (v.has(id)) continue;
-      v.add(id);
+  const lineageOf = new Map<string, number>();
+  const lineages: Lineage[] = [];
+
+  /** BFS through parent-child links only. Returns lineage info. */
+  function buildLineageFrom(startId: string, startGen: number, lineageIdx: number): Lineage {
+    const members = new Set<string>();
+    const queue: { id: string; gen: number }[] = [{ id: startId, gen: startGen }];
+
+    while (queue.length > 0) {
+      const { id, gen } = queue.shift()!;
+      if (genOf.has(id)) continue;
       genOf.set(id, gen);
-      for (const s of graph.getSpouseIds(id)) if (!v.has(s)) q.push({ id: s, gen });
-      for (const p of graph.getParentIds(id)) if (!v.has(p)) q.push({ id: p, gen: gen - 1 });
-      for (const c of graph.getChildIds(id)) if (!v.has(c)) q.push({ id: c, gen: gen + 1 });
+      members.add(id);
+      lineageOf.set(id, lineageIdx);
+
+      for (const pid of graph.getParentIds(id)) {
+        if (!genOf.has(pid)) queue.push({ id: pid, gen: gen - 1 });
+      }
+      for (const cid of graph.getChildIds(id)) {
+        if (!genOf.has(cid)) queue.push({ id: cid, gen: gen + 1 });
+      }
+    }
+
+    // Find topmost ancestor without parents in this lineage
+    let rootAncId = startId;
+    let minGenVal = Infinity;
+    for (const mid of members) {
+      const g = genOf.get(mid)!;
+      if (g < minGenVal) {
+        const parentsInLineage = graph.getParentIds(mid).filter(p => members.has(p));
+        if (parentsInLineage.length === 0) {
+          rootAncId = mid;
+          minGenVal = g;
+        }
+      }
+    }
+
+    return { members, rootAncestorId: rootAncId };
+  }
+
+  // Main lineage from root
+  lineages.push(buildLineageFrom(rootId, 0, 0));
+
+  // Iteratively discover spouse lineages
+  let discoveryChanged = true;
+  while (discoveryChanged) {
+    discoveryChanged = false;
+    for (const lineage of lineages) {
+      for (const memberId of lineage.members) {
+        for (const spouseId of graph.getSpouseIds(memberId)) {
+          if (genOf.has(spouseId)) continue;
+          const spouseParents = graph.getParentIds(spouseId);
+          if (spouseParents.length > 0) {
+            // Spouse has ancestry → separate lineage, anchored at partner's generation
+            const newIdx = lineages.length;
+            lineages.push(buildLineageFrom(spouseId, genOf.get(memberId)!, newIdx));
+            discoveryChanged = true;
+          } else {
+            // Orphan spouse → place in partner's lineage
+            genOf.set(spouseId, genOf.get(memberId)!);
+            lineage.members.add(spouseId);
+            lineageOf.set(spouseId, lineages.indexOf(lineage));
+          }
+        }
+      }
     }
   }
 
-  // ── Step 2: Filter by view mode ──────────────────────────────────────────
+  // ── Phase 2: Filter by view mode ────────────────────────────────────────
   const rootGen = genOf.get(rootId) ?? 0;
   const activeIds = new Set<string>();
   for (const [id, gen] of genOf) {
@@ -177,90 +237,77 @@ function layoutUnified(
     activeIds.add(id);
   }
 
-  // Normalize so minimum active generation = 0
   let minGen = Infinity;
   for (const id of activeIds) minGen = Math.min(minGen, genOf.get(id)!);
   if (!isFinite(minGen)) minGen = 0;
   const normGen = (id: string) => (genOf.get(id) ?? 0) - minGen;
   const normalizedRootGen = rootGen - minGen;
 
-  // ── Step 3: Recursive subtree measurement + placement ────────────────────
+  // ── Phase 3: Layout each lineage as independent column ──────────────────
+  const placed = new Set<string>();
 
-  /** Return spouse IDs on the same generation that haven't been placed yet */
-  function getActiveSpouses(id: string): string[] {
-    return graph.getSpouseIds(id).filter(s => activeIds.has(s) && !placed.has(s));
+  function getSpousesInLineage(id: string, li: number): string[] {
+    return graph.getSpouseIds(id).filter(
+      s => activeIds.has(s) && !placed.has(s) && lineageOf.get(s) === li
+    );
   }
 
-  /** Return children of a family unit (person + spouses) that haven't been placed */
-  function getUnitChildren(personId: string, spouseIds: string[]): string[] {
+  function getChildrenInLineage(personId: string, spouseIds: string[], li: number): string[] {
     const all = new Set<string>();
     for (const cid of graph.getChildIds(personId))
-      if (activeIds.has(cid) && !placed.has(cid)) all.add(cid);
+      if (activeIds.has(cid) && !placed.has(cid) && lineageOf.get(cid) === li) all.add(cid);
     for (const sid of spouseIds)
       for (const cid of graph.getChildIds(sid))
-        if (activeIds.has(cid) && !placed.has(cid)) all.add(cid);
+        if (activeIds.has(cid) && !placed.has(cid) && lineageOf.get(cid) === li) all.add(cid);
     return [...all];
   }
 
-  /** Measure the width needed for a subtree rooted at personId */
-  function measureSubtree(personId: string, tempPlaced: Set<string>): number {
+  function measureInLineage(personId: string, li: number, tempPlaced: Set<string>): number {
     if (tempPlaced.has(personId)) return 0;
     tempPlaced.add(personId);
 
-    const spouseIds = graph.getSpouseIds(personId).filter(
-      s => activeIds.has(s) && !tempPlaced.has(s)
-    );
+    const spouseIds = getSpousesInLineage(personId, li).filter(s => !tempPlaced.has(s));
     spouseIds.forEach(s => tempPlaced.add(s));
 
     const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
 
-    // Collect children
-    const childIds: string[] = [];
-    const allC = new Set<string>();
-    for (const cid of graph.getChildIds(personId))
-      if (activeIds.has(cid) && !tempPlaced.has(cid)) allC.add(cid);
-    for (const sid of spouseIds)
-      for (const cid of graph.getChildIds(sid))
-        if (activeIds.has(cid) && !tempPlaced.has(cid)) allC.add(cid);
-    childIds.push(...allC);
-
+    const childIds = getChildrenInLineage(personId, spouseIds, li);
     let childrenWidth = 0;
-    for (const cid of childIds) childrenWidth += measureSubtree(cid, tempPlaced);
+    for (const cid of childIds) childrenWidth += measureInLineage(cid, li, tempPlaced);
     if (childIds.length > 1) childrenWidth += (childIds.length - 1) * H_GAP;
 
     return Math.max(unitWidth, childrenWidth);
   }
 
-  /** Place a subtree starting at personId at horizontal offset x. Returns total width used. */
-  function placeSubtree(personId: string, x: number): number {
+  function placeInLineage(personId: string, li: number, x: number): number {
     if (placed.has(personId)) return 0;
     placed.add(personId);
 
     const gen = normGen(personId);
-    const spouseIds = getActiveSpouses(personId);
+    const y = gen * (CARD_HEIGHT + V_GAP);
+    const spouseIds = getSpousesInLineage(personId, li);
     spouseIds.forEach(s => placed.add(s));
 
-    const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
-    const childIds = getUnitChildren(personId, spouseIds);
+    const childIds = getChildrenInLineage(personId, spouseIds, li);
 
-    // Measure children to determine total width
+    // Measure children
     const childWidths: number[] = [];
     let childrenWidth = 0;
     for (const cid of childIds) {
-      const w = measureSubtree(cid, new Set(placed));
+      const w = measureInLineage(cid, li, new Set(placed));
       childWidths.push(w);
       childrenWidth += w;
     }
     if (childIds.length > 1) childrenWidth += (childIds.length - 1) * H_GAP;
 
+    const unitWidth = CARD_WIDTH + spouseIds.length * (CARD_WIDTH + SPOUSE_GAP);
     const totalWidth = Math.max(unitWidth, childrenWidth);
     const unitX = x + (totalWidth - unitWidth) / 2;
-    const y = gen * (CARD_HEIGHT + V_GAP);
 
-    // Place main person
+    // Place person
     positions.set(personId, { personId, x: unitX, y, generation: gen });
 
-    // Place spouses adjacent
+    // Place same-lineage spouses adjacent
     let sx = unitX + CARD_WIDTH + SPOUSE_GAP;
     for (const sid of spouseIds) {
       positions.set(sid, { personId: sid, x: sx, y, generation: gen });
@@ -274,7 +321,7 @@ function layoutUnified(
       sx += CARD_WIDTH + SPOUSE_GAP;
     }
 
-    // Union center point (midpoint between person and first spouse, or person center)
+    // Union center for child connections
     let unionCenterX: number;
     if (spouseIds.length > 0) {
       const spPos = positions.get(spouseIds[0])!;
@@ -283,12 +330,12 @@ function layoutUnified(
       unionCenterX = unitX + CARD_WIDTH / 2;
     }
 
-    // Place children centered below the union
+    // Place children
     if (childIds.length > 0) {
       const childStartX = x + (totalWidth - childrenWidth) / 2;
       let cx = childStartX;
       for (let i = 0; i < childIds.length; i++) {
-        placeSubtree(childIds[i], cx);
+        placeInLineage(childIds[i], li, cx);
         const childPos = positions.get(childIds[i]);
         if (childPos) {
           connections.push({
@@ -306,67 +353,67 @@ function layoutUnified(
     return totalWidth;
   }
 
-  // ── Step 4: Find root ancestors and lay them out ─────────────────────────
-  // Root ancestors = persons with no parents in the active set
-  // Process the branch containing rootId first for better positioning
+  // ── Order lineages: main first, then by marriage proximity ──────────────
+  const lineageOrder: number[] = [0];
+  const orderedSet = new Set([0]);
+  const lineageQueue = [0];
 
-  const rootAncestors: string[] = [];
-  const raVisited = new Set<string>();
-
-  // Sort active persons by generation (topmost first)
-  const sortedActive = [...activeIds].sort((a, b) => normGen(a) - normGen(b));
-
-  for (const id of sortedActive) {
-    if (raVisited.has(id)) continue;
-    const parents = graph.getParentIds(id).filter(p => activeIds.has(p));
-    if (parents.length === 0) {
-      raVisited.add(id);
-      for (const sid of graph.getSpouseIds(id)) raVisited.add(sid);
-      rootAncestors.push(id);
+  while (lineageQueue.length > 0) {
+    const li = lineageQueue.shift()!;
+    const lineage = lineages[li];
+    if (!lineage) continue;
+    for (const memberId of lineage.members) {
+      for (const spouseId of graph.getSpouseIds(memberId)) {
+        const spLi = lineageOf.get(spouseId);
+        if (spLi !== undefined && !orderedSet.has(spLi)) {
+          lineageOrder.push(spLi);
+          orderedSet.add(spLi);
+          lineageQueue.push(spLi);
+        }
+      }
     }
   }
-
-  if (rootAncestors.length === 0) rootAncestors.push(rootId);
-
-  // Put the ancestor belonging to root's branch first
-  const rootComponent = new Set<string>();
-  {
-    // BFS up from rootId to find which root ancestor is in the main branch
-    let cur = rootId;
-    const seen = new Set<string>();
-    while (true) {
-      if (seen.has(cur)) break;
-      seen.add(cur);
-      rootComponent.add(cur);
-      const parents = graph.getParentIds(cur).filter(p => activeIds.has(p));
-      if (parents.length === 0) break;
-      cur = parents[0];
-    }
+  for (let i = 0; i < lineages.length; i++) {
+    if (!orderedSet.has(i)) lineageOrder.push(i);
   }
-  rootAncestors.sort((a, b) => {
-    const aMain = rootComponent.has(a) ? 0 : 1;
-    const bMain = rootComponent.has(b) ? 0 : 1;
-    return aMain - bMain;
-  });
 
-  // Layout each root ancestor's subtree
+  // ── Layout each lineage column ─────────────────────────────────────────
   let currentX = 0;
-  for (const ra of rootAncestors) {
-    if (placed.has(ra)) continue;
-    const w = placeSubtree(ra, currentX);
+  for (const li of lineageOrder) {
+    const lineage = lineages[li];
+    if (!lineage) continue;
+
+    // Find active root ancestor for this lineage
+    let rootAncId = lineage.rootAncestorId;
+    if (!activeIds.has(rootAncId)) {
+      let topGen = Infinity;
+      for (const mid of lineage.members) {
+        if (activeIds.has(mid) && normGen(mid) < topGen) {
+          const parents = graph.getParentIds(mid).filter(p => activeIds.has(p) && lineage.members.has(p));
+          if (parents.length === 0) {
+            rootAncId = mid;
+            topGen = normGen(mid);
+          }
+        }
+      }
+    }
+
+    if (placed.has(rootAncId)) continue;
+
+    const w = placeInLineage(rootAncId, li, currentX);
     if (w > 0) currentX += w + COMPONENT_GAP;
   }
 
-  // ── Step 5: Post-processing ──────────────────────────────────────────────
-  // Add missing spouse connections (for unions where both persons were placed
-  // via different branches)
-  const existingSpouseConns = new Set(
+  // ── Phase 4: Cross-lineage connections ──────────────────────────────────
+
+  // Cross-lineage spouse connections
+  const existingSpouseKeys = new Set(
     connections.filter(c => c.type === 'spouse')
       .map(c => [c.fromPersonId, c.toPersonId].sort().join('|'))
   );
   for (const u of unions) {
     const key = [u.person1_id, u.person2_id].sort().join('|');
-    if (existingSpouseConns.has(key)) continue;
+    if (existingSpouseKeys.has(key)) continue;
     const pos1 = positions.get(u.person1_id);
     const pos2 = positions.get(u.person2_id);
     if (!pos1 || !pos2) continue;
@@ -383,15 +430,14 @@ function layoutUnified(
     });
   }
 
-  // Add missing parent-child connections (converging branches)
-  const existingPCConns = new Set(
+  // Cross-lineage parent-child connections
+  const existingPCKeys = new Set(
     connections.filter(c => c.type === 'parent-child')
       .map(c => `${c.fromPersonId}→${c.toPersonId}`)
   );
   for (const r of relationships) {
     if (!activeIds.has(r.parent_id) || !activeIds.has(r.child_id)) continue;
-    const key = `${r.parent_id}→${r.child_id}`;
-    if (existingPCConns.has(key)) continue;
+    if (existingPCKeys.has(`${r.parent_id}→${r.child_id}`)) continue;
     const parentPos = positions.get(r.parent_id);
     const childPos = positions.get(r.child_id);
     if (!parentPos || !childPos) continue;
@@ -404,7 +450,6 @@ function layoutUnified(
     });
   }
 
-  // Resolve overlaps
   resolveOverlaps(positions);
 
   return { positions, connections, rootGeneration: normalizedRootGen };
