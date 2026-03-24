@@ -1,6 +1,6 @@
 import { User, UserPlus, Heart, Baby, MoreVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Badge } from '@/components/ui/badge';
 import {
   ContextMenu,
@@ -70,12 +70,7 @@ export function PersonCard({
           )}
         >
           {/* Avatar */}
-          <Avatar className={cn("border-2", genderColor, compact ? "w-12 h-12" : "w-16 h-16")}>
-            <AvatarImage src={person.profile_photo_url || undefined} alt={person.first_names} />
-            <AvatarFallback className="bg-muted text-muted-foreground font-medium">
-              {initials || <User className="w-6 h-6" />}
-            </AvatarFallback>
-          </Avatar>
+          <FamilyAvatar photoUrl={person.profile_photo_url} fallback={initials || '?'} className={cn("border-2", genderColor, compact ? "w-12 h-12" : "w-16 h-16")} fallbackClassName="bg-muted text-muted-foreground font-medium" />
 
           {/* Name */}
           <div className="mt-3 text-center">

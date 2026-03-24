@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { FamilyPerson } from '@/types/familyTree';
 
@@ -172,10 +172,7 @@ export function MergePersonsDialog({
               <Label>{t('merge.keepPerson')}</Label>
               {keepPerson ? (
                 <div className="flex items-center gap-3 p-3 bg-secondary/10 border border-secondary/20 rounded-lg">
-                  <Avatar>
-                    <AvatarImage src={keepPerson.profile_photo_url || undefined} />
-                    <AvatarFallback>{getInitials(keepPerson)}</AvatarFallback>
-                  </Avatar>
+                  <FamilyAvatar photoUrl={keepPerson.profile_photo_url} fallback={getInitials(keepPerson)} />
                   <div className="flex-1">
                     <p className="font-medium">{formatPersonName(keepPerson)}</p>
                     {keepPerson.birth_date && (
@@ -216,10 +213,7 @@ export function MergePersonsDialog({
                           onClick={() => setMergePerson(person)}
                         >
                           <RadioGroupItem value={person.id} id={person.id} />
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={person.profile_photo_url || undefined} />
-                            <AvatarFallback className="text-xs">{getInitials(person)}</AvatarFallback>
-                          </Avatar>
+                          <FamilyAvatar photoUrl={person.profile_photo_url} fallback={getInitials(person)} className="h-8 w-8" fallbackClassName="text-xs" />
                           <div className="flex-1 min-w-0">
                             <p className="font-medium truncate">{formatPersonName(person)}</p>
                             <p className="text-xs text-muted-foreground truncate">
@@ -261,19 +255,13 @@ export function MergePersonsDialog({
             {/* Visual merge preview */}
             <div className="flex items-center justify-center gap-4 py-4">
               <div className="text-center">
-                <Avatar className="h-12 w-12 mx-auto mb-2">
-                  <AvatarImage src={keepPerson.profile_photo_url || undefined} />
-                  <AvatarFallback>{getInitials(keepPerson)}</AvatarFallback>
-                </Avatar>
+                <FamilyAvatar photoUrl={keepPerson.profile_photo_url} fallback={getInitials(keepPerson)} className="h-12 w-12 mx-auto mb-2" />
                 <p className="text-sm font-medium">{formatPersonName(keepPerson)}</p>
                 <Badge variant="secondary" className="mt-1">{t('merge.kept')}</Badge>
               </div>
               <ArrowRight className="w-6 h-6 text-muted-foreground" />
               <div className="text-center opacity-50">
-                <Avatar className="h-12 w-12 mx-auto mb-2">
-                  <AvatarImage src={mergePerson.profile_photo_url || undefined} />
-                  <AvatarFallback>{getInitials(mergePerson)}</AvatarFallback>
-                </Avatar>
+                <FamilyAvatar photoUrl={mergePerson.profile_photo_url} fallback={getInitials(mergePerson)} className="h-12 w-12 mx-auto mb-2" />
                 <p className="text-sm font-medium line-through">{formatPersonName(mergePerson)}</p>
                 <Badge variant="destructive" className="mt-1">{t('merge.deleted')}</Badge>
               </div>

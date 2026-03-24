@@ -25,7 +25,7 @@ import {
   Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -353,12 +353,12 @@ export function PersonDetailPanel({
           onClick={() => onPersonClick(relatedPerson)}
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors flex-1 text-left"
         >
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={relatedPerson.profile_photo_url || undefined} />
-            <AvatarFallback className="text-sm">
-              {`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
-            </AvatarFallback>
-          </Avatar>
+          <FamilyAvatar
+            photoUrl={relatedPerson.profile_photo_url}
+            fallback={`${relatedPerson.first_names[0] || ''}${relatedPerson.last_name[0] || ''}`}
+            className="w-10 h-10"
+            fallbackClassName="text-sm"
+          />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="font-medium text-sm truncate">
@@ -434,12 +434,12 @@ export function PersonDetailPanel({
           {isEditing ? (
             <PersonPhotoUpload person={person} onUpdate={onUpdate} />
           ) : (
-            <Avatar className="w-16 h-16 border-2 border-secondary">
-              <AvatarImage src={person.profile_photo_url || undefined} />
-              <AvatarFallback className="bg-secondary/20 text-secondary text-lg font-medium">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <FamilyAvatar
+              photoUrl={person.profile_photo_url}
+              fallback={initials}
+              className="w-16 h-16 border-2 border-secondary"
+              fallbackClassName="bg-secondary/20 text-secondary text-lg font-medium"
+            />
           )}
           <div>
             {isEditing ? (
@@ -865,12 +865,12 @@ export function PersonDetailPanel({
                                 onClick={() => onPersonClick(child)}
                                 className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
                               >
-                                <Avatar className="w-6 h-6">
-                                  <AvatarImage src={child.profile_photo_url || undefined} />
-                                  <AvatarFallback className="text-[10px]">
-                                    {`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
-                                  </AvatarFallback>
-                                </Avatar>
+                                <FamilyAvatar
+                                  photoUrl={child.profile_photo_url}
+                                  fallback={`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
+                                  className="w-6 h-6"
+                                  fallbackClassName="text-[10px]"
+                                />
                                 <span className="text-xs truncate">
                                   {child.first_names} {child.last_name}
                                 </span>
@@ -896,12 +896,12 @@ export function PersonDetailPanel({
                                 onClick={() => onPersonClick(parent)}
                                 className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
                               >
-                                <Avatar className="w-6 h-6">
-                                  <AvatarImage src={parent.profile_photo_url || undefined} />
-                                  <AvatarFallback className="text-[10px]">
-                                    {`${parent.first_names[0] || ''}${parent.last_name[0] || ''}`}
-                                  </AvatarFallback>
-                                </Avatar>
+                                <FamilyAvatar
+                                  photoUrl={parent.profile_photo_url}
+                                  fallback={`${parent.first_names[0] || ''}${parent.last_name[0] || ''}`}
+                                  className="w-6 h-6"
+                                  fallbackClassName="text-[10px]"
+                                />
                                 <span className="text-xs truncate">
                                   {parent.first_names} {parent.last_name}
                                 </span>
@@ -916,12 +916,12 @@ export function PersonDetailPanel({
                                 onClick={() => onPersonClick(sibling)}
                                 className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
                               >
-                                <Avatar className="w-6 h-6">
-                                  <AvatarImage src={sibling.profile_photo_url || undefined} />
-                                  <AvatarFallback className="text-[10px]">
-                                    {`${sibling.first_names[0] || ''}${sibling.last_name[0] || ''}`}
-                                  </AvatarFallback>
-                                </Avatar>
+                                <FamilyAvatar
+                                  photoUrl={sibling.profile_photo_url}
+                                  fallback={`${sibling.first_names[0] || ''}${sibling.last_name[0] || ''}`}
+                                  className="w-6 h-6"
+                                  fallbackClassName="text-[10px]"
+                                />
                                 <span className="text-xs truncate">
                                   {sibling.first_names} {sibling.last_name}
                                 </span>

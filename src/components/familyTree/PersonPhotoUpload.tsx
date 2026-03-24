@@ -5,7 +5,16 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { useFamilyPhotoUrl } from '@/hooks/useFamilyPhotoUrl';
 import type { FamilyPerson } from '@/types/familyTree';
+
+/** Extract relative storage path from either a full public URL or a relative path */
+const getRelativePath = (photoUrl: string): string => {
+  const marker = '/object/public/family-photos/';
+  const idx = photoUrl.indexOf(marker);
+  if (idx !== -1) return photoUrl.substring(idx + marker.length);
+  return photoUrl;
+};
 
 interface PersonPhotoUploadProps {
   person: FamilyPerson;
@@ -19,6 +28,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
   const { updatePerson } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
+  const photoUrl = useFamilyPhotoUrl(person.profile_photo_url);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -52,7 +62,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
 
       // Delete old photo if exists
       if (person.profile_photo_url) {
-        const oldPath = person.profile_photo_url.split('/family-photos/')[1];
+        const oldPath = getRelativePath(person.profile_photo_url);
         if (oldPath) {
           await supabase.storage.from('family-photos').remove([oldPath]);
         }
@@ -72,14 +82,9 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
         return;
       }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('family-photos')
-        .getPublicUrl(fileName);
-
-      // Update person with new photo URL
+      // Store the relative file path (not public URL since bucket is private)
       const success = await updatePerson(person.id, {
-        profile_photo_url: publicUrl
+        profile_photo_url: fileName
       });
 
       if (success) {
@@ -107,7 +112,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
 
     try {
       // Delete from storage
-      const oldPath = person.profile_photo_url.split('/family-photos/')[1];
+      const oldPath = getRelativePath(person.profile_photo_url);
       if (oldPath) {
         await supabase.storage.from('family-photos').remove([oldPath]);
       }
@@ -149,7 +154,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
         onClick={() => !isUploading && fileInputRef.current?.click()}
       >
         <Avatar className="w-20 h-20 border-2 border-secondary transition-opacity group-hover:opacity-80">
-          <AvatarImage src={person.profile_photo_url || undefined} />
+          <AvatarImage src={photoUrl || undefined} />
           <AvatarFallback className="bg-secondary/20 text-secondary text-xl font-medium">
             {initials}
           </AvatarFallback>

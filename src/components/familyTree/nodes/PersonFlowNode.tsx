@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
 import { Home } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
 
@@ -85,15 +85,13 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
         )}
 
         {/* Avatar */}
-        <Avatar className={cn(
-          "w-14 h-14 border-2 shrink-0",
-          genderBorderColor
-        )}>
-          <AvatarImage src={person.profile_photo_url || undefined} className="object-cover" />
-          <AvatarFallback className={cn("text-sm font-semibold font-tree", genderAvatarBg)}>
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+        <FamilyAvatar
+          photoUrl={person.profile_photo_url}
+          fallback={initials}
+          className={cn("w-14 h-14 border-2 shrink-0", genderBorderColor)}
+          fallbackClassName={cn("text-sm font-semibold font-tree", genderAvatarBg)}
+          imgClassName="object-cover"
+        />
 
         {/* Info */}
         <div className="flex-1 min-w-0 text-left">

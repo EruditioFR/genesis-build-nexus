@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -197,12 +197,7 @@ export function PersonsListSheet({
                       !person.is_alive && "opacity-75"
                     )}
                   >
-                    <Avatar className="w-12 h-12 flex-shrink-0">
-                      <AvatarImage src={person.profile_photo_url || undefined} />
-                      <AvatarFallback className="bg-muted text-muted-foreground">
-                        {person.first_names[0]}{person.last_name[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                    <FamilyAvatar photoUrl={person.profile_photo_url} fallback={`${person.first_names[0]}${person.last_name[0]}`} className="w-12 h-12 flex-shrink-0" fallbackClassName="bg-muted text-muted-foreground" />
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">

@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
@@ -368,12 +368,12 @@ export function AddPersonDialog({
                   {availableSpouses.map((spouse) => (
                     <SelectItem key={spouse.id} value={spouse.id}>
                       <div className="flex items-center gap-2">
-                        <Avatar className="w-5 h-5">
-                          <AvatarImage src={spouse.profile_photo_url || undefined} />
-                          <AvatarFallback className="text-[10px]">
-                            {spouse.first_names[0]}{spouse.last_name[0]}
-                          </AvatarFallback>
-                        </Avatar>
+                        <FamilyAvatar
+                          photoUrl={spouse.profile_photo_url}
+                          fallback={`${spouse.first_names[0]}${spouse.last_name[0]}`}
+                          className="w-5 h-5"
+                          fallbackClassName="text-[10px]"
+                        />
                         {spouse.first_names} {spouse.last_name}
                       </div>
                     </SelectItem>

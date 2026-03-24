@@ -10,7 +10,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
 
@@ -104,12 +104,7 @@ export function TreeSearchCommand({ persons, onPersonSelect, className }: TreeSe
                   onSelect={() => handleSelect(person)}
                   className="flex items-center gap-3 py-3 cursor-pointer"
                 >
-                  <Avatar className="h-9 w-9 border">
-                    <AvatarImage src={person.profile_photo_url || undefined} />
-                    <AvatarFallback className="text-xs bg-secondary/20 text-secondary">
-                      {getPersonInitials(person)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <FamilyAvatar photoUrl={person.profile_photo_url} fallback={getPersonInitials(person)} className="h-9 w-9 border" fallbackClassName="text-xs bg-secondary/20 text-secondary" />
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
