@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { type EdgeProps, getBezierPath, type Edge } from '@xyflow/react';
 
 type ParentChildEdgeData = {
@@ -18,6 +18,8 @@ export const ParentChildEdge = memo(({
   style,
   data,
 }: EdgeProps<ParentChildEdgeType>) => {
+  const [hovered, setHovered] = useState(false);
+
   const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
@@ -25,30 +27,46 @@ export const ParentChildEdge = memo(({
     targetY,
     sourcePosition,
     targetPosition,
-    curvature: 0.3,
+    curvature: 0.35,
   });
 
   const isAdopted = data?.relationshipType === 'adopted';
   const isStep = data?.relationshipType === 'step';
 
   return (
-    <g>
+    <g
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Invisible wider hit area */}
       <path
         d={edgePath}
         fill="none"
-        stroke="hsl(var(--secondary))"
-        strokeWidth={1.8}
-        strokeOpacity={0.6}
-        strokeDasharray={isAdopted ? '6 4' : isStep ? '3 3' : undefined}
-        style={style}
-        className="transition-all duration-200"
+        stroke="transparent"
+        strokeWidth={12}
       />
+      {/* Visible edge */}
+      <path
+        d={edgePath}
+        fill="none"
+        stroke="hsl(var(--tree-edge-parent))"
+        strokeWidth={hovered ? 2.5 : 1.8}
+        strokeOpacity={hovered ? 0.85 : 0.55}
+        strokeDasharray={isAdopted ? '6 4' : isStep ? '3 3' : undefined}
+        strokeLinecap="round"
+        style={{
+          ...style,
+          transition: 'stroke-width 0.2s ease, stroke-opacity 0.2s ease',
+        }}
+      />
+      {/* Target dot */}
       <circle
         cx={targetX}
         cy={targetY}
-        r={3}
-        fill="hsl(var(--secondary))"
-        fillOpacity={0.5}
+        r={hovered ? 4 : 3}
+        fill="hsl(var(--tree-edge-parent))"
+        fillOpacity={hovered ? 0.7 : 0.45}
+        style={{ transition: 'r 0.2s ease, fill-opacity 0.2s ease' }}
       />
     </g>
   );
