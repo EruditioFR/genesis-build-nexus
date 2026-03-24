@@ -27,6 +27,7 @@ const H_GAP = 50;
 const V_GAP = 120;
 const SPOUSE_GAP = 30;
 const COMPONENT_GAP = 140;
+const MAX_VISIBLE_PERSONS = 200;
 
 export interface PersonPositionData {
   personId: string;
