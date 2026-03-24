@@ -35,13 +35,18 @@ export const useSubscription = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
 
+  const initialCheckDone = useRef(false);
+
   const checkSubscription = useCallback(async () => {
     if (!user) {
       setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free' }));
       return;
     }
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    // Only show loading spinner on the very first check
+    if (!initialCheckDone.current) {
+      setState(prev => ({ ...prev, loading: true, error: null }));
+    }
 
     try {
       // First check Stripe
