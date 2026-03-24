@@ -671,10 +671,11 @@ function computeLayout(
   const childrenConnected = new Set<string>();
   for (const r of relationships) {
     if (!allPositions.has(r.parent_id) || !allPositions.has(r.child_id)) continue;
-    if (!visibleIds.has(r.parent_id) && !visibleIds.has(r.child_id)) continue;
+    // Both endpoints must be visible (including ghost nodes) to draw an edge
+    if (!visibleIds.has(r.parent_id) || !visibleIds.has(r.child_id)) continue;
     if (childrenConnected.has(r.child_id)) continue;
 
-    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id && allPositions.has(p));
+    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id && visibleIds.has(p));
     let sourceId = r.parent_id;
     let sourceHandle = 'bottom';
 
