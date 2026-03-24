@@ -431,6 +431,76 @@ function resolveOverlaps(positions: Map<string, LayoutNode>): void {
   }
 }
 
+// ─── Pre-filter persons by viewMode ─────────────────────────────────────────
+
+function filterByViewMode(
+  persons: FamilyPerson[],
+  relationships: ParentChildRelationship[],
+  unions: FamilyUnion[],
+  rootPersonId: string | undefined,
+  viewMode: TreeViewMode,
+): { persons: FamilyPerson[]; relationships: ParentChildRelationship[]; unions: FamilyUnion[] } {
+  if (viewMode === 'hourglass' || persons.length === 0) {
+    return { persons, relationships, unions };
+  }
+
+  const personMap = new Map(persons.map(p => [p.id, p]));
+  const rootId = rootPersonId && personMap.has(rootPersonId) ? rootPersonId : persons[0]?.id;
+  if (!rootId) return { persons, relationships, unions };
+
+  // Build adjacency
+  const childrenOf = new Map<string, Set<string>>();
+  const parentsOf = new Map<string, Set<string>>();
+  const spousesOf = new Map<string, Set<string>>();
+
+  for (const r of relationships) {
+    if (!childrenOf.has(r.parent_id)) childrenOf.set(r.parent_id, new Set());
+    childrenOf.get(r.parent_id)!.add(r.child_id);
+    if (!parentsOf.has(r.child_id)) parentsOf.set(r.child_id, new Set());
+    parentsOf.get(r.child_id)!.add(r.parent_id);
+  }
+  for (const u of unions) {
+    if (!spousesOf.has(u.person1_id)) spousesOf.set(u.person1_id, new Set());
+    spousesOf.get(u.person1_id)!.add(u.person2_id);
+    if (!spousesOf.has(u.person2_id)) spousesOf.set(u.person2_id, new Set());
+    spousesOf.get(u.person2_id)!.add(u.person1_id);
+  }
+
+  const activeIds = new Set<string>();
+  const queue = [rootId];
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const currentId = queue.shift()!;
+    if (visited.has(currentId)) continue;
+    visited.add(currentId);
+    activeIds.add(currentId);
+
+    // Add spouses
+    for (const sid of spousesOf.get(currentId) || []) {
+      activeIds.add(sid);
+    }
+
+    if (viewMode === 'ascendant') {
+      // Traverse parents
+      for (const pid of parentsOf.get(currentId) || []) {
+        if (!visited.has(pid)) queue.push(pid);
+      }
+    } else {
+      // Traverse children
+      for (const cid of childrenOf.get(currentId) || []) {
+        if (!visited.has(cid)) queue.push(cid);
+      }
+    }
+  }
+
+  const filteredPersons = persons.filter(p => activeIds.has(p.id));
+  const filteredRels = relationships.filter(r => activeIds.has(r.parent_id) && activeIds.has(r.child_id));
+  const filteredUnions = unions.filter(u => activeIds.has(u.person1_id) && activeIds.has(u.person2_id));
+
+  return { persons: filteredPersons, relationships: filteredRels, unions: filteredUnions };
+}
+
 // ─── Convert layout to React Flow nodes & edges ─────────────────────────────
 
 function buildFlowElements(
