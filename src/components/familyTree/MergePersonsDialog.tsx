@@ -213,10 +213,7 @@ export function MergePersonsDialog({
                           onClick={() => setMergePerson(person)}
                         >
                           <RadioGroupItem value={person.id} id={person.id} />
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={person.profile_photo_url || undefined} />
-                            <AvatarFallback className="text-xs">{getInitials(person)}</AvatarFallback>
-                          </Avatar>
+                          <FamilyAvatar photoUrl={person.profile_photo_url} fallback={getInitials(person)} className="h-8 w-8" fallbackClassName="text-xs" />
                           <div className="flex-1 min-w-0">
                             <p className="font-medium truncate">{formatPersonName(person)}</p>
                             <p className="text-xs text-muted-foreground truncate">
