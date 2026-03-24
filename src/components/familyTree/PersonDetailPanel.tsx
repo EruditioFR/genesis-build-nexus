@@ -817,10 +817,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Parents</h4>
-                <Button variant="ghost" size="sm" onClick={onAddParent} className="h-7 text-xs">
-                  <UserPlus className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddParent && (
+                  <Button variant="ghost" size="sm" onClick={onAddParent} className="h-7 text-xs">
+                    <UserPlus className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {parentsWithRelationships.length > 0 ? (
                 <div className="space-y-1">
