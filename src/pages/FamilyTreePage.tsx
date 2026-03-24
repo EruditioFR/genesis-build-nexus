@@ -624,7 +624,7 @@ export default function FamilyTreePage() {
       </Select>
 
       <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
-        <Map className="w-4 h-4 text-muted-foreground" />
+        <MapIcon className="w-4 h-4 text-muted-foreground" />
         <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
       </div>
     </>
