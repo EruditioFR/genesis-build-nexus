@@ -671,38 +671,40 @@ function TreeVisualizationInner({
   }, []);
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onNodeClick={onNodeClick}
-      fitView
-      fitViewOptions={{ padding: 0.2 }}
-      minZoom={0.1}
-      maxZoom={2}
-      nodesDraggable={false}
-      nodesConnectable={false}
-      elementsSelectable={false}
-      proOptions={{ hideAttribution: true }}
-      className="bg-muted/20"
-    >
-      <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="hsl(var(--border))" />
-      <Controls
-        showInteractive={false}
-        className="!bg-card !border !border-border !rounded-xl !shadow-lg [&>button]:!bg-card [&>button]:!border-border [&>button]:!text-foreground [&>button:hover]:!bg-muted"
-      />
-      {showMinimap && (
-        <MiniMap
-          nodeColor={minimapNodeColor}
-          nodeStrokeWidth={0}
-          maskColor="hsl(var(--background) / 0.7)"
-          className="!bg-card/95 !border !border-border !rounded-lg !shadow-lg"
-          pannable
-          zoomable
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodeClick={onNodeClick}
+        fitView
+        fitViewOptions={{ padding: 0.2 }}
+        minZoom={0.1}
+        maxZoom={2}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        proOptions={{ hideAttribution: true }}
+        className="bg-muted/20"
+      >
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="hsl(var(--border))" />
+        <Controls
+          showInteractive={false}
+          className="!bg-card !border !border-border !rounded-xl !shadow-lg [&>button]:!bg-card [&>button]:!border-border [&>button]:!text-foreground [&>button:hover]:!bg-muted"
         />
-      )}
-    </ReactFlow>
+        {showMinimap && (
+          <MiniMap
+            nodeColor={minimapNodeColor}
+            nodeStrokeWidth={0}
+            maskColor="hsl(var(--background) / 0.7)"
+            className="!bg-card/95 !border !border-border !rounded-lg !shadow-lg"
+            pannable
+            zoomable
+          />
+        )}
+      </ReactFlow>
+    </div>
   );
 }
 
