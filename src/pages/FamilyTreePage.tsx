@@ -521,18 +521,6 @@ export default function FamilyTreePage() {
         </DropdownMenu>
       )}
 
-      <div data-tour="tree-view-mode">
-        <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
-          <SelectTrigger className={compact ? "w-[130px] h-8" : "w-[140px]"}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
-            <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
-            <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
 
       <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
         <Map className="w-4 h-4 text-muted-foreground" />

@@ -208,8 +208,7 @@ function layoutUnified(
   const rootGen = genOf.get(rootId) ?? 0;
   const activeIds = new Set<string>();
   for (const [id, gen] of genOf) {
-    if (viewMode === 'descendant' && gen < rootGen) continue;
-    if (viewMode === 'ascendant' && gen > rootGen) continue;
+    // Hourglass mode: show all generations
     activeIds.add(id);
   }
 
