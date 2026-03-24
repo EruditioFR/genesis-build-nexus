@@ -1062,6 +1062,49 @@ export type Database = {
         }
         Returns: string
       }
+      get_branch_persons: {
+        Args: {
+          p_center_person_id: string
+          p_max_generations?: number
+          p_tree_id: string
+        }
+        Returns: {
+          biography: string | null
+          birth_date: string | null
+          birth_date_precision: string | null
+          birth_place: string | null
+          birth_place_lat: number | null
+          birth_place_lng: number | null
+          burial_date: string | null
+          burial_place: string | null
+          created_at: string
+          created_by: string | null
+          death_date: string | null
+          death_date_precision: string | null
+          death_place: string | null
+          death_place_lat: number | null
+          death_place_lng: number | null
+          first_names: string
+          gender: string | null
+          id: string
+          is_alive: boolean | null
+          last_name: string
+          maiden_name: string | null
+          nationality: string | null
+          occupation: string | null
+          privacy_level: string | null
+          profile_photo_url: string | null
+          residences: Json | null
+          tree_id: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "family_persons"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_tree_relationships: {
         Args: { p_tree_id: string }
         Returns: {
