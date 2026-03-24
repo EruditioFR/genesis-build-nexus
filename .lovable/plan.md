@@ -1,67 +1,65 @@
 
 
-## Chargement progressif : ghost nodes + expansion dynamique
+## Optimisation des performances de l'arbre genealogique
 
-### Principe
+### Diagnostic
 
-Au lieu de rendre tous les nœuds d'un coup, limiter l'affichage a 3 generations depuis le root. Les nœuds a la frontiere (generation 4) deviennent des "ghost nodes" cliquables. Un clic sur un ghost node l'expanse de +2 generations avec animation.
+L'arbre contient ~8400 personnes et ~7200 relations. Voici les goulots d'etranglement identifies :
 
-### Fichiers modifies
+1. **Layout recalcule a chaque clic** : `buildFlowElements` est dans un `useMemo` qui depend de `selectedPersonId`, `highlightedPersonId`, et `activeBranchIds`. Chaque selection de personne relance le layout complet sur 8400 noeuds, alors que seules les proprietes visuelles changent (pas les positions).
 
-#### 1. `src/components/familyTree/nodes/PersonFlowNode.tsx`
+2. **`expandedNodeIds = new Set()`** dans les props par defaut cree un nouvel objet a chaque render, invalidant le `useMemo`.
 
-- Lire `data.isGhost` dans `PersonNodeData`
-- Si `isGhost === true` :
-  - Opacite globale 0.35, bordure en `border-dashed`, pas de hover effect
-  - Afficher un badge `+` (icone `ChevronDown` ou `Plus`) en bas du noeud pour indiquer l'expansion possible
-  - Le clic remonte normalement via React Flow `onNodeClick`
+3. **`activeBranchIds`** recalcule avec des `.filter()` lineaires sur toutes les relations a chaque changement de selection.
 
-#### 2. `src/components/familyTree/TreeVisualization.tsx`
+4. **Framer Motion** sur chaque noeud (`motion.div` avec `initial`/`animate`) ajoute un cout significatif pour 200+ noeuds animes simultanement.
 
-**Types** :
-- Ajouter `isGhost: boolean` a `PersonNodeData`
-- Ajouter `maxVisibleGenerations` et `expandedNodeIds` aux props de `TreeVisualizationProps`
-- Ajouter callback `onExpandGhost: (personId: string) => void`
+5. **Serialisation des positions** dans le `useEffect` (`positionData.map(...).join(',')`) a chaque render.
 
-**Layout (`layoutUnified`)** :
-- Apres le BFS ascendant/descendant existant qui produit `activeIds`, ajouter une passe de filtrage par profondeur :
-  - Calculer `distance` de chaque noeud par rapport au root (en nombre de generations)
-  - Aussi calculer la distance par rapport a chaque noeud dans `expandedNodeIds`
-  - Un noeud est **visible** si `min(distances) <= maxVisibleGenerations`
-  - Un noeud est **ghost** si `min(distances) == maxVisibleGenerations + 1`
-  - Un noeud est **exclu** si `min(distances) > maxVisibleGenerations + 1`
-- Passer `isGhost` dans les donnees du noeud React Flow
+### Plan d'optimisation
 
-**Gestion du clic** :
-- Dans `onNodeClick`, si `node.data.isGhost` → appeler `onExpandGhost(node.data.person.id)` au lieu de `onPersonClick`
-- Puis `fitView` anime (duration 600ms) centre sur le noeud clique
+#### 1. Separer layout et etat visuel (impact majeur)
 
-#### 3. `src/pages/FamilyTreePage.tsx`
+**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
 
-**Nouveaux states** :
-- `expandedNodeIds: Set<string>` (initialement vide)
-- `maxVisibleGenerations = 3` (constante)
+Scinder le `useMemo` en deux etapes :
+- **useMemo 1 (layout)** : depend uniquement de `persons`, `relationships`, `unions`, `rootPersonId`, `viewMode`, `maxVisibleGenerations`, `expandedNodeIds` → produit les positions et la liste des noeuds visibles/ghost
+- **useMemo 2 (nodes visuels)** : depend du layout + `selectedPersonId`, `highlightedPersonId`, `activeBranchIds` → met a jour uniquement les proprietes `data` des noeuds sans recalculer les positions
 
-**Handler `handleExpandGhost`** :
-1. Ajouter le `personId` dans `expandedNodeIds`
-2. Le state change declenche un re-render de `TreeVisualization` qui recalcule le layout avec les nœuds nouvellement visibles
+Cela evite de relancer le BFS + layout pour 8400 personnes a chaque clic.
 
-**Props passes a `TreeVisualization`** :
-- `maxVisibleGenerations={3}`
-- `expandedNodeIds={expandedNodeIds}`
-- `onExpandGhost={handleExpandGhost}`
+#### 2. Stabiliser la reference `expandedNodeIds` (impact moyen)
 
-**Desactivation pour petits arbres** : si `persons.length < LARGE_TREE_THRESHOLD` et `viewMode === 'hourglass'`, passer `maxVisibleGenerations={Infinity}` (pas de ghost nodes).
+**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
 
-#### 4. Animation d'apparition
+Remplacer `expandedNodeIds = new Set()` par une constante stable :
+```typescript
+const EMPTY_SET = new Set<string>();
+// Dans les props par defaut :
+expandedNodeIds = EMPTY_SET,
+```
 
-Les nœuds qui passent de ghost/exclu a visible beneficient deja de `motion.div initial={{ opacity: 0, scale: 0.9 }}` dans `PersonFlowNode`. Pour un effet stagger, ajouter un `transition.delay` base sur la distance au noeud expanse : `delay = (distance - 1) * 0.08s`. Passer `data.appearDelay` dans `PersonNodeData`.
+#### 3. Remplacer Framer Motion par des transitions CSS (impact majeur)
 
-### Comportement attendu
+**Fichier** : `src/components/familyTree/nodes/PersonFlowNode.tsx`
 
-1. Chargement → root + 3 generations, generation 4 = ghost nodes (semi-transparents, border dashed, badge "+")
-2. Clic ghost → ce noeud devient normal + 2 generations supplementaires apparaissent en cascade (stagger 80ms/gen)
-3. `fitView` anime centre sur le noeud expanse
-4. Les nouvelles frontieres sont des ghost nodes cliquables
-5. Petits arbres (< 500) en mode sablier : pas de ghost nodes, tout est affiche
+Remplacer `motion.div` par un `div` classique avec `transition` CSS et `style={{ opacity, transform }}`. Cela elimine le surcout de Framer Motion sur 200+ noeuds. L'animation d'apparition sera geree via un `setTimeout` + changement de classe CSS.
+
+#### 4. Optimiser `activeBranchIds` avec des Maps indexees (impact moyen)
+
+**Fichier** : `src/pages/FamilyTreePage.tsx`
+
+Pre-construire des index `Map<string, string[]>` pour `parentOf` et `childOf` a partir de `relationships` (via un `useMemo` separe), au lieu de faire des `.filter()` lineaires a chaque calcul de branche.
+
+#### 5. Debounce du report de positions (impact mineur)
+
+**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
+
+Supprimer la serialisation string des positions. Utiliser un `useRef` pour comparer par longueur + premier/dernier element, ou simplement reporter les positions uniquement quand le layout change (pas quand la selection change).
+
+### Resultats attendus
+
+- **Clic sur un noeud** : de ~500-1000ms a <50ms (plus de recalcul de layout)
+- **Changement de mode de vue** : inchange (le layout doit etre recalcule)
+- **Rendu initial** : ~30% plus rapide (pas de Framer Motion overhead)
 
