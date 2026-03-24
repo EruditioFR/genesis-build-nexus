@@ -255,10 +255,7 @@ export function MergePersonsDialog({
             {/* Visual merge preview */}
             <div className="flex items-center justify-center gap-4 py-4">
               <div className="text-center">
-                <Avatar className="h-12 w-12 mx-auto mb-2">
-                  <AvatarImage src={keepPerson.profile_photo_url || undefined} />
-                  <AvatarFallback>{getInitials(keepPerson)}</AvatarFallback>
-                </Avatar>
+                <FamilyAvatar photoUrl={keepPerson.profile_photo_url} fallback={getInitials(keepPerson)} className="h-12 w-12 mx-auto mb-2" />
                 <p className="text-sm font-medium">{formatPersonName(keepPerson)}</p>
                 <Badge variant="secondary" className="mt-1">{t('merge.kept')}</Badge>
               </div>
