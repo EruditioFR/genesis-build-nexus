@@ -35,6 +35,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import NoIndex from '@/components/seo/NoIndex';
 
 interface LegacyCapsule {
   id: string;
@@ -241,6 +242,8 @@ const GuardianDashboard = () => {
   const pendingCapsules = totalCapsules - unlockedCapsules;
 
   return (
+    <>
+    <NoIndex />
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <div className="container max-w-4xl mx-auto py-8 px-4">
         <Button variant="ghost" asChild className="mb-6 gap-2">
@@ -419,6 +422,7 @@ const GuardianDashboard = () => {
         <MobileBottomNav />
       </div>
     </div>
+    </>
   );
 };
 
