@@ -5,7 +5,16 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { useFamilyPhotoUrl } from '@/hooks/useFamilyPhotoUrl';
 import type { FamilyPerson } from '@/types/familyTree';
+
+/** Extract relative storage path from either a full public URL or a relative path */
+const getRelativePath = (photoUrl: string): string => {
+  const marker = '/object/public/family-photos/';
+  const idx = photoUrl.indexOf(marker);
+  if (idx !== -1) return photoUrl.substring(idx + marker.length);
+  return photoUrl;
+};
 
 interface PersonPhotoUploadProps {
   person: FamilyPerson;
