@@ -548,6 +548,89 @@ function buildFlowElements(
     });
     childrenConnected.add(r.child_id);
   }
+  // Spouse edges + union junction nodes
+  const spouseKeys = new Set<string>();
+  const unionJunctionMap = new Map<string, string>(); // "p1|p2" sorted key -> junction node id
+
+  for (const u of unions) {
+    const pos1 = allPositions.get(u.person1_id);
+    const pos2 = allPositions.get(u.person2_id);
+    if (!pos1 || !pos2) continue;
+    const key = [u.person1_id, u.person2_id].sort().join('|');
+    if (spouseKeys.has(key)) continue;
+    spouseKeys.add(key);
+
+    const left = pos1.x < pos2.x ? u.person1_id : u.person2_id;
+    const right = pos1.x < pos2.x ? u.person2_id : u.person1_id;
+    const leftPos = pos1.x < pos2.x ? pos1 : pos2;
+    const rightPos = pos1.x < pos2.x ? pos2 : pos1;
+
+    const isActive = !activeBranchIds || (activeBranchIds.has(u.person1_id) && activeBranchIds.has(u.person2_id));
+
+    edges.push({
+      id: `marriage-${key}`,
+      source: left,
+      target: right,
+      type: 'marriage',
+      sourceHandle: 'right',
+      targetHandle: 'left',
+      data: { unionType: u.union_type, isActive },
+      style: { opacity: isActive ? 1 : 0.15 },
+    });
+
+    // Create invisible junction node at midpoint between the couple, at bottom of cards
+    const junctionId = `union-junction-${key}`;
+    const junctionX = (leftPos.x + CARD_WIDTH + rightPos.x) / 2;
+    const junctionY = leftPos.y + CARD_HEIGHT;
+
+    nodes.push({
+      id: junctionId,
+      type: 'unionJunction',
+      position: { x: junctionX - 1, y: junctionY },
+      data: {} as PersonNodeData,
+      style: { width: 2, height: 2, opacity: 0, pointerEvents: 'none' },
+      selectable: false,
+      draggable: false,
+    });
+
+    unionJunctionMap.set(key, junctionId);
+  }
+
+  // Parent-child edges - route through union junction when possible
+  const childrenConnected = new Set<string>();
+  for (const r of relationships) {
+    if (!allPositions.has(r.parent_id) || !allPositions.has(r.child_id)) continue;
+    if (childrenConnected.has(r.child_id)) continue;
+
+    const isActive = !activeBranchIds || (activeBranchIds.has(r.parent_id) && activeBranchIds.has(r.child_id));
+
+    // Find co-parent to use the union junction
+    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id && allPositions.has(p));
+    let sourceId = r.parent_id;
+    let sourceHandle = 'bottom';
+
+    if (otherParents.length > 0) {
+      const coParentId = otherParents[0];
+      const junctionKey = [r.parent_id, coParentId].sort().join('|');
+      const junctionId = unionJunctionMap.get(junctionKey);
+      if (junctionId) {
+        sourceId = junctionId;
+        sourceHandle = 'bottom';
+      }
+    }
+
+    edges.push({
+      id: `parent-child-${r.parent_id}-${r.child_id}`,
+      source: sourceId,
+      target: r.child_id,
+      type: 'parentChild',
+      sourceHandle,
+      targetHandle: 'top',
+      data: { relationshipType: r.relationship_type, isActive },
+      style: { opacity: isActive ? 1 : 0.15 },
+    });
+    childrenConnected.add(r.child_id);
+  }
 
   return { nodes, edges, positionData };
 }
