@@ -984,10 +984,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Enfants</h4>
-                <Button variant="ghost" size="sm" onClick={onAddChild} className="h-7 text-xs">
-                  <Baby className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddChild && (
+                  <Button variant="ghost" size="sm" onClick={onAddChild} className="h-7 text-xs">
+                    <Baby className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {children.length > 0 ? (
                 <div className="space-y-1">
