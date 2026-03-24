@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
-import { Home } from 'lucide-react';
+import { Home, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,8 @@ export type PersonNodeData = {
   isHighlighted: boolean;
   isRoot: boolean;
   isDimmed: boolean;
+  isGhost: boolean;
+  appearDelay: number;
   generation: number;
   generationLabel: string;
 };
