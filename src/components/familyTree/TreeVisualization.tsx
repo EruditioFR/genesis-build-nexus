@@ -11,7 +11,7 @@ import {
   BackgroundVariant,
   type NodeTypes,
   type EdgeTypes,
-  type OnNodeClick,
+  type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import type { FamilyPerson, ParentChildRelationship, FamilyUnion, TreeViewMode } from '@/types/familyTree';
