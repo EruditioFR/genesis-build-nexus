@@ -27,6 +27,7 @@ const H_GAP = 50;
 const V_GAP = 120;
 const SPOUSE_GAP = 30;
 const COMPONENT_GAP = 140;
+const MAX_VISIBLE_PERSONS = 200;
 
 export interface PersonPositionData {
   personId: string;
@@ -517,25 +518,35 @@ function buildFlowElements(
     return minDist;
   };
 
-  // Build React Flow nodes
+  // Build React Flow nodes with hard cap of MAX_VISIBLE_PERSONS
   const nodes: Node<PersonNodeData>[] = [];
   const positionData: PersonPositionData[] = [];
 
-  for (const [id, pos] of allPositions) {
+  // Sort by distance so closest nodes are prioritized
+  const sortedEntries = [...allPositions.entries()]
+    .map(([id, pos]) => ({ id, pos, dist: getMinDistance(id) }))
+    .sort((a, b) => a.dist - b.dist);
+
+  let visibleCount = 0;
+
+  for (const { id, pos, dist } of sortedEntries) {
     const person = graph.personMap.get(id);
     if (!person) continue;
 
-    const minDist = getMinDistance(id);
-    const isGhost = isFinite(maxVisibleGenerations) && minDist === maxVisibleGenerations + 1;
-    const isExcluded = isFinite(maxVisibleGenerations) && minDist > maxVisibleGenerations + 1;
+    const isGhostByGen = isFinite(maxVisibleGenerations) && dist === maxVisibleGenerations + 1;
+    const isExcludedByGen = isFinite(maxVisibleGenerations) && dist > maxVisibleGenerations + 1;
 
-    if (isExcluded) continue;
+    if (isExcludedByGen) continue;
+
+    // Hard cap: beyond MAX_VISIBLE_PERSONS, force ghost or exclude
+    const isOverCap = !isGhostByGen && visibleCount >= MAX_VISIBLE_PERSONS;
+    const isGhost = isGhostByGen || isOverCap;
+
+    if (!isGhost) visibleCount++;
 
     const isDimmed = !!activeBranchIds && !activeBranchIds.has(id);
     const genDiff = pos.generation - (rootGeneration ?? detectedRootGen);
-
-    // Stagger delay based on distance for newly appeared nodes
-    const appearDelay = isGhost ? 0 : Math.max(0, (minDist - 1) * 0.08);
+    const appearDelay = isGhost ? 0 : Math.max(0, (dist - 1) * 0.08);
 
     nodes.push({
       id,
