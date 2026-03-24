@@ -81,6 +81,7 @@ export default function FamilyTreePage() {
   const [unions, setUnions] = useState<FamilyUnion[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
   
+  const LARGE_TREE_THRESHOLD = 500;
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
