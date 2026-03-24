@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import { Home } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -636,7 +635,8 @@ export function TreeVisualization({
   const offsetX = 50 - bounds.minX;
   const offsetY = 50 - bounds.minY;
 
-  // Report positions
+  // Report positions (stable ref to avoid re-render loops)
+  const lastPositionsRef = useRef<string>('');
   useEffect(() => {
     if (onPositionsCalculated && positions.length > 0) {
       const positionsData: PersonPositionData[] = positions.map(pos => ({
@@ -644,7 +644,11 @@ export function TreeVisualization({
         x: pos.x + offsetX,
         y: pos.y + offsetY,
       }));
-      onPositionsCalculated(positionsData);
+      const key = positionsData.map(p => `${p.personId}:${p.x}:${p.y}`).join(',');
+      if (key !== lastPositionsRef.current) {
+        lastPositionsRef.current = key;
+        onPositionsCalculated(positionsData);
+      }
     }
   }, [positions, offsetX, offsetY, onPositionsCalculated]);
 
@@ -690,44 +694,36 @@ export function TreeVisualization({
           if (conn.type === 'spouse') {
             const midX = (fromX + toX) / 2;
             const midY = fromY;
+            // Double line for marriage (genealogical standard)
             return (
-              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
-                <motion.line
-                  x1={fromX} y1={fromY} x2={toX} y2={toY}
+              <g key={`conn-${index}`} opacity={connOpacity}>
+                <line
+                  x1={fromX} y1={fromY - 1.5} x2={toX} y2={toY - 1.5}
                   stroke="hsl(var(--accent))"
-                  strokeWidth="2"
-                  strokeDasharray="4 2"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.02 }}
+                  strokeWidth="1.5"
+                />
+                <line
+                  x1={fromX} y1={fromY + 1.5} x2={toX} y2={toY + 1.5}
+                  stroke="hsl(var(--accent))"
+                  strokeWidth="1.5"
                 />
                 <use href="#heartSymbol" x={midX - 6} y={midY - 6} />
               </g>
             );
           } else {
-            // T-shape genealogical connection
-            const midY = fromY + (toY - fromY) / 2;
+            // Orthogonal parent-child connection (genealogical standard)
+            const midY = fromY + (toY - fromY) * 0.4;
+            const path = `M ${fromX} ${fromY} L ${fromX} ${midY} L ${toX} ${midY} L ${toX} ${toY}`;
             return (
-              <g key={`conn-${index}`} opacity={connOpacity} className="transition-opacity duration-300">
-                <motion.line
-                  x1={fromX} y1={fromY} x2={fromX} y2={midY}
-                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.02 }}
+              <g key={`conn-${index}`} opacity={connOpacity}>
+                <path
+                  d={path}
+                  fill="none"
+                  stroke="hsl(var(--secondary))"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.6"
                 />
-                <motion.line
-                  x1={fromX} y1={midY} x2={toX} y2={midY}
-                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.02 + 0.1 }}
-                />
-                <motion.line
-                  x1={toX} y1={midY} x2={toX} y2={toY}
-                  stroke="hsl(var(--secondary))" strokeWidth="2" strokeOpacity="0.5"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.02 + 0.2 }}
-                />
-                <circle cx={toX} cy={midY} r="3" fill="hsl(var(--secondary))" fillOpacity="0.4" />
+                <circle cx={toX} cy={toY} r="2.5" fill="hsl(var(--secondary))" fillOpacity="0.5" />
               </g>
             );
           }
@@ -735,8 +731,8 @@ export function TreeVisualization({
       </svg>
 
       {/* Person cards */}
-      {positions.map((pos, index) => (
-        <motion.div
+      {positions.map((pos) => (
+        <div
           key={pos.person.id}
           className="absolute"
           style={{
@@ -744,13 +740,6 @@ export function TreeVisualization({
             top: pos.y + offsetY,
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
-          }}
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{
-            duration: 0.4,
-            delay: Math.min(index * 0.03, 1.5),
-            ease: [0.23, 1, 0.32, 1],
           }}
         >
           <TreePersonCard
@@ -762,7 +751,7 @@ export function TreeVisualization({
             onClick={() => onPersonClick(pos.person)}
             generation={pos.generation}
           />
-        </motion.div>
+        </div>
       ))}
 
       {/* Generation labels */}
