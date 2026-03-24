@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Capsule Mémorielle Design System
-   Palette: Bleu nuit, Or chaud, Terracotta, Gris perle
-   Typography: System UI (optimized for readability)
+/* Family Garden Design System
+   Palette: Crème, Sépia profond, Terracotta, Vert sauge
+   Typography: Playfair Display (display) + DM Sans (body)
 */
 
 @layer base {
