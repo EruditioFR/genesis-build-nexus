@@ -63,10 +63,16 @@ import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export default function FamilyTreePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation('familyTree');
   const { user, signOut, loading: authLoading } = useAuth();
   const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
+
+  // Admin viewing another user's tree
+  const viewTreeId = searchParams.get('viewTreeId');
+  const isAdminViewing = !!viewTreeId && isAdmin;
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
   const [persons, setPersons] = useState<FamilyPerson[]>([]);
