@@ -40,6 +40,7 @@ export const useSubscription = () => {
   const checkSubscription = useCallback(async () => {
     if (!user) {
       setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free' }));
+      initialCheckDone.current = true;
       return;
     }
 
@@ -63,6 +64,7 @@ export const useSubscription = () => {
           loading: false,
           error: null,
         });
+        initialCheckDone.current = true;
         return;
       }
 
@@ -82,6 +84,7 @@ export const useSubscription = () => {
           loading: false,
           error: null,
         });
+        initialCheckDone.current = true;
         return;
       }
 
