@@ -624,45 +624,49 @@ export default function FamilyTreePage() {
                     <Maximize2 className="w-4 h-4" />
                   </Button>
 
-                  <div data-tour="tree-import-export" className="flex items-center gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" title={t('export.title')}>
-                          <Download className="w-4 h-4" />
+                  {!isAdminViewing && (
+                    <>
+                      <div data-tour="tree-import-export" className="flex items-center gap-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="icon" title={t('export.title')}>
+                              <Download className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
+                              className="gap-2"
+                            >
+                              <FileText className="w-4 h-4" />
+                              {t('export.pdf')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
+                              className="gap-2"
+                            >
+                              <FileDown className="w-4 h-4" />
+                              {t('export.gedcom')}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <Button 
+                          variant="outline" 
+                          size="icon"
+                          onClick={() => setShowGedcomImport(true)}
+                          title={t('import.gedcom')}
+                        >
+                          <Upload className="w-4 h-4" />
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem 
-                          onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
-                          className="gap-2"
-                        >
-                          <FileText className="w-4 h-4" />
-                          {t('export.pdf')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
-                          className="gap-2"
-                        >
-                          <FileDown className="w-4 h-4" />
-                          {t('export.gedcom')}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      </div>
 
-                    <Button 
-                      variant="outline" 
-                      size="icon"
-                      onClick={() => setShowGedcomImport(true)}
-                      title={t('import.gedcom')}
-                    >
-                      <Upload className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
-                    <Plus className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t('toolbar.add')}</span>
-                  </Button>
+                      <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
+                        <Plus className="w-4 h-4" />
+                        <span className="hidden sm:inline">{t('toolbar.add')}</span>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
