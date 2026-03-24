@@ -383,13 +383,49 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
-  const handleExpandGhost = useCallback((personId: string) => {
+  const handleExpandGhost = useCallback(async (personId: string) => {
+    if (!tree?.id) return;
+    
+    // Mark as expanded immediately for UI feedback
     setExpandedNodeIds(prev => {
       const next = new Set(prev);
       next.add(personId);
       return next;
     });
-  }, []);
+
+    // Lazy load the branch from database
+    setIsLoadingBranch(true);
+    try {
+      const branch = await fetchBranch(tree.id, personId, BRANCH_FETCH_GENERATIONS);
+      
+      if (branch.persons.length > 0) {
+        // Merge new persons (deduplicate by id)
+        setPersons(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const newPersons = branch.persons.filter(p => !existingIds.has(p.id));
+          return newPersons.length > 0 ? [...prev, ...newPersons] : prev;
+        });
+        
+        // Merge new relationships (deduplicate by id)
+        setRelationships(prev => {
+          const existingIds = new Set(prev.map(r => r.id));
+          const newRels = branch.relationships.filter(r => !existingIds.has(r.id));
+          return newRels.length > 0 ? [...prev, ...newRels] : prev;
+        });
+        
+        // Merge new unions (deduplicate by id)
+        setUnions(prev => {
+          const existingIds = new Set(prev.map(u => u.id));
+          const newUnions = branch.unions.filter(u => !existingIds.has(u.id));
+          return newUnions.length > 0 ? [...prev, ...newUnions] : prev;
+        });
+      }
+    } catch (error) {
+      console.error('Error loading branch:', error);
+    } finally {
+      setIsLoadingBranch(false);
+    }
+  }, [tree?.id, fetchBranch]);
 
   // Compute effective maxVisibleGenerations
   const effectiveMaxGenerations = useMemo(() => {
