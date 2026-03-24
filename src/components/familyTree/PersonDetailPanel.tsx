@@ -916,12 +916,12 @@ export function PersonDetailPanel({
                                 onClick={() => onPersonClick(sibling)}
                                 className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
                               >
-                                <Avatar className="w-6 h-6">
-                                  <AvatarImage src={sibling.profile_photo_url || undefined} />
-                                  <AvatarFallback className="text-[10px]">
-                                    {`${sibling.first_names[0] || ''}${sibling.last_name[0] || ''}`}
-                                  </AvatarFallback>
-                                </Avatar>
+                                <FamilyAvatar
+                                  photoUrl={sibling.profile_photo_url}
+                                  fallback={`${sibling.first_names[0] || ''}${sibling.last_name[0] || ''}`}
+                                  className="w-6 h-6"
+                                  fallbackClassName="text-[10px]"
+                                />
                                 <span className="text-xs truncate">
                                   {sibling.first_names} {sibling.last_name}
                                 </span>
