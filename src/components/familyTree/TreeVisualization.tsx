@@ -802,6 +802,8 @@ function TreeVisualizationInner({
         isRoot: ln.isRoot,
         isDimmed: !!activeBranchIds && !activeBranchIds.has(ln.id),
         isGhost: ln.isGhost,
+        ghostCount: ln.ghostCount,
+        ghostLabel: ln.ghostLabel,
         appearDelay: ln.appearDelay,
         generation: ln.generation,
         generationLabel: ln.generationLabel,
