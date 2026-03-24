@@ -93,8 +93,10 @@ export const useSubscription = () => {
         loading: false,
         error: null,
       });
+      initialCheckDone.current = true;
     } catch (error: any) {
       console.error('Error checking subscription:', error);
+      initialCheckDone.current = true;
       setState(prev => ({
         ...prev,
         loading: false,
