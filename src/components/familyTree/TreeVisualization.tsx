@@ -692,10 +692,13 @@ interface TreeVisualizationProps {
   highlightedPersonId?: string;
   activeBranchIds?: Set<string>;
   onPersonClick: (person: FamilyPerson) => void;
+  onExpandGhost?: (personId: string) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
   showMinimap?: boolean;
   onCenterOnPerson?: string | null;
+  maxVisibleGenerations?: number;
+  expandedNodeIds?: Set<string>;
 }
 
 function TreeVisualizationInner({
@@ -708,9 +711,12 @@ function TreeVisualizationInner({
   highlightedPersonId,
   activeBranchIds,
   onPersonClick,
+  onExpandGhost,
   onPositionsCalculated,
   showMinimap = true,
   onCenterOnPerson,
+  maxVisibleGenerations = Infinity,
+  expandedNodeIds = new Set(),
 }: TreeVisualizationProps) {
   const { fitView, setCenter } = useReactFlow();
   const lastPositionsRef = useRef<string>('');
@@ -726,8 +732,10 @@ function TreeVisualizationInner({
       highlightedPersonId,
       activeBranchIds,
       0,
+      maxVisibleGenerations,
+      expandedNodeIds,
     );
-  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds]);
+  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds, maxVisibleGenerations, expandedNodeIds]);
 
   // Report positions
   useEffect(() => {
