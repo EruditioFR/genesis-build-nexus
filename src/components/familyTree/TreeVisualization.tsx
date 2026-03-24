@@ -533,13 +533,14 @@ function buildFlowElements(
     const person = graph.personMap.get(id);
     if (!person) continue;
 
-    const isGhostByGen = isFinite(maxVisibleGenerations) && dist === maxVisibleGenerations + 1;
-    const isExcludedByGen = isFinite(maxVisibleGenerations) && dist > maxVisibleGenerations + 1;
+    const isRootNode = id === rootPersonId;
+    const isGhostByGen = !isRootNode && isFinite(maxVisibleGenerations) && dist === maxVisibleGenerations + 1;
+    const isExcludedByGen = !isRootNode && isFinite(maxVisibleGenerations) && dist > maxVisibleGenerations + 1;
 
     if (isExcludedByGen) continue;
 
-    // Hard cap: beyond MAX_VISIBLE_PERSONS, force ghost or exclude
-    const isOverCap = !isGhostByGen && visibleCount >= MAX_VISIBLE_PERSONS;
+    // Hard cap: beyond MAX_VISIBLE_PERSONS, force ghost or exclude (never ghost the root)
+    const isOverCap = !isRootNode && !isGhostByGen && visibleCount >= MAX_VISIBLE_PERSONS;
     const isGhost = isGhostByGen || isOverCap;
 
     if (!isGhost) visibleCount++;
