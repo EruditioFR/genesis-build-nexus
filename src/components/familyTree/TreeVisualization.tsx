@@ -764,7 +764,10 @@ function TreeVisualizationInner({
   useEffect(() => {
     if (nodes.length > 0 && !hasInitialFit.current) {
       hasInitialFit.current = true;
-      const rootNode = rootPersonId ? nodes.find(n => n.id === rootPersonId) : nodes[0];
+      // Always center on root person node, falling back to first node
+      const rootNode = rootPersonId
+        ? nodes.find(n => n.id === rootPersonId) || nodes.find(n => n.data?.isRoot) || nodes[0]
+        : nodes[0];
       if (rootNode) {
         setTimeout(() => {
           setCenter(
