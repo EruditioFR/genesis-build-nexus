@@ -72,14 +72,9 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
         return;
       }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('family-photos')
-        .getPublicUrl(fileName);
-
-      // Update person with new photo URL
+      // Store the relative file path (not public URL since bucket is private)
       const success = await updatePerson(person.id, {
-        profile_photo_url: publicUrl
+        profile_photo_url: fileName
       });
 
       if (success) {
