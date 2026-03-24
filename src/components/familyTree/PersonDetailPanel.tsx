@@ -851,10 +851,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Conjoint(s)</h4>
-                <Button variant="ghost" size="sm" onClick={onAddSpouse} className="h-7 text-xs">
-                  <Heart className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddSpouse && (
+                  <Button variant="ghost" size="sm" onClick={onAddSpouse} className="h-7 text-xs">
+                    <Heart className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {spousesWithUnions.length > 0 ? (
                 <div className="space-y-3">
