@@ -61,20 +61,21 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{
-          opacity: isDimmed ? 0.2 : 1,
-          scale: isDimmed ? 0.97 : 1,
+          opacity: isGhost ? 0.35 : isDimmed ? 0.2 : 1,
+          scale: isGhost ? 0.95 : isDimmed ? 0.97 : 1,
         }}
-        whileHover={!isDimmed ? { y: -2, boxShadow: 'var(--tree-card-hover-shadow)' } : undefined}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        whileHover={!isDimmed && !isGhost ? { y: -2, boxShadow: 'var(--tree-card-hover-shadow)' } : isGhost ? { opacity: 0.55 } : undefined}
+        transition={{ duration: 0.3, ease: 'easeOut', delay: appearDelay || 0 }}
         className={cn(
           "w-full h-full rounded-2xl p-2.5 flex items-center gap-2.5 cursor-pointer font-tree",
           "border-2 shadow-[var(--tree-card-shadow)]",
           "bg-[hsl(var(--tree-card-bg))]",
+          isGhost && "border-dashed",
           isSelected
             ? "border-[hsl(var(--terracotta))] ring-2 ring-[hsl(var(--terracotta)/0.25)]"
             : cn("hover:border-[hsl(var(--gold-light))]", genderBorderColor),
           isHighlighted && "ring-2 ring-[hsl(var(--gold))] animate-pulse",
-          !person.is_alive && !isDimmed && "opacity-80"
+          !person.is_alive && !isDimmed && !isGhost && "opacity-80"
         )}
       >
         {/* Root badge */}
