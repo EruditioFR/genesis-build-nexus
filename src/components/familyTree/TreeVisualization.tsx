@@ -14,6 +14,7 @@ import {
   type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { Handle, Position } from '@xyflow/react';
 import type { FamilyPerson, ParentChildRelationship, FamilyUnion, TreeViewMode } from '@/types/familyTree';
 import { PersonFlowNode, type PersonNodeData } from './nodes/PersonFlowNode';
 import { MarriageEdge } from './edges/MarriageEdge';
@@ -579,10 +580,19 @@ function getGenerationLabel(diff: number): string {
   return `Gén. ${diff}`;
 }
 
+// Invisible junction node for union midpoints
+const UnionJunctionNode = memo(() => (
+  <div style={{ width: 2, height: 2 }}>
+    <Handle type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
+  </div>
+));
+UnionJunctionNode.displayName = 'UnionJunctionNode';
+
 // ─── Custom node types ──────────────────────────────────────────────────────
 
 const nodeTypes: NodeTypes = {
   person: PersonFlowNode,
+  unionJunction: UnionJunctionNode,
 };
 
 const edgeTypes: EdgeTypes = {
