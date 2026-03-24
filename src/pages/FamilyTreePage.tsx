@@ -668,7 +668,7 @@ export default function FamilyTreePage() {
             )}
 
             {/* Tree canvas area */}
-            <div className="flex-1 relative" data-tour="tree-visualization">
+            <div className="flex-1 relative min-h-0" style={{ minHeight: '500px' }} data-tour="tree-visualization">
               {persons.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center space-y-4 p-8">
