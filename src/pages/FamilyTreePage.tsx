@@ -599,7 +599,7 @@ export default function FamilyTreePage() {
                 initial={{ x: 400, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
-                className="absolute top-12 right-0 bottom-0 w-96 bg-card border-l shadow-lg overflow-auto"
+                className="fixed top-0 right-0 bottom-0 w-96 bg-card border-l shadow-lg overflow-auto z-50"
               >
                 <PersonDetailPanel
                   person={selectedPerson}
@@ -861,7 +861,7 @@ export default function FamilyTreePage() {
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: 384, opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
-                  className="border-l bg-card overflow-hidden"
+                  className="border-l bg-card overflow-hidden flex-shrink-0 h-full"
                 >
                   <div className="w-96 h-full overflow-auto">
                     <PersonDetailPanel
