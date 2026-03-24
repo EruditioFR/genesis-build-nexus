@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
@@ -35,13 +35,18 @@ export const useSubscription = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
 
+  const initialCheckDone = useRef(false);
+
   const checkSubscription = useCallback(async () => {
     if (!user) {
       setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free' }));
       return;
     }
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    // Only show loading spinner on the very first check
+    if (!initialCheckDone.current) {
+      setState(prev => ({ ...prev, loading: true, error: null }));
+    }
 
     try {
       // First check Stripe
@@ -88,8 +93,10 @@ export const useSubscription = () => {
         loading: false,
         error: null,
       });
+      initialCheckDone.current = true;
     } catch (error: any) {
       console.error('Error checking subscription:', error);
+      initialCheckDone.current = true;
       setState(prev => ({
         ...prev,
         loading: false,
