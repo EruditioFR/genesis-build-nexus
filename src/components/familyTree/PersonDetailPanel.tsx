@@ -566,17 +566,30 @@ export function PersonDetailPanel({
           )}
         </div>
       )}
-      {readOnly && onCenterOnPerson && (
+      {readOnly && (onCenterOnPerson || onSetAsRoot) && (
         <div className="p-4 border-b flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={onCenterOnPerson}
-            title="Centrer l'arbre sur cette personne"
-          >
-            <Focus className="w-3 h-3 mr-1" />
-            Centrer
-          </Button>
+          {onCenterOnPerson && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onCenterOnPerson}
+              title="Centrer l'arbre sur cette personne"
+            >
+              <Focus className="w-3 h-3 mr-1" />
+              Centrer
+            </Button>
+          )}
+          {onSetAsRoot && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onSetAsRoot}
+              title={t('detail.setAsRoot', 'Définir comme personne racine')}
+            >
+              <Home className="w-3 h-3 mr-1" />
+              {t('detail.setAsRoot', 'Définir comme racine')}
+            </Button>
+          )}
         </div>
       )}
 
