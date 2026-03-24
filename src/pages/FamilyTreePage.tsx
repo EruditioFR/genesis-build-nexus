@@ -767,7 +767,11 @@ export default function FamilyTreePage() {
                   <TreeDeciduous className="w-6 h-6 text-secondary" />
                   <div>
                     <h1 className="font-semibold">{tree?.name || t('defaultTreeName')}</h1>
-                    <p className="text-sm text-muted-foreground">{t('toolbar.persons', { count: persons.length })}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {totalPersonsCount > persons.length 
+                        ? `${t('toolbar.persons', { count: totalPersonsCount })} (${persons.length} ${t('toolbar.loaded', { defaultValue: 'chargées' })})`
+                        : t('toolbar.persons', { count: totalPersonsCount })}
+                    </p>
                   </div>
                 </div>
 
