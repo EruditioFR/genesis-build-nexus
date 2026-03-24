@@ -23,7 +23,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Trash2, TreePine, Users, Heart, Loader2 } from "lucide-react";
+import { Search, Trash2, TreePine, Users, Heart, Loader2, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
