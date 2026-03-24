@@ -10,7 +10,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
 

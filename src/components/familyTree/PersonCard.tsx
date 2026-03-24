@@ -1,6 +1,6 @@
 import { User, UserPlus, Heart, Baby, MoreVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Badge } from '@/components/ui/badge';
 import {
   ContextMenu,

@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { FamilyPerson } from '@/types/familyTree';
 
