@@ -144,6 +144,9 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "center": "Centrer l'arbre sur cette personne",
+    "setAsRoot": "Définir comme personne racine",
+    "rootUpdated": "Personne racine mise à jour",
+    "rootUpdateError": "Erreur lors de la mise à jour de la personne racine",
     "tabs": {
       "overview": "Infos",
       "relations": "Famille",
