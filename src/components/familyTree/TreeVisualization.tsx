@@ -583,7 +583,7 @@ function getGenerationLabel(diff: number): string {
 // Invisible junction node for union midpoints
 const UnionJunctionNode = reactMemo(() => (
   <div style={{ width: 2, height: 2 }}>
-    <Handle type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
+    <Handle type="source" position={Position.Bottom} id="bottom" style={{ opacity: 0, pointerEvents: 'none' }} />
   </div>
 ));
 UnionJunctionNode.displayName = 'UnionJunctionNode';
