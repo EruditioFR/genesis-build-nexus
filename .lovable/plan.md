@@ -1,56 +1,60 @@
 
 
-## Plan: Navigation intuitive entre branches et reperage dans l'arbre
+## Plan: Separation des branches par lignee (regles de l'art genealogique)
 
 ### Probleme
-L'utilisateur se perd dans un arbre de 105+ personnes. Pas de fil d'Ariane, pas de moyen rapide de sauter d'une branche a l'autre, et les labels de generation sont statiques et peu utiles.
+Le moteur de layout actuel melange les branches de belles-familles. Quand Jean-Baptiste Bejot epouse Jessica Guerrero, les ancetres Guerrero se retrouvent entremeles avec les ancetres Bejot au lieu d'etre dans une colonne separee. En genealogie professionnelle, chaque lignee forme un sous-arbre distinct, relies par des lignes de mariage horizontales.
 
-### Solutions proposees
-
-#### 1. Fil d'Ariane (Breadcrumb) — position de la personne selectionnee
-Un bandeau horizontal en haut de la zone de visualisation montrant le chemin genealogique depuis la racine jusqu'a la personne selectionnee :
+### Principe genealogique standard
 
 ```text
-Jean Dupont > Marie Dupont > Pierre Martin > [Vous etes ici]
+  [Gd-pere Bejot]──[Gd-mere Bejot]     [Gd-pere Guerrero]──[Gd-mere Guerrero]
+         │                                        │
+  [Daniel Bejot]──[Jocelyne Dubuis]     [Juan Ramon]──[Marie-Noelle]
+         │                                        │
+         └──── [Jean-Baptiste]════════[Jessica] ──┘
+                       │
+                  [Enfants...]
 ```
 
-Chaque element est cliquable pour centrer + selectionner cette personne. Affiché uniquement quand une personne est selectionnee.
+Chaque lignee = 1 sous-arbre vertical independant. Les mariages inter-branches = lignes horizontales reliant les deux colonnes.
 
-**Fichier** : `src/components/familyTree/TreeBreadcrumb.tsx` (nouveau)
-- Calcule le chemin ascendant depuis la personne selectionnee vers la racine via `relationships`
-- Affiche les ancetres en ordre, chacun cliquable
-- Badge "Vous" sur le root person
+### Solution technique
 
-#### 2. Navigation rapide par branches dans le panneau de detail
-Ameliorer le panneau lateral (`PersonDetailPanel`) pour que les liens familiaux (parents, conjoints, enfants) soient tous des boutons qui centrent et selectionnent la personne cible. Deja partiellement en place via `onPersonClick` — s'assurer que ca fonctionne pour TOUS les liens du panneau.
+**Fichier modifie** : `src/components/familyTree/TreeVisualization.tsx`
 
-#### 3. Indicateur visuel "Vous etes ici" sur la carte
-Ajouter un marqueur visuel distinct (pin/etoile) sur la carte de la personne racine de l'arbre pour que l'utilisateur sache toujours ou est le point de reference.
+#### 1. Identifier les lignees par naissance (pas par mariage)
+- Chaque personne appartient a la lignee de ses **parents biologiques**
+- Un conjoint est "emprunte" a sa lignee d'origine et place a cote de son partenaire, mais ses ancetres restent dans leur propre sous-arbre
+- Modifier le BFS pour ne PAS traverser les liens de parente d'un conjoint (ne pas remonter aux parents du conjoint)
 
-**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
-- Ajouter une prop `rootPersonId` au `TreePersonCard` et afficher un petit badge "Racine" ou icone Home
+#### 2. Layout par sous-arbre de lignee
+- Chaque "root ancestor" (ancetre sans parents) et ses descendants forment un sous-arbre independant
+- `placeSubtree` ne remonte JAMAIS aux parents d'un conjoint
+- Les conjoints sont places a cote de leur partenaire dans le sous-arbre du partenaire
 
-#### 4. Bouton "Retour a la racine"
-Un bouton flottant toujours visible qui recentre sur la personne racine en un clic.
+#### 3. Ordonnancement intelligent des sous-arbres
+- Placer les sous-arbres de gauche a droite en priorisant la proximite des branches mariees
+- La branche principale (celle du root person) est au centre
+- Les branches de belles-familles sont adjacentes aux branches avec lesquelles elles sont liees par mariage
 
-**Fichier** : `src/pages/FamilyTreePage.tsx`
-- Ajouter un bouton flottant en bas a gauche avec icone Home
-- Clic → `centerOnPerson(tree.root_person_id)` + selection
+#### 4. Lignes de mariage inter-branches
+- Les mariages entre membres de branches differentes generent des lignes horizontales longues
+- Les enfants sont connectes au point median entre les deux parents (meme si les parents sont dans des sous-arbres differents)
 
-#### 5. Highlight de la branche active
-Quand une personne est selectionnee, mettre en surbrillance la branche (ancetres + descendants directs) pour qu'elle ressorte visuellement du reste de l'arbre.
+### Modifications concretes
 
-**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
-- Calculer les IDs de la branche active (ancetres + descendants de la personne selectionnee)
-- Appliquer une opacite reduite aux cartes et connexions hors branche
-- Les cartes de la branche restent a pleine opacite
+| Aspect | Avant | Apres |
+|---|---|---|
+| BFS generation | Traverse parents du conjoint → melange | Stop au conjoint, ne remonte pas ses parents |
+| Root ancestors | Tous melanges dans le meme espace | Chaque lignee = colonne separee |
+| Placement conjoint | Tire dans le sous-arbre du partenaire avec toute sa famille | Conjoint place a cote, mais ses ancetres dans leur propre colonne |
+| Connexions enfants | Point d'union = centre du couple local | Point d'union = milieu entre les 2 parents (potentiellement inter-branches) |
 
-### Fichiers modifies
+### Detail de l'algorithme
 
-| Fichier | Modification |
-|---|---|
-| `src/components/familyTree/TreeBreadcrumb.tsx` | **Nouveau** — fil d'Ariane genealogique cliquable |
-| `src/components/familyTree/TreeVisualization.tsx` | Badge racine sur la carte root, highlight de la branche active (opacite reduite hors branche) |
-| `src/pages/FamilyTreePage.tsx` | Integration du breadcrumb, bouton "retour racine" flottant, passage des props de branche active |
-| `public/locales/*/familyTree.json` | Cles i18n : `breadcrumb.root`, `navigation.backToRoot` |
+1. **Decomposer en lignees** : BFS depuis chaque personne, suivre uniquement liens parent→enfant (pas conjoint→parent-du-conjoint). Chaque composante = 1 lignee.
+2. **Ordonner les lignees** : Graphe des mariages inter-lignees → placement adjacent des lignees liees.
+3. **Layout intra-lignee** : Top-down classique (ancetres en haut, descendants en bas). Conjoints places a cote.
+4. **Post-traitement** : Lignes de mariage horizontales entre lignees + lignes parent-enfant vers le point median.
 
