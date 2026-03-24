@@ -443,6 +443,8 @@ function buildFlowElements(
   highlightedPersonId: string | undefined,
   activeBranchIds: Set<string> | undefined,
   rootGeneration: number,
+  maxVisibleGenerations: number,
+  expandedNodeIds: Set<string>,
 ): { nodes: Node<PersonNodeData>[]; edges: Edge[]; positionData: PersonPositionData[] } {
   if (persons.length === 0) {
     return { nodes: [], edges: [], positionData: [] };
