@@ -167,6 +167,9 @@ export default function FamilyTreePage() {
           setPersons(data.persons);
           setRelationships(data.relationships);
           setUnions(data.unions);
+          if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+            setViewMode('ascendant');
+          }
         } else {
           const trees = await fetchTrees();
           
