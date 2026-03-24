@@ -108,8 +108,8 @@ export default function FamilyTreePage() {
 
   // Pre-build indexed maps for parent/child lookups
   const { parentOfIndex, childOfIndex } = useMemo(() => {
-    const parentOf = new Map<string, string[]>();
-    const childOf = new Map<string, string[]>();
+    const parentOf: Map<string, string[]> = new Map();
+    const childOf: Map<string, string[]> = new Map();
     for (const r of relationships) {
       if (!parentOf.has(r.parent_id)) parentOf.set(r.parent_id, []);
       parentOf.get(r.parent_id)!.push(r.child_id);
