@@ -87,6 +87,7 @@ interface PersonDetailPanelProps {
   onLinkPerson?: () => void;
   onMergePerson?: () => void;
   onCenterOnPerson?: () => void;
+  onSetAsRoot?: () => void;
   onDelete?: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
