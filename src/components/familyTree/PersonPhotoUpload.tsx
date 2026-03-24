@@ -28,6 +28,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
   const { updatePerson } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
+  const photoUrl = useFamilyPhotoUrl(person.profile_photo_url);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
