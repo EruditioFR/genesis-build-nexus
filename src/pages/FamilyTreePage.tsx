@@ -655,7 +655,7 @@ export default function FamilyTreePage() {
           </div>
 
           {/* Main content */}
-          <div className="flex-1 flex flex-col overflow-hidden relative">
+          <div className="flex-1 flex flex-col overflow-hidden relative min-h-0">
             {/* Breadcrumb */}
             {selectedPerson && showDetailPanel && (
               <TreeBreadcrumb
