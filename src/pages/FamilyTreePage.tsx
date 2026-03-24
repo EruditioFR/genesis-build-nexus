@@ -70,7 +70,7 @@ export default function FamilyTreePage() {
   const { user, signOut, loading: authLoading } = useAuth();
   const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
   const { isAdmin, loading: adminLoading } = useAdminAuth();
-  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
+  const { fetchTrees, createTree, fetchTree, fetchBranch, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
 
   // Admin viewing another user's tree
   const viewTreeId = searchParams.get('viewTreeId');
