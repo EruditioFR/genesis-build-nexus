@@ -66,6 +66,14 @@ export default {
         },
         pearl: "hsl(var(--pearl))",
         cream: "hsl(var(--cream))",
+        sage: {
+          DEFAULT: "hsl(var(--sage))",
+          light: "hsl(var(--sage-light))",
+        },
+        sepia: {
+          DEFAULT: "hsl(var(--sepia))",
+          light: "hsl(var(--sepia-light))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

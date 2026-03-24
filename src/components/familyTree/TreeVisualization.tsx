@@ -686,9 +686,9 @@ function TreeVisualizationInner({
         nodesConnectable={false}
         elementsSelectable={false}
         proOptions={{ hideAttribution: true }}
-        className="bg-muted/20"
+        className="bg-[hsl(var(--tree-bg))]"
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="hsl(var(--border))" />
+        <Background variant={BackgroundVariant.Dots} gap={24} size={0.8} color="hsl(30 20% 80% / 0.5)" />
         <Controls
           showInteractive={false}
           className="!bg-card !border !border-border !rounded-xl !shadow-lg [&>button]:!bg-card [&>button]:!border-border [&>button]:!text-foreground [&>button:hover]:!bg-muted"
