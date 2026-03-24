@@ -542,6 +542,15 @@ export function PersonDetailPanel({
                   <Focus className="w-3 h-3" />
                 </Button>
               )}
+              {onSetAsRoot && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={onSetAsRoot}
+                  title={t('detail.setAsRoot', 'Définir comme personne racine')}
+                >
+                  <Home className="w-3 h-3" />
+                </Button>
               {onDelete && (
                 <Button 
                   variant="outline" 
