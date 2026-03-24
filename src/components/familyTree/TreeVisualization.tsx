@@ -886,7 +886,6 @@ function TreeVisualizationInner({
           { zoom: 1, duration: 600 }
         );
       }, 50);
-      return;
     }
     onPersonClick(node.data.person);
   }, [onPersonClick, onExpandGhost, setCenter]);
