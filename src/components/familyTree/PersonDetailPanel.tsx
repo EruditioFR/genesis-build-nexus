@@ -79,15 +79,16 @@ interface PersonDetailPanelProps {
   relationships?: ParentChildRelationship[];
   allPersons?: FamilyPerson[];
   onClose: () => void;
-  onAddParent: () => void;
-  onAddChild: () => void;
-  onAddSpouse: () => void;
+  onAddParent?: () => void;
+  onAddChild?: () => void;
+  onAddSpouse?: () => void;
   onLinkPerson?: () => void;
   onMergePerson?: () => void;
   onCenterOnPerson?: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
+  readOnly?: boolean;
 }
 
 export function PersonDetailPanel({
