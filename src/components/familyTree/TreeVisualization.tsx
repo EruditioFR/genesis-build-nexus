@@ -310,41 +310,15 @@ function layoutUnified(
     let sx = unitX + CARD_WIDTH + SPOUSE_GAP;
     for (const sid of spouseIds) {
       positions.set(sid, { personId: sid, x: sx, y, generation: gen });
-      connections.push({
-        type: 'spouse',
-        from: { x: unitX + CARD_WIDTH, y: y + CARD_HEIGHT / 2 },
-        to: { x: sx, y: y + CARD_HEIGHT / 2 },
-        fromPersonId: personId,
-        toPersonId: sid,
-      });
       sx += CARD_WIDTH + SPOUSE_GAP;
     }
 
-    // Union center for child connections
-    let unionCenterX: number;
-    if (spouseIds.length > 0) {
-      const spPos = positions.get(spouseIds[0])!;
-      unionCenterX = (unitX + CARD_WIDTH / 2 + spPos.x + CARD_WIDTH / 2) / 2;
-    } else {
-      unionCenterX = unitX + CARD_WIDTH / 2;
-    }
-
-    // Place children
+    // Place children (no connections here — done post-placement)
     if (childIds.length > 0) {
       const childStartX = x + (totalWidth - childrenWidth) / 2;
       let cx = childStartX;
       for (let i = 0; i < childIds.length; i++) {
         placeInLineage(childIds[i], li, cx);
-        const childPos = positions.get(childIds[i]);
-        if (childPos) {
-          connections.push({
-            type: 'parent-child',
-            from: { x: unionCenterX, y: y + CARD_HEIGHT },
-            to: { x: childPos.x + CARD_WIDTH / 2, y: childPos.y },
-            fromPersonId: personId,
-            toPersonId: childIds[i],
-          });
-        }
         cx += childWidths[i] + H_GAP;
       }
     }
