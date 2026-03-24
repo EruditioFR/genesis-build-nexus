@@ -334,6 +334,22 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
+  const handleExpandGhost = useCallback((personId: string) => {
+    setExpandedNodeIds(prev => {
+      const next = new Set(prev);
+      next.add(personId);
+      return next;
+    });
+  }, []);
+
+  // Compute effective maxVisibleGenerations
+  const effectiveMaxGenerations = useMemo(() => {
+    if (persons.length < LARGE_TREE_THRESHOLD && viewMode === 'hourglass') {
+      return Infinity;
+    }
+    return MAX_VISIBLE_GENERATIONS;
+  }, [persons.length, viewMode]);
+
   const [importProgress, setImportProgress] = useState(0);
   const [importDetail, setImportDetail] = useState('');
 
