@@ -81,11 +81,14 @@ export default function FamilyTreePage() {
   const [relationships, setRelationships] = useState<ParentChildRelationship[]>([]);
   const [unions, setUnions] = useState<FamilyUnion[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [totalPersonsCount, setTotalPersonsCount] = useState(0);
   
   const LARGE_TREE_THRESHOLD = 500;
   const MAX_VISIBLE_GENERATIONS = 3;
+  const BRANCH_FETCH_GENERATIONS = 4;
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set());
+  const [isLoadingBranch, setIsLoadingBranch] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   
