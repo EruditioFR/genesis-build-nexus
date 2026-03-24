@@ -172,10 +172,7 @@ export function MergePersonsDialog({
               <Label>{t('merge.keepPerson')}</Label>
               {keepPerson ? (
                 <div className="flex items-center gap-3 p-3 bg-secondary/10 border border-secondary/20 rounded-lg">
-                  <Avatar>
-                    <AvatarImage src={keepPerson.profile_photo_url || undefined} />
-                    <AvatarFallback>{getInitials(keepPerson)}</AvatarFallback>
-                  </Avatar>
+                  <FamilyAvatar photoUrl={keepPerson.profile_photo_url} fallback={getInitials(keepPerson)} />
                   <div className="flex-1">
                     <p className="font-medium">{formatPersonName(keepPerson)}</p>
                     {keepPerson.birth_date && (
