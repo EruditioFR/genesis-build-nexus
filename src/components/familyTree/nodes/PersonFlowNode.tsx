@@ -21,7 +21,7 @@ export type PersonNodeData = {
 export type PersonNode = Node<PersonNodeData, 'person'>;
 
 export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
-  const { person, isSelected, isHighlighted, isRoot, isDimmed } = data;
+  const { person, isSelected, isHighlighted, isRoot, isDimmed, isGhost, appearDelay } = data;
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
   const getBirthYear = () => {
