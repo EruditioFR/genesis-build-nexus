@@ -81,6 +81,7 @@ export default function FamilyTreePage() {
   const [unions, setUnions] = useState<FamilyUnion[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
   
+  const LARGE_TREE_THRESHOLD = 500;
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
@@ -166,6 +167,9 @@ export default function FamilyTreePage() {
           setPersons(data.persons);
           setRelationships(data.relationships);
           setUnions(data.unions);
+          if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+            setViewMode('ascendant');
+          }
         } else {
           const trees = await fetchTrees();
           
@@ -176,6 +180,9 @@ export default function FamilyTreePage() {
             setPersons(data.persons);
             setRelationships(data.relationships);
             setUnions(data.unions);
+            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+              setViewMode('ascendant');
+            }
           } else {
             const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
             if (newTree) {
@@ -205,6 +212,9 @@ export default function FamilyTreePage() {
     setPersons(data.persons);
     setRelationships(data.relationships);
     setUnions(data.unions);
+    if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+      setViewMode(prev => prev === 'hourglass' ? 'ascendant' : prev);
+    }
   }, [tree?.id, fetchTree]);
 
   useEffect(() => {

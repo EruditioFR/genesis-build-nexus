@@ -208,9 +208,52 @@ function layoutUnified(
 
   const rootGen = genOf.get(rootId) ?? 0;
   const activeIds = new Set<string>();
-  for (const [id, gen] of genOf) {
-    // Hourglass mode: show all generations
-    activeIds.add(id);
+
+  if (viewMode === 'ascendant') {
+    // Only show ancestors of root (generation <= rootGen) and their spouses
+    const ancestorQueue = [rootId];
+    const visited = new Set<string>();
+    while (ancestorQueue.length > 0) {
+      const currentId = ancestorQueue.shift()!;
+      if (visited.has(currentId)) continue;
+      visited.add(currentId);
+      if (!genOf.has(currentId)) continue;
+      activeIds.add(currentId);
+      // Add parents
+      for (const pid of graph.getParentIds(currentId)) {
+        if (!visited.has(pid)) ancestorQueue.push(pid);
+      }
+      // Add spouses at same generation
+      for (const sid of graph.getSpouseIds(currentId)) {
+        if (!visited.has(sid) && genOf.has(sid)) {
+          activeIds.add(sid);
+        }
+      }
+    }
+  } else if (viewMode === 'descendant') {
+    // Only show descendants of root and their spouses
+    const descQueue = [rootId];
+    const visited = new Set<string>();
+    while (descQueue.length > 0) {
+      const currentId = descQueue.shift()!;
+      if (visited.has(currentId)) continue;
+      visited.add(currentId);
+      if (!genOf.has(currentId)) continue;
+      activeIds.add(currentId);
+      for (const cid of graph.getChildIds(currentId)) {
+        if (!visited.has(cid)) descQueue.push(cid);
+      }
+      for (const sid of graph.getSpouseIds(currentId)) {
+        if (!visited.has(sid) && genOf.has(sid)) {
+          activeIds.add(sid);
+        }
+      }
+    }
+  } else {
+    // Hourglass: show all
+    for (const [id] of genOf) {
+      activeIds.add(id);
+    }
   }
 
   let minGen = Infinity;
