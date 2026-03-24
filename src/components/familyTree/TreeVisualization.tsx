@@ -659,7 +659,7 @@ function TreeVisualizationInner({
     }
   }, [onCenterOnPerson, nodes, setCenter]);
 
-  const onNodeClick: OnNodeClick<Node<PersonNodeData>> = useCallback((_event, node) => {
+  const onNodeClick: NodeMouseHandler<Node<PersonNodeData>> = useCallback((_event, node) => {
     onPersonClick(node.data.person);
   }, [onPersonClick]);
 
