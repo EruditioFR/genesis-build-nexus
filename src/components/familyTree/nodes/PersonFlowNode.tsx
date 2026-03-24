@@ -124,8 +124,17 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
           )}
         </div>
 
+        {/* Ghost expansion badge */}
+        {isGhost && (
+          <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10">
+            <div className="w-5 h-5 rounded-full bg-[hsl(var(--gold))] text-white flex items-center justify-center shadow-md">
+              <Plus className="w-3 h-3" />
+            </div>
+          </div>
+        )}
+
         {/* Deceased indicator */}
-        {!person.is_alive && (
+        {!person.is_alive && !isGhost && (
           <div className="absolute top-1 right-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--sepia-light)/0.4)]" />
           </div>
