@@ -86,7 +86,7 @@ export default function FamilyTreePage() {
   const LARGE_TREE_THRESHOLD = 500;
   const MAX_VISIBLE_GENERATIONS = 3;
   const BRANCH_FETCH_GENERATIONS = 4;
-  const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
+  const [viewMode, setViewMode] = useState<TreeViewMode>('ascendant');
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set());
   const [isLoadingBranch, setIsLoadingBranch] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
@@ -272,7 +272,7 @@ export default function FamilyTreePage() {
     setRelationships(data.relationships);
     setUnions(data.unions);
     if (data.persons.length >= LARGE_TREE_THRESHOLD) {
-      setViewMode(prev => prev === 'hourglass' ? 'ascendant' : prev);
+      setViewMode('ascendant');
     }
   }, [tree?.id, fetchTree]);
 
@@ -438,12 +438,7 @@ export default function FamilyTreePage() {
   }, [tree?.id, fetchBranch]);
 
   // Compute effective maxVisibleGenerations
-  const effectiveMaxGenerations = useMemo(() => {
-    if (persons.length < LARGE_TREE_THRESHOLD && viewMode === 'hourglass') {
-      return Infinity;
-    }
-    return MAX_VISIBLE_GENERATIONS;
-  }, [persons.length, viewMode]);
+  const effectiveMaxGenerations = MAX_VISIBLE_GENERATIONS;
 
   const [importProgress, setImportProgress] = useState(0);
   const [importDetail, setImportDetail] = useState('');
@@ -681,16 +676,7 @@ export default function FamilyTreePage() {
         </DropdownMenu>
       )}
 
-      <Select value={viewMode} onValueChange={(v) => setViewMode(v as TreeViewMode)}>
-        <SelectTrigger className="w-auto h-8 gap-1 text-sm">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="ascendant">{t('viewMode.ascendant')}</SelectItem>
-          <SelectItem value="descendant">{t('viewMode.descendant')}</SelectItem>
-          <SelectItem value="hourglass">{t('viewMode.hourglass')}</SelectItem>
-        </SelectContent>
-      </Select>
+      {/* View mode fixed to ascendant */}
 
       <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
         <MapIcon className="w-4 h-4 text-muted-foreground" />
