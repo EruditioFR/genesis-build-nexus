@@ -783,8 +783,20 @@ function TreeVisualizationInner({
   }, [onCenterOnPerson, nodes, setCenter]);
 
   const onNodeClick: NodeMouseHandler<Node<PersonNodeData>> = useCallback((_event, node) => {
+    if (node.data.isGhost && onExpandGhost) {
+      onExpandGhost(node.data.person.id);
+      // Animated fitView on the expanded ghost node
+      setTimeout(() => {
+        setCenter(
+          node.position.x + CARD_WIDTH / 2,
+          node.position.y + CARD_HEIGHT / 2,
+          { zoom: 1, duration: 600 }
+        );
+      }, 50);
+      return;
+    }
     onPersonClick(node.data.person);
-  }, [onPersonClick]);
+  }, [onPersonClick, onExpandGhost, setCenter]);
 
   const minimapNodeColor = useCallback((node: Node<PersonNodeData>) => {
     if (node.data.isSelected) return 'hsl(var(--secondary))';
