@@ -142,7 +142,7 @@ export default function FamilyTreePage() {
     return ids;
   }, [selectedPerson, showDetailPanel, relationships, unions]);
 
-  const canAccessFamilyTree = limits.canAccessFamilyTree;
+  const canAccessFamilyTree = limits.canAccessFamilyTree || isAdminViewing;
 
   // Initialize: fetch or create the single tree
   const initializedRef = useRef(false);
