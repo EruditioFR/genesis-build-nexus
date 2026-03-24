@@ -541,7 +541,9 @@ function computeLayout(
   const positionData: PersonPositionData[] = [];
   let visibleCount = 0;
   const visibleIds = new Set<string>();
+  const excludedIds = new Set<string>();
 
+  // First pass: determine visible vs ghost vs excluded
   for (const { id, pos, dist } of sortedEntries) {
     const person = graph.personMap.get(id);
     if (!person) continue;
@@ -550,12 +552,53 @@ function computeLayout(
     const isGhostByGen = !isRootNode && isFinite(maxVisibleGenerations) && dist === maxVisibleGenerations + 1;
     const isExcludedByGen = !isRootNode && isFinite(maxVisibleGenerations) && dist > maxVisibleGenerations + 1;
 
-    if (isExcludedByGen) continue;
+    if (isExcludedByGen) {
+      excludedIds.add(id);
+      continue;
+    }
 
     const isOverCap = !isRootNode && !isGhostByGen && visibleCount >= MAX_VISIBLE_PERSONS;
     const isGhost = isGhostByGen || isOverCap;
 
     if (!isGhost) visibleCount++;
+
+    // Compute hidden count behind this ghost node
+    let ghostCount = 0;
+    let ghostLabel = '';
+    if (isGhost) {
+      // BFS from this person to count all hidden descendants/ancestors
+      const counted = new Set<string>();
+      const bfsQueue = [id];
+      while (bfsQueue.length > 0) {
+        const cur = bfsQueue.shift()!;
+        if (counted.has(cur)) continue;
+        counted.add(cur);
+        // Count children
+        for (const cid of graph.getChildIds(cur)) {
+          if (!counted.has(cid) && !visibleIds.has(cid)) bfsQueue.push(cid);
+        }
+        // Count parents
+        for (const pid of graph.getParentIds(cur)) {
+          if (!counted.has(pid) && !visibleIds.has(pid)) bfsQueue.push(pid);
+        }
+        // Count spouses
+        for (const sid of graph.getSpouseIds(cur)) {
+          if (!counted.has(sid) && !visibleIds.has(sid)) bfsQueue.push(sid);
+        }
+      }
+      ghostCount = Math.max(0, counted.size - 1); // exclude self
+      if (ghostCount > 0) {
+        // Determine direction
+        const rootPos = allPositions.get(rootPerson.id);
+        if (rootPos && pos.generation < rootPos.generation) {
+          ghostLabel = `+${ghostCount} ancêtres`;
+        } else if (rootPos && pos.generation > rootPos.generation) {
+          ghostLabel = `+${ghostCount} descendants`;
+        } else {
+          ghostLabel = `+${ghostCount}`;
+        }
+      }
+    }
 
     const genDiff = pos.generation - detectedRootGen;
     const appearDelay = isGhost ? 0 : Math.max(0, (dist - 1) * 0.08);
@@ -570,6 +613,8 @@ function computeLayout(
       isRoot: rootPersonId === id,
       appearDelay,
       generationLabel: getGenerationLabel(genDiff),
+      ghostCount,
+      ghostLabel,
     });
 
     visibleIds.add(id);
