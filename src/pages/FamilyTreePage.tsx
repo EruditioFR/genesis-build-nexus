@@ -193,11 +193,21 @@ export default function FamilyTreePage() {
         if (isAdminViewing && viewTreeId) {
           const data = await fetchTree(viewTreeId);
           setTree(data.tree);
-          setPersons(data.persons);
-          setRelationships(data.relationships);
-          setUnions(data.unions);
-          if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+          setTotalPersonsCount(data.persons.length);
+          if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
+            // Large tree: load only nearby branch
+            const branch = await fetchBranch(viewTreeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
+            setPersons(branch.persons);
+            setRelationships(branch.relationships);
+            setUnions(branch.unions);
             setViewMode('ascendant');
+          } else {
+            setPersons(data.persons);
+            setRelationships(data.relationships);
+            setUnions(data.unions);
+            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+              setViewMode('ascendant');
+            }
           }
         } else {
           const trees = await fetchTrees();
@@ -206,11 +216,21 @@ export default function FamilyTreePage() {
             const treeId = trees[0].id;
             const data = await fetchTree(treeId);
             setTree(data.tree);
-            setPersons(data.persons);
-            setRelationships(data.relationships);
-            setUnions(data.unions);
-            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+            setTotalPersonsCount(data.persons.length);
+            if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
+              // Large tree: load only nearby branch
+              const branch = await fetchBranch(treeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
+              setPersons(branch.persons);
+              setRelationships(branch.relationships);
+              setUnions(branch.unions);
               setViewMode('ascendant');
+            } else {
+              setPersons(data.persons);
+              setRelationships(data.relationships);
+              setUnions(data.unions);
+              if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+                setViewMode('ascendant');
+              }
             }
           } else {
             const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
