@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
 import { Home } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
 
