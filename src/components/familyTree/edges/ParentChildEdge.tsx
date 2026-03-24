@@ -1,11 +1,12 @@
 import { memo } from 'react';
-import { type EdgeProps, getBezierPath } from '@xyflow/react';
+import { type EdgeProps, getBezierPath, type Edge } from '@xyflow/react';
 
-interface ParentChildEdgeData {
+type ParentChildEdgeData = {
   relationshipType?: string;
   isActive?: boolean;
-  [key: string]: unknown;
-}
+};
+
+export type ParentChildEdgeType = Edge<ParentChildEdgeData, 'parentChild'>;
 
 export const ParentChildEdge = memo(({
   sourceX,
@@ -16,7 +17,7 @@ export const ParentChildEdge = memo(({
   targetPosition,
   style,
   data,
-}: EdgeProps<ParentChildEdgeData>) => {
+}: EdgeProps<ParentChildEdgeType>) => {
   const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
@@ -42,14 +43,12 @@ export const ParentChildEdge = memo(({
         style={style}
         className="transition-all duration-200"
       />
-      {/* Arrival dot */}
       <circle
         cx={targetX}
         cy={targetY}
         r={3}
         fill="hsl(var(--secondary))"
         fillOpacity={0.5}
-        style={style}
       />
     </g>
   );

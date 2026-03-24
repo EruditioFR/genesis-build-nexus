@@ -1,11 +1,12 @@
 import { memo } from 'react';
-import { type EdgeProps, getStraightPath } from '@xyflow/react';
+import { type EdgeProps, getStraightPath, type Edge } from '@xyflow/react';
 
-interface MarriageEdgeData {
+type MarriageEdgeData = {
   unionType?: string;
   isActive?: boolean;
-  [key: string]: unknown;
-}
+};
+
+export type MarriageEdgeType = Edge<MarriageEdgeData, 'marriage'>;
 
 export const MarriageEdge = memo(({
   sourceX,
@@ -13,7 +14,7 @@ export const MarriageEdge = memo(({
   targetX,
   targetY,
   style,
-}: EdgeProps<MarriageEdgeData>) => {
+}: EdgeProps<MarriageEdgeType>) => {
   const [, labelX, labelY] = getStraightPath({
     sourceX,
     sourceY,
@@ -24,8 +25,7 @@ export const MarriageEdge = memo(({
   const offset = 2;
 
   return (
-    <g>
-      {/* Double line for marriage */}
+    <g style={style}>
       <line
         x1={sourceX}
         y1={sourceY - offset}
@@ -33,7 +33,6 @@ export const MarriageEdge = memo(({
         y2={targetY - offset}
         stroke="hsl(var(--accent))"
         strokeWidth={1.5}
-        style={style}
       />
       <line
         x1={sourceX}
@@ -42,16 +41,14 @@ export const MarriageEdge = memo(({
         y2={targetY + offset}
         stroke="hsl(var(--accent))"
         strokeWidth={1.5}
-        style={style}
       />
-      {/* Heart symbol at center */}
       <text
         x={labelX}
         y={labelY + 1}
         textAnchor="middle"
         dominantBaseline="central"
         className="text-[10px]"
-        style={{ ...style, fill: 'hsl(var(--accent))' }}
+        fill="hsl(var(--accent))"
       >
         ♥
       </text>
