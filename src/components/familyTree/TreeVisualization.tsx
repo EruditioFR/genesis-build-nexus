@@ -1,47 +1,36 @@
-import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
-import { Home } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { useMemo, useCallback, useEffect, useRef } from 'react';
+import {
+  ReactFlow,
+  Node,
+  Edge,
+  Background,
+  MiniMap,
+  Controls,
+  useReactFlow,
+  ReactFlowProvider,
+  BackgroundVariant,
+  type NodeTypes,
+  type EdgeTypes,
+  type OnNodeClick,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import type { FamilyPerson, ParentChildRelationship, FamilyUnion, TreeViewMode } from '@/types/familyTree';
+import { PersonFlowNode, type PersonNodeData } from './nodes/PersonFlowNode';
+import { MarriageEdge } from './edges/MarriageEdge';
+import { ParentChildEdge } from './edges/ParentChildEdge';
 
 // Layout constants
-const CARD_WIDTH = 160;
-const CARD_HEIGHT = 80;
-const H_GAP = 40;
-const V_GAP = 100;
-const SPOUSE_GAP = 20;
-const COMPONENT_GAP = 120;
-
-// ─── Internal types ─────────────────────────────────────────────────────────
-
-interface LayoutNode {
-  personId: string;
-  x: number;
-  y: number;
-  generation: number;
-}
-
-interface Connection {
-  type: 'parent-child' | 'spouse';
-  from: { x: number; y: number };
-  to: { x: number; y: number };
-  fromPersonId: string;
-  toPersonId: string;
-}
+const CARD_WIDTH = 180;
+const CARD_HEIGHT = 90;
+const H_GAP = 50;
+const V_GAP = 120;
+const SPOUSE_GAP = 30;
+const COMPONENT_GAP = 140;
 
 export interface PersonPositionData {
   personId: string;
   x: number;
   y: number;
-}
-
-interface PersonPosition {
-  person: FamilyPerson;
-  x: number;
-  y: number;
-  generation: number;
-  spouses: FamilyPerson[];
 }
 
 // ─── Graph builder ──────────────────────────────────────────────────────────
@@ -129,17 +118,14 @@ function buildFamilyGraph(
   };
 }
 
-// ─── Lineage-based layout engine (genealogical standard) ────────────────────
-//
-// Each bloodline forms an independent vertical column. Spouses with ancestry
-// get their own column. Cross-lineage marriages are shown as horizontal lines.
-//
-// Algorithm:
-// 1. BFS from root through parent-child links only → main lineage
-// 2. Spouses with parents → separate lineages (recursively)
-// 3. Spouses without parents → same lineage as partner
-// 4. Layout each lineage as an independent subtree column
-// 5. Post-processing: cross-lineage marriage + parent-child connections
+// ─── Lineage-based layout engine ────────────────────────────────────────────
+
+interface LayoutNode {
+  personId: string;
+  x: number;
+  y: number;
+  generation: number;
+}
 
 interface Lineage {
   members: Set<string>;
@@ -153,16 +139,13 @@ function layoutUnified(
   relationships: ParentChildRelationship[],
   unions: FamilyUnion[],
   viewMode: TreeViewMode,
-): { positions: Map<string, LayoutNode>; connections: Connection[]; rootGeneration: number } {
+): { positions: Map<string, LayoutNode>; rootGeneration: number } {
   const positions = new Map<string, LayoutNode>();
-  const connections: Connection[] = [];
 
-  // ── Phase 1: Build lineages by blood connection ─────────────────────────
   const genOf = new Map<string, number>();
   const lineageOf = new Map<string, number>();
   const lineages: Lineage[] = [];
 
-  /** BFS through parent-child links only. Returns lineage info. */
   function buildLineageFrom(startId: string, startGen: number, lineageIdx: number): Lineage {
     const members = new Set<string>();
     const queue: { id: string; gen: number }[] = [{ id: startId, gen: startGen }];
@@ -182,7 +165,6 @@ function layoutUnified(
       }
     }
 
-    // Find topmost ancestor without parents in this lineage
     let rootAncId = startId;
     let minGenVal = Infinity;
     for (const mid of members) {
@@ -199,10 +181,8 @@ function layoutUnified(
     return { members, rootAncestorId: rootAncId };
   }
 
-  // Main lineage from root
   lineages.push(buildLineageFrom(rootId, 0, 0));
 
-  // Iteratively discover spouse lineages
   let discoveryChanged = true;
   while (discoveryChanged) {
     discoveryChanged = false;
@@ -212,12 +192,10 @@ function layoutUnified(
           if (genOf.has(spouseId)) continue;
           const spouseParents = graph.getParentIds(spouseId);
           if (spouseParents.length > 0) {
-            // Spouse has ancestry → separate lineage, anchored at partner's generation
             const newIdx = lineages.length;
             lineages.push(buildLineageFrom(spouseId, genOf.get(memberId)!, newIdx));
             discoveryChanged = true;
           } else {
-            // Orphan spouse → place in partner's lineage
             genOf.set(spouseId, genOf.get(memberId)!);
             lineage.members.add(spouseId);
             lineageOf.set(spouseId, lineages.indexOf(lineage));
@@ -227,7 +205,6 @@ function layoutUnified(
     }
   }
 
-  // ── Phase 2: Filter by view mode ────────────────────────────────────────
   const rootGen = genOf.get(rootId) ?? 0;
   const activeIds = new Set<string>();
   for (const [id, gen] of genOf) {
@@ -242,7 +219,6 @@ function layoutUnified(
   const normGen = (id: string) => (genOf.get(id) ?? 0) - minGen;
   const normalizedRootGen = rootGen - minGen;
 
-  // ── Phase 3: Layout each lineage as independent column ──────────────────
   const placed = new Set<string>();
 
   function getSpousesInLineage(id: string, li: number): string[] {
@@ -289,7 +265,6 @@ function layoutUnified(
 
     const childIds = getChildrenInLineage(personId, spouseIds, li);
 
-    // Measure children
     const childWidths: number[] = [];
     let childrenWidth = 0;
     for (const cid of childIds) {
@@ -303,17 +278,14 @@ function layoutUnified(
     const totalWidth = Math.max(unitWidth, childrenWidth);
     const unitX = x + (totalWidth - unitWidth) / 2;
 
-    // Place person
     positions.set(personId, { personId, x: unitX, y, generation: gen });
 
-    // Place same-lineage spouses adjacent
     let sx = unitX + CARD_WIDTH + SPOUSE_GAP;
     for (const sid of spouseIds) {
       positions.set(sid, { personId: sid, x: sx, y, generation: gen });
       sx += CARD_WIDTH + SPOUSE_GAP;
     }
 
-    // Place children (no connections here — done post-placement)
     if (childIds.length > 0) {
       const childStartX = x + (totalWidth - childrenWidth) / 2;
       let cx = childStartX;
@@ -326,7 +298,7 @@ function layoutUnified(
     return totalWidth;
   }
 
-  // ── Order lineages: main first, then by marriage proximity ──────────────
+  // Order lineages
   const lineageOrder: number[] = [0];
   const orderedSet = new Set([0]);
   const lineageQueue = [0];
@@ -350,16 +322,11 @@ function layoutUnified(
     if (!orderedSet.has(i)) lineageOrder.push(i);
   }
 
-  // ── Layout each lineage column ─────────────────────────────────────────
-  // A single lineage can have MULTIPLE top-level ancestors (e.g. paternal
-  // grandparents AND maternal grandparents connected only through their
-  // children's marriage). We must place ALL of them.
   let currentX = 0;
   for (const li of lineageOrder) {
     const lineage = lineages[li];
     if (!lineage) continue;
 
-    // Find ALL active root ancestors (members without parents in lineage)
     const rootAncs: string[] = [];
     for (const mid of lineage.members) {
       if (!activeIds.has(mid)) continue;
@@ -371,17 +338,13 @@ function layoutUnified(
       }
     }
 
-    // Sort by generation (top first), then by x-stability
     rootAncs.sort((a, b) => normGen(a) - normGen(b));
 
-    // Deduplicate: skip ancestors whose spouse is already in the list
-    // (they'll be placed alongside their partner)
     const rootAncsFiltered: string[] = [];
     const willBePlacedAsSpouse = new Set<string>();
     for (const ancId of rootAncs) {
       if (willBePlacedAsSpouse.has(ancId)) continue;
       rootAncsFiltered.push(ancId);
-      // Mark spouses at the same generation as "will be placed alongside"
       for (const sid of graph.getSpouseIds(ancId)) {
         if (lineageOf.get(sid) === li && rootAncs.includes(sid)) {
           willBePlacedAsSpouse.add(sid);
@@ -396,71 +359,11 @@ function layoutUnified(
     }
   }
 
-  // ── Resolve overlaps BEFORE generating connections ──────────────────────
+  // Resolve overlaps
   resolveOverlaps(positions);
 
-  // ── Phase 4: Generate ALL connections post-placement ─────────────────────
-
-  // Spouse connections from unions
-  const spouseKeys = new Set<string>();
-  for (const u of unions) {
-    const pos1 = positions.get(u.person1_id);
-    const pos2 = positions.get(u.person2_id);
-    if (!pos1 || !pos2) continue;
-    const key = [u.person1_id, u.person2_id].sort().join('|');
-    if (spouseKeys.has(key)) continue;
-    spouseKeys.add(key);
-    const left = pos1.x < pos2.x ? pos1 : pos2;
-    const right = pos1.x < pos2.x ? pos2 : pos1;
-    const leftId = pos1.x < pos2.x ? u.person1_id : u.person2_id;
-    const rightId = pos1.x < pos2.x ? u.person2_id : u.person1_id;
-    connections.push({
-      type: 'spouse',
-      from: { x: left.x + CARD_WIDTH, y: left.y + CARD_HEIGHT / 2 },
-      to: { x: right.x, y: right.y + CARD_HEIGHT / 2 },
-      fromPersonId: leftId,
-      toPersonId: rightId,
-    });
-  }
-
-  // Parent-child connections: one per child, from the union center of parents
-  const childrenConnected = new Set<string>();
-  for (const r of relationships) {
-    if (!activeIds.has(r.parent_id) || !activeIds.has(r.child_id)) continue;
-    if (childrenConnected.has(r.child_id)) continue;
-    const parentPos = positions.get(r.parent_id);
-    const childPos = positions.get(r.child_id);
-    if (!parentPos || !childPos) continue;
-
-    // Find the co-parent (spouse who is also a parent of this child)
-    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id);
-    let fromX = parentPos.x + CARD_WIDTH / 2;
-    let fromY = parentPos.y + CARD_HEIGHT;
-    
-    for (const otherId of otherParents) {
-      const otherPos = positions.get(otherId);
-      if (otherPos) {
-        // Union center = midpoint between both parents
-        fromX = (parentPos.x + CARD_WIDTH / 2 + otherPos.x + CARD_WIDTH / 2) / 2;
-        fromY = Math.max(parentPos.y, otherPos.y) + CARD_HEIGHT;
-        break;
-      }
-    }
-
-    connections.push({
-      type: 'parent-child',
-      from: { x: fromX, y: fromY },
-      to: { x: childPos.x + CARD_WIDTH / 2, y: childPos.y },
-      fromPersonId: r.parent_id,
-      toPersonId: r.child_id,
-    });
-    childrenConnected.add(r.child_id);
-  }
-
-  return { positions, connections, rootGeneration: normalizedRootGen };
+  return { positions, rootGeneration: normalizedRootGen };
 }
-
-// ─── Overlap resolver ───────────────────────────────────────────────────────
 
 function resolveOverlaps(positions: Map<string, LayoutNode>): void {
   const byGeneration = new Map<number, LayoutNode[]>();
@@ -485,6 +388,194 @@ function resolveOverlaps(positions: Map<string, LayoutNode>): void {
   }
 }
 
+// ─── Convert layout to React Flow nodes & edges ─────────────────────────────
+
+function buildFlowElements(
+  persons: FamilyPerson[],
+  relationships: ParentChildRelationship[],
+  unions: FamilyUnion[],
+  rootPersonId: string | undefined,
+  viewMode: TreeViewMode,
+  selectedPersonId: string | undefined,
+  highlightedPersonId: string | undefined,
+  activeBranchIds: Set<string> | undefined,
+  rootGeneration: number,
+): { nodes: Node<PersonNodeData>[]; edges: Edge[]; positionData: PersonPositionData[] } {
+  if (persons.length === 0) {
+    return { nodes: [], edges: [], positionData: [] };
+  }
+
+  const graph = buildFamilyGraph(persons, relationships, unions);
+  const rootPerson = rootPersonId
+    ? persons.find(p => p.id === rootPersonId) || persons[0]
+    : persons[0];
+
+  const components = graph.findComponents(rootPerson.id);
+  const allPositions = new Map<string, LayoutNode>();
+  let currentX = 0;
+  let detectedRootGen = 0;
+
+  for (const component of components) {
+    if (component.length === 0) continue;
+    const componentRoot = component.includes(rootPerson.id) ? rootPerson.id : component[0];
+    const result = layoutUnified(componentRoot, graph, persons, relationships, unions, viewMode);
+
+    for (const [id, pos] of result.positions) {
+      allPositions.set(id, { ...pos, x: pos.x + currentX });
+    }
+
+    if (componentRoot === rootPerson.id) {
+      detectedRootGen = result.rootGeneration;
+    }
+
+    let maxX = 0;
+    for (const pos of result.positions.values()) {
+      maxX = Math.max(maxX, pos.x + CARD_WIDTH);
+    }
+    currentX += maxX + COMPONENT_GAP;
+  }
+
+  // Safety net for unpositioned persons
+  const missingPersons = persons.filter(p => !allPositions.has(p.id));
+  if (missingPersons.length > 0) {
+    let maxY = 0;
+    for (const pos of allPositions.values()) maxY = Math.max(maxY, pos.y);
+    const orphanY = maxY + CARD_HEIGHT + COMPONENT_GAP;
+    let orphanX = 0;
+    for (const p of missingPersons) {
+      allPositions.set(p.id, { personId: p.id, x: orphanX, y: orphanY, generation: 99 });
+      orphanX += CARD_WIDTH + H_GAP;
+    }
+  }
+
+  // Build React Flow nodes
+  const nodes: Node<PersonNodeData>[] = [];
+  const positionData: PersonPositionData[] = [];
+
+  for (const [id, pos] of allPositions) {
+    const person = graph.personMap.get(id);
+    if (!person) continue;
+
+    const isDimmed = !!activeBranchIds && !activeBranchIds.has(id);
+    const genDiff = pos.generation - (rootGeneration ?? detectedRootGen);
+
+    nodes.push({
+      id,
+      type: 'person',
+      position: { x: pos.x, y: pos.y },
+      data: {
+        person,
+        isSelected: selectedPersonId === id,
+        isHighlighted: highlightedPersonId === id,
+        isRoot: rootPersonId === id,
+        isDimmed,
+        generation: pos.generation,
+        generationLabel: getGenerationLabel(genDiff),
+      },
+      style: { width: CARD_WIDTH, height: CARD_HEIGHT },
+    });
+
+    positionData.push({ personId: id, x: pos.x, y: pos.y });
+  }
+
+  // Build edges
+  const edges: Edge[] = [];
+
+  // Spouse edges
+  const spouseKeys = new Set<string>();
+  for (const u of unions) {
+    const pos1 = allPositions.get(u.person1_id);
+    const pos2 = allPositions.get(u.person2_id);
+    if (!pos1 || !pos2) continue;
+    const key = [u.person1_id, u.person2_id].sort().join('|');
+    if (spouseKeys.has(key)) continue;
+    spouseKeys.add(key);
+
+    const left = pos1.x < pos2.x ? u.person1_id : u.person2_id;
+    const right = pos1.x < pos2.x ? u.person2_id : u.person1_id;
+
+    const isActive = !activeBranchIds || (activeBranchIds.has(u.person1_id) && activeBranchIds.has(u.person2_id));
+
+    edges.push({
+      id: `marriage-${key}`,
+      source: left,
+      target: right,
+      type: 'marriage',
+      sourceHandle: 'right',
+      targetHandle: 'left',
+      data: { unionType: u.union_type, isActive },
+      style: { opacity: isActive ? 1 : 0.15 },
+    });
+  }
+
+  // Parent-child edges
+  const childrenConnected = new Set<string>();
+  for (const r of relationships) {
+    if (!allPositions.has(r.parent_id) || !allPositions.has(r.child_id)) continue;
+    if (childrenConnected.has(r.child_id)) continue;
+
+    const parentPos = allPositions.get(r.parent_id)!;
+    const childPos = allPositions.get(r.child_id)!;
+
+    // Find co-parent for union midpoint
+    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id);
+    let sourceId = r.parent_id;
+    let sourceHandle = 'bottom';
+
+    // If there's a co-parent, create a virtual union node or connect from the marriage midpoint
+    // For simplicity, we connect from parent's bottom handle
+    for (const otherId of otherParents) {
+      if (allPositions.has(otherId)) {
+        // Use the parent that's more to the left as source to keep consistent
+        const otherPos = allPositions.get(otherId)!;
+        if (otherPos.x < parentPos.x) {
+          sourceId = otherId;
+        }
+        break;
+      }
+    }
+
+    const isActive = !activeBranchIds || (activeBranchIds.has(r.parent_id) && activeBranchIds.has(r.child_id));
+
+    edges.push({
+      id: `parent-child-${r.parent_id}-${r.child_id}`,
+      source: sourceId,
+      target: r.child_id,
+      type: 'parentChild',
+      sourceHandle: 'bottom',
+      targetHandle: 'top',
+      data: { relationshipType: r.relationship_type, isActive },
+      style: { opacity: isActive ? 1 : 0.15 },
+    });
+    childrenConnected.add(r.child_id);
+  }
+
+  return { nodes, edges, positionData };
+}
+
+function getGenerationLabel(diff: number): string {
+  if (diff === 0) return 'Vous';
+  if (diff === 1) return 'Enfants';
+  if (diff === -1) return 'Parents';
+  if (diff === 2) return 'Petits-enfants';
+  if (diff === -2) return 'Grands-parents';
+  if (diff === 3) return 'Arr.-petits-enfants';
+  if (diff === -3) return 'Arr.-grands-parents';
+  if (diff > 0) return `Gén. +${diff}`;
+  return `Gén. ${diff}`;
+}
+
+// ─── Custom node types ──────────────────────────────────────────────────────
+
+const nodeTypes: NodeTypes = {
+  person: PersonFlowNode,
+};
+
+const edgeTypes: EdgeTypes = {
+  marriage: MarriageEdge,
+  parentChild: ParentChildEdge,
+};
+
 // ─── Main component ─────────────────────────────────────────────────────────
 
 interface TreeVisualizationProps {
@@ -499,9 +590,11 @@ interface TreeVisualizationProps {
   onPersonClick: (person: FamilyPerson) => void;
   onAddPerson: (type: 'parent' | 'child' | 'spouse', target: FamilyPerson) => void;
   onPositionsCalculated?: (positions: PersonPositionData[]) => void;
+  showMinimap?: boolean;
+  onCenterOnPerson?: string | null;
 }
 
-export function TreeVisualization({
+function TreeVisualizationInner({
   persons,
   relationships,
   unions,
@@ -511,403 +604,112 @@ export function TreeVisualization({
   highlightedPersonId,
   activeBranchIds,
   onPersonClick,
-  onAddPerson,
   onPositionsCalculated,
+  showMinimap = true,
+  onCenterOnPerson,
 }: TreeVisualizationProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  const { positions, connections, bounds, rootGeneration } = useMemo(() => {
-    if (persons.length === 0) {
-      return {
-        positions: [] as PersonPosition[],
-        connections: [] as Connection[],
-        bounds: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
-        rootGeneration: 0,
-      };
-    }
-
-    const graph = buildFamilyGraph(persons, relationships, unions);
-
-    // Find root person
-    const rootPerson = rootPersonId
-      ? persons.find(p => p.id === rootPersonId) || persons[0]
-      : persons[0];
-
-    // Find connected components
-    const components = graph.findComponents(rootPerson.id);
-
-    const allPositions = new Map<string, LayoutNode>();
-    const allConnections: Connection[] = [];
-    let currentX = 0;
-    let detectedRootGen = 0;
-
-    for (const component of components) {
-      if (component.length === 0) continue;
-
-      // Pick the root for this component
-      const componentRoot = component.includes(rootPerson.id)
-        ? rootPerson.id
-        : component[0];
-
-      // Use the unified layout engine
-      const result = layoutUnified(componentRoot, graph, persons, relationships, unions, viewMode);
-
-      // Shift positions by currentX offset
-      for (const [id, pos] of result.positions) {
-        allPositions.set(id, { ...pos, x: pos.x + currentX });
-      }
-      for (const conn of result.connections) {
-        allConnections.push({
-          ...conn,
-          from: { x: conn.from.x + currentX, y: conn.from.y },
-          to: { x: conn.to.x + currentX, y: conn.to.y },
-        });
-      }
-
-      if (componentRoot === rootPerson.id) {
-        detectedRootGen = result.rootGeneration;
-      }
-
-      // Calculate max X for next component
-      let maxX = 0;
-      for (const pos of result.positions.values()) {
-        maxX = Math.max(maxX, pos.x + CARD_WIDTH);
-      }
-      currentX += maxX + COMPONENT_GAP;
-    }
-
-    // Safety net: place any persons not yet positioned
-    const missingPersons = persons.filter(p => !allPositions.has(p.id));
-    if (missingPersons.length > 0) {
-      let maxY = 0;
-      for (const pos of allPositions.values()) maxY = Math.max(maxY, pos.y);
-      const orphanY = maxY + CARD_HEIGHT + COMPONENT_GAP;
-      let orphanX = 0;
-      for (const p of missingPersons) {
-        allPositions.set(p.id, { personId: p.id, x: orphanX, y: orphanY, generation: 99 });
-        orphanX += CARD_WIDTH + H_GAP;
-      }
-    }
-
-    // Convert to PersonPosition array
-    const positionsArray: PersonPosition[] = [];
-    for (const [id, node] of allPositions) {
-      const person = graph.personMap.get(id);
-      if (person) {
-        positionsArray.push({
-          person,
-          x: node.x,
-          y: node.y,
-          generation: node.generation,
-          spouses: graph.getSpouseIds(id)
-            .map(sid => graph.personMap.get(sid))
-            .filter((p): p is FamilyPerson => !!p),
-        });
-      }
-    }
-
-    // Calculate bounds
-    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    for (const pos of positionsArray) {
-      minX = Math.min(minX, pos.x);
-      maxX = Math.max(maxX, pos.x + CARD_WIDTH);
-      minY = Math.min(minY, pos.y);
-      maxY = Math.max(maxY, pos.y + CARD_HEIGHT);
-    }
-
-    return {
-      positions: positionsArray,
-      connections: allConnections,
-      bounds: {
-        minX: isFinite(minX) ? minX : 0,
-        maxX: isFinite(maxX) ? maxX : 800,
-        minY: isFinite(minY) ? minY : 0,
-        maxY: isFinite(maxY) ? maxY : 600,
-      },
-      rootGeneration: detectedRootGen,
-    };
-  }, [persons, relationships, unions, rootPersonId, viewMode]);
-
-  // Update dimensions
-  useEffect(() => {
-    const padding = 100;
-    setDimensions({
-      width: Math.max(800, bounds.maxX - bounds.minX + padding * 2),
-      height: Math.max(600, bounds.maxY - bounds.minY + padding * 2),
-    });
-  }, [bounds]);
-
-  const offsetX = 50 - bounds.minX;
-  const offsetY = 50 - bounds.minY;
-
-  // Report positions (stable ref to avoid re-render loops)
+  const { fitView, setCenter } = useReactFlow();
   const lastPositionsRef = useRef<string>('');
+
+  const { nodes, edges, positionData } = useMemo(() => {
+    return buildFlowElements(
+      persons,
+      relationships,
+      unions,
+      rootPersonId,
+      viewMode,
+      selectedPersonId,
+      highlightedPersonId,
+      activeBranchIds,
+      0,
+    );
+  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds]);
+
+  // Report positions
   useEffect(() => {
-    if (onPositionsCalculated && positions.length > 0) {
-      const positionsData: PersonPositionData[] = positions.map(pos => ({
-        personId: pos.person.id,
-        x: pos.x + offsetX,
-        y: pos.y + offsetY,
-      }));
-      const key = positionsData.map(p => `${p.personId}:${p.x}:${p.y}`).join(',');
+    if (onPositionsCalculated && positionData.length > 0) {
+      const key = positionData.map(p => `${p.personId}:${p.x}:${p.y}`).join(',');
       if (key !== lastPositionsRef.current) {
         lastPositionsRef.current = key;
-        onPositionsCalculated(positionsData);
+        onPositionsCalculated(positionData);
       }
     }
-  }, [positions, offsetX, offsetY, onPositionsCalculated]);
+  }, [positionData, onPositionsCalculated]);
+
+  // Fit view on initial load
+  const hasInitialFit = useRef(false);
+  useEffect(() => {
+    if (nodes.length > 0 && !hasInitialFit.current) {
+      hasInitialFit.current = true;
+      setTimeout(() => fitView({ padding: 0.2, duration: 500 }), 100);
+    }
+  }, [nodes.length, fitView]);
+
+  // Center on person when requested
+  useEffect(() => {
+    if (onCenterOnPerson && nodes.length > 0) {
+      const node = nodes.find(n => n.id === onCenterOnPerson);
+      if (node) {
+        setCenter(
+          node.position.x + CARD_WIDTH / 2,
+          node.position.y + CARD_HEIGHT / 2,
+          { zoom: 1, duration: 600 }
+        );
+      }
+    }
+  }, [onCenterOnPerson, nodes, setCenter]);
+
+  const onNodeClick: OnNodeClick<Node<PersonNodeData>> = useCallback((_event, node) => {
+    onPersonClick(node.data.person);
+  }, [onPersonClick]);
+
+  const minimapNodeColor = useCallback((node: Node<PersonNodeData>) => {
+    if (node.data.isSelected) return 'hsl(var(--secondary))';
+    if (node.data.person.gender === 'male') return 'hsl(210, 70%, 60%)';
+    if (node.data.person.gender === 'female') return 'hsl(330, 70%, 60%)';
+    return 'hsl(var(--muted-foreground))';
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{
-        width: dimensions.width,
-        height: dimensions.height,
-        minWidth: '100%',
-        minHeight: '100%',
-      }}
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onNodeClick={onNodeClick}
+      fitView
+      fitViewOptions={{ padding: 0.2 }}
+      minZoom={0.1}
+      maxZoom={2}
+      nodesDraggable={false}
+      nodesConnectable={false}
+      elementsSelectable={false}
+      proOptions={{ hideAttribution: true }}
+      className="bg-muted/20"
     >
-      {/* SVG connections layer */}
-      <svg
-        className="absolute inset-0 pointer-events-none"
-        width={dimensions.width}
-        height={dimensions.height}
-      >
-        <defs>
-          <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--secondary))" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.3" />
-          </linearGradient>
-          <symbol id="heartSymbol" viewBox="0 0 24 24" width="12" height="12">
-            <path
-              fill="hsl(var(--accent))"
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </symbol>
-        </defs>
-
-        {connections.map((conn, index) => {
-          const fromX = conn.from.x + offsetX;
-          const fromY = conn.from.y + offsetY;
-          const toX = conn.to.x + offsetX;
-          const toY = conn.to.y + offsetY;
-
-          const isActive = !activeBranchIds || (activeBranchIds.has(conn.fromPersonId) && activeBranchIds.has(conn.toPersonId));
-          const connOpacity = isActive ? 1 : 0.15;
-
-          if (conn.type === 'spouse') {
-            const midX = (fromX + toX) / 2;
-            const midY = fromY;
-            // Double line for marriage (genealogical standard)
-            return (
-              <g key={`conn-${index}`} opacity={connOpacity}>
-                <line
-                  x1={fromX} y1={fromY - 1.5} x2={toX} y2={toY - 1.5}
-                  stroke="hsl(var(--accent))"
-                  strokeWidth="1.5"
-                />
-                <line
-                  x1={fromX} y1={fromY + 1.5} x2={toX} y2={toY + 1.5}
-                  stroke="hsl(var(--accent))"
-                  strokeWidth="1.5"
-                />
-                <use href="#heartSymbol" x={midX - 6} y={midY - 6} />
-              </g>
-            );
-          } else {
-            // Orthogonal parent-child connection (genealogical standard)
-            const midY = fromY + (toY - fromY) * 0.4;
-            const path = `M ${fromX} ${fromY} L ${fromX} ${midY} L ${toX} ${midY} L ${toX} ${toY}`;
-            return (
-              <g key={`conn-${index}`} opacity={connOpacity}>
-                <path
-                  d={path}
-                  fill="none"
-                  stroke="hsl(var(--secondary))"
-                  strokeWidth="1.5"
-                  strokeOpacity="0.6"
-                />
-                <circle cx={toX} cy={toY} r="2.5" fill="hsl(var(--secondary))" fillOpacity="0.5" />
-              </g>
-            );
-          }
-        })}
-      </svg>
-
-      {/* Person cards */}
-      {positions.map((pos) => (
-        <div
-          key={pos.person.id}
-          className="absolute"
-          style={{
-            left: pos.x + offsetX,
-            top: pos.y + offsetY,
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT,
-          }}
-        >
-          <TreePersonCard
-            person={pos.person}
-            isSelected={selectedPersonId === pos.person.id}
-            isHighlighted={highlightedPersonId === pos.person.id}
-            isRoot={rootPersonId === pos.person.id}
-            isDimmed={!!activeBranchIds && !activeBranchIds.has(pos.person.id)}
-            onClick={() => onPersonClick(pos.person)}
-            generation={pos.generation}
-          />
-        </div>
-      ))}
-
-      {/* Generation labels */}
-      <GenerationLabels
-        positions={positions}
-        offsetX={offsetX}
-        offsetY={offsetY}
-        rootGeneration={rootGeneration}
+      <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="hsl(var(--border))" />
+      <Controls
+        showInteractive={false}
+        className="!bg-card !border !border-border !rounded-xl !shadow-lg [&>button]:!bg-card [&>button]:!border-border [&>button]:!text-foreground [&>button:hover]:!bg-muted"
       />
-    </div>
+      {showMinimap && (
+        <MiniMap
+          nodeColor={minimapNodeColor}
+          nodeStrokeWidth={0}
+          maskColor="hsl(var(--background) / 0.7)"
+          className="!bg-card/95 !border !border-border !rounded-lg !shadow-lg"
+          pannable
+          zoomable
+        />
+      )}
+    </ReactFlow>
   );
 }
 
-// ─── Person Card ────────────────────────────────────────────────────────────
-
-interface TreePersonCardProps {
-  person: FamilyPerson;
-  isSelected: boolean;
-  isHighlighted?: boolean;
-  isRoot?: boolean;
-  isDimmed?: boolean;
-  onClick: () => void;
-  generation: number;
-}
-
-function TreePersonCard({ person, isSelected, isHighlighted, isRoot, isDimmed, onClick }: TreePersonCardProps) {
-  const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
-
-  const getBirthYear = () => {
-    if (!person.birth_date) return null;
-    return new Date(person.birth_date).getFullYear();
-  };
-
-  const getDeathYear = () => {
-    if (!person.death_date) return null;
-    return new Date(person.death_date).getFullYear();
-  };
-
+export function TreeVisualization(props: TreeVisualizationProps) {
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "w-full h-full rounded-xl p-2 flex items-center gap-2 transition-all duration-300",
-        "border-2 bg-card shadow-md hover:shadow-lg",
-        "hover:-translate-y-0.5",
-        isSelected
-          ? "border-secondary ring-2 ring-secondary/20 shadow-secondary/20"
-          : "border-border hover:border-secondary/50",
-        isHighlighted && "animate-highlight-pulse",
-        isDimmed && "opacity-20 scale-[0.97]",
-        !person.is_alive && !isDimmed && "opacity-80"
-      )}
-    >
-      {isRoot && (
-        <div className="absolute -top-2 -left-2 z-10">
-          <div className="w-5 h-5 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center shadow-sm">
-            <Home className="w-3 h-3" />
-          </div>
-        </div>
-      )}
-
-      <Avatar className={cn(
-        "w-12 h-12 border-2",
-        person.gender === 'male' ? 'border-blue-400/50' :
-        person.gender === 'female' ? 'border-pink-400/50' :
-        'border-secondary/30'
-      )}>
-        <AvatarImage src={person.profile_photo_url || undefined} />
-        <AvatarFallback className={cn(
-          "text-xs font-medium",
-          person.gender === 'male' ? 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300' :
-          person.gender === 'female' ? 'bg-pink-50 text-pink-700 dark:bg-pink-950 dark:text-pink-300' :
-          'bg-secondary/10 text-secondary'
-        )}>
-          {initials}
-        </AvatarFallback>
-      </Avatar>
-
-      <div className="flex-1 min-w-0 text-left">
-        <p className="text-xs font-semibold truncate leading-tight">
-          {person.first_names}
-        </p>
-        <p className="text-xs text-muted-foreground truncate leading-tight">
-          {person.last_name}
-        </p>
-        {(getBirthYear() || getDeathYear()) && (
-          <p className="text-[10px] text-muted-foreground/70 mt-0.5">
-            {getBirthYear() || '?'} - {!person.is_alive ? (getDeathYear() || '?') : ''}
-          </p>
-        )}
-      </div>
-
-      {!person.is_alive && (
-        <div className="absolute top-1 right-1">
-          <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
-        </div>
-      )}
-    </button>
-  );
-}
-
-// ─── Generation Labels ──────────────────────────────────────────────────────
-
-interface GenerationLabelsProps {
-  positions: PersonPosition[];
-  offsetX: number;
-  offsetY: number;
-  rootGeneration: number;
-}
-
-function GenerationLabels({ positions, offsetX, offsetY, rootGeneration }: GenerationLabelsProps) {
-  const generations = useMemo(() => {
-    const genMap = new Map<number, number>();
-    for (const pos of positions) {
-      if (!genMap.has(pos.generation)) {
-        genMap.set(pos.generation, pos.y);
-      }
-    }
-    return Array.from(genMap.entries()).sort((a, b) => a[0] - b[0]);
-  }, [positions]);
-
-  const getGenerationLabel = (gen: number) => {
-    const diff = gen - rootGeneration;
-    if (diff === 0) return 'Vous';
-    if (diff === 1) return 'Enfants';
-    if (diff === -1) return 'Parents';
-    if (diff === 2) return 'Petits-enfants';
-    if (diff === -2) return 'Grands-parents';
-    if (diff === 3) return 'Arrière-petits-enfants';
-    if (diff === -3) return 'Arrière-grands-parents';
-    if (diff > 0) return `Génération +${diff}`;
-    return `Génération ${diff}`;
-  };
-
-  return (
-    <>
-      {generations.map(([gen, y]) => (
-        <div
-          key={gen}
-          className="absolute left-2 flex items-center"
-          style={{ top: y + offsetY + CARD_HEIGHT / 2 - 12 }}
-        >
-          <Badge
-            variant="outline"
-            className="text-[10px] bg-background/80 backdrop-blur-sm border-dashed"
-          >
-            {getGenerationLabel(gen)}
-          </Badge>
-        </div>
-      ))}
-    </>
+    <ReactFlowProvider>
+      <TreeVisualizationInner {...props} />
+    </ReactFlowProvider>
   );
 }
