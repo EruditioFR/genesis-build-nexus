@@ -351,30 +351,49 @@ function layoutUnified(
   }
 
   // ── Layout each lineage column ─────────────────────────────────────────
+  // A single lineage can have MULTIPLE top-level ancestors (e.g. paternal
+  // grandparents AND maternal grandparents connected only through their
+  // children's marriage). We must place ALL of them.
   let currentX = 0;
   for (const li of lineageOrder) {
     const lineage = lineages[li];
     if (!lineage) continue;
 
-    // Find active root ancestor for this lineage
-    let rootAncId = lineage.rootAncestorId;
-    if (!activeIds.has(rootAncId)) {
-      let topGen = Infinity;
-      for (const mid of lineage.members) {
-        if (activeIds.has(mid) && normGen(mid) < topGen) {
-          const parents = graph.getParentIds(mid).filter(p => activeIds.has(p) && lineage.members.has(p));
-          if (parents.length === 0) {
-            rootAncId = mid;
-            topGen = normGen(mid);
-          }
+    // Find ALL active root ancestors (members without parents in lineage)
+    const rootAncs: string[] = [];
+    for (const mid of lineage.members) {
+      if (!activeIds.has(mid)) continue;
+      const parentsInLineage = graph.getParentIds(mid).filter(
+        p => activeIds.has(p) && lineage.members.has(p)
+      );
+      if (parentsInLineage.length === 0) {
+        rootAncs.push(mid);
+      }
+    }
+
+    // Sort by generation (top first), then by x-stability
+    rootAncs.sort((a, b) => normGen(a) - normGen(b));
+
+    // Deduplicate: skip ancestors whose spouse is already in the list
+    // (they'll be placed alongside their partner)
+    const rootAncsFiltered: string[] = [];
+    const willBePlacedAsSpouse = new Set<string>();
+    for (const ancId of rootAncs) {
+      if (willBePlacedAsSpouse.has(ancId)) continue;
+      rootAncsFiltered.push(ancId);
+      // Mark spouses at the same generation as "will be placed alongside"
+      for (const sid of graph.getSpouseIds(ancId)) {
+        if (lineageOf.get(sid) === li && rootAncs.includes(sid)) {
+          willBePlacedAsSpouse.add(sid);
         }
       }
     }
 
-    if (placed.has(rootAncId)) continue;
-
-    const w = placeInLineage(rootAncId, li, currentX);
-    if (w > 0) currentX += w + COMPONENT_GAP;
+    for (const rootAncId of rootAncsFiltered) {
+      if (placed.has(rootAncId)) continue;
+      const w = placeInLineage(rootAncId, li, currentX);
+      if (w > 0) currentX += w + COMPONENT_GAP;
+    }
   }
 
   // ── Resolve overlaps BEFORE generating connections ──────────────────────
