@@ -35,6 +35,7 @@ import { supabase } from '@/integrations/supabase/client';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CapsuleThumbnail from '@/components/capsule/CapsuleThumbnail';
 import { toast } from 'sonner';
+import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';
 
