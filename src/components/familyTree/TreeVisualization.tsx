@@ -636,14 +636,25 @@ function TreeVisualizationInner({
     }
   }, [positionData, onPositionsCalculated]);
 
-  // Fit view on initial load
+  // Center on root person on initial load
   const hasInitialFit = useRef(false);
   useEffect(() => {
     if (nodes.length > 0 && !hasInitialFit.current) {
       hasInitialFit.current = true;
-      setTimeout(() => fitView({ padding: 0.2, duration: 500 }), 100);
+      const rootNode = rootPersonId ? nodes.find(n => n.id === rootPersonId) : nodes[0];
+      if (rootNode) {
+        setTimeout(() => {
+          setCenter(
+            rootNode.position.x + CARD_WIDTH / 2,
+            rootNode.position.y + CARD_HEIGHT / 2,
+            { zoom: 1.2, duration: 800 }
+          );
+        }, 150);
+      } else {
+        setTimeout(() => fitView({ padding: 0.2, duration: 500 }), 100);
+      }
     }
-  }, [nodes.length, fitView]);
+  }, [nodes.length, fitView, setCenter, rootPersonId, nodes]);
 
   // Center on person when requested
   useEffect(() => {
