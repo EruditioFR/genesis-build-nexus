@@ -23,7 +23,8 @@ import {
   Pencil,
   GitMerge,
   Focus,
-  Users
+  Users,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
