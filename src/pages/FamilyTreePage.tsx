@@ -148,7 +148,7 @@ export default function FamilyTreePage() {
   const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (authLoading || subLoading) return;
+    if (authLoading || subLoading || adminLoading) return;
     if (!user || !canAccessFamilyTree) {
       setIsInitializing(false);
       return;
@@ -159,22 +159,31 @@ export default function FamilyTreePage() {
     const init = async () => {
       setIsInitializing(true);
       try {
-        const trees = await fetchTrees();
-        
-        if (trees.length > 0) {
-          const treeId = trees[0].id;
-          const data = await fetchTree(treeId);
+        // Admin viewing a specific tree
+        if (isAdminViewing && viewTreeId) {
+          const data = await fetchTree(viewTreeId);
           setTree(data.tree);
           setPersons(data.persons);
           setRelationships(data.relationships);
           setUnions(data.unions);
         } else {
-          const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
-          if (newTree) {
-            setTree(newTree);
-            setPersons([]);
-            setRelationships([]);
-            setUnions([]);
+          const trees = await fetchTrees();
+          
+          if (trees.length > 0) {
+            const treeId = trees[0].id;
+            const data = await fetchTree(treeId);
+            setTree(data.tree);
+            setPersons(data.persons);
+            setRelationships(data.relationships);
+            setUnions(data.unions);
+          } else {
+            const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
+            if (newTree) {
+              setTree(newTree);
+              setPersons([]);
+              setRelationships([]);
+              setUnions([]);
+            }
           }
         }
       } catch (error) {
@@ -187,7 +196,7 @@ export default function FamilyTreePage() {
 
     init();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading, subLoading, user, canAccessFamilyTree]);
+  }, [authLoading, subLoading, adminLoading, user, canAccessFamilyTree, isAdminViewing, viewTreeId]);
 
   const loadTree = useCallback(async () => {
     if (!tree?.id) return;
