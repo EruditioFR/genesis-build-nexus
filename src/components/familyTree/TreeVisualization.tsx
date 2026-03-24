@@ -377,6 +377,9 @@ function layoutUnified(
     if (w > 0) currentX += w + COMPONENT_GAP;
   }
 
+  // ── Resolve overlaps BEFORE generating connections ──────────────────────
+  resolveOverlaps(positions);
+
   // ── Phase 4: Generate ALL connections post-placement ─────────────────────
 
   // Spouse connections from unions
@@ -434,8 +437,6 @@ function layoutUnified(
     });
     childrenConnected.add(r.child_id);
   }
-
-  resolveOverlaps(positions);
 
   return { positions, connections, rootGeneration: normalizedRootGen };
 }
