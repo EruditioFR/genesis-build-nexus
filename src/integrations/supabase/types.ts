@@ -1062,6 +1062,18 @@ export type Database = {
         }
         Returns: string
       }
+      get_admin_tree_stats: {
+        Args: never
+        Returns: {
+          persons_count: number
+          relations_count: number
+          tree_created_at: string
+          tree_id: string
+          tree_name: string
+          tree_user_id: string
+          unions_count: number
+        }[]
+      }
       get_branch_persons: {
         Args: {
           p_center_person_id: string
