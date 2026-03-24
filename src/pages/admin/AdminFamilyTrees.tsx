@@ -78,55 +78,54 @@ export default function AdminFamilyTrees() {
 
     const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) ?? []);
 
-    // Fetch counts per tree
+    // Fetch exact counts per tree using count queries (no 1000-row limit)
     const treeIds = treesData.map((t) => t.id);
-
-    const [personsRes, unionsRes, relationsRes] = await Promise.all([
-      supabase.from("family_persons").select("tree_id").in("tree_id", treeIds),
-      supabase.from("family_unions").select("id, person1_id").in(
-        "person1_id",
-        (await supabase.from("family_persons").select("id").in("tree_id", treeIds)).data?.map((p) => p.id) ?? []
-      ),
-      supabase.from("family_parent_child").select("id, parent_id").in(
-        "parent_id",
-        (await supabase.from("family_persons").select("id").in("tree_id", treeIds)).data?.map((p) => p.id) ?? []
-      ),
-    ]);
-
-    // Count persons per tree
     const personsCountMap = new Map<string, number>();
-    personsRes.data?.forEach((p) => {
-      personsCountMap.set(p.tree_id, (personsCountMap.get(p.tree_id) || 0) + 1);
-    });
-
-    // For unions and relations, we need person->tree mapping
-    const personTreeMap = new Map<string, string>();
-    personsRes.data?.forEach((p) => {
-      personTreeMap.set(p.tree_id, p.tree_id); // This won't work, need person id
-    });
-
-    // Simpler approach: fetch persons with their ids to build person->tree map
-    const { data: personsWithIds } = await supabase
-      .from("family_persons")
-      .select("id, tree_id")
-      .in("tree_id", treeIds);
-
-    const personToTree = new Map<string, string>();
-    personsWithIds?.forEach((p) => {
-      personToTree.set(p.id, p.tree_id);
-    });
-
     const unionsCountMap = new Map<string, number>();
-    unionsRes.data?.forEach((u) => {
-      const treeId = personToTree.get(u.person1_id);
-      if (treeId) unionsCountMap.set(treeId, (unionsCountMap.get(treeId) || 0) + 1);
-    });
-
     const relationsCountMap = new Map<string, number>();
-    relationsRes.data?.forEach((r) => {
-      const treeId = personToTree.get(r.parent_id);
-      if (treeId) relationsCountMap.set(treeId, (relationsCountMap.get(treeId) || 0) + 1);
-    });
+
+    await Promise.all(
+      treeIds.map(async (treeId) => {
+        const [personsRes, personsWithIds] = await Promise.all([
+          supabase
+            .from("family_persons")
+            .select("*", { count: "exact", head: true })
+            .eq("tree_id", treeId),
+          supabase
+            .from("family_persons")
+            .select("id")
+            .eq("tree_id", treeId)
+            .limit(5000),
+        ]);
+
+        personsCountMap.set(treeId, personsRes.count || 0);
+
+        const personIds = personsWithIds.data?.map((p) => p.id) ?? [];
+        if (personIds.length === 0) return;
+
+        // Batch person IDs in chunks to avoid query limits
+        const chunkSize = 500;
+        let uCount = 0;
+        let rCount = 0;
+        for (let i = 0; i < personIds.length; i += chunkSize) {
+          const chunk = personIds.slice(i, i + chunkSize);
+          const [uRes, rRes] = await Promise.all([
+            supabase
+              .from("family_unions")
+              .select("*", { count: "exact", head: true })
+              .in("person1_id", chunk),
+            supabase
+              .from("family_parent_child")
+              .select("*", { count: "exact", head: true })
+              .in("parent_id", chunk),
+          ]);
+          uCount += uRes.count || 0;
+          rCount += rRes.count || 0;
+        }
+        unionsCountMap.set(treeId, uCount);
+        relationsCountMap.set(treeId, rCount);
+      })
+    );
 
     // Fetch emails via get_user_email function
     const emailPromises = userIds.map(async (uid) => {
