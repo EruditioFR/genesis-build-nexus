@@ -221,7 +221,12 @@ export default function FamilyTreePage() {
             const treeId = trees[0].id;
             const data = await fetchTree(treeId);
             setTree(data.tree);
-            setTotalPersonsCount(data.persons.length);
+            // Fetch real total count from DB
+            const { count: realCount2 } = await supabase
+              .from('family_persons')
+              .select('*', { count: 'exact', head: true })
+              .eq('tree_id', treeId);
+            setTotalPersonsCount(realCount2 || data.persons.length);
             if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
               // Large tree: load only nearby branch
               const branch = await fetchBranch(treeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
