@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -38,6 +38,7 @@ import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { PersonDetailPanel } from '@/components/familyTree/PersonDetailPanel';
 import { AddPersonDialog } from '@/components/familyTree/AddPersonDialog';
 import { LinkPersonDialog } from '@/components/familyTree/LinkPersonDialog';
@@ -63,10 +64,16 @@ import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export default function FamilyTreePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation('familyTree');
   const { user, signOut, loading: authLoading } = useAuth();
   const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
+
+  // Admin viewing another user's tree
+  const viewTreeId = searchParams.get('viewTreeId');
+  const isAdminViewing = !!viewTreeId && isAdmin;
 
   const [tree, setTree] = useState<FamilyTree | null>(null);
   const [persons, setPersons] = useState<FamilyPerson[]>([]);
@@ -135,13 +142,13 @@ export default function FamilyTreePage() {
     return ids;
   }, [selectedPerson, showDetailPanel, relationships, unions]);
 
-  const canAccessFamilyTree = limits.canAccessFamilyTree;
+  const canAccessFamilyTree = limits.canAccessFamilyTree || isAdminViewing;
 
   // Initialize: fetch or create the single tree
   const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (authLoading || subLoading) return;
+    if (authLoading || subLoading || adminLoading) return;
     if (!user || !canAccessFamilyTree) {
       setIsInitializing(false);
       return;
@@ -152,22 +159,31 @@ export default function FamilyTreePage() {
     const init = async () => {
       setIsInitializing(true);
       try {
-        const trees = await fetchTrees();
-        
-        if (trees.length > 0) {
-          const treeId = trees[0].id;
-          const data = await fetchTree(treeId);
+        // Admin viewing a specific tree
+        if (isAdminViewing && viewTreeId) {
+          const data = await fetchTree(viewTreeId);
           setTree(data.tree);
           setPersons(data.persons);
           setRelationships(data.relationships);
           setUnions(data.unions);
         } else {
-          const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
-          if (newTree) {
-            setTree(newTree);
-            setPersons([]);
-            setRelationships([]);
-            setUnions([]);
+          const trees = await fetchTrees();
+          
+          if (trees.length > 0) {
+            const treeId = trees[0].id;
+            const data = await fetchTree(treeId);
+            setTree(data.tree);
+            setPersons(data.persons);
+            setRelationships(data.relationships);
+            setUnions(data.unions);
+          } else {
+            const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
+            if (newTree) {
+              setTree(newTree);
+              setPersons([]);
+              setRelationships([]);
+              setUnions([]);
+            }
           }
         }
       } catch (error) {
@@ -180,7 +196,7 @@ export default function FamilyTreePage() {
 
     init();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading, subLoading, user, canAccessFamilyTree]);
+  }, [authLoading, subLoading, adminLoading, user, canAccessFamilyTree, isAdminViewing, viewTreeId]);
 
   const loadTree = useCallback(async () => {
     if (!tree?.id) return;
@@ -467,15 +483,16 @@ export default function FamilyTreePage() {
             relationships={relationships}
             allPersons={persons}
             onClose={() => setShowDetailPanel(false)}
-            onAddParent={() => handleAddPerson('parent', selectedPerson)}
-            onAddChild={() => handleAddPerson('child', selectedPerson)}
-            onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
-            onLinkPerson={() => handleLinkPerson(selectedPerson)}
-            onMergePerson={() => handleMergePerson(selectedPerson)}
+            onAddParent={isAdminViewing ? undefined : () => handleAddPerson('parent', selectedPerson)}
+            onAddChild={isAdminViewing ? undefined : () => handleAddPerson('child', selectedPerson)}
+            onAddSpouse={isAdminViewing ? undefined : () => handleAddPerson('spouse', selectedPerson)}
+            onLinkPerson={isAdminViewing ? undefined : () => handleLinkPerson(selectedPerson)}
+            onMergePerson={isAdminViewing ? undefined : () => handleMergePerson(selectedPerson)}
             onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
-            onDelete={() => handleDeletePerson(selectedPerson.id)}
-            onUpdate={loadTree}
+            onDelete={isAdminViewing ? undefined : () => handleDeletePerson(selectedPerson.id)}
+            onUpdate={isAdminViewing ? () => {} : loadTree}
             onPersonClick={handleSearchSelect}
+            readOnly={isAdminViewing}
           />
         </motion.div>
       )}
@@ -577,9 +594,19 @@ export default function FamilyTreePage() {
       
       {renderFullscreenView()}
 
+      {isAdminViewing && (
+        <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 flex items-center justify-between">
+          <p className="text-sm text-amber-700 dark:text-amber-400 font-medium">
+            👁️ Mode consultation admin — Vue en lecture seule
+          </p>
+          <Button variant="outline" size="sm" onClick={() => navigate('/admin/family-trees')}>
+            ← Retour à la liste
+          </Button>
+        </div>
+      )}
+
       {!isFullscreen && (
         <>
-          {/* Toolbar */}
           <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-7xl mx-auto px-4 py-3">
               <div className="flex items-center justify-between gap-4">
@@ -598,45 +625,49 @@ export default function FamilyTreePage() {
                     <Maximize2 className="w-4 h-4" />
                   </Button>
 
-                  <div data-tour="tree-import-export" className="flex items-center gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" title={t('export.title')}>
-                          <Download className="w-4 h-4" />
+                  {!isAdminViewing && (
+                    <>
+                      <div data-tour="tree-import-export" className="flex items-center gap-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="icon" title={t('export.title')}>
+                              <Download className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
+                              className="gap-2"
+                            >
+                              <FileText className="w-4 h-4" />
+                              {t('export.pdf')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
+                              className="gap-2"
+                            >
+                              <FileDown className="w-4 h-4" />
+                              {t('export.gedcom')}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <Button 
+                          variant="outline" 
+                          size="icon"
+                          onClick={() => setShowGedcomImport(true)}
+                          title={t('import.gedcom')}
+                        >
+                          <Upload className="w-4 h-4" />
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem 
-                          onClick={() => tree && exportFamilyTreeToPDF({ tree, persons, relationships, unions })}
-                          className="gap-2"
-                        >
-                          <FileText className="w-4 h-4" />
-                          {t('export.pdf')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => tree && downloadGedcom({ tree, persons, relationships, unions })}
-                          className="gap-2"
-                        >
-                          <FileDown className="w-4 h-4" />
-                          {t('export.gedcom')}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      </div>
 
-                    <Button 
-                      variant="outline" 
-                      size="icon"
-                      onClick={() => setShowGedcomImport(true)}
-                      title={t('import.gedcom')}
-                    >
-                      <Upload className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
-                    <Plus className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t('toolbar.add')}</span>
-                  </Button>
+                      <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
+                        <Plus className="w-4 h-4" />
+                        <span className="hidden sm:inline">{t('toolbar.add')}</span>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

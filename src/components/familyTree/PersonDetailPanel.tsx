@@ -79,15 +79,16 @@ interface PersonDetailPanelProps {
   relationships?: ParentChildRelationship[];
   allPersons?: FamilyPerson[];
   onClose: () => void;
-  onAddParent: () => void;
-  onAddChild: () => void;
-  onAddSpouse: () => void;
+  onAddParent?: () => void;
+  onAddChild?: () => void;
+  onAddSpouse?: () => void;
   onLinkPerson?: () => void;
   onMergePerson?: () => void;
   onCenterOnPerson?: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   onPersonClick: (person: FamilyPerson) => void;
   onUpdate: () => void;
+  readOnly?: boolean;
 }
 
 export function PersonDetailPanel({
@@ -107,7 +108,8 @@ export function PersonDetailPanel({
   onCenterOnPerson,
   onDelete,
   onPersonClick,
-  onUpdate
+  onUpdate,
+  readOnly = false,
 }: PersonDetailPanelProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -487,64 +489,81 @@ export function PersonDetailPanel({
       </div>
 
       {/* Action buttons */}
-      <div className="p-4 border-b flex gap-2">
-        {isEditing ? (
-          <>
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="flex-1 gap-1"
-              onClick={handleSave}
-              disabled={isSaving}
-            >
-              {isSaving ? (
-                <Loader2 className="w-3 h-3 animate-spin" />
-              ) : (
-                <Check className="w-3 h-3" />
-              )}
-              Enregistrer
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleCancelEdit}
-              disabled={isSaving}
-            >
-              <XCircle className="w-3 h-3" />
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex-1 gap-1"
-              onClick={handleStartEdit}
-            >
-              <Edit className="w-3 h-3" />
-              Modifier
-            </Button>
-            {onCenterOnPerson && (
+      {!readOnly && (
+        <div className="p-4 border-b flex gap-2">
+          {isEditing ? (
+            <>
+              <Button 
+                variant="default" 
+                size="sm" 
+                className="flex-1 gap-1"
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Check className="w-3 h-3" />
+                )}
+                Enregistrer
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={onCenterOnPerson}
-                title="Centrer l'arbre sur cette personne"
+                onClick={handleCancelEdit}
+                disabled={isSaving}
               >
-                <Focus className="w-3 h-3" />
+                <XCircle className="w-3 h-3" />
               </Button>
-            )}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-destructive hover:bg-destructive/10"
-              onClick={() => setShowDeleteDialog(true)}
-            >
-              <Trash2 className="w-3 h-3" />
-            </Button>
-          </>
-        )}
-      </div>
+            </>
+          ) : (
+            <>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 gap-1"
+                onClick={handleStartEdit}
+              >
+                <Edit className="w-3 h-3" />
+                Modifier
+              </Button>
+              {onCenterOnPerson && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={onCenterOnPerson}
+                  title="Centrer l'arbre sur cette personne"
+                >
+                  <Focus className="w-3 h-3" />
+                </Button>
+              )}
+              {onDelete && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-destructive hover:bg-destructive/10"
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+      )}
+      {readOnly && onCenterOnPerson && (
+        <div className="p-4 border-b flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={onCenterOnPerson}
+            title="Centrer l'arbre sur cette personne"
+          >
+            <Focus className="w-3 h-3 mr-1" />
+            Centrer
+          </Button>
+        </div>
+      )}
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
@@ -798,10 +817,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Parents</h4>
-                <Button variant="ghost" size="sm" onClick={onAddParent} className="h-7 text-xs">
-                  <UserPlus className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddParent && (
+                  <Button variant="ghost" size="sm" onClick={onAddParent} className="h-7 text-xs">
+                    <UserPlus className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {parentsWithRelationships.length > 0 ? (
                 <div className="space-y-1">
@@ -830,10 +851,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Conjoint(s)</h4>
-                <Button variant="ghost" size="sm" onClick={onAddSpouse} className="h-7 text-xs">
-                  <Heart className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddSpouse && (
+                  <Button variant="ghost" size="sm" onClick={onAddSpouse} className="h-7 text-xs">
+                    <Heart className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {spousesWithUnions.length > 0 ? (
                 <div className="space-y-3">
@@ -961,10 +984,12 @@ export function PersonDetailPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-muted-foreground">Enfants</h4>
-                <Button variant="ghost" size="sm" onClick={onAddChild} className="h-7 text-xs">
-                  <Baby className="w-3 h-3 mr-1" />
-                  Ajouter
-                </Button>
+                {!readOnly && onAddChild && (
+                  <Button variant="ghost" size="sm" onClick={onAddChild} className="h-7 text-xs">
+                    <Baby className="w-3 h-3 mr-1" />
+                    Ajouter
+                  </Button>
+                )}
               </div>
               {children.length > 0 ? (
                 <div className="space-y-1">
