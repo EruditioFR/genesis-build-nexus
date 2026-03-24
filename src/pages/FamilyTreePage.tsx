@@ -593,9 +593,19 @@ export default function FamilyTreePage() {
       
       {renderFullscreenView()}
 
+      {isAdminViewing && (
+        <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 flex items-center justify-between">
+          <p className="text-sm text-amber-700 dark:text-amber-400 font-medium">
+            👁️ Mode consultation admin — Vue en lecture seule
+          </p>
+          <Button variant="outline" size="sm" onClick={() => navigate('/admin/family-trees')}>
+            ← Retour à la liste
+          </Button>
+        </div>
+      )}
+
       {!isFullscreen && (
         <>
-          {/* Toolbar */}
           <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-7xl mx-auto px-4 py-3">
               <div className="flex items-center justify-between gap-4">
