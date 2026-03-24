@@ -139,51 +139,23 @@ export function useFamilyTree() {
 
       const personIds = (personsResult.data || []).map(p => p.id);
 
-      // Step 2: Load relationships and unions filtered by person IDs
+      // Step 2: Load relationships and unions via RPC (handles large trees efficiently)
       let filteredRelationships: ParentChildRelationship[] = [];
       let filteredUnions: FamilyUnion[] = [];
 
       if (personIds.length > 0) {
-        const CHUNK_SIZE = 40;
-        const chunks: string[][] = [];
-        for (let i = 0; i < personIds.length; i += CHUNK_SIZE) {
-          chunks.push(personIds.slice(i, i + CHUNK_SIZE));
-        }
-
-        const [relResults, unionResults] = await Promise.all([
-          Promise.all(chunks.map(chunk => {
-            const idList = chunk.join(',');
-            return supabase.from('family_parent_child').select('*')
-              .or(`parent_id.in.(${idList}),child_id.in.(${idList})`);
-          })),
-          Promise.all(chunks.map(chunk => {
-            const idList = chunk.join(',');
-            return supabase.from('family_unions').select('*')
-              .or(`person1_id.in.(${idList}),person2_id.in.(${idList})`);
-          })),
+        const personIdSet = new Set(personIds);
+        const [relationshipsResult, unionsResult] = await Promise.all([
+          supabase.rpc('get_tree_relationships', { p_tree_id: treeId }),
+          supabase.rpc('get_tree_unions', { p_tree_id: treeId }),
         ]);
 
-        const personIdSet = new Set(personIds);
-        const relSeen = new Set<string>();
-        const unionSeen = new Set<string>();
-
-        for (const result of relResults) {
-          for (const r of (result.data || []) as ParentChildRelationship[]) {
-            if (!relSeen.has(r.id) && personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)) {
-              relSeen.add(r.id);
-              filteredRelationships.push(r);
-            }
-          }
-        }
-
-        for (const result of unionResults) {
-          for (const u of (result.data || []) as FamilyUnion[]) {
-            if (!unionSeen.has(u.id) && personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)) {
-              unionSeen.add(u.id);
-              filteredUnions.push(u);
-            }
-          }
-        }
+        filteredRelationships = ((relationshipsResult.data || []) as ParentChildRelationship[]).filter(
+          r => personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)
+        );
+        filteredUnions = ((unionsResult.data || []) as FamilyUnion[]).filter(
+          u => personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)
+        );
       }
 
       return {
