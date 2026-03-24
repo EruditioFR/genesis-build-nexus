@@ -483,10 +483,13 @@ export default function FamilyTreePage() {
       highlightedPersonId={highlightedPersonId || undefined}
       activeBranchIds={activeBranchIds}
       onPersonClick={handlePersonClick}
+      onExpandGhost={handleExpandGhost}
       onAddPerson={handleAddPerson}
       onPositionsCalculated={setPersonPositions}
       showMinimap={showMinimap}
       onCenterOnPerson={pendingCenterId}
+      maxVisibleGenerations={effectiveMaxGenerations}
+      expandedNodeIds={expandedNodeIds}
     />
   );
 
