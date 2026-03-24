@@ -93,6 +93,8 @@ const CategoriesPage = () => {
   if (!user) return null;
 
   return (
+    <>
+    <NoIndex />
     <AuthenticatedLayout
       user={{
         id: user.id,

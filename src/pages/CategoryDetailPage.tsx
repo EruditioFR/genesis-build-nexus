@@ -174,6 +174,8 @@ const CategoryDetailPage = () => {
   if (!user || !category) return null;
 
   return (
+    <>
+    <NoIndex />
     <div className="min-h-screen bg-gradient-warm">
       <DashboardHeader
         user={{
