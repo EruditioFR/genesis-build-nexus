@@ -551,6 +551,7 @@ export function PersonDetailPanel({
                 >
                   <Home className="w-3 h-3" />
                 </Button>
+              )}
               {onDelete && (
                 <Button 
                   variant="outline" 
