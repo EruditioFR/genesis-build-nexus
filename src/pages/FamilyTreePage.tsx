@@ -212,6 +212,9 @@ export default function FamilyTreePage() {
     setPersons(data.persons);
     setRelationships(data.relationships);
     setUnions(data.unions);
+    if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+      setViewMode(prev => prev === 'hourglass' ? 'ascendant' : prev);
+    }
   }, [tree?.id, fetchTree]);
 
   useEffect(() => {
