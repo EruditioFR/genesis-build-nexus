@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
-import { Home, Plus } from 'lucide-react';
+import { Home, Plus, ChevronDown } from 'lucide-react';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
@@ -12,6 +12,8 @@ export type PersonNodeData = {
   isRoot: boolean;
   isDimmed: boolean;
   isGhost: boolean;
+  ghostCount: number;
+  ghostLabel: string;
   appearDelay: number;
   generation: number;
   generationLabel: string;
@@ -20,7 +22,7 @@ export type PersonNodeData = {
 export type PersonNode = Node<PersonNodeData, 'person'>;
 
 export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
-  const { person, isSelected, isHighlighted, isRoot, isDimmed, isGhost, appearDelay } = data;
+  const { person, isSelected, isHighlighted, isRoot, isDimmed, isGhost, ghostCount, ghostLabel, appearDelay } = data;
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
   // CSS transition: start hidden, then reveal after appearDelay
@@ -61,6 +63,45 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
   const opacity = !appeared ? 0 : isGhost ? 0.35 : isDimmed ? 0.2 : 1;
   const scale = !appeared ? 0.9 : isGhost ? 0.95 : isDimmed ? 0.97 : 1;
 
+  // Ghost node: simplified display with count
+  if (isGhost) {
+    return (
+      <>
+        <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-transparent !border-0" />
+        <Handle type="source" position={Position.Bottom} id="bottom" className="!w-2 !h-2 !bg-transparent !border-0" />
+        <Handle type="source" position={Position.Right} id="right" className="!w-2 !h-2 !bg-transparent !border-0" />
+        <Handle type="target" position={Position.Left} id="left" className="!w-2 !h-2 !bg-transparent !border-0" />
+
+        <div
+          style={{
+            opacity: appeared ? 0.5 : 0,
+            transform: `scale(${appeared ? 0.95 : 0.9})`,
+            transition: 'opacity 0.3s ease-out, transform 0.3s ease-out',
+          }}
+          className={cn(
+            "w-full h-full rounded-2xl p-2.5 flex flex-col items-center justify-center cursor-pointer font-tree",
+            "border-2 border-dashed shadow-[var(--tree-card-shadow)]",
+            "bg-[hsl(var(--tree-card-bg))] hover:opacity-70",
+            genderBorderColor,
+          )}
+        >
+          <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.15)] flex items-center justify-center mb-1">
+            <Plus className="w-4 h-4 text-[hsl(var(--gold))]" />
+          </div>
+          <p className="text-[10px] font-semibold text-[hsl(var(--sepia))] truncate max-w-full">
+            {person.first_names}
+          </p>
+          {ghostCount > 0 && (
+            <p className="text-[9px] text-[hsl(var(--gold))] font-medium mt-0.5 flex items-center gap-0.5">
+              <ChevronDown className="w-3 h-3" />
+              {ghostLabel || `+${ghostCount}`}
+            </p>
+          )}
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-transparent !border-0" />
@@ -78,14 +119,12 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
           "w-full h-full rounded-2xl p-2.5 flex items-center gap-2.5 cursor-pointer font-tree",
           "border-2 shadow-[var(--tree-card-shadow)]",
           "bg-[hsl(var(--tree-card-bg))]",
-          isGhost && "border-dashed",
-          !isDimmed && !isGhost && "hover:-translate-y-0.5 hover:shadow-[var(--tree-card-hover-shadow)]",
-          isGhost && "hover:opacity-55",
+          !isDimmed && "hover:-translate-y-0.5 hover:shadow-[var(--tree-card-hover-shadow)]",
           isSelected
             ? "border-[hsl(var(--terracotta))] ring-2 ring-[hsl(var(--terracotta)/0.25)]"
             : cn("hover:border-[hsl(var(--gold-light))]", genderBorderColor),
           isHighlighted && "ring-2 ring-[hsl(var(--gold))] animate-pulse",
-          !person.is_alive && !isDimmed && !isGhost && "opacity-80"
+          !person.is_alive && !isDimmed && "opacity-80"
         )}
       >
         {/* Root badge */}
@@ -134,17 +173,8 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
           )}
         </div>
 
-        {/* Ghost expansion badge */}
-        {isGhost && (
-          <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10">
-            <div className="w-5 h-5 rounded-full bg-[hsl(var(--gold))] text-white flex items-center justify-center shadow-md">
-              <Plus className="w-3 h-3" />
-            </div>
-          </div>
-        )}
-
         {/* Deceased indicator */}
-        {!person.is_alive && !isGhost && (
+        {!person.is_alive && (
           <div className="absolute top-1 right-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--sepia-light)/0.4)]" />
           </div>

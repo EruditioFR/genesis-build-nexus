@@ -755,11 +755,66 @@ export function useFamilyTree() {
     }
   }, [user]);
 
+  // Fetch a branch around a specific person (lazy loading for large trees)
+  const fetchBranch = useCallback(async (
+    treeId: string,
+    centerPersonId: string,
+    maxGenerations: number = 4
+  ): Promise<{
+    persons: FamilyPerson[];
+    relationships: ParentChildRelationship[];
+    unions: FamilyUnion[];
+  }> => {
+    try {
+      // Fetch persons within N generations of center person
+      const { data: branchPersons, error: personsError } = await supabase
+        .rpc('get_branch_persons', {
+          p_tree_id: treeId,
+          p_center_person_id: centerPersonId,
+          p_max_generations: maxGenerations,
+        });
+
+      if (personsError) throw personsError;
+
+      const persons = (branchPersons || []) as FamilyPerson[];
+      const personIdSet = new Set(persons.map(p => p.id));
+
+      if (persons.length === 0) {
+        return { persons: [], relationships: [], unions: [] };
+      }
+
+      // Fetch relationships and unions for this tree, then filter to branch
+      const [allRels, allUnions] = await Promise.all([
+        supabase.rpc('get_tree_relationships', { p_tree_id: treeId }).then(r => {
+          if (r.error) throw r.error;
+          return (r.data || []) as ParentChildRelationship[];
+        }),
+        supabase.rpc('get_tree_unions', { p_tree_id: treeId }).then(r => {
+          if (r.error) throw r.error;
+          return (r.data || []) as FamilyUnion[];
+        }),
+      ]);
+
+      const relationships = allRels.filter(
+        r => personIdSet.has(r.parent_id) && personIdSet.has(r.child_id)
+      );
+      const unions = allUnions.filter(
+        u => personIdSet.has(u.person1_id) && personIdSet.has(u.person2_id)
+      );
+
+      return { persons, relationships, unions };
+    } catch (error) {
+      console.error('Error fetching branch:', error);
+      return { persons: [], relationships: [], unions: [] };
+    }
+  }, []);
+
   return {
     loading,
     fetchTrees,
     createTree,
     fetchTree,
+    fetchBranch,
     addPerson,
     updatePerson,
     deletePerson,

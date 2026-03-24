@@ -70,7 +70,7 @@ export default function FamilyTreePage() {
   const { user, signOut, loading: authLoading } = useAuth();
   const { limits, loading: subLoading, isHeritage, tier } = useFeatureAccess();
   const { isAdmin, loading: adminLoading } = useAdminAuth();
-  const { fetchTrees, createTree, fetchTree, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
+  const { fetchTrees, createTree, fetchTree, fetchBranch, addPerson, addRelationship, addUnion, deletePerson, importFromGedcom, mergePersons, loading } = useFamilyTree();
 
   // Admin viewing another user's tree
   const viewTreeId = searchParams.get('viewTreeId');
@@ -81,11 +81,14 @@ export default function FamilyTreePage() {
   const [relationships, setRelationships] = useState<ParentChildRelationship[]>([]);
   const [unions, setUnions] = useState<FamilyUnion[]>([]);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [totalPersonsCount, setTotalPersonsCount] = useState(0);
   
   const LARGE_TREE_THRESHOLD = 500;
   const MAX_VISIBLE_GENERATIONS = 3;
+  const BRANCH_FETCH_GENERATIONS = 4;
   const [viewMode, setViewMode] = useState<TreeViewMode>('hourglass');
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set());
+  const [isLoadingBranch, setIsLoadingBranch] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<FamilyPerson | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   
@@ -190,11 +193,21 @@ export default function FamilyTreePage() {
         if (isAdminViewing && viewTreeId) {
           const data = await fetchTree(viewTreeId);
           setTree(data.tree);
-          setPersons(data.persons);
-          setRelationships(data.relationships);
-          setUnions(data.unions);
-          if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+          setTotalPersonsCount(data.persons.length);
+          if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
+            // Large tree: load only nearby branch
+            const branch = await fetchBranch(viewTreeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
+            setPersons(branch.persons);
+            setRelationships(branch.relationships);
+            setUnions(branch.unions);
             setViewMode('ascendant');
+          } else {
+            setPersons(data.persons);
+            setRelationships(data.relationships);
+            setUnions(data.unions);
+            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+              setViewMode('ascendant');
+            }
           }
         } else {
           const trees = await fetchTrees();
@@ -203,11 +216,21 @@ export default function FamilyTreePage() {
             const treeId = trees[0].id;
             const data = await fetchTree(treeId);
             setTree(data.tree);
-            setPersons(data.persons);
-            setRelationships(data.relationships);
-            setUnions(data.unions);
-            if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+            setTotalPersonsCount(data.persons.length);
+            if (data.tree?.root_person_id && data.persons.length >= LARGE_TREE_THRESHOLD) {
+              // Large tree: load only nearby branch
+              const branch = await fetchBranch(treeId, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
+              setPersons(branch.persons);
+              setRelationships(branch.relationships);
+              setUnions(branch.unions);
               setViewMode('ascendant');
+            } else {
+              setPersons(data.persons);
+              setRelationships(data.relationships);
+              setUnions(data.unions);
+              if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+                setViewMode('ascendant');
+              }
             }
           } else {
             const newTree = await createTree(t('defaultTreeName'), t('defaultTreeDescription'));
@@ -360,13 +383,49 @@ export default function FamilyTreePage() {
     setShowDetailPanel(true);
   };
 
-  const handleExpandGhost = useCallback((personId: string) => {
+  const handleExpandGhost = useCallback(async (personId: string) => {
+    if (!tree?.id) return;
+    
+    // Mark as expanded immediately for UI feedback
     setExpandedNodeIds(prev => {
       const next = new Set(prev);
       next.add(personId);
       return next;
     });
-  }, []);
+
+    // Lazy load the branch from database
+    setIsLoadingBranch(true);
+    try {
+      const branch = await fetchBranch(tree.id, personId, BRANCH_FETCH_GENERATIONS);
+      
+      if (branch.persons.length > 0) {
+        // Merge new persons (deduplicate by id)
+        setPersons(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const newPersons = branch.persons.filter(p => !existingIds.has(p.id));
+          return newPersons.length > 0 ? [...prev, ...newPersons] : prev;
+        });
+        
+        // Merge new relationships (deduplicate by id)
+        setRelationships(prev => {
+          const existingIds = new Set(prev.map(r => r.id));
+          const newRels = branch.relationships.filter(r => !existingIds.has(r.id));
+          return newRels.length > 0 ? [...prev, ...newRels] : prev;
+        });
+        
+        // Merge new unions (deduplicate by id)
+        setUnions(prev => {
+          const existingIds = new Set(prev.map(u => u.id));
+          const newUnions = branch.unions.filter(u => !existingIds.has(u.id));
+          return newUnions.length > 0 ? [...prev, ...newUnions] : prev;
+        });
+      }
+    } catch (error) {
+      console.error('Error loading branch:', error);
+    } finally {
+      setIsLoadingBranch(false);
+    }
+  }, [tree?.id, fetchBranch]);
 
   // Compute effective maxVisibleGenerations
   const effectiveMaxGenerations = useMemo(() => {
