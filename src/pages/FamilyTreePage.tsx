@@ -121,7 +121,7 @@ export default function FamilyTreePage() {
 
   // Pre-build spouse index
   const spouseIndex = useMemo(() => {
-    const idx = new Map<string, string[]>();
+    const idx: Map<string, string[]> = new Map();
     for (const u of unions) {
       if (!idx.has(u.person1_id)) idx.set(u.person1_id, []);
       idx.get(u.person1_id)!.push(u.person2_id);
