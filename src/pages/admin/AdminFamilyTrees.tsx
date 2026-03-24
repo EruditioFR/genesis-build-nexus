@@ -79,6 +79,7 @@ export default function AdminFamilyTrees() {
     const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) ?? []);
 
     // Fetch exact counts per tree using count queries (no 1000-row limit)
+    const treeIds = treesData.map((t) => t.id);
     const personsCountMap = new Map<string, number>();
     const unionsCountMap = new Map<string, number>();
     const relationsCountMap = new Map<string, number>();
