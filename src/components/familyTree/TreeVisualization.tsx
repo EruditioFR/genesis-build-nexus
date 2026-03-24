@@ -635,7 +635,8 @@ export function TreeVisualization({
   const offsetX = 50 - bounds.minX;
   const offsetY = 50 - bounds.minY;
 
-  // Report positions
+  // Report positions (stable ref to avoid re-render loops)
+  const lastPositionsRef = useRef<string>('');
   useEffect(() => {
     if (onPositionsCalculated && positions.length > 0) {
       const positionsData: PersonPositionData[] = positions.map(pos => ({
@@ -643,7 +644,11 @@ export function TreeVisualization({
         x: pos.x + offsetX,
         y: pos.y + offsetY,
       }));
-      onPositionsCalculated(positionsData);
+      const key = positionsData.map(p => `${p.personId}:${p.x}:${p.y}`).join(',');
+      if (key !== lastPositionsRef.current) {
+        lastPositionsRef.current = key;
+        onPositionsCalculated(positionsData);
+      }
     }
   }, [positions, offsetX, offsetY, onPositionsCalculated]);
 
