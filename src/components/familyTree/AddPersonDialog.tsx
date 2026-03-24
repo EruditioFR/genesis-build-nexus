@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
