@@ -631,7 +631,7 @@ export default function FamilyTreePage() {
             onLinkPerson={isAdminViewing ? undefined : () => handleLinkPerson(selectedPerson)}
             onMergePerson={isAdminViewing ? undefined : () => handleMergePerson(selectedPerson)}
             onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
-            onSetAsRoot={isAdminViewing ? undefined : () => handleSetAsRoot(selectedPerson.id)}
+            onSetAsRoot={() => handleSetAsRoot(selectedPerson.id)}
             onDelete={isAdminViewing ? undefined : () => handleDeletePerson(selectedPerson.id)}
             onUpdate={isAdminViewing ? () => {} : loadTree}
             onPersonClick={handleSearchSelect}
