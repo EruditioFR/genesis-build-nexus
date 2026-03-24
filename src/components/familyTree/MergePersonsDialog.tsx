@@ -261,10 +261,7 @@ export function MergePersonsDialog({
               </div>
               <ArrowRight className="w-6 h-6 text-muted-foreground" />
               <div className="text-center opacity-50">
-                <Avatar className="h-12 w-12 mx-auto mb-2">
-                  <AvatarImage src={mergePerson.profile_photo_url || undefined} />
-                  <AvatarFallback>{getInitials(mergePerson)}</AvatarFallback>
-                </Avatar>
+                <FamilyAvatar photoUrl={mergePerson.profile_photo_url} fallback={getInitials(mergePerson)} className="h-12 w-12 mx-auto mb-2" />
                 <p className="text-sm font-medium line-through">{formatPersonName(mergePerson)}</p>
                 <Badge variant="destructive" className="mt-1">{t('merge.deleted')}</Badge>
               </div>
