@@ -483,15 +483,16 @@ export default function FamilyTreePage() {
             relationships={relationships}
             allPersons={persons}
             onClose={() => setShowDetailPanel(false)}
-            onAddParent={() => handleAddPerson('parent', selectedPerson)}
-            onAddChild={() => handleAddPerson('child', selectedPerson)}
-            onAddSpouse={() => handleAddPerson('spouse', selectedPerson)}
-            onLinkPerson={() => handleLinkPerson(selectedPerson)}
-            onMergePerson={() => handleMergePerson(selectedPerson)}
+            onAddParent={isAdminViewing ? undefined : () => handleAddPerson('parent', selectedPerson)}
+            onAddChild={isAdminViewing ? undefined : () => handleAddPerson('child', selectedPerson)}
+            onAddSpouse={isAdminViewing ? undefined : () => handleAddPerson('spouse', selectedPerson)}
+            onLinkPerson={isAdminViewing ? undefined : () => handleLinkPerson(selectedPerson)}
+            onMergePerson={isAdminViewing ? undefined : () => handleMergePerson(selectedPerson)}
             onCenterOnPerson={() => centerOnPerson(selectedPerson.id)}
-            onDelete={() => handleDeletePerson(selectedPerson.id)}
-            onUpdate={loadTree}
+            onDelete={isAdminViewing ? undefined : () => handleDeletePerson(selectedPerson.id)}
+            onUpdate={isAdminViewing ? () => {} : loadTree}
             onPersonClick={handleSearchSelect}
+            readOnly={isAdminViewing}
           />
         </motion.div>
       )}
