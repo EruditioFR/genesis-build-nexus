@@ -434,12 +434,12 @@ export function PersonDetailPanel({
           {isEditing ? (
             <PersonPhotoUpload person={person} onUpdate={onUpdate} />
           ) : (
-            <Avatar className="w-16 h-16 border-2 border-secondary">
-              <AvatarImage src={person.profile_photo_url || undefined} />
-              <AvatarFallback className="bg-secondary/20 text-secondary text-lg font-medium">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <FamilyAvatar
+              photoUrl={person.profile_photo_url}
+              fallback={initials}
+              className="w-16 h-16 border-2 border-secondary"
+              fallbackClassName="bg-secondary/20 text-secondary text-lg font-medium"
+            />
           )}
           <div>
             {isEditing ? (
