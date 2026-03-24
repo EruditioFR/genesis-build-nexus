@@ -109,11 +109,13 @@ export function PersonDetailPanel({
   onLinkPerson,
   onMergePerson,
   onCenterOnPerson,
+  onSetAsRoot,
   onDelete,
   onPersonClick,
   onUpdate,
   readOnly = false,
 }: PersonDetailPanelProps) {
+  const { t } = useTranslation('familyTree');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
