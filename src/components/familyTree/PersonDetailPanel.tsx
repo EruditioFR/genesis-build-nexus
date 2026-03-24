@@ -865,12 +865,12 @@ export function PersonDetailPanel({
                                 onClick={() => onPersonClick(child)}
                                 className="flex items-center gap-2 p-1.5 rounded hover:bg-muted transition-colors w-full text-left"
                               >
-                                <Avatar className="w-6 h-6">
-                                  <AvatarImage src={child.profile_photo_url || undefined} />
-                                  <AvatarFallback className="text-[10px]">
-                                    {`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
-                                  </AvatarFallback>
-                                </Avatar>
+                                <FamilyAvatar
+                                  photoUrl={child.profile_photo_url}
+                                  fallback={`${child.first_names[0] || ''}${child.last_name[0] || ''}`}
+                                  className="w-6 h-6"
+                                  fallbackClassName="text-[10px]"
+                                />
                                 <span className="text-xs truncate">
                                   {child.first_names} {child.last_name}
                                 </span>
