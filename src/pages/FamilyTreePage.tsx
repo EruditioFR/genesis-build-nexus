@@ -438,12 +438,7 @@ export default function FamilyTreePage() {
   }, [tree?.id, fetchBranch]);
 
   // Compute effective maxVisibleGenerations
-  const effectiveMaxGenerations = useMemo(() => {
-    if (persons.length < LARGE_TREE_THRESHOLD && viewMode === 'hourglass') {
-      return Infinity;
-    }
-    return MAX_VISIBLE_GENERATIONS;
-  }, [persons.length, viewMode]);
+  const effectiveMaxGenerations = MAX_VISIBLE_GENERATIONS;
 
   const [importProgress, setImportProgress] = useState(0);
   const [importDetail, setImportDetail] = useState('');
