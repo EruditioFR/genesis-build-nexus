@@ -35,6 +35,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import NoIndex from '@/components/seo/NoIndex';
 
 interface LegacyCapsule {
   id: string;
