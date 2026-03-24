@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Capsule Mémorielle Design System
-   Palette: Bleu nuit, Or chaud, Terracotta, Gris perle
-   Typography: System UI (optimized for readability)
+/* Family Garden Design System
+   Palette: Crème, Sépia profond, Terracotta, Vert sauge
+   Typography: Playfair Display (display) + DM Sans (body)
 */
 
 @layer base {
@@ -44,7 +44,7 @@
 
     --radius: 0.75rem;
 
-    /* Custom tokens - plus doux */
+    /* Custom tokens */
     --gold: 38 45% 42%;
     --gold-light: 38 40% 60%;
     --terracotta: 16 55% 55%;
@@ -53,6 +53,22 @@
     --navy-light: 215 40% 38%;
     --pearl: 40 10% 96%;
     --cream: 40 20% 94%;
+    --sage: 140 20% 45%;
+    --sage-light: 140 15% 70%;
+    --sepia: 30 30% 30%;
+    --sepia-light: 30 20% 50%;
+
+    /* Family tree specific tokens */
+    --tree-bg: 40 18% 95%;
+    --tree-card-bg: 38 25% 98%;
+    --tree-card-border: 30 20% 82%;
+    --tree-card-shadow: 0 4px 16px -4px hsl(30 30% 30% / 0.1);
+    --tree-card-hover-shadow: 0 8px 24px -6px hsl(30 30% 30% / 0.18);
+    --tree-edge-parent: 30 25% 55%;
+    --tree-edge-marriage: 16 55% 55%;
+    --tree-male: 200 35% 60%;
+    --tree-female: 340 35% 65%;
+    --tree-root-accent: 38 45% 42%;
 
     /* Capsule type colors - complementary palette */
     --capsule-photo: 155 35% 42%;
