@@ -766,9 +766,9 @@ function TreeVisualizationInner({
   }, [layout, selectedPersonId, highlightedPersonId, activeBranchIds]);
 
   // STEP 2b: Apply active branch dimming to edges
-  const edges = useMemo(() => {
-    if (!activeBranchIds) return layout.structuralEdges;
+  const edges = useMemo((): Edge[] => {
     return layout.structuralEdges.map(edge => {
+      if (!activeBranchIds) return edge;
       const isMarriage = edge.type === 'marriage';
       const isActive = isMarriage
         ? activeBranchIds.has(edge.source) && activeBranchIds.has(edge.target)
