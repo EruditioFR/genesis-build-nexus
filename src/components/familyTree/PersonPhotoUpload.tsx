@@ -62,7 +62,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
 
       // Delete old photo if exists
       if (person.profile_photo_url) {
-        const oldPath = person.profile_photo_url.split('/family-photos/')[1];
+        const oldPath = getRelativePath(person.profile_photo_url);
         if (oldPath) {
           await supabase.storage.from('family-photos').remove([oldPath]);
         }
