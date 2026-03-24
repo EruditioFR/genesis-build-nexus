@@ -716,7 +716,7 @@ export default function FamilyTreePage() {
                 <TreeDeciduous className="w-5 h-5 text-secondary" />
                 <h1 className="font-semibold">{tree?.name || t('toolbar.myTree')}</h1>
                 <Badge variant="outline" className="text-xs">
-                  {t('toolbar.persons', { count: persons.length })}
+                  {t('toolbar.persons', { count: totalPersonsCount || persons.length })}
                 </Badge>
               </div>
 
