@@ -183,7 +183,7 @@ export function useFamilyTree() {
 
       return {
         tree: treeResult.data as FamilyTree,
-        persons: (personsResult.data || []) as FamilyPerson[],
+        persons: allPersons as FamilyPerson[],
         relationships: filteredRelationships,
         unions: filteredUnions
       };
