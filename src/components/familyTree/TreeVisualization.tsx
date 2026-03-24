@@ -28,6 +28,7 @@ const V_GAP = 120;
 const SPOUSE_GAP = 30;
 const COMPONENT_GAP = 140;
 const MAX_VISIBLE_PERSONS = 200;
+const EMPTY_SET = new Set<string>();
 
 export interface PersonPositionData {
   personId: string;
@@ -211,7 +212,6 @@ function layoutUnified(
   const activeIds = new Set<string>();
 
   if (viewMode === 'ascendant') {
-    // Only show ancestors of root (generation <= rootGen) and their spouses
     const ancestorQueue = [rootId];
     const visited = new Set<string>();
     while (ancestorQueue.length > 0) {
@@ -220,11 +220,9 @@ function layoutUnified(
       visited.add(currentId);
       if (!genOf.has(currentId)) continue;
       activeIds.add(currentId);
-      // Add parents
       for (const pid of graph.getParentIds(currentId)) {
         if (!visited.has(pid)) ancestorQueue.push(pid);
       }
-      // Add spouses at same generation
       for (const sid of graph.getSpouseIds(currentId)) {
         if (!visited.has(sid) && genOf.has(sid)) {
           activeIds.add(sid);
@@ -232,7 +230,6 @@ function layoutUnified(
       }
     }
   } else if (viewMode === 'descendant') {
-    // Only show descendants of root and their spouses
     const descQueue = [rootId];
     const visited = new Set<string>();
     while (descQueue.length > 0) {
@@ -251,7 +248,6 @@ function layoutUnified(
       }
     }
   } else {
-    // Hourglass: show all
     for (const [id] of genOf) {
       activeIds.add(id);
     }
@@ -432,23 +428,40 @@ function resolveOverlaps(positions: Map<string, LayoutNode>): void {
   }
 }
 
-// ─── Convert layout to React Flow nodes & edges ─────────────────────────────
+// ─── Layout computation (structural only) ───────────────────────────────────
 
-function buildFlowElements(
+interface LayoutResult {
+  /** Structural nodes with positions, ghost/visible status, generation info */
+  layoutNodes: Array<{
+    id: string;
+    person: FamilyPerson;
+    x: number;
+    y: number;
+    generation: number;
+    isGhost: boolean;
+    isRoot: boolean;
+    appearDelay: number;
+    generationLabel: string;
+  }>;
+  /** Edges (structural, not dependent on selection) */
+  structuralEdges: Edge[];
+  /** Union junction nodes */
+  junctionNodes: Node<PersonNodeData>[];
+  /** Position data for external consumers */
+  positionData: PersonPositionData[];
+}
+
+function computeLayout(
   persons: FamilyPerson[],
   relationships: ParentChildRelationship[],
   unions: FamilyUnion[],
   rootPersonId: string | undefined,
   viewMode: TreeViewMode,
-  selectedPersonId: string | undefined,
-  highlightedPersonId: string | undefined,
-  activeBranchIds: Set<string> | undefined,
-  rootGeneration: number,
   maxVisibleGenerations: number,
   expandedNodeIds: Set<string>,
-): { nodes: Node<PersonNodeData>[]; edges: Edge[]; positionData: PersonPositionData[] } {
+): LayoutResult {
   if (persons.length === 0) {
-    return { nodes: [], edges: [], positionData: [] };
+    return { layoutNodes: [], structuralEdges: [], junctionNodes: [], positionData: [] };
   }
 
   const graph = buildFamilyGraph(persons, relationships, unions);
@@ -494,7 +507,7 @@ function buildFlowElements(
     }
   }
 
-  // Build generation distance map for progressive loading
+  // Build generation distance map
   const genDistanceFromRoot = new Map<string, number>();
   for (const [id, pos] of allPositions) {
     const rootPos = allPositions.get(rootPerson.id);
@@ -504,7 +517,6 @@ function buildFlowElements(
     }
   }
 
-  // Also compute distance from expanded nodes
   const getMinDistance = (id: string): number => {
     let minDist = genDistanceFromRoot.get(id) ?? Infinity;
     for (const expandedId of expandedNodeIds) {
@@ -518,16 +530,15 @@ function buildFlowElements(
     return minDist;
   };
 
-  // Build React Flow nodes with hard cap of MAX_VISIBLE_PERSONS
-  const nodes: Node<PersonNodeData>[] = [];
-  const positionData: PersonPositionData[] = [];
-
-  // Sort by distance so closest nodes are prioritized
+  // Sort by distance, apply visibility cap
   const sortedEntries = [...allPositions.entries()]
     .map(([id, pos]) => ({ id, pos, dist: getMinDistance(id) }))
     .sort((a, b) => a.dist - b.dist);
 
+  const layoutNodes: LayoutResult['layoutNodes'] = [];
+  const positionData: PersonPositionData[] = [];
   let visibleCount = 0;
+  const visibleIds = new Set<string>();
 
   for (const { id, pos, dist } of sortedEntries) {
     const person = graph.personMap.get(id);
@@ -539,48 +550,41 @@ function buildFlowElements(
 
     if (isExcludedByGen) continue;
 
-    // Hard cap: beyond MAX_VISIBLE_PERSONS, force ghost or exclude (never ghost the root)
     const isOverCap = !isRootNode && !isGhostByGen && visibleCount >= MAX_VISIBLE_PERSONS;
     const isGhost = isGhostByGen || isOverCap;
 
     if (!isGhost) visibleCount++;
 
-    const isDimmed = !!activeBranchIds && !activeBranchIds.has(id);
-    const genDiff = pos.generation - (rootGeneration ?? detectedRootGen);
+    const genDiff = pos.generation - detectedRootGen;
     const appearDelay = isGhost ? 0 : Math.max(0, (dist - 1) * 0.08);
 
-    nodes.push({
+    layoutNodes.push({
       id,
-      type: 'person',
-      position: { x: pos.x, y: pos.y },
-      data: {
-        person,
-        isSelected: selectedPersonId === id,
-        isHighlighted: highlightedPersonId === id,
-        isRoot: rootPersonId === id,
-        isDimmed,
-        isGhost,
-        appearDelay,
-        generation: pos.generation,
-        generationLabel: getGenerationLabel(genDiff),
-      },
-      style: { width: CARD_WIDTH, height: CARD_HEIGHT },
+      person,
+      x: pos.x,
+      y: pos.y,
+      generation: pos.generation,
+      isGhost,
+      isRoot: rootPersonId === id,
+      appearDelay,
+      generationLabel: getGenerationLabel(genDiff),
     });
 
+    visibleIds.add(id);
     positionData.push({ personId: id, x: pos.x, y: pos.y });
   }
 
-  // Build edges
-  const edges: Edge[] = [];
-
-  // Spouse edges + union junction nodes
+  // Build edges & junction nodes
+  const structuralEdges: Edge[] = [];
+  const junctionNodes: Node<PersonNodeData>[] = [];
   const spouseKeys = new Set<string>();
-  const unionJunctionMap = new Map<string, string>(); // "p1|p2" sorted key -> junction node id
+  const unionJunctionMap = new Map<string, string>();
 
   for (const u of unions) {
     const pos1 = allPositions.get(u.person1_id);
     const pos2 = allPositions.get(u.person2_id);
     if (!pos1 || !pos2) continue;
+    if (!visibleIds.has(u.person1_id) || !visibleIds.has(u.person2_id)) continue;
     const key = [u.person1_id, u.person2_id].sort().join('|');
     if (spouseKeys.has(key)) continue;
     spouseKeys.add(key);
@@ -590,25 +594,21 @@ function buildFlowElements(
     const leftPos = pos1.x < pos2.x ? pos1 : pos2;
     const rightPos = pos1.x < pos2.x ? pos2 : pos1;
 
-    const isActive = !activeBranchIds || (activeBranchIds.has(u.person1_id) && activeBranchIds.has(u.person2_id));
-
-    edges.push({
+    structuralEdges.push({
       id: `marriage-${key}`,
       source: left,
       target: right,
       type: 'marriage',
       sourceHandle: 'right',
       targetHandle: 'left',
-      data: { unionType: u.union_type, isActive },
-      style: { opacity: isActive ? 1 : 0.15 },
+      data: { unionType: u.union_type, isActive: true },
     });
 
-    // Create invisible junction node at midpoint between the couple, at bottom of cards
     const junctionId = `union-junction-${key}`;
     const junctionX = (leftPos.x + CARD_WIDTH + rightPos.x) / 2;
     const junctionY = leftPos.y + CARD_HEIGHT;
 
-    nodes.push({
+    junctionNodes.push({
       id: junctionId,
       type: 'unionJunction',
       position: { x: junctionX - 1, y: junctionY },
@@ -621,15 +621,12 @@ function buildFlowElements(
     unionJunctionMap.set(key, junctionId);
   }
 
-  // Parent-child edges - route through union junction when possible
   const childrenConnected = new Set<string>();
   for (const r of relationships) {
     if (!allPositions.has(r.parent_id) || !allPositions.has(r.child_id)) continue;
+    if (!visibleIds.has(r.parent_id) && !visibleIds.has(r.child_id)) continue;
     if (childrenConnected.has(r.child_id)) continue;
 
-    const isActive = !activeBranchIds || (activeBranchIds.has(r.parent_id) && activeBranchIds.has(r.child_id));
-
-    // Find co-parent to use the union junction
     const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id && allPositions.has(p));
     let sourceId = r.parent_id;
     let sourceHandle = 'bottom';
@@ -644,20 +641,19 @@ function buildFlowElements(
       }
     }
 
-    edges.push({
+    structuralEdges.push({
       id: `parent-child-${r.parent_id}-${r.child_id}`,
       source: sourceId,
       target: r.child_id,
       type: 'parentChild',
       sourceHandle,
       targetHandle: 'top',
-      data: { relationshipType: r.relationship_type, isActive },
-      style: { opacity: isActive ? 1 : 0.15 },
+      data: { relationshipType: r.relationship_type, isActive: true },
     });
     childrenConnected.add(r.child_id);
   }
 
-  return { nodes, edges, positionData };
+  return { layoutNodes, structuralEdges, junctionNodes, positionData };
 }
 
 function getGenerationLabel(diff: number): string {
@@ -728,44 +724,78 @@ function TreeVisualizationInner({
   showMinimap = true,
   onCenterOnPerson,
   maxVisibleGenerations = Infinity,
-  expandedNodeIds = new Set(),
+  expandedNodeIds = EMPTY_SET,
 }: TreeVisualizationProps) {
   const { fitView, setCenter } = useReactFlow();
-  const lastPositionsRef = useRef<string>('');
+  const lastPositionCountRef = useRef(0);
 
-  const { nodes, edges, positionData } = useMemo(() => {
-    return buildFlowElements(
+  // STEP 1: Layout computation — only depends on structural data
+  const layout = useMemo(() => {
+    return computeLayout(
       persons,
       relationships,
       unions,
       rootPersonId,
       viewMode,
-      selectedPersonId,
-      highlightedPersonId,
-      activeBranchIds,
-      0,
       maxVisibleGenerations,
       expandedNodeIds,
     );
-  }, [persons, relationships, unions, rootPersonId, viewMode, selectedPersonId, highlightedPersonId, activeBranchIds, maxVisibleGenerations, expandedNodeIds]);
+  }, [persons, relationships, unions, rootPersonId, viewMode, maxVisibleGenerations, expandedNodeIds]);
 
-  // Report positions
+  // STEP 2: Visual state — cheap, only updates node data properties
+  const nodes = useMemo(() => {
+    const personNodes: Node<PersonNodeData>[] = layout.layoutNodes.map(ln => ({
+      id: ln.id,
+      type: 'person' as const,
+      position: { x: ln.x, y: ln.y },
+      data: {
+        person: ln.person,
+        isSelected: selectedPersonId === ln.id,
+        isHighlighted: highlightedPersonId === ln.id,
+        isRoot: ln.isRoot,
+        isDimmed: !!activeBranchIds && !activeBranchIds.has(ln.id),
+        isGhost: ln.isGhost,
+        appearDelay: ln.appearDelay,
+        generation: ln.generation,
+        generationLabel: ln.generationLabel,
+      },
+      style: { width: CARD_WIDTH, height: CARD_HEIGHT },
+    }));
+
+    return [...personNodes, ...layout.junctionNodes];
+  }, [layout, selectedPersonId, highlightedPersonId, activeBranchIds]);
+
+  // STEP 2b: Apply active branch dimming to edges
+  const edges = useMemo((): Edge[] => {
+    return layout.structuralEdges.map(edge => {
+      if (!activeBranchIds) return edge;
+      const isMarriage = edge.type === 'marriage';
+      const isActive = isMarriage
+        ? activeBranchIds.has(edge.source) && activeBranchIds.has(edge.target)
+        : activeBranchIds.has(edge.target);
+      return {
+        ...edge,
+        data: { ...edge.data, isActive },
+        style: { opacity: isActive ? 1 : 0.15 },
+      };
+    });
+  }, [layout.structuralEdges, activeBranchIds]);
+
+  // Report positions only when layout changes (not on selection changes)
   useEffect(() => {
-    if (onPositionsCalculated && positionData.length > 0) {
-      const key = positionData.map(p => `${p.personId}:${p.x}:${p.y}`).join(',');
-      if (key !== lastPositionsRef.current) {
-        lastPositionsRef.current = key;
-        onPositionsCalculated(positionData);
+    if (onPositionsCalculated && layout.positionData.length > 0) {
+      if (layout.positionData.length !== lastPositionCountRef.current) {
+        lastPositionCountRef.current = layout.positionData.length;
+        onPositionsCalculated(layout.positionData);
       }
     }
-  }, [positionData, onPositionsCalculated]);
+  }, [layout.positionData, onPositionsCalculated]);
 
   // Center on root person on initial load
   const hasInitialFit = useRef(false);
   useEffect(() => {
     if (nodes.length > 0 && !hasInitialFit.current) {
       hasInitialFit.current = true;
-      // Always center on root person node, falling back to first node
       const rootNode = rootPersonId
         ? nodes.find(n => n.id === rootPersonId) || nodes.find(n => n.data?.isRoot) || nodes[0]
         : nodes[0];
@@ -800,7 +830,6 @@ function TreeVisualizationInner({
   const onNodeClick: NodeMouseHandler<Node<PersonNodeData>> = useCallback((_event, node) => {
     if (node.data.isGhost && onExpandGhost) {
       onExpandGhost(node.data.person.id);
-      // Animated fitView on the expanded ghost node
       setTimeout(() => {
         setCenter(
           node.position.x + CARD_WIDTH / 2,
@@ -815,8 +844,8 @@ function TreeVisualizationInner({
 
   const minimapNodeColor = useCallback((node: Node<PersonNodeData>) => {
     if (node.data.isSelected) return 'hsl(var(--secondary))';
-    if (node.data.person.gender === 'male') return 'hsl(210, 70%, 60%)';
-    if (node.data.person.gender === 'female') return 'hsl(330, 70%, 60%)';
+    if (node.data.person?.gender === 'male') return 'hsl(210, 70%, 60%)';
+    if (node.data.person?.gender === 'female') return 'hsl(330, 70%, 60%)';
     return 'hsl(var(--muted-foreground))';
   }, []);
 

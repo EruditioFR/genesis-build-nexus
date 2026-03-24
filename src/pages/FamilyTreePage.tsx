@@ -16,7 +16,7 @@ import {
   FileText,
   FileDown,
   Focus,
-  Map,
+  Map as MapIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -106,14 +106,39 @@ export default function FamilyTreePage() {
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
 
-  // Compute active branch (ancestors + descendants of selected person)
+  // Pre-build indexed maps for parent/child lookups
+  const { parentOfIndex, childOfIndex } = useMemo(() => {
+    const parentOf: Map<string, string[]> = new Map();
+    const childOf: Map<string, string[]> = new Map();
+    for (const r of relationships) {
+      if (!parentOf.has(r.parent_id)) parentOf.set(r.parent_id, []);
+      parentOf.get(r.parent_id)!.push(r.child_id);
+      if (!childOf.has(r.child_id)) childOf.set(r.child_id, []);
+      childOf.get(r.child_id)!.push(r.parent_id);
+    }
+    return { parentOfIndex: parentOf, childOfIndex: childOf };
+  }, [relationships]);
+
+  // Pre-build spouse index
+  const spouseIndex = useMemo(() => {
+    const idx: Map<string, string[]> = new Map();
+    for (const u of unions) {
+      if (!idx.has(u.person1_id)) idx.set(u.person1_id, []);
+      idx.get(u.person1_id)!.push(u.person2_id);
+      if (!idx.has(u.person2_id)) idx.set(u.person2_id, []);
+      idx.get(u.person2_id)!.push(u.person1_id);
+    }
+    return idx;
+  }, [unions]);
+
+  // Compute active branch using indexed maps (O(branch) instead of O(all relations))
   const activeBranchIds = useMemo(() => {
     if (!selectedPerson || !showDetailPanel) return undefined;
     const ids = new Set<string>();
     ids.add(selectedPerson.id);
 
     const addAncestors = (personId: string, visited: Set<string>) => {
-      const parentIds = relationships.filter(r => r.child_id === personId).map(r => r.parent_id);
+      const parentIds = childOfIndex.get(personId) || [];
       for (const pid of parentIds) {
         if (!visited.has(pid)) {
           visited.add(pid);
@@ -124,7 +149,7 @@ export default function FamilyTreePage() {
     };
 
     const addDescendants = (personId: string, visited: Set<string>) => {
-      const childIds = relationships.filter(r => r.parent_id === personId).map(r => r.child_id);
+      const childIds = parentOfIndex.get(personId) || [];
       for (const cid of childIds) {
         if (!visited.has(cid)) {
           visited.add(cid);
@@ -134,9 +159,7 @@ export default function FamilyTreePage() {
       }
     };
 
-    const spouseIds = unions
-      .filter(u => u.person1_id === selectedPerson.id || u.person2_id === selectedPerson.id)
-      .map(u => u.person1_id === selectedPerson.id ? u.person2_id : u.person1_id);
+    const spouseIds = spouseIndex.get(selectedPerson.id) || [];
     spouseIds.forEach(id => ids.add(id));
 
     const visited = new Set<string>([selectedPerson.id]);
@@ -144,7 +167,7 @@ export default function FamilyTreePage() {
     addDescendants(selectedPerson.id, visited);
 
     return ids;
-  }, [selectedPerson, showDetailPanel, relationships, unions]);
+  }, [selectedPerson, showDetailPanel, parentOfIndex, childOfIndex, spouseIndex]);
 
   const canAccessFamilyTree = limits.canAccessFamilyTree || isAdminViewing;
 
@@ -601,7 +624,7 @@ export default function FamilyTreePage() {
       </Select>
 
       <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
-        <Map className="w-4 h-4 text-muted-foreground" />
+        <MapIcon className="w-4 h-4 text-muted-foreground" />
         <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
       </div>
     </>
