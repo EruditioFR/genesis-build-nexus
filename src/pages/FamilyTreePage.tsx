@@ -882,7 +882,6 @@ export default function FamilyTreePage() {
                       onUpdate={loadTree}
                       onPersonClick={handleSearchSelect}
                     />
-                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
