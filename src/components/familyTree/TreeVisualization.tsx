@@ -377,19 +377,17 @@ function layoutUnified(
     if (w > 0) currentX += w + COMPONENT_GAP;
   }
 
-  // ── Phase 4: Cross-lineage connections ──────────────────────────────────
+  // ── Phase 4: Generate ALL connections post-placement ─────────────────────
 
-  // Cross-lineage spouse connections
-  const existingSpouseKeys = new Set(
-    connections.filter(c => c.type === 'spouse')
-      .map(c => [c.fromPersonId, c.toPersonId].sort().join('|'))
-  );
+  // Spouse connections from unions
+  const spouseKeys = new Set<string>();
   for (const u of unions) {
-    const key = [u.person1_id, u.person2_id].sort().join('|');
-    if (existingSpouseKeys.has(key)) continue;
     const pos1 = positions.get(u.person1_id);
     const pos2 = positions.get(u.person2_id);
     if (!pos1 || !pos2) continue;
+    const key = [u.person1_id, u.person2_id].sort().join('|');
+    if (spouseKeys.has(key)) continue;
+    spouseKeys.add(key);
     const left = pos1.x < pos2.x ? pos1 : pos2;
     const right = pos1.x < pos2.x ? pos2 : pos1;
     const leftId = pos1.x < pos2.x ? u.person1_id : u.person2_id;
@@ -403,34 +401,38 @@ function layoutUnified(
     });
   }
 
-  // Cross-lineage parent-child connections — only add if child doesn't already have one
-  const childrenWithConnection = new Set(
-    connections.filter(c => c.type === 'parent-child').map(c => c.toPersonId)
-  );
+  // Parent-child connections: one per child, from the union center of parents
+  const childrenConnected = new Set<string>();
   for (const r of relationships) {
     if (!activeIds.has(r.parent_id) || !activeIds.has(r.child_id)) continue;
-    if (childrenWithConnection.has(r.child_id)) continue;
+    if (childrenConnected.has(r.child_id)) continue;
     const parentPos = positions.get(r.parent_id);
     const childPos = positions.get(r.child_id);
     if (!parentPos || !childPos) continue;
-    // Find spouse to compute union center
-    const spouseIds = graph.getSpouseIds(r.parent_id);
+
+    // Find the co-parent (spouse who is also a parent of this child)
+    const otherParents = graph.getParentIds(r.child_id).filter(p => p !== r.parent_id);
     let fromX = parentPos.x + CARD_WIDTH / 2;
-    for (const sid of spouseIds) {
-      const sPos = positions.get(sid);
-      if (sPos) {
-        fromX = (parentPos.x + CARD_WIDTH / 2 + sPos.x + CARD_WIDTH / 2) / 2;
+    let fromY = parentPos.y + CARD_HEIGHT;
+    
+    for (const otherId of otherParents) {
+      const otherPos = positions.get(otherId);
+      if (otherPos) {
+        // Union center = midpoint between both parents
+        fromX = (parentPos.x + CARD_WIDTH / 2 + otherPos.x + CARD_WIDTH / 2) / 2;
+        fromY = Math.max(parentPos.y, otherPos.y) + CARD_HEIGHT;
         break;
       }
     }
+
     connections.push({
       type: 'parent-child',
-      from: { x: fromX, y: parentPos.y + CARD_HEIGHT },
+      from: { x: fromX, y: fromY },
       to: { x: childPos.x + CARD_WIDTH / 2, y: childPos.y },
       fromPersonId: r.parent_id,
       toPersonId: r.child_id,
     });
-    childrenWithConnection.add(r.child_id);
+    childrenConnected.add(r.child_id);
   }
 
   resolveOverlaps(positions);
