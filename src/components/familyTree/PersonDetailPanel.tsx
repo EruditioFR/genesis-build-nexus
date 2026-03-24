@@ -108,7 +108,8 @@ export function PersonDetailPanel({
   onCenterOnPerson,
   onDelete,
   onPersonClick,
-  onUpdate
+  onUpdate,
+  readOnly = false,
 }: PersonDetailPanelProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
