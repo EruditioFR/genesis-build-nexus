@@ -51,97 +51,56 @@ export default function AdminFamilyTrees() {
   const fetchTrees = async () => {
     setLoading(true);
 
-    // Fetch trees with owner profiles
-    const { data: treesData, error: treesError } = await supabase
-      .from("family_trees")
-      .select("id, name, user_id, created_at")
-      .order("created_at", { ascending: false });
+    // Single RPC call gets all tree stats server-side
+    const { data: statsData, error: statsError } = await supabase
+      .rpc("get_admin_tree_stats" as any);
 
-    if (treesError || !treesData) {
+    if (statsError || !statsData) {
       toast({ title: "Erreur", description: "Impossible de charger les arbres", variant: "destructive" });
       setLoading(false);
       return;
     }
 
-    if (treesData.length === 0) {
+    const rows = statsData as Array<{
+      tree_id: string;
+      tree_name: string;
+      tree_user_id: string;
+      tree_created_at: string;
+      persons_count: number;
+      unions_count: number;
+      relations_count: number;
+    }>;
+
+    if (rows.length === 0) {
       setTrees([]);
       setLoading(false);
       return;
     }
 
-    // Fetch profiles for owner names
-    const userIds = [...new Set(treesData.map((t) => t.user_id))];
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("user_id, display_name")
-      .in("user_id", userIds);
+    // Fetch profiles and emails in parallel
+    const userIds = [...new Set(rows.map((r) => r.tree_user_id))];
 
-    const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) ?? []);
+    const [profilesRes, ...emailResults] = await Promise.all([
+      supabase.from("profiles").select("user_id, display_name").in("user_id", userIds),
+      ...userIds.map(async (uid) => {
+        const { data } = await supabase.rpc("get_user_email", { _user_id: uid });
+        return [uid, data as string | null] as const;
+      }),
+    ]);
 
-    // Fetch exact counts per tree using count queries (no 1000-row limit)
-    const treeIds = treesData.map((t) => t.id);
-    const personsCountMap = new Map<string, number>();
-    const unionsCountMap = new Map<string, number>();
-    const relationsCountMap = new Map<string, number>();
+    const profileMap = new Map(profilesRes.data?.map((p) => [p.user_id, p.display_name]) ?? []);
+    const emailMap = new Map(emailResults as Array<readonly [string, string | null]>);
 
-    await Promise.all(
-      treeIds.map(async (treeId) => {
-        const [personsRes, personsWithIds] = await Promise.all([
-          supabase
-            .from("family_persons")
-            .select("*", { count: "exact", head: true })
-            .eq("tree_id", treeId),
-          supabase
-            .from("family_persons")
-            .select("id")
-            .eq("tree_id", treeId)
-            .limit(5000),
-        ]);
-
-        personsCountMap.set(treeId, personsRes.count || 0);
-
-        const personIds = personsWithIds.data?.map((p) => p.id) ?? [];
-        if (personIds.length === 0) return;
-
-        // Batch person IDs in chunks to avoid query limits
-        const chunkSize = 500;
-        let uCount = 0;
-        let rCount = 0;
-        for (let i = 0; i < personIds.length; i += chunkSize) {
-          const chunk = personIds.slice(i, i + chunkSize);
-          const [uRes, rRes] = await Promise.all([
-            supabase
-              .from("family_unions")
-              .select("*", { count: "exact", head: true })
-              .in("person1_id", chunk),
-            supabase
-              .from("family_parent_child")
-              .select("*", { count: "exact", head: true })
-              .in("parent_id", chunk),
-          ]);
-          uCount += uRes.count || 0;
-          rCount += rRes.count || 0;
-        }
-        unionsCountMap.set(treeId, uCount);
-        relationsCountMap.set(treeId, rCount);
-      })
-    );
-
-    // Fetch emails via get_user_email function
-    const emailPromises = userIds.map(async (uid) => {
-      const { data } = await supabase.rpc("get_user_email", { _user_id: uid });
-      return [uid, data as string | null] as const;
-    });
-    const emailResults = await Promise.all(emailPromises);
-    const emailMap = new Map(emailResults);
-
-    const enriched: TreeWithStats[] = treesData.map((t) => ({
-      ...t,
-      owner_name: profileMap.get(t.user_id) ?? null,
-      owner_email: emailMap.get(t.user_id) ?? null,
-      persons_count: personsCountMap.get(t.id) || 0,
-      unions_count: unionsCountMap.get(t.id) || 0,
-      relations_count: relationsCountMap.get(t.id) || 0,
+    const enriched: TreeWithStats[] = rows.map((r) => ({
+      id: r.tree_id,
+      name: r.tree_name,
+      user_id: r.tree_user_id,
+      created_at: r.tree_created_at,
+      owner_name: profileMap.get(r.tree_user_id) ?? null,
+      owner_email: emailMap.get(r.tree_user_id) ?? null,
+      persons_count: Number(r.persons_count),
+      unions_count: Number(r.unions_count),
+      relations_count: Number(r.relations_count),
     }));
 
     setTrees(enriched);
