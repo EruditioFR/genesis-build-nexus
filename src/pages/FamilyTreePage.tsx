@@ -861,9 +861,9 @@ export default function FamilyTreePage() {
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: 384, opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
-                  className="border-l bg-card overflow-hidden flex-shrink-0"
+                  className="border-l bg-card overflow-hidden flex-shrink-0 h-full"
                 >
-                  <div className="w-96 h-full overflow-auto sticky top-0">
+                  <div className="w-96 h-full overflow-auto">
                     <PersonDetailPanel
                       person={selectedPerson}
                       parents={getPersonParents(selectedPerson.id)}
