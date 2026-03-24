@@ -858,12 +858,11 @@ export default function FamilyTreePage() {
             <AnimatePresence>
               {showDetailPanel && selectedPerson && (
                 <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 384, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  className="border-l bg-card overflow-hidden flex-shrink-0 h-full"
+                  initial={{ x: 384, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 384, opacity: 0 }}
+                  className="fixed top-0 right-0 bottom-0 w-96 bg-card border-l shadow-lg z-50 overflow-auto"
                 >
-                  <div className="w-96 h-full overflow-auto">
                     <PersonDetailPanel
                       person={selectedPerson}
                       parents={getPersonParents(selectedPerson.id)}
@@ -883,7 +882,6 @@ export default function FamilyTreePage() {
                       onUpdate={loadTree}
                       onPersonClick={handleSearchSelect}
                     />
-                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
