@@ -1,7 +1,6 @@
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
 import { Home, Plus } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import type { FamilyPerson } from '@/types/familyTree';
@@ -23,6 +22,14 @@ export type PersonNode = Node<PersonNodeData, 'person'>;
 export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
   const { person, isSelected, isHighlighted, isRoot, isDimmed, isGhost, appearDelay } = data;
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
+
+  // CSS transition: start hidden, then reveal after appearDelay
+  const [appeared, setAppeared] = useState(appearDelay === 0);
+  useEffect(() => {
+    if (appeared) return;
+    const timer = setTimeout(() => setAppeared(true), (appearDelay || 0) * 1000);
+    return () => clearTimeout(timer);
+  }, [appearDelay, appeared]);
 
   const getBirthYear = () => {
     if (!person.birth_date) return null;
@@ -51,6 +58,9 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
         ? 'bg-[hsl(340_35%_92%)] text-[hsl(340_40%_35%)]'
         : 'bg-muted text-muted-foreground';
 
+  const opacity = !appeared ? 0 : isGhost ? 0.35 : isDimmed ? 0.2 : 1;
+  const scale = !appeared ? 0.9 : isGhost ? 0.95 : isDimmed ? 0.97 : 1;
+
   return (
     <>
       <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-transparent !border-0" />
@@ -58,19 +68,19 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
       <Handle type="source" position={Position.Right} id="right" className="!w-2 !h-2 !bg-transparent !border-0" />
       <Handle type="target" position={Position.Left} id="left" className="!w-2 !h-2 !bg-transparent !border-0" />
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{
-          opacity: isGhost ? 0.35 : isDimmed ? 0.2 : 1,
-          scale: isGhost ? 0.95 : isDimmed ? 0.97 : 1,
+      <div
+        style={{
+          opacity,
+          transform: `scale(${scale})`,
+          transition: 'opacity 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.2s ease-out',
         }}
-        whileHover={!isDimmed && !isGhost ? { y: -2, boxShadow: 'var(--tree-card-hover-shadow)' } : isGhost ? { opacity: 0.55 } : undefined}
-        transition={{ duration: 0.3, ease: 'easeOut', delay: appearDelay || 0 }}
         className={cn(
           "w-full h-full rounded-2xl p-2.5 flex items-center gap-2.5 cursor-pointer font-tree",
           "border-2 shadow-[var(--tree-card-shadow)]",
           "bg-[hsl(var(--tree-card-bg))]",
           isGhost && "border-dashed",
+          !isDimmed && !isGhost && "hover:-translate-y-0.5 hover:shadow-[var(--tree-card-hover-shadow)]",
+          isGhost && "hover:opacity-55",
           isSelected
             ? "border-[hsl(var(--terracotta))] ring-2 ring-[hsl(var(--terracotta)/0.25)]"
             : cn("hover:border-[hsl(var(--gold-light))]", genderBorderColor),
@@ -139,7 +149,7 @@ export const PersonFlowNode = memo(({ data }: NodeProps<PersonNode>) => {
             <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--sepia-light)/0.4)]" />
           </div>
         )}
-      </motion.div>
+      </div>
     </>
   );
 });
