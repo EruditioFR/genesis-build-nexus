@@ -490,5 +490,49 @@
     "stepContent": "Contenido",
     "stepDetails": "Detalles",
     "stepFinish": "Terminar"
+  },
+  "reactions": {
+    "title": "Expresar una emoción",
+    "add": "Reaccionar",
+    "categories": {
+      "joy": "Alegría",
+      "tenderness": "Ternura",
+      "nostalgia": "Nostalgia",
+      "admiration": "Admiración",
+      "emotion": "Emoción",
+      "fun": "Diversión"
+    },
+    "emotions": {
+      "touched": "Conmovido",
+      "amused": "Divertido",
+      "in_love": "Enamorado",
+      "amazed": "Maravillado",
+      "happy": "Feliz",
+      "moved": "Emocionado",
+      "affection": "Afecto",
+      "grateful": "Agradecido",
+      "warm": "Cálido",
+      "serene": "Sereno",
+      "nostalgic": "Nostálgico",
+      "dreamy": "Soñador",
+      "memories": "Recuerdos",
+      "melancholic": "Melancólico",
+      "flashback": "Flashback",
+      "bravo": "Bravo",
+      "inspiring": "Inspirador",
+      "magnificent": "Magnífico",
+      "impressive": "Impresionante",
+      "brilliant": "Brillante",
+      "tearful": "Conmovedor",
+      "heartbreaking": "Desgarrador",
+      "respectful": "Respetuoso",
+      "speechless": "Sin palabras",
+      "overwhelming": "Abrumador",
+      "playful": "Juguetón",
+      "festive": "Festivo",
+      "awkward": "Incómodo",
+      "mischievous": "Travieso",
+      "cheeky": "Pícaro"
+    }
   }
 }

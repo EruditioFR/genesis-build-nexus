@@ -490,5 +490,49 @@
     "stepContent": "콘텐츠",
     "stepDetails": "세부사항",
     "stepFinish": "완료"
+  },
+  "reactions": {
+    "title": "감정 표현하기",
+    "add": "반응",
+    "categories": {
+      "joy": "기쁨",
+      "tenderness": "다정함",
+      "nostalgia": "향수",
+      "admiration": "감탄",
+      "emotion": "감동",
+      "fun": "재미"
+    },
+    "emotions": {
+      "touched": "감동",
+      "amused": "재미있는",
+      "in_love": "사랑에 빠진",
+      "amazed": "놀라운",
+      "happy": "행복한",
+      "moved": "감격한",
+      "affection": "애정",
+      "grateful": "감사한",
+      "warm": "따뜻한",
+      "serene": "평온한",
+      "nostalgic": "그리운",
+      "dreamy": "몽환적인",
+      "memories": "추억",
+      "melancholic": "서글픈",
+      "flashback": "회상",
+      "bravo": "브라보",
+      "inspiring": "영감을 주는",
+      "magnificent": "훌륭한",
+      "impressive": "인상적인",
+      "brilliant": "빛나는",
+      "tearful": "눈물나는",
+      "heartbreaking": "가슴 아픈",
+      "respectful": "존경하는",
+      "speechless": "할 말을 잃은",
+      "overwhelming": "벅찬",
+      "playful": "장난스러운",
+      "festive": "축제의",
+      "awkward": "어색한",
+      "mischievous": "짓궂은",
+      "cheeky": "건방진"
+    }
   }
 }
