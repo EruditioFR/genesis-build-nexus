@@ -2,10 +2,10 @@
   "hero": {
     "badge": "Create your family journal, simply",
     "title": {
-      "prefix": "Protect what ",
-      "rotating": ["matters"],
-      "suffix": " ",
-      "highlight": "most"
+      "prefix": "All your ",
+      "rotating": ["family", "personal", "friendly"],
+      "suffix": " memories ",
+      "highlight": "in one place"
     },
     "subtitle": {
       "line1": "Photos, videos, texts, audio… gather your memories in one place, with context and emotion.",
