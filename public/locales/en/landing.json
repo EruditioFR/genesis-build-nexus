@@ -3,7 +3,7 @@
     "badge": "Create your family journal, simply",
     "title": {
       "prefix": "Protect what ",
-      "rotating": ["matters", "connects", "inspires"],
+      "rotating": ["matters"],
       "suffix": " ",
       "highlight": "most"
     },
