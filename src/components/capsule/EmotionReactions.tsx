@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -154,9 +154,9 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
               return (
                 <button
                   key={emotion.key}
-                  onClick={() => {
-                    toggleReaction(emotion.key);
-                    if (!isMobile) setOpen(false);
+                  onClick={async () => {
+                    await toggleReaction(emotion.key);
+                    setOpen(false);
                   }}
                   disabled={toggling === emotion.key}
                   className={cn(
@@ -183,9 +183,9 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     <Button
       variant="outline"
       size="sm"
-      className="rounded-full h-8 gap-1 text-xs border-dashed hover:border-primary/50"
+      className="rounded-full h-8 gap-1.5 text-xs border-dashed hover:border-primary/50"
     >
-      <Plus className="w-3.5 h-3.5" />
+      <Heart className="w-3.5 h-3.5" />
       {t('reactions.add')}
     </Button>
   );
