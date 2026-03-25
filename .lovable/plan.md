@@ -1,65 +1,58 @@
 
 
-## Optimisation des performances de l'arbre genealogique
+## Emotion Reactions on Shared Capsules
 
-### Diagnostic
+### Summary
+Add an emoji-based "emotion reaction" system to capsules, allowing circle members to express emotions (not just a simple like). This includes a new database table, a React component with 30 categorized emotions, and integration into the capsule detail page.
 
-L'arbre contient ~8400 personnes et ~7200 relations. Voici les goulots d'etranglement identifies :
+### 30 Emotions (6 categories, 5 each)
 
-1. **Layout recalcule a chaque clic** : `buildFlowElements` est dans un `useMemo` qui depend de `selectedPersonId`, `highlightedPersonId`, et `activeBranchIds`. Chaque selection de personne relance le layout complet sur 8400 noeuds, alors que seules les proprietes visuelles changent (pas les positions).
+| Category | Emotions |
+|----------|----------|
+| **Joy** | 😊 Touched, 😂 Amused, 🥰 In love, 🤩 Amazed, 😄 Happy |
+| **Tenderness** | 🥹 Moved, 💕 Affection, 🫶 Grateful, 🤗 Warm, 😌 Serene |
+| **Nostalgia** | 🥲 Nostalgic, 💭 Dreamy, 🕰️ Memories, 🌅 Melancholic, 📸 Flashback |
+| **Admiration** | 👏 Bravo, 💪 Inspiring, ✨ Magnificent, 🌟 Impressive, 🎯 Brilliant |
+| **Emotion** | 😢 Tearful, 💔 Heartbreaking, 🙏 Respectful, 😮 Speechless, 💫 Overwhelming |
+| **Fun** | 😜 Playful, 🎉 Festive, 😅 Awkward, 🤭 Mischievous, 😏 Cheeky |
 
-2. **`expandedNodeIds = new Set()`** dans les props par defaut cree un nouvel objet a chaque render, invalidant le `useMemo`.
+### Database Changes
 
-3. **`activeBranchIds`** recalcule avec des `.filter()` lineaires sur toutes les relations a chaque changement de selection.
+1. **New table `capsule_reactions`**:
+   - `id` (uuid, PK)
+   - `capsule_id` (uuid, not null)
+   - `user_id` (uuid, not null)
+   - `emotion_key` (varchar, not null) — e.g. "touched", "amused"
+   - `created_at` (timestamptz)
+   - Unique constraint on `(capsule_id, user_id, emotion_key)` — one reaction per emotion per user
 
-4. **Framer Motion** sur chaque noeud (`motion.div` avec `initial`/`animate`) ajoute un cout significatif pour 200+ noeuds animes simultanement.
+2. **RLS Policies**:
+   - SELECT: `user_can_view_capsule(auth.uid(), capsule_id)` — anyone who can see the capsule can see reactions
+   - INSERT: `user_can_view_capsule(auth.uid(), capsule_id) AND auth.uid() = user_id` — circle members can react
+   - DELETE: `auth.uid() = user_id` — users can remove their own reactions
 
-5. **Serialisation des positions** dans le `useEffect` (`positionData.map(...).join(',')`) a chaque render.
+3. **Enable realtime** on `capsule_reactions` for live updates
 
-### Plan d'optimisation
+### Frontend Changes
 
-#### 1. Separer layout et etat visuel (impact majeur)
+1. **New component `EmotionReactions.tsx`** (`src/components/capsule/`):
+   - Displays aggregated emotion counts as small pills below the capsule content
+   - A "+" button opens a popover/drawer with the 30 emotions organized by category
+   - Clicking an emotion toggles it (insert/delete)
+   - User's own reactions are highlighted
+   - Realtime subscription for live updates
 
-**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
+2. **Integration in `CapsuleDetail.tsx`**:
+   - Place the `EmotionReactions` component between the content and the comments section
+   - Visible to both owner and circle members (anyone who can view the capsule)
 
-Scinder le `useMemo` en deux etapes :
-- **useMemo 1 (layout)** : depend uniquement de `persons`, `relationships`, `unions`, `rootPersonId`, `viewMode`, `maxVisibleGenerations`, `expandedNodeIds` → produit les positions et la liste des noeuds visibles/ghost
-- **useMemo 2 (nodes visuels)** : depend du layout + `selectedPersonId`, `highlightedPersonId`, `activeBranchIds` → met a jour uniquement les proprietes `data` des noeuds sans recalculer les positions
+3. **Translations**: Add emotion labels and category names in all 5 languages (FR, EN, ES, KO, ZH) under the `capsules` namespace
 
-Cela evite de relancer le BFS + layout pour 8400 personnes a chaque clic.
+### Technical Details
 
-#### 2. Stabiliser la reference `expandedNodeIds` (impact moyen)
-
-**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
-
-Remplacer `expandedNodeIds = new Set()` par une constante stable :
-```typescript
-const EMPTY_SET = new Set<string>();
-// Dans les props par defaut :
-expandedNodeIds = EMPTY_SET,
-```
-
-#### 3. Remplacer Framer Motion par des transitions CSS (impact majeur)
-
-**Fichier** : `src/components/familyTree/nodes/PersonFlowNode.tsx`
-
-Remplacer `motion.div` par un `div` classique avec `transition` CSS et `style={{ opacity, transform }}`. Cela elimine le surcout de Framer Motion sur 200+ noeuds. L'animation d'apparition sera geree via un `setTimeout` + changement de classe CSS.
-
-#### 4. Optimiser `activeBranchIds` avec des Maps indexees (impact moyen)
-
-**Fichier** : `src/pages/FamilyTreePage.tsx`
-
-Pre-construire des index `Map<string, string[]>` pour `parentOf` et `childOf` a partir de `relationships` (via un `useMemo` separe), au lieu de faire des `.filter()` lineaires a chaque calcul de branche.
-
-#### 5. Debounce du report de positions (impact mineur)
-
-**Fichier** : `src/components/familyTree/TreeVisualization.tsx`
-
-Supprimer la serialisation string des positions. Utiliser un `useRef` pour comparer par longueur + premier/dernier element, ou simplement reporter les positions uniquement quand le layout change (pas quand la selection change).
-
-### Resultats attendus
-
-- **Clic sur un noeud** : de ~500-1000ms a <50ms (plus de recalcul de layout)
-- **Changement de mode de vue** : inchange (le layout doit etre recalcule)
-- **Rendu initial** : ~30% plus rapide (pas de Framer Motion overhead)
+- Emotion definitions stored as a static constant (key, emoji, category, translationKey)
+- The component fetches reactions on mount + subscribes to realtime changes
+- Toggle logic: check if user already reacted with that emotion → DELETE if yes, INSERT if no
+- Aggregation done client-side from the reaction rows
+- Mobile-friendly: popover on desktop, drawer on mobile (use `useIsMobile` hook)
 
