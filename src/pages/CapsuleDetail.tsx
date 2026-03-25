@@ -47,7 +47,7 @@ import NoIndex from '@/components/seo/NoIndex';
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import HeaderImageSelector from '@/components/capsule/HeaderImageSelector';
-
+import EmotionReactions from '@/components/capsule/EmotionReactions';
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
