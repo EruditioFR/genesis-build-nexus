@@ -183,9 +183,9 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     <Button
       variant="outline"
       size="sm"
-      className="rounded-full h-8 gap-1 text-xs border-dashed hover:border-primary/50"
+      className="rounded-full h-8 gap-1.5 text-xs border-dashed hover:border-primary/50"
     >
-      <Plus className="w-3.5 h-3.5" />
+      <Heart className="w-3.5 h-3.5" />
       {t('reactions.add')}
     </Button>
   );
