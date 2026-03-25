@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -18,37 +16,31 @@ interface EmotionDefinition {
 }
 
 const EMOTIONS: EmotionDefinition[] = [
-  // Joy
   { key: 'touched', emoji: '😊', category: 'joy' },
   { key: 'amused', emoji: '😂', category: 'joy' },
   { key: 'in_love', emoji: '🥰', category: 'joy' },
   { key: 'amazed', emoji: '🤩', category: 'joy' },
   { key: 'happy', emoji: '😄', category: 'joy' },
-  // Tenderness
   { key: 'moved', emoji: '🥹', category: 'tenderness' },
   { key: 'affection', emoji: '💕', category: 'tenderness' },
   { key: 'grateful', emoji: '🫶', category: 'tenderness' },
   { key: 'warm', emoji: '🤗', category: 'tenderness' },
   { key: 'serene', emoji: '😌', category: 'tenderness' },
-  // Nostalgia
   { key: 'nostalgic', emoji: '🥲', category: 'nostalgia' },
   { key: 'dreamy', emoji: '💭', category: 'nostalgia' },
   { key: 'memories', emoji: '🕰️', category: 'nostalgia' },
   { key: 'melancholic', emoji: '🌅', category: 'nostalgia' },
   { key: 'flashback', emoji: '📸', category: 'nostalgia' },
-  // Admiration
   { key: 'bravo', emoji: '👏', category: 'admiration' },
   { key: 'inspiring', emoji: '💪', category: 'admiration' },
   { key: 'magnificent', emoji: '✨', category: 'admiration' },
   { key: 'impressive', emoji: '🌟', category: 'admiration' },
   { key: 'brilliant', emoji: '🎯', category: 'admiration' },
-  // Emotion
   { key: 'tearful', emoji: '😢', category: 'emotion' },
   { key: 'heartbreaking', emoji: '💔', category: 'emotion' },
   { key: 'respectful', emoji: '🙏', category: 'emotion' },
   { key: 'speechless', emoji: '😮', category: 'emotion' },
   { key: 'overwhelming', emoji: '💫', category: 'emotion' },
-  // Fun
   { key: 'playful', emoji: '😜', category: 'fun' },
   { key: 'festive', emoji: '🎉', category: 'fun' },
   { key: 'awkward', emoji: '😅', category: 'fun' },
@@ -87,7 +79,6 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     if (data) setReactions(data as Reaction[]);
   }, [capsuleId]);
 
-  // Fetch display names for all unique user_ids in reactions
   useEffect(() => {
     const userIds = [...new Set(reactions.map((r) => r.user_id))];
     const missing = userIds.filter((id) => !profiles[id]);
@@ -153,22 +144,27 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     setToggling(null);
   };
 
-  // Aggregate reactions with author names
-  const aggregated = useMemo(() => {
-    return reactions.reduce<Record<string, { count: number; userReacted: boolean; authors: string[] }>>((acc, r) => {
-      if (!acc[r.emotion_key]) acc[r.emotion_key] = { count: 0, userReacted: false, authors: [] };
-      acc[r.emotion_key].count++;
-      const name = profiles[r.user_id] || t('detail.unknownOwner');
-      acc[r.emotion_key].authors.push(name);
-      if (user && r.user_id === user.id) acc[r.emotion_key].userReacted = true;
-      return acc;
-    }, {});
-  }, [reactions, profiles, user, t]);
-
-  const sortedEmotions = Object.entries(aggregated)
-    .sort((a, b) => b[1].count - a[1].count);
-
   const getEmoji = (key: string) => EMOTIONS.find((e) => e.key === key)?.emoji || '❓';
+
+  // Group reactions by user
+  const reactionsByUser = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    reactions.forEach((r) => {
+      if (!map[r.user_id]) map[r.user_id] = [];
+      map[r.user_id].push(r.emotion_key);
+    });
+    return Object.entries(map).map(([userId, emotionKeys]) => ({
+      userId,
+      name: profiles[userId] || t('detail.unknownOwner'),
+      emotionKeys,
+    }));
+  }, [reactions, profiles, t]);
+
+  // Current user's reacted emotions for highlighting in grid
+  const myEmotions = useMemo(() => {
+    if (!user) return new Set<string>();
+    return new Set(reactions.filter((r) => r.user_id === user.id).map((r) => r.emotion_key));
+  }, [reactions, user]);
 
   const EmotionGrid = () => (
     <div className="space-y-3 p-1">
@@ -179,7 +175,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
           </p>
           <div className="grid grid-cols-5 gap-1.5">
             {EMOTIONS.filter((e) => e.category === cat).map((emotion) => {
-              const isActive = aggregated[emotion.key]?.userReacted;
+              const isActive = myEmotions.has(emotion.key);
               return (
                 <button
                   key={emotion.key}
@@ -220,64 +216,60 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   );
 
   return (
-    <TooltipProvider delayDuration={300}>
-      <div className="flex flex-wrap items-center gap-1.5">
-        <AnimatePresence>
-          {sortedEmotions.map(([key, { count, userReacted, authors }]) => (
-            <Tooltip key={key}>
-              <TooltipTrigger asChild>
-                <motion.button
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  onClick={() => toggleReaction(key)}
+    <div className="space-y-3">
+      {/* Reactions grouped by user */}
+      {reactionsByUser.length > 0 && (
+        <div className="space-y-2">
+          {reactionsByUser.map(({ userId, name, emotionKeys }) => (
+            <div key={userId} className="flex flex-wrap items-center gap-1.5">
+              <span className="text-sm font-medium text-foreground mr-1">{name}</span>
+              {emotionKeys.map((ek) => (
+                <span
+                  key={ek}
                   className={cn(
-                    'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all',
-                    'border hover:shadow-sm active:scale-95',
-                    userReacted
-                      ? 'bg-primary/10 border-primary/30 text-primary font-medium'
-                      : 'bg-muted/50 border-border text-muted-foreground hover:bg-muted'
+                    'inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-xs',
+                    'border',
+                    user && userId === user.id
+                      ? 'bg-primary/10 border-primary/30 text-primary'
+                      : 'bg-muted/50 border-border text-muted-foreground'
                   )}
                 >
-                  <span className="text-sm">{getEmoji(key)}</span>
-                  <span>{count}</span>
-                </motion.button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-[200px] text-xs">
-                <p className="font-medium mb-0.5">{t(`reactions.emotions.${key}`)}</p>
-                <p className="text-muted-foreground">{authors.join(', ')}</p>
-              </TooltipContent>
-            </Tooltip>
+                  <span className="text-sm">{getEmoji(ek)}</span>
+                  <span className="hidden sm:inline">{t(`reactions.emotions.${ek}`)}</span>
+                </span>
+              ))}
+            </div>
           ))}
-        </AnimatePresence>
+        </div>
+      )}
 
-        {user && (
-          isMobile ? (
-            <Drawer open={open} onOpenChange={setOpen}>
-              <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>{t('reactions.title')}</DrawerTitle>
-                </DrawerHeader>
-                <div className="px-4 pb-6 max-h-[60vh] overflow-y-auto">
-                  <EmotionGrid />
-                </div>
-              </DrawerContent>
-            </Drawer>
-          ) : (
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>{TriggerButton}</PopoverTrigger>
-              <PopoverContent className="w-80 p-3" align="start">
-                <p className="text-sm font-semibold mb-2">{t('reactions.title')}</p>
-                <div className="max-h-[400px] overflow-y-auto">
-                  <EmotionGrid />
-                </div>
-              </PopoverContent>
-            </Popover>
-          )
-        )}
-      </div>
-    </TooltipProvider>
+      {/* Single react button */}
+      {user && (
+        isMobile ? (
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>{t('reactions.title')}</DrawerTitle>
+              </DrawerHeader>
+              <div className="px-4 pb-6 max-h-[60vh] overflow-y-auto">
+                <EmotionGrid />
+              </div>
+            </DrawerContent>
+          </Drawer>
+        ) : (
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>{TriggerButton}</PopoverTrigger>
+            <PopoverContent className="w-80 p-3" align="start">
+              <p className="text-sm font-semibold mb-2">{t('reactions.title')}</p>
+              <div className="max-h-[400px] overflow-y-auto">
+                <EmotionGrid />
+              </div>
+            </PopoverContent>
+          </Popover>
+        )
+      )}
+    </div>
   );
 };
 
