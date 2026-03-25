@@ -75,6 +75,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const [reactions, setReactions] = useState<Reaction[]>([]);
+  const [profiles, setProfiles] = useState<Record<string, string>>({});
   const [open, setOpen] = useState(false);
   const [toggling, setToggling] = useState<string | null>(null);
 
@@ -85,6 +86,29 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
       .eq('capsule_id', capsuleId);
     if (data) setReactions(data as Reaction[]);
   }, [capsuleId]);
+
+  // Fetch display names for all unique user_ids in reactions
+  useEffect(() => {
+    const userIds = [...new Set(reactions.map((r) => r.user_id))];
+    const missing = userIds.filter((id) => !profiles[id]);
+    if (missing.length === 0) return;
+
+    supabase
+      .from('profiles')
+      .select('user_id, display_name')
+      .in('user_id', missing)
+      .then(({ data }) => {
+        if (data) {
+          setProfiles((prev) => {
+            const next = { ...prev };
+            data.forEach((p) => {
+              next[p.user_id] = p.display_name || t('detail.unknownOwner');
+            });
+            return next;
+          });
+        }
+      });
+  }, [reactions, profiles, t]);
 
   useEffect(() => {
     fetchReactions();
@@ -129,13 +153,17 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     setToggling(null);
   };
 
-  // Aggregate reactions
-  const aggregated = reactions.reduce<Record<string, { count: number; userReacted: boolean }>>((acc, r) => {
-    if (!acc[r.emotion_key]) acc[r.emotion_key] = { count: 0, userReacted: false };
-    acc[r.emotion_key].count++;
-    if (user && r.user_id === user.id) acc[r.emotion_key].userReacted = true;
-    return acc;
-  }, {});
+  // Aggregate reactions with author names
+  const aggregated = useMemo(() => {
+    return reactions.reduce<Record<string, { count: number; userReacted: boolean; authors: string[] }>>((acc, r) => {
+      if (!acc[r.emotion_key]) acc[r.emotion_key] = { count: 0, userReacted: false, authors: [] };
+      acc[r.emotion_key].count++;
+      const name = profiles[r.user_id] || t('detail.unknownOwner');
+      acc[r.emotion_key].authors.push(name);
+      if (user && r.user_id === user.id) acc[r.emotion_key].userReacted = true;
+      return acc;
+    }, {});
+  }, [reactions, profiles, user, t]);
 
   const sortedEmotions = Object.entries(aggregated)
     .sort((a, b) => b[1].count - a[1].count);
