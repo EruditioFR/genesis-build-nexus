@@ -2,8 +2,10 @@
   "hero": {
     "badge": "Create your family journal, simply",
     "title": {
-      "prefix": "Family moments deserve ",
-      "highlight": "to be relived"
+      "prefix": "Protect what ",
+      "rotating": ["matters", "connects", "inspires"],
+      "suffix": " ",
+      "highlight": "most"
     },
     "subtitle": {
       "line1": "Photos, videos, texts, audio… gather your memories in one place, with context and emotion.",
