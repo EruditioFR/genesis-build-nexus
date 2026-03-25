@@ -280,7 +280,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
           )
         )}
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 
