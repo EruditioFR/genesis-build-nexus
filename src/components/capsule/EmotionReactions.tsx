@@ -220,8 +220,6 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   );
 
   return (
-    <div className="space-y-2">
-      {/* Aggregated reaction pills */}
     <TooltipProvider delayDuration={300}>
       <div className="flex flex-wrap items-center gap-1.5">
         <AnimatePresence>
@@ -253,7 +251,6 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
           ))}
         </AnimatePresence>
 
-        {/* Add reaction button */}
         {user && (
           isMobile ? (
             <Drawer open={open} onOpenChange={setOpen}>
