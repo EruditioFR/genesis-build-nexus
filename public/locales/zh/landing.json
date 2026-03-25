@@ -2,8 +2,10 @@
   "hero": {
     "badge": "轻松创建您的家庭日记",
     "title": {
-      "prefix": "家庭时刻值得",
-      "highlight": "被重温"
+      "prefix": "您所有的",
+      "rotating": ["家庭", "个人", "朋友"],
+      "suffix": "回忆 ",
+      "highlight": "都在一个地方"
     },
     "subtitle": {
       "line1": "照片、视频、文字、音频…将您的回忆汇集在一处，带着背景和情感。",

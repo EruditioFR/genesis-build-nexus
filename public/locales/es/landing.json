@@ -2,8 +2,10 @@
   "hero": {
     "badge": "Crea tu diario familiar, simplemente",
     "title": {
-      "prefix": "Los momentos en familia merecen ",
-      "highlight": "ser revividos"
+      "prefix": "Todos tus recuerdos ",
+      "rotating": ["familiares", "personales", "de amigos"],
+      "suffix": " ",
+      "highlight": "en un solo lugar"
     },
     "subtitle": {
       "line1": "Fotos, vídeos, textos, audios… reúne tus recuerdos en un solo lugar, con contexto y emoción.",
