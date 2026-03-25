@@ -154,9 +154,9 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
               return (
                 <button
                   key={emotion.key}
-                  onClick={() => {
-                    toggleReaction(emotion.key);
-                    if (!isMobile) setOpen(false);
+                  onClick={async () => {
+                    await toggleReaction(emotion.key);
+                    setOpen(false);
                   }}
                   disabled={toggling === emotion.key}
                   className={cn(
