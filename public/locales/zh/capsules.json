@@ -485,5 +485,49 @@
     "stepContent": "内容",
     "stepDetails": "详情",
     "stepFinish": "完成"
+  },
+  "reactions": {
+    "title": "表达情感",
+    "add": "反应",
+    "categories": {
+      "joy": "喜悦",
+      "tenderness": "温柔",
+      "nostalgia": "怀旧",
+      "admiration": "敬佩",
+      "emotion": "感动",
+      "fun": "有趣"
+    },
+    "emotions": {
+      "touched": "感动",
+      "amused": "有趣",
+      "in_love": "心动",
+      "amazed": "惊叹",
+      "happy": "开心",
+      "moved": "动容",
+      "affection": "深情",
+      "grateful": "感恩",
+      "warm": "温暖",
+      "serene": "宁静",
+      "nostalgic": "怀念",
+      "dreamy": "梦幻",
+      "memories": "回忆",
+      "melancholic": "忧郁",
+      "flashback": "闪回",
+      "bravo": "太棒了",
+      "inspiring": "励志",
+      "magnificent": "精彩",
+      "impressive": "震撼",
+      "brilliant": "出色",
+      "tearful": "催泪",
+      "heartbreaking": "心碎",
+      "respectful": "敬意",
+      "speechless": "无言",
+      "overwhelming": "震撼",
+      "playful": "俏皮",
+      "festive": "欢乐",
+      "awkward": "尴尬",
+      "mischievous": "调皮",
+      "cheeky": "顽皮"
+    }
   }
 }

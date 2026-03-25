@@ -498,5 +498,49 @@
     "stepContent": "Content",
     "stepDetails": "Details",
     "stepFinish": "Finish"
+  },
+  "reactions": {
+    "title": "Express an emotion",
+    "add": "React",
+    "categories": {
+      "joy": "Joy",
+      "tenderness": "Tenderness",
+      "nostalgia": "Nostalgia",
+      "admiration": "Admiration",
+      "emotion": "Emotion",
+      "fun": "Fun"
+    },
+    "emotions": {
+      "touched": "Touched",
+      "amused": "Amused",
+      "in_love": "In love",
+      "amazed": "Amazed",
+      "happy": "Happy",
+      "moved": "Moved",
+      "affection": "Affection",
+      "grateful": "Grateful",
+      "warm": "Warm",
+      "serene": "Serene",
+      "nostalgic": "Nostalgic",
+      "dreamy": "Dreamy",
+      "memories": "Memories",
+      "melancholic": "Melancholic",
+      "flashback": "Flashback",
+      "bravo": "Bravo",
+      "inspiring": "Inspiring",
+      "magnificent": "Magnificent",
+      "impressive": "Impressive",
+      "brilliant": "Brilliant",
+      "tearful": "Tearful",
+      "heartbreaking": "Heartbreaking",
+      "respectful": "Respectful",
+      "speechless": "Speechless",
+      "overwhelming": "Overwhelming",
+      "playful": "Playful",
+      "festive": "Festive",
+      "awkward": "Awkward",
+      "mischievous": "Mischievous",
+      "cheeky": "Cheeky"
+    }
   }
 }
