@@ -133,6 +133,38 @@ export type Database = {
           },
         ]
       }
+      capsule_reactions: {
+        Row: {
+          capsule_id: string
+          created_at: string
+          emotion_key: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          capsule_id: string
+          created_at?: string
+          emotion_key: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          capsule_id?: string
+          created_at?: string
+          emotion_key?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capsule_reactions_capsule_id_fkey"
+            columns: ["capsule_id"]
+            isOneToOne: false
+            referencedRelation: "capsules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capsule_shares: {
         Row: {
           capsule_id: string
