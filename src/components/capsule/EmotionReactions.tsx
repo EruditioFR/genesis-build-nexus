@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -74,6 +75,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const [reactions, setReactions] = useState<Reaction[]>([]);
+  const [profiles, setProfiles] = useState<Record<string, string>>({});
   const [open, setOpen] = useState(false);
   const [toggling, setToggling] = useState<string | null>(null);
 
@@ -84,6 +86,29 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
       .eq('capsule_id', capsuleId);
     if (data) setReactions(data as Reaction[]);
   }, [capsuleId]);
+
+  // Fetch display names for all unique user_ids in reactions
+  useEffect(() => {
+    const userIds = [...new Set(reactions.map((r) => r.user_id))];
+    const missing = userIds.filter((id) => !profiles[id]);
+    if (missing.length === 0) return;
+
+    supabase
+      .from('profiles')
+      .select('user_id, display_name')
+      .in('user_id', missing)
+      .then(({ data }) => {
+        if (data) {
+          setProfiles((prev) => {
+            const next = { ...prev };
+            data.forEach((p) => {
+              next[p.user_id] = p.display_name || t('detail.unknownOwner');
+            });
+            return next;
+          });
+        }
+      });
+  }, [reactions, profiles, t]);
 
   useEffect(() => {
     fetchReactions();
@@ -128,13 +153,17 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
     setToggling(null);
   };
 
-  // Aggregate reactions
-  const aggregated = reactions.reduce<Record<string, { count: number; userReacted: boolean }>>((acc, r) => {
-    if (!acc[r.emotion_key]) acc[r.emotion_key] = { count: 0, userReacted: false };
-    acc[r.emotion_key].count++;
-    if (user && r.user_id === user.id) acc[r.emotion_key].userReacted = true;
-    return acc;
-  }, {});
+  // Aggregate reactions with author names
+  const aggregated = useMemo(() => {
+    return reactions.reduce<Record<string, { count: number; userReacted: boolean; authors: string[] }>>((acc, r) => {
+      if (!acc[r.emotion_key]) acc[r.emotion_key] = { count: 0, userReacted: false, authors: [] };
+      acc[r.emotion_key].count++;
+      const name = profiles[r.user_id] || t('detail.unknownOwner');
+      acc[r.emotion_key].authors.push(name);
+      if (user && r.user_id === user.id) acc[r.emotion_key].userReacted = true;
+      return acc;
+    }, {});
+  }, [reactions, profiles, user, t]);
 
   const sortedEmotions = Object.entries(aggregated)
     .sort((a, b) => b[1].count - a[1].count);
@@ -191,32 +220,37 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   );
 
   return (
-    <div className="space-y-2">
-      {/* Aggregated reaction pills */}
+    <TooltipProvider delayDuration={300}>
       <div className="flex flex-wrap items-center gap-1.5">
         <AnimatePresence>
-          {sortedEmotions.map(([key, { count, userReacted }]) => (
-            <motion.button
-              key={key}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              onClick={() => toggleReaction(key)}
-              className={cn(
-                'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all',
-                'border hover:shadow-sm active:scale-95',
-                userReacted
-                  ? 'bg-primary/10 border-primary/30 text-primary font-medium'
-                  : 'bg-muted/50 border-border text-muted-foreground hover:bg-muted'
-              )}
-            >
-              <span className="text-sm">{getEmoji(key)}</span>
-              <span>{count}</span>
-            </motion.button>
+          {sortedEmotions.map(([key, { count, userReacted, authors }]) => (
+            <Tooltip key={key}>
+              <TooltipTrigger asChild>
+                <motion.button
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  onClick={() => toggleReaction(key)}
+                  className={cn(
+                    'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all',
+                    'border hover:shadow-sm active:scale-95',
+                    userReacted
+                      ? 'bg-primary/10 border-primary/30 text-primary font-medium'
+                      : 'bg-muted/50 border-border text-muted-foreground hover:bg-muted'
+                  )}
+                >
+                  <span className="text-sm">{getEmoji(key)}</span>
+                  <span>{count}</span>
+                </motion.button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-[200px] text-xs">
+                <p className="font-medium mb-0.5">{t(`reactions.emotions.${key}`)}</p>
+                <p className="text-muted-foreground">{authors.join(', ')}</p>
+              </TooltipContent>
+            </Tooltip>
           ))}
         </AnimatePresence>
 
-        {/* Add reaction button */}
         {user && (
           isMobile ? (
             <Drawer open={open} onOpenChange={setOpen}>
@@ -243,7 +277,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
           )
         )}
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 
