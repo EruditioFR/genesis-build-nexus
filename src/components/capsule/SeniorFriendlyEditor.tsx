@@ -855,11 +855,10 @@ const SeniorFriendlyEditor = ({
                   </Badge>
                 )}
               </div>
-              <Textarea
+              <RichTextEditor
                 placeholder={t('seniorEditor.textPlaceholder', 'Écrivez votre texte ici...')}
-                className="min-h-[250px] text-lg px-4 py-3 border-2 focus:border-primary resize-none"
                 value={content}
-                onChange={(e) => onContentChange(e.target.value)}
+                onChange={onContentChange}
               />
             </div>
           </div>

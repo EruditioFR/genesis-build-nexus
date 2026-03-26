@@ -777,7 +777,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.15 }}
                 className="p-6 rounded-2xl bg-muted/50 border-l-4 border-secondary">
                 
-                  <p className="text-foreground whitespace-pre-wrap leading-relaxed">{capsule.content}</p>
+                  <div className="text-foreground leading-relaxed prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-bold prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground" dangerouslySetInnerHTML={{ __html: capsule.content }} />
                 </motion.div>
               }
 
