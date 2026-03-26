@@ -768,28 +768,38 @@ const CapsuleDetail = () => {
                 </motion.div>
               }
 
-              {/* YouTube Video */}
-              {capsule.metadata && typeof capsule.metadata === 'object' && 'youtube_id' in capsule.metadata && capsule.metadata.youtube_id &&
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.18 }}>
-                
-                  <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
-                    <Video className="w-5 h-5 text-red-500" />
-                    {t('detail.youtubeVideo', 'Vidéo YouTube')}
-                  </h2>
-                  <div className="relative rounded-xl overflow-hidden bg-muted aspect-video shadow-lg">
-                    <iframe
-                    src={`https://www.youtube.com/embed/${capsule.metadata.youtube_id}`}
-                    title="YouTube video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full" />
-                  
-                  </div>
-                </motion.div>
-              }
+              {/* YouTube Videos */}
+              {capsule.metadata && typeof capsule.metadata === 'object' && (() => {
+                const meta = capsule.metadata as Record<string, any>;
+                const youtubeIds: string[] = meta.youtube_ids && Array.isArray(meta.youtube_ids)
+                  ? meta.youtube_ids
+                  : meta.youtube_id ? [meta.youtube_id] : [];
+                return youtubeIds.length > 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.18 }}>
+                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                      <Video className="w-5 h-5 text-red-500" />
+                      {t('detail.youtubeVideo', 'Vidéo YouTube')}
+                      {youtubeIds.length > 1 && <span className="text-sm font-normal text-muted-foreground">({youtubeIds.length})</span>}
+                    </h2>
+                    <div className="space-y-4">
+                      {youtubeIds.map((id: string, index: number) => (
+                        <div key={id + index} className="relative rounded-xl overflow-hidden bg-muted aspect-video shadow-lg">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${id}`}
+                            title={`YouTube video ${index + 1}`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : null;
+              })()}
 
               {/* Emotion Reactions */}
               <motion.div
