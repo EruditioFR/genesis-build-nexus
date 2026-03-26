@@ -355,6 +355,88 @@ export default function AdminUsers() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Profile Detail Dialog */}
+      <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Profil utilisateur</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-16 w-16">
+                  <AvatarImage src={selectedUser.avatar_url || undefined} />
+                  <AvatarFallback className="text-lg">{getInitials(selectedUser.display_name)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-lg font-semibold">{selectedUser.display_name || "Sans nom"}</p>
+                  <p className="text-sm text-muted-foreground">{selectedUser.user_id}</p>
+                  {selectedUser.suspended && (
+                    <Badge variant="destructive" className="mt-1">Suspendu</Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Abonnement</p>
+                  <p className="font-medium capitalize">{selectedUser.subscription_level}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Souvenirs</p>
+                  <p className="font-medium">{selectedUser.capsulesCount ?? 0}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Stockage</p>
+                  <p className="font-medium">{selectedUser.realStorageMb.toFixed(1)} / {selectedUser.storage_limit_mb} MB</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Inscrit le</p>
+                  <p className="font-medium">{format(new Date(selectedUser.created_at), "d MMM yyyy", { locale: fr })}</p>
+                </div>
+                {selectedUser.country && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Pays</p>
+                    <p className="font-medium">{selectedUser.country}</p>
+                  </div>
+                )}
+                {selectedUser.city && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Ville</p>
+                    <p className="font-medium">{selectedUser.city}</p>
+                  </div>
+                )}
+                {selectedUser.birth_date && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Date de naissance</p>
+                    <p className="font-medium">{format(new Date(selectedUser.birth_date), "d MMM yyyy", { locale: fr })}</p>
+                  </div>
+                )}
+              </div>
+
+              {selectedUser.bio && (
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Bio</p>
+                  <p className="text-sm">{selectedUser.bio}</p>
+                </div>
+              )}
+
+              {selectedUser.suspended && selectedUser.suspended_reason && (
+                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 space-y-1">
+                  <p className="text-xs text-destructive font-semibold uppercase tracking-wide">Raison de suspension</p>
+                  <p className="text-sm">{selectedUser.suspended_reason}</p>
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setProfileDialogOpen(false)}>
+              Fermer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
