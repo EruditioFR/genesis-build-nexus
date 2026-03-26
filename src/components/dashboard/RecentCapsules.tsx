@@ -23,6 +23,9 @@ interface Capsule {
   youtubeId?: string;
 }
 
+const hasVisualMedia = (capsule: Capsule) =>
+  !!(capsule.thumbnail || capsule.firstMediaUrl || capsule.firstVideoUrl || capsule.youtubeId);
+
 interface RecentCapsulesProps {
   capsules: Capsule[];
 }
