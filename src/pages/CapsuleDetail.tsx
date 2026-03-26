@@ -270,6 +270,17 @@ const CapsuleDetail = () => {
     loadHeroImages();
   }, [medias, capsule?.thumbnail_url]);
 
+  // Detect portrait images
+  useEffect(() => {
+    heroImageUrls.forEach((url, idx) => {
+      const img = new window.Image();
+      img.onload = () => {
+        setHeroIsPortrait((prev) => ({ ...prev, [idx]: img.naturalHeight > img.naturalWidth }));
+      };
+      img.src = url;
+    });
+  }, [heroImageUrls]);
+
   // Auto-advance hero slider
   useEffect(() => {
     if (heroImageUrls.length <= 1) return;
