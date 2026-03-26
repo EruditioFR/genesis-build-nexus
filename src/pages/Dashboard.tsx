@@ -344,6 +344,7 @@ const Dashboard = () => {
         {!hideWelcome && (
           <div className="mb-6 md:mb-8">
             <WelcomeSection
+              totalCapsules={stats.totalCapsules}
               onHide={() => {
                 setHideWelcome(true);
                 localStorage.setItem('welcome_section_hidden', 'true');
