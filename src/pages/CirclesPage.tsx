@@ -533,6 +533,16 @@ const CirclesPage = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Link to shared with me page */}
+        <Button
+          variant="outline"
+          className="w-full gap-2 mt-8"
+          onClick={() => navigate('/shared-with-me')}
+        >
+          <Share className="w-4 h-4" />
+          Voir les souvenirs partagés avec moi
+        </Button>
       </div>
       </AuthenticatedLayout>
     </>
