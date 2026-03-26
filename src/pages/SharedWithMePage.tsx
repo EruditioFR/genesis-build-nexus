@@ -9,14 +9,22 @@ import NoIndex from '@/components/seo/NoIndex';
 
 const SharedWithMePage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile, signOut } = useAuth();
 
   if (!user) return null;
 
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout
+      user={{
+        id: user.id,
+        email: user.email,
+        displayName: profile?.display_name || undefined,
+        avatarUrl: profile?.avatar_url || undefined,
+      }}
+      onSignOut={signOut}
+    >
       <NoIndex />
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

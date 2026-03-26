@@ -6,7 +6,7 @@ import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   Users, Plus, ArrowLeft, MoreHorizontal, UserPlus, Edit, Trash2,
-  Mail, Clock, User, Loader2
+  Mail, Clock, User, Loader2, Share
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
