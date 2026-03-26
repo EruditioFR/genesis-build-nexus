@@ -603,28 +603,8 @@ const CapsuleEdit = () => {
               <TagInput tags={tags} onChange={setTags} />
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex-1 gap-2"
-                onClick={() => saveCapsule('draft')}
-                disabled={isSaving}
-              >
-                <Save className="w-4 h-4" />
-                {t('create.saveDraft')}
-              </Button>
-              <Button
-                size="lg"
-                className="flex-1 gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
-                onClick={() => saveCapsule('published')}
-                disabled={isSaving}
-              >
-                <Send className="w-4 h-4" />
-                {t('create.publish')}
-              </Button>
-            </div>
+            {/* Spacer for sticky buttons */}
+            <div className="h-28" />
           </motion.div>
 
           {/* Preview Column */}
