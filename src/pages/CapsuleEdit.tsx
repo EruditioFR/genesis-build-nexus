@@ -500,24 +500,6 @@ const CapsuleEdit = () => {
               />
             </div>
 
-            {/* Unified Media Section */}
-            <UnifiedMediaSection
-              userId={user.id}
-              content={form.watch('content') || ''}
-              onContentChange={(value) => form.setValue('content', value)}
-              showTextSection={true}
-              files={mediaFiles}
-              onFilesChange={(files) => {
-                setMediaFiles(files);
-                if (mediaError) setMediaError(false);
-              }}
-              maxFiles={20 - existingMedia.length}
-              onUploadAll={(uploadFn) => {
-                uploadAllFilesRef.current = uploadFn;
-              }}
-              hasError={mediaError}
-            />
-
             {/* Existing Media */}
             {existingMedia.length > 0 && (
               <div className="p-6 rounded-2xl border border-border bg-card">
@@ -537,6 +519,24 @@ const CapsuleEdit = () => {
                 </div>
               </div>
             )}
+
+            {/* Unified Media Section */}
+            <UnifiedMediaSection
+              userId={user.id}
+              content={form.watch('content') || ''}
+              onContentChange={(value) => form.setValue('content', value)}
+              showTextSection={true}
+              files={mediaFiles}
+              onFilesChange={(files) => {
+                setMediaFiles(files);
+                if (mediaError) setMediaError(false);
+              }}
+              maxFiles={20 - existingMedia.length}
+              onUploadAll={(uploadFn) => {
+                uploadAllFilesRef.current = uploadFn;
+              }}
+              hasError={mediaError}
+            />
 
             {/* Memory Date */}
             <div className="p-6 rounded-2xl border border-border bg-card">
