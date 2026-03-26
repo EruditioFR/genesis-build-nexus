@@ -42,6 +42,10 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string | null;
+  bio: string | null;
+  country: string | null;
+  city: string | null;
+  birth_date: string | null;
   subscription_level: string;
   storage_used_mb: number;
   storage_limit_mb: number;
@@ -52,6 +56,8 @@ interface Profile {
 
 interface UserWithStorage extends Profile {
   realStorageMb: number;
+  email?: string;
+  capsulesCount?: number;
 }
 
 export default function AdminUsers() {
