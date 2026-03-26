@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Share2, Loader2, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -173,6 +174,16 @@ const ShareCapsuleDialog = ({ open, onOpenChange, capsuleId, capsuleTitle, userI
                   )}
                 </div>
               ))}
+            </div>
+
+            <div className="pt-3">
+              <Link
+                to="/circles"
+                onClick={() => onOpenChange(false)}
+                className="text-sm text-primary hover:underline font-medium"
+              >
+                + Ajouter un cercle de partage
+              </Link>
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t mt-4">
