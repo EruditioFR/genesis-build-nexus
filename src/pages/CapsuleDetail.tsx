@@ -445,13 +445,25 @@ const CapsuleDetail = () => {
         {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
           {heroImageUrls.length > 0 ?
-          <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+           <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+              {/* Blurred background for portrait images */}
+              {heroIsPortrait[heroSlideIndex] && (
+                <img
+                  src={heroImageUrls[heroSlideIndex]}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-40"
+                />
+              )}
               <AnimatePresence mode="wait">
                 <motion.img
                 key={heroSlideIndex}
                 src={heroImageUrls[heroSlideIndex]}
                 alt={capsule.title}
-                className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                className={heroIsPortrait[heroSlideIndex]
+                  ? "absolute inset-0 h-full object-contain mx-auto z-[1]"
+                  : "absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                }
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
@@ -463,7 +475,7 @@ const CapsuleDetail = () => {
                 }} />
               </AnimatePresence>
             
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[2]" />
 
 
 
