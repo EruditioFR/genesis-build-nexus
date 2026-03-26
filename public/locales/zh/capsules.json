@@ -409,6 +409,14 @@
     "videoRestricted": "视频需要高级版订阅",
     "audioRestricted": "音频需要高级版订阅"
   },
+  "socialLinks": {
+    "title": "社交链接",
+    "description": "添加 Facebook、Instagram、TikTok 或 LinkedIn 链接",
+    "placeholder": "https://www.instagram.com/...",
+    "add": "添加",
+    "invalidUrl": "无法识别的链接。请粘贴 Facebook、Instagram、TikTok 或 LinkedIn 链接。",
+    "hint": "粘贴社交媒体链接来丰富您的回忆。"
+  },
   "seniorEditor": {
     "createMemory": "新回忆",
     "step1Label": "添加标题",
