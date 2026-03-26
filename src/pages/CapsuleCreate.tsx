@@ -277,7 +277,7 @@ const CapsuleCreate = () => {
       // Prepare memory date storage values
       const memoryDateStorage = memoryDateToStorage(memoryDate);
 
-      // Prepare metadata with YouTube URL if present
+      // Prepare metadata with YouTube URL and social links if present
       const metadata: Record<string, any> = {};
       if (youtubeUrls.length > 0) {
         metadata.youtube_urls = youtubeUrls;
@@ -285,6 +285,9 @@ const CapsuleCreate = () => {
         // Keep backward compat
         metadata.youtube_url = youtubeUrls[0];
         metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
+      }
+      if (socialLinks.length > 0) {
+        metadata.social_links = socialLinks;
       }
 
       // Create the capsule
