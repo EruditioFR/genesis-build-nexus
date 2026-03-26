@@ -1052,6 +1052,12 @@ const SeniorFriendlyEditor = ({
               </div>
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
+
+            {/* Social Links */}
+            <SocialLinksEmbed
+              value={socialLinks}
+              onChange={onSocialLinksChange}
+            />
           </div>
         );
 
