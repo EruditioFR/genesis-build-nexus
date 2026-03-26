@@ -255,6 +255,9 @@ const CirclesPage = () => {
                 <p className="text-muted-foreground text-sm">
                   {t('circles.subtitle', { count: circles.length })}
                 </p>
+                <p className="text-muted-foreground text-sm mt-1">
+                  Un cercle vous permet de partager vos capsules avec un groupe de personnes.
+                </p>
               </div>
             </div>
 
