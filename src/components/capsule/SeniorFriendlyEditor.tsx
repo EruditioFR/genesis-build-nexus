@@ -597,6 +597,8 @@ const SeniorFriendlyEditor = ({
   onMemoryDateChange,
   youtubeUrls,
   onYoutubeUrlsChange,
+  socialLinks,
+  onSocialLinksChange,
   isSaving,
   onSaveDraft,
   onPublish,
