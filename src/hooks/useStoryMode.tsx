@@ -88,7 +88,7 @@ export const useStoryMode = () => {
           bgAudioTracks.push({
             id: media.id,
             url: signedUrlsMap[media.file_url] || '',
-            label: media.caption || capsule.title,
+            label: media.caption || media.file_name || capsule.title,
           });
           return;
         }
