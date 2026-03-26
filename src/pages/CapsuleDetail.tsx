@@ -471,15 +471,20 @@ const CapsuleDetail = () => {
               {/* Actions on hero - only for owner */}
               {isOwner &&
             <div className="absolute top-4 right-4 flex gap-2">
-                  <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setHeaderSelectorOpen(true)}
-                className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm"
-                title={t('detail.changeHeaderImage')}>
-                
-                    <ImagePlus className="w-4 h-4" />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setHeaderSelectorOpen(true)}
+                          className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                          <ImagePlus className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>{t('detail.changeHeaderImage')}</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
