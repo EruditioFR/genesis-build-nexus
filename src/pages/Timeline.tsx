@@ -81,7 +81,7 @@ const Timeline = () => {
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
 
   // Story mode
-  const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
+  const { isOpen: storyOpen, items: storyItems, audioTracks: storyAudioTracks, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
 
   // Filter states
   const [selectedTypes, setSelectedTypes] = useState<CapsuleType[]>([]);
