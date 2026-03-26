@@ -32,6 +32,8 @@ import MemoryDateSelector, {
   formatMemoryDate 
 } from '@/components/capsule/MemoryDateSelector';
 import { determineContentType } from '@/lib/capsuleTypeUtils';
+import YouTubeEmbed from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 import type { Category, SubCategory } from '@/hooks/useCategories';
