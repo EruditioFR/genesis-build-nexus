@@ -291,13 +291,16 @@ const CapsuleEdit = () => {
     );
 
     try {
-      // Prepare metadata with YouTube URL if present
+      // Prepare metadata with YouTube URL and social links if present
       const metadata: Record<string, any> = {};
       if (youtubeUrls.length > 0) {
         metadata.youtube_urls = youtubeUrls;
         metadata.youtube_ids = youtubeUrls.map(u => extractYouTubeId(u)).filter(Boolean);
         metadata.youtube_url = youtubeUrls[0];
         metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
+      }
+      if (socialLinks.length > 0) {
+        metadata.social_links = socialLinks;
       }
 
       // Update the capsule
