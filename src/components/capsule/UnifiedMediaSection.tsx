@@ -485,11 +485,11 @@ const UnifiedMediaSection = ({
             'text'
           )}
           <CollapsibleContent className="pt-2">
-            <Textarea
+            <RichTextEditor
               placeholder={t('create.contentPlaceholder')}
-              className="min-h-[150px] resize-none"
               value={content}
-              onChange={(e) => onContentChange(e.target.value)}
+              onChange={onContentChange}
+              minHeight="150px"
             />
           </CollapsibleContent>
         </Collapsible>
