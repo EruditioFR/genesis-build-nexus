@@ -563,6 +563,12 @@ const CapsuleEdit = () => {
               onChange={setYoutubeUrls}
             />
 
+            {/* Social Links */}
+            <SocialLinksEmbed
+              value={socialLinks}
+              onChange={setSocialLinks}
+            />
+
             {/* Tags */}
             <div className="p-6 rounded-2xl border border-border bg-card">
               <Label className="text-base font-medium mb-4 block">
