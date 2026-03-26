@@ -53,7 +53,7 @@ export const useStoryMode = () => {
       
       const { data: allMedias } = await supabase
         .from('capsule_medias')
-        .select('id, capsule_id, file_url, file_type, caption, position')
+        .select('id, capsule_id, file_url, file_type, file_name, caption, position')
         .in('capsule_id', capsuleIds)
         .order('position');
 
