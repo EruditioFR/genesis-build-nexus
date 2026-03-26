@@ -51,6 +51,7 @@ import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
 import { determineContentType, validateContentForPlan } from '@/lib/capsuleTypeUtils';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
