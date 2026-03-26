@@ -485,7 +485,7 @@ const CapsuleDetail = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/capsules')}
-              className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+              className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm z-[3]">
               
                 <ArrowLeft className="w-4 h-4" />
                 {t('backToList')}
