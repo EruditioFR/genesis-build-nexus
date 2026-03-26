@@ -35,7 +35,7 @@ import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
-import SharedCapsulesSection from '@/components/circles/SharedCapsulesSection';
+
 import { toast } from 'sonner';
 import NoIndex from '@/components/seo/NoIndex';
 
