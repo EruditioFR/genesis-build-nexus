@@ -99,6 +99,7 @@ const CapsuleEdit = () => {
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   const [mediaError, setMediaError] = useState(false);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
