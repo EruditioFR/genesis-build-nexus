@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 interface WelcomeSectionProps {
   onHide: () => void;
+  totalCapsules?: number;
 }
 
 const WelcomeSection = ({ onHide }: WelcomeSectionProps) => {
