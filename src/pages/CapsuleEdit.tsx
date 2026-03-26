@@ -551,8 +551,8 @@ const CapsuleEdit = () => {
 
             {/* YouTube Embed */}
             <YouTubeEmbed
-              value={youtubeUrl}
-              onChange={setYoutubeUrl}
+              value={youtubeUrls}
+              onChange={setYoutubeUrls}
             />
 
             {/* Tags */}

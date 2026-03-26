@@ -466,8 +466,8 @@ const CapsuleCreate = () => {
         onTagsChange={setTags}
         memoryDate={memoryDate}
         onMemoryDateChange={setMemoryDate}
-        youtubeUrl={youtubeUrl}
-        onYoutubeUrlChange={setYoutubeUrl}
+        youtubeUrls={youtubeUrls}
+        onYoutubeUrlsChange={setYoutubeUrls}
         isSaving={isSaving}
         onSaveDraft={() => saveCapsule('draft')}
         onPublish={() => saveCapsule('published')}
