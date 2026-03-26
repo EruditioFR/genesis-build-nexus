@@ -94,17 +94,17 @@ const StoryViewer = ({
     };
   }, [currentTrackIndex, hasAudioTracks]);
 
-  // Pause/resume bg audio based on current item type & mute
+  // Pause/resume bg audio based on current item type, mute & play state
   useEffect(() => {
     if (!bgAudioRef.current) return;
     bgAudioRef.current.muted = isMuted;
 
-    if (currentItem?.type === 'video') {
+    if (!isPlaying || currentItem?.type === 'video') {
       bgAudioRef.current.pause();
     } else {
       bgAudioRef.current.play().catch(() => {});
     }
-  }, [currentIndex, isMuted, currentItem?.type]);
+  }, [currentIndex, isMuted, currentItem?.type, isPlaying]);
 
   // Preload adjacent items
   useEffect(() => {
