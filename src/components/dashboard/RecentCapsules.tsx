@@ -77,7 +77,39 @@ const FeaturedCard = ({ capsule, category, t }: { capsule: Capsule; category?: C
 };
 // --- Compact card for the grid ---
 
+const SimpleLineCard = ({ capsule, category, index, t }: { capsule: Capsule; category?: Category; index: number; t: (key: string) => string }) => {
+  const Icon = getTypeIcon(capsule.type);
+  const styles = getTypeStyles(capsule.type);
+  return (
+    <Link to={`/capsules/${capsule.id}`} className="block group">
+      <motion.article
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
+        className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:shadow-md hover:border-foreground/10 transition-all duration-200 hover:-translate-y-0.5"
+      >
+        <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0", styles.bg)}>
+          <Icon className="w-4.5 h-4.5 text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-foreground text-[15px] line-clamp-1 leading-snug group-hover:text-primary transition-colors">
+            {capsule.title}
+          </h4>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {category && <CategoryBadge category={category} size="sm" />}
+          <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">{capsule.date}</span>
+          <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        </div>
+      </motion.article>
+    </Link>
+  );
+};
+
 const CompactCard = ({ capsule, category, index, t }: { capsule: Capsule; category?: Category; index: number; t: (key: string) => string }) => {
+  if (!hasVisualMedia(capsule)) {
+    return <SimpleLineCard capsule={capsule} category={category} index={index} t={t} />;
+  }
   const Icon = getTypeIcon(capsule.type);
   const styles = getTypeStyles(capsule.type);
 
