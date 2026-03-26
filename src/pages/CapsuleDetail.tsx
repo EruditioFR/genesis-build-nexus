@@ -105,7 +105,6 @@ const CapsuleDetail = () => {
   const [heroImageUrls, setHeroImageUrls] = useState<string[]>([]);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
-  const [heroIsPortrait, setHeroIsPortrait] = useState<Record<number, boolean>>({});
 
   // Parallax effect for hero image
   const heroRef = useRef<HTMLDivElement>(null);
@@ -269,17 +268,6 @@ const CapsuleDetail = () => {
     };
     loadHeroImages();
   }, [medias, capsule?.thumbnail_url]);
-
-  // Detect portrait images
-  useEffect(() => {
-    heroImageUrls.forEach((url, idx) => {
-      const img = new window.Image();
-      img.onload = () => {
-        setHeroIsPortrait((prev) => ({ ...prev, [idx]: img.naturalHeight > img.naturalWidth }));
-      };
-      img.src = url;
-    });
-  }, [heroImageUrls]);
 
   // Auto-advance hero slider
   useEffect(() => {
@@ -445,25 +433,13 @@ const CapsuleDetail = () => {
         {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
           {heroImageUrls.length > 0 ?
-           <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-              {/* Blurred background for portrait images */}
-              {heroIsPortrait[heroSlideIndex] && (
-                <img
-                  src={heroImageUrls[heroSlideIndex]}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-40"
-                />
-              )}
+          <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.img
                 key={heroSlideIndex}
                 src={heroImageUrls[heroSlideIndex]}
                 alt={capsule.title}
-                className={heroIsPortrait[heroSlideIndex]
-                  ? "absolute inset-0 h-full object-contain mx-auto z-[1]"
-                  : "absolute inset-0 w-full h-full object-cover object-[center_25%]"
-                }
+                className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
@@ -475,7 +451,7 @@ const CapsuleDetail = () => {
                 }} />
               </AnimatePresence>
             
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[2]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
 
 
@@ -485,7 +461,7 @@ const CapsuleDetail = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/capsules')}
-              className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm z-[3]">
+              className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
               
                 <ArrowLeft className="w-4 h-4" />
                 {t('backToList')}
@@ -493,7 +469,7 @@ const CapsuleDetail = () => {
 
               {/* Actions on hero - only for owner */}
               {isOwner &&
-            <div className="absolute top-4 right-4 flex gap-2 z-[3]">
+            <div className="absolute top-4 right-4 flex gap-2">
                   <Button
                 variant="ghost"
                 size="icon"
