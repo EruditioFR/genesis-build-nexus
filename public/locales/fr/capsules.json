@@ -418,6 +418,14 @@
     "invalidUrl": "URL YouTube non valide. Formats acceptés : youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...",
     "hint": "Collez un lien YouTube pour enrichir votre souvenir avec une vidéo musicale, un film, ou un moment particulier."
   },
+  "socialLinks": {
+    "title": "Liens sociaux",
+    "description": "Ajoutez des liens Facebook, Instagram, TikTok ou LinkedIn",
+    "placeholder": "https://www.instagram.com/...",
+    "add": "Ajouter",
+    "invalidUrl": "URL non reconnue. Collez un lien Facebook, Instagram, TikTok ou LinkedIn.",
+    "hint": "Collez un lien de réseau social pour enrichir votre souvenir."
+  },
   "seniorEditor": {
     "createMemory": "Nouveau souvenir",
     "step1Label": "Donnez un titre",
