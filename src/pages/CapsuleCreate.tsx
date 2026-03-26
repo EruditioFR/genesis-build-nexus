@@ -45,6 +45,7 @@ import MemoryDateSelector, {
 import { useIsMobile } from '@/hooks/use-mobile';
 import NoIndex from '@/components/seo/NoIndex';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 import SeniorFriendlyEditor from '@/components/capsule/SeniorFriendlyEditor';
 
 import type { Database } from '@/integrations/supabase/types';
