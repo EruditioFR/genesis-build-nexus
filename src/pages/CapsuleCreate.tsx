@@ -439,6 +439,10 @@ const CapsuleCreate = () => {
         onUploadAllRef={(uploadFn) => {
           uploadAllFilesRef.current = uploadFn;
         }}
+        youtubeUrls={youtubeUrls}
+        onYoutubeUrlsChange={setYoutubeUrls}
+        socialLinks={socialLinks}
+        onSocialLinksChange={setSocialLinks}
       />
     );
   }

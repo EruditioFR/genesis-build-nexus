@@ -290,7 +290,7 @@ const MobileCapsuleWizard = ({
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
 
-            <YouTubeEmbed urls={youtubeUrls} onChange={onYoutubeUrlsChange} />
+            <YouTubeEmbed value={youtubeUrls} onChange={onYoutubeUrlsChange} />
 
             <SocialLinksEmbed value={socialLinks} onChange={onSocialLinksChange} />
 
