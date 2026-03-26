@@ -32,6 +32,7 @@ interface MediaWithCapsule {
     id: string;
     file_url: string;
     file_type: string;
+    file_name: string | null;
     caption: string | null;
   };
   capsule: Capsule;
@@ -53,7 +54,7 @@ export const useStoryMode = () => {
       
       const { data: allMedias } = await supabase
         .from('capsule_medias')
-        .select('id, capsule_id, file_url, file_type, caption, position')
+        .select('id, capsule_id, file_url, file_type, file_name, caption, position')
         .in('capsule_id', capsuleIds)
         .order('position');
 
@@ -88,7 +89,7 @@ export const useStoryMode = () => {
           bgAudioTracks.push({
             id: media.id,
             url: signedUrlsMap[media.file_url] || '',
-            label: media.caption || capsule.title,
+            label: media.caption || media.file_name || capsule.title,
           });
           return;
         }
