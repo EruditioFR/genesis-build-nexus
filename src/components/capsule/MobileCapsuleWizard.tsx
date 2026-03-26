@@ -13,6 +13,7 @@ import {
   Calendar,
   Send,
   Save,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
@@ -31,6 +32,8 @@ import MemoryDateSelector, {
   formatMemoryDate 
 } from '@/components/capsule/MemoryDateSelector';
 import { determineContentType } from '@/lib/capsuleTypeUtils';
+import YouTubeEmbed from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 import type { Category, SubCategory } from '@/hooks/useCategories';
@@ -63,6 +66,10 @@ interface MobileCapsuleWizardProps {
   onPublish: () => void;
   onBack: () => void;
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
+  socialLinks: SocialLink[];
+  onSocialLinksChange: (links: SocialLink[]) => void;
 }
 
 const STEP_COUNT = 4;
@@ -93,6 +100,10 @@ const MobileCapsuleWizard = ({
   onPublish,
   onBack,
   onUploadAllRef,
+  youtubeUrls,
+  onYoutubeUrlsChange,
+  socialLinks,
+  onSocialLinksChange,
 }: MobileCapsuleWizardProps) => {
   const { t, i18n } = useTranslation('capsules');
   const [currentStep, setCurrentStep] = useState(0);
@@ -278,6 +289,10 @@ const MobileCapsuleWizard = ({
               </Label>
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
+
+            <YouTubeEmbed value={youtubeUrls} onChange={onYoutubeUrlsChange} />
+
+            <SocialLinksEmbed value={socialLinks} onChange={onSocialLinksChange} />
 
             {renderContinueButton()}
           </div>
