@@ -97,11 +97,11 @@ const CapsuleCreate = () => {
   
   // Mapping from guided prompt categories to category info (for creation if needed)
   const promptCategoryConfig: Record<string, { slug: string; name: string; icon: string; color: string; description: string }> = {
-    'enfance': { slug: 'enfance', name: 'Enfance', icon: 'baby', color: '#22c55e', description: 'Souvenirs de mon enfance' },
-    'ecole': { slug: 'ecole-adolescence', name: 'École & Adolescence', icon: 'graduation-cap', color: '#3b82f6', description: 'Souvenirs d\'école et d\'adolescence' },
-    'musiques': { slug: 'musiques-films', name: 'Musiques & Films', icon: 'music', color: '#a855f7', description: 'Musiques et films marquants' },
-    'famille': { slug: 'famille-proches', name: 'Famille & Proches', icon: 'users', color: '#f97316', description: 'Souvenirs de famille' },
-    'vie-personnelle': { slug: 'vie-personnelle', name: 'Vie personnelle', icon: 'heart', color: '#ef4444', description: 'Moments personnels importants' },
+    'enfance': { slug: 'enfance', name: 'Enfance', icon: '👶', color: '#22c55e', description: 'Souvenirs de mon enfance' },
+    'ecole': { slug: 'ecole-adolescence', name: 'École & Adolescence', icon: '🎓', color: '#3b82f6', description: 'Souvenirs d\'école et d\'adolescence' },
+    'musiques': { slug: 'musiques-films', name: 'Musiques & Films', icon: '🎵', color: '#a855f7', description: 'Musiques et films marquants' },
+    'famille': { slug: 'famille-proches', name: 'Famille & Proches', icon: '👨‍👩‍👧‍👦', color: '#f97316', description: 'Souvenirs de famille' },
+    'vie-personnelle': { slug: 'vie-personnelle', name: 'Vie personnelle', icon: '❤️', color: '#ef4444', description: 'Moments personnels importants' },
   };
 
   const capsuleSchema = z.object({
