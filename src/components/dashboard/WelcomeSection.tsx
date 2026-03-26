@@ -11,7 +11,7 @@ interface WelcomeSectionProps {
   totalCapsules?: number;
 }
 
-const WelcomeSection = ({ onHide }: WelcomeSectionProps) => {
+const WelcomeSection = ({ onHide, totalCapsules = 0 }: WelcomeSectionProps) => {
   const { t } = useTranslation('dashboard');
   const [isVisible, setIsVisible] = useState(true);
 
