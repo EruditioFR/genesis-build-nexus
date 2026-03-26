@@ -25,6 +25,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 import TagInput from '@/components/capsule/TagInput';
+import RichTextEditor from '@/components/capsule/RichTextEditor';
 import UnifiedMediaSection, { type MediaFile, type UploadResult } from '@/components/capsule/UnifiedMediaSection';
 import CategorySelector from '@/components/capsule/CategorySelector';
 import MemoryDateSelector, { 
