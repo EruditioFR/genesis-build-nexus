@@ -802,6 +802,48 @@ const CapsuleDetail = () => {
                 ) : null;
               })()}
 
+              {/* Social Links */}
+              {capsule.metadata && typeof capsule.metadata === 'object' && (() => {
+                const meta = capsule.metadata as Record<string, any>;
+                const links: { platform: string; url: string }[] = meta.social_links && Array.isArray(meta.social_links) ? meta.social_links : [];
+                const platformLabels: Record<string, { icon: string; label: string }> = {
+                  facebook: { icon: '📘', label: 'Facebook' },
+                  instagram: { icon: '📷', label: 'Instagram' },
+                  tiktok: { icon: '🎵', label: 'TikTok' },
+                  linkedin: { icon: '💼', label: 'LinkedIn' },
+                };
+                return links.length > 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}>
+                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                      🔗 {t('socialLinks.title', 'Liens sociaux')}
+                    </h2>
+                    <div className="space-y-2">
+                      {links.map((link, index) => {
+                        const config = platformLabels[link.platform] || { icon: '🔗', label: link.platform };
+                        return (
+                          <a
+                            key={index}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-muted/50 transition-colors"
+                          >
+                            <span className="text-lg">{config.icon}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</p>
+                              <p className="text-sm text-foreground truncate">{link.url}</p>
+                            </div>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ) : null;
+              })()}
+
               {/* Emotion Reactions */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
