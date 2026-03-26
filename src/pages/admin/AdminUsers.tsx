@@ -68,6 +68,8 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<UserWithStorage | null>(null);
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [suspendReason, setSuspendReason] = useState("");
 
   useEffect(() => {
