@@ -170,6 +170,30 @@ export default function AdminUsers() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!selectedUser || !isAdmin) return;
+    setDeleting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("admin-delete-user", {
+        body: { user_id: selectedUser.user_id },
+      });
+
+      if (error || data?.error) {
+        toast.error(data?.error || "Erreur lors de la suppression");
+      } else {
+        toast.success(`${selectedUser.display_name || "Utilisateur"} supprimé définitivement`);
+        fetchUsers();
+      }
+    } catch {
+      toast.error("Erreur lors de la suppression");
+    }
+
+    setDeleting(false);
+    setDeleteDialogOpen(false);
+    setSelectedUser(null);
+  };
+
   const getSubscriptionBadge = (level: string) => {
     switch (level) {
       case "premium":
