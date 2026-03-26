@@ -37,6 +37,7 @@ const CategoryDetailPage = lazy(() => import("./pages/CategoryDetailPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const About = lazy(() => import("./pages/About"));
 const InspirationsPage = lazy(() => import("./pages/InspirationsPage"));
+const SharedWithMePage = lazy(() => import("./pages/SharedWithMePage"));
 
 // Legal pages - lazy loaded
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -90,6 +91,7 @@ const App = () => (
                   <Route path="/capsules/:id" element={<CapsuleDetail />} />
                   <Route path="/capsules/:id/edit" element={<CapsuleEdit />} />
                   <Route path="/circles" element={<CirclesPage />} />
+                  <Route path="/shared-with-me" element={<SharedWithMePage />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/statistics" element={<Statistics />} />
                   

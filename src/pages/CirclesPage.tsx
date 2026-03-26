@@ -6,7 +6,7 @@ import { fr, enUS, es, ko, zhCN, Locale } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   Users, Plus, ArrowLeft, MoreHorizontal, UserPlus, Edit, Trash2,
-  Mail, Clock, User, Loader2
+  Mail, Clock, User, Loader2, Share
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,7 @@ import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import CreateCircleDialog from '@/components/circles/CreateCircleDialog';
 import AddMemberDialog from '@/components/circles/AddMemberDialog';
 import CircleLimitsIndicator from '@/components/circles/CircleLimitsIndicator';
-import SharedCapsulesSection from '@/components/circles/SharedCapsulesSection';
+
 import { toast } from 'sonner';
 import NoIndex from '@/components/seo/NoIndex';
 
@@ -268,8 +268,15 @@ const CirclesPage = () => {
           </div>
         </motion.div>
 
-        {/* Shared with me section */}
-        <SharedCapsulesSection userId={user.id} />
+        {/* Link to shared with me page */}
+        <Button
+          variant="outline"
+          className="w-full gap-2 mb-6"
+          onClick={() => navigate('/shared-with-me')}
+        >
+          <Share className="w-4 h-4" />
+          Voir les souvenirs partagés avec moi
+        </Button>
 
         {/* Section header for my circles */}
         <motion.div
