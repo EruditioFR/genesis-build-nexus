@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { X, Link as LinkIcon, Check, AlertCircle, Plus, ExternalLink } from 'lucide-react';
+import { X, Link as LinkIcon, Check, AlertCircle, Plus, ExternalLink, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 import { cn } from '@/lib/utils';
 
 export type SocialPlatform = 'facebook' | 'instagram' | 'tiktok' | 'linkedin';
@@ -65,8 +66,28 @@ const isValidUrl = (url: string): boolean => {
   }
 };
 
+const getEmbedPreviewUrl = (platform: SocialPlatform, url: string): string | null => {
+  switch (platform) {
+    case 'facebook':
+      return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&width=320&show_text=true`;
+    case 'instagram':
+      return `${url.replace(/\/$/, '')}/embed`;
+    case 'tiktok': {
+      const match = url.match(/\/video\/(\d+)/);
+      if (match) return `https://www.tiktok.com/embed/v2/${match[1]}`;
+      return null;
+    }
+    case 'linkedin':
+      return null; // LinkedIn doesn't support simple embeds
+    default:
+      return null;
+  }
+};
+
 const SocialLinkItem = ({ link, onRemove }: { link: SocialLink; onRemove: () => void }) => {
+  const { t } = useTranslation('capsules');
   const config = platformConfig[link.platform];
+  const embedUrl = getEmbedPreviewUrl(link.platform, link.url);
 
   return (
     <div className={cn(
@@ -85,6 +106,34 @@ const SocialLinkItem = ({ link, onRemove }: { link: SocialLink; onRemove: () => 
           {link.url}
         </a>
       </div>
+      {embedUrl ? (
+        <HoverCard openDelay={300}>
+          <HoverCardTrigger asChild>
+            <button
+              type="button"
+              className="p-1.5 rounded-lg hover:bg-background/50 transition-colors"
+              aria-label={t('socialLinks.preview', 'Aperçu')}
+            >
+              <Eye className="w-4 h-4" />
+            </button>
+          </HoverCardTrigger>
+          <HoverCardContent side="left" className="w-[340px] p-2">
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <span>{config.icon}</span>
+              <span className="text-sm font-medium">{config.label}</span>
+            </div>
+            <div className="rounded-lg overflow-hidden border border-border bg-muted aspect-[4/5]">
+              <iframe
+                src={embedUrl}
+                title={`${config.label} preview`}
+                className="w-full h-full"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                loading="lazy"
+              />
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      ) : null}
       <a
         href={link.url}
         target="_blank"
