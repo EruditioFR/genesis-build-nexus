@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Youtube, X, Link as LinkIcon, Check, AlertCircle } from 'lucide-react';
+import { Youtube, X, Link as LinkIcon, Check, AlertCircle, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 interface YouTubeEmbedProps {
-  value: string | null;
-  onChange: (url: string | null) => void;
+  value: string[];
+  onChange: (urls: string[]) => void;
   className?: string;
 }
 
@@ -34,19 +34,41 @@ export const getYouTubeThumbnail = (videoId: string): string => {
   return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 };
 
+interface YouTubeItemProps {
+  url: string;
+  onRemove: () => void;
+}
+
+const YouTubeItem = ({ url, onRemove }: YouTubeItemProps) => {
+  const videoId = extractYouTubeId(url);
+  if (!videoId) return null;
+
+  return (
+    <div className="relative rounded-xl overflow-hidden bg-muted aspect-video group">
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}`}
+        title="YouTube video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="w-full h-full"
+      />
+      <Button
+        type="button"
+        variant="destructive"
+        size="icon"
+        className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={onRemove}
+      >
+        <X className="w-4 h-4" />
+      </Button>
+    </div>
+  );
+};
+
 const YouTubeEmbed = ({ value, onChange, className }: YouTubeEmbedProps) => {
   const { t } = useTranslation('capsules');
-  const [inputValue, setInputValue] = useState(value || '');
+  const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState<boolean | null>(null);
-  
-  const videoId = value ? extractYouTubeId(value) : null;
-  
-  useEffect(() => {
-    if (value) {
-      setInputValue(value);
-      setIsValid(!!extractYouTubeId(value));
-    }
-  }, [value]);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -54,23 +76,32 @@ const YouTubeEmbed = ({ value, onChange, className }: YouTubeEmbedProps) => {
     
     if (!newValue.trim()) {
       setIsValid(null);
-      onChange(null);
       return;
     }
     
     const id = extractYouTubeId(newValue);
+    setIsValid(!!id);
+  };
+  
+  const handleAdd = () => {
+    if (!inputValue.trim()) return;
+    const id = extractYouTubeId(inputValue);
     if (id) {
-      setIsValid(true);
-      onChange(newValue);
-    } else {
-      setIsValid(false);
+      onChange([...value, inputValue]);
+      setInputValue('');
+      setIsValid(null);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAdd();
     }
   };
   
-  const handleRemove = () => {
-    setInputValue('');
-    setIsValid(null);
-    onChange(null);
+  const handleRemove = (index: number) => {
+    onChange(value.filter((_, i) => i !== index));
   };
   
   return (
@@ -81,32 +112,46 @@ const YouTubeEmbed = ({ value, onChange, className }: YouTubeEmbedProps) => {
       </Label>
       
       <p className="text-sm text-muted-foreground">
-        {t('youtube.description', 'Ajoutez un lien YouTube pour intégrer une vidéo à votre souvenir')}
+        {t('youtube.description', 'Ajoutez un ou plusieurs liens YouTube pour intégrer des vidéos à votre souvenir')}
       </p>
       
       <div className="space-y-3">
-        <div className="relative">
-          <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            type="url"
-            placeholder={t('youtube.placeholder', 'https://www.youtube.com/watch?v=...')}
-            value={inputValue}
-            onChange={handleInputChange}
-            className={cn(
-              "pl-10 pr-10",
-              isValid === true && "border-green-500 focus-visible:ring-green-500",
-              isValid === false && "border-destructive focus-visible:ring-destructive"
-            )}
-          />
-          {isValid !== null && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              {isValid ? (
-                <Check className="w-4 h-4 text-green-500" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-destructive" />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="url"
+              placeholder={t('youtube.placeholder', 'https://www.youtube.com/watch?v=...')}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              className={cn(
+                "pl-10 pr-10",
+                isValid === true && "border-green-500 focus-visible:ring-green-500",
+                isValid === false && "border-destructive focus-visible:ring-destructive"
               )}
-            </div>
-          )}
+            />
+            {isValid !== null && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                {isValid ? (
+                  <Check className="w-4 h-4 text-green-500" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-destructive" />
+                )}
+              </div>
+            )}
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            onClick={handleAdd}
+            disabled={!isValid}
+            className="shrink-0"
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            {t('youtube.add', 'Ajouter')}
+          </Button>
         </div>
         
         {isValid === false && (
@@ -115,25 +160,16 @@ const YouTubeEmbed = ({ value, onChange, className }: YouTubeEmbedProps) => {
           </p>
         )}
         
-        {/* Preview */}
-        {videoId && (
-          <div className="relative rounded-xl overflow-hidden bg-muted aspect-video group">
-            <iframe
-              src={`https://www.youtube.com/embed/${videoId}`}
-              title="YouTube video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
-            <Button
-              type="button"
-              variant="destructive"
-              size="icon"
-              className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={handleRemove}
-            >
-              <X className="w-4 h-4" />
-            </Button>
+        {/* Previews */}
+        {value.length > 0 && (
+          <div className="space-y-3">
+            {value.map((url, index) => (
+              <YouTubeItem
+                key={`${url}-${index}`}
+                url={url}
+                onRemove={() => handleRemove(index)}
+              />
+            ))}
           </div>
         )}
       </div>

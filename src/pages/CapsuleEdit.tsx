@@ -97,7 +97,7 @@ const CapsuleEdit = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   const [mediaError, setMediaError] = useState(false);
-  const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
+  const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
   
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -170,9 +170,14 @@ const CapsuleEdit = () => {
           setMemoryDate(parseISO(capsule.memory_date));
         }
 
-        // Set YouTube URL if exists in metadata
-        if (capsule.metadata && typeof capsule.metadata === 'object' && 'youtube_url' in capsule.metadata) {
-          setYoutubeUrl(capsule.metadata.youtube_url as string);
+        // Set YouTube URLs if exists in metadata
+        if (capsule.metadata && typeof capsule.metadata === 'object') {
+          const meta = capsule.metadata as Record<string, any>;
+          if (meta.youtube_urls && Array.isArray(meta.youtube_urls)) {
+            setYoutubeUrls(meta.youtube_urls);
+          } else if (meta.youtube_url) {
+            setYoutubeUrls([meta.youtube_url]);
+          }
         }
 
         // Fetch existing media
@@ -283,9 +288,11 @@ const CapsuleEdit = () => {
     try {
       // Prepare metadata with YouTube URL if present
       const metadata: Record<string, any> = {};
-      if (youtubeUrl) {
-        metadata.youtube_url = youtubeUrl;
-        metadata.youtube_id = extractYouTubeId(youtubeUrl);
+      if (youtubeUrls.length > 0) {
+        metadata.youtube_urls = youtubeUrls;
+        metadata.youtube_ids = youtubeUrls.map(u => extractYouTubeId(u)).filter(Boolean);
+        metadata.youtube_url = youtubeUrls[0];
+        metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
       }
 
       // Update the capsule
@@ -544,8 +551,8 @@ const CapsuleEdit = () => {
 
             {/* YouTube Embed */}
             <YouTubeEmbed
-              value={youtubeUrl}
-              onChange={setYoutubeUrl}
+              value={youtubeUrls}
+              onChange={setYoutubeUrls}
             />
 
             {/* Tags */}

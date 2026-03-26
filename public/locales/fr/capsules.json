@@ -411,9 +411,10 @@
     "audioRestricted": "L'audio nécessite le forfait Premium"
   },
   "youtube": {
-    "title": "Vidéo YouTube",
-    "description": "Ajoutez un lien YouTube pour intégrer une vidéo à votre souvenir",
+    "title": "Vidéos YouTube",
+    "description": "Ajoutez un ou plusieurs liens YouTube pour intégrer des vidéos à votre souvenir",
     "placeholder": "https://www.youtube.com/watch?v=...",
+    "add": "Ajouter",
     "invalidUrl": "URL YouTube non valide. Formats acceptés : youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...",
     "hint": "Collez un lien YouTube pour enrichir votre souvenir avec une vidéo musicale, un film, ou un moment particulier."
   },

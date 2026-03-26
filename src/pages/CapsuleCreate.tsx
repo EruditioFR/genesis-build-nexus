@@ -83,7 +83,7 @@ const CapsuleCreate = () => {
   const [legacyUnlockDate, setLegacyUnlockDate] = useState<Date | null>(null);
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
   const [mediaError, setMediaError] = useState(false);
-  const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
+  const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
   
   // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -277,9 +277,12 @@ const CapsuleCreate = () => {
 
       // Prepare metadata with YouTube URL if present
       const metadata: Record<string, any> = {};
-      if (youtubeUrl) {
-        metadata.youtube_url = youtubeUrl;
-        metadata.youtube_id = extractYouTubeId(youtubeUrl);
+      if (youtubeUrls.length > 0) {
+        metadata.youtube_urls = youtubeUrls;
+        metadata.youtube_ids = youtubeUrls.map(u => extractYouTubeId(u)).filter(Boolean);
+        // Keep backward compat
+        metadata.youtube_url = youtubeUrls[0];
+        metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
       }
 
       // Create the capsule
@@ -463,8 +466,8 @@ const CapsuleCreate = () => {
         onTagsChange={setTags}
         memoryDate={memoryDate}
         onMemoryDateChange={setMemoryDate}
-        youtubeUrl={youtubeUrl}
-        onYoutubeUrlChange={setYoutubeUrl}
+        youtubeUrls={youtubeUrls}
+        onYoutubeUrlsChange={setYoutubeUrls}
         isSaving={isSaving}
         onSaveDraft={() => saveCapsule('draft')}
         onPublish={() => saveCapsule('published')}

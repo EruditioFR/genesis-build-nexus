@@ -67,8 +67,8 @@ interface SeniorFriendlyEditorProps {
   onTagsChange: (tags: string[]) => void;
   memoryDate: MemoryDateValue | null;
   onMemoryDateChange: (date: MemoryDateValue | null) => void;
-  youtubeUrl: string | null;
-  onYoutubeUrlChange: (url: string | null) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
   isSaving: boolean;
   onSaveDraft: () => void;
   onPublish: () => void;
@@ -225,8 +225,8 @@ const VideoEditorSection = ({
   userId,
   mediaFiles,
   onMediaFilesChange,
-  youtubeUrl,
-  onYoutubeUrlChange,
+  youtubeUrls,
+  onYoutubeUrlsChange,
   onUploadAllRef,
   hasMediaError,
   onBack,
@@ -235,15 +235,15 @@ const VideoEditorSection = ({
   userId: string;
   mediaFiles: MediaFile[];
   onMediaFilesChange: (files: MediaFile[]) => void;
-  youtubeUrl: string | null;
-  onYoutubeUrlChange: (url: string | null) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
   hasMediaError: boolean;
   onBack: () => void;
   onContinue: () => void;
 }) => {
   const { t } = useTranslation('capsules');
-  const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrl ? 'youtube' : 'upload');
+  const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrls.length > 0 ? 'youtube' : 'upload');
   
   // Filter only video files
   const videoFiles = mediaFiles.filter(f => f.type === 'video');
@@ -337,8 +337,8 @@ const VideoEditorSection = ({
               />
             ) : (
               <YouTubeEmbed
-                value={youtubeUrl}
-                onChange={onYoutubeUrlChange}
+                value={youtubeUrls}
+                onChange={onYoutubeUrlsChange}
                 className="border-0 p-0 bg-transparent"
               />
             )}
@@ -592,8 +592,8 @@ const SeniorFriendlyEditor = ({
   onTagsChange,
   memoryDate,
   onMemoryDateChange,
-  youtubeUrl,
-  onYoutubeUrlChange,
+  youtubeUrls,
+  onYoutubeUrlsChange,
   isSaving,
   onSaveDraft,
   onPublish,
@@ -615,7 +615,7 @@ const SeniorFriendlyEditor = ({
 
   // Count media by type
   const photoCount = mediaFiles.filter(f => f.type === 'image').length;
-  const videoCount = mediaFiles.filter(f => f.type === 'video').length + (youtubeUrl ? 1 : 0);
+  const videoCount = mediaFiles.filter(f => f.type === 'video').length + youtubeUrls.length;
   const audioCount = mediaFiles.filter(f => f.type === 'audio').length;
 
   const canContinue = () => {
@@ -882,8 +882,8 @@ const SeniorFriendlyEditor = ({
               userId={userId}
               mediaFiles={mediaFiles}
               onMediaFilesChange={onMediaFilesChange}
-              youtubeUrl={youtubeUrl}
-              onYoutubeUrlChange={onYoutubeUrlChange}
+               youtubeUrls={youtubeUrls}
+               onYoutubeUrlsChange={onYoutubeUrlsChange}
               onUploadAllRef={onUploadAllRef}
               hasMediaError={hasMediaError}
               onBack={() => setActiveMediaSection('menu')}
@@ -1119,12 +1119,12 @@ const SeniorFriendlyEditor = ({
                         <Mic className="w-4 h-4 mr-1" /> {audioCount} audio
                       </Badge>
                     )}
-                    {youtubeUrl && (
+                    {youtubeUrls.length > 0 && (
                       <Badge variant="outline" className="text-base">
-                        <Youtube className="w-4 h-4 mr-1" /> YouTube
+                        <Youtube className="w-4 h-4 mr-1" /> {youtubeUrls.length} YouTube
                       </Badge>
                     )}
-                    {!content.trim() && photoCount === 0 && videoCount === 0 && audioCount === 0 && !youtubeUrl && (
+                    {!content.trim() && photoCount === 0 && videoCount === 0 && audioCount === 0 && youtubeUrls.length === 0 && (
                       <span className="text-muted-foreground italic">{t('seniorEditor.noContent', 'Aucun contenu ajouté')}</span>
                     )}
                   </div>
