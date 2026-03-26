@@ -882,8 +882,8 @@ const SeniorFriendlyEditor = ({
               userId={userId}
               mediaFiles={mediaFiles}
               onMediaFilesChange={onMediaFilesChange}
-              youtubeUrl={youtubeUrl}
-              onYoutubeUrlChange={onYoutubeUrlChange}
+               youtubeUrls={youtubeUrls}
+               onYoutubeUrlsChange={onYoutubeUrlsChange}
               onUploadAllRef={onUploadAllRef}
               hasMediaError={hasMediaError}
               onBack={() => setActiveMediaSection('menu')}
