@@ -70,6 +70,8 @@ interface SeniorFriendlyEditorProps {
   onMemoryDateChange: (date: MemoryDateValue | null) => void;
   youtubeUrls: string[];
   onYoutubeUrlsChange: (urls: string[]) => void;
+  socialLinks: SocialLink[];
+  onSocialLinksChange: (links: SocialLink[]) => void;
   isSaving: boolean;
   onSaveDraft: () => void;
   onPublish: () => void;
