@@ -815,11 +815,11 @@ const SeniorFriendlyEditor = ({
                 {t('seniorEditor.descLabel', 'Description (optionnel)')}
                 <InfoTip text={t('seniorEditor.descTip', 'Une courte description pour vous rappeler de quoi parle ce souvenir')} />
               </label>
-              <Textarea
-                placeholder={t('seniorEditor.descPlaceholder', 'Décrivez brièvement ce souvenir...')}
-                className="min-h-[120px] text-lg px-5 py-4 border-2 focus:border-primary resize-none"
+              <RichTextEditor
                 value={description}
-                onChange={(e) => onDescriptionChange(e.target.value)}
+                onChange={onDescriptionChange}
+                placeholder={t('seniorEditor.descPlaceholder', 'Décrivez brièvement ce souvenir...')}
+                minHeight="120px"
               />
             </div>
           </div>
