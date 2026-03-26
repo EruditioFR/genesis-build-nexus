@@ -67,8 +67,8 @@ interface SeniorFriendlyEditorProps {
   onTagsChange: (tags: string[]) => void;
   memoryDate: MemoryDateValue | null;
   onMemoryDateChange: (date: MemoryDateValue | null) => void;
-  youtubeUrl: string | null;
-  onYoutubeUrlChange: (url: string | null) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
   isSaving: boolean;
   onSaveDraft: () => void;
   onPublish: () => void;
