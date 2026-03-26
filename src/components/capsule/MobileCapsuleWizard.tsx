@@ -100,6 +100,10 @@ const MobileCapsuleWizard = ({
   onPublish,
   onBack,
   onUploadAllRef,
+  youtubeUrls,
+  onYoutubeUrlsChange,
+  socialLinks,
+  onSocialLinksChange,
 }: MobileCapsuleWizardProps) => {
   const { t, i18n } = useTranslation('capsules');
   const [currentStep, setCurrentStep] = useState(0);
