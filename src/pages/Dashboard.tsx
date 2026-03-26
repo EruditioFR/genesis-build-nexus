@@ -40,7 +40,7 @@ interface CapsuleRow {
   created_at: string;
   thumbnail_url: string | null;
   content: string | null;
-  metadata: { youtube_id?: string; youtube_url?: string } | null;
+  metadata: { youtube_id?: string; youtube_url?: string; youtube_ids?: string[]; youtube_urls?: string[] } | null;
 }
 
 interface MediaRow {
