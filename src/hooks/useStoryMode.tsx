@@ -40,6 +40,7 @@ interface MediaWithCapsule {
 export const useStoryMode = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState<StoryItem[]>([]);
+  const [audioTracks, setAudioTracks] = useState<AudioTrack[]>([]);
   const [initialIndex, setInitialIndex] = useState(0);
   const [loading, setLoading] = useState(false);
 
