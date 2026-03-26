@@ -1135,7 +1135,12 @@ const SeniorFriendlyEditor = ({
                         <Youtube className="w-4 h-4 mr-1" /> {youtubeUrls.length} YouTube
                       </Badge>
                     )}
-                    {!content.trim() && photoCount === 0 && videoCount === 0 && audioCount === 0 && youtubeUrls.length === 0 && (
+                    {socialLinks.length > 0 && (
+                      <Badge variant="outline" className="text-base">
+                        🔗 {socialLinks.length} {t('socialLinks.title', 'Liens sociaux')}
+                      </Badge>
+                    )}
+                    {!content.trim() && photoCount === 0 && videoCount === 0 && audioCount === 0 && youtubeUrls.length === 0 && socialLinks.length === 0 && (
                       <span className="text-muted-foreground italic">{t('seniorEditor.noContent', 'Aucun contenu ajouté')}</span>
                     )}
                   </div>
