@@ -21,6 +21,12 @@ interface StoryItem {
   date?: string;
 }
 
+interface AudioTrack {
+  id: string;
+  url: string;
+  label: string;
+}
+
 interface MediaWithCapsule {
   media: {
     id: string;
