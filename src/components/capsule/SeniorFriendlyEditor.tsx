@@ -337,8 +337,8 @@ const VideoEditorSection = ({
               />
             ) : (
               <YouTubeEmbed
-                value={youtubeUrl}
-                onChange={onYoutubeUrlChange}
+                value={youtubeUrls}
+                onChange={onYoutubeUrlsChange}
                 className="border-0 p-0 bg-transparent"
               />
             )}
