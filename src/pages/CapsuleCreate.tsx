@@ -473,6 +473,8 @@ const CapsuleCreate = () => {
         onMemoryDateChange={setMemoryDate}
         youtubeUrls={youtubeUrls}
         onYoutubeUrlsChange={setYoutubeUrls}
+        socialLinks={socialLinks}
+        onSocialLinksChange={setSocialLinks}
         isSaving={isSaving}
         onSaveDraft={() => saveCapsule('draft')}
         onPublish={() => saveCapsule('published')}
