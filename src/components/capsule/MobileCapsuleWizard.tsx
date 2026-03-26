@@ -240,6 +240,10 @@ const MobileCapsuleWizard = ({
               hasError={mediaError}
             />
 
+            <YouTubeEmbed value={youtubeUrls} onChange={onYoutubeUrlsChange} />
+
+            <SocialLinksEmbed value={socialLinks} onChange={onSocialLinksChange} />
+
             {renderContinueButton()}
           </div>
         );
@@ -290,9 +294,7 @@ const MobileCapsuleWizard = ({
               <TagInput tags={tags} onChange={onTagsChange} />
             </div>
 
-            <YouTubeEmbed value={youtubeUrls} onChange={onYoutubeUrlsChange} />
 
-            <SocialLinksEmbed value={socialLinks} onChange={onSocialLinksChange} />
 
             {renderContinueButton()}
           </div>
