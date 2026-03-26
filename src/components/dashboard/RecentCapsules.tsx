@@ -38,39 +38,43 @@ interface CapsuleCategoryData {
 
 // --- Featured (hero) card ---
 
-const FeaturedCard = ({ capsule, category, t }: { capsule: Capsule; category?: Category; t: (key: string) => string }) => (
-  <Link to={`/capsules/${capsule.id}`} className="block group">
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative rounded-2xl border-2 border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1 hover:border-foreground/10"
-    >
-      <div className="relative aspect-[16/9] sm:aspect-[2/1] overflow-hidden">
-        <CapsuleVisual capsule={capsule} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-          <h4 className="font-bold text-white text-xl sm:text-2xl line-clamp-2 leading-snug mb-2 drop-shadow-lg">
-            {capsule.title}
-          </h4>
-          {capsule.content && capsule.type === 'text' && (
-            <p className="text-white/80 text-sm sm:text-base line-clamp-2 leading-relaxed mb-3 max-w-lg">
-              {capsule.content.slice(0, 150)}{capsule.content.length > 150 ? '…' : ''}
-            </p>
-          )}
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1.5 text-white/70">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm font-medium">{capsule.date}</span>
+const FeaturedCard = ({ capsule, category, t }: { capsule: Capsule; category?: Category; t: (key: string) => string }) => {
+  if (!hasVisualMedia(capsule)) {
+    return <SimpleLineCard capsule={capsule} category={category} index={0} t={t} />;
+  }
+  return (
+    <Link to={`/capsules/${capsule.id}`} className="block group">
+      <motion.article
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative rounded-2xl border-2 border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1 hover:border-foreground/10"
+      >
+        <div className="relative aspect-[16/9] sm:aspect-[2/1] overflow-hidden">
+          <CapsuleVisual capsule={capsule} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+            <h4 className="font-bold text-white text-xl sm:text-2xl line-clamp-2 leading-snug mb-2 drop-shadow-lg">
+              {capsule.title}
+            </h4>
+            {capsule.content && capsule.type === 'text' && (
+              <p className="text-white/80 text-sm sm:text-base line-clamp-2 leading-relaxed mb-3 max-w-lg">
+                {capsule.content.slice(0, 150)}{capsule.content.length > 150 ? '…' : ''}
+              </p>
+            )}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-1.5 text-white/70">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm font-medium">{capsule.date}</span>
+              </div>
+              {category && <CategoryBadge category={category} size="sm" showIcon />}
             </div>
-            {category && <CategoryBadge category={category} size="sm" showIcon />}
           </div>
         </div>
-      </div>
-    </motion.article>
-  </Link>
-);
-
+      </motion.article>
+    </Link>
+  );
+};
 // --- Compact card for the grid ---
 
 const CompactCard = ({ capsule, category, index, t }: { capsule: Capsule; category?: Category; index: number; t: (key: string) => string }) => {
