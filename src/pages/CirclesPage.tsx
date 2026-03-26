@@ -268,15 +268,6 @@ const CirclesPage = () => {
           </div>
         </motion.div>
 
-        {/* Link to shared with me page */}
-        <Button
-          variant="outline"
-          className="w-full gap-2 mb-6"
-          onClick={() => navigate('/shared-with-me')}
-        >
-          <Share className="w-4 h-4" />
-          Voir les souvenirs partagés avec moi
-        </Button>
 
         {/* Section header for my circles */}
         <motion.div
