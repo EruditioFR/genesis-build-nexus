@@ -260,34 +260,40 @@ const StoryViewer = ({
 
             {/* Track dropdown */}
             {showTrackSelector && hasMultipleTracks && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute top-12 right-0 bg-black/90 backdrop-blur-md border border-white/20 rounded-lg p-2 min-w-[220px] max-w-[300px] z-30"
-              >
-                <p className="text-white/50 text-xs px-3 py-1 uppercase tracking-wider">Fond sonore</p>
-                {audioTracks.map((track, idx) => (
-                  <button
-                    key={track.id}
-                    className={cn(
-                      "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-2",
-                      idx === currentTrackIndex
-                        ? "bg-white/20 text-white"
-                        : "text-white/70 hover:bg-white/10 hover:text-white"
-                    )}
-                    onClick={() => {
-                      setCurrentTrackIndex(idx);
-                      setShowTrackSelector(false);
-                    }}
-                  >
-                    <Music className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span className="truncate">{track.label}</span>
-                    {idx === currentTrackIndex && (
-                      <span className="ml-auto text-xs text-white/50">▶</span>
-                    )}
-                  </button>
-                ))}
-              </motion.div>
+              <>
+                {/* Backdrop to close selector */}
+                <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setShowTrackSelector(false); }} />
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute top-12 right-0 bg-black/90 backdrop-blur-md border border-white/20 rounded-lg p-2 min-w-[220px] max-w-[300px] z-50"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-white/50 text-xs px-3 py-1 uppercase tracking-wider">Fond sonore</p>
+                  {audioTracks.map((track, idx) => (
+                    <button
+                      key={track.id}
+                      className={cn(
+                        "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-2",
+                        idx === currentTrackIndex
+                          ? "bg-white/20 text-white"
+                          : "text-white/70 hover:bg-white/10 hover:text-white"
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentTrackIndex(idx);
+                        setShowTrackSelector(false);
+                      }}
+                    >
+                      <Music className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span className="truncate">{track.label}</span>
+                      {idx === currentTrackIndex && (
+                        <span className="ml-auto text-xs text-white/50">▶</span>
+                      )}
+                    </button>
+                  ))}
+                </motion.div>
+              </>
             )}
           </div>
         )}
