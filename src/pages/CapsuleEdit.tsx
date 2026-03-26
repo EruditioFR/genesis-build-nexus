@@ -170,9 +170,14 @@ const CapsuleEdit = () => {
           setMemoryDate(parseISO(capsule.memory_date));
         }
 
-        // Set YouTube URL if exists in metadata
-        if (capsule.metadata && typeof capsule.metadata === 'object' && 'youtube_url' in capsule.metadata) {
-          setYoutubeUrl(capsule.metadata.youtube_url as string);
+        // Set YouTube URLs if exists in metadata
+        if (capsule.metadata && typeof capsule.metadata === 'object') {
+          const meta = capsule.metadata as Record<string, any>;
+          if (meta.youtube_urls && Array.isArray(meta.youtube_urls)) {
+            setYoutubeUrls(meta.youtube_urls);
+          } else if (meta.youtube_url) {
+            setYoutubeUrls([meta.youtube_url]);
+          }
         }
 
         // Fetch existing media
