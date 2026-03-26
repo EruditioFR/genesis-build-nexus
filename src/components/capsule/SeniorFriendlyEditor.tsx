@@ -243,7 +243,7 @@ const VideoEditorSection = ({
   onContinue: () => void;
 }) => {
   const { t } = useTranslation('capsules');
-  const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrl ? 'youtube' : 'upload');
+  const [videoMode, setVideoMode] = useState<'upload' | 'youtube'>(youtubeUrls.length > 0 ? 'youtube' : 'upload');
   
   // Filter only video files
   const videoFiles = mediaFiles.filter(f => f.type === 'video');
