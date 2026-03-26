@@ -229,7 +229,7 @@ const StoryViewer = ({
   };
 
   return (
-    <motion.div className="fixed inset-0 z-50 bg-black" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <motion.div className="fixed inset-0 z-[100] bg-black" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {/* Progress bars */}
       <div className="absolute top-0 left-0 right-0 z-20 flex gap-1 p-2">
         {items.map((_, index) => (
