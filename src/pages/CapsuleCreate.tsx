@@ -85,6 +85,7 @@ const CapsuleCreate = () => {
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
   const [mediaError, setMediaError] = useState(false);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   
   // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
