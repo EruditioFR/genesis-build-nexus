@@ -235,8 +235,8 @@ const VideoEditorSection = ({
   userId: string;
   mediaFiles: MediaFile[];
   onMediaFilesChange: (files: MediaFile[]) => void;
-  youtubeUrl: string | null;
-  onYoutubeUrlChange: (url: string | null) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
   hasMediaError: boolean;
   onBack: () => void;
