@@ -105,6 +105,7 @@ const CapsuleDetail = () => {
   const [heroImageUrls, setHeroImageUrls] = useState<string[]>([]);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
+  const [heroIsPortrait, setHeroIsPortrait] = useState<Record<number, boolean>>({});
 
   // Parallax effect for hero image
   const heroRef = useRef<HTMLDivElement>(null);
