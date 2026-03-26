@@ -113,7 +113,7 @@ const CapsuleDetail = () => {
   const heroScale = useTransform(scrollY, [0, 500], [1, 1.1]);
 
   // Story mode
-  const { isOpen: storyOpen, items: storyItems, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
+  const { isOpen: storyOpen, items: storyItems, audioTracks: storyAudioTracks, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
 
   const typeConfig: Record<CapsuleType, {icon: typeof FileText;label: string;color: string;}> = {
     text: { icon: FileText, label: t('types.text'), color: 'bg-primary/10 text-primary' },
