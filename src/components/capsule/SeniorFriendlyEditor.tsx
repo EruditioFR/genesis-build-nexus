@@ -615,7 +615,7 @@ const SeniorFriendlyEditor = ({
 
   // Count media by type
   const photoCount = mediaFiles.filter(f => f.type === 'image').length;
-  const videoCount = mediaFiles.filter(f => f.type === 'video').length + (youtubeUrl ? 1 : 0);
+  const videoCount = mediaFiles.filter(f => f.type === 'video').length + youtubeUrls.length;
   const audioCount = mediaFiles.filter(f => f.type === 'audio').length;
 
   const canContinue = () => {
