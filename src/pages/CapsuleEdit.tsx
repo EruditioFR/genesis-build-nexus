@@ -458,6 +458,32 @@ const CapsuleEdit = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
+            {/* Title & Description */}
+            <div className="p-6 rounded-2xl border border-border bg-card space-y-4">
+              <div>
+                <Label className="text-base font-medium mb-2 block">
+                  {t('create.title')}
+                </Label>
+                <Input
+                  placeholder={t('create.titlePlaceholder', 'Titre du souvenir')}
+                  className="h-12 text-lg border-2 focus:border-secondary"
+                  value={watchedValues.title}
+                  onChange={(e) => form.setValue('title', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label className="text-base font-medium mb-2 block">
+                  {t('create.description', 'Description')}
+                </Label>
+                <Textarea
+                  placeholder={t('create.descriptionPlaceholder', 'Une courte description...')}
+                  className="min-h-[100px] text-base border-2 focus:border-secondary"
+                  value={watchedValues.description}
+                  onChange={(e) => form.setValue('description', e.target.value)}
+                />
+              </div>
+            </div>
+
             {/* Category selector */}
             <div className="p-6 rounded-2xl border border-border bg-card">
             <CategorySelector
