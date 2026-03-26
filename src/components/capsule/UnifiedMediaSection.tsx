@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from './RichTextEditor';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -484,11 +485,11 @@ const UnifiedMediaSection = ({
             'text'
           )}
           <CollapsibleContent className="pt-2">
-            <Textarea
+            <RichTextEditor
               placeholder={t('create.contentPlaceholder')}
-              className="min-h-[150px] resize-none"
               value={content}
-              onChange={(e) => onContentChange(e.target.value)}
+              onChange={onContentChange}
+              minHeight="150px"
             />
           </CollapsibleContent>
         </Collapsible>
