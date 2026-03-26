@@ -91,6 +91,7 @@ const App = () => (
                   <Route path="/capsules/:id" element={<CapsuleDetail />} />
                   <Route path="/capsules/:id/edit" element={<CapsuleEdit />} />
                   <Route path="/circles" element={<CirclesPage />} />
+                  <Route path="/shared-with-me" element={<SharedWithMePage />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/statistics" element={<Statistics />} />
                   
