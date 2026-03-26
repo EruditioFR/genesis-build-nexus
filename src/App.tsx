@@ -37,6 +37,7 @@ const CategoryDetailPage = lazy(() => import("./pages/CategoryDetailPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const About = lazy(() => import("./pages/About"));
 const InspirationsPage = lazy(() => import("./pages/InspirationsPage"));
+const SharedWithMePage = lazy(() => import("./pages/SharedWithMePage"));
 
 // Legal pages - lazy loaded
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
