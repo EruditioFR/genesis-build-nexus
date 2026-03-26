@@ -289,7 +289,10 @@ export default function AdminUsers() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => {
+                                setSelectedUser(user);
+                                setProfileDialogOpen(true);
+                              }}>
                                 <Eye className="h-4 w-4 mr-2" />
                                 Voir le profil
                               </DropdownMenuItem>
