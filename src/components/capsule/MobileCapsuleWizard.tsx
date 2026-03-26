@@ -13,6 +13,7 @@ import {
   Calendar,
   Send,
   Save,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
