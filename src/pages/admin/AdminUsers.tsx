@@ -88,8 +88,12 @@ export default function AdminUsers() {
     const capsules = capsulesResult.data || [];
     const capsuleMedias = capsuleMediasResult.data || [];
 
-    // Create a map of capsule_id -> user_id
+    // Create a map of capsule_id -> user_id and count per user
     const capsuleToUser = new Map(capsules.map(c => [c.id, c.user_id]));
+    const userCapsuleCount = new Map<string, number>();
+    capsules.forEach(c => {
+      userCapsuleCount.set(c.user_id, (userCapsuleCount.get(c.user_id) || 0) + 1);
+    });
     
     // Calculate storage per user
     const userStorageMap = new Map<string, number>();
@@ -105,6 +109,7 @@ export default function AdminUsers() {
     const usersWithStorage: UserWithStorage[] = profiles.map(profile => ({
       ...profile,
       realStorageMb: (userStorageMap.get(profile.user_id) || 0) / (1024 * 1024),
+      capsulesCount: userCapsuleCount.get(profile.user_id) || 0,
     }));
 
     setUsers(usersWithStorage);
