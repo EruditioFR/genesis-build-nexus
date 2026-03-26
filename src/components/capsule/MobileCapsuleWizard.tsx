@@ -66,6 +66,10 @@ interface MobileCapsuleWizardProps {
   onPublish: () => void;
   onBack: () => void;
   onUploadAllRef?: (uploadFn: () => Promise<UploadResult>) => void;
+  youtubeUrls: string[];
+  onYoutubeUrlsChange: (urls: string[]) => void;
+  socialLinks: SocialLink[];
+  onSocialLinksChange: (links: SocialLink[]) => void;
 }
 
 const STEP_COUNT = 4;
