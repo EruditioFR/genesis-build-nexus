@@ -114,12 +114,14 @@ const WelcomeSection = ({ onHide, totalCapsules = 0 }: WelcomeSectionProps) => {
 
         {/* CTA + Hide */}
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          <Button asChild size="lg" className="w-full sm:w-auto">
-            <Link to="/capsules/new">
-              <Plus className="w-4 h-4 mr-2" />
-              {t('welcomeSection.cta')}
-            </Link>
-          </Button>
+          {totalCapsules === 0 && (
+            <Button asChild size="lg" className="w-full sm:w-auto">
+              <Link to="/capsules/new">
+                <Plus className="w-4 h-4 mr-2" />
+                {t('welcomeSection.cta')}
+              </Link>
+            </Button>
+          )}
           <button
             onClick={handleHide}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
