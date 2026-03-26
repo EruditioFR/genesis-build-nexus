@@ -145,12 +145,14 @@ export const useStoryMode = () => {
   const closeStory = useCallback(() => {
     setIsOpen(false);
     setItems([]);
+    setAudioTracks([]);
     setInitialIndex(0);
   }, []);
 
   return {
     isOpen,
     items,
+    audioTracks,
     initialIndex,
     loading,
     openStory,
