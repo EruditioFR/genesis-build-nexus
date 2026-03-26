@@ -195,11 +195,11 @@ const MobileCapsuleWizard = ({
               <Label className="text-base font-semibold mb-2 block">
                 {t('wizard.descriptionLabel')}
               </Label>
-              <Textarea
-                placeholder={t('wizard.descriptionPlaceholder')}
-                className="min-h-[120px] text-base px-4 py-3 border-2 focus:border-secondary"
+              <RichTextEditor
                 value={description}
-                onChange={(e) => onDescriptionChange(e.target.value)}
+                onChange={onDescriptionChange}
+                placeholder={t('wizard.descriptionPlaceholder')}
+                minHeight="120px"
               />
             </div>
 

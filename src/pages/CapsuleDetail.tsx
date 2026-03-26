@@ -765,7 +765,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="prose prose-lg max-w-none">
                 
-                  <p className="text-foreground text-lg leading-relaxed">{capsule.description}</p>
+                  <div className="text-foreground text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: capsule.description }} />
                 </motion.div>
               }
 
