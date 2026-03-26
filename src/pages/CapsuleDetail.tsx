@@ -10,6 +10,7 @@ import {
 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -479,14 +480,20 @@ const CapsuleDetail = () => {
                 
                     <ImagePlus className="w-4 h-4" />
                   </Button>
-                  <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShareDialogOpen(true)}
-                className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
-                
-                    <Share2 className="w-4 h-4" />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setShareDialogOpen(true)}
+                          className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Partager</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
