@@ -423,6 +423,14 @@
     "invalidUrl": "Invalid YouTube URL. Accepted formats: youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...",
     "hint": "Paste a YouTube link to enrich your memory with a music video, movie clip, or special moment."
   },
+  "socialLinks": {
+    "title": "Social Links",
+    "description": "Add Facebook, Instagram, TikTok or LinkedIn links",
+    "placeholder": "https://www.instagram.com/...",
+    "add": "Add",
+    "invalidUrl": "Unrecognized URL. Paste a Facebook, Instagram, TikTok or LinkedIn link.",
+    "hint": "Paste a social media link to enrich your memory."
+  },
   "seniorEditor": {
     "createMemory": "New memory",
     "step1Label": "Give a title",

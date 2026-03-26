@@ -51,6 +51,7 @@ import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
 import { determineContentType, validateContentForPlan } from '@/lib/capsuleTypeUtils';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -98,6 +99,7 @@ const CapsuleEdit = () => {
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   const [mediaError, setMediaError] = useState(false);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -177,6 +179,9 @@ const CapsuleEdit = () => {
             setYoutubeUrls(meta.youtube_urls);
           } else if (meta.youtube_url) {
             setYoutubeUrls([meta.youtube_url]);
+          }
+          if (meta.social_links && Array.isArray(meta.social_links)) {
+            setSocialLinks(meta.social_links);
           }
         }
 
@@ -286,13 +291,16 @@ const CapsuleEdit = () => {
     );
 
     try {
-      // Prepare metadata with YouTube URL if present
+      // Prepare metadata with YouTube URL and social links if present
       const metadata: Record<string, any> = {};
       if (youtubeUrls.length > 0) {
         metadata.youtube_urls = youtubeUrls;
         metadata.youtube_ids = youtubeUrls.map(u => extractYouTubeId(u)).filter(Boolean);
         metadata.youtube_url = youtubeUrls[0];
         metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
+      }
+      if (socialLinks.length > 0) {
+        metadata.social_links = socialLinks;
       }
 
       // Update the capsule
@@ -553,6 +561,12 @@ const CapsuleEdit = () => {
             <YouTubeEmbed
               value={youtubeUrls}
               onChange={setYoutubeUrls}
+            />
+
+            {/* Social Links */}
+            <SocialLinksEmbed
+              value={socialLinks}
+              onChange={setSocialLinks}
             />
 
             {/* Tags */}

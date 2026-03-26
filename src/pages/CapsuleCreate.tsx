@@ -45,6 +45,7 @@ import MemoryDateSelector, {
 import { useIsMobile } from '@/hooks/use-mobile';
 import NoIndex from '@/components/seo/NoIndex';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 import SeniorFriendlyEditor from '@/components/capsule/SeniorFriendlyEditor';
 
 import type { Database } from '@/integrations/supabase/types';
@@ -84,6 +85,7 @@ const CapsuleCreate = () => {
   const [legacyGuardianId, setLegacyGuardianId] = useState<string | null>(null);
   const [mediaError, setMediaError] = useState(false);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   
   // Reference to the upload function from UnifiedMediaSection component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
@@ -275,7 +277,7 @@ const CapsuleCreate = () => {
       // Prepare memory date storage values
       const memoryDateStorage = memoryDateToStorage(memoryDate);
 
-      // Prepare metadata with YouTube URL if present
+      // Prepare metadata with YouTube URL and social links if present
       const metadata: Record<string, any> = {};
       if (youtubeUrls.length > 0) {
         metadata.youtube_urls = youtubeUrls;
@@ -283,6 +285,9 @@ const CapsuleCreate = () => {
         // Keep backward compat
         metadata.youtube_url = youtubeUrls[0];
         metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
+      }
+      if (socialLinks.length > 0) {
+        metadata.social_links = socialLinks;
       }
 
       // Create the capsule
@@ -468,6 +473,8 @@ const CapsuleCreate = () => {
         onMemoryDateChange={setMemoryDate}
         youtubeUrls={youtubeUrls}
         onYoutubeUrlsChange={setYoutubeUrls}
+        socialLinks={socialLinks}
+        onSocialLinksChange={setSocialLinks}
         isSaving={isSaving}
         onSaveDraft={() => saveCapsule('draft')}
         onPublish={() => saveCapsule('published')}
