@@ -493,7 +493,7 @@ const CapsuleDetail = () => {
 
               {/* Actions on hero - only for owner */}
               {isOwner &&
-            <div className="absolute top-4 right-4 flex gap-2">
+            <div className="absolute top-4 right-4 flex gap-2 z-[3]">
                   <Button
                 variant="ghost"
                 size="icon"
