@@ -77,17 +77,27 @@ export const useStoryMode = () => {
       const filePaths = mediaWithCapsules.map(({ media }) => media.file_url);
       const signedUrlsMap = await getSignedUrls('capsule-medias', filePaths);
 
-      // Build story items with signed URLs
+      // Separate audio from visual media, build story items and audio tracks
       const storyItems: StoryItem[] = [];
+      const bgAudioTracks: AudioTrack[] = [];
 
       mediaWithCapsules.forEach(({ media, capsule }) => {
+        const isAudio = media.file_type.startsWith('audio/');
+        
+        if (isAudio) {
+          bgAudioTracks.push({
+            id: media.id,
+            url: signedUrlsMap[media.file_url] || '',
+            label: media.caption || capsule.title,
+          });
+          return;
+        }
+
         const mediaType = media.file_type.startsWith('image/') 
-          ? 'image' 
+          ? 'image' as const
           : media.file_type.startsWith('video/') 
-            ? 'video' 
-            : media.file_type.startsWith('audio/') 
-              ? 'audio' 
-              : 'text';
+            ? 'video' as const
+            : 'text' as const;
 
         storyItems.push({
           id: `${capsule.id}-${media.id}`,
@@ -121,6 +131,7 @@ export const useStoryMode = () => {
 
       if (storyItems.length > 0) {
         setItems(storyItems);
+        setAudioTracks(bgAudioTracks);
         setInitialIndex(startIndex);
         setIsOpen(true);
       }
