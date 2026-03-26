@@ -39,6 +39,7 @@ import UnifiedMediaSection, { type MediaFile, type UploadResult } from './Unifie
 import CategorySelector from './CategorySelector';
 import MemoryDateSelector, { type MemoryDateValue } from './MemoryDateSelector';
 import YouTubeEmbed from './YouTubeEmbed';
+import SocialLinksEmbed, { type SocialLink } from './SocialLinksEmbed';
 import { AudioRecorder } from './AudioRecorder';
 
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
