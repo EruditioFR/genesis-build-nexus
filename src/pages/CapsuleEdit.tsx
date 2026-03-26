@@ -97,7 +97,7 @@ const CapsuleEdit = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [memoryDate, setMemoryDate] = useState<Date | null>(null);
   const [mediaError, setMediaError] = useState(false);
-  const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
+  const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
   
   // Reference to the upload function from MediaUpload component
   const uploadAllFilesRef = useRef<() => Promise<UploadResult>>();
