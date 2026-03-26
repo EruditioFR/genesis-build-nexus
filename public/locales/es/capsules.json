@@ -414,6 +414,14 @@
       "audio": "audio"
     }
   },
+  "socialLinks": {
+    "title": "Enlaces sociales",
+    "description": "Añade enlaces de Facebook, Instagram, TikTok o LinkedIn",
+    "placeholder": "https://www.instagram.com/...",
+    "add": "Añadir",
+    "invalidUrl": "URL no reconocida. Pega un enlace de Facebook, Instagram, TikTok o LinkedIn.",
+    "hint": "Pega un enlace de red social para enriquecer tu recuerdo."
+  },
   "seniorEditor": {
     "createMemory": "Nuevo recuerdo",
     "step1Label": "Pon un título",

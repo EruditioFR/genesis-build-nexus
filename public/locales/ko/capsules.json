@@ -414,6 +414,14 @@
       "audio": "오디오"
     }
   },
+  "socialLinks": {
+    "title": "소셜 링크",
+    "description": "Facebook, Instagram, TikTok 또는 LinkedIn 링크를 추가하세요",
+    "placeholder": "https://www.instagram.com/...",
+    "add": "추가",
+    "invalidUrl": "인식할 수 없는 URL입니다. Facebook, Instagram, TikTok 또는 LinkedIn 링크를 붙여넣으세요.",
+    "hint": "소셜 미디어 링크를 붙여넣어 추억을 풍성하게 만드세요."
+  },
   "seniorEditor": {
     "createMemory": "새 추억",
     "step1Label": "제목 입력",
