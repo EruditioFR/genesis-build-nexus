@@ -269,17 +269,6 @@ const CirclesPage = () => {
         </motion.div>
 
 
-        {/* Section header for my circles */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="mt-8 mb-4"
-        >
-          <h2 className="text-lg font-display font-semibold text-foreground">
-            {t('circles.myCircles')}
-          </h2>
-        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Circles List */}
