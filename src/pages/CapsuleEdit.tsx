@@ -603,28 +603,8 @@ const CapsuleEdit = () => {
               <TagInput tags={tags} onChange={setTags} />
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex-1 gap-2"
-                onClick={() => saveCapsule('draft')}
-                disabled={isSaving}
-              >
-                <Save className="w-4 h-4" />
-                {t('create.saveDraft')}
-              </Button>
-              <Button
-                size="lg"
-                className="flex-1 gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
-                onClick={() => saveCapsule('published')}
-                disabled={isSaving}
-              >
-                <Send className="w-4 h-4" />
-                {t('create.publish')}
-              </Button>
-            </div>
+            {/* Spacer for sticky buttons */}
+            <div className="h-28" />
           </motion.div>
 
           {/* Preview Column */}
@@ -646,6 +626,31 @@ const CapsuleEdit = () => {
           </motion.div>
         </div>
       </main>
+
+      {/* Floating action buttons */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3">
+          <Button
+            variant="outline"
+            size="lg"
+            className="flex-1 h-12 gap-2"
+            onClick={() => saveCapsule('draft')}
+            disabled={isSaving}
+          >
+            <Save className="w-4 h-4" />
+            {t('create.saveDraft')}
+          </Button>
+          <Button
+            size="lg"
+            className="flex-1 h-12 gap-2 bg-gradient-gold hover:opacity-90 text-primary-foreground shadow-gold"
+            onClick={() => saveCapsule('published')}
+            disabled={isSaving}
+          >
+            <Send className="w-4 h-4" />
+            {t('create.publish')}
+          </Button>
+        </div>
+      </div>
 
       <MobileBottomNav />
     </div>

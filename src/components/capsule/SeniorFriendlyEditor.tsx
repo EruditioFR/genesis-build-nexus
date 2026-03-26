@@ -1169,29 +1169,8 @@ const SeniorFriendlyEditor = ({
               )}
             </div>
 
-            {/* Action buttons - VERY LARGE */}
-            <div className="space-y-4 pt-4">
-              <Button
-                size="lg"
-                className="w-full h-16 text-xl gap-3 bg-gradient-to-r from-secondary to-secondary/80 hover:opacity-90 text-secondary-foreground shadow-lg transition-transform hover:scale-[1.02]"
-                onClick={onPublish}
-                disabled={isSaving}
-              >
-                <Send className="w-7 h-7" />
-                {t('seniorEditor.publish', 'Publier mon souvenir')}
-              </Button>
-              
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full h-14 text-lg gap-3 border-2"
-                onClick={onSaveDraft}
-                disabled={isSaving}
-              >
-                <Save className="w-6 h-6" />
-                {t('seniorEditor.saveDraft', 'Enregistrer comme brouillon')}
-              </Button>
-            </div>
+            {/* Spacer for sticky buttons */}
+            <div className="h-36" />
           </div>
         );
     }
@@ -1375,9 +1354,9 @@ const SeniorFriendlyEditor = ({
         </div>
       </div>
 
-      {/* Fixed bottom navigation - LARGE buttons */}
+      {/* Fixed bottom navigation */}
       {currentStep < 4 && activeMediaSection === 'menu' && (
-        <div className="fixed bottom-0 left-0 right-0 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
           <div className="max-w-5xl mx-auto flex gap-4">
             {currentStep > 0 && (
               <Button
@@ -1404,6 +1383,33 @@ const SeniorFriendlyEditor = ({
             >
               {t('seniorEditor.continue', 'Continuer')}
               <ChevronRight className="w-6 h-6" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Fixed bottom: Publish & Draft buttons on review step */}
+      {currentStep === 4 && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row gap-3">
+            <Button
+              size="lg"
+              className="flex-1 h-14 text-lg gap-3 bg-gradient-to-r from-secondary to-secondary/80 hover:opacity-90 text-secondary-foreground shadow-lg"
+              onClick={onPublish}
+              disabled={isSaving}
+            >
+              <Send className="w-6 h-6" />
+              {t('seniorEditor.publish', 'Publier mon souvenir')}
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="flex-1 h-14 text-lg gap-3 border-2"
+              onClick={onSaveDraft}
+              disabled={isSaving}
+            >
+              <Save className="w-6 h-6" />
+              {t('seniorEditor.saveDraft', 'Enregistrer comme brouillon')}
             </Button>
           </div>
         </div>
