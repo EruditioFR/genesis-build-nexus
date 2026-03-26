@@ -180,6 +180,9 @@ const CapsuleEdit = () => {
           } else if (meta.youtube_url) {
             setYoutubeUrls([meta.youtube_url]);
           }
+          if (meta.social_links && Array.isArray(meta.social_links)) {
+            setSocialLinks(meta.social_links);
+          }
         }
 
         // Fetch existing media
