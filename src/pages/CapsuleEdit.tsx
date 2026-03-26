@@ -288,9 +288,11 @@ const CapsuleEdit = () => {
     try {
       // Prepare metadata with YouTube URL if present
       const metadata: Record<string, any> = {};
-      if (youtubeUrl) {
-        metadata.youtube_url = youtubeUrl;
-        metadata.youtube_id = extractYouTubeId(youtubeUrl);
+      if (youtubeUrls.length > 0) {
+        metadata.youtube_urls = youtubeUrls;
+        metadata.youtube_ids = youtubeUrls.map(u => extractYouTubeId(u)).filter(Boolean);
+        metadata.youtube_url = youtubeUrls[0];
+        metadata.youtube_id = extractYouTubeId(youtubeUrls[0]);
       }
 
       // Update the capsule
