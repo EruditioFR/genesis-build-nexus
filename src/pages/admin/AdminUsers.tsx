@@ -67,6 +67,7 @@ export default function AdminUsers() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserWithStorage | null>(null);
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [suspendReason, setSuspendReason] = useState("");
 
   useEffect(() => {
