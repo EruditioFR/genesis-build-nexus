@@ -413,7 +413,8 @@ const CapsuleDetail = () => {
           items={storyItems}
           initialIndex={initialIndex}
           onClose={closeStory}
-          autoPlay />
+          autoPlay
+          audioTracks={storyAudioTracks} />
 
         }
       </AnimatePresence>

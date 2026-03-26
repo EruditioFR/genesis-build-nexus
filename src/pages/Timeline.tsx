@@ -360,6 +360,7 @@ const Timeline = () => {
             initialIndex={initialIndex}
             onClose={closeStory}
             autoPlay
+            audioTracks={storyAudioTracks}
           />
         )}
       </AnimatePresence>
