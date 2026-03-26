@@ -68,6 +68,8 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<UserWithStorage | null>(null);
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [suspendReason, setSuspendReason] = useState("");
 
   useEffect(() => {
@@ -166,6 +168,30 @@ export default function AdminUsers() {
       toast.success("Utilisateur réactivé");
       fetchUsers();
     }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!selectedUser || !isAdmin) return;
+    setDeleting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("admin-delete-user", {
+        body: { user_id: selectedUser.user_id },
+      });
+
+      if (error || data?.error) {
+        toast.error(data?.error || "Erreur lors de la suppression");
+      } else {
+        toast.success(`${selectedUser.display_name || "Utilisateur"} supprimé définitivement`);
+        fetchUsers();
+      }
+    } catch {
+      toast.error("Erreur lors de la suppression");
+    }
+
+    setDeleting(false);
+    setDeleteDialogOpen(false);
+    setSelectedUser(null);
   };
 
   const getSubscriptionBadge = (level: string) => {
@@ -314,6 +340,17 @@ export default function AdminUsers() {
                                   Suspendre
                                 </DropdownMenuItem>
                               )}
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedUser(user);
+                                  setDeleteDialogOpen(true);
+                                }}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Supprimer
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         )}
@@ -433,6 +470,30 @@ export default function AdminUsers() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setProfileDialogOpen(false)}>
               Fermer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Supprimer l'utilisateur</DialogTitle>
+            <DialogDescription>
+              Êtes-vous sûr de vouloir supprimer définitivement le compte de{" "}
+              <span className="font-semibold text-foreground">
+                {selectedUser?.display_name || "cet utilisateur"}
+              </span>{" "}
+              ? Cette action est irréversible. Toutes les données associées seront perdues.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
+              Annuler
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteUser} disabled={deleting}>
+              {deleting ? "Suppression..." : "Supprimer définitivement"}
             </Button>
           </DialogFooter>
         </DialogContent>
