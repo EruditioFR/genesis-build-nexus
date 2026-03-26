@@ -32,6 +32,7 @@ interface MediaWithCapsule {
     id: string;
     file_url: string;
     file_type: string;
+    file_name: string | null;
     caption: string | null;
   };
   capsule: Capsule;
