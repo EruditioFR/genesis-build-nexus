@@ -111,7 +111,7 @@ const DashboardInspirationWidget = () => {
                     <span className="text-2xl flex-shrink-0">{category.emoji}</span>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground">{category.title}</span>
+                        <span className="text-base font-semibold text-foreground">{category.title}</span>
                         {isComplete && (
                           <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 text-[10px] px-1.5 py-0">
                             <Check className="h-2.5 w-2.5 mr-0.5" />
