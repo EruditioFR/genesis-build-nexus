@@ -205,6 +205,7 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
                     <img
                       src={url}
                       alt={media.file_name || 'Image'}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center gap-2">
