@@ -120,8 +120,8 @@ const DashboardInspirationWidget = () => {
                         )}
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <Progress value={progress.percentage} className="h-1.5 flex-1 max-w-28" />
-                        <span className="text-[10px] text-muted-foreground">{progress.used}/{progress.total}</span>
+                         <Progress value={progress.percentage} className="h-2 flex-1 max-w-32" />
+                         <span className="text-xs text-muted-foreground">{progress.used}/{progress.total}</span>
                       </div>
                     </div>
                     <ChevronDown
