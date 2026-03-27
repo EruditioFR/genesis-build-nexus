@@ -141,30 +141,31 @@ const DashboardInspirationWidget = () => {
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-3 pb-3 space-y-1.5">
-                          {category.prompts.map((prompt, index) => {
-                            const isUsed = usedPromptIds.has(prompt.id);
+                         <div className="px-4 pb-4 space-y-2">
+                           {category.prompts.map((prompt, index) => {
+                             const isUsed = usedPromptIds.has(prompt.id);
 
-                            return isUsed ? (
-                              <div
-                                key={prompt.id}
-                                className="flex items-center gap-2.5 p-2.5 rounded-lg bg-muted/30 opacity-50"
-                              >
-                                <Check className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                <p className="text-xs text-muted-foreground line-through flex-1">{prompt.question}</p>
-                              </div>
-                            ) : (
-                              <Link
-                                key={prompt.id}
-                                to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
-                                onClick={() => setOpen(false)}
-                                className="flex items-center gap-2.5 p-2.5 rounded-lg bg-background border border-border/50 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all group"
-                              >
-                                <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted text-[10px] font-medium text-muted-foreground flex-shrink-0">
-                                  {index + 1}
-                                </span>
-                                <p className="text-xs text-foreground flex-1 leading-snug">{prompt.question}</p>
-                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-orange-500 flex-shrink-0 transition-colors" />
+                             return isUsed ? (
+                               <div
+                                 key={prompt.id}
+                                 className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 opacity-50"
+                               >
+                                 <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                                 <p className="text-sm text-muted-foreground line-through flex-1">{prompt.question}</p>
+                               </div>
+                             ) : (
+                               <Link
+                                 key={prompt.id}
+                                 to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
+                                 onClick={() => setOpen(false)}
+                                 className="flex items-center gap-3 p-3 rounded-lg bg-background border border-border/50 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all group"
+                               >
+                                 <span className="flex h-7 w-7 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground flex-shrink-0">
+                                   {index + 1}
+                                 </span>
+                                 <p className="text-sm text-foreground flex-1 leading-relaxed">{prompt.question}</p>
+                                 <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-orange-500 flex-shrink-0 transition-colors" />
+                               </Link>
                               </Link>
                             );
                           })}
