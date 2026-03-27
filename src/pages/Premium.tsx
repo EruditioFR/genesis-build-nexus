@@ -52,7 +52,7 @@ const Premium = () => {
   ];
 
   const heritageFeatures = [
-    { feature: 'Espace de stockage', value: '15 Go', icon: HardDrive },
+    { feature: 'Espace de stockage', value: '20 Go', icon: HardDrive },
     { feature: 'Tous les formats de capsules', value: 'Texte, photo, vidéo, audio', icon: Sparkles },
     { feature: 'Chronologie avancée', value: true, icon: Zap },
     { feature: 'Partages illimités', value: 'Famille & amis', icon: Users },
