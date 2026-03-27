@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+// Module-level cache to avoid re-fetching categories across component mounts
+let cachedCategories: Category[] | null = null;
+let cachedSubCategories: SubCategory[] | null = null;
+let cacheTimestamp = 0;
+const CATEGORIES_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 import { supabase } from '@/integrations/supabase/client';
 
 export interface Category {
