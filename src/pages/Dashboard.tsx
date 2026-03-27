@@ -184,7 +184,7 @@ const Dashboard = () => {
         // Fetch stats - total capsules
         const { count: capsuleCount } = await supabase
           .from('capsules')
-          .select('*', { count: 'exact', head: true })
+          .select('id', { count: 'exact', head: true })
           .eq('user_id', user.id);
 
         // Fetch stats - total medias and calculate actual storage used

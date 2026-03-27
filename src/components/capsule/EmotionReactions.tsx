@@ -74,7 +74,7 @@ const EmotionReactions = ({ capsuleId }: EmotionReactionsProps) => {
   const fetchReactions = useCallback(async () => {
     const { data } = await supabase
       .from('capsule_reactions')
-      .select('*')
+      .select('id, user_id, emotion_key')
       .eq('capsule_id', capsuleId);
     if (data) setReactions(data as Reaction[]);
   }, [capsuleId]);

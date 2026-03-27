@@ -290,7 +290,7 @@ const CapsulesList = () => {
 
       const { data: capsulesData, error } = await supabase
         .from('capsules')
-        .select('*')
+        .select('id, title, description, capsule_type, status, created_at, updated_at, thumbnail_url, tags, memory_date, memory_date_precision, memory_date_year_end, metadata, scheduled_at, content')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 

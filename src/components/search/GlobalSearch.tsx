@@ -117,7 +117,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
           // Also include tag matches
           const { data: allCapsules } = await supabase
             .from('capsules')
-            .select('*')
+            .select('id, title, description, capsule_type, created_at, thumbnail_url, tags')
             .eq('user_id', userId);
 
           if (allCapsules) {
