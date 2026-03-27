@@ -71,7 +71,7 @@ const DashboardInspirationWidget = () => {
 
       {/* Dialog with categories & questions */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto p-0 gap-0">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-0 gap-0">
           <DialogHeader className="p-5 pb-3 sticky top-0 bg-background z-10 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-md">
