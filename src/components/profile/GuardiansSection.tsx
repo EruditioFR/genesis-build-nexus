@@ -80,7 +80,7 @@ const GuardiansSection = ({ userId }: GuardiansSectionProps) => {
     try {
       const { data, error } = await supabase
         .from('guardians')
-        .select('id, guardian_email, guardian_name, guardian_user_id, verified_at, created_at')
+        .select('*')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 

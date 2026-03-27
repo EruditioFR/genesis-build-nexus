@@ -234,7 +234,7 @@ const Timeline = () => {
         const [capsulesRes, profileRes] = await Promise.all([
           supabase
             .from('capsules')
-            .select('id, title, description, capsule_type, status, created_at, memory_date, memory_date_precision, memory_date_year_end, thumbnail_url, tags, metadata, content')
+            .select('*')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false }),
           supabase

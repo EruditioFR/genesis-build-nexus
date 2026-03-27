@@ -61,7 +61,7 @@ const CommentsSection = ({ capsuleId, currentUserId }: CommentsSectionProps) => 
     try {
       const { data, error } = await supabase
         .from('comments')
-        .select('id, user_id, content, created_at')
+        .select('*')
         .eq('capsule_id', capsuleId)
         .order('created_at', { ascending: true });
 

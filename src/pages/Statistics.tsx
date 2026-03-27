@@ -72,7 +72,7 @@ const Statistics = () => {
         // Step 1: Load profile and capsules first
         const [profileRes, capsulesRes, circlesRes] = await Promise.all([
           supabase.from('profiles').select('display_name, avatar_url').eq('user_id', user.id).maybeSingle(),
-          supabase.from('capsules').select('id, capsule_type, status, created_at, memory_date, memory_date_precision, tags').eq('user_id', user.id),
+          supabase.from('capsules').select('*').eq('user_id', user.id),
           supabase.from('circles').select('id').eq('owner_id', user.id),
         ]);
 
