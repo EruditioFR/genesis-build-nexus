@@ -102,7 +102,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
         if (filteredResults.length === 0) {
           const { data: allCapsules } = await supabase
             .from('capsules')
-            .select('*')
+            .select('id, title, description, capsule_type, created_at, thumbnail_url, tags')
             .eq('user_id', userId)
             .order('created_at', { ascending: false });
 
