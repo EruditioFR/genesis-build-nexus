@@ -167,7 +167,6 @@ export default function AdminSubscriptions() {
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-muted-foreground">{freeStats.total}</div>
             <p className="text-xs text-muted-foreground">Gratuit</p>
-            <p className="mt-1 text-xs text-muted-foreground">{freeStats.offerts} offert(s) · {freeStats.payants} payant(s)</p>
           </CardContent>
         </Card>
         <Card className="border-primary/50">
