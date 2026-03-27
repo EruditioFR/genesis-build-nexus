@@ -608,7 +608,6 @@ const CapsulesList = () => {
                       navigate={(path) => navigate(path)}
                       onDelete={openDeleteDialog}
                     />
-                    {/* Ad every 4 capsules */}
                     {(index + 1) % 4 === 0 && index < rest.length - 1 && (
                       <div className="col-span-1 sm:col-span-2">
                         <AdBanner className="my-2" />
@@ -616,6 +615,27 @@ const CapsulesList = () => {
                     )}
                   </React.Fragment>
                 ))}
+              </div>
+            )}
+
+            {/* Load More */}
+            {hasMore && (
+              <div className="flex justify-center pt-4">
+                <Button
+                  variant="outline"
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                  className="gap-2"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      {t('list.loading', 'Chargement...')}
+                    </>
+                  ) : (
+                    t('list.loadMore', 'Charger plus')
+                  )}
+                </Button>
               </div>
             )}
           </div>
