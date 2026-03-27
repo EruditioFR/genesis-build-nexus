@@ -45,8 +45,8 @@ const plans: PlanInfo[] = [
   {
     id: 'legacy',
     name: 'Héritage',
-    storageMb: 15360,
-    storageLabel: '15 Go',
+    storageMb: 20480,
+    storageLabel: '20 Go',
     price: '19,99€/mois',
     color: 'bg-primary',
     features: ['Stockage massif', 'Arbre généalogique', 'Partages illimités'],
