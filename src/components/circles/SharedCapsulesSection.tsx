@@ -218,20 +218,6 @@ const SharedCapsulesSection = ({ userId }: SharedCapsulesSectionProps) => {
       transition={{ duration: 0.4, delay: 0.3 }}
       className="space-y-6"
     >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-          <Share className="w-5 h-5 text-accent" />
-        </div>
-        <div>
-          <h2 className="text-xl font-display font-bold text-foreground">
-            {t('circles.sharedWithMe')}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {t('circles.sharedWithMeDesc')}
-          </p>
-        </div>
-      </div>
-
       {sharedData.map((item) => (
         <div
           key={item.circle.id}
