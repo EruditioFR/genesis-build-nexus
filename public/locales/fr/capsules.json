@@ -293,6 +293,8 @@
     "dropHere": "Déposez vos fichiers ici",
     "dragDrop": "Glissez-déposez vos fichiers",
     "clickToSelect": "ou cliquez pour sélectionner • Max {{maxFiles}} fichiers, {{maxSize}} Mo chacun",
+    "clickToSelectCount": "ou cliquez pour sélectionner • Max {{maxFiles}} fichiers",
+    "sizeLimits": "Photos : 3 Mo • Vidéos : 50 Mo • Audio : 10 Mo",
     "audioSupported": "Fichiers audio supportés",
     "allSupported": "Images, vidéos et audio supportés",
     "formatNotSupported": "Format non supporté: {{type}}",
