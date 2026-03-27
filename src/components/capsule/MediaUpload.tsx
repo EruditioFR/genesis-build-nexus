@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioRecorder } from './AudioRecorder';
+import { compressImageIfNeeded } from '@/lib/imageCompression';
 
 export interface MediaFile {
   id: string;

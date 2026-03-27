@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioRecorder } from './AudioRecorder';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { compressImageIfNeeded } from '@/lib/imageCompression';
 
 export interface MediaFile {
   id: string;
