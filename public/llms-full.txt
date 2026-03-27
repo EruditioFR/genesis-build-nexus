@@ -1,0 +1,165 @@
+# Family Garden — Documentation complète pour LLM
+
+> Family Garden est une plateforme française de journal de famille privé et sécurisé. Elle permet de créer, organiser et partager des souvenirs multimédia avec ses proches dans un environnement chiffré et conforme au RGPD.
+
+## Présentation détaillée
+
+Family Garden répond au besoin des familles de préserver leurs souvenirs de manière durable, privée et organisée. Plutôt que de disperser ses photos sur 10 applications différentes, Family Garden rassemble tous les types de médias (photos, vidéos, enregistrements audio, textes) dans des « capsules mémorielles » contextualisées.
+
+Chaque capsule est enrichie d'une date, d'un lieu et des personnes impliquées, puis organisée automatiquement sur une chronologie interactive. L'utilisateur garde un contrôle total sur la confidentialité : il crée des cercles de partage (famille proche, grands-parents, amis) et choisit précisément quelles capsules partager avec qui.
+
+## Qu'est-ce qu'une capsule mémorielle ?
+
+Une capsule mémorielle est un conteneur numérique sécurisé qui rassemble :
+- Des **photos** (formats courants : JPEG, PNG, WebP)
+- Des **vidéos** (MP4 et autres formats courants)
+- Des **enregistrements audio** (enregistrement direct ou import)
+- Du **texte riche** (éditeur intégré avec mise en forme)
+- Des **métadonnées** : date du souvenir (avec précision variable : jour, mois, année, période), lieu, personnes liées, tags, catégories
+
+Les capsules peuvent être organisées en catégories thématiques (enfance, voyages, fêtes, quotidien, etc.) et sous-catégories.
+
+## Fonctionnalités en détail
+
+### 1. Capsules mémorielles multimédia
+Créez des souvenirs complets combinant tous les types de médias. L'éditeur intuitif guide l'utilisateur étape par étape. Un mode « senior-friendly » simplifie l'interface pour les utilisateurs moins à l'aise avec la technologie.
+
+### 2. Chronologie interactive par décennies
+Visualisez l'ensemble de votre histoire familiale sur une frise temporelle. Naviguez par décennies, puis par années et par mois. Chaque capsule est positionnée à sa date exacte, permettant de revivre les souvenirs dans leur contexte temporel.
+
+### 3. Cercles de partage sécurisés
+- Créez des cercles nommés (ex : « Famille proche », « Grands-parents », « Amis d'enfance »)
+- Invitez des membres par email
+- Définissez les permissions par cercle
+- Partagez des capsules spécifiques avec des cercles spécifiques
+- Les membres reçoivent des notifications lors de nouveaux partages
+
+### 4. Arbre généalogique interactif
+- Créez visuellement votre arbre familial
+- Ajoutez des personnes avec photos, dates de naissance/décès, biographies
+- Reliez les personnes par des relations (parent-enfant, unions)
+- Associez des capsules mémorielles aux personnes de l'arbre
+- Import/export au format GEDCOM (standard généalogique)
+
+### 5. Catégories et organisation
+Les capsules peuvent être classées dans des catégories prédéfinies :
+- Enfance & jeunesse
+- Vie de famille
+- Voyages & aventures
+- Fêtes & célébrations
+- Vie quotidienne
+- Carrière & accomplissements
+- Traditions & recettes
+- Et d'autres catégories personnalisables
+
+### 6. Export et sauvegarde
+- Export de capsules individuelles en PDF haute qualité
+- Récupération de tous les médias (photos, vidéos, audio)
+- Export de l'arbre généalogique au format GEDCOM
+- Les données restent accessibles même en cas de passage au plan gratuit
+
+### 7. Legs posthume (offre Héritage)
+- Désignez des « gardiens » (contacts de confiance)
+- Programmez la transmission de capsules spécifiques
+- Définissez des conditions d'accès et des révélations différées
+- Laissez des messages personnels pour chaque destinataire
+
+### 8. Inspirations et suggestions guidées
+- L'application propose des idées de souvenirs à créer
+- Des prompts guidés aident à démarrer l'écriture
+- Des suggestions saisonnières et contextuelles stimulent la création
+
+## Sécurité et confidentialité
+
+### Chiffrement
+- Standard AES-256 (niveau bancaire) pour toutes les données
+- Communications HTTPS/TLS
+
+### Hébergement
+- Serveurs situés en Union Européenne
+- Conformité totale au RGPD (Règlement Général sur la Protection des Données)
+- Sauvegardes quotidiennes automatiques
+
+### Contrôle utilisateur
+- L'utilisateur est propriétaire de ses données
+- Contrôle granulaire des permissions de partage
+- Possibilité d'exporter et supprimer ses données à tout moment
+- Aucune revente ni exploitation commerciale des données personnelles
+
+## Offres et tarifs détaillés
+
+### Gratuit
+- 250 Mo de stockage
+- Capsules texte et photo uniquement
+- Chronologie basique
+- Avec publicité
+- Idéal pour découvrir la plateforme
+
+### Premium — 4,99 €/mois (ou abonnement annuel avec -17%)
+- 10 Go de stockage
+- Tous les formats : texte, photo, vidéo, audio
+- Partage avec 1 personne de son choix
+- Chronologie avancée
+- Sans publicité
+- Offre de lancement : -50% pendant 3 mois
+
+### Héritage — 9,99 €/mois (ou abonnement annuel avec -17%)
+- 20 Go de stockage
+- Tous les formats : texte, photo, vidéo, audio
+- Partage illimité
+- Chronologie avancée
+- Arbre généalogique interactif
+- Création de podcasts à partir des souvenirs
+- Support VIP par WhatsApp
+- Legs posthume programmé
+- Sans publicité
+
+## FAQ
+
+### Qu'est-ce qu'une capsule mémorielle ?
+Une capsule mémorielle est un conteneur numérique sécurisé qui préserve vos souvenirs sous forme de textes, photos, vidéos et enregistrements audio. C'est votre histoire personnelle, organisée chronologiquement sur une frise interactive, prête à être transmise aux générations futures.
+
+### Mes données sont-elles sécurisées ?
+Oui. Vos données sont chiffrées avec le standard AES-256, stockées sur des serveurs européens conformes au RGPD, et sauvegardées quotidiennement. Vous gardez un contrôle total sur qui peut accéder à vos souvenirs.
+
+### Comment fonctionne le partage familial ?
+Vous créez des cercles de confiance et invitez des membres par email. Pour chaque cercle, vous définissez les permissions : lecture seule, commentaires ou contribution.
+
+### Que se passe-t-il si je ne renouvelle pas ?
+Vos données ne sont jamais supprimées automatiquement. En passant au plan gratuit, vous conservez l'accès en lecture. Vous pouvez exporter vos données à tout moment.
+
+### Comment fonctionne le legs posthume ?
+Avec l'offre Héritage, vous désignez des gardiens qui recevront accès à certaines capsules selon vos souhaits. Vous pouvez programmer des révélations différées et laisser des messages personnels.
+
+### Y a-t-il une application mobile ?
+La plateforme web est responsive et fonctionne sur mobile. Des applications natives iOS et Android sont en développement.
+
+### Quelle est la différence avec un album photo en ligne ?
+Family Garden combine capsules multimédia contextualisées, chronologie interactive, arbre généalogique, cercles de partage sécurisés et transmission d'héritage numérique — bien au-delà d'un simple album photo.
+
+## Langues supportées
+
+- 🇫🇷 Français (langue par défaut)
+- 🇬🇧 English
+- 🇪🇸 Español
+- 🇰🇷 한국어
+- 🇨🇳 中文
+
+## Public cible
+
+- Familles souhaitant préserver leurs souvenirs
+- Grands-parents voulant transmettre leur histoire
+- Parents documentant la croissance de leurs enfants
+- Généalogistes amateurs
+- Toute personne soucieuse de créer un héritage numérique privé et sécurisé
+
+## Liens utiles
+
+- Site web : https://www.familygarden.fr
+- FAQ : https://www.familygarden.fr/faq
+- Tarifs : https://www.familygarden.fr/premium
+- À propos : https://www.familygarden.fr/about
+- Inscription gratuite : https://www.familygarden.fr/signup
+- Politique de confidentialité : https://www.familygarden.fr/privacy
+- Conditions générales : https://www.familygarden.fr/terms
+- Mentions légales : https://www.familygarden.fr/mentions-legales

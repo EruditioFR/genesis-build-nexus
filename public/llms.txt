@@ -1,0 +1,62 @@
+# Family Garden
+
+> Family Garden est une plateforme française de journal de famille privé et sécurisé. Elle permet de créer, organiser et partager des souvenirs multimédia (photos, vidéos, audio, textes) avec ses proches dans un environnement chiffré et conforme au RGPD.
+
+## À propos
+
+Family Garden est une application web conçue pour préserver l'héritage familial numérique. Contrairement à un simple album photo, chaque souvenir (appelé « capsule ») combine plusieurs médias avec un contexte (date, lieu, personnes liées) et s'organise automatiquement sur une chronologie interactive par décennies.
+
+## Fonctionnalités principales
+
+- **Capsules mémorielles multimédia** : Combinez photos, vidéos, enregistrements audio et textes dans un seul souvenir contextualisé (date, lieu, personnes).
+- **Chronologie interactive par décennies** : Naviguez dans votre histoire familiale sur une frise temporelle visuelle.
+- **Cercles de partage sécurisés** : Créez des groupes (famille proche, grands-parents, amis) et contrôlez qui voit quoi.
+- **Arbre généalogique interactif** : Reliez les personnes de votre famille et associez-les à vos souvenirs.
+- **Export PDF et sauvegarde** : Exportez vos souvenirs en PDF et récupérez vos médias à tout moment.
+- **Legs posthume** : Programmez la transmission de certains souvenirs à des contacts de confiance.
+- **Support multilingue** : Disponible en français, anglais, espagnol, coréen et chinois.
+
+## Sécurité et confidentialité
+
+- Chiffrement AES-256 de niveau bancaire
+- Hébergement sur serveurs européens conformes au RGPD
+- Sauvegardes quotidiennes automatiques
+- Contrôle total des permissions de partage par l'utilisateur
+- Aucune revente de données personnelles
+
+## Offres et tarifs
+
+- **Gratuit** : 250 Mo de stockage, capsules texte et photo, chronologie basique.
+- **Premium** (4,99 €/mois) : 10 Go, tous formats (vidéo, audio), partage avancé, sans publicité.
+- **Héritage** (9,99 €/mois) : 20 Go, partage illimité, arbre généalogique interactif, legs posthume, support VIP WhatsApp, sans publicité.
+
+## Cas d'usage
+
+- Parents souhaitant documenter la croissance de leurs enfants
+- Grands-parents voulant transmettre leurs histoires aux générations futures
+- Familles reconstituées partageant des souvenirs en cercles privés
+- Généalogistes amateurs organisant leur arbre familial avec des médias
+- Toute personne souhaitant créer un héritage numérique sécurisé
+
+## Informations techniques
+
+- Application web responsive (fonctionne sur mobile, tablette et desktop)
+- Pas d'installation requise, accessible depuis un navigateur
+- Applications natives iOS et Android en développement
+
+## Liens
+
+- Site web : https://www.familygarden.fr
+- FAQ : https://www.familygarden.fr/faq
+- Tarifs : https://www.familygarden.fr/premium
+- À propos : https://www.familygarden.fr/about
+- Politique de confidentialité : https://www.familygarden.fr/privacy
+- Conditions d'utilisation : https://www.familygarden.fr/terms
+
+## Contact
+
+Pour toute question, utilisez le formulaire de contact sur https://www.familygarden.fr (section Contact) ou consultez la FAQ.
+
+## Contenu détaillé
+
+Pour plus de détails, consultez : [llms-full.txt](https://www.familygarden.fr/llms-full.txt)
