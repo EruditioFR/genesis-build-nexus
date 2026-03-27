@@ -139,15 +139,17 @@ export default function AdminSubscriptions() {
   };
 
   // Stats
-  const legacyUsers = users.filter((u) => u.subscription_level === "legacy");
-  const stats = {
-    total: users.length,
-    free: users.filter((u) => u.subscription_level === "free").length,
-    premium: users.filter((u) => u.subscription_level === "premium").length,
-    legacy: legacyUsers.length,
-    legacyOfferts: legacyUsers.filter((u) => u.admin_override).length,
-    legacyPayants: legacyUsers.filter((u) => !u.admin_override).length,
+  const getStats = (level: string) => {
+    const all = users.filter((u) => u.subscription_level === level);
+    return {
+      total: all.length,
+      offerts: all.filter((u) => u.admin_override).length,
+      payants: all.filter((u) => !u.admin_override).length,
+    };
   };
+  const freeStats = getStats("free");
+  const premiumStats = getStats("premium");
+  const legacyStats = getStats("legacy");
 
   return (
     <div className="space-y-6">
