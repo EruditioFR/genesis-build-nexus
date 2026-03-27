@@ -77,8 +77,8 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
     {
       id: 'premium',
       name: t('plans.premium'),
-      storageMb: 5120,
-      storageLabel: '5 Go',
+      storageMb: 10240,
+      storageLabel: '10 Go',
       price: '9,99€/mois',
       color: 'bg-secondary',
       features: [t('plans.premiumFeature1'), t('plans.premiumFeature2'), t('plans.premiumFeature3')],
