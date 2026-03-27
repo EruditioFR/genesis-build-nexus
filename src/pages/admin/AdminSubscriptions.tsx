@@ -139,15 +139,17 @@ export default function AdminSubscriptions() {
   };
 
   // Stats
-  const legacyUsers = users.filter((u) => u.subscription_level === "legacy");
-  const stats = {
-    total: users.length,
-    free: users.filter((u) => u.subscription_level === "free").length,
-    premium: users.filter((u) => u.subscription_level === "premium").length,
-    legacy: legacyUsers.length,
-    legacyOfferts: legacyUsers.filter((u) => u.admin_override).length,
-    legacyPayants: legacyUsers.filter((u) => !u.admin_override).length,
+  const getStats = (level: string) => {
+    const all = users.filter((u) => u.subscription_level === level);
+    return {
+      total: all.length,
+      offerts: all.filter((u) => u.admin_override).length,
+      payants: all.filter((u) => !u.admin_override).length,
+    };
   };
+  const freeStats = getStats("free");
+  const premiumStats = getStats("premium");
+  const legacyStats = getStats("legacy");
 
   return (
     <div className="space-y-6">
@@ -157,31 +159,29 @@ export default function AdminSubscriptions() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-xs text-muted-foreground">Total utilisateurs</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-muted-foreground">{stats.free}</div>
+            <div className="text-2xl font-bold text-muted-foreground">{freeStats.total}</div>
             <p className="text-xs text-muted-foreground">Gratuit</p>
+            <p className="mt-1 text-xs text-muted-foreground">{freeStats.offerts} offert(s) · {freeStats.payants} payant(s)</p>
           </CardContent>
         </Card>
         <Card className="border-primary/50">
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-primary">{stats.premium}</div>
+            <div className="text-2xl font-bold text-primary">{premiumStats.total}</div>
             <p className="text-xs text-muted-foreground">Premium</p>
+            <p className="mt-1 text-xs text-muted-foreground">{premiumStats.offerts} offert(s) · {premiumStats.payants} payant(s)</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-secondary-foreground">{stats.legacy}</div>
+            <div className="text-2xl font-bold text-secondary-foreground">{legacyStats.total}</div>
             <p className="text-xs text-muted-foreground">Legacy</p>
-            <div className="mt-1 flex gap-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><Gift className="h-3 w-3 text-amber-500" />{stats.legacyOfferts} offert(s)</span>
-              <span>·</span>
-              <span>{stats.legacyPayants} payant(s)</span>
-            </div>
+            <p className="mt-1 text-xs text-muted-foreground">{legacyStats.offerts} offert(s) · {legacyStats.payants} payant(s)</p>
           </CardContent>
         </Card>
       </div>
