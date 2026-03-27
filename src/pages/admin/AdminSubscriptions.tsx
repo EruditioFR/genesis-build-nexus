@@ -179,7 +179,7 @@ export default function AdminSubscriptions() {
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-secondary-foreground">{legacyStats.total}</div>
+            <div className="text-2xl font-bold">{legacyStats.total}</div>
             <p className="text-xs text-muted-foreground">Legacy</p>
             <p className="mt-1 text-xs text-muted-foreground">{legacyStats.offerts} offert(s) · {legacyStats.payants} payant(s)</p>
           </CardContent>
