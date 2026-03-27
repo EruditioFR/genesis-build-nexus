@@ -166,8 +166,7 @@ const DashboardInspirationWidget = () => {
                                  <p className="text-sm text-foreground flex-1 leading-relaxed">{prompt.question}</p>
                                  <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-orange-500 flex-shrink-0 transition-colors" />
                                </Link>
-                              </Link>
-                            );
+                             );
                           })}
                         </div>
                       </motion.div>
