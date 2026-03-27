@@ -1,3 +1,4 @@
+# Search engines
 User-agent: Googlebot
 Allow: /
 
@@ -8,6 +9,58 @@ User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
+Allow: /
+
+# AI Crawlers / LLM Bots — autoriser pour le GEO
+User-agent: GPTBot
+Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /invite/
+Disallow: /guardian/
+Disallow: /admin
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /invite/
+Disallow: /guardian/
+Disallow: /admin
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
 Allow: /
 
 User-agent: *
@@ -29,3 +82,6 @@ Disallow: /admin
 
 # Sitemap
 Sitemap: https://www.familygarden.fr/sitemap.xml
+
+# LLM content
+# See https://www.familygarden.fr/llms.txt for LLM-optimized content
