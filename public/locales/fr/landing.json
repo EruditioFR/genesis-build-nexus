@@ -142,7 +142,7 @@
         "promoAfter": "puis {{price}}€/mois après 3 mois",
         "originalPrice": "9,99",
         "features": {
-          "storage": "10 Go de stockage",
+          "storage": "5 Go de stockage",
           "formats": "Souvenirs au format texte, photo, vidéo et audio",
           "sharing": "1 partage de souvenirs à la personne de votre choix",
           "timeline": "Chronologie avancée",
@@ -153,7 +153,7 @@
         "name": "Héritage",
         "description": "Pour les familles multigénérationnelles",
         "features": {
-          "storage": "50 Go de stockage",
+          "storage": "15 Go de stockage",
           "formats": "Souvenirs au format texte, photo, vidéo et audio",
           "sharing": "Partages illimités",
           "timeline": "Chronologie avancée",

@@ -208,7 +208,7 @@ serve(async (req) => {
       .from("profiles")
       .update({ 
         subscription_level: subscriptionLevel,
-        storage_limit_mb: tier === "heritage" ? 51200 : tier === "premium" ? 10240 : 500
+        storage_limit_mb: tier === "heritage" ? 15360 : tier === "premium" ? 5120 : 500
       })
       .eq("user_id", user.id);
 
