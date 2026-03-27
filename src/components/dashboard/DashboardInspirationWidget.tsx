@@ -21,12 +21,8 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
-interface DashboardInspirationWidgetProps {
-  className?: string;
-}
-
-const DashboardInspirationWidget = ({ className }: DashboardInspirationWidgetProps) => {
-  const { usedPromptIds, loading, memoryCategories, getCategoryProgress, getTotalProgress, getUnusedPrompts } = useMemoryPrompts();
+const DashboardInspirationWidget = () => {
+  const { usedPromptIds, loading, memoryCategories, getCategoryProgress, getTotalProgress } = useMemoryPrompts();
   const [open, setOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
@@ -36,34 +32,34 @@ const DashboardInspirationWidget = ({ className }: DashboardInspirationWidgetPro
 
   return (
     <>
-      {/* Floating bubble CTA */}
+      {/* Floating bubble - fixed bottom right */}
       <motion.button
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        initial={{ opacity: 0, y: 40, scale: 0.8 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(true)}
         className={cn(
-          'w-full p-4 rounded-2xl border-2 border-dashed border-secondary/40 bg-gradient-to-r from-secondary/5 to-primary/5',
-          'hover:border-secondary/70 hover:from-secondary/10 hover:to-primary/10',
-          'transition-all cursor-pointer group text-left',
-          className
+          'fixed bottom-6 right-6 z-40 flex items-center gap-3',
+          'pl-4 pr-5 py-3 rounded-full',
+          'bg-gradient-to-r from-secondary to-primary text-white',
+          'shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40',
+          'transition-shadow cursor-pointer',
+          'md:bottom-8 md:right-8'
         )}
       >
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-primary text-white shadow-md flex-shrink-0">
-            <Lightbulb className="h-5 w-5" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground group-hover:text-secondary transition-colors">
-              En manque d'inspiration pour un souvenir ?
-            </p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              50 questions pour guider vos souvenirs · {totalProgress.used} répondu{totalProgress.used > 1 ? 's' : ''}
-            </p>
-          </div>
-          <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-secondary transition-colors flex-shrink-0" />
+        <div className="relative">
+          <Lightbulb className="h-5 w-5" />
+          {/* Pulse indicator */}
+          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
+          </span>
         </div>
+        <span className="text-sm font-semibold whitespace-nowrap hidden sm:inline">
+          En panne d'inspiration ?
+        </span>
       </motion.button>
 
       {/* Dialog with categories & questions */}
