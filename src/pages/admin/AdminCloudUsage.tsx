@@ -227,6 +227,55 @@ export default function AdminCloudUsage() {
   const totalMedias = users.reduce((s, u) => s + u.mediaCount + u.familyMediaCount, 0);
   const usersNearLimit = users.filter(u => u.storageUsedMb > u.storageLimitMb * 0.8).length;
 
+  // Cost estimation (based on Lovable Cloud / Supabase pricing)
+  const costEstimate = useMemo(() => {
+    const storageGb = totalStorage / (1024 * 1024 * 1024);
+    const dbSizeMb = 30; // approximate from schema
+    const activeUsers = users.length;
+    
+    // Compute (Nano instance, auto-pause) ~$0.01344/hour when active
+    // Estimate ~8h active/day for low traffic
+    const computeHoursPerMonth = activeUsers > 100 ? 720 : activeUsers > 20 ? 360 : 240;
+    const computeCost = computeHoursPerMonth * 0.01344;
+    
+    // Storage: $0.021/GB/month for file storage
+    const storageCost = storageGb * 0.021;
+    
+    // Database: included in compute for < 500MB
+    const dbCost = dbSizeMb > 500 ? (dbSizeMb / 1024) * 0.125 : 0;
+    
+    // Bandwidth/Data transfer: estimate ~4.5 pages/visit, ~2400 visits/month
+    // Average ~50KB per API call, ~10 calls per page view
+    const estimatedMonthlyVisits = activeUsers * 70; // rough estimate
+    const estimatedBandwidthGb = (estimatedMonthlyVisits * 10 * 50 * 1024) / (1024 * 1024 * 1024);
+    // First 5GB free, then $0.09/GB
+    const bandwidthCost = Math.max(0, estimatedBandwidthGb - 5) * 0.09;
+    
+    // Edge functions: ~$0.20 base + $0.000002 per invocation
+    const edgeFnInvocations = estimatedMonthlyVisits * 2; // ~2 fn calls per visit
+    const edgeFnCost = 0.20 + edgeFnInvocations * 0.000002;
+    
+    // Auth: free for < 50K MAU
+    const authCost = 0;
+    
+    const total = computeCost + storageCost + dbCost + bandwidthCost + edgeFnCost + authCost;
+    const freeCredit = 25;
+    
+    return {
+      compute: computeCost,
+      storage: storageCost,
+      database: dbCost,
+      bandwidth: bandwidthCost,
+      edgeFunctions: edgeFnCost,
+      auth: authCost,
+      total,
+      freeCredit,
+      netCost: Math.max(0, total - freeCredit),
+      storageGb,
+      estimatedMonthlyVisits,
+    };
+  }, [totalStorage, users.length]);
+
   const typeIcon = (type: string) => {
     switch (type) {
       case "photo": return <Image className="w-3.5 h-3.5 text-emerald-500" />;
