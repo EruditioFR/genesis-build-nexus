@@ -304,6 +304,7 @@
     "timeoutError": "超时 - 文件太大或连接太慢",
     "uploadError": "错误 {{status}}",
     "recordingAdded": "录音已添加！",
+    "imageCompressed": "图片已压缩：{{original}} → {{compressed}}",
     "uploaded": "已上传",
     "uploading": "上传中...",
     "fileCounter": "{{count}}/{{max}} 文件"

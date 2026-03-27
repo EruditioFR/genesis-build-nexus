@@ -302,6 +302,7 @@
     "timeoutError": "Timeout - file too large or slow connection",
     "uploadError": "Error {{status}}",
     "recordingAdded": "Recording added!",
+    "imageCompressed": "Image compressed: {{original}} → {{compressed}}",
     "uploaded": "Uploaded",
     "uploading": "Uploading...",
     "fileCounter": "{{count}}/{{max}} files"

@@ -301,6 +301,7 @@
     "timeoutError": "시간 초과 - 파일이 너무 크거나 연결이 느림",
     "uploadError": "오류 {{status}}",
     "recordingAdded": "녹음이 추가되었습니다!",
+    "imageCompressed": "이미지 압축됨: {{original}} → {{compressed}}",
     "uploaded": "업로드됨",
     "uploading": "업로드 중...",
     "fileCounter": "{{count}}/{{max}} 파일"

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioRecorder } from './AudioRecorder';
+import { compressImageIfNeeded } from '@/lib/imageCompression';
 
 export interface MediaFile {
   id: string;
@@ -123,7 +124,7 @@ const MediaUpload = ({
     return null;
   }, [acceptedTypes, maxSizeMb, t]);
 
-  const addFiles = useCallback((newFiles: FileList | File[]) => {
+  const addFiles = useCallback(async (newFiles: FileList | File[]) => {
     const fileArray = Array.from(newFiles);
     const remainingSlots = maxFiles - files.length;
     
@@ -135,7 +136,23 @@ const MediaUpload = ({
     const mediaFiles: MediaFile[] = [];
 
     for (const file of filesToAdd) {
-      const error = validateFile(file);
+      // Auto-compress images before validation
+      let processedFile = file;
+      if (file.type.startsWith('image/') && file.size > 3 * 1024 * 1024) {
+        try {
+          processedFile = await compressImageIfNeeded(file);
+          if (processedFile !== file) {
+            toast.success(t('media.imageCompressed', { 
+              original: formatFileSize(file.size), 
+              compressed: formatFileSize(processedFile.size) 
+            }));
+          }
+        } catch {
+          // If compression fails, continue with original
+        }
+      }
+
+      const error = validateFile(processedFile);
       if (error) {
         toast.error(`${file.name}: ${error}`);
         continue;
@@ -143,9 +160,9 @@ const MediaUpload = ({
 
       mediaFiles.push({
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        file,
-        preview: createPreview(file),
-        type: getFileType(file.type),
+        file: processedFile,
+        preview: createPreview(processedFile),
+        type: getFileType(processedFile.type),
         uploading: false,
         uploaded: false,
       });

@@ -305,6 +305,7 @@
     "timeoutError": "Timeout - fichier trop volumineux ou connexion lente",
     "uploadError": "Erreur {{status}}",
     "recordingAdded": "Enregistrement ajouté !",
+    "imageCompressed": "Image compressée : {{original}} → {{compressed}}",
     "uploaded": "Uploadé",
     "uploading": "Upload en cours...",
     "fileCounter": "{{count}}/{{max}} fichiers"
