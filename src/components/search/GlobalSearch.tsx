@@ -84,7 +84,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
       try {
         const searchTerm = query.toLowerCase().trim();
         
-        // Search by title, description, and tags
+        // Search by title and description
         const { data, error } = await supabase
           .from('capsules')
           .select('*')
@@ -95,37 +95,21 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
 
         if (error) throw error;
 
-        // Also filter by tags client-side since array contains is tricky
         let filteredResults = data || [];
         
-        // If no results from title/description, try tags
-        if (filteredResults.length === 0) {
-          const { data: allCapsules } = await supabase
+        // Search tags separately only if we need more results
+        if (filteredResults.length < 10) {
+          const existingIds = filteredResults.map(r => r.id);
+          const { data: tagCapsules } = await supabase
             .from('capsules')
             .select('*')
             .eq('user_id', userId)
-            .order('created_at', { ascending: false });
+            .contains('tags', [searchTerm])
+            .order('created_at', { ascending: false })
+            .limit(10);
 
-          if (allCapsules) {
-            filteredResults = allCapsules.filter(capsule =>
-              capsule.tags?.some(tag => 
-                tag.toLowerCase().includes(searchTerm)
-              )
-            ).slice(0, 10);
-          }
-        } else {
-          // Also include tag matches
-          const { data: allCapsules } = await supabase
-            .from('capsules')
-            .select('*')
-            .eq('user_id', userId);
-
-          if (allCapsules) {
-            const tagMatches = allCapsules.filter(capsule =>
-              capsule.tags?.some(tag => 
-                tag.toLowerCase().includes(searchTerm)
-              ) && !filteredResults.find(r => r.id === capsule.id)
-            );
+          if (tagCapsules) {
+            const tagMatches = tagCapsules.filter(c => !existingIds.includes(c.id));
             filteredResults = [...filteredResults, ...tagMatches].slice(0, 10);
           }
         }
