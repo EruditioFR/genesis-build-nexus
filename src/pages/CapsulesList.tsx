@@ -257,8 +257,12 @@ const CapsulesList = () => {
   const { categories } = useCategories();
   const [capsules, setCapsules] = useState<CapsuleWithMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
+  
+  const PAGE_SIZE = 20;
   
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -276,6 +280,52 @@ const CapsulesList = () => {
     }
   }, [user, loading, navigate]);
 
+  const enrichCapsules = async (capsulesData: Capsule[]): Promise<CapsuleWithMedia[]> => {
+    const capsuleIds = capsulesData.map(c => c.id);
+    
+    const { data: mediasData } = await supabase
+      .from('capsule_medias')
+      .select('capsule_id, file_url, file_type')
+      .in('capsule_id', capsuleIds)
+      .order('position', { ascending: true });
+
+    const firstImageMap: Record<string, string> = {};
+    const firstVideoMap: Record<string, string> = {};
+    if (mediasData) {
+      mediasData.forEach((media: { capsule_id: string; file_url: string; file_type: string }) => {
+        if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
+          firstImageMap[media.capsule_id] = media.file_url;
+        }
+        if (!firstVideoMap[media.capsule_id] && media.file_type.startsWith('video/')) {
+          firstVideoMap[media.capsule_id] = media.file_url;
+        }
+      });
+    }
+
+    // Fetch categories
+    if (capsuleIds.length > 0) {
+      const { data: categoriesData } = await supabase
+        .from('capsule_categories')
+        .select(`capsule_id, is_primary, category:categories(*)`)
+        .in('capsule_id', capsuleIds)
+        .eq('is_primary', true);
+
+      if (categoriesData) {
+        const categoryMap: Record<string, Category> = {};
+        (categoriesData as any[]).forEach((item) => {
+          if (item.category) categoryMap[item.capsule_id] = item.category;
+        });
+        setCapsuleCategories(prev => ({ ...prev, ...categoryMap }));
+      }
+    }
+
+    return capsulesData.map(capsule => ({
+      ...capsule,
+      firstMediaUrl: firstImageMap[capsule.id],
+      firstVideoUrl: firstVideoMap[capsule.id],
+    }));
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
@@ -292,58 +342,38 @@ const CapsulesList = () => {
         .from('capsules')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .range(0, PAGE_SIZE - 1);
 
       if (!error && capsulesData) {
-        const capsuleIds = capsulesData.map(c => c.id);
-        
-        const { data: mediasData } = await supabase
-          .from('capsule_medias')
-          .select('capsule_id, file_url, file_type')
-          .in('capsule_id', capsuleIds)
-          .order('position', { ascending: true });
-
-        const firstImageMap: Record<string, string> = {};
-        const firstVideoMap: Record<string, string> = {};
-        if (mediasData) {
-          mediasData.forEach((media: { capsule_id: string; file_url: string; file_type: string }) => {
-            if (!firstImageMap[media.capsule_id] && media.file_type.startsWith('image/')) {
-              firstImageMap[media.capsule_id] = media.file_url;
-            }
-            if (!firstVideoMap[media.capsule_id] && media.file_type.startsWith('video/')) {
-              firstVideoMap[media.capsule_id] = media.file_url;
-            }
-          });
-        }
-
-        const capsulesWithMedia: CapsuleWithMedia[] = capsulesData.map(capsule => ({
-          ...capsule,
-          firstMediaUrl: firstImageMap[capsule.id],
-          firstVideoUrl: firstVideoMap[capsule.id],
-        }));
-        setCapsules(capsulesWithMedia);
-        
-        if (capsulesData.length > 0) {
-          const { data: categoriesData } = await supabase
-            .from('capsule_categories')
-            .select(`capsule_id, is_primary, category:categories(*)`)
-            .in('capsule_id', capsuleIds)
-            .eq('is_primary', true);
-
-          if (categoriesData) {
-            const categoryMap: Record<string, Category> = {};
-            (categoriesData as any[]).forEach((item) => {
-              if (item.category) categoryMap[item.capsule_id] = item.category;
-            });
-            setCapsuleCategories(categoryMap);
-          }
-        }
+        setHasMore(capsulesData.length === PAGE_SIZE);
+        const enriched = await enrichCapsules(capsulesData);
+        setCapsules(enriched);
       }
       setIsLoading(false);
     };
 
     if (user) fetchData();
   }, [user]);
+
+  const loadMore = async () => {
+    if (!user || isLoadingMore) return;
+    setIsLoadingMore(true);
+    
+    const { data: capsulesData, error } = await supabase
+      .from('capsules')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .range(capsules.length, capsules.length + PAGE_SIZE - 1);
+
+    if (!error && capsulesData) {
+      setHasMore(capsulesData.length === PAGE_SIZE);
+      const enriched = await enrichCapsules(capsulesData);
+      setCapsules(prev => [...prev, ...enriched]);
+    }
+    setIsLoadingMore(false);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -578,7 +608,6 @@ const CapsulesList = () => {
                       navigate={(path) => navigate(path)}
                       onDelete={openDeleteDialog}
                     />
-                    {/* Ad every 4 capsules */}
                     {(index + 1) % 4 === 0 && index < rest.length - 1 && (
                       <div className="col-span-1 sm:col-span-2">
                         <AdBanner className="my-2" />
@@ -586,6 +615,27 @@ const CapsulesList = () => {
                     )}
                   </React.Fragment>
                 ))}
+              </div>
+            )}
+
+            {/* Load More */}
+            {hasMore && (
+              <div className="flex justify-center pt-4">
+                <Button
+                  variant="outline"
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                  className="gap-2"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      {t('list.loading', 'Chargement...')}
+                    </>
+                  ) : (
+                    t('list.loadMore', 'Charger plus')
+                  )}
+                </Button>
               </div>
             )}
           </div>
