@@ -53,13 +53,20 @@
       "@type": "Organization",
       "@id": "https://www.familygarden.fr/#organization",
       "name": "Family Garden",
+      "alternateName": "FamilyGarden",
       "url": "https://www.familygarden.fr",
-      "logo": "https://www.familygarden.fr/logo.png",
-      "description": "Plateforme française de capsules mémorielles pour préserver et transmettre vos souvenirs aux générations futures. Stockage sécurisé avec chiffrement AES-256 sur serveurs européens conformes RGPD.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.familygarden.fr/logo.png",
+        "width": 512,
+        "height": 512
+      },
+      "description": "Plateforme française de journal de famille privé et sécurisé. Créez, organisez et partagez vos souvenirs multimédia avec vos proches. Chiffrement AES-256, hébergement européen RGPD.",
       "foundingDate": "2024",
-      "areaServed": "France",
-      "knowsLanguage": "fr",
-      "slogan": "Préservez l'extraordinaire de votre vie ordinaire"
+      "areaServed": {"@type": "Country", "name": "France"},
+      "knowsLanguage": ["fr", "en", "es", "ko", "zh"],
+      "slogan": "Un espace privé pour raconter ses souvenirs, et partager les moments qui comptent.",
+      "keywords": "journal de famille, capsule mémorielle, souvenirs familiaux, arbre généalogique, héritage numérique, album photo sécurisé, RGPD"
     }
     </script>
     <script type="application/ld+json">
@@ -70,25 +77,12 @@
       "name": "Family Garden",
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "Web",
-      "description": "Application web de création de capsules mémorielles numériques. Stockez textes, photos, vidéos et audio pour créer votre héritage familial digital.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR",
-        "description": "Version gratuite disponible avec 500 Mo de stockage"
-      },
-      "featureList": [
-        "Capsules mémorielles multimédia",
-        "Chronologie interactive par décennies",
-        "Cercles de partage familial sécurisés",
-        "Export PDF haute qualité",
-        "Arbre généalogique interactif",
-        "Legs posthume programmé",
-        "Chiffrement AES-256"
-      ],
-      "provider": {
-        "@id": "https://www.familygarden.fr/#organization"
-      }
+      "description": "Application web de création de capsules mémorielles numériques. Rassemblez photos, vidéos, audio et textes, organisez-les sur une chronologie interactive et partagez-les en cercles privés.",
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Version gratuite avec 250 Mo de stockage"},
+      "featureList": ["Capsules mémorielles multimédia", "Chronologie interactive par décennies", "Cercles de partage sécurisés", "Arbre généalogique interactif", "Export PDF", "Legs posthume", "Chiffrement AES-256", "RGPD"],
+      "availableLanguage": ["fr", "en", "es", "ko", "zh"],
+      "provider": {"@id": "https://www.familygarden.fr/#organization"}
     }
     </script>
   </head>
