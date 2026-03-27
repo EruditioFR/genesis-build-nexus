@@ -155,8 +155,10 @@ const UnifiedMediaSection = ({
     if (!normalizedAccepted.includes(normalizedType)) {
       return t('media.formatNotSupported', { type: file.type });
     }
-    if (file.size > maxSizeMb * 1024 * 1024) {
-      return t('media.fileTooLarge', { max: maxSizeMb });
+    const fileType = getFileType(normalizedType);
+    const limitMb = fileType === 'image' ? 3 : fileType === 'video' ? 50 : fileType === 'audio' ? 10 : maxSizeMb;
+    if (file.size > limitMb * 1024 * 1024) {
+      return t('media.fileTooLarge', { max: limitMb });
     }
     return null;
   }, [maxSizeMb, t]);
