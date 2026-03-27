@@ -257,8 +257,12 @@ const CapsulesList = () => {
   const { categories } = useCategories();
   const [capsules, setCapsules] = useState<CapsuleWithMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [capsuleCategories, setCapsuleCategories] = useState<Record<string, Category>>({});
+  
+  const PAGE_SIZE = 20;
   
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
