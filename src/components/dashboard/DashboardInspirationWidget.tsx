@@ -108,7 +108,7 @@ const DashboardInspirationWidget = () => {
                     onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
                     className="w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors"
                   >
-                    <span className="text-xl flex-shrink-0">{category.emoji}</span>
+                    <span className="text-2xl flex-shrink-0">{category.emoji}</span>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-foreground">{category.title}</span>
