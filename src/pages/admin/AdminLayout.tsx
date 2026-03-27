@@ -12,7 +12,8 @@ import {
   ChevronLeft,
   Settings,
   BarChart3,
-  TreePine
+  TreePine,
+  Cloud
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,6 +32,7 @@ const navItems = [
   { to: "/admin/roles", label: "Rôles", icon: Shield },
   { to: "/admin/stats", label: "Statistiques", icon: BarChart3 },
   { to: "/admin/family-trees", label: "Arbres", icon: TreePine },
+  { to: "/admin/cloud-usage", label: "Usage Cloud", icon: Cloud },
   { to: "/admin/contact", label: "Contact", icon: Mail },
 ];
 
