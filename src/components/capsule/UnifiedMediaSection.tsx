@@ -432,7 +432,10 @@ const UnifiedMediaSection = ({
           </div>
           <p className="text-sm font-medium">{t('media.dragDrop')}</p>
           <p className="text-xs text-muted-foreground mt-1">
-            {t('media.clickToSelect', { maxFiles, maxSize: maxSizeMb })}
+            {t('media.clickToSelectCount', { maxFiles })}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            {t('media.sizeLimits')}
           </p>
         </div>
       </div>

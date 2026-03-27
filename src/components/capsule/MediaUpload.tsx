@@ -374,10 +374,10 @@ const MediaUpload = ({
               {isDragging ? t('media.dropHere') : t('media.dragDrop')}
             </p>
             <p className="text-sm text-muted-foreground">
-              {t('media.clickToSelect', { maxFiles, maxSize: maxSizeMb })}
+              {t('media.clickToSelectCount', { maxFiles })}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              {showAudioRecorder ? t('media.audioSupported') : t('media.allSupported')}
+              {t('media.sizeLimits')}
             </p>
           </div>
         </div>
