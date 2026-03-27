@@ -8,6 +8,7 @@ import {
   Check,
   Trophy,
   Lightbulb,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMemoryPrompts } from '@/hooks/useMemoryPrompts';
@@ -25,60 +26,66 @@ const DashboardInspirationWidget = () => {
   const { usedPromptIds, loading, memoryCategories, getCategoryProgress, getTotalProgress } = useMemoryPrompts();
   const [open, setOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [dismissed, setDismissed] = useState(false);
 
   const totalProgress = getTotalProgress();
 
-  if (loading) return null;
+  if (loading || dismissed) return null;
 
   return (
     <>
-      {/* Floating bubble - fixed bottom right */}
-      <motion.button
-        initial={{ opacity: 0, y: 40, scale: 0.8 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setOpen(true)}
-        className={cn(
-          'fixed bottom-6 right-6 z-40 flex items-center gap-3',
-          'pl-4 pr-5 py-3 rounded-full',
-          'bg-gradient-to-r from-secondary to-primary text-white',
-          'shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40',
-          'transition-shadow cursor-pointer',
-          'md:bottom-8 md:right-8'
-        )}
+      {/* Sticky banner - warm & joyful */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="sticky top-0 z-30 -mx-4 sm:-mx-6 md:-mx-8 mb-5"
       >
-        <div className="relative">
-          <Lightbulb className="h-5 w-5" />
-          {/* Pulse indicator */}
-          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
+        <button
+          onClick={() => setOpen(true)}
+          className={cn(
+            'w-full px-4 sm:px-6 py-3 flex items-center justify-center gap-3',
+            'bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400',
+            'hover:from-amber-500 hover:via-orange-500 hover:to-rose-500',
+            'transition-all cursor-pointer group',
+            'shadow-md shadow-orange-200/50 dark:shadow-orange-900/30'
+          )}
+        >
+          <span className="text-lg animate-bounce">💡</span>
+          <span className="text-sm sm:text-base font-bold text-white drop-shadow-sm">
+            En panne d'inspiration pour écrire un souvenir ?
           </span>
-        </div>
-        <span className="text-sm font-semibold whitespace-nowrap hidden sm:inline">
-          En panne d'inspiration ?
-        </span>
-      </motion.button>
+          <span className="text-xs sm:text-sm font-medium text-white/80 hidden sm:inline">
+            — Découvrez nos 50 idées !
+          </span>
+          <ChevronRight className="h-4 w-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
+        </button>
+        {/* Dismiss button */}
+        <button
+          onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-white/60 hover:text-white hover:bg-white/20 transition-colors"
+          aria-label="Fermer"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </motion.div>
 
       {/* Dialog with categories & questions */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto p-0 gap-0">
           <DialogHeader className="p-5 pb-3 sticky top-0 bg-background z-10 border-b border-border">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-primary text-white shadow-md">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-md">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <DialogTitle className="text-lg font-display">Inspirez-vous</DialogTitle>
+                <DialogTitle className="text-lg font-display">Inspirez-vous ✨</DialogTitle>
                 <DialogDescription className="text-xs">
                   Choisissez une question et commencez à écrire
                 </DialogDescription>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-xs">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-xs">
                 <Trophy className="h-3.5 w-3.5 text-amber-500" />
-                <span className="font-medium">{totalProgress.used}/{totalProgress.total}</span>
+                <span className="font-medium text-amber-700 dark:text-amber-300">{totalProgress.used}/{totalProgress.total}</span>
               </div>
             </div>
           </DialogHeader>
@@ -94,7 +101,7 @@ const DashboardInspirationWidget = () => {
                   key={category.id}
                   className={cn(
                     'rounded-xl border overflow-hidden transition-all',
-                    isComplete ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20' : 'border-border hover:border-secondary/30'
+                    isComplete ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20' : 'border-border hover:border-orange-300 dark:hover:border-orange-700'
                   )}
                 >
                   <button
@@ -151,13 +158,13 @@ const DashboardInspirationWidget = () => {
                                 key={prompt.id}
                                 to={`/capsules/new?prompt=${encodeURIComponent(prompt.question)}&promptId=${prompt.id}&category=${category.id}`}
                                 onClick={() => setOpen(false)}
-                                className="flex items-center gap-2.5 p-2.5 rounded-lg bg-background border border-border/50 hover:border-secondary/50 hover:bg-secondary/5 transition-all group"
+                                className="flex items-center gap-2.5 p-2.5 rounded-lg bg-background border border-border/50 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all group"
                               >
                                 <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted text-[10px] font-medium text-muted-foreground flex-shrink-0">
                                   {index + 1}
                                 </span>
                                 <p className="text-xs text-foreground flex-1 leading-snug">{prompt.question}</p>
-                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-secondary flex-shrink-0 transition-colors" />
+                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-orange-500 flex-shrink-0 transition-colors" />
                               </Link>
                             );
                           })}

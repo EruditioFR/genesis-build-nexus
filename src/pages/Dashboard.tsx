@@ -340,6 +340,9 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
+        {/* Inspiration sticky banner */}
+        <DashboardInspirationWidget />
+
         {/* Welcome Section for empty accounts */}
         {!hideWelcome && (
           <div className="mb-6 md:mb-8">
@@ -380,7 +383,6 @@ const Dashboard = () => {
           </div>
         </div>
         </div>
-      <DashboardInspirationWidget />
       </AuthenticatedLayout>
     </>
   );
