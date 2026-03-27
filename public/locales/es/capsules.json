@@ -301,6 +301,7 @@
     "timeoutError": "Tiempo de espera - archivo muy grande o conexión lenta",
     "uploadError": "Error {{status}}",
     "recordingAdded": "¡Grabación añadida!",
+    "imageCompressed": "Imagen comprimida: {{original}} → {{compressed}}",
     "uploaded": "Subido",
     "uploading": "Subiendo...",
     "fileCounter": "{{count}}/{{max}} archivos"
