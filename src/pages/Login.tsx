@@ -87,6 +87,10 @@ const Login = () => {
     titleKey: "login.tutorial.family.title",
     descriptionKey: "login.tutorial.family.description"
   }, {
+    icon: TreePine,
+    titleKey: "login.tutorial.tree.title",
+    descriptionKey: "login.tutorial.tree.description"
+  }, {
     icon: Clock,
     titleKey: "login.tutorial.continue.title",
     descriptionKey: "login.tutorial.continue.description"
