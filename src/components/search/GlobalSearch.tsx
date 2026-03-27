@@ -87,7 +87,7 @@ const GlobalSearch = ({ userId }: GlobalSearchProps) => {
         // Search by title, description, and tags
         const { data, error } = await supabase
           .from('capsules')
-          .select('id, title, description, capsule_type, created_at, thumbnail_url, tags')
+          .select('*')
           .eq('user_id', userId)
           .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
           .order('created_at', { ascending: false })
