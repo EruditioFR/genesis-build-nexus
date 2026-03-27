@@ -9,14 +9,31 @@ const organizationSchema = {
   "@type": "Organization",
   "@id": "https://www.familygarden.fr/#organization",
   "name": "Family Garden",
+  "alternateName": "FamilyGarden",
   "url": "https://www.familygarden.fr",
-  "logo": "https://www.familygarden.fr/logo.png",
-  "description": "Plateforme française de capsules mémorielles pour préserver et transmettre vos souvenirs aux générations futures. Stockage sécurisé avec chiffrement AES-256 sur serveurs européens conformes RGPD.",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://www.familygarden.fr/logo.png",
+    "width": 512,
+    "height": 512
+  },
+  "image": "https://www.familygarden.fr/og-image.png",
+  "description": "Plateforme française de journal de famille privé et sécurisé. Créez, organisez et partagez vos souvenirs multimédia (photos, vidéos, audio, textes) avec vos proches. Chiffrement AES-256 et hébergement européen conforme RGPD.",
   "foundingDate": "2024",
-  "areaServed": "France",
-  "knowsLanguage": "fr",
-  "slogan": "Préservez l'extraordinaire de votre vie ordinaire",
-  "sameAs": []
+  "areaServed": {
+    "@type": "Country",
+    "name": "France"
+  },
+  "knowsLanguage": ["fr", "en", "es", "ko", "zh"],
+  "slogan": "Un espace privé pour raconter ses souvenirs, et partager les moments qui comptent.",
+  "keywords": "journal de famille, capsule mémorielle, souvenirs familiaux, arbre généalogique, héritage numérique, album photo sécurisé, partage familial privé, RGPD, chronologie familiale",
+  "sameAs": [],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": ["French", "English", "Spanish", "Korean", "Chinese"],
+    "url": "https://www.familygarden.fr/#contact"
+  }
 };
 
 const softwareApplicationSchema = {
@@ -24,27 +41,72 @@ const softwareApplicationSchema = {
   "@type": "SoftwareApplication",
   "@id": "https://www.familygarden.fr/#app",
   "name": "Family Garden",
+  "alternateName": "FamilyGarden — Journal de famille privé",
   "applicationCategory": "LifestyleApplication",
+  "applicationSubCategory": "Family Memory Preservation",
   "operatingSystem": "Web",
-  "description": "Application web de création de capsules mémorielles numériques. Stockez textes, photos, vidéos et audio pour créer votre héritage familial digital. Chiffrement de niveau bancaire AES-256, stockage sur serveurs européens RGPD.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "EUR",
-    "description": "Version gratuite disponible avec 500 Mo de stockage"
-  },
+  "description": "Application web de création de capsules mémorielles numériques. Rassemblez photos, vidéos, audio et textes dans des souvenirs contextualisés, organisez-les sur une chronologie interactive par décennies, et partagez-les en cercles privés avec votre famille. Chiffrement AES-256, serveurs européens RGPD.",
+  "abstract": "Family Garden est un journal de famille privé qui permet de préserver et transmettre ses souvenirs aux générations futures. Chaque souvenir combine plusieurs médias avec un contexte (date, lieu, personnes) et s'organise sur une chronologie interactive.",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Gratuit",
+      "price": "0",
+      "priceCurrency": "EUR",
+      "description": "250 Mo de stockage, capsules texte et photo, chronologie basique"
+    },
+    {
+      "@type": "Offer",
+      "name": "Premium",
+      "price": "4.99",
+      "priceCurrency": "EUR",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "4.99",
+        "priceCurrency": "EUR",
+        "billingDuration": "P1M"
+      },
+      "description": "10 Go de stockage, tous formats multimédia, partage avancé, sans publicité"
+    },
+    {
+      "@type": "Offer",
+      "name": "Héritage",
+      "price": "9.99",
+      "priceCurrency": "EUR",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "9.99",
+        "priceCurrency": "EUR",
+        "billingDuration": "P1M"
+      },
+      "description": "20 Go, partage illimité, arbre généalogique interactif, legs posthume, support VIP"
+    }
+  ],
   "featureList": [
     "Capsules mémorielles multimédia (texte, photo, vidéo, audio)",
     "Chronologie interactive par décennies",
     "Cercles de partage familial sécurisés",
+    "Arbre généalogique interactif avec import/export GEDCOM",
     "Export PDF haute qualité",
-    "Arbre généalogique interactif",
-    "Legs posthume programmé",
-    "Chiffrement AES-256",
-    "Stockage européen conforme RGPD"
+    "Legs posthume programmé avec gardiens de confiance",
+    "Chiffrement AES-256 de niveau bancaire",
+    "Hébergement sur serveurs européens conformes RGPD",
+    "Mode senior-friendly simplifié",
+    "Support multilingue (FR, EN, ES, KO, ZH)",
+    "Suggestions et inspirations guidées de souvenirs",
+    "Catégories thématiques personnalisables"
   ],
+  "screenshot": "https://www.familygarden.fr/og-image.png",
+  "availableLanguage": ["fr", "en", "es", "ko", "zh"],
+  "inLanguage": "fr",
+  "isAccessibleForFree": true,
   "provider": {
     "@id": "https://www.familygarden.fr/#organization"
+  },
+  "audience": {
+    "@type": "PeopleAudience",
+    "audienceType": "Familles, grands-parents, parents, généalogistes amateurs",
+    "suggestedMinAge": 13
   }
 };
 
@@ -82,7 +144,7 @@ const faqPageSchema = {
       "name": "Comment fonctionne le legs posthume sur Family Garden ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Avec l'offre Legacy, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certaines capsules selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
+        "text": "Avec l'offre Héritage, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certaines capsules selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
       }
     },
     {
@@ -108,6 +170,14 @@ const faqPageSchema = {
         "@type": "Answer",
         "text": "Family Garden va bien au-delà d'un album photo. C'est une plateforme de préservation de l'héritage familial qui combine : des capsules mémorielles multimédia contextualisées (dates, lieux, histoires), une chronologie interactive par décennies, un arbre généalogique pour relier les personnes aux souvenirs, des cercles de partage sécurisés, et surtout la possibilité de programmer la transmission de votre héritage numérique aux générations futures."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Family Garden est-il conforme au RGPD ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, Family Garden est entièrement conforme au RGPD. Toutes les données sont hébergées sur des serveurs situés en Union Européenne, chiffrées avec le standard AES-256. L'utilisateur garde un contrôle total sur ses données : droit d'accès, de rectification, de portabilité et de suppression. Aucune donnée n'est revendue à des tiers."
+      }
     }
   ]
 };
@@ -117,7 +187,6 @@ const JsonLdSchema = ({ type = 'all' }: JsonLdSchemaProps) => {
     const scripts: HTMLScriptElement[] = [];
 
     const addSchema = (schema: object, id: string) => {
-      // Check if script already exists
       if (document.getElementById(id)) return;
       
       const script = document.createElement('script');
@@ -138,7 +207,6 @@ const JsonLdSchema = ({ type = 'all' }: JsonLdSchemaProps) => {
       addSchema(faqPageSchema, 'json-ld-faq');
     }
 
-    // Cleanup on unmount
     return () => {
       scripts.forEach(script => {
         if (script.parentNode) {
