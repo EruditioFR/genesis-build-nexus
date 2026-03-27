@@ -380,6 +380,7 @@ const Dashboard = () => {
           </div>
         </div>
         </div>
+      <DashboardInspirationWidget />
       </AuthenticatedLayout>
     </>
   );
