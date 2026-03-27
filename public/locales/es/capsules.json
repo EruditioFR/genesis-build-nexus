@@ -289,6 +289,8 @@
     "dropHere": "Suelta tus archivos aquí",
     "dragDrop": "Arrastra y suelta tus archivos",
     "clickToSelect": "o haz clic para seleccionar • Máx {{maxFiles}} archivos, {{maxSize}} MB cada uno",
+    "clickToSelectCount": "o haz clic para seleccionar • Máx {{maxFiles}} archivos",
+    "sizeLimits": "Fotos: 3 MB • Videos: 50 MB • Audio: 10 MB",
     "audioSupported": "Archivos de audio soportados",
     "allSupported": "Imágenes, videos y audio soportados",
     "formatNotSupported": "Formato no soportado: {{type}}",
