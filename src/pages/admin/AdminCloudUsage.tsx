@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   Cloud, HardDrive, User, FileText, Image, Video, Music, ChevronDown, ChevronUp,
-  Search, ArrowUpDown, AlertTriangle, Loader2
+  Search, ArrowUpDown, AlertTriangle, Loader2, DollarSign, Zap, Database, Globe
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
