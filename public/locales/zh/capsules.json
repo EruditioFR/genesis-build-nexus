@@ -292,6 +292,8 @@
     "dropHere": "将文件拖放到这里",
     "dragDrop": "拖放您的文件",
     "clickToSelect": "或点击选择 • 最多 {{maxFiles}} 个文件，每个 {{maxSize}} MB",
+    "clickToSelectCount": "或点击选择 • 最多 {{maxFiles}} 个文件",
+    "sizeLimits": "照片：3 MB • 视频：50 MB • 音频：10 MB",
     "audioSupported": "支持音频文件",
     "allSupported": "支持图片、视频和音频",
     "formatNotSupported": "不支持的格式：{{type}}",
