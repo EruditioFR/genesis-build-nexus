@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   Cloud, HardDrive, User, FileText, Image, Video, Music, ChevronDown, ChevronUp,
-  Search, ArrowUpDown, AlertTriangle, Loader2
+  Search, ArrowUpDown, AlertTriangle, Loader2, DollarSign, Zap, Database, Globe
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -227,6 +227,55 @@ export default function AdminCloudUsage() {
   const totalMedias = users.reduce((s, u) => s + u.mediaCount + u.familyMediaCount, 0);
   const usersNearLimit = users.filter(u => u.storageUsedMb > u.storageLimitMb * 0.8).length;
 
+  // Cost estimation (based on Lovable Cloud / Supabase pricing)
+  const costEstimate = useMemo(() => {
+    const storageGb = totalStorage / (1024 * 1024 * 1024);
+    const dbSizeMb = 30; // approximate from schema
+    const activeUsers = users.length;
+    
+    // Compute (Nano instance, auto-pause) ~$0.01344/hour when active
+    // Estimate ~8h active/day for low traffic
+    const computeHoursPerMonth = activeUsers > 100 ? 720 : activeUsers > 20 ? 360 : 240;
+    const computeCost = computeHoursPerMonth * 0.01344;
+    
+    // Storage: $0.021/GB/month for file storage
+    const storageCost = storageGb * 0.021;
+    
+    // Database: included in compute for < 500MB
+    const dbCost = dbSizeMb > 500 ? (dbSizeMb / 1024) * 0.125 : 0;
+    
+    // Bandwidth/Data transfer: estimate ~4.5 pages/visit, ~2400 visits/month
+    // Average ~50KB per API call, ~10 calls per page view
+    const estimatedMonthlyVisits = activeUsers * 70; // rough estimate
+    const estimatedBandwidthGb = (estimatedMonthlyVisits * 10 * 50 * 1024) / (1024 * 1024 * 1024);
+    // First 5GB free, then $0.09/GB
+    const bandwidthCost = Math.max(0, estimatedBandwidthGb - 5) * 0.09;
+    
+    // Edge functions: ~$0.20 base + $0.000002 per invocation
+    const edgeFnInvocations = estimatedMonthlyVisits * 2; // ~2 fn calls per visit
+    const edgeFnCost = 0.20 + edgeFnInvocations * 0.000002;
+    
+    // Auth: free for < 50K MAU
+    const authCost = 0;
+    
+    const total = computeCost + storageCost + dbCost + bandwidthCost + edgeFnCost + authCost;
+    const freeCredit = 25;
+    
+    return {
+      compute: computeCost,
+      storage: storageCost,
+      database: dbCost,
+      bandwidth: bandwidthCost,
+      edgeFunctions: edgeFnCost,
+      auth: authCost,
+      total,
+      freeCredit,
+      netCost: Math.max(0, total - freeCredit),
+      storageGb,
+      estimatedMonthlyVisits,
+    };
+  }, [totalStorage, users.length]);
+
   const typeIcon = (type: string) => {
     switch (type) {
       case "photo": return <Image className="w-3.5 h-3.5 text-emerald-500" />;
@@ -301,7 +350,73 @@ export default function AdminCloudUsage() {
         </Card>
       </div>
 
-      {/* Search */}
+      {/* Cost estimation widget */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-primary" />
+            Estimation du coût Cloud mensuel
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Breakdown items */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Zap className="w-3.5 h-3.5" /> Compute
+                </span>
+                <span className="font-medium">${costEstimate.compute.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <HardDrive className="w-3.5 h-3.5" /> Stockage ({costEstimate.storageGb.toFixed(2)} Go)
+                </span>
+                <span className="font-medium">${costEstimate.storage.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Database className="w-3.5 h-3.5" /> Base de données
+                </span>
+                <span className="font-medium">{costEstimate.database > 0 ? `$${costEstimate.database.toFixed(2)}` : "Inclus"}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Globe className="w-3.5 h-3.5" /> Bandwidth
+                </span>
+                <span className="font-medium">${costEstimate.bandwidth.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Cloud className="w-3.5 h-3.5" /> Edge Functions
+                </span>
+                <span className="font-medium">${costEstimate.edgeFunctions.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="sm:col-span-1 lg:col-span-2 flex flex-col items-center justify-center p-4 rounded-xl bg-card border border-border">
+              <p className="text-sm text-muted-foreground mb-1">Coût estimé</p>
+              <p className="text-3xl font-bold text-foreground">${costEstimate.total.toFixed(2)}<span className="text-base font-normal text-muted-foreground">/mois</span></p>
+              <div className="mt-3 flex items-center gap-2">
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800">
+                  -${costEstimate.freeCredit} crédit gratuit
+                </Badge>
+              </div>
+              <p className="mt-2 text-lg font-bold">
+                {costEstimate.netCost === 0 ? (
+                  <span className="text-emerald-600">Couvert par le crédit gratuit ✓</span>
+                ) : (
+                  <span className="text-amber-600">Net : ${costEstimate.netCost.toFixed(2)}/mois</span>
+                )}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground text-center max-w-xs">
+                Basé sur {users.length} utilisateurs, ~{costEstimate.estimatedMonthlyVisits.toLocaleString()} visites/mois estimées, {formatBytes(totalStorage)} de fichiers
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
