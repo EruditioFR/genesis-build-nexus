@@ -36,8 +36,8 @@ const plans: PlanInfo[] = [
   {
     id: 'premium',
     name: 'Premium',
-    storageMb: 5120,
-    storageLabel: '5 Go',
+    storageMb: 10240,
+    storageLabel: '10 Go',
     price: '9,99€/mois',
     color: 'bg-secondary',
     features: ['Tous types de médias', 'Chronologie avancée', '1 cercle de partage'],
@@ -45,8 +45,8 @@ const plans: PlanInfo[] = [
   {
     id: 'legacy',
     name: 'Héritage',
-    storageMb: 15360,
-    storageLabel: '15 Go',
+    storageMb: 20480,
+    storageLabel: '20 Go',
     price: '19,99€/mois',
     color: 'bg-primary',
     features: ['Stockage massif', 'Arbre généalogique', 'Partages illimités'],
@@ -77,8 +77,8 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
     {
       id: 'premium',
       name: t('plans.premium'),
-      storageMb: 5120,
-      storageLabel: '5 Go',
+      storageMb: 10240,
+      storageLabel: '10 Go',
       price: '9,99€/mois',
       color: 'bg-secondary',
       features: [t('plans.premiumFeature1'), t('plans.premiumFeature2'), t('plans.premiumFeature3')],
@@ -86,8 +86,8 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
     {
       id: 'legacy',
       name: t('plans.heritage'),
-      storageMb: 15360,
-      storageLabel: '15 Go',
+      storageMb: 20480,
+      storageLabel: '20 Go',
       price: '19,99€/mois',
       color: 'bg-primary',
       features: [t('plans.heritageFeature1'), t('plans.heritageFeature2'), t('plans.heritageFeature3')],

@@ -55,7 +55,7 @@ const FREE_LIMITS: FeatureLimits = {
 };
 
 const PREMIUM_LIMITS: FeatureLimits = {
-  storageLimit: 5120, // 5 GB
+  storageLimit: 10240, // 10 GB
   canCreateTextCapsule: true,
   canCreatePhotoCapsule: true,
   canCreateVideoCapsule: true,
@@ -76,7 +76,7 @@ const PREMIUM_LIMITS: FeatureLimits = {
 };
 
 const HERITAGE_LIMITS: FeatureLimits = {
-  storageLimit: 15360, // 15 GB
+  storageLimit: 20480, // 20 GB
   canCreateTextCapsule: true,
   canCreatePhotoCapsule: true,
   canCreateVideoCapsule: true,

@@ -142,7 +142,7 @@
         "promoAfter": "3个月后{{price}}€/月",
         "originalPrice": "9.99",
         "features": {
-          "storage": "5 GB存储空间",
+          "storage": "10 GB存储空间",
           "formats": "文字、照片、视频和音频回忆",
           "sharing": "与您选择的1人分享回忆",
           "timeline": "高级时间线",
@@ -153,7 +153,7 @@
         "name": "传承版",
         "description": "适合多代家庭",
         "features": {
-          "storage": "15 GB存储空间",
+          "storage": "20 GB存储空间",
           "formats": "文字、照片、视频和音频回忆",
           "sharing": "无限分享",
           "timeline": "高级时间线",

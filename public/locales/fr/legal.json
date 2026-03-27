@@ -467,11 +467,11 @@
           },
           "premium": {
             "name": "Premium",
-            "description": "Stockage étendu (5 Go), capsules vidéo et audio, jusqu'à 5 cercles de partage, capsules programmées, export PDF."
+            "description": "Stockage étendu (10 Go), capsules vidéo et audio, jusqu'à 5 cercles de partage, capsules programmées, export PDF."
           },
           "legacy": {
             "name": "Héritage",
-            "description": "Toutes les fonctionnalités Premium + arbre généalogique illimité, capsules d'héritage numérique, gardiens de confiance, cercles illimités, stockage 15 Go."
+            "description": "Toutes les fonctionnalités Premium + arbre généalogique illimité, capsules d'héritage numérique, gardiens de confiance, cercles illimités, stockage 20 Go."
           }
         }
       },

@@ -467,11 +467,11 @@
           },
           "premium": {
             "name": "Premium",
-            "description": "Extended storage (5 GB), video and audio capsules, up to 5 sharing circles, scheduled capsules, PDF export."
+            "description": "Extended storage (10 GB), video and audio capsules, up to 5 sharing circles, scheduled capsules, PDF export."
           },
           "legacy": {
             "name": "Heritage",
-            "description": "All Premium features + unlimited family tree, digital legacy capsules, trusted guardians, unlimited circles, 15 GB storage."
+            "description": "All Premium features + unlimited family tree, digital legacy capsules, trusted guardians, unlimited circles, 20 GB storage."
           }
         }
       },
