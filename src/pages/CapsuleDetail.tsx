@@ -420,7 +420,7 @@ const CapsuleDetail = () => {
         }
       </AnimatePresence>
 
-      <div className="min-h-screen bg-background pb-24 md:pb-0">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background pb-24 md:pb-0">
         <DashboardHeader
           user={{
             id: user.id,
@@ -700,7 +700,7 @@ const CapsuleDetail = () => {
         </div>
 
         {/* Main Content */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-4xl mx-auto w-full min-w-0 px-4 sm:px-6 lg:px-8 py-8">
           {/* Shared by indicator for non-owner */}
           {!isOwner && ownerProfile &&
           <motion.div
@@ -718,9 +718,9 @@ const CapsuleDetail = () => {
             </motion.div>
           }
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid min-w-0 gap-6 md:grid-cols-3">
             {/* Main Column */}
-            <div className="md:col-span-2 space-y-6">
+            <div className="md:col-span-2 min-w-0 space-y-6">
               {/* Media Gallery - Prominent position */}
               {medias.length > 0 &&
               <motion.div
@@ -729,7 +729,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.08 }}
                 className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 
-                  <div className="flex items-center justify-between mb-5">
+                  <div className="mb-5 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <h2 className="text-xl font-display font-bold text-foreground flex items-center gap-2.5">
                       <div className="w-9 h-9 rounded-lg bg-secondary/15 flex items-center justify-center">
                         <Image className="w-5 h-5 text-secondary" />
@@ -742,7 +742,7 @@ const CapsuleDetail = () => {
                     size="sm"
                     onClick={() => capsule && openStory([capsule])}
                     disabled={storyLoading}
-                    className="gap-2 rounded-lg">
+                    className="w-full justify-center gap-2 rounded-lg sm:w-auto">
                     
                       <Play className="w-4 h-4" />
                       {t('detail.viewInStory')}
@@ -875,7 +875,7 @@ const CapsuleDetail = () => {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+            <div className="min-w-0 space-y-6">
               {/* Quick Info Card */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
