@@ -177,6 +177,11 @@ export default function AdminSubscriptions() {
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-secondary-foreground">{stats.legacy}</div>
             <p className="text-xs text-muted-foreground">Legacy</p>
+            <div className="mt-1 flex gap-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1"><Gift className="h-3 w-3 text-amber-500" />{stats.legacyOfferts} offert(s)</span>
+              <span>·</span>
+              <span>{stats.legacyPayants} payant(s)</span>
+            </div>
           </CardContent>
         </Card>
       </div>
