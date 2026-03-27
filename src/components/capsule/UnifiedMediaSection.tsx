@@ -164,7 +164,7 @@ const UnifiedMediaSection = ({
     return null;
   }, [maxSizeMb, t]);
 
-  const addFiles = useCallback((newFiles: FileList | File[], acceptedTypes: string[]) => {
+  const addFiles = useCallback(async (newFiles: FileList | File[], acceptedTypes: string[]) => {
     const fileArray = Array.from(newFiles);
     const remainingSlots = maxFiles - files.length;
     
@@ -176,7 +176,22 @@ const UnifiedMediaSection = ({
     const mediaFiles: MediaFile[] = [];
 
     for (const file of filesToAdd) {
-      const error = validateFile(file, acceptedTypes);
+      let processedFile = file;
+      if (file.type.startsWith('image/') && file.size > 3 * 1024 * 1024) {
+        try {
+          processedFile = await compressImageIfNeeded(file);
+          if (processedFile !== file) {
+            toast.success(t('media.imageCompressed', { 
+              original: formatFileSize(file.size), 
+              compressed: formatFileSize(processedFile.size) 
+            }));
+          }
+        } catch {
+          // Continue with original
+        }
+      }
+
+      const error = validateFile(processedFile, acceptedTypes);
       if (error) {
         toast.error(`${file.name}: ${error}`);
         continue;
@@ -184,9 +199,9 @@ const UnifiedMediaSection = ({
 
       mediaFiles.push({
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        file,
-        preview: createPreview(file),
-        type: getFileType(file.type),
+        file: processedFile,
+        preview: createPreview(processedFile),
+        type: getFileType(processedFile.type),
         uploading: false,
         uploaded: false,
       });
