@@ -1,19 +1,73 @@
-# Search engines
+# =================================================================
+# Family Garden — robots.txt
+# Toutes les pages privées (contenu utilisateur, données personnelles)
+# sont explicitement bloquées pour TOUS les bots (search + LLM).
+# Seules les pages publiques (landing, FAQ, tarifs, légal) sont ouvertes.
+# =================================================================
+
+# Pages privées communes à bloquer pour tous les bots
+# (répétées par user-agent car robots.txt l'exige)
+
+# --- Moteurs de recherche ---
+
 User-agent: Googlebot
 Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+# --- Réseaux sociaux ---
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: facebookexternalhit
 Allow: /
-
-# AI Crawlers / LLM Bots — autoriser pour le GEO
-User-agent: GPTBot
-Allow: /
 Disallow: /dashboard
 Disallow: /capsules
 Disallow: /timeline
@@ -23,18 +77,79 @@ Disallow: /statistics
 Disallow: /family-tree
 Disallow: /categories
 Disallow: /guardian-dashboard
-Disallow: /invite/
 Disallow: /guardian/
+Disallow: /invite/
 Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+# --- LLM / AI Crawlers (GEO) ---
+
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: ChatGPT-User
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: Google-Extended
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: ClaudeBot
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
 Disallow: /dashboard
 Disallow: /capsules
 Disallow: /timeline
@@ -44,29 +159,17 @@ Disallow: /statistics
 Disallow: /family-tree
 Disallow: /categories
 Disallow: /guardian-dashboard
-Disallow: /invite/
 Disallow: /guardian/
+Disallow: /invite/
 Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 User-agent: PerplexityBot
 Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: cohere-ai
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Meta-ExternalAgent
-Allow: /
-
-User-agent: *
-Allow: /
-
-# Pages privées - ne pas indexer
+Allow: /llms.txt
+Allow: /llms-full.txt
 Disallow: /dashboard
 Disallow: /capsules
 Disallow: /timeline
@@ -76,12 +179,116 @@ Disallow: /statistics
 Disallow: /family-tree
 Disallow: /categories
 Disallow: /guardian-dashboard
-Disallow: /invite/
 Disallow: /guardian/
+Disallow: /invite/
 Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+User-agent: Bytespider
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+User-agent: cohere-ai
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
+
+# --- Tous les autres bots ---
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /capsules
+Disallow: /timeline
+Disallow: /circles
+Disallow: /profile
+Disallow: /statistics
+Disallow: /family-tree
+Disallow: /categories
+Disallow: /guardian-dashboard
+Disallow: /guardian/
+Disallow: /invite/
+Disallow: /admin
+Disallow: /shared-with-me
+Disallow: /email-confirmation
+Disallow: /capsule/
 
 # Sitemap
 Sitemap: https://www.familygarden.fr/sitemap.xml
 
-# LLM content
-# See https://www.familygarden.fr/llms.txt for LLM-optimized content
+# LLM-optimized content
+# https://www.familygarden.fr/llms.txt
+# https://www.familygarden.fr/llms-full.txt
