@@ -153,7 +153,7 @@
         "name": "Herencia",
         "description": "Para familias multigeneracionales",
         "features": {
-          "storage": "50 GB de almacenamiento",
+          "storage": "15 GB de almacenamiento",
           "formats": "Recuerdos de texto, foto, video y audio",
           "sharing": "Compartir ilimitado",
           "timeline": "Cronología avanzada",

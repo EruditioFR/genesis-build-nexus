@@ -76,7 +76,7 @@ const PREMIUM_LIMITS: FeatureLimits = {
 };
 
 const HERITAGE_LIMITS: FeatureLimits = {
-  storageLimit: 51200, // 50 GB
+  storageLimit: 15360, // 15 GB
   canCreateTextCapsule: true,
   canCreatePhotoCapsule: true,
   canCreateVideoCapsule: true,

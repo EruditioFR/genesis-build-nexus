@@ -86,8 +86,8 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
     {
       id: 'legacy',
       name: t('plans.heritage'),
-      storageMb: 51200,
-      storageLabel: '50 Go',
+      storageMb: 15360,
+      storageLabel: '15 Go',
       price: '19,99€/mois',
       color: 'bg-primary',
       features: [t('plans.heritageFeature1'), t('plans.heritageFeature2'), t('plans.heritageFeature3')],
