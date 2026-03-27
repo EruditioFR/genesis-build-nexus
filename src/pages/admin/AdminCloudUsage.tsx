@@ -350,7 +350,73 @@ export default function AdminCloudUsage() {
         </Card>
       </div>
 
-      {/* Search */}
+      {/* Cost estimation widget */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-primary" />
+            Estimation du coût Cloud mensuel
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Breakdown items */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Zap className="w-3.5 h-3.5" /> Compute
+                </span>
+                <span className="font-medium">${costEstimate.compute.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <HardDrive className="w-3.5 h-3.5" /> Stockage ({costEstimate.storageGb.toFixed(2)} Go)
+                </span>
+                <span className="font-medium">${costEstimate.storage.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Database className="w-3.5 h-3.5" /> Base de données
+                </span>
+                <span className="font-medium">{costEstimate.database > 0 ? `$${costEstimate.database.toFixed(2)}` : "Inclus"}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Globe className="w-3.5 h-3.5" /> Bandwidth
+                </span>
+                <span className="font-medium">${costEstimate.bandwidth.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <Cloud className="w-3.5 h-3.5" /> Edge Functions
+                </span>
+                <span className="font-medium">${costEstimate.edgeFunctions.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="sm:col-span-1 lg:col-span-2 flex flex-col items-center justify-center p-4 rounded-xl bg-card border border-border">
+              <p className="text-sm text-muted-foreground mb-1">Coût estimé</p>
+              <p className="text-3xl font-bold text-foreground">${costEstimate.total.toFixed(2)}<span className="text-base font-normal text-muted-foreground">/mois</span></p>
+              <div className="mt-3 flex items-center gap-2">
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800">
+                  -${costEstimate.freeCredit} crédit gratuit
+                </Badge>
+              </div>
+              <p className="mt-2 text-lg font-bold">
+                {costEstimate.netCost === 0 ? (
+                  <span className="text-emerald-600">Couvert par le crédit gratuit ✓</span>
+                ) : (
+                  <span className="text-amber-600">Net : ${costEstimate.netCost.toFixed(2)}/mois</span>
+                )}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground text-center max-w-xs">
+                Basé sur {users.length} utilisateurs, ~{costEstimate.estimatedMonthlyVisits.toLocaleString()} visites/mois estimées, {formatBytes(totalStorage)} de fichiers
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
