@@ -148,14 +148,37 @@ const SharedCapsulesSection = ({ userId }: SharedCapsulesSectionProps) => {
       setSharedData(results);
       setLoading(false);
 
-      // Load thumbnail URLs
+      // Load thumbnail URLs (with fallback to first image media)
       const { getSignedUrl } = await import('@/lib/signedUrlCache');
       const urlsToLoad: { id: string; path: string }[] = [];
+      const capsulesWithoutThumb: string[] = [];
       
       for (const item of results) {
         for (const capsule of item.capsules) {
           if (capsule.thumbnail_url) {
             urlsToLoad.push({ id: capsule.id, path: capsule.thumbnail_url });
+          } else {
+            capsulesWithoutThumb.push(capsule.id);
+          }
+        }
+      }
+
+      // Fallback: fetch first image media for capsules without thumbnail
+      if (capsulesWithoutThumb.length > 0) {
+        const { data: mediasData } = await supabase
+          .from('capsule_medias')
+          .select('capsule_id, file_url, file_type')
+          .in('capsule_id', capsulesWithoutThumb)
+          .like('file_type', 'image/%')
+          .order('position', { ascending: true });
+
+        if (mediasData) {
+          const seen = new Set<string>();
+          for (const m of mediasData) {
+            if (!seen.has(m.capsule_id)) {
+              seen.add(m.capsule_id);
+              urlsToLoad.push({ id: m.capsule_id, path: m.file_url });
+            }
           }
         }
       }
