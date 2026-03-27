@@ -368,7 +368,6 @@ const Dashboard = () => {
           {/* Left Column - 2/3 width */}
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
             <RecentCapsules capsules={recentCapsules} />
-            <DashboardInspirationWidget />
           </div>
 
           {/* Right Column - 1/3 width */}
