@@ -46,7 +46,7 @@ const NotificationsBell = ({ userId }: NotificationsBellProps) => {
     const fetchNotifications = async () => {
       const { data } = await supabase
         .from('notifications')
-        .select('*')
+        .select('id, type, title, message, link, read, created_at, data')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(20);
