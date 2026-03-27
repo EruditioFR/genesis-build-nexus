@@ -139,11 +139,14 @@ export default function AdminSubscriptions() {
   };
 
   // Stats
+  const legacyUsers = users.filter((u) => u.subscription_level === "legacy");
   const stats = {
     total: users.length,
     free: users.filter((u) => u.subscription_level === "free").length,
     premium: users.filter((u) => u.subscription_level === "premium").length,
-    legacy: users.filter((u) => u.subscription_level === "legacy").length,
+    legacy: legacyUsers.length,
+    legacyOfferts: legacyUsers.filter((u) => u.admin_override).length,
+    legacyPayants: legacyUsers.filter((u) => !u.admin_override).length,
   };
 
   return (
