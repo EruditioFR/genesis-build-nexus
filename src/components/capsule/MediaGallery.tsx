@@ -178,7 +178,7 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-6 overflow-hidden w-full min-w-0">
         {/* Images Grid */}
         {images.length > 0 && (
           <div>
