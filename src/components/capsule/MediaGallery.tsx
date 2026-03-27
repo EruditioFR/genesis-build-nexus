@@ -185,7 +185,7 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
             <h3 className="text-sm font-medium text-muted-foreground mb-3">
               Photos ({images.length})
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
               {images.map((media, index) => {
                 const url = getMediaUrl(media);
                 if (!url) return null;
