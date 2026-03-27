@@ -90,7 +90,7 @@ const DashboardInspirationWidget = () => {
             </div>
           </DialogHeader>
 
-          <div className="p-3 space-y-2">
+          <div className="p-4 space-y-3">
             {memoryCategories.map((category) => {
               const progress = getCategoryProgress(category);
               const isExpanded = expandedCategory === category.id;
