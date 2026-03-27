@@ -54,28 +54,33 @@ export const useCategories = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCategories = useCallback(async () => {
+  const fetchCategories = useCallback(async (force = false) => {
+    // Use module-level cache if still valid
+    if (!force && cachedCategories && cachedSubCategories && Date.now() - cacheTimestamp < CATEGORIES_CACHE_TTL) {
+      setCategories(cachedCategories);
+      setSubCategories(cachedSubCategories);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const { data: categoriesData, error: categoriesError } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('is_active', true)
-        .order('order_index');
+      const [catRes, subRes] = await Promise.all([
+        supabase.from('categories').select('*').eq('is_active', true).order('order_index'),
+        supabase.from('sub_categories').select('*').order('order_index'),
+      ]);
 
-      if (categoriesError) throw categoriesError;
+      if (catRes.error) throw catRes.error;
+      if (subRes.error) throw subRes.error;
 
-      const { data: subCategoriesData, error: subCategoriesError } = await supabase
-        .from('sub_categories')
-        .select('*')
-        .order('order_index');
+      cachedCategories = catRes.data || [];
+      cachedSubCategories = subRes.data || [];
+      cacheTimestamp = Date.now();
 
-      if (subCategoriesError) throw subCategoriesError;
-
-      setCategories(categoriesData || []);
-      setSubCategories(subCategoriesData || []);
+      setCategories(cachedCategories);
+      setSubCategories(cachedSubCategories);
     } catch (err: any) {
       setError(err.message);
     } finally {
