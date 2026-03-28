@@ -65,7 +65,7 @@ const FAQ = () => {
         },
         {
           question: "Combien de souvenirs puis-je créer ?",
-          answer: "Avec l'abonnement gratuit, vous pouvez créer jusqu'à 5 souvenirs avec 100 Mo de stockage. Les abonnements Premium et Héritage offrent des souvenirs illimités avec un stockage étendu."
+          answer: "Avec l'abonnement gratuit, vous disposez de 250 Mo de stockage pour vos souvenirs texte et photo. L'abonnement Premium offre 10 Go avec les formats vidéo et audio en plus. L'abonnement Héritage offre 20 Go avec toutes les fonctionnalités avancées."
         }
       ]
     },
