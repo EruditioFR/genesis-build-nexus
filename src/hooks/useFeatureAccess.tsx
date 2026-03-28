@@ -138,7 +138,6 @@ export const useFeatureAccess = () => {
       'canAccessFamilyTree',
       'canAccessPodcast',
       'hasVIPSupport',
-      'canShareUnlimited',
     ];
 
     if (heritageOnlyFeatures.includes(feature)) {
