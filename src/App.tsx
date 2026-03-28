@@ -127,6 +127,7 @@ const App = () => (
                     <Route path="stats" element={<AdminStats />} />
                     <Route path="family-trees" element={<AdminFamilyTrees />} />
                     <Route path="cloud-usage" element={<AdminCloudUsage />} />
+                    <Route path="feedback" element={<AdminFeedback />} />
                     <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   
