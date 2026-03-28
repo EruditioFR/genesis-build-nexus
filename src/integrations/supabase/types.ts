@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      beta_feedback: {
+        Row: {
+          created_at: string
+          feature_ratings: Json
+          feature_suggestions: string | null
+          general_opinion: string | null
+          id: string
+          issues_encountered: string | null
+          recommend_reason: string | null
+          updated_at: string
+          user_id: string
+          ux_ratings: Json
+          would_recommend: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          feature_ratings?: Json
+          feature_suggestions?: string | null
+          general_opinion?: string | null
+          id?: string
+          issues_encountered?: string | null
+          recommend_reason?: string | null
+          updated_at?: string
+          user_id: string
+          ux_ratings?: Json
+          would_recommend?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          feature_ratings?: Json
+          feature_suggestions?: string | null
+          general_opinion?: string | null
+          id?: string
+          issues_encountered?: string | null
+          recommend_reason?: string | null
+          updated_at?: string
+          user_id?: string
+          ux_ratings?: Json
+          would_recommend?: boolean | null
+        }
+        Relationships: []
+      }
       capsule_categories: {
         Row: {
           capsule_id: string
