@@ -261,7 +261,7 @@
     "statusPending": "Pendiente",
     "selectCircle": "Selecciona un círculo para ver sus detalles",
     "deleteConfirmTitle": "¿Eliminar este círculo?",
-    "deleteConfirmDesc": "Todos los miembros serán eliminados y las cápsulas compartidas ya no serán accesibles. Esta acción es irreversible.",
+    "deleteConfirmDesc": "Todos los miembros serán eliminados y los recuerdos compartidos ya no serán accesibles. Esta acción es irreversible.",
     "deleteSuccess": "Círculo eliminado",
     "deleteError": "Error al eliminar",
     "memberRemoved": "Miembro eliminado",

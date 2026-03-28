@@ -252,7 +252,7 @@
     "unlockByGuardian": "Desbloqueo por un guardián",
     "unlockDate": "Fecha de desbloqueo",
     "chooseDate": "Elegir una fecha",
-    "willUnlockAt": "La cápsula se desbloqueará el {{date}}",
+    "willUnlockAt": "El recuerdo se desbloqueará el {{date}}",
     "guardian": "Guardián responsable",
     "loading": "Cargando...",
     "noGuardians": "Aún no tienes guardianes. Añade uno desde tu perfil.",
