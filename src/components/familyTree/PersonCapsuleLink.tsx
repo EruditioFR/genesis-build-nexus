@@ -99,7 +99,7 @@ export function LinkCapsuleDialog({
 
       if (error) throw error;
       
-      toast.success('Capsule liée avec succès');
+      toast.success('Souvenir lié avec succès');
       onLinked();
     } catch (error) {
       console.error('Error linking capsule:', error);
