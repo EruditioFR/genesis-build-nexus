@@ -105,6 +105,7 @@ const App = () => (
                   <Route path="/categories" element={<CategoriesPage />} />
                   <Route path="/categories/:slug" element={<CategoryDetailPage />} />
                   <Route path="/inspirations" element={<InspirationsPage />} />
+                  <Route path="/beta-feedback" element={<BetaFeedback />} />
                   
                   {/* Legal pages */}
                   <Route path="/privacy" element={<PrivacyPolicy />} />
