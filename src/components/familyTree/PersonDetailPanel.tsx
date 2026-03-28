@@ -795,7 +795,7 @@ export function PersonDetailPanel({
                 )}
 
                 {/* Biography */}
-                {person.biography && (
+                {person.biography && person.biography.replace(/\{[a-zA-Z_]+:[a-zA-Z_]+\}/g, '').trim() && (
                   <>
                     <Separator />
                     <div className="flex items-start gap-3">
@@ -803,7 +803,7 @@ export function PersonDetailPanel({
                       <div>
                         <p className="text-sm font-medium">Biographie</p>
                         <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                          {person.biography}
+                          {person.biography.replace(/\{[a-zA-Z_]+:[a-zA-Z_]+\}/g, '').trim() || '-'}
                         </p>
                       </div>
                     </div>
