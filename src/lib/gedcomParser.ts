@@ -40,6 +40,18 @@ interface GedcomLine {
   pointer?: string;
 }
 
+/**
+ * Clean GEDCOM notes by removing metadata tags like {geni:...}, _ATTR tags, etc.
+ */
+function cleanGedcomNote(note: string): string {
+  if (!note) return '';
+  // Remove {geni:...} tags and similar metadata markers
+  let cleaned = note.replace(/\{[a-zA-Z_]+:[a-zA-Z_]+\}/g, '').trim();
+  // Remove lines that are only whitespace after cleaning
+  cleaned = cleaned.split('\n').filter(line => line.trim()).join('\n');
+  return cleaned || '';
+}
+
 function parseLine(line: string): GedcomLine | null {
   const trimmed = line.trim();
   if (!trimmed) return null;
