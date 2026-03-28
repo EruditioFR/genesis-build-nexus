@@ -625,6 +625,23 @@ export function useFamilyTree() {
         onProgress?.(percent, `Relations...`);
       }
 
+      // Phase 4: Set root_person_id if not already set
+      const firstPersonDbId = Object.values(gedcomToDbId)[0];
+      if (firstPersonDbId) {
+        const { data: currentTree } = await supabase
+          .from('family_trees')
+          .select('root_person_id')
+          .eq('id', treeId)
+          .single();
+
+        if (currentTree && !currentTree.root_person_id) {
+          await supabase
+            .from('family_trees')
+            .update({ root_person_id: firstPersonDbId })
+            .eq('id', treeId);
+        }
+      }
+
       onProgress?.(100, 'Terminé');
 
       toast.success(`Import réussi : ${personsCreated} personnes importées`);
