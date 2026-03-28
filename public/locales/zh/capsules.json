@@ -249,8 +249,8 @@
     "willPublishAt": "回忆将于{{date}}自动发布"
   },
   "legacy": {
-    "title": "传承胶囊",
-    "description": "传承胶囊在满足条件之前保持锁定。非常适合在特定日期或经您批准后传递回忆。",
+    "title": "传承回忆",
+    "description": "传承回忆在满足条件之前保持锁定。非常适合在特定日期或经您批准后传递回忆。",
     "unlockByDate": "在特定日期解锁",
     "unlockByGuardian": "由监护人解锁",
     "unlockDate": "解锁日期",
