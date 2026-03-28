@@ -229,7 +229,7 @@ export function parseGedcom(content: string): GedcomParseResult {
             }
             break;
           case 'NOTE':
-            currentIndividual.notes = value;
+            currentIndividual.notes = cleanGedcomNote(value);
             break;
         }
       }
