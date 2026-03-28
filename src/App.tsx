@@ -59,6 +59,7 @@ const AdminStats = lazy(() => import("./pages/admin/AdminStats"));
 const AdminContactMessages = lazy(() => import("./pages/admin/AdminContactMessages"));
 const AdminFamilyTrees = lazy(() => import("./pages/admin/AdminFamilyTrees"));
 const AdminCloudUsage = lazy(() => import("./pages/admin/AdminCloudUsage"));
+const AdminFeedback = lazy(() => import("./pages/admin/AdminFeedback"));
 
 const queryClient = new QueryClient();
 
