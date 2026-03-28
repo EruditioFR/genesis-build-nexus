@@ -53,7 +53,7 @@ const softwareApplicationSchema = {
       "name": "Gratuit",
       "price": "0",
       "priceCurrency": "EUR",
-      "description": "250 Mo de stockage, capsules texte et photo, chronologie basique"
+      "description": "250 Mo de stockage, souvenirs texte et photo, chronologie basique"
     },
     {
       "@type": "Offer",
