@@ -1,31 +1,66 @@
 
 
-## Optimiser l'usage data de Lovable Cloud
+# Formulaire de satisfaction Beta Testeurs
 
-L'indicateur "Used when your app sends or receives data" mesure le volume de données échangées entre votre app et le backend (requêtes base de données, uploads/downloads de fichiers storage, appels edge functions).
+## Objectif
+Créer un formulaire multi-pages accessible aux utilisateurs connectés (forfait Héritage), pour recueillir les retours des beta testeurs sur toutes les fonctionnalités du site.
 
-### Leviers d'optimisation identifiés dans votre projet
+## Structure du formulaire (5 pages)
 
-1. **Compression des images (deja en place)** — Vous avez deja la compression automatique sous 3 Mo, ce qui reduit le volume d'upload.
+### Page 1 — Accueil & Remerciements
+- Message de remerciement personnalisé (avec le prénom de l'utilisateur)
+- Explication du but du formulaire
+- Bouton "Commencer"
 
-2. **Cache des signed URLs** — Le fichier `src/lib/signedUrlCache.ts` existe deja. Verifier qu'il est bien utilise partout (MediaGallery, CapsuleDetail, Timeline) pour eviter de regenerer des URLs signees a chaque rendu.
+### Page 2 — Évaluation des fonctionnalités (notation 1-5 étoiles)
+Questions basées sur les fonctionnalités existantes :
+- Création de souvenirs (texte, photo)
+- Navigation et ergonomie générale
+- Timeline / chronologie
+- Cercles de partage
+- Arbre généalogique
+- Catégories et sous-catégories
+- Recherche globale
+- Mode story
+- Profil utilisateur
+- Notifications
+- Inspirations / suggestions de souvenirs
 
-3. **Pagination des requetes** — Verifier que les listes de capsules, medias et notifications utilisent bien une pagination (limit/offset ou cursor) plutot que de tout charger d'un coup. Le default Supabase est 1000 lignes.
+### Page 3 — Qualité de l'expérience utilisateur (notation 1-5)
+- Facilité de prise en main
+- Design et esthétique
+- Rapidité de chargement
+- Clarté des textes et instructions
+- Expérience mobile
+- Processus d'inscription
+- Gestion des médias (upload photos/vidéos)
 
-4. **Optimiser les SELECT** — Ne selectionner que les colonnes necessaires (`.select('id, title, thumbnail_url')`) au lieu de `.select('*')` dans les listes/dashboards.
+### Page 4 — Retours libres (zones de texte)
+- Avis général sur le site (textarea)
+- Problèmes rencontrés pendant le test (textarea)
+- Fonctionnalités souhaitées / suggestions d'amélioration (textarea)
+- Recommanderiez-vous Family Garden ? (oui/non + pourquoi)
 
-5. **Lazy loading des medias** — S'assurer que les images/videos dans les galeries et timelines ne sont chargees (signed URL + download) que quand elles sont visibles a l'ecran (intersection observer).
+### Page 5 — Confirmation
+- Message de remerciement
+- Résumé du nombre de réponses données
+- Bouton retour au dashboard
 
-6. **Reduire les re-fetches** — Utiliser le cache React Query (deja en place via TanStack Query probablement) avec des `staleTime` adequats pour eviter de re-fetcher les memes donnees.
+## Architecture technique
 
-7. **Thumbnails pour les videos** — Utiliser `src/lib/videoThumbnail.ts` pour afficher des miniatures legeres plutot que de pre-charger les videos.
+1. **Migration DB** : Créer une table `beta_feedback` avec colonnes pour toutes les réponses (JSON pour les ratings, texte pour les champs libres), liée à `user_id`, avec RLS (seul l'utilisateur peut insérer/voir ses propres réponses, admins peuvent tout voir).
 
-### Ce que je peux implementer
+2. **Nouvelle page** : `src/pages/BetaFeedback.tsx` — formulaire multi-étapes avec state local, progress bar, navigation avant/arrière.
 
-- Auditer les requetes `.select('*')` et les remplacer par des selects cibles
-- Ajouter de la pagination la ou elle manque
-- Verifier/etendre l'utilisation du cache de signed URLs
-- Ajouter du lazy loading sur les medias de la timeline/galerie
+3. **Composants** :
+   - `StarRating` — composant réutilisable de notation par étoiles
+   - Utilisation des composants UI existants (Button, Textarea, Card, Progress)
 
-Voulez-vous que je procede a cet audit et ces optimisations ?
+4. **Route** : `/beta-feedback` ajoutée dans `App.tsx`
+
+5. **Accès** : Lien depuis le dashboard (visible uniquement pour les utilisateurs Héritage), protégé par authentification.
+
+6. **i18n** : Formulaire en français uniquement (ciblé beta testeurs FR).
+
+7. **Admin** : Les admins pourront consulter les réponses via la vue admin existante ou une requête directe.
 
