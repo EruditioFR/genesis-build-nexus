@@ -130,6 +130,7 @@
         "features": {
           "storage": "250 MB storage",
           "formats": "Text and photo memories",
+          "sharing": "Unlimited shares",
           "timeline": "Basic timeline",
           "ads": "With ads"
         }
@@ -144,7 +145,7 @@
         "features": {
           "storage": "10 GB storage",
           "formats": "Text, photo, video and audio memories",
-          "sharing": "1 memory share with the person of your choice",
+          "sharing": "Unlimited shares",
           "timeline": "Advanced timeline",
           "noAds": "No ads"
         }

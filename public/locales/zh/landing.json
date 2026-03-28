@@ -130,6 +130,7 @@
         "features": {
           "storage": "250 MB存储空间",
           "formats": "文字和照片回忆",
+          "sharing": "无限分享",
           "timeline": "基本时间线",
           "ads": "含广告"
         }
@@ -144,7 +145,7 @@
         "features": {
           "storage": "10 GB存储空间",
           "formats": "文字、照片、视频和音频回忆",
-          "sharing": "与您选择的1人分享回忆",
+          "sharing": "无限分享",
           "timeline": "高级时间线",
           "noAds": "无广告"
         }

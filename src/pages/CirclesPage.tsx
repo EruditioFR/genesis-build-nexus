@@ -280,10 +280,7 @@ const CirclesPage = () => {
             data-tour="circles-list"
           >
             {/* Limits indicator */}
-            <CircleLimitsIndicator 
-              currentCircles={circles.length}
-              currentMembersInSelectedCircle={selectedCircle ? members.length : undefined}
-            />
+            <CircleLimitsIndicator />
             {circles.length === 0 ? (
               <div className="p-8 rounded-2xl border border-border bg-card text-center">
                 <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">

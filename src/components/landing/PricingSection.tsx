@@ -25,6 +25,7 @@ const PricingSection = () => {
       featuresKeys: [
         "pricing.plans.free.features.storage",
         "pricing.plans.free.features.formats",
+        "pricing.plans.free.features.sharing",
         "pricing.plans.free.features.timeline",
         "pricing.plans.free.features.ads",
       ],

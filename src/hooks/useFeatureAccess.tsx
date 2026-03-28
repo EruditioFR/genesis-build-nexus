@@ -42,9 +42,9 @@ const FREE_LIMITS: FeatureLimits = {
   canCreateMixedCapsule: false,
   canAccessFamilyTree: false,
   maxFamilyTreePersons: 0,
-  maxCircles: 1,
-  maxMembersPerCircle: 1,
-  canShareUnlimited: false,
+  maxCircles: -1,
+  maxMembersPerCircle: -1,
+  canShareUnlimited: true,
   canAccessTimeline: true,
   canAccessLegacyCapsules: false,
   canAccessPodcast: false,
@@ -63,9 +63,9 @@ const PREMIUM_LIMITS: FeatureLimits = {
   canCreateMixedCapsule: true,
   canAccessFamilyTree: false,
   maxFamilyTreePersons: 0,
-  maxCircles: 3,
-  maxMembersPerCircle: 5,
-  canShareUnlimited: false,
+  maxCircles: -1,
+  maxMembersPerCircle: -1,
+  canShareUnlimited: true,
   canAccessTimeline: true,
   canAccessLegacyCapsules: true,
   canAccessPodcast: false,
@@ -138,7 +138,6 @@ export const useFeatureAccess = () => {
       'canAccessFamilyTree',
       'canAccessPodcast',
       'hasVIPSupport',
-      'canShareUnlimited',
     ];
 
     if (heritageOnlyFeatures.includes(feature)) {
@@ -172,7 +171,7 @@ export const useFeatureAccess = () => {
       canAccessFamilyTree: 'L\'arbre généalogique est disponible avec le forfait Héritage.',
       canAccessPodcast: 'Le podcast de vos souvenirs est disponible avec le forfait Héritage.',
       hasVIPSupport: 'Le support VIP WhatsApp est disponible avec le forfait Héritage.',
-      canShareUnlimited: 'Le partage illimité est disponible avec le forfait Héritage.',
+      
       canAccessLegacyCapsules: 'Les capsules testament sont disponibles avec le forfait Premium.',
     };
 
