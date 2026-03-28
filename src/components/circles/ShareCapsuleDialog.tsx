@@ -129,7 +129,7 @@ const ShareCapsuleDialog = ({ open, onOpenChange, capsuleId, capsuleTitle, userI
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display">
             <Share2 className="w-5 h-5 text-secondary" />
-            Partager la capsule
+            Partager le souvenir
           </DialogTitle>
           <DialogDescription>
             Sélectionnez les cercles avec lesquels partager "{capsuleTitle}"

@@ -394,7 +394,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
         onClick={() => setShowLinkDialog(true)}
       >
         <Link2 className="w-4 h-4" />
-        Lier une capsule
+         Lier un souvenir
       </Button>
 
       <LinkCapsuleDialog
