@@ -382,7 +382,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
         <div className="text-center py-6">
           <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
           <p className="text-sm text-muted-foreground">
-            Aucune capsule liée à cette personne
+            Aucun souvenir lié à cette personne
           </p>
         </div>
       )}
