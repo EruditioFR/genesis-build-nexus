@@ -261,7 +261,7 @@
     "statusPending": "待处理",
     "selectCircle": "选择一个圈子查看详情",
     "deleteConfirmTitle": "删除此圈子？",
-    "deleteConfirmDesc": "所有成员将被移除，共享的胶囊将无法访问。此操作无法撤销。",
+    "deleteConfirmDesc": "所有成员将被移除，共享的回忆将无法访问。此操作无法撤销。",
     "deleteSuccess": "圈子已删除",
     "deleteError": "删除时出错",
     "memberRemoved": "成员已移除",

@@ -252,7 +252,7 @@
     "unlockByGuardian": "보호자에 의해 잠금 해제",
     "unlockDate": "잠금 해제 날짜",
     "chooseDate": "날짜 선택",
-    "willUnlockAt": "캡슐은 {{date}}에 잠금 해제됩니다",
+    "willUnlockAt": "추억은 {{date}}에 잠금 해제됩니다",
     "guardian": "담당 보호자",
     "loading": "로딩 중...",
     "noGuardians": "아직 보호자가 없습니다. 프로필에서 추가하세요.",

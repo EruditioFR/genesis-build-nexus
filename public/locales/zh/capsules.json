@@ -255,7 +255,7 @@
     "unlockByGuardian": "由监护人解锁",
     "unlockDate": "解锁日期",
     "chooseDate": "选择日期",
-    "willUnlockAt": "胶囊将于{{date}}解锁",
+    "willUnlockAt": "回忆将于{{date}}解锁",
     "guardian": "负责监护人",
     "loading": "加载中...",
     "noGuardians": "您还没有监护人。请从个人资料中添加。",
