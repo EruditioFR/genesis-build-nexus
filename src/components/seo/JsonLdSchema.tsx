@@ -83,7 +83,7 @@ const softwareApplicationSchema = {
     }
   ],
   "featureList": [
-    "Capsules mémorielles multimédia (texte, photo, vidéo, audio)",
+    "Souvenirs multimédia (texte, photo, vidéo, audio)",
     "Chronologie interactive par décennies",
     "Cercles de partage familial sécurisés",
     "Arbre généalogique interactif avec import/export GEDCOM",
