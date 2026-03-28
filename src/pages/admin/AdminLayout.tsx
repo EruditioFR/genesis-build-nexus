@@ -13,7 +13,8 @@ import {
   Settings,
   BarChart3,
   TreePine,
-  Cloud
+  Cloud,
+  MessageSquareHeart
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useAuth } from "@/hooks/useAuth";
