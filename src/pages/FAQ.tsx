@@ -65,7 +65,7 @@ const FAQ = () => {
         },
         {
           question: "Combien de souvenirs puis-je créer ?",
-          answer: "Avec l'abonnement gratuit, vous pouvez créer jusqu'à 5 souvenirs avec 100 Mo de stockage. Les abonnements Premium et Héritage offrent des souvenirs illimités avec un stockage étendu."
+          answer: "Avec l'abonnement gratuit, vous disposez de 250 Mo de stockage pour vos souvenirs texte et photo. L'abonnement Premium offre 10 Go avec les formats vidéo et audio en plus. L'abonnement Héritage offre 20 Go avec toutes les fonctionnalités avancées."
         }
       ]
     },
@@ -111,7 +111,7 @@ const FAQ = () => {
       questions: [
         {
           question: "Quels sont les différents abonnements disponibles ?",
-          answer: "Nous proposons trois formules : Gratuit (5 souvenirs, 100 Mo), Premium (souvenirs illimités, 10 Go, 9,99€/mois) et Héritage (toutes les fonctionnalités Premium + mode héritage avancé, 19,99€/mois)."
+          answer: "Nous proposons trois formules : Gratuit (250 Mo, souvenirs texte et photo), Premium (10 Go, tous les formats, 1 partage, 4,99€/mois en offre de lancement) et Héritage (20 Go, partages illimités, arbre généalogique, podcast, support VIP, 19,99€/mois)."
         },
         {
           question: "Puis-je changer d'abonnement à tout moment ?",
