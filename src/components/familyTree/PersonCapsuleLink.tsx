@@ -149,7 +149,7 @@ export function LinkCapsuleDialog({
           <div className="text-center py-8">
             <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
             <p className="text-sm text-muted-foreground">
-              {search ? 'Aucune capsule trouvée' : 'Aucune capsule disponible'}
+              {search ? 'Aucun souvenir trouvé' : 'Aucun souvenir disponible'}
             </p>
           </div>
         ) : (
