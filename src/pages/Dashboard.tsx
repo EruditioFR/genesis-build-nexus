@@ -366,6 +366,29 @@ const Dashboard = () => {
           <StatsCards stats={stats} />
         </div>
 
+        {/* Beta Feedback Banner for legacy users */}
+        {profile?.subscription_level === 'legacy' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 md:mb-8"
+          >
+            <Link
+              to="/beta-feedback"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-secondary/30 bg-gradient-to-r from-secondary/5 to-secondary/10 hover:from-secondary/10 hover:to-secondary/15 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0">
+                <MessageSquareHeart className="w-6 h-6 text-secondary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground text-sm md:text-base">Donnez votre avis de beta testeur</p>
+                <p className="text-xs md:text-sm text-muted-foreground truncate">Aidez-nous à améliorer Family Garden — formulaire rapide (5 min)</p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-secondary shrink-0 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
+        )}
+
         {/* Main Grid - RecentCapsules first */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left Column - 2/3 width */}
