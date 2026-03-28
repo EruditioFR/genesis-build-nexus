@@ -243,7 +243,7 @@
     "chooseDate": "Elegir una fecha",
     "dateTimeFormat": "PPP 'a las' HH:mm",
     "publicationTime": "Hora de publicación",
-    "willPublishAt": "La cápsula se publicará automáticamente el {{date}}"
+    "willPublishAt": "El recuerdo se publicará automáticamente el {{date}}"
   },
   "legacy": {
     "title": "Cápsula Herencia",
