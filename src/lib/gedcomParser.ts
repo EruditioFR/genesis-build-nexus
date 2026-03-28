@@ -391,7 +391,7 @@ export async function parseGedcomAsync(content: string): Promise<GedcomParseResu
               if (value) currentIndividual.occupation = value;
               break;
             case 'NOTE':
-              currentIndividual.notes = value;
+              currentIndividual.notes = cleanGedcomNote(value);
               break;
           }
         }
