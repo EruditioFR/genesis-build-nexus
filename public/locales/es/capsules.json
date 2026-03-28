@@ -246,8 +246,8 @@
     "willPublishAt": "El recuerdo se publicará automáticamente el {{date}}"
   },
   "legacy": {
-    "title": "Cápsula Herencia",
-    "description": "Una cápsula herencia permanece bloqueada hasta que se cumpla una condición. Ideal para transmitir recuerdos en una fecha específica o con tu aprobación.",
+    "title": "Recuerdo Herencia",
+    "description": "Un recuerdo herencia permanece bloqueado hasta que se cumpla una condición. Ideal para transmitir recuerdos en una fecha específica o con tu aprobación.",
     "unlockByDate": "Desbloqueo en una fecha específica",
     "unlockByGuardian": "Desbloqueo por un guardián",
     "unlockDate": "Fecha de desbloqueo",
