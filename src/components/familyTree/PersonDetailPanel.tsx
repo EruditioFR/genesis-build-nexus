@@ -795,7 +795,7 @@ export function PersonDetailPanel({
                 )}
 
                 {/* Biography */}
-                {person.biography && (
+                {person.biography && person.biography.replace(/\{[a-zA-Z_]+:[a-zA-Z_]+\}/g, '').trim() && (
                   <>
                     <Separator />
                     <div className="flex items-start gap-3">
