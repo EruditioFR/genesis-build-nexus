@@ -243,7 +243,7 @@
     "chooseDate": "날짜 선택",
     "dateTimeFormat": "PPP HH:mm",
     "publicationTime": "발행 시간",
-    "willPublishAt": "캡슐은 {{date}}에 자동으로 발행됩니다"
+    "willPublishAt": "추억은 {{date}}에 자동으로 발행됩니다"
   },
   "legacy": {
     "title": "유산 캡슐",
