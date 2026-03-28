@@ -267,14 +267,32 @@ export default function FamilyTreePage() {
   const loadTree = useCallback(async () => {
     if (!tree?.id) return;
     const data = await fetchTree(tree.id);
-    setTree(data.tree);
-    setPersons(data.persons);
-    setRelationships(data.relationships);
-    setUnions(data.unions);
-    if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+    
+    // Get real count
+    const { count: realCount } = await supabase
+      .from('family_persons')
+      .select('*', { count: 'exact', head: true })
+      .eq('tree_id', tree.id);
+    setTotalPersonsCount(realCount || data.persons.length);
+
+    // Large tree with root: load branch only
+    if (data.tree?.root_person_id && (realCount || data.persons.length) >= LARGE_TREE_THRESHOLD) {
+      const branch = await fetchBranch(tree.id, data.tree.root_person_id, BRANCH_FETCH_GENERATIONS);
+      setTree(data.tree);
+      setPersons(branch.persons);
+      setRelationships(branch.relationships);
+      setUnions(branch.unions);
       setViewMode('ascendant');
+    } else {
+      setTree(data.tree);
+      setPersons(data.persons);
+      setRelationships(data.relationships);
+      setUnions(data.unions);
+      if (data.persons.length >= LARGE_TREE_THRESHOLD) {
+        setViewMode('ascendant');
+      }
     }
-  }, [tree?.id, fetchTree]);
+  }, [tree?.id, fetchTree, fetchBranch]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
