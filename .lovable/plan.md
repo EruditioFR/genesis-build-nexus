@@ -1,66 +1,36 @@
 
 
-# Formulaire de satisfaction Beta Testeurs
+# Correction : Arbre vide après import GEDCOM
 
-## Objectif
-Créer un formulaire multi-pages accessible aux utilisateurs connectés (forfait Héritage), pour recueillir les retours des beta testeurs sur toutes les fonctionnalités du site.
+## Problème identifié
 
-## Structure du formulaire (5 pages)
+Après l'import GEDCOM, les personnes apparaissent dans la liste mais l'arbre reste vide. Deux causes principales :
 
-### Page 1 — Accueil & Remerciements
-- Message de remerciement personnalisé (avec le prénom de l'utilisateur)
-- Explication du but du formulaire
-- Bouton "Commencer"
+1. **Pas de `root_person_id` défini après l'import** — L'import crée les personnes et relations mais ne désigne jamais de personne racine sur l'arbre. Sans racine, la visualisation en mode "ascendant" (mode par défaut pour les grands arbres) ne sait pas d'où partir.
 
-### Page 2 — Évaluation des fonctionnalités (notation 1-5 étoiles)
-Questions basées sur les fonctionnalités existantes :
-- Création de souvenirs (texte, photo)
-- Navigation et ergonomie générale
-- Timeline / chronologie
-- Cercles de partage
-- Arbre généalogique
-- Catégories et sous-catégories
-- Recherche globale
-- Mode story
-- Profil utilisateur
-- Notifications
-- Inspirations / suggestions de souvenirs
+2. **`loadTree` ne gère pas les grands arbres** — Après import, `loadTree` recharge toutes les données mais ne bascule pas vers le chargement par branche (`fetchBranch`) pour les arbres volumineux, contrairement au code d'initialisation. Cela peut causer des problèmes de rendu.
 
-### Page 3 — Qualité de l'expérience utilisateur (notation 1-5)
-- Facilité de prise en main
-- Design et esthétique
-- Rapidité de chargement
-- Clarté des textes et instructions
-- Expérience mobile
-- Processus d'inscription
-- Gestion des médias (upload photos/vidéos)
+## Plan de correction
 
-### Page 4 — Retours libres (zones de texte)
-- Avis général sur le site (textarea)
-- Problèmes rencontrés pendant le test (textarea)
-- Fonctionnalités souhaitées / suggestions d'amélioration (textarea)
-- Recommanderiez-vous Family Garden ? (oui/non + pourquoi)
+### 1. Définir automatiquement une personne racine après l'import GEDCOM
 
-### Page 5 — Confirmation
-- Message de remerciement
-- Résumé du nombre de réponses données
-- Bouton retour au dashboard
+Dans `src/hooks/useFamilyTree.tsx`, à la fin de `importFromGedcom` (après les 3 phases d'insertion), ajouter la logique :
+- Récupérer l'ID DB de la première personne importée (`gedcomToDbId` du premier individu)
+- Mettre à jour `family_trees.root_person_id` avec cet ID si le champ est actuellement `null`
 
-## Architecture technique
+### 2. Améliorer `loadTree` pour les grands arbres
 
-1. **Migration DB** : Créer une table `beta_feedback` avec colonnes pour toutes les réponses (JSON pour les ratings, texte pour les champs libres), liée à `user_id`, avec RLS (seul l'utilisateur peut insérer/voir ses propres réponses, admins peuvent tout voir).
+Dans `src/pages/FamilyTreePage.tsx`, modifier `loadTree` pour reproduire la logique d'initialisation :
+- Récupérer le count total des personnes
+- Si l'arbre a un `root_person_id` ET plus de 500 personnes → utiliser `fetchBranch` au lieu de `fetchTree`
+- Mettre à jour `totalPersonsCount`
 
-2. **Nouvelle page** : `src/pages/BetaFeedback.tsx` — formulaire multi-étapes avec state local, progress bar, navigation avant/arrière.
+### 3. Rafraîchir l'état `tree` après import
 
-3. **Composants** :
-   - `StarRating` — composant réutilisable de notation par étoiles
-   - Utilisation des composants UI existants (Button, Textarea, Card, Progress)
+Dans `handleGedcomImport`, s'assurer que l'objet `tree` en state est mis à jour avec le nouveau `root_person_id` après le rechargement via `loadTree`.
 
-4. **Route** : `/beta-feedback` ajoutée dans `App.tsx`
+## Fichiers modifiés
 
-5. **Accès** : Lien depuis le dashboard (visible uniquement pour les utilisateurs Héritage), protégé par authentification.
-
-6. **i18n** : Formulaire en français uniquement (ciblé beta testeurs FR).
-
-7. **Admin** : Les admins pourront consulter les réponses via la vue admin existante ou une requête directe.
+- `src/hooks/useFamilyTree.tsx` — Ajout de la mise à jour `root_person_id` en fin d'import
+- `src/pages/FamilyTreePage.tsx` — Refonte de `loadTree` pour gérer les grands arbres comme à l'initialisation
 
