@@ -183,7 +183,7 @@
     "sections": {
       "presentation": {
         "title": "1. Présentation du service",
-        "content": "Family Garden est une plateforme de préservation de souvenirs familiaux permettant aux utilisateurs de créer, stocker et partager des capsules mémorielles numériques. Ces capsules peuvent contenir des textes, photos, vidéos, enregistrements audio et autres contenus multimédias destinés à être préservés et transmis aux générations futures."
+        "content": "Family Garden est une plateforme de préservation de souvenirs familiaux permettant aux utilisateurs de créer, stocker et partager des souvenirs numériques. Ces souvenirs peuvent contenir des textes, photos, vidéos, enregistrements audio et autres contenus multimédias destinés à être préservés et transmis aux générations futures."
       },
       "acceptance": {
         "title": "2. Acceptation des conditions",
