@@ -73,7 +73,7 @@ export function CountrySelector({ value, onChange, className }: CountrySelectorP
             {selectedCountry?.name || t('signup.countryPlaceholder')}
           </span>
         </div>
-        <ChevronDown className={cn('w-4 h-4 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
+        <ChevronDown className={cn('w-4 h-4 shrink-0 text-[#1a1a2e]/50 transition-transform', open && 'rotate-180')} />
       </button>
 
       {open && (

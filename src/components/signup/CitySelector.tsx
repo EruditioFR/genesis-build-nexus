@@ -200,7 +200,7 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
   return (
     <div ref={containerRef} className={cn('relative', className)}>
       <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 shrink-0 text-[#1a1a2e]/50 z-10" />
         <Input
           ref={inputRef}
           type="text"
@@ -211,7 +211,7 @@ export function CitySelector({ value, onChange, countryCode, className }: CitySe
             setOpen(true);
             setSearch(value);
           }}
-          className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40"
+          className="pl-10 pr-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40 truncate"
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {loading && <Loader2 className="w-4 h-4 text-[#1a1a2e]/50 animate-spin" />}
