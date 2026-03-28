@@ -144,7 +144,7 @@ const faqPageSchema = {
       "name": "Comment fonctionne le legs posthume sur Family Garden ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Avec l'offre Héritage, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certaines capsules selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
+        "text": "Avec l'offre Héritage, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certains souvenirs selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
       }
     },
     {
