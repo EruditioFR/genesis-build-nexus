@@ -25,7 +25,7 @@
           "profile": "Datos de perfil:",
           "profileDesc": "foto de perfil, biografía, fecha de nacimiento",
           "userContent": "Contenido del usuario:",
-          "userContentDesc": "cápsulas del tiempo, fotos, videos, textos, árboles genealógicos",
+          "userContentDesc": "recuerdos digitales, fotos, videos, textos, árboles genealógicos",
           "technical": "Datos técnicos:",
           "technicalDesc": "dirección IP, tipo de navegador, datos de conexión, registros de acceso",
           "payment": "Datos de pago:",
@@ -36,10 +36,10 @@
         "title": "3. Uso de los datos",
         "intro": "Sus datos se utilizan para:",
         "items": [
-          "Proporcionar y mejorar nuestros servicios de cápsulas del tiempo",
+          "Proporcionar y mejorar nuestros servicios de recuerdos digitales",
           "Gestionar su cuenta y suscripciones",
           "Procesar sus pagos de forma segura",
-          "Enviarle notificaciones sobre sus cápsulas y su apertura programada",
+          "Enviarle notificaciones sobre sus recuerdos y su apertura programada",
           "Garantizar la seguridad y disponibilidad de la plataforma",
           "Responder a sus solicitudes de asistencia"
         ]
@@ -48,7 +48,7 @@
         "title": "4. Base legal del tratamiento",
         "intro": "Tratamos sus datos sobre las siguientes bases legales:",
         "contract": "Ejecución del contrato (Art. 6.1.b RGPD):",
-        "contractDesc": "para proporcionar nuestros servicios de cápsulas del tiempo",
+        "contractDesc": "para proporcionar nuestros servicios de recuerdos digitales",
         "consent": "Consentimiento (Art. 6.1.a RGPD):",
         "consentDesc": "para comunicaciones de marketing y cookies analíticas",
         "legitimateInterest": "Interés legítimo (Art. 6.1.f RGPD):",
@@ -59,7 +59,7 @@
       "retention": {
         "title": "5. Conservación de datos",
         "content": "Sus datos se conservan durante toda la duración de su cuenta activa. Si elimina su cuenta, sus datos personales se eliminarán en un plazo de 30 días, excepto por obligaciones legales de conservación (datos de facturación: 10 años).",
-        "capsules": "Las cápsulas del tiempo se conservan según la configuración que haya definido, incluidas las cápsulas de legado digital que pueden transmitirse a sus guardianes designados."
+        "capsules": "Los recuerdos se conservan según la configuración que haya definido, incluidos los recuerdos de legado digital que pueden transmitirse a sus guardianes designados."
       },
       "hosting": {
         "title": "6. Alojamiento y ubicación de datos",
@@ -183,7 +183,7 @@
     "sections": {
       "presentation": {
         "title": "1. Presentación del servicio",
-        "content": "Family Garden es una plataforma de preservación de recuerdos familiares que permite a los usuarios crear, almacenar y compartir cápsulas de memoria digitales. Estas cápsulas pueden contener textos, fotos, videos, grabaciones de audio y otros contenidos multimedia destinados a ser preservados y transmitidos a las generaciones futuras."
+        "content": "Family Garden es una plataforma de preservación de recuerdos familiares que permite a los usuarios crear, almacenar y compartir recuerdos digitales. Estos recuerdos pueden contener textos, fotos, videos, grabaciones de audio y otros contenidos multimedia destinados a ser preservados y transmitidos a las generaciones futuras."
       },
       "acceptance": {
         "title": "2. Aceptación de las condiciones",
@@ -224,10 +224,10 @@
         "guarantee": "Usted garantiza que tiene los derechos necesarios sobre todo el contenido que publica y que no viola los derechos de terceros."
       },
       "capsules": {
-        "title": "6. Cápsulas de memoria y función Legado",
-        "intro": "Family Garden ofrece una función única para transmitir cápsulas después del fallecimiento del usuario. Esta función implica:",
+        "title": "6. Recuerdos y función Legado",
+        "intro": "Family Garden ofrece una función única para transmitir recuerdos después del fallecimiento del usuario. Esta función implica:",
         "items": [
-          "La designación de guardianes de confianza que pueden desbloquear sus cápsulas",
+          "La designación de guardianes de confianza que pueden desbloquear sus recuerdos",
           "La definición de condiciones de desbloqueo (fecha, evento, fallecimiento)",
           "La responsabilidad de mantener actualizada la información de sus guardianes"
         ],
@@ -235,7 +235,7 @@
       },
       "circles": {
         "title": "7. Círculos de compartir",
-        "content": "Los círculos le permiten compartir sus cápsulas con grupos de personas de confianza. Usted es responsable de gestionar sus círculos y las personas que invita. Los miembros del círculo pueden ver las cápsulas compartidas según los permisos que defina."
+        "content": "Los círculos le permiten compartir sus recuerdos con grupos de personas de confianza. Usted es responsable de gestionar sus círculos y las personas que invita. Los miembros del círculo pueden ver los recuerdos compartidos según los permisos que defina."
       },
       "storage": {
         "title": "8. Almacenamiento y conservación",
@@ -405,15 +405,15 @@
         "plans": {
           "free": {
             "name": "Gratis",
-            "description": "Acceso limitado con almacenamiento básico (500 MB), creación de cápsulas de texto y foto, 1 círculo de compartir."
+            "description": "Acceso limitado con almacenamiento básico (500 MB), creación de recuerdos de texto y foto, 1 círculo de compartir."
           },
           "premium": {
             "name": "Premium",
-            "description": "Almacenamiento extendido (10 GB), cápsulas de video y audio, hasta 5 círculos de compartir, cápsulas programadas, exportación PDF."
+            "description": "Almacenamiento extendido (10 GB), recuerdos de video y audio, hasta 5 círculos de compartir, recuerdos programados, exportación PDF."
           },
           "legacy": {
             "name": "Herencia",
-            "description": "Todas las funciones Premium + árbol genealógico ilimitado, cápsulas de legado digital, guardianes de confianza, círculos ilimitados, 50 GB de almacenamiento."
+            "description": "Todas las funciones Premium + árbol genealógico ilimitado, recuerdos de legado digital, guardianes de confianza, círculos ilimitados, 50 GB de almacenamiento."
           }
         }
       },

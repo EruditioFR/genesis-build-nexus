@@ -81,7 +81,7 @@ export function LinkCapsuleDialog({
       setCapsules(data || []);
     } catch (error) {
       console.error('Error fetching capsules:', error);
-      toast.error('Erreur lors du chargement des capsules');
+      toast.error('Erreur lors du chargement des souvenirs');
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ export function LinkCapsuleDialog({
 
       if (error) throw error;
       
-      toast.success('Capsule liée avec succès');
+      toast.success('Souvenir lié avec succès');
       onLinked();
     } catch (error) {
       console.error('Error linking capsule:', error);
@@ -133,7 +133,7 @@ export function LinkCapsuleDialog({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
-          placeholder="Rechercher une capsule..."
+          placeholder="Rechercher un souvenir..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
@@ -149,7 +149,7 @@ export function LinkCapsuleDialog({
           <div className="text-center py-8">
             <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
             <p className="text-sm text-muted-foreground">
-              {search ? 'Aucune capsule trouvée' : 'Aucune capsule disponible'}
+              {search ? 'Aucun souvenir trouvé' : 'Aucun souvenir disponible'}
             </p>
           </div>
         ) : (
@@ -300,7 +300,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
 
       if (error) throw error;
       
-      toast.success('Capsule déliée');
+      toast.success('Souvenir délié');
       fetchLinkedCapsules();
       onUpdate();
     } catch (error) {
@@ -382,7 +382,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
         <div className="text-center py-6">
           <Package className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
           <p className="text-sm text-muted-foreground">
-            Aucune capsule liée à cette personne
+            Aucun souvenir lié à cette personne
           </p>
         </div>
       )}
@@ -394,7 +394,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
         onClick={() => setShowLinkDialog(true)}
       >
         <Link2 className="w-4 h-4" />
-        Lier une capsule
+         Lier un souvenir
       </Button>
 
       <LinkCapsuleDialog

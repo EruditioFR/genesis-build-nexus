@@ -45,7 +45,7 @@ const softwareApplicationSchema = {
   "applicationCategory": "LifestyleApplication",
   "applicationSubCategory": "Family Memory Preservation",
   "operatingSystem": "Web",
-  "description": "Application web de création de capsules mémorielles numériques. Rassemblez photos, vidéos, audio et textes dans des souvenirs contextualisés, organisez-les sur une chronologie interactive par décennies, et partagez-les en cercles privés avec votre famille. Chiffrement AES-256, serveurs européens RGPD.",
+  "description": "Application web de création de souvenirs numériques. Rassemblez photos, vidéos, audio et textes dans des souvenirs contextualisés, organisez-les sur une chronologie interactive par décennies, et partagez-les en cercles privés avec votre famille. Chiffrement AES-256, serveurs européens RGPD.",
   "abstract": "Family Garden est un journal de famille privé qui permet de préserver et transmettre ses souvenirs aux générations futures. Chaque souvenir combine plusieurs médias avec un contexte (date, lieu, personnes) et s'organise sur une chronologie interactive.",
   "offers": [
     {
@@ -53,7 +53,7 @@ const softwareApplicationSchema = {
       "name": "Gratuit",
       "price": "0",
       "priceCurrency": "EUR",
-      "description": "250 Mo de stockage, capsules texte et photo, chronologie basique"
+      "description": "250 Mo de stockage, souvenirs texte et photo, chronologie basique"
     },
     {
       "@type": "Offer",
@@ -83,7 +83,7 @@ const softwareApplicationSchema = {
     }
   ],
   "featureList": [
-    "Capsules mémorielles multimédia (texte, photo, vidéo, audio)",
+    "Souvenirs multimédia (texte, photo, vidéo, audio)",
     "Chronologie interactive par décennies",
     "Cercles de partage familial sécurisés",
     "Arbre généalogique interactif avec import/export GEDCOM",
@@ -144,7 +144,7 @@ const faqPageSchema = {
       "name": "Comment fonctionne le legs posthume sur Family Garden ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Avec l'offre Héritage, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certaines capsules selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
+        "text": "Avec l'offre Héritage, vous désignez des contacts de confiance (gardiens) qui seront notifiés et recevront accès à certains souvenirs selon vos souhaits après votre décès. Vous pouvez programmer des révélations différées, laisser des messages personnels pour chaque destinataire, et définir des conditions d'accès spécifiques."
       }
     },
     {

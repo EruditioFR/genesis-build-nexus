@@ -75,7 +75,7 @@
       },
       "step3": {
         "title": "Organiza y comparte",
-        "description": "Estructura tus cápsulas en capítulos de vida e invita a tu familia a contribuir."
+        "description": "Estructura tus recuerdos en capítulos de vida e invita a tu familia a contribuir."
       },
       "step4": {
         "title": "Revive cuando quieras",
@@ -99,7 +99,7 @@
         "role": "Emprendedor, 45 años"
       },
       "t3": {
-        "quote": "Gracias a las funciones colaborativas, toda mi familia pudo contribuir a la cápsula de nuestro padre. Un regalo invaluable.",
+        "quote": "Gracias a las funciones colaborativas, toda mi familia pudo contribuir al recuerdo de nuestro padre. Un regalo invaluable.",
         "author": "Sophie M.",
         "role": "Cuidadora familiar, 35 años"
       }
@@ -172,8 +172,8 @@
     "titleHighlight": "frecuentes",
     "items": {
       "q1": {
-        "question": "¿Qué es una cápsula de recuerdos?",
-        "answer": "Una cápsula de recuerdos es un contenedor digital seguro que preserva tus recuerdos como textos, fotos, videos y audio. Es tu historia personal, organizada cronológicamente y lista para ser transmitida a las generaciones futuras. Cada cápsula es privada y accesible solo para las personas que autorices."
+        "question": "¿Qué es un recuerdo digital?",
+        "answer": "Un recuerdo digital es un espacio seguro que preserva tus recuerdos como textos, fotos, videos y audio. Es tu historia personal, organizada cronológicamente y lista para ser transmitida a las generaciones futuras. Cada recuerdo es privado y accesible solo para las personas que autorices."
       },
       "q2": {
         "question": "¿Mis datos están seguros?",
@@ -189,7 +189,7 @@
       },
       "q5": {
         "question": "¿Cómo funciona el legado póstumo?",
-        "answer": "Con la oferta Legacy, designas contactos de confianza que serán notificados y recibirán acceso a ciertas cápsulas según tus deseos. Puedes programar revelaciones diferidas, definir condiciones de acceso y dejar mensajes personales."
+        "answer": "Con la oferta Legacy, designas contactos de confianza que serán notificados y recibirán acceso a ciertos recuerdos según tus deseos. Puedes programar revelaciones diferidas, definir condiciones de acceso y dejar mensajes personales."
       },
       "q6": {
         "question": "¿Hay una aplicación móvil?",

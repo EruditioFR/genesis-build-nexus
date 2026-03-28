@@ -25,7 +25,7 @@
           "profile": "Données de profil :",
           "profileDesc": "photo de profil, biographie, date de naissance",
           "userContent": "Contenu utilisateur :",
-          "userContentDesc": "capsules temporelles, photos, vidéos, textes, arbres généalogiques",
+          "userContentDesc": "souvenirs numériques, photos, vidéos, textes, arbres généalogiques",
           "technical": "Données techniques :",
           "technicalDesc": "adresse IP, type de navigateur, données de connexion, logs d'accès",
           "payment": "Données de paiement :",
@@ -36,10 +36,10 @@
         "title": "3. Utilisation des données",
         "intro": "Vos données sont utilisées pour :",
         "items": [
-          "Fournir et améliorer nos services de capsules temporelles",
+          "Fournir et améliorer nos services de souvenirs numériques",
           "Gérer votre compte et vos abonnements",
           "Traiter vos paiements de manière sécurisée",
-          "Vous envoyer des notifications relatives à vos capsules et à leur ouverture programmée",
+          "Vous envoyer des notifications relatives à vos souvenirs et à leur ouverture programmée",
           "Assurer la sécurité et la disponibilité de la plateforme",
           "Répondre à vos demandes d'assistance"
         ]
@@ -48,7 +48,7 @@
         "title": "4. Base légale du traitement",
         "intro": "Nous traitons vos données sur les bases légales suivantes :",
         "contract": "Exécution du contrat (Art. 6.1.b RGPD) :",
-        "contractDesc": "pour fournir nos services de capsules temporelles",
+        "contractDesc": "pour fournir nos services de souvenirs numériques",
         "consent": "Consentement (Art. 6.1.a RGPD) :",
         "consentDesc": "pour les communications marketing et les cookies analytiques",
         "legitimateInterest": "Intérêt légitime (Art. 6.1.f RGPD) :",
@@ -59,7 +59,7 @@
       "retention": {
         "title": "5. Conservation des données",
         "content": "Vos données sont conservées pendant toute la durée de votre compte actif. En cas de suppression de compte, vos données personnelles seront supprimées dans un délai de 30 jours, sauf obligation légale de conservation (données de facturation : 10 ans).",
-        "capsules": "Les capsules temporelles sont conservées selon les paramètres que vous avez définis, y compris les capsules d'héritage numérique qui peuvent être transmises à vos gardiens désignés."
+        "capsules": "Les souvenirs sont conservés selon les paramètres que vous avez définis, y compris les souvenirs d'héritage numérique qui peuvent être transmis à vos gardiens désignés."
       },
       "hosting": {
         "title": "6. Hébergement et localisation des données",
@@ -183,7 +183,7 @@
     "sections": {
       "presentation": {
         "title": "1. Présentation du service",
-        "content": "Family Garden est une plateforme de préservation de souvenirs familiaux permettant aux utilisateurs de créer, stocker et partager des capsules mémorielles numériques. Ces capsules peuvent contenir des textes, photos, vidéos, enregistrements audio et autres contenus multimédias destinés à être préservés et transmis aux générations futures."
+        "content": "Family Garden est une plateforme de préservation de souvenirs familiaux permettant aux utilisateurs de créer, stocker et partager des souvenirs numériques. Ces souvenirs peuvent contenir des textes, photos, vidéos, enregistrements audio et autres contenus multimédias destinés à être préservés et transmis aux générations futures."
       },
       "acceptance": {
         "title": "2. Acceptation des conditions",
@@ -224,10 +224,10 @@
         "guarantee": "Vous garantissez que vous disposez des droits nécessaires sur tous les contenus que vous publiez et que ceux-ci ne violent pas les droits de tiers."
       },
       "capsules": {
-        "title": "6. Capsules mémorielles et fonctionnalité Héritage",
-        "intro": "Family Garden propose une fonctionnalité unique de transmission de capsules après le décès de l'utilisateur. Cette fonctionnalité implique :",
+        "title": "6. Souvenirs et fonctionnalité Héritage",
+        "intro": "Family Garden propose une fonctionnalité unique de transmission de souvenirs après le décès de l'utilisateur. Cette fonctionnalité implique :",
         "items": [
-          "La désignation de gardiens de confiance qui pourront débloquer vos capsules",
+          "La désignation de gardiens de confiance qui pourront débloquer vos souvenirs",
           "La définition de conditions de déverrouillage (date, événement, décès)",
           "La responsabilité de tenir à jour les informations de vos gardiens"
         ],
@@ -235,7 +235,7 @@
       },
       "circles": {
         "title": "7. Cercles de partage",
-        "content": "Les cercles vous permettent de partager vos capsules avec des groupes de personnes de confiance. Vous êtes responsable de la gestion de vos cercles et des personnes que vous y invitez. Les membres d'un cercle peuvent visualiser les capsules partagées selon les permissions que vous définissez."
+        "content": "Les cercles vous permettent de partager vos souvenirs avec des groupes de personnes de confiance. Vous êtes responsable de la gestion de vos cercles et des personnes que vous y invitez. Les membres d'un cercle peuvent visualiser les souvenirs partagés selon les permissions que vous définissez."
       },
       "storage": {
         "title": "8. Stockage et conservation",
@@ -463,15 +463,15 @@
         "plans": {
           "free": {
             "name": "Gratuit",
-            "description": "Accès limité avec stockage de base (500 Mo), création de capsules texte et photo, 1 cercle de partage."
+            "description": "Accès limité avec stockage de base (500 Mo), création de souvenirs texte et photo, 1 cercle de partage."
           },
           "premium": {
             "name": "Premium",
-            "description": "Stockage étendu (10 Go), capsules vidéo et audio, jusqu'à 5 cercles de partage, capsules programmées, export PDF."
+            "description": "Stockage étendu (10 Go), souvenirs vidéo et audio, jusqu'à 5 cercles de partage, souvenirs programmés, export PDF."
           },
           "legacy": {
             "name": "Héritage",
-            "description": "Toutes les fonctionnalités Premium + arbre généalogique illimité, capsules d'héritage numérique, gardiens de confiance, cercles illimités, stockage 20 Go."
+            "description": "Toutes les fonctionnalités Premium + arbre généalogique illimité, souvenirs d'héritage numérique, gardiens de confiance, cercles illimités, stockage 20 Go."
           }
         }
       },
