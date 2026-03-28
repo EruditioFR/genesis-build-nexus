@@ -25,7 +25,7 @@
           "profile": "Données de profil :",
           "profileDesc": "photo de profil, biographie, date de naissance",
           "userContent": "Contenu utilisateur :",
-          "userContentDesc": "capsules temporelles, photos, vidéos, textes, arbres généalogiques",
+          "userContentDesc": "souvenirs numériques, photos, vidéos, textes, arbres généalogiques",
           "technical": "Données techniques :",
           "technicalDesc": "adresse IP, type de navigateur, données de connexion, logs d'accès",
           "payment": "Données de paiement :",
