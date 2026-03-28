@@ -596,9 +596,9 @@ export function PersonDetailPanel({
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <TabsList className="grid grid-cols-3 mx-4 mt-2">
-          <TabsTrigger value="overview">Infos</TabsTrigger>
-          <TabsTrigger value="relations">Famille</TabsTrigger>
-          <TabsTrigger value="capsules">Capsules</TabsTrigger>
+          <TabsTrigger value="overview">{t('familyTree:detail.tabs.overview')}</TabsTrigger>
+          <TabsTrigger value="relations">{t('familyTree:detail.tabs.relations')}</TabsTrigger>
+          <TabsTrigger value="capsules">{t('familyTree:detail.tabs.capsules')}</TabsTrigger>
         </TabsList>
 
         <ScrollArea className="flex-1">
