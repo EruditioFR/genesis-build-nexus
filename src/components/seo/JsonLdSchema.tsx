@@ -45,7 +45,7 @@ const softwareApplicationSchema = {
   "applicationCategory": "LifestyleApplication",
   "applicationSubCategory": "Family Memory Preservation",
   "operatingSystem": "Web",
-  "description": "Application web de création de capsules mémorielles numériques. Rassemblez photos, vidéos, audio et textes dans des souvenirs contextualisés, organisez-les sur une chronologie interactive par décennies, et partagez-les en cercles privés avec votre famille. Chiffrement AES-256, serveurs européens RGPD.",
+  "description": "Application web de création de souvenirs numériques. Rassemblez photos, vidéos, audio et textes dans des souvenirs contextualisés, organisez-les sur une chronologie interactive par décennies, et partagez-les en cercles privés avec votre famille. Chiffrement AES-256, serveurs européens RGPD.",
   "abstract": "Family Garden est un journal de famille privé qui permet de préserver et transmettre ses souvenirs aux générations futures. Chaque souvenir combine plusieurs médias avec un contexte (date, lieu, personnes) et s'organise sur une chronologie interactive.",
   "offers": [
     {
