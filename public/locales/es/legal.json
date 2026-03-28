@@ -405,7 +405,7 @@
         "plans": {
           "free": {
             "name": "Gratis",
-            "description": "Acceso limitado con almacenamiento básico (500 MB), creación de cápsulas de texto y foto, 1 círculo de compartir."
+            "description": "Acceso limitado con almacenamiento básico (500 MB), creación de recuerdos de texto y foto, 1 círculo de compartir."
           },
           "premium": {
             "name": "Premium",
