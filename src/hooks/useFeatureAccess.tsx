@@ -171,7 +171,7 @@ export const useFeatureAccess = () => {
       canAccessFamilyTree: 'L\'arbre généalogique est disponible avec le forfait Héritage.',
       canAccessPodcast: 'Le podcast de vos souvenirs est disponible avec le forfait Héritage.',
       hasVIPSupport: 'Le support VIP WhatsApp est disponible avec le forfait Héritage.',
-      canShareUnlimited: 'Le partage illimité est disponible avec le forfait Héritage.',
+      
       canAccessLegacyCapsules: 'Les capsules testament sont disponibles avec le forfait Premium.',
     };
 
