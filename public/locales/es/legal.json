@@ -224,10 +224,10 @@
         "guarantee": "Usted garantiza que tiene los derechos necesarios sobre todo el contenido que publica y que no viola los derechos de terceros."
       },
       "capsules": {
-        "title": "6. Cápsulas de memoria y función Legado",
-        "intro": "Family Garden ofrece una función única para transmitir cápsulas después del fallecimiento del usuario. Esta función implica:",
+        "title": "6. Recuerdos y función Legado",
+        "intro": "Family Garden ofrece una función única para transmitir recuerdos después del fallecimiento del usuario. Esta función implica:",
         "items": [
-          "La designación de guardianes de confianza que pueden desbloquear sus cápsulas",
+          "La designación de guardianes de confianza que pueden desbloquear sus recuerdos",
           "La definición de condiciones de desbloqueo (fecha, evento, fallecimiento)",
           "La responsabilidad de mantener actualizada la información de sus guardianes"
         ],
@@ -235,7 +235,7 @@
       },
       "circles": {
         "title": "7. Círculos de compartir",
-        "content": "Los círculos le permiten compartir sus cápsulas con grupos de personas de confianza. Usted es responsable de gestionar sus círculos y las personas que invita. Los miembros del círculo pueden ver las cápsulas compartidas según los permisos que defina."
+        "content": "Los círculos le permiten compartir sus recuerdos con grupos de personas de confianza. Usted es responsable de gestionar sus círculos y las personas que invita. Los miembros del círculo pueden ver los recuerdos compartidos según los permisos que defina."
       },
       "storage": {
         "title": "8. Almacenamiento y conservación",
