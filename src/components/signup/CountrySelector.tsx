@@ -67,9 +67,9 @@ export function CountrySelector({ value, onChange, className }: CountrySelectorP
           !value && 'text-[#1a1a2e]/40'
         )}
       >
-        <div className="flex items-center gap-2">
-          <Globe className="w-5 h-5 text-[#1a1a2e]/50" />
-          <span className={value ? 'text-[#1a1a2e]' : 'text-[#1a1a2e]/40'}>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <Globe className="w-5 h-5 shrink-0 text-[#1a1a2e]/50" />
+          <span className={cn('truncate', value ? 'text-[#1a1a2e]' : 'text-[#1a1a2e]/40')}>
             {selectedCountry?.name || t('signup.countryPlaceholder')}
           </span>
         </div>
