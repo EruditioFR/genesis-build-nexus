@@ -463,7 +463,7 @@
         "plans": {
           "free": {
             "name": "Gratuit",
-            "description": "Accès limité avec stockage de base (500 Mo), création de capsules texte et photo, 1 cercle de partage."
+            "description": "Accès limité avec stockage de base (500 Mo), création de souvenirs texte et photo, 1 cercle de partage."
           },
           "premium": {
             "name": "Premium",
