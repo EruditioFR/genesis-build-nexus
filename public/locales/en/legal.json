@@ -463,7 +463,7 @@
         "plans": {
           "free": {
             "name": "Free",
-            "description": "Limited access with basic storage (500 MB), text and photo capsule creation, 1 sharing circle."
+            "description": "Limited access with basic storage (500 MB), text and photo memory creation, 1 sharing circle."
           },
           "premium": {
             "name": "Premium",
