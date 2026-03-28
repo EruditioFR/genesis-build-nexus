@@ -14,7 +14,7 @@
     "titleRequired": "标题是必填项",
     "titleMaxLength": "标题不能超过100个字符",
     "description": "描述",
-    "descriptionPlaceholder": "简要描述这个胶囊...",
+    "descriptionPlaceholder": "简要描述这个回忆...",
     "descriptionMaxLength": "描述不能超过500个字符",
     "content": "内容",
     "contentPlaceholder": "写下你的文字、信件或故事...",
