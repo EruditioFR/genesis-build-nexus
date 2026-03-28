@@ -246,8 +246,8 @@
     "willPublishAt": "추억은 {{date}}에 자동으로 발행됩니다"
   },
   "legacy": {
-    "title": "유산 캡슐",
-    "description": "유산 캡슐은 조건이 충족될 때까지 잠겨 있습니다. 특정 날짜나 승인 후 추억을 전달하는 데 이상적입니다.",
+    "title": "유산 추억",
+    "description": "유산 추억은 조건이 충족될 때까지 잠겨 있습니다. 특정 날짜나 승인 후 추억을 전달하는 데 이상적입니다.",
     "unlockByDate": "특정 날짜에 잠금 해제",
     "unlockByGuardian": "보호자에 의해 잠금 해제",
     "unlockDate": "잠금 해제 날짜",
