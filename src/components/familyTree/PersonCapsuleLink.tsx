@@ -81,7 +81,7 @@ export function LinkCapsuleDialog({
       setCapsules(data || []);
     } catch (error) {
       console.error('Error fetching capsules:', error);
-      toast.error('Erreur lors du chargement des capsules');
+      toast.error('Erreur lors du chargement des souvenirs');
     } finally {
       setLoading(false);
     }
