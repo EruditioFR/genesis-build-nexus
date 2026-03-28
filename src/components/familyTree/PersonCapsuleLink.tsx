@@ -300,7 +300,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
 
       if (error) throw error;
       
-      toast.success('Capsule déliée');
+      toast.success('Souvenir délié');
       fetchLinkedCapsules();
       onUpdate();
     } catch (error) {
