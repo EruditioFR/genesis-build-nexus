@@ -246,7 +246,7 @@
     "chooseDate": "选择日期",
     "dateTimeFormat": "PPP HH:mm",
     "publicationTime": "发布时间",
-    "willPublishAt": "胶囊将于{{date}}自动发布"
+    "willPublishAt": "回忆将于{{date}}自动发布"
   },
   "legacy": {
     "title": "传承胶囊",
