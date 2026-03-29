@@ -831,6 +831,14 @@ export default function FamilyTreePage() {
                         >
                           <Upload className="w-4 h-4" />
                         </Button>
+                        <Button 
+                          variant="outline" 
+                          size="icon"
+                          onClick={() => setShowValidationPanel(true)}
+                          title="Audit de l'arbre"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                        </Button>
                       </div>
 
                       <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
