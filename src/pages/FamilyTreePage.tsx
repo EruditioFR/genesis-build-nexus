@@ -342,7 +342,7 @@ export default function FamilyTreePage() {
   };
 
   const handlePersonAdded = useCallback(
-    async (person: FamilyPerson, secondParentId?: string, unionId?: string) => {
+    async (person: FamilyPerson, secondParentId?: string, unionId?: string, extraLinks?: { parentIds: string[]; childIds: string[] }) => {
       if (!tree?.id || !person.id) return;
 
       if (addRelationTarget && addRelationType) {
@@ -369,6 +369,16 @@ export default function FamilyTreePage() {
           for (const rel of parentRelations) {
             await addRelationship(rel.parent_id, person.id, 'biological', rel.union_id);
           }
+        }
+      }
+
+      // Handle extra links (optional parents/children)
+      if (extraLinks) {
+        for (const parentId of extraLinks.parentIds) {
+          await addRelationship(parentId, person.id);
+        }
+        for (const childId of extraLinks.childIds) {
+          await addRelationship(person.id, childId);
         }
       }
       
