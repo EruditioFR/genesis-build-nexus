@@ -105,6 +105,7 @@ export default function FamilyTreePage() {
   const [showGedcomImport, setShowGedcomImport] = useState(false);
   const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [mergeSourcePerson, setMergeSourcePerson] = useState<FamilyPerson | null>(null);
+  const [showValidationPanel, setShowValidationPanel] = useState(false);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
