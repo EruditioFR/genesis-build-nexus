@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect, ClipboardEvent } from 'react';
 import {
   Bold, Italic, Underline, List, ListOrdered,
   Heading2, Heading3, Quote, Minus, Undo2, Redo2
@@ -78,6 +78,47 @@ const RichTextEditor = ({
     handleInput();
   }, [handleInput]);
 
+  const handlePaste = useCallback((e: ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const html = e.clipboardData.getData('text/html');
+    const plain = e.clipboardData.getData('text/plain');
+
+    if (html) {
+      // Parse and clean the pasted HTML
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      // Remove all style attributes, class attributes, and unwanted tags
+      doc.querySelectorAll('*').forEach((el) => {
+        el.removeAttribute('style');
+        el.removeAttribute('class');
+        el.removeAttribute('id');
+        el.removeAttribute('dir');
+        el.removeAttribute('lang');
+        el.removeAttribute('data-stringify-type');
+      });
+      // Remove script, style, meta, link tags
+      doc.querySelectorAll('script, style, meta, link, head, title, comment').forEach((el) => el.remove());
+      // Only keep allowed tags
+      const allowed = new Set(['P', 'BR', 'B', 'STRONG', 'I', 'EM', 'U', 'H2', 'H3', 'UL', 'OL', 'LI', 'BLOCKQUOTE', 'HR', 'DIV', 'SPAN', 'A']);
+      const cleanNode = (node: Element) => {
+        Array.from(node.children).forEach((child) => {
+          if (!allowed.has(child.tagName)) {
+            // Replace with its text content
+            const text = document.createTextNode(child.textContent || '');
+            child.replaceWith(text);
+          } else {
+            cleanNode(child);
+          }
+        });
+      };
+      cleanNode(doc.body);
+      const cleaned = doc.body.innerHTML;
+      document.execCommand('insertHTML', false, cleaned);
+    } else {
+      document.execCommand('insertText', false, plain);
+    }
+    handleInput();
+  }, [handleInput]);
+
   const isActive = (command: string) => {
     try {
       return document.queryCommandState(command);
@@ -142,6 +183,7 @@ const RichTextEditor = ({
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onPaste={handlePaste}
         data-placeholder={placeholder}
         className={cn(
           "px-4 py-3 text-lg text-foreground outline-none",
