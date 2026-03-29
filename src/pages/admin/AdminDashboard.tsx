@@ -641,20 +641,20 @@ export default function AdminDashboard() {
                     const isNearLimit = usagePercent >= 80;
                     return (
                       <div key={user.userId} className="space-y-1.5">
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-5 text-xs">{index + 1}.</span>
-                            <span className="font-medium truncate max-w-[200px]">{user.displayName}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
-                              {user.storageMb.toFixed(1)} MB
-                            </span>
-                            <span className="text-muted-foreground text-xs">
-                              / {user.storageLimitMb} MB
-                            </span>
-                          </div>
-                        </div>
+                         <div className="flex items-center justify-between text-sm gap-2">
+                           <div className="flex items-center gap-1.5 min-w-0">
+                             <span className="text-muted-foreground w-4 text-xs shrink-0">{index + 1}.</span>
+                             <span className="font-medium truncate">{user.displayName}</span>
+                           </div>
+                           <div className="flex items-center gap-1 shrink-0 text-xs sm:text-sm">
+                             <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
+                               {user.storageMb.toFixed(1)}
+                             </span>
+                             <span className="text-muted-foreground">
+                               / {user.storageLimitMb} MB
+                             </span>
+                           </div>
+                         </div>
                         <div className="flex items-center gap-2">
                           <Progress 
                             value={usagePercent} 
