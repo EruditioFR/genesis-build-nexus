@@ -576,7 +576,7 @@ export default function AdminDashboard() {
                   <BarChart
                     data={sortedUserStorage}
                     layout="vertical"
-                    margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                    margin={{ top: 5, right: 10, left: 80, bottom: 5 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                     <XAxis 
