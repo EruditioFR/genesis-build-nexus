@@ -157,16 +157,16 @@ export function LinkCapsuleDialog({
             {filteredCapsules.map((capsule) => (
               <div
                 key={capsule.id}
-                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors overflow-hidden"
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors w-[80vw] max-w-lg mx-auto"
               >
                 {capsule.thumbnail_url ? (
                   <img
                     src={capsule.thumbnail_url}
                     alt=""
-                    className="w-12 h-12 rounded object-cover flex-shrink-0"
+                    className="w-12 h-12 rounded object-cover shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded bg-muted flex items-center justify-center shrink-0">
                     <Package className="w-5 h-5 text-muted-foreground" />
                   </div>
                 )}
@@ -183,7 +183,7 @@ export function LinkCapsuleDialog({
                 </div>
                 <Button
                   size="sm"
-                  className="flex-shrink-0"
+                  className="shrink-0"
                   onClick={() => handleLink(capsule.id)}
                   disabled={linking === capsule.id}
                 >
