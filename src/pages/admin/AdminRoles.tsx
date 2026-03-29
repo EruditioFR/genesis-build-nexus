@@ -303,63 +303,63 @@ export default function AdminRoles() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[400px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Utilisateur</TableHead>
-                  <TableHead>Rôle</TableHead>
-                  <TableHead>Attribué le</TableHead>
-                  <TableHead className="w-12"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  [...Array(3)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={4}>
-                        <div className="h-12 bg-muted animate-pulse rounded" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : roles.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                      Aucun rôle attribué
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  roles.map((role) => (
-                    <TableRow key={role.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{getProfileName(role.user_id)}</p>
-                          <p className="text-xs text-muted-foreground">{role.user_id}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getRoleBadge(role.role)}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {format(new Date(role.created_at), "d MMM yyyy", { locale: fr })}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => {
-                            setSelectedRole(role);
-                            setDeleteDialogOpen(true);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+          {loading ? (
+            <div className="p-4 space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-12 bg-muted animate-pulse rounded" />)}</div>
+          ) : roles.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">Aucun rôle attribué</div>
+          ) : (
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
+                {roles.map((role) => (
+                  <div key={role.id} className="p-3 flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{getProfileName(role.user_id)}</p>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {getRoleBadge(role.role)}
+                        <span className="text-xs text-muted-foreground">{format(new Date(role.created_at), "d MMM yyyy", { locale: fr })}</span>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-destructive hover:text-destructive" onClick={() => { setSelectedRole(role); setDeleteDialogOpen(true); }}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <ScrollArea className="h-[400px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Utilisateur</TableHead>
+                        <TableHead>Rôle</TableHead>
+                        <TableHead>Attribué le</TableHead>
+                        <TableHead className="w-12"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {roles.map((role) => (
+                        <TableRow key={role.id}>
+                          <TableCell>
+                            <div>
+                              <p className="font-medium">{getProfileName(role.user_id)}</p>
+                              <p className="text-xs text-muted-foreground">{role.user_id}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell>{getRoleBadge(role.role)}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{format(new Date(role.created_at), "d MMM yyyy", { locale: fr })}</TableCell>
+                          <TableCell>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => { setSelectedRole(role); setDeleteDialogOpen(true); }}><Trash2 className="h-4 w-4" /></Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 

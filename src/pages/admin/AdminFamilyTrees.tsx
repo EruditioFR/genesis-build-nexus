@@ -199,75 +199,79 @@ export default function AdminFamilyTrees() {
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Propriétaire</TableHead>
-                <TableHead>Arbre</TableHead>
-                <TableHead className="text-center">Personnes</TableHead>
-                <TableHead className="text-center">Unions</TableHead>
-                <TableHead className="text-center">Relations</TableHead>
-                <TableHead>Créé le</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.length === 0 ? (
+        <>
+          {/* Mobile card layout */}
+          <div className="lg:hidden space-y-2">
+            {filtered.length === 0 ? (
+              <div className="text-center text-muted-foreground py-8">Aucun arbre trouvé</div>
+            ) : (
+              filtered.map((tree) => (
+                <div key={tree.id} className="rounded-lg border p-3 space-y-1.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">{tree.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{tree.owner_name || "—"}</p>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+                        <Link to={`/family-tree?viewTreeId=${tree.id}`}><Eye className="h-3.5 w-3.5" /></Link>
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setDeleteTarget(tree)}>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge variant="secondary" className="text-[10px]">{tree.persons_count} pers.</Badge>
+                    <Badge variant="outline" className="text-[10px]">{tree.unions_count} unions</Badge>
+                    <Badge variant="outline" className="text-[10px]">{tree.relations_count} rel.</Badge>
+                    <span className="text-xs text-muted-foreground">{format(new Date(tree.created_at), "dd MMM yyyy", { locale: fr })}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          {/* Desktop table */}
+          <div className="hidden lg:block rounded-lg border">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
-                    Aucun arbre trouvé
-                  </TableCell>
+                  <TableHead>Propriétaire</TableHead>
+                  <TableHead>Arbre</TableHead>
+                  <TableHead className="text-center">Personnes</TableHead>
+                  <TableHead className="text-center">Unions</TableHead>
+                  <TableHead className="text-center">Relations</TableHead>
+                  <TableHead>Créé le</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                filtered.map((tree) => (
-                  <TableRow key={tree.id}>
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{tree.owner_name || "—"}</p>
-                        <p className="text-xs text-muted-foreground">{tree.owner_email}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">{tree.name}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="secondary">{tree.persons_count}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline">{tree.unions_count}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline">{tree.relations_count}</Badge>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {format(new Date(tree.created_at), "dd MMM yyyy", { locale: fr })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          asChild
-                        >
-                          <Link to={`/family-tree?viewTreeId=${tree.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => setDeleteTarget(tree)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {filtered.length === 0 ? (
+                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">Aucun arbre trouvé</TableCell></TableRow>
+                ) : (
+                  filtered.map((tree) => (
+                    <TableRow key={tree.id}>
+                      <TableCell>
+                        <div><p className="font-medium">{tree.owner_name || "—"}</p><p className="text-xs text-muted-foreground">{tree.owner_email}</p></div>
+                      </TableCell>
+                      <TableCell className="font-medium">{tree.name}</TableCell>
+                      <TableCell className="text-center"><Badge variant="secondary">{tree.persons_count}</Badge></TableCell>
+                      <TableCell className="text-center"><Badge variant="outline">{tree.unions_count}</Badge></TableCell>
+                      <TableCell className="text-center"><Badge variant="outline">{tree.relations_count}</Badge></TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{format(new Date(tree.created_at), "dd MMM yyyy", { locale: fr })}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button variant="ghost" size="icon" asChild><Link to={`/family-tree?viewTreeId=${tree.id}`}><Eye className="h-4 w-4" /></Link></Button>
+                          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => setDeleteTarget(tree)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
 
       {/* Delete confirmation */}

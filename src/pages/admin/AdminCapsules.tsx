@@ -174,96 +174,121 @@ export default function AdminCapsules() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[600px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Titre</TableHead>
-                  <TableHead>Auteur</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead>Créée le</TableHead>
-                  <TableHead className="w-12"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={6}>
-                        <div className="h-12 bg-muted animate-pulse rounded" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : filteredCapsules.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      Aucun souvenir trouvé
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredCapsules.map((capsule) => (
-                    <TableRow key={capsule.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          {typeIcons[capsule.capsule_type]}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium truncate max-w-[200px]">{capsule.title}</p>
-                          {capsule.description && (
-                            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                              {capsule.description}
-                            </p>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <p className="text-xs text-muted-foreground truncate max-w-[150px]">
-                          {capsule.user_id}
-                        </p>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(capsule.status)}</TableCell>
-                      <TableCell className="text-sm">
-                        {format(new Date(capsule.created_at), "d MMM yyyy", { locale: fr })}
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => navigate(`/capsules/${capsule.id}`)}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              Voir
+          {loading ? (
+            <div className="p-4 space-y-3">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-12 bg-muted animate-pulse rounded" />
+              ))}
+            </div>
+          ) : filteredCapsules.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">Aucun souvenir trouvé</div>
+          ) : (
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
+                {filteredCapsules.map((capsule) => (
+                  <div key={capsule.id} className="p-3 flex items-start gap-3">
+                    <div className="text-muted-foreground mt-0.5 shrink-0">{typeIcons[capsule.capsule_type]}</div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{capsule.title}</p>
+                      {capsule.description && (
+                        <p className="text-xs text-muted-foreground truncate">{capsule.description}</p>
+                      )}
+                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                        {getStatusBadge(capsule.status)}
+                        <span className="text-xs text-muted-foreground">
+                          {format(new Date(capsule.created_at), "d MMM yyyy", { locale: fr })}
+                        </span>
+                      </div>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => navigate(`/capsules/${capsule.id}`)}>
+                          <Eye className="h-4 w-4 mr-2" /> Voir
+                        </DropdownMenuItem>
+                        {isAdmin && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => { setSelectedCapsule(capsule); setDeleteDialogOpen(true); }} className="text-destructive">
+                              <Trash2 className="h-4 w-4 mr-2" /> Supprimer
                             </DropdownMenuItem>
-                            {isAdmin && (
-                              <>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setSelectedCapsule(capsule);
-                                    setDeleteDialogOpen(true);
-                                  }}
-                                  className="text-destructive"
-                                >
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Supprimer
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <ScrollArea className="h-[600px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Titre</TableHead>
+                        <TableHead>Auteur</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead>Créée le</TableHead>
+                        <TableHead className="w-12"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredCapsules.map((capsule) => (
+                        <TableRow key={capsule.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                              {typeIcons[capsule.capsule_type]}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <p className="font-medium truncate max-w-[200px]">{capsule.title}</p>
+                              {capsule.description && (
+                                <p className="text-xs text-muted-foreground truncate max-w-[200px]">{capsule.description}</p>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <p className="text-xs text-muted-foreground truncate max-w-[150px]">{capsule.user_id}</p>
+                          </TableCell>
+                          <TableCell>{getStatusBadge(capsule.status)}</TableCell>
+                          <TableCell className="text-sm">
+                            {format(new Date(capsule.created_at), "d MMM yyyy", { locale: fr })}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => navigate(`/capsules/${capsule.id}`)}>
+                                  <Eye className="h-4 w-4 mr-2" /> Voir
                                 </DropdownMenuItem>
-                              </>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+                                {isAdmin && (
+                                  <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => { setSelectedCapsule(capsule); setDeleteDialogOpen(true); }} className="text-destructive">
+                                      <Trash2 className="h-4 w-4 mr-2" /> Supprimer
+                                    </DropdownMenuItem>
+                                  </>
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
