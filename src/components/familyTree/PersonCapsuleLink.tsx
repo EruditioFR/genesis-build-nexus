@@ -226,10 +226,10 @@ export function LinkCapsuleDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link2 className="w-5 h-5" />
-            Lier une capsule
+            Lier un souvenir
           </DialogTitle>
           <DialogDescription>
-            Sélectionnez une capsule à lier à {person.first_names} {person.last_name}
+            Sélectionnez un souvenir à lier à {person.first_names} {person.last_name}
           </DialogDescription>
         </DialogHeader>
         {capsuleList}
