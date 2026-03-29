@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
-import { CalendarIcon, User, Loader2, Users } from 'lucide-react';
+import { CalendarIcon, User, Loader2, Users, Search, X, UserPlus, Baby } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -37,9 +37,10 @@ interface AddPersonDialogProps {
   treeId: string;
   relationType: 'parent' | 'child' | 'spouse' | 'sibling' | null;
   targetPerson: FamilyPerson | null;
-  onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string) => void;
+  onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string, extraLinks?: { parentIds: string[]; childIds: string[] }) => void;
   availableSpouses?: FamilyPerson[];
   existingUnions?: FamilyUnion[];
+  allPersons?: FamilyPerson[];
 }
 
 export function AddPersonDialog({
@@ -50,7 +51,8 @@ export function AddPersonDialog({
   targetPerson,
   onPersonAdded,
   availableSpouses = [],
-  existingUnions = []
+  existingUnions = [],
+  allPersons = []
 }: AddPersonDialogProps) {
   const { t, i18n } = useTranslation('familyTree');
   const { addPerson, loading } = useFamilyTree();
@@ -75,6 +77,9 @@ export function AddPersonDialog({
   const [secondParentId, setSecondParentId] = useState<string>('none');
   const [selectedUnionId, setSelectedUnionId] = useState<string>('auto');
   const [isNewUnion, setIsNewUnion] = useState(false);
+  const [selectedParentIds, setSelectedParentIds] = useState<string[]>([]);
+  const [selectedChildIds, setSelectedChildIds] = useState<string[]>([]);
+  const [linkSearchQuery, setLinkSearchQuery] = useState('');
 
   const getUnionsWithSelectedParent = () => {
     if (!targetPerson || secondParentId === 'none') return [];
@@ -113,6 +118,9 @@ export function AddPersonDialog({
     setSecondParentId('none');
     setSelectedUnionId('auto');
     setIsNewUnion(false);
+    setSelectedParentIds([]);
+    setSelectedChildIds([]);
+    setLinkSearchQuery('');
   };
 
   const handleClose = () => {
@@ -148,8 +156,12 @@ export function AddPersonDialog({
           unionIdToUse = unionsWithSelectedParent[0].id;
         }
       }
+
+      const extraLinks = (selectedParentIds.length > 0 || selectedChildIds.length > 0)
+        ? { parentIds: selectedParentIds, childIds: selectedChildIds }
+        : undefined;
       
-      onPersonAdded(person, selectedSecondParent, unionIdToUse);
+      onPersonAdded(person, selectedSecondParent, unionIdToUse, extraLinks);
       handleClose();
     }
   };
@@ -446,6 +458,136 @@ export function AddPersonDialog({
               rows={3}
             />
           </div>
+
+          {/* Optional links to parents/children */}
+          {allPersons.length > 0 && (
+            <div className="space-y-3 p-3 bg-muted/50 border rounded-lg">
+              <Label className="flex items-center gap-2 text-sm font-medium">
+                <Users className="w-4 h-4" />
+                {t('addPerson.optionalLinks')}
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {t('addPerson.optionalLinksHint')}
+              </p>
+
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <Input
+                  placeholder={t('addPerson.searchPerson')}
+                  value={linkSearchQuery}
+                  onChange={(e) => setLinkSearchQuery(e.target.value)}
+                  className="pl-9 h-8 text-sm"
+                />
+              </div>
+
+              {/* Selected parents */}
+              {selectedParentIds.length > 0 && (
+                <div className="space-y-1">
+                  <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                    <UserPlus className="w-3 h-3" />
+                    {t('addPerson.selectedParents')}
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedParentIds.map(id => {
+                      const p = allPersons.find(p => p.id === id);
+                      if (!p) return null;
+                      return (
+                        <span key={id} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-secondary/10 border border-secondary/30 rounded-full">
+                          {p.first_names} {p.last_name}
+                          <button onClick={() => setSelectedParentIds(prev => prev.filter(pid => pid !== id))} className="hover:text-destructive">
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Selected children */}
+              {selectedChildIds.length > 0 && (
+                <div className="space-y-1">
+                  <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                    <Baby className="w-3 h-3" />
+                    {t('addPerson.selectedChildren')}
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedChildIds.map(id => {
+                      const p = allPersons.find(p => p.id === id);
+                      if (!p) return null;
+                      return (
+                        <span key={id} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-secondary/10 border border-secondary/30 rounded-full">
+                          {p.first_names} {p.last_name}
+                          <button onClick={() => setSelectedChildIds(prev => prev.filter(cid => cid !== id))} className="hover:text-destructive">
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Person list */}
+              {linkSearchQuery.trim().length > 0 && (() => {
+                const filtered = allPersons.filter(p => {
+                  if (targetPerson && p.id === targetPerson.id) return false;
+                  if (selectedParentIds.includes(p.id) || selectedChildIds.includes(p.id)) return false;
+                  const fullName = `${p.first_names} ${p.last_name}`.toLowerCase();
+                  return fullName.includes(linkSearchQuery.toLowerCase());
+                }).slice(0, 8);
+
+                return filtered.length > 0 ? (
+                  <div className="border rounded-lg divide-y max-h-[150px] overflow-y-auto">
+                    {filtered.map(person => (
+                      <div key={person.id} className="flex items-center justify-between p-2 text-sm hover:bg-muted">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <FamilyAvatar
+                            photoUrl={person.profile_photo_url}
+                            fallback={`${person.first_names[0]}${person.last_name[0]}`}
+                            className="w-6 h-6"
+                            fallbackClassName="text-[9px]"
+                          />
+                          <span className="truncate">{person.first_names} {person.last_name}</span>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 px-2 text-xs gap-1"
+                            onClick={() => {
+                              setSelectedParentIds(prev => [...prev, person.id]);
+                              setLinkSearchQuery('');
+                            }}
+                          >
+                            <UserPlus className="w-3 h-3" />
+                            {t('addPerson.asParent')}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 px-2 text-xs gap-1"
+                            onClick={() => {
+                              setSelectedChildIds(prev => [...prev, person.id]);
+                              setLinkSearchQuery('');
+                            }}
+                          >
+                            <Baby className="w-3 h-3" />
+                            {t('addPerson.asChild')}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground text-center py-2">{t('link.noResults')}</p>
+                );
+              })()}
+            </div>
+          )}
         </div>
 
         <PersonValidationWarnings

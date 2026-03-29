@@ -117,7 +117,14 @@
     "existingSpouses": "{{name}} a déjà {{count}} conjoint(s)",
     "newUnionHint": "Vous pouvez ajouter un nouveau conjoint (remariage, nouvelle union après divorce ou veuvage).",
     "adding": "Ajout en cours...",
-    "add": "Ajouter"
+    "add": "Ajouter",
+    "optionalLinks": "Relier à des personnes existantes (facultatif)",
+    "optionalLinksHint": "Recherchez et sélectionnez des parents ou descendants existants dans l'arbre.",
+    "searchPerson": "Rechercher une personne...",
+    "selectedParents": "Parents (ascendants)",
+    "selectedChildren": "Enfants (descendants)",
+    "asParent": "Parent",
+    "asChild": "Enfant"
   },
   "person": {
     "born": "née",
