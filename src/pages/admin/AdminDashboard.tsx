@@ -531,13 +531,13 @@ export default function AdminDashboard() {
         transition={{ duration: 0.3, delay: 0.5 }}
       >
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-500" />
-              Répartition du stockage par utilisateur (Top 10)
+          <CardHeader className="space-y-3 pb-4">
+            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-500 shrink-0" />
+              <span className="truncate">Stockage par utilisateur (Top 10)</span>
             </CardTitle>
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground shrink-0" />
               <ToggleGroup 
                 type="single" 
                 value={storageSortKey} 
@@ -547,21 +547,21 @@ export default function AdminDashboard() {
                 <ToggleGroupItem 
                   value="total" 
                   aria-label="Trier par total"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   Total
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="capsules" 
                   aria-label="Trier par capsules"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   <span className="text-orange-500">●</span> Capsules
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="trees" 
                   aria-label="Trier par arbres"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   <span className="text-green-500">●</span> Arbres
                 </ToggleGroupItem>
