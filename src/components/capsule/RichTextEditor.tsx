@@ -183,6 +183,7 @@ const RichTextEditor = ({
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onPaste={handlePaste}
         data-placeholder={placeholder}
         className={cn(
           "px-4 py-3 text-lg text-foreground outline-none",
