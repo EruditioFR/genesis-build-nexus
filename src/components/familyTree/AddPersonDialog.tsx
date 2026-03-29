@@ -51,7 +51,8 @@ export function AddPersonDialog({
   targetPerson,
   onPersonAdded,
   availableSpouses = [],
-  existingUnions = []
+  existingUnions = [],
+  allPersons = []
 }: AddPersonDialogProps) {
   const { t, i18n } = useTranslation('familyTree');
   const { addPerson, loading } = useFamilyTree();
