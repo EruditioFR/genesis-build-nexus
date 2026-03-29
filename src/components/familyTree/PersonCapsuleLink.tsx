@@ -337,7 +337,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
           {linkedCapsules.map((capsule) => (
             <div
               key={capsule.link_id}
-              className="flex items-center gap-3 p-3 rounded-lg border bg-card"
+              className="flex items-center gap-3 p-3 rounded-lg border bg-card w-[80vw] max-w-lg mx-auto"
             >
               {capsule.thumbnail_url ? (
                 <img
