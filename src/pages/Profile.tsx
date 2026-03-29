@@ -95,6 +95,7 @@ const Profile = () => {
   const [realStorageUsedMb, setRealStorageUsedMb] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+  const [invoicesFetched, setInvoicesFetched] = useState(false);
   
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -598,7 +599,7 @@ const Profile = () => {
           </motion.div>
 
           {/* Invoices Section */}
-          {profile.subscription_level !== 'free' && (
+          {profile.subscription_level !== 'free' && !profile.admin_override && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -614,23 +615,33 @@ const Profile = () => {
                     {t('profile.invoices')}
                   </h2>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={fetchInvoices}
-                  disabled={invoicesLoading}
-                >
-                  {invoicesLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    t('profile.invoicesLoad')
-                  )}
-                </Button>
+                {!invoicesFetched && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => { await fetchInvoices(); setInvoicesFetched(true); }}
+                    disabled={invoicesLoading}
+                  >
+                    {invoicesLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      t('profile.invoicesLoad')
+                    )}
+                  </Button>
+                )}
               </div>
 
-              {invoices.length === 0 && !invoicesLoading ? (
+              {!invoicesFetched && !invoicesLoading ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
                   {t('profile.invoicesLoadPrompt')}
+                </p>
+              ) : invoicesLoading ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : invoices.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Aucune facture
                 </p>
               ) : (
                 <div className="space-y-3">
