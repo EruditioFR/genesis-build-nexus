@@ -408,6 +408,7 @@ export default function FamilyTreePage() {
 
   const handleLinkSubmit = async (targetPersonId: string, relationType: 'parent' | 'child' | 'spouse') => {
     if (!linkSourcePerson) return;
+    if (targetPersonId === linkSourcePerson.id) return; // Prevent self-link
 
     if (relationType === 'parent') {
       await addRelationship(targetPersonId, linkSourcePerson.id);

@@ -300,7 +300,25 @@ export function useFamilyTree() {
     type: ParentChildRelationship['relationship_type'] = 'biological',
     unionId?: string | null
   ): Promise<boolean> => {
+    // Prevent self-referencing relationships
+    if (parentId === childId) {
+      console.warn('Cannot create self-referencing relationship', parentId);
+      return false;
+    }
     try {
+      // Check for duplicate relationship
+      const { data: existing } = await supabase
+        .from('family_parent_child')
+        .select('id')
+        .eq('parent_id', parentId)
+        .eq('child_id', childId)
+        .maybeSingle();
+      
+      if (existing) {
+        console.warn('Relationship already exists', parentId, childId);
+        return true; // Already exists, not an error
+      }
+
       const { error } = await supabase
         .from('family_parent_child')
         .insert({
