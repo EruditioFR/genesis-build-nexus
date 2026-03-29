@@ -118,6 +118,9 @@ export function AddPersonDialog({
     setSecondParentId('none');
     setSelectedUnionId('auto');
     setIsNewUnion(false);
+    setSelectedParentIds([]);
+    setSelectedChildIds([]);
+    setLinkSearchQuery('');
   };
 
   const handleClose = () => {
