@@ -234,6 +234,22 @@ const CapsuleDetail = () => {
         })));
       }
 
+      // Fetch linked persons
+      const { data: linksData } = await supabase
+        .from('capsule_person_links')
+        .select('person_id')
+        .eq('capsule_id', id);
+
+      if (linksData && linksData.length > 0) {
+        const personIds = linksData.map((l) => l.person_id);
+        const { data: personsData } = await supabase
+          .from('family_persons')
+          .select('id, first_names, last_name')
+          .in('id', personIds);
+
+        if (personsData) setLinkedPersons(personsData);
+      }
+
       setIsLoading(false);
     };
 
