@@ -682,17 +682,15 @@ export default function FamilyTreePage() {
         <TreeSearchCommand persons={persons} onPersonSelect={handleSearchSelect} />
       </div>
 
-      <Button variant="outline" size="sm" onClick={() => setShowPersonsList(true)} className="gap-2" data-tour="tree-persons-list">
+      <Button variant="outline" size="icon" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0" onClick={() => setShowPersonsList(true)} data-tour="tree-persons-list">
         <List className="w-4 h-4" />
-        {!compact && <span className="hidden sm:inline">{t('toolbar.list')}</span>}
       </Button>
 
       {persons.length > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2" data-tour="tree-center">
+            <Button variant="outline" size="icon" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0" data-tour="tree-center">
               <Focus className="w-4 h-4" />
-              {!compact && <span className="hidden sm:inline">{t('toolbar.centerOn')}</span>}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
@@ -714,9 +712,7 @@ export default function FamilyTreePage() {
         </DropdownMenu>
       )}
 
-      {/* View mode fixed to ascendant */}
-
-      <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
+      <div className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1">
         <MapIcon className="w-4 h-4 text-muted-foreground" />
         <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
       </div>
