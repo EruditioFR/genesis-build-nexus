@@ -1,12 +1,7 @@
 {
   "hero": {
     "badge": "Create your family journal, simply",
-    "title": {
-      "prefix": "All your ",
-      "rotating": ["family", "personal", "friendly"],
-      "suffix": " memories ",
-      "highlight": "in one place"
-    },
+    "title": "All your memories, finally together",
     "subtitle": {
       "line1": "Photos, videos, texts, audio… gather your memories in one place, with context and emotion.",
       "line2": "Share your memories effortlessly with your loved ones, in a private and secure space."

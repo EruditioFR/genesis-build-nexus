@@ -1,12 +1,7 @@
 {
   "hero": {
     "badge": "Créez votre journal de famille, simplement",
-    "title": {
-      "prefix": "Tous vos souvenirs ",
-      "rotating": ["familiaux", "amicaux", "personnels"],
-      "suffix": " ",
-      "highlight": "au même endroit"
-    },
+    "title": "Tous vos souvenirs enfin réunis",
     "subtitle": {
       "line1": "Photos, vidéos, textes, audios… rassemblez vos souvenirs au même endroit, avec du contexte et de l'émotion.",
       "line2": "Partagez vos souvenirs en toute simplicité avec vos proches, dans un espace privé et sécurisé."

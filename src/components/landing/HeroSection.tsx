@@ -52,10 +52,6 @@ const HeroSection = () => {
   const { t } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  
-  // Get rotating words from translations
-  const rotatingWords = t('hero.title.rotating', { returnObjects: true }) as string[];
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -70,14 +66,6 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-advance rotating words
-  useEffect(() => {
-    if (!Array.isArray(rotatingWords) || rotatingWords.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentWordIndex(prev => (prev + 1) % rotatingWords.length);
-    }, 1500);
-    return () => clearInterval(interval);
-  }, [rotatingWords]);
 
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
@@ -157,27 +145,7 @@ const HeroSection = () => {
           duration: 0.7,
           delay: 0.1
         }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.15] mb-5 sm:mb-6 drop-shadow-lg">
-            <span className="block">
-              {t('hero.title.prefix')}
-              <span className="relative inline-block min-w-[140px] sm:min-w-[200px] md:min-w-[260px]">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={currentWordIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="text-primary-foreground"
-                  >
-                    {Array.isArray(rotatingWords) ? rotatingWords[currentWordIndex] : ''}
-                  </motion.span>
-                </AnimatePresence>
-              </span>
-              {t('hero.title.suffix')}
-            </span>
-            <span className="block">
-              <span className="text-gradient-gold">{t('hero.title.highlight')}</span>
-            </span>
+            {t('hero.title')}
           </motion.h1>
 
           {/* Subtitle - Enriched for GEO with semantic keywords */}
