@@ -494,6 +494,22 @@ export function PersonDetailPanel({
         </Button>
       </div>
 
+      {/* Validation warnings in edit mode */}
+      {isEditing && (
+        <div className="px-4 pt-2">
+          <PersonValidationWarnings
+            person={{
+              birth_date: editData.birth_date || null,
+              death_date: editData.death_date || null,
+              is_alive: editData.is_alive,
+              gender: editData.gender || null,
+            }}
+            parents={parents}
+            children={children}
+          />
+        </div>
+      )}
+
       {/* Action buttons */}
       {!readOnly && (
         <div className="p-4 border-b flex gap-2">
