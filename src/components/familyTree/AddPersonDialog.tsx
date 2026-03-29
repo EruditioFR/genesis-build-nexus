@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
-import { CalendarIcon, User, Loader2, Users } from 'lucide-react';
+import { CalendarIcon, User, Loader2, Users, Search, X, UserPlus, Baby } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
