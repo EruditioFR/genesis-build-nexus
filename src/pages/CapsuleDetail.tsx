@@ -93,6 +93,7 @@ const CapsuleDetail = () => {
   const [sharedCircles, setSharedCircles] = useState<SharedCircle[]>([]);
   const [capsuleCategories, setCapsuleCategories] = useState<CapsuleCategory[]>([]);
   const [capsuleSubCategories, setCapsuleSubCategories] = useState<CapsuleSubCategoryWithData[]>([]);
+  const [linkedPersons, setLinkedPersons] = useState<{id: string; first_names: string; last_name: string;}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{display_name: string | null;avatar_url: string | null;} | null>(null);
   const [ownerProfile, setOwnerProfile] = useState<{display_name: string | null;} | null>(null);
