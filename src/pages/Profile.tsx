@@ -542,47 +542,57 @@ const Profile = () => {
                 </div>
               </div>
               
-              {profile.subscription_level !== 'free' && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-foreground">{t('profile.price')} :</span>
-                    <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9,99 €' : '19,99 €' })}</span>
-                  </div>
-                  {subscriptionEnd && (
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-foreground">{t('profile.nextRenewal')} :</span>
-                      <span>{format(new Date(subscriptionEnd), 'd MMMM yyyy', { locale: getLocale() })}</span>
+              {profile.admin_override ? (
+                <div className="flex items-center gap-2 text-sm border-t border-border pt-4">
+                  <span className="font-medium text-green-600 dark:text-green-400">
+                    ✨ Gratuit sans limite de temps
+                  </span>
+                </div>
+              ) : (
+                <>
+                  {profile.subscription_level !== 'free' && (
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-foreground">{t('profile.price')} :</span>
+                        <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9,99 €' : '19,99 €' })}</span>
+                      </div>
+                      {subscriptionEnd && (
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">{t('profile.nextRenewal')} :</span>
+                          <span>{format(new Date(subscriptionEnd), 'd MMMM yyyy', { locale: getLocale() })}</span>
+                        </div>
+                      )}
                     </div>
                   )}
-                </div>
-              )}
-              
-              {profile.subscription_level === 'free' ? (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  asChild
-                >
-                  <Link to="/premium">
-                    {t('profile.upgrade')}
-                  </Link>
-                </Button>
-              ) : (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={handleManageSubscription}
-                  disabled={isManaging}
-                >
-                  {isManaging ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      {t('profile.managingSubscription')}
-                    </>
+                  
+                  {profile.subscription_level === 'free' ? (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      asChild
+                    >
+                      <Link to="/premium">
+                        {t('profile.upgrade')}
+                      </Link>
+                    </Button>
                   ) : (
-                    t('profile.manageSubscription')
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleManageSubscription}
+                      disabled={isManaging}
+                    >
+                      {isManaging ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          {t('profile.managingSubscription')}
+                        </>
+                      ) : (
+                        t('profile.manageSubscription')
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </>
               )}
             </div>
           </motion.div>
