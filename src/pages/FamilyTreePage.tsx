@@ -113,6 +113,12 @@ export default function FamilyTreePage() {
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
 
+  // Validation issues (computed on demand when panel opens)
+  const validationIssues = useMemo(() => {
+    if (!showValidationPanel || persons.length === 0) return [];
+    return validateFamilyTree(persons, relationships, unions);
+  }, [showValidationPanel, persons, relationships, unions]);
+
   // Pre-build indexed maps for parent/child lookups
   const { parentOfIndex, childOfIndex } = useMemo(() => {
     const parentOf: Map<string, string[]> = new Map();
