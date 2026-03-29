@@ -37,9 +37,10 @@ interface AddPersonDialogProps {
   treeId: string;
   relationType: 'parent' | 'child' | 'spouse' | 'sibling' | null;
   targetPerson: FamilyPerson | null;
-  onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string) => void;
+  onPersonAdded: (person: FamilyPerson, secondParentId?: string, unionId?: string, extraLinks?: { parentIds: string[]; childIds: string[] }) => void;
   availableSpouses?: FamilyPerson[];
   existingUnions?: FamilyUnion[];
+  allPersons?: FamilyPerson[];
 }
 
 export function AddPersonDialog({
