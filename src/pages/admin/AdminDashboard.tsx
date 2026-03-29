@@ -395,23 +395,23 @@ export default function AdminDashboard() {
                   </div>
                   
                   {/* Répartition */}
-                  <div className="grid grid-cols-3 gap-3 text-sm pt-2 border-t">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-orange-500" />
-                      <span className="text-muted-foreground">Capsules:</span>
-                      <span className="font-medium">{stats.capsuleStorageMb.toFixed(0)} MB</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-green-500" />
-                      <span className="text-muted-foreground">Arbres:</span>
-                      <span className="font-medium">{stats.familyStorageMb.toFixed(0)} MB</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-blue-500" />
-                      <span className="text-muted-foreground">Avatars:</span>
-                      <span className="font-medium">{stats.avatarStorageMb.toFixed(0)} MB</span>
-                    </div>
-                  </div>
+                   <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm pt-2 border-t">
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-orange-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Capsules:</span>
+                       <span className="font-medium text-xs">{stats.capsuleStorageMb.toFixed(0)} MB</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-green-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Arbres:</span>
+                       <span className="font-medium text-xs">{stats.familyStorageMb.toFixed(0)} MB</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-blue-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Avatars:</span>
+                       <span className="font-medium text-xs">{stats.avatarStorageMb.toFixed(0)} MB</span>
+                     </div>
+                   </div>
 
                   {/* Info limite */}
                   <p className="text-xs text-muted-foreground text-center pt-2">
