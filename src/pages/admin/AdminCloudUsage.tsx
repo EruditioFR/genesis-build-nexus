@@ -303,7 +303,7 @@ export default function AdminCloudUsage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 overflow-x-hidden">
       <h1 className="text-2xl font-display font-bold flex items-center gap-2">
         <Cloud className="w-6 h-6 text-primary" />
         Usage Cloud détaillé
