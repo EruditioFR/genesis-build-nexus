@@ -390,11 +390,11 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
       <Button 
         variant="outline" 
         size="sm" 
-        className="w-full gap-2"
+        className="w-[80vw] max-w-lg mx-auto gap-2 flex"
         onClick={() => setShowLinkDialog(true)}
       >
         <Link2 className="w-4 h-4" />
-         Lier un souvenir
+        Lier un souvenir
       </Button>
 
       <LinkCapsuleDialog
