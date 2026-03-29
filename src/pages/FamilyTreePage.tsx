@@ -766,7 +766,7 @@ export default function FamilyTreePage() {
   );
 
   return (
-    <div className={cn("min-h-screen bg-background flex flex-col", isFullscreen && "overflow-hidden")}>
+    <div className={cn("min-h-screen bg-background flex flex-col w-full max-w-[100vw] overflow-x-hidden", isFullscreen && "overflow-hidden")}>
       {!isFullscreen && user && <DashboardHeader user={user} onSignOut={signOut} />}
       
       {renderFullscreenView()}
