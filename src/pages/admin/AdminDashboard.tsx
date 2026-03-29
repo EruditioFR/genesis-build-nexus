@@ -319,10 +319,10 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-display font-bold">Dashboard Admin</h1>
-        <Badge variant="outline" className="text-xs">
+    <div className="space-y-6 w-full min-w-0 overflow-x-hidden">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <h1 className="text-xl sm:text-2xl font-display font-bold">Dashboard Admin</h1>
+        <Badge variant="outline" className="text-xs shrink-0">
           Dernière mise à jour: {new Date().toLocaleTimeString("fr-FR")}
         </Badge>
       </div>
