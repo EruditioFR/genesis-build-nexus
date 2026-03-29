@@ -52,10 +52,6 @@ const HeroSection = () => {
   const { t } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  
-  // Get rotating words from translations
-  const rotatingWords = t('hero.title.rotating', { returnObjects: true }) as string[];
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
