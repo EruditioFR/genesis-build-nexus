@@ -149,6 +149,20 @@ export function TreeValidationPanel({ open, onClose, issues, onPersonClick }: Tr
                                       Voir : {issue.relatedPersonName}
                                     </button>
                                   )}
+                                  {isExpanded && issue.personId && onPersonClick && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="mt-2 h-7 text-xs gap-1"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onPersonClick(issue.personId!);
+                                      }}
+                                    >
+                                      <User className="w-3 h-3" />
+                                      Voir la fiche
+                                    </Button>
+                                  )}
                                 </div>
                                 <Badge variant="outline" className={`text-[10px] shrink-0 ${cfg.color}`}>
                                   {cfg.label}
