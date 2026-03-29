@@ -50,7 +50,7 @@ export const memoryCategories: MemoryCategory[] = [
       { id: 'ecole-1', question: 'Rappelle-toi ton premier jour d\'école. Qu\'as-tu ressenti ?' },
       { id: 'ecole-2', question: 'Un professeur t\'a marqué. Pourquoi ?' },
       { id: 'ecole-3', question: 'Qui était ton meilleur ami à cette époque ?' },
-      { id: 'ecole-4', question: 'Quel moment d\'école n\'oublieras jamais ?' },
+      { id: 'ecole-4', question: 'Quel moment d\'école n\'oublieras-tu jamais ?' },
       { id: 'ecole-5', question: 'Quelle matière aimais-tu (ou détestais-tu) secrètement ?' },
       { id: 'ecole-6', question: 'Raconte un fou rire impossible à oublier.' },
       { id: 'ecole-7', question: 'Quel rêve avais-tu adolescent ?' },
