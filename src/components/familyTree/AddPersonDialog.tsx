@@ -77,6 +77,9 @@ export function AddPersonDialog({
   const [secondParentId, setSecondParentId] = useState<string>('none');
   const [selectedUnionId, setSelectedUnionId] = useState<string>('auto');
   const [isNewUnion, setIsNewUnion] = useState(false);
+  const [selectedParentIds, setSelectedParentIds] = useState<string[]>([]);
+  const [selectedChildIds, setSelectedChildIds] = useState<string[]>([]);
+  const [linkSearchQuery, setLinkSearchQuery] = useState('');
 
   const getUnionsWithSelectedParent = () => {
     if (!targetPerson || secondParentId === 'none') return [];
