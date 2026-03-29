@@ -156,7 +156,7 @@ export default function AdminSubscriptions() {
       <h1 className="text-2xl font-display font-bold">Gestion des abonnements</h1>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{users.length}</div>
@@ -217,105 +217,116 @@ export default function AdminSubscriptions() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[500px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Utilisateur</TableHead>
-                  <TableHead>Niveau actuel</TableHead>
-                  <TableHead>Override</TableHead>
-                  <TableHead>Stockage</TableHead>
-                  <TableHead>Inscrit le</TableHead>
-                  {isAdmin && <TableHead>Changer</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={5}>
-                        <div className="h-12 bg-muted animate-pulse rounded" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : filteredUsers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      Aucun utilisateur trouvé
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredUsers.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.avatar_url || undefined} />
-                            <AvatarFallback>{getInitials(user.display_name)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium">{user.display_name || "Sans nom"}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1.5">
+          {loading ? (
+            <div className="p-4 space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-12 bg-muted animate-pulse rounded" />)}</div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">Aucun utilisateur trouvé</div>
+          ) : (
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
+                {filteredUsers.map((user) => (
+                  <div key={user.id} className="p-3 space-y-2">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8 shrink-0">
+                        <AvatarImage src={user.avatar_url || undefined} />
+                        <AvatarFallback>{getInitials(user.display_name)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">{user.display_name || "Sans nom"}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           {getSubscriptionBadge(user.subscription_level)}
                           {user.admin_override && (
-                            <Badge variant="outline" className="gap-1 text-xs border-amber-500 text-amber-600">
-                              <Gift className="h-3 w-3" />
-                              Offert
+                            <Badge variant="outline" className="gap-1 text-[10px] border-amber-500 text-amber-600">
+                              <Gift className="h-2.5 w-2.5" /> Offert
                             </Badge>
                           )}
+                          <span className="text-xs text-muted-foreground">{user.storage_limit_mb} MB</span>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant={user.admin_override ? "destructive" : "outline"}
-                          size="sm"
-                          className="gap-1 text-xs"
-                          onClick={() => handleToggleOverride(user.id, user.admin_override)}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Button
+                        variant={user.admin_override ? "destructive" : "outline"}
+                        size="sm"
+                        className="gap-1 text-xs h-7"
+                        onClick={() => handleToggleOverride(user.id, user.admin_override)}
+                        disabled={updating === user.id}
+                      >
+                        {user.admin_override ? <><RotateCcw className="h-3 w-3" /> Stripe</> : <><Gift className="h-3 w-3" /> Offrir</>}
+                      </Button>
+                      {isAdmin && (
+                        <Select
+                          value={user.subscription_level}
+                          onValueChange={(value) => handleSubscriptionChange(user.user_id, user.id, value)}
                           disabled={updating === user.id}
                         >
-                          {user.admin_override ? (
-                            <><RotateCcw className="h-3 w-3" /> Stripe</>
-                          ) : (
-                            <><Gift className="h-3 w-3" /> Offrir</>
-                          )}
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{user.storage_limit_mb} MB</span>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {format(new Date(user.created_at), "d MMM yyyy", { locale: fr })}
-                      </TableCell>
-                      {isAdmin && (
-                        <TableCell>
-                          <Select
-                            value={user.subscription_level}
-                            onValueChange={(value) => handleSubscriptionChange(user.user_id, user.id, value)}
-                            disabled={updating === user.id}
-                          >
-                            <SelectTrigger className="w-[120px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {subscriptionLevels.map((level) => (
-                                <SelectItem key={level.value} value={level.value}>
-                                  {level.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
+                          <SelectTrigger className="w-[100px] h-7 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {subscriptionLevels.map((level) => (
+                              <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <ScrollArea className="h-[500px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Utilisateur</TableHead>
+                        <TableHead>Niveau actuel</TableHead>
+                        <TableHead>Override</TableHead>
+                        <TableHead>Stockage</TableHead>
+                        <TableHead>Inscrit le</TableHead>
+                        {isAdmin && <TableHead>Changer</TableHead>}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers.map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-8 w-8"><AvatarImage src={user.avatar_url || undefined} /><AvatarFallback>{getInitials(user.display_name)}</AvatarFallback></Avatar>
+                              <p className="font-medium">{user.display_name || "Sans nom"}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1.5">
+                              {getSubscriptionBadge(user.subscription_level)}
+                              {user.admin_override && <Badge variant="outline" className="gap-1 text-xs border-amber-500 text-amber-600"><Gift className="h-3 w-3" /> Offert</Badge>}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={user.admin_override ? "destructive" : "outline"} size="sm" className="gap-1 text-xs" onClick={() => handleToggleOverride(user.id, user.admin_override)} disabled={updating === user.id}>
+                              {user.admin_override ? <><RotateCcw className="h-3 w-3" /> Stripe</> : <><Gift className="h-3 w-3" /> Offrir</>}
+                            </Button>
+                          </TableCell>
+                          <TableCell><span className="text-sm">{user.storage_limit_mb} MB</span></TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{format(new Date(user.created_at), "d MMM yyyy", { locale: fr })}</TableCell>
+                          {isAdmin && (
+                            <TableCell>
+                              <Select value={user.subscription_level} onValueChange={(value) => handleSubscriptionChange(user.user_id, user.id, value)} disabled={updating === user.id}>
+                                <SelectTrigger className="w-[120px]"><SelectValue /></SelectTrigger>
+                                <SelectContent>{subscriptionLevels.map((level) => <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>)}</SelectContent>
+                              </Select>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

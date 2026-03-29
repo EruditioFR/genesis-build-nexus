@@ -89,49 +89,71 @@ export default function AdminContactMessages() {
           ) : messages.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">Aucun message de contact</div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-8" />
-                  <TableHead>Nom</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Sujet</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
                 {messages.map((msg) => (
-                  <TableRow
+                  <div
                     key={msg.id}
-                    className={`cursor-pointer ${!msg.read ? "bg-primary/5 font-medium" : ""}`}
+                    className={`p-3 cursor-pointer ${!msg.read ? "bg-primary/5" : ""}`}
                     onClick={() => openMessage(msg)}
                   >
-                    <TableCell>
-                      {!msg.read && <div className="w-2 h-2 rounded-full bg-primary" />}
-                    </TableCell>
-                    <TableCell>{msg.name}</TableCell>
-                    <TableCell className="text-muted-foreground">{msg.email}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">{msg.subject || "—"}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {format(new Date(msg.created_at), "d MMM yyyy HH:mm", { locale: fr })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-start gap-2">
+                      {!msg.read && <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />}
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm truncate ${!msg.read ? "font-medium" : ""}`}>{msg.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{msg.subject || "Sans sujet"}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {format(new Date(msg.created_at), "d MMM yyyy HH:mm", { locale: fr })}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                         {!msg.read && (
-                          <Button variant="ghost" size="icon" onClick={() => markAsRead(msg.id)} title="Marquer comme lu">
-                            <Check className="h-4 w-4" />
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => markAsRead(msg.id)}>
+                            <Check className="h-3.5 w-3.5" />
                           </Button>
                         )}
-                        <Button variant="ghost" size="icon" onClick={() => deleteMessage(msg.id)} title="Supprimer">
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => deleteMessage(msg.id)}>
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </div>
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-8" />
+                      <TableHead>Nom</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Sujet</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {messages.map((msg) => (
+                      <TableRow key={msg.id} className={`cursor-pointer ${!msg.read ? "bg-primary/5 font-medium" : ""}`} onClick={() => openMessage(msg)}>
+                        <TableCell>{!msg.read && <div className="w-2 h-2 rounded-full bg-primary" />}</TableCell>
+                        <TableCell>{msg.name}</TableCell>
+                        <TableCell className="text-muted-foreground">{msg.email}</TableCell>
+                        <TableCell className="max-w-[200px] truncate">{msg.subject || "—"}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{format(new Date(msg.created_at), "d MMM yyyy HH:mm", { locale: fr })}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                            {!msg.read && <Button variant="ghost" size="icon" onClick={() => markAsRead(msg.id)}><Check className="h-4 w-4" /></Button>}
+                            <Button variant="ghost" size="icon" onClick={() => deleteMessage(msg.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

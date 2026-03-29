@@ -107,84 +107,67 @@ export default function AdminComments() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[600px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[40%]">Contenu</TableHead>
-                  <TableHead>Auteur</TableHead>
-                  <TableHead>Capsule</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="w-24">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={5}>
-                        <div className="h-12 bg-muted animate-pulse rounded" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : filteredComments.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      Aucun commentaire trouvé
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredComments.map((comment) => (
-                    <TableRow key={comment.id}>
-                      <TableCell>
-                        <p className="text-sm line-clamp-2">{comment.content}</p>
-                      </TableCell>
-                      <TableCell>
-                        <p className="text-xs text-muted-foreground truncate max-w-[120px]">
-                          {comment.user_id}
-                        </p>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="link"
-                          size="sm"
-                          className="h-auto p-0 text-xs"
-                          onClick={() => navigate(`/capsules/${comment.capsule_id}`)}
-                        >
-                          Voir la capsule
-                        </Button>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
+          {loading ? (
+            <div className="p-4 space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-12 bg-muted animate-pulse rounded" />)}</div>
+          ) : filteredComments.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">Aucun commentaire trouvé</div>
+          ) : (
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
+                {filteredComments.map((comment) => (
+                  <div key={comment.id} className="p-3 space-y-1.5">
+                    <p className="text-sm line-clamp-2">{comment.content}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">
                         {format(new Date(comment.created_at), "d MMM yyyy HH:mm", { locale: fr })}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => navigate(`/capsules/${comment.capsule_id}`)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-destructive hover:text-destructive"
-                            onClick={() => {
-                              setSelectedComment(comment);
-                              setDeleteDialogOpen(true);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => navigate(`/capsules/${comment.capsule_id}`)}>
+                          <Eye className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => { setSelectedComment(comment); setDeleteDialogOpen(true); }}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <ScrollArea className="h-[600px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[40%]">Contenu</TableHead>
+                        <TableHead>Auteur</TableHead>
+                        <TableHead>Capsule</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="w-24">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredComments.map((comment) => (
+                        <TableRow key={comment.id}>
+                          <TableCell><p className="text-sm line-clamp-2">{comment.content}</p></TableCell>
+                          <TableCell><p className="text-xs text-muted-foreground truncate max-w-[120px]">{comment.user_id}</p></TableCell>
+                          <TableCell><Button variant="link" size="sm" className="h-auto p-0 text-xs" onClick={() => navigate(`/capsules/${comment.capsule_id}`)}>Voir le souvenir</Button></TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{format(new Date(comment.created_at), "d MMM yyyy HH:mm", { locale: fr })}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <Button variant="ghost" size="icon" onClick={() => navigate(`/capsules/${comment.capsule_id}`)}><Eye className="h-4 w-4" /></Button>
+                              <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => { setSelectedComment(comment); setDeleteDialogOpen(true); }}><Trash2 className="h-4 w-4" /></Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 

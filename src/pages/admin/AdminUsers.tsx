@@ -232,135 +232,118 @@ export default function AdminUsers() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[600px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Utilisateur</TableHead>
-                  <TableHead>Abonnement</TableHead>
-                  <TableHead>Stockage</TableHead>
-                  <TableHead>Inscrit le</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead className="w-12"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={6}>
-                        <div className="h-12 bg-muted animate-pulse rounded" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : filteredUsers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      Aucun utilisateur trouvé
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredUsers.map((user) => (
-                    <TableRow key={user.id} className={user.suspended ? "opacity-60" : ""}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.avatar_url || undefined} />
-                            <AvatarFallback>{getInitials(user.display_name)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium">{user.display_name || "Sans nom"}</p>
-                            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                              {user.user_id}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getSubscriptionBadge(user.subscription_level)}</TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {user.realStorageMb.toFixed(0)} / {user.storage_limit_mb} MB
-                        </div>
-                        <div className="w-20 h-1.5 bg-muted rounded-full mt-1">
-                          <div
-                            className={`h-full rounded-full ${
-                              user.realStorageMb / user.storage_limit_mb >= 0.8 
-                                ? "bg-amber-500" 
-                                : "bg-primary"
-                            }`}
-                            style={{
-                              width: `${Math.min((user.realStorageMb / user.storage_limit_mb) * 100, 100)}%`,
-                            }}
-                          />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {format(new Date(user.created_at), "d MMM yyyy", { locale: fr })}
-                      </TableCell>
-                      <TableCell>
+          {loading ? (
+            <div className="p-4 space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-12 bg-muted animate-pulse rounded" />)}</div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">Aucun utilisateur trouvé</div>
+          ) : (
+            <>
+              {/* Mobile card layout */}
+              <div className="lg:hidden divide-y">
+                {filteredUsers.map((user) => (
+                  <div key={user.id} className={`p-3 flex items-center gap-3 ${user.suspended ? "opacity-60" : ""}`}>
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarImage src={user.avatar_url || undefined} />
+                      <AvatarFallback>{getInitials(user.display_name)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{user.display_name || "Sans nom"}</p>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {getSubscriptionBadge(user.subscription_level)}
                         {user.suspended ? (
-                          <Badge variant="destructive">Suspendu</Badge>
+                          <Badge variant="destructive" className="text-[10px]">Suspendu</Badge>
                         ) : (
-                          <Badge variant="outline" className="text-green-600 border-green-600">
-                            Actif
-                          </Badge>
+                          <Badge variant="outline" className="text-green-600 border-green-600 text-[10px]">Actif</Badge>
                         )}
-                      </TableCell>
-                      <TableCell>
-                        {isAdmin && (
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => {
-                                setSelectedUser(user);
-                                setProfileDialogOpen(true);
-                              }}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                Voir le profil
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              {user.suspended ? (
-                                <DropdownMenuItem onClick={() => handleUnsuspend(user)}>
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Réactiver
-                                </DropdownMenuItem>
-                              ) : (
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setSelectedUser(user);
-                                    setSuspendDialogOpen(true);
-                                  }}
-                                  className="text-destructive"
-                                >
-                                  <Ban className="h-4 w-4 mr-2" />
-                                  Suspendre
-                                </DropdownMenuItem>
-                              )}
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setDeleteDialogOpen(true);
-                                }}
-                                className="text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Supprimer
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+                        <span className="text-xs text-muted-foreground">{user.realStorageMb.toFixed(0)}/{user.storage_limit_mb} MB</span>
+                      </div>
+                    </div>
+                    {isAdmin && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8"><MoreVertical className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => { setSelectedUser(user); setProfileDialogOpen(true); }}>
+                            <Eye className="h-4 w-4 mr-2" /> Voir le profil
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          {user.suspended ? (
+                            <DropdownMenuItem onClick={() => handleUnsuspend(user)}><CheckCircle className="h-4 w-4 mr-2" /> Réactiver</DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem onClick={() => { setSelectedUser(user); setSuspendDialogOpen(true); }} className="text-destructive"><Ban className="h-4 w-4 mr-2" /> Suspendre</DropdownMenuItem>
+                          )}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => { setSelectedUser(user); setDeleteDialogOpen(true); }} className="text-destructive"><Trash2 className="h-4 w-4 mr-2" /> Supprimer</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* Desktop table */}
+              <div className="hidden lg:block">
+                <ScrollArea className="h-[600px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Utilisateur</TableHead>
+                        <TableHead>Abonnement</TableHead>
+                        <TableHead>Stockage</TableHead>
+                        <TableHead>Inscrit le</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead className="w-12"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers.map((user) => (
+                        <TableRow key={user.id} className={user.suspended ? "opacity-60" : ""}>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-8 w-8"><AvatarImage src={user.avatar_url || undefined} /><AvatarFallback>{getInitials(user.display_name)}</AvatarFallback></Avatar>
+                              <div>
+                                <p className="font-medium">{user.display_name || "Sans nom"}</p>
+                                <p className="text-xs text-muted-foreground truncate max-w-[200px]">{user.user_id}</p>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{getSubscriptionBadge(user.subscription_level)}</TableCell>
+                          <TableCell>
+                            <div className="text-sm">{user.realStorageMb.toFixed(0)} / {user.storage_limit_mb} MB</div>
+                            <div className="w-20 h-1.5 bg-muted rounded-full mt-1">
+                              <div className={`h-full rounded-full ${user.realStorageMb / user.storage_limit_mb >= 0.8 ? "bg-amber-500" : "bg-primary"}`} style={{ width: `${Math.min((user.realStorageMb / user.storage_limit_mb) * 100, 100)}%` }} />
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm">{format(new Date(user.created_at), "d MMM yyyy", { locale: fr })}</TableCell>
+                          <TableCell>
+                            {user.suspended ? <Badge variant="destructive">Suspendu</Badge> : <Badge variant="outline" className="text-green-600 border-green-600">Actif</Badge>}
+                          </TableCell>
+                          <TableCell>
+                            {isAdmin && (
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => { setSelectedUser(user); setProfileDialogOpen(true); }}><Eye className="h-4 w-4 mr-2" /> Voir le profil</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  {user.suspended ? (
+                                    <DropdownMenuItem onClick={() => handleUnsuspend(user)}><CheckCircle className="h-4 w-4 mr-2" /> Réactiver</DropdownMenuItem>
+                                  ) : (
+                                    <DropdownMenuItem onClick={() => { setSelectedUser(user); setSuspendDialogOpen(true); }} className="text-destructive"><Ban className="h-4 w-4 mr-2" /> Suspendre</DropdownMenuItem>
+                                  )}
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem onClick={() => { setSelectedUser(user); setDeleteDialogOpen(true); }} className="text-destructive"><Trash2 className="h-4 w-4 mr-2" /> Supprimer</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
