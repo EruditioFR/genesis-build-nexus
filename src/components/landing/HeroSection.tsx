@@ -66,14 +66,6 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-advance rotating words
-  useEffect(() => {
-    if (!Array.isArray(rotatingWords) || rotatingWords.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentWordIndex(prev => (prev + 1) % rotatingWords.length);
-    }, 1500);
-    return () => clearInterval(interval);
-  }, [rotatingWords]);
 
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
