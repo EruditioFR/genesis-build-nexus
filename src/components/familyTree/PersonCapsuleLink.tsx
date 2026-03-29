@@ -157,16 +157,16 @@ export function LinkCapsuleDialog({
             {filteredCapsules.map((capsule) => (
               <div
                 key={capsule.id}
-                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors overflow-hidden"
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors w-[80vw] max-w-lg mx-auto"
               >
                 {capsule.thumbnail_url ? (
                   <img
                     src={capsule.thumbnail_url}
                     alt=""
-                    className="w-12 h-12 rounded object-cover flex-shrink-0"
+                    className="w-12 h-12 rounded object-cover shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded bg-muted flex items-center justify-center shrink-0">
                     <Package className="w-5 h-5 text-muted-foreground" />
                   </div>
                 )}
@@ -183,7 +183,7 @@ export function LinkCapsuleDialog({
                 </div>
                 <Button
                   size="sm"
-                  className="flex-shrink-0"
+                  className="shrink-0"
                   onClick={() => handleLink(capsule.id)}
                   disabled={linking === capsule.id}
                 >
@@ -208,10 +208,10 @@ export function LinkCapsuleDialog({
           <DrawerHeader className="text-left px-0">
             <DrawerTitle className="flex items-center gap-2">
               <Link2 className="w-5 h-5" />
-              Lier une capsule
+              Lier un souvenir
             </DrawerTitle>
             <DrawerDescription>
-              Sélectionnez une capsule à lier à {person.first_names} {person.last_name}
+              Sélectionnez un souvenir à lier à {person.first_names} {person.last_name}
             </DrawerDescription>
           </DrawerHeader>
           {capsuleList}
@@ -226,10 +226,10 @@ export function LinkCapsuleDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link2 className="w-5 h-5" />
-            Lier une capsule
+            Lier un souvenir
           </DialogTitle>
           <DialogDescription>
-            Sélectionnez une capsule à lier à {person.first_names} {person.last_name}
+            Sélectionnez un souvenir à lier à {person.first_names} {person.last_name}
           </DialogDescription>
         </DialogHeader>
         {capsuleList}
@@ -337,7 +337,7 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
           {linkedCapsules.map((capsule) => (
             <div
               key={capsule.link_id}
-              className="flex items-center gap-3 p-3 rounded-lg border bg-card"
+              className="flex items-center gap-3 p-3 rounded-lg border bg-card w-[80vw] max-w-lg mx-auto"
             >
               {capsule.thumbnail_url ? (
                 <img
@@ -390,11 +390,11 @@ export function PersonCapsulesList({ person, onUpdate }: PersonCapsulesListProps
       <Button 
         variant="outline" 
         size="sm" 
-        className="w-full gap-2"
+        className="w-[80vw] max-w-lg mx-auto gap-2 flex"
         onClick={() => setShowLinkDialog(true)}
       >
         <Link2 className="w-4 h-4" />
-         Lier un souvenir
+        Lier un souvenir
       </Button>
 
       <LinkCapsuleDialog
