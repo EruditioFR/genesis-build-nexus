@@ -17,6 +17,7 @@ import {
   FileDown,
   Focus,
   Map as MapIcon,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -51,6 +52,8 @@ import { GedcomImportDialog } from '@/components/familyTree/GedcomImportDialog';
 import { MergePersonsDialog } from '@/components/familyTree/MergePersonsDialog';
 import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { downloadGedcom } from '@/lib/gedcomExporter';
+import { validateFamilyTree } from '@/lib/familyTreeValidation';
+import { TreeValidationPanel } from '@/components/familyTree/TreeValidationPanel';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
@@ -102,12 +105,19 @@ export default function FamilyTreePage() {
   const [showGedcomImport, setShowGedcomImport] = useState(false);
   const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [mergeSourcePerson, setMergeSourcePerson] = useState<FamilyPerson | null>(null);
+  const [showValidationPanel, setShowValidationPanel] = useState(false);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
   const [personPositions, setPersonPositions] = useState<PersonPositionData[]>([]);
   const [pendingCenterId, setPendingCenterId] = useState<string | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<string | null>(null);
+
+  // Validation issues (computed on demand when panel opens)
+  const validationIssues = useMemo(() => {
+    if (!showValidationPanel || persons.length === 0) return [];
+    return validateFamilyTree(persons, relationships, unions);
+  }, [showValidationPanel, persons, relationships, unions]);
 
   // Pre-build indexed maps for parent/child lookups
   const { parentOfIndex, childOfIndex } = useMemo(() => {
@@ -821,6 +831,14 @@ export default function FamilyTreePage() {
                         >
                           <Upload className="w-4 h-4" />
                         </Button>
+                        <Button 
+                          variant="outline" 
+                          size="icon"
+                          onClick={() => setShowValidationPanel(true)}
+                          title="Audit de l'arbre"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                        </Button>
                       </div>
 
                       <Button onClick={() => handleAddPerson('child')} className="gap-2" data-tour="tree-add-person">
@@ -948,6 +966,20 @@ export default function FamilyTreePage() {
           onMerge={handleMergeSubmit}
         />
       )}
+
+      <TreeValidationPanel
+        open={showValidationPanel}
+        onClose={() => setShowValidationPanel(false)}
+        issues={validationIssues}
+        onPersonClick={(personId) => {
+          const person = persons.find(p => p.id === personId);
+          if (person) {
+            setSelectedPerson(person);
+            setShowDetailPanel(true);
+            setShowValidationPanel(false);
+          }
+        }}
+      />
     </div>
   );
 }
