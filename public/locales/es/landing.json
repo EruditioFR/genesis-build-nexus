@@ -2,10 +2,7 @@
   "hero": {
     "badge": "Crea tu diario familiar, simplemente",
     "title": "Todos tus recuerdos, por fin reunidos",
-    "subtitle": {
-      "line1": "Fotos, vídeos, textos, audios… reúne tus recuerdos en un solo lugar, con contexto y emoción.",
-      "line2": "Comparte tus recuerdos con total sencillez con tus seres queridos, en un espacio privado y seguro."
-    },
+    "subtitle": "Fotos, vídeos, textos y audios: reúne tus recuerdos en un espacio privado, seguro y lleno de emoción, para compartirlos fácilmente con tus seres queridos.",
     "cta": {
       "primary": "Comenzar gratis",
       "secondary": "Ver demo"
