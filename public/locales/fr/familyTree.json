@@ -124,7 +124,8 @@
     "selectedParents": "Parents (ascendants)",
     "selectedChildren": "Enfants (descendants)",
     "asParent": "Parent",
-    "asChild": "Enfant"
+    "asChild": "Enfant",
+    "moreInfo": "Plus d'informations"
   },
   "person": {
     "born": "née",
