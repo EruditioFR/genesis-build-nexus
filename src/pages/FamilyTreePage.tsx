@@ -966,6 +966,20 @@ export default function FamilyTreePage() {
           onMerge={handleMergeSubmit}
         />
       )}
+
+      <TreeValidationPanel
+        open={showValidationPanel}
+        onClose={() => setShowValidationPanel(false)}
+        issues={validationIssues}
+        onPersonClick={(personId) => {
+          const person = persons.find(p => p.id === personId);
+          if (person) {
+            setSelectedPerson(person);
+            setShowDetailPanel(true);
+            setShowValidationPanel(false);
+          }
+        }}
+      />
     </div>
   );
 }
