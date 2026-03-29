@@ -156,8 +156,12 @@ export function AddPersonDialog({
           unionIdToUse = unionsWithSelectedParent[0].id;
         }
       }
+
+      const extraLinks = (selectedParentIds.length > 0 || selectedChildIds.length > 0)
+        ? { parentIds: selectedParentIds, childIds: selectedChildIds }
+        : undefined;
       
-      onPersonAdded(person, selectedSecondParent, unionIdToUse);
+      onPersonAdded(person, selectedSecondParent, unionIdToUse, extraLinks);
       handleClose();
     }
   };
