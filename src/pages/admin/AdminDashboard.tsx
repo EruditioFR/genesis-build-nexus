@@ -319,10 +319,10 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-display font-bold">Dashboard Admin</h1>
-        <Badge variant="outline" className="text-xs">
+    <div className="space-y-6 w-full min-w-0 overflow-x-hidden">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <h1 className="text-xl sm:text-2xl font-display font-bold">Dashboard Admin</h1>
+        <Badge variant="outline" className="text-xs shrink-0">
           Dernière mise à jour: {new Date().toLocaleTimeString("fr-FR")}
         </Badge>
       </div>
@@ -395,23 +395,23 @@ export default function AdminDashboard() {
                   </div>
                   
                   {/* Répartition */}
-                  <div className="grid grid-cols-3 gap-3 text-sm pt-2 border-t">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-orange-500" />
-                      <span className="text-muted-foreground">Capsules:</span>
-                      <span className="font-medium">{stats.capsuleStorageMb.toFixed(0)} MB</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-green-500" />
-                      <span className="text-muted-foreground">Arbres:</span>
-                      <span className="font-medium">{stats.familyStorageMb.toFixed(0)} MB</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded bg-blue-500" />
-                      <span className="text-muted-foreground">Avatars:</span>
-                      <span className="font-medium">{stats.avatarStorageMb.toFixed(0)} MB</span>
-                    </div>
-                  </div>
+                   <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm pt-2 border-t">
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-orange-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Capsules:</span>
+                       <span className="font-medium text-xs">{stats.capsuleStorageMb.toFixed(0)} MB</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-green-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Arbres:</span>
+                       <span className="font-medium text-xs">{stats.familyStorageMb.toFixed(0)} MB</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded bg-blue-500 shrink-0" />
+                       <span className="text-muted-foreground text-xs">Avatars:</span>
+                       <span className="font-medium text-xs">{stats.avatarStorageMb.toFixed(0)} MB</span>
+                     </div>
+                   </div>
 
                   {/* Info limite */}
                   <p className="text-xs text-muted-foreground text-center pt-2">
@@ -424,7 +424,7 @@ export default function AdminDashboard() {
         </Card>
       </motion.div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -432,16 +432,16 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
+            <Card className="min-w-0">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 p-3 sm:p-6 sm:pb-2">
+                <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground truncate mr-1">
                   {stat.title}
                 </CardTitle>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                <stat.icon className={`h-4 w-4 shrink-0 ${stat.color}`} />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.description}</p>
+              <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold truncate">{stat.value}</div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{stat.description}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -531,13 +531,13 @@ export default function AdminDashboard() {
         transition={{ duration: 0.3, delay: 0.5 }}
       >
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-500" />
-              Répartition du stockage par utilisateur (Top 10)
+          <CardHeader className="space-y-3 pb-4">
+            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-500 shrink-0" />
+              <span className="truncate">Stockage par utilisateur (Top 10)</span>
             </CardTitle>
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground shrink-0" />
               <ToggleGroup 
                 type="single" 
                 value={storageSortKey} 
@@ -547,21 +547,21 @@ export default function AdminDashboard() {
                 <ToggleGroupItem 
                   value="total" 
                   aria-label="Trier par total"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   Total
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="capsules" 
                   aria-label="Trier par capsules"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   <span className="text-orange-500">●</span> Capsules
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="trees" 
                   aria-label="Trier par arbres"
-                  className="text-xs px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+                  className="text-xs px-2 sm:px-3 py-1 data-[state=on]:bg-background data-[state=on]:shadow-sm"
                 >
                   <span className="text-green-500">●</span> Arbres
                 </ToggleGroupItem>
@@ -576,7 +576,7 @@ export default function AdminDashboard() {
                   <BarChart
                     data={sortedUserStorage}
                     layout="vertical"
-                    margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                    margin={{ top: 5, right: 10, left: 80, bottom: 5 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                     <XAxis 
@@ -641,20 +641,20 @@ export default function AdminDashboard() {
                     const isNearLimit = usagePercent >= 80;
                     return (
                       <div key={user.userId} className="space-y-1.5">
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-5 text-xs">{index + 1}.</span>
-                            <span className="font-medium truncate max-w-[200px]">{user.displayName}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
-                              {user.storageMb.toFixed(1)} MB
-                            </span>
-                            <span className="text-muted-foreground text-xs">
-                              / {user.storageLimitMb} MB
-                            </span>
-                          </div>
-                        </div>
+                         <div className="flex items-center justify-between text-sm gap-2">
+                           <div className="flex items-center gap-1.5 min-w-0">
+                             <span className="text-muted-foreground w-4 text-xs shrink-0">{index + 1}.</span>
+                             <span className="font-medium truncate">{user.displayName}</span>
+                           </div>
+                           <div className="flex items-center gap-1 shrink-0 text-xs sm:text-sm">
+                             <span className={isNearLimit ? "text-amber-500 font-medium" : "text-muted-foreground"}>
+                               {user.storageMb.toFixed(1)}
+                             </span>
+                             <span className="text-muted-foreground">
+                               / {user.storageLimitMb} MB
+                             </span>
+                           </div>
+                         </div>
                         <div className="flex items-center gap-2">
                           <Progress 
                             value={usagePercent} 

@@ -303,14 +303,14 @@ export default function AdminCloudUsage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 overflow-x-hidden">
       <h1 className="text-2xl font-display font-bold flex items-center gap-2">
         <Cloud className="w-6 h-6 text-primary" />
         Usage Cloud détaillé
       </h1>
 
       {/* Summary cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Stockage total</CardTitle>
