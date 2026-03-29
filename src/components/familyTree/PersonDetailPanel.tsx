@@ -57,6 +57,7 @@ import type { FamilyPerson, FamilyUnion, ParentChildRelationship } from '@/types
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
+import { PersonValidationWarnings } from './PersonValidationWarnings';
 import { UnionEditDialog } from './UnionEditDialog';
 import { RelationshipEditDialog } from './RelationshipEditDialog';
 import { toast } from 'sonner';
@@ -492,6 +493,22 @@ export function PersonDetailPanel({
           <X className="w-4 h-4" />
         </Button>
       </div>
+
+      {/* Validation warnings in edit mode */}
+      {isEditing && (
+        <div className="px-4 pt-2">
+          <PersonValidationWarnings
+            person={{
+              birth_date: editData.birth_date || null,
+              death_date: editData.death_date || null,
+              is_alive: editData.is_alive,
+              gender: editData.gender || null,
+            }}
+            parents={parents}
+            children={children}
+          />
+        </div>
+      )}
 
       {/* Action buttons */}
       {!readOnly && (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { CalendarIcon, User, Loader2, Users } from 'lucide-react';
@@ -28,6 +28,7 @@ import {
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { PersonValidationWarnings } from './PersonValidationWarnings';
 import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
 
 interface AddPersonDialogProps {
@@ -446,6 +447,17 @@ export function AddPersonDialog({
             />
           </div>
         </div>
+
+        <PersonValidationWarnings
+          person={{
+            birth_date: birthDate ? `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}` : null,
+            death_date: !isAlive && deathDate ? `${deathDate.getFullYear()}-${String(deathDate.getMonth() + 1).padStart(2, '0')}-${String(deathDate.getDate()).padStart(2, '0')}` : null,
+            is_alive: isAlive,
+            gender,
+          }}
+          relationType={relationType}
+          targetPerson={targetPerson}
+        />
 
         {/* Footer */}
         <div className="flex justify-end gap-2 pt-4 border-t">
