@@ -448,6 +448,17 @@ export function AddPersonDialog({
           </div>
         </div>
 
+        <PersonValidationWarnings
+          person={{
+            birth_date: birthDate ? `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}` : null,
+            death_date: !isAlive && deathDate ? `${deathDate.getFullYear()}-${String(deathDate.getMonth() + 1).padStart(2, '0')}-${String(deathDate.getDate()).padStart(2, '0')}` : null,
+            is_alive: isAlive,
+            gender,
+          }}
+          relationType={relationType}
+          targetPerson={targetPerson}
+        />
+
         {/* Footer */}
         <div className="flex justify-end gap-2 pt-4 border-t">
           <Button variant="outline" onClick={handleClose}>
