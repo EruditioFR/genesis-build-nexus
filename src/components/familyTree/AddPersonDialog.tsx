@@ -28,6 +28,7 @@ import {
 import { FamilyAvatar } from '@/components/familyTree/FamilyAvatar';
 import { cn } from '@/lib/utils';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
+import { PersonValidationWarnings } from './PersonValidationWarnings';
 import type { FamilyPerson, FamilyUnion } from '@/types/familyTree';
 
 interface AddPersonDialogProps {
