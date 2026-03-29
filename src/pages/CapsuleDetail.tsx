@@ -93,6 +93,7 @@ const CapsuleDetail = () => {
   const [sharedCircles, setSharedCircles] = useState<SharedCircle[]>([]);
   const [capsuleCategories, setCapsuleCategories] = useState<CapsuleCategory[]>([]);
   const [capsuleSubCategories, setCapsuleSubCategories] = useState<CapsuleSubCategoryWithData[]>([]);
+  const [linkedPersons, setLinkedPersons] = useState<{id: string; first_names: string; last_name: string;}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<{display_name: string | null;avatar_url: string | null;} | null>(null);
   const [ownerProfile, setOwnerProfile] = useState<{display_name: string | null;} | null>(null);
@@ -231,6 +232,22 @@ const CapsuleDetail = () => {
           id: item.id,
           sub_category: item.sub_category as SubCategory
         })));
+      }
+
+      // Fetch linked persons
+      const { data: linksData } = await supabase
+        .from('capsule_person_links')
+        .select('person_id')
+        .eq('capsule_id', id);
+
+      if (linksData && linksData.length > 0) {
+        const personIds = linksData.map((l) => l.person_id);
+        const { data: personsData } = await supabase
+          .from('family_persons')
+          .select('id, first_names, last_name')
+          .in('id', personIds);
+
+        if (personsData) setLinkedPersons(personsData);
       }
 
       setIsLoading(false);
@@ -953,6 +970,30 @@ const CapsuleDetail = () => {
                   )}
                   </div>
                 </motion.div>
+              }
+
+              {/* Linked persons */}
+              {linkedPersons.length > 0 &&
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.28 }}
+                className="p-5 rounded-2xl border border-border bg-card">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  {t('detail.linkedPersons')}
+                </h3>
+                <div className="space-y-2">
+                  {linkedPersons.map((person) => (
+                    <div key={person.id} className="flex items-center gap-2 text-sm text-foreground">
+                      <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
+                        {person.first_names.charAt(0)}
+                      </div>
+                      <span>{person.first_names} {person.last_name}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
               }
 
               {/* Shared with */}
