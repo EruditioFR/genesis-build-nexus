@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect, ClipboardEvent } from 'react';
 import {
   Bold, Italic, Underline, List, ListOrdered,
   Heading2, Heading3, Quote, Minus, Undo2, Redo2
