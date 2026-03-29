@@ -2,10 +2,7 @@
   "hero": {
     "badge": "Create your family journal, simply",
     "title": "All your memories, finally together",
-    "subtitle": {
-      "line1": "Photos, videos, texts, audio… gather your memories in one place, with context and emotion.",
-      "line2": "Share your memories effortlessly with your loved ones, in a private and secure space."
-    },
+    "subtitle": "Photos, videos, texts and audio: gather your memories in a private, secure and emotion-filled space, to share them easily with your loved ones.",
     "cta": {
       "primary": "Get started free",
       "secondary": "Watch demo"
