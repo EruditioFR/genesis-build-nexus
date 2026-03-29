@@ -156,7 +156,7 @@ export default function AdminSubscriptions() {
       <h1 className="text-2xl font-display font-bold">Gestion des abonnements</h1>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{users.length}</div>
