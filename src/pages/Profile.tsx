@@ -95,6 +95,7 @@ const Profile = () => {
   const [realStorageUsedMb, setRealStorageUsedMb] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+  const [invoicesFetched, setInvoicesFetched] = useState(false);
   
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
