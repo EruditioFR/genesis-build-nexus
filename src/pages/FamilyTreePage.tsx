@@ -938,6 +938,7 @@ export default function FamilyTreePage() {
           availableSpouses={addRelationTarget ? getPersonSpouses(addRelationTarget.id) : []}
           existingUnions={unions}
           onPersonAdded={handlePersonAdded}
+          allPersons={persons}
         />
       )}
 
