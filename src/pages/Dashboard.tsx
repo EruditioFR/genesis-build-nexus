@@ -17,6 +17,7 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
+import HowItWorksVideo from '@/components/dashboard/HowItWorksVideo';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import NoIndex from '@/components/seo/NoIndex';
