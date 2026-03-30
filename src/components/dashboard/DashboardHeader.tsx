@@ -342,7 +342,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         gradient="bg-gradient-to-br from-secondary to-secondary/70"
                       />
                       
-                      {isHeritage ? (
+                      {(isHeritage || adminOverride) ? (
                         <FeatureCard
                           to="/family-tree"
                           icon={GitBranch}
