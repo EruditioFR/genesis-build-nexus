@@ -71,7 +71,7 @@ export const useSubscription = () => {
 
   const checkSubscription = useCallback(async (force = false) => {
     if (!user) {
-      setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free' }));
+      setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free', adminOverride: false }));
       initialCheckDone.current = true;
       return;
     }
