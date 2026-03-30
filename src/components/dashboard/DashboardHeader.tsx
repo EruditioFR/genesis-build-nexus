@@ -160,10 +160,11 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
   const { startTour, welcomeDialogProps } = useOnboardingTour();
-  const { tier } = useSubscription();
+  const { tier, adminOverride } = useSubscription();
 
   const isPremium = tier === 'premium' || tier === 'heritage';
   const isHeritage = tier === 'heritage';
+  const hideUpgrade = isHeritage || adminOverride;
 
   const getInitials = () => {
     if (user.displayName) {
