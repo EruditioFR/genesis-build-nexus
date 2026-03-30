@@ -17,6 +17,7 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
+import HowItWorksVideo from '@/components/dashboard/HowItWorksVideo';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { TourWelcomeDialog } from '@/components/tour/TourWelcomeDialog';
 import NoIndex from '@/components/seo/NoIndex';
@@ -389,6 +390,11 @@ const Dashboard = () => {
             </Link>
           </motion.div>
         )}
+
+        {/* How it works video */}
+        <div className="mb-6 md:mb-8">
+          <HowItWorksVideo variant="dashboard" />
+        </div>
 
         {/* Main Grid - RecentCapsules first */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">

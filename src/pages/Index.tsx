@@ -10,6 +10,7 @@ import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 // Lazy load below-the-fold components to improve LCP
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
 const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSection"));
+const HowItWorksVideo = lazy(() => import("@/components/dashboard/HowItWorksVideo"));
 const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
@@ -56,6 +57,7 @@ const Index = () => {
         <HeroSection />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
           <FeaturesSection />
+          <HowItWorksVideo variant="landing" />
           <HowItWorksSection />
           <TestimonialsSection />
           <PricingSection />
