@@ -61,7 +61,7 @@ export const useSubscription = () => {
   const [state, setState] = useState<SubscriptionState>(() => {
     const cached = getCache();
     if (cached) {
-      return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null };
+      return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null, adminOverride: false };
     }
     return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null, adminOverride: false };
   });
