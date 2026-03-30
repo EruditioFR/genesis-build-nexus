@@ -97,7 +97,7 @@ export const useSubscription = () => {
       if (data.subscribed && data.tier) {
         const result = { subscribed: data.subscribed, tier: data.tier || 'free', subscriptionEnd: data.subscription_end };
         setCache(result);
-        setState({ ...result, loading: false, error: null });
+        setState(prev => ({ ...prev, ...result, loading: false, error: null }));
         initialCheckDone.current = true;
         return;
       }
