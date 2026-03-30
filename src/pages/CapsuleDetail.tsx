@@ -44,6 +44,7 @@ import CategoryBadge from '@/components/capsule/CategoryBadge';
 import SubCategoryBadge from '@/components/capsule/SubCategoryBadge';
 import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
+import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
