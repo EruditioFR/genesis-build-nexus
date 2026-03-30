@@ -1,36 +1,89 @@
 import { motion } from 'framer-motion';
 import { Play, CirclePlay } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+
+interface TutorialVideo {
+  id: string;
+  title: string;
+  description: string;
+  src: string;
+}
+
+const TUTORIALS: TutorialVideo[] = [
+  {
+    id: 'creer-souvenir',
+    title: 'Créer un souvenir',
+    description: 'Apprenez à créer votre premier souvenir en quelques clics.',
+    src: '/videos/tuto-comment-creer-souvenir.mp4',
+  },
+];
+
+interface VideoCardProps {
+  video: TutorialVideo;
+}
+
+const VideoCard = ({ video }: VideoCardProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleToggle = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="group"
+    >
+      <div
+        className="relative rounded-2xl overflow-hidden shadow-md border border-border/30 cursor-pointer aspect-video"
+        onClick={handleToggle}
+      >
+        <video
+          ref={videoRef}
+          src={video.src}
+          className="w-full h-full object-cover"
+          playsInline
+          onEnded={() => setIsPlaying(false)}
+          onPause={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
+        />
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity duration-300 ${
+            isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+        >
+          <div className="w-14 h-14 rounded-full bg-secondary/90 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+            <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+          </div>
+        </div>
+      </div>
+      <h3 className="mt-3 text-sm font-semibold text-foreground">{video.title}</h3>
+      <p className="text-xs text-muted-foreground mt-0.5">{video.description}</p>
+    </motion.div>
+  );
+};
 
 interface HowItWorksVideoProps {
   variant?: 'dashboard' | 'landing';
 }
 
 const HowItWorksVideo = ({ variant = 'dashboard' }: HowItWorksVideoProps) => {
-  const { t } = useTranslation('common');
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const handlePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const handleVideoEnd = () => {
-    setIsPlaying(false);
-  };
-
   const isLanding = variant === 'landing';
 
   return (
-    <section className={isLanding ? 'py-16 sm:py-24 bg-[#f5f0e8] relative overflow-hidden' : ''}>
+    <section
+      id="tutoriels"
+      className={isLanding ? 'py-16 sm:py-24 bg-[#f5f0e8] relative overflow-hidden' : ''}
+    >
       {isLanding && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 right-20 w-64 h-64 bg-secondary/8 rounded-full blur-3xl" />
@@ -45,68 +98,44 @@ const HowItWorksVideo = ({ variant = 'dashboard' }: HowItWorksVideoProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className={`${isLanding ? 'text-center max-w-2xl mx-auto mb-10 sm:mb-14' : 'mb-4'}`}
+          className={isLanding ? 'text-center max-w-2xl mx-auto mb-10 sm:mb-14' : 'mb-5'}
         >
           {isLanding && (
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20 text-sm font-semibold mb-5">
               <CirclePlay className="w-4 h-4 text-secondary" />
-              <span className="text-secondary">Tutoriel</span>
+              <span className="text-secondary">Tutoriels</span>
             </span>
           )}
-          <h2 className={
-            isLanding
-              ? 'text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-4 leading-tight'
-              : 'text-lg md:text-xl font-display font-bold text-foreground flex items-center gap-2'
-          }>
+          <h2
+            className={
+              isLanding
+                ? 'text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-4 leading-tight'
+                : 'text-lg md:text-xl font-display font-bold text-foreground flex items-center gap-2'
+            }
+          >
             {isLanding ? (
-              <>Comment créer <span className="text-secondary">un souvenir ?</span></>
+              <>
+                Nos tutoriels <span className="text-secondary">vidéo</span>
+              </>
             ) : (
-              <><CirclePlay className="w-5 h-5 text-secondary" /> Comment ça marche ?</>
+              <>
+                <CirclePlay className="w-5 h-5 text-secondary" /> Tutoriels vidéo
+              </>
             )}
           </h2>
           {isLanding && (
             <p className="text-[#1a1a2e]/70 text-base sm:text-lg">
-              Découvrez en vidéo comment créer votre premier souvenir en quelques clics.
+              Découvrez en vidéo comment utiliser Family Garden en quelques clics.
             </p>
           )}
         </motion.div>
 
-        {/* Video Player */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className={isLanding ? 'max-w-4xl mx-auto' : ''}
-        >
-          <div
-            className={`relative rounded-2xl overflow-hidden shadow-lg border border-border/30 cursor-pointer group ${
-              isLanding ? 'aspect-video' : 'aspect-video'
-            }`}
-            onClick={handlePlay}
-          >
-            <video
-              ref={videoRef}
-              src="/videos/tuto-comment-creer-souvenir.mp4"
-              className="w-full h-full object-cover"
-              playsInline
-              onEnded={handleVideoEnd}
-              onPause={() => setIsPlaying(false)}
-              onPlay={() => setIsPlaying(true)}
-            />
-
-            {/* Play overlay */}
-            <div
-              className={`absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity duration-300 ${
-                isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
-              }`}
-            >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-secondary/90 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                <Play className="w-7 h-7 sm:w-9 sm:h-9 text-white fill-white ml-1" />
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        {/* Video Grid */}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 ${isLanding ? 'max-w-5xl mx-auto' : ''}`}>
+          {TUTORIALS.map((video) => (
+            <VideoCard key={video.id} video={video} />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -16,6 +16,7 @@ import {
   Home,
   Plus,
   Sparkles,
+  CirclePlay,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -492,6 +493,20 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </Link>
                   </DropdownMenuItem>
                 )}
+                <DropdownMenuItem
+                  onClick={() => {
+                    const el = document.getElementById('tutoriels');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      navigate('/dashboard#tutoriels');
+                    }
+                  }}
+                  className="flex items-center gap-3 cursor-pointer"
+                >
+                  <CirclePlay className="h-4 w-4" />
+                  Tutoriels
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={startTour}
                   className="flex items-center gap-3 cursor-pointer"
