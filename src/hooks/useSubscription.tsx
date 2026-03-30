@@ -80,7 +80,7 @@ export const useSubscription = () => {
     if (!force) {
       const cached = getCache();
       if (cached) {
-        setState({ subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null });
+        setState(prev => ({ ...prev, subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null }));
         initialCheckDone.current = true;
         return;
       }
