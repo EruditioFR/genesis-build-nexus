@@ -842,15 +842,6 @@ const CapsuleDetail = () => {
                   tiktok: { icon: '🎵', label: 'TikTok', color: 'border-foreground/20' },
                   linkedin: { icon: '💼', label: 'LinkedIn', color: 'border-[#0A66C2]/30' },
                 };
-                const getEmbedUrl = (platform: string, url: string): string | null => {
-                  if (platform === 'facebook') return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&width=500&show_text=true`;
-                  if (platform === 'instagram') return `${url.replace(/\/$/, '')}/embed`;
-                  if (platform === 'tiktok') {
-                    const match = url.match(/\/video\/(\d+)/);
-                    return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : null;
-                  }
-                  return null;
-                };
                 return links.length > 0 ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -862,39 +853,24 @@ const CapsuleDetail = () => {
                     <div className="space-y-4">
                       {links.map((link, index) => {
                         const config = platformLabels[link.platform] || { icon: '🔗', label: link.platform, color: 'border-border' };
-                        const embedUrl = getEmbedUrl(link.platform, link.url);
                         return (
-                          <div key={index} className="space-y-2">
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={cn(
-                                "flex items-center gap-3 p-3 rounded-xl border bg-card hover:bg-muted/50 transition-colors",
-                                config.color
-                              )}
-                            >
-                              <span className="text-lg">{config.icon}</span>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</p>
-                                <p className="text-sm text-foreground truncate">{link.url}</p>
-                              </div>
-                              <ExternalLink className="w-4 h-4 text-muted-foreground shrink-0" />
-                            </a>
-                            {embedUrl && (
-                              <div className={cn("rounded-xl overflow-hidden border bg-muted", config.color)}>
-                                <iframe
-                                  src={embedUrl}
-                                  title={`${config.label} - post`}
-                                  className="w-full border-0"
-                                  style={{ minHeight: link.platform === 'instagram' ? 480 : link.platform === 'tiktok' ? 600 : 350 }}
-                                  sandbox="allow-scripts allow-same-origin allow-popups"
-                                  loading="lazy"
-                                  allowFullScreen
-                                />
-                              </div>
+                          <a
+                            key={index}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cn(
+                              "flex items-center gap-3 p-3 rounded-xl border bg-card hover:bg-muted/50 transition-colors",
+                              config.color
                             )}
-                          </div>
+                          >
+                            <span className="text-lg">{config.icon}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</p>
+                              <p className="text-sm text-foreground truncate">{link.url}</p>
+                            </div>
+                            <ExternalLink className="w-4 h-4 text-muted-foreground shrink-0" />
+                          </a>
                         );
                       })}
                     </div>
