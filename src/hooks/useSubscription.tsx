@@ -104,22 +104,24 @@ export const useSubscription = () => {
 
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('subscription_level')
+        .select('subscription_level, admin_override')
         .eq('user_id', user.id)
         .single();
+
+      const isAdminOverride = profileData?.admin_override ?? false;
 
       if (profileData?.subscription_level && profileData.subscription_level !== 'free') {
         const tier = profileData.subscription_level === 'legacy' ? 'heritage' : profileData.subscription_level as 'free' | 'premium' | 'heritage';
         const result = { subscribed: true, tier, subscriptionEnd: null };
         setCache(result);
-        setState({ ...result, loading: false, error: null });
+        setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
         initialCheckDone.current = true;
         return;
       }
 
       const result = { subscribed: false, tier: 'free' as const, subscriptionEnd: null };
       setCache(result);
-      setState({ ...result, loading: false, error: null });
+      setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
       initialCheckDone.current = true;
     } catch (error: any) {
       console.error('Error checking subscription:', error);
