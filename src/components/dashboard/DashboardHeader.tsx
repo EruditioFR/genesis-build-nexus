@@ -375,7 +375,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </div>
 
                     {/* Upgrade CTA for non-heritage users */}
-                      {!isHeritage && (
+                      {!hideUpgrade && (
                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-secondary/20">
