@@ -6,7 +6,7 @@ import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus } from
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink } from
 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -44,6 +44,7 @@ import CategoryBadge from '@/components/capsule/CategoryBadge';
 import SubCategoryBadge from '@/components/capsule/SubCategoryBadge';
 import type { Category, CapsuleCategory, SubCategory } from '@/hooks/useCategories';
 import NoIndex from '@/components/seo/NoIndex';
+import { cn } from '@/lib/utils';
 
 import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
@@ -835,11 +836,20 @@ const CapsuleDetail = () => {
               {capsule.metadata && typeof capsule.metadata === 'object' && (() => {
                 const meta = capsule.metadata as Record<string, any>;
                 const links: { platform: string; url: string }[] = meta.social_links && Array.isArray(meta.social_links) ? meta.social_links : [];
-                const platformLabels: Record<string, { icon: string; label: string }> = {
-                  facebook: { icon: '📘', label: 'Facebook' },
-                  instagram: { icon: '📷', label: 'Instagram' },
-                  tiktok: { icon: '🎵', label: 'TikTok' },
-                  linkedin: { icon: '💼', label: 'LinkedIn' },
+                const platformLabels: Record<string, { icon: string; label: string; color: string }> = {
+                  facebook: { icon: '📘', label: 'Facebook', color: 'border-[#1877F2]/30' },
+                  instagram: { icon: '📷', label: 'Instagram', color: 'border-[#E4405F]/30' },
+                  tiktok: { icon: '🎵', label: 'TikTok', color: 'border-foreground/20' },
+                  linkedin: { icon: '💼', label: 'LinkedIn', color: 'border-[#0A66C2]/30' },
+                };
+                const getEmbedUrl = (platform: string, url: string): string | null => {
+                  if (platform === 'facebook') return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&width=500&show_text=true`;
+                  if (platform === 'instagram') return `${url.replace(/\/$/, '')}/embed`;
+                  if (platform === 'tiktok') {
+                    const match = url.match(/\/video\/(\d+)/);
+                    return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : null;
+                  }
+                  return null;
                 };
                 return links.length > 0 ? (
                   <motion.div
@@ -849,23 +859,42 @@ const CapsuleDetail = () => {
                     <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
                       🔗 {t('socialLinks.title', 'Liens sociaux')}
                     </h2>
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                       {links.map((link, index) => {
-                        const config = platformLabels[link.platform] || { icon: '🔗', label: link.platform };
+                        const config = platformLabels[link.platform] || { icon: '🔗', label: link.platform, color: 'border-border' };
+                        const embedUrl = getEmbedUrl(link.platform, link.url);
                         return (
-                          <a
-                            key={index}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-muted/50 transition-colors"
-                          >
-                            <span className="text-lg">{config.icon}</span>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</p>
-                              <p className="text-sm text-foreground truncate">{link.url}</p>
-                            </div>
-                          </a>
+                          <div key={index} className="space-y-2">
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={cn(
+                                "flex items-center gap-3 p-3 rounded-xl border bg-card hover:bg-muted/50 transition-colors",
+                                config.color
+                              )}
+                            >
+                              <span className="text-lg">{config.icon}</span>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</p>
+                                <p className="text-sm text-foreground truncate">{link.url}</p>
+                              </div>
+                              <ExternalLink className="w-4 h-4 text-muted-foreground shrink-0" />
+                            </a>
+                            {embedUrl && (
+                              <div className={cn("rounded-xl overflow-hidden border bg-muted", config.color)}>
+                                <iframe
+                                  src={embedUrl}
+                                  title={`${config.label} - post`}
+                                  className="w-full border-0"
+                                  style={{ minHeight: link.platform === 'instagram' ? 480 : link.platform === 'tiktok' ? 600 : 350 }}
+                                  sandbox="allow-scripts allow-same-origin allow-popups"
+                                  loading="lazy"
+                                  allowFullScreen
+                                />
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
