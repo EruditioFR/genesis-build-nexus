@@ -290,7 +290,7 @@ const Dashboard = () => {
     return null;
   }
 
-  const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy';
+  const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy' || profile?.admin_override;
 
   return (
     <>
