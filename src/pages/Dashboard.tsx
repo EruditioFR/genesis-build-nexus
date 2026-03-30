@@ -391,10 +391,7 @@ const Dashboard = () => {
           </motion.div>
         )}
 
-        {/* How it works video */}
-        <div className="mb-6 md:mb-8">
-          <HowItWorksVideo variant="dashboard" />
-        </div>
+        {/* Main Grid - RecentCapsules first */}
 
         {/* Main Grid - RecentCapsules first */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
