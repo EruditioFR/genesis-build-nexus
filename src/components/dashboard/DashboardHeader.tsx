@@ -493,6 +493,20 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem
+                  onClick={() => {
+                    const el = document.getElementById('tutoriels');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      navigate('/dashboard#tutoriels');
+                    }
+                  }}
+                  className="flex items-center gap-3 cursor-pointer"
+                >
+                  <CirclePlay className="h-4 w-4" />
+                  Tutoriels
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={startTour}
                   className="flex items-center gap-3 cursor-pointer"
                 >

@@ -409,6 +409,11 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+
+        {/* Tutoriels vidéo - bottom of page */}
+        <div className="mt-8 md:mt-12">
+          <HowItWorksVideo variant="dashboard" />
+        </div>
         </div>
       </AuthenticatedLayout>
     </>
