@@ -63,7 +63,7 @@ export const useSubscription = () => {
     if (cached) {
       return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null };
     }
-    return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null };
+    return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null, adminOverride: false };
   });
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
