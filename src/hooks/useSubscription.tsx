@@ -21,6 +21,7 @@ interface SubscriptionState {
   subscriptionEnd: string | null;
   loading: boolean;
   error: string | null;
+  adminOverride: boolean;
 }
 
 interface CachedSubscription {
