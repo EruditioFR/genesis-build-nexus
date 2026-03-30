@@ -66,23 +66,6 @@ const isValidUrl = (url: string): boolean => {
   }
 };
 
-const getEmbedPreviewUrl = (platform: SocialPlatform, url: string): string | null => {
-  switch (platform) {
-    case 'facebook':
-      return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&width=320&show_text=true`;
-    case 'instagram':
-      return `${url.replace(/\/$/, '')}/embed`;
-    case 'tiktok': {
-      const match = url.match(/\/video\/(\d+)/);
-      if (match) return `https://www.tiktok.com/embed/v2/${match[1]}`;
-      return null;
-    }
-    case 'linkedin':
-      return null; // LinkedIn doesn't support simple embeds
-    default:
-      return null;
-  }
-};
 
 const SocialLinkItem = ({ link, onRemove }: { link: SocialLink; onRemove: () => void }) => {
   const { t } = useTranslation('capsules');
