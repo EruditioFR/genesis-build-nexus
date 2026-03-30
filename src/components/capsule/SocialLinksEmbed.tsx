@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
+
 import { cn } from '@/lib/utils';
 
 export type SocialPlatform = 'facebook' | 'instagram' | 'tiktok' | 'linkedin';
