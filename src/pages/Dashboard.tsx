@@ -126,7 +126,7 @@ const Dashboard = () => {
         // Fetch profile
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb')
+          .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb, admin_override')
           .eq('user_id', user.id)
           .maybeSingle();
 
