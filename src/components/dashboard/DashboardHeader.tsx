@@ -481,7 +481,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     {t('userMenu.myProfile')}
                   </Link>
                 </DropdownMenuItem>
-                {tier !== 'heritage' && (
+                {!hideUpgrade && (
                   <DropdownMenuItem asChild>
                     <Link
                       to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
