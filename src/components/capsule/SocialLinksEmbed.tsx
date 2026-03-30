@@ -68,9 +68,7 @@ const isValidUrl = (url: string): boolean => {
 
 
 const SocialLinkItem = ({ link, onRemove }: { link: SocialLink; onRemove: () => void }) => {
-  const { t } = useTranslation('capsules');
   const config = platformConfig[link.platform];
-  const embedUrl = getEmbedPreviewUrl(link.platform, link.url);
 
   return (
     <div className={cn(
@@ -89,34 +87,6 @@ const SocialLinkItem = ({ link, onRemove }: { link: SocialLink; onRemove: () => 
           {link.url}
         </a>
       </div>
-      {embedUrl ? (
-        <HoverCard openDelay={300}>
-          <HoverCardTrigger asChild>
-            <button
-              type="button"
-              className="p-1.5 rounded-lg hover:bg-background/50 transition-colors"
-              aria-label={t('socialLinks.preview', 'Aperçu')}
-            >
-              <Eye className="w-4 h-4" />
-            </button>
-          </HoverCardTrigger>
-          <HoverCardContent side="left" className="w-[340px] p-2">
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span>{config.icon}</span>
-              <span className="text-sm font-medium">{config.label}</span>
-            </div>
-            <div className="rounded-lg overflow-hidden border border-border bg-muted aspect-[4/5]">
-              <iframe
-                src={embedUrl}
-                title={`${config.label} preview`}
-                className="w-full h-full"
-                sandbox="allow-scripts allow-same-origin allow-popups"
-                loading="lazy"
-              />
-            </div>
-          </HoverCardContent>
-        </HoverCard>
-      ) : null}
       <a
         href={link.url}
         target="_blank"
