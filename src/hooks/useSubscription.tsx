@@ -21,6 +21,7 @@ interface SubscriptionState {
   subscriptionEnd: string | null;
   loading: boolean;
   error: string | null;
+  adminOverride: boolean;
 }
 
 interface CachedSubscription {
@@ -60,9 +61,9 @@ export const useSubscription = () => {
   const [state, setState] = useState<SubscriptionState>(() => {
     const cached = getCache();
     if (cached) {
-      return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null };
+      return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null, adminOverride: false };
     }
-    return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null };
+    return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null, adminOverride: false };
   });
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
@@ -70,7 +71,7 @@ export const useSubscription = () => {
 
   const checkSubscription = useCallback(async (force = false) => {
     if (!user) {
-      setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free' }));
+      setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free', adminOverride: false }));
       initialCheckDone.current = true;
       return;
     }
@@ -79,7 +80,7 @@ export const useSubscription = () => {
     if (!force) {
       const cached = getCache();
       if (cached) {
-        setState({ subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null });
+        setState(prev => ({ ...prev, subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null }));
         initialCheckDone.current = true;
         return;
       }
@@ -96,29 +97,31 @@ export const useSubscription = () => {
       if (data.subscribed && data.tier) {
         const result = { subscribed: data.subscribed, tier: data.tier || 'free', subscriptionEnd: data.subscription_end };
         setCache(result);
-        setState({ ...result, loading: false, error: null });
+        setState(prev => ({ ...prev, ...result, loading: false, error: null }));
         initialCheckDone.current = true;
         return;
       }
 
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('subscription_level')
+        .select('subscription_level, admin_override')
         .eq('user_id', user.id)
         .single();
+
+      const isAdminOverride = profileData?.admin_override ?? false;
 
       if (profileData?.subscription_level && profileData.subscription_level !== 'free') {
         const tier = profileData.subscription_level === 'legacy' ? 'heritage' : profileData.subscription_level as 'free' | 'premium' | 'heritage';
         const result = { subscribed: true, tier, subscriptionEnd: null };
         setCache(result);
-        setState({ ...result, loading: false, error: null });
+        setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
         initialCheckDone.current = true;
         return;
       }
 
       const result = { subscribed: false, tier: 'free' as const, subscriptionEnd: null };
       setCache(result);
-      setState({ ...result, loading: false, error: null });
+      setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
       initialCheckDone.current = true;
     } catch (error: any) {
       console.error('Error checking subscription:', error);

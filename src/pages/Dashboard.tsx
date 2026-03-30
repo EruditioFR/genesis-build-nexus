@@ -31,6 +31,7 @@ interface Profile {
   subscription_level: 'free' | 'premium' | 'legacy';
   storage_used_mb: number;
   storage_limit_mb: number;
+  admin_override?: boolean;
 }
 
 interface CapsuleRow {
@@ -125,7 +126,7 @@ const Dashboard = () => {
         // Fetch profile
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb')
+          .select('display_name, avatar_url, subscription_level, storage_used_mb, storage_limit_mb, admin_override')
           .eq('user_id', user.id)
           .maybeSingle();
 
@@ -290,7 +291,7 @@ const Dashboard = () => {
     return null;
   }
 
-  const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy';
+  const isPremium = profile?.subscription_level === 'premium' || profile?.subscription_level === 'legacy' || profile?.admin_override;
 
   return (
     <>

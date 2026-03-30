@@ -160,10 +160,11 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
   const { startTour, welcomeDialogProps } = useOnboardingTour();
-  const { tier } = useSubscription();
+  const { tier, adminOverride } = useSubscription();
 
   const isPremium = tier === 'premium' || tier === 'heritage';
   const isHeritage = tier === 'heritage';
+  const hideUpgrade = isHeritage || adminOverride;
 
   const getInitials = () => {
     if (user.displayName) {
@@ -341,7 +342,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                         gradient="bg-gradient-to-br from-secondary to-secondary/70"
                       />
                       
-                      {isHeritage ? (
+                      {(isHeritage || adminOverride) ? (
                         <FeatureCard
                           to="/family-tree"
                           icon={GitBranch}
@@ -374,7 +375,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </div>
 
                     {/* Upgrade CTA for non-heritage users */}
-                      {!isHeritage && (
+                      {!hideUpgrade && (
                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-accent/10 border border-secondary/20">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-secondary/20">
@@ -480,7 +481,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     {t('userMenu.myProfile')}
                   </Link>
                 </DropdownMenuItem>
-                {tier !== 'heritage' && (
+                {!hideUpgrade && (
                   <DropdownMenuItem asChild>
                     <Link
                       to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
