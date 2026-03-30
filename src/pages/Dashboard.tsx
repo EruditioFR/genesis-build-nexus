@@ -31,6 +31,7 @@ interface Profile {
   subscription_level: 'free' | 'premium' | 'legacy';
   storage_used_mb: number;
   storage_limit_mb: number;
+  admin_override?: boolean;
 }
 
 interface CapsuleRow {
