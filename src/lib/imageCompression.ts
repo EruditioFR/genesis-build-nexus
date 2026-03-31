@@ -1,4 +1,6 @@
 const MAX_IMAGE_SIZE_BYTES = 3 * 1024 * 1024; // 3 MB
+const MAX_DIMENSION = 2048;
+const WEBP_QUALITY = 0.82;
 
 /**
  * Compress an image file to fit under the max size (3 MB).
