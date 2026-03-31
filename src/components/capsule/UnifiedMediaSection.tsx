@@ -30,7 +30,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioRecorder } from './AudioRecorder';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
-import { compressImageIfNeeded } from '@/lib/imageCompression';
+import { compressImageIfNeeded, optimizeImageForUpload } from '@/lib/imageCompression';
 
 export interface MediaFile {
   id: string;
@@ -177,9 +177,14 @@ const UnifiedMediaSection = ({
 
     for (const file of filesToAdd) {
       let processedFile = file;
-      if (file.type.startsWith('image/') && file.size > 3 * 1024 * 1024) {
+      if (file.type.startsWith('image/')) {
         try {
-          processedFile = await compressImageIfNeeded(file);
+          // Step 1: Resize to 2048px max + convert to WebP
+          processedFile = await optimizeImageForUpload(processedFile);
+          // Step 2: Compress further if still over 3MB
+          if (processedFile.size > 3 * 1024 * 1024) {
+            processedFile = await compressImageIfNeeded(processedFile);
+          }
           if (processedFile !== file) {
             toast.success(t('media.imageCompressed', { 
               original: formatFileSize(file.size), 
