@@ -228,6 +228,26 @@ const MediaUpload = ({
       fileName: mediaFile.file.name,
     });
 
+    // Generate and upload thumbnail for images (fire-and-forget, non-blocking)
+    if (mediaFile.type === 'image') {
+      generateThumbnail(mediaFile.file).then(async (thumbFile) => {
+        if (!thumbFile) return;
+        const thumbPath = getThumbnailPath(fileName);
+        try {
+          await supabase.storage
+            .from('capsule-medias')
+            .upload(thumbPath, thumbFile, {
+              cacheControl: '31536000',
+              upsert: true,
+              contentType: 'image/jpeg',
+            });
+          console.log('[MediaUpload] Thumbnail uploaded:', thumbPath);
+        } catch (err) {
+          console.warn('[MediaUpload] Thumbnail upload failed (non-critical):', err);
+        }
+      });
+    }
+
     // Signal completion
     onProgress(100);
 
