@@ -70,6 +70,64 @@ export async function compressImageIfNeeded(file: File): Promise<File> {
   return new File([blob], newName, { type: outputType });
 }
 
+/**
+ * Optimize an image for upload: resize to 2048px max dimension and convert to WebP.
+ * Always runs on compressible image types. Returns the original file for non-images or on failure.
+ */
+export async function optimizeImageForUpload(file: File): Promise<File> {
+  const compressibleTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  if (!compressibleTypes.includes(file.type)) return file;
+
+  try {
+    const img = await loadImage(file);
+
+    // Calculate new dimensions (cap at MAX_DIMENSION)
+    let width = img.width;
+    let height = img.height;
+    if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+      if (width > height) {
+        height = Math.round(height * (MAX_DIMENSION / width));
+        width = MAX_DIMENSION;
+      } else {
+        width = Math.round(width * (MAX_DIMENSION / height));
+        height = MAX_DIMENSION;
+      }
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return file;
+
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // Try WebP first
+    let blob = await canvasToBlob(canvas, 'image/webp', WEBP_QUALITY);
+    let outputType = 'image/webp';
+    let ext = '.webp';
+
+    // Fallback to JPEG if WebP not supported
+    if (!blob || blob.size === 0) {
+      blob = await canvasToBlob(canvas, 'image/jpeg', 0.85);
+      outputType = 'image/jpeg';
+      ext = '.jpg';
+    }
+
+    if (!blob) return file;
+
+    // Only use optimized version if it's actually smaller
+    if (blob.size >= file.size && width === img.width && height === img.height) {
+      return file;
+    }
+
+    const newName = file.name.replace(/\.[^.]+$/, '') + ext;
+    return new File([blob], newName, { type: outputType });
+  } catch {
+    return file;
+  }
+}
+
 const THUMBNAIL_MAX_WIDTH = 400;
 const THUMBNAIL_QUALITY = 0.75;
 
