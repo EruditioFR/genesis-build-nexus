@@ -68,6 +68,52 @@ export async function compressImageIfNeeded(file: File): Promise<File> {
   return new File([blob], newName, { type: outputType });
 }
 
+const THUMBNAIL_MAX_WIDTH = 400;
+const THUMBNAIL_QUALITY = 0.75;
+
+/**
+ * Generate a 400px-wide JPEG thumbnail from an image File.
+ * Returns null for non-image files or on failure.
+ */
+export async function generateThumbnail(file: File): Promise<File | null> {
+  if (!file.type.startsWith('image/')) return null;
+
+  try {
+    const img = await loadImage(file);
+
+    // Skip if already smaller than thumbnail size
+    if (img.width <= THUMBNAIL_MAX_WIDTH) return null;
+
+    const scale = THUMBNAIL_MAX_WIDTH / img.width;
+    const thumbWidth = THUMBNAIL_MAX_WIDTH;
+    const thumbHeight = Math.round(img.height * scale);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = thumbWidth;
+    canvas.height = thumbHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    ctx.drawImage(img, 0, 0, thumbWidth, thumbHeight);
+
+    const blob = await canvasToBlob(canvas, 'image/jpeg', THUMBNAIL_QUALITY);
+    if (!blob) return null;
+
+    const thumbName = file.name.replace(/\.[^.]+$/, '') + '_thumb.jpg';
+    return new File([blob], thumbName, { type: 'image/jpeg' });
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Derive the thumbnail storage path from the original path.
+ * e.g. "userId/abc123.jpg" → "userId/abc123_thumb.jpg"
+ */
+export function getThumbnailPath(originalPath: string): string {
+  return originalPath.replace(/\.[^.]+$/, '_thumb.jpg');
+}
+
 function loadImage(file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
