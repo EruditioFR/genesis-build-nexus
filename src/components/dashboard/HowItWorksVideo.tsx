@@ -1,12 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, CirclePlay, X } from 'lucide-react';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 interface TutorialVideo {
   id: string;
   title: string;
   description: string;
-  src: string;
+  youtubeId: string;
 }
 
 const TUTORIALS: TutorialVideo[] = [
@@ -14,7 +14,7 @@ const TUTORIALS: TutorialVideo[] = [
     id: 'creer-souvenir',
     title: 'Créer un souvenir',
     description: 'Apprenez à créer votre premier souvenir en quelques clics.',
-    src: '/videos/tuto-comment-creer-souvenir.mp4',
+    youtubeId: 'afoWU3vDcOg',
   },
 ];
 
@@ -29,12 +29,11 @@ const VideoCard = ({ video, onOpen }: { video: TutorialVideo; onOpen: (v: Tutori
     onClick={() => onOpen(video)}
   >
     <div className="relative rounded-2xl overflow-hidden shadow-md border border-border/30 aspect-video bg-muted">
-      <video
-        src={video.src}
+      <img
+        src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+        alt={video.title}
         className="w-full h-full object-cover"
-        muted
-        playsInline
-        preload="metadata"
+        loading="lazy"
       />
       <div className="absolute inset-0 flex items-center justify-center bg-black/25">
         <div className="w-14 h-14 rounded-full bg-secondary/90 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
@@ -49,10 +48,7 @@ const VideoCard = ({ video, onOpen }: { video: TutorialVideo; onOpen: (v: Tutori
 
 /* ── Modal / Popin ── */
 const VideoModal = ({ video, onClose }: { video: TutorialVideo; onClose: () => void }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -75,7 +71,6 @@ const VideoModal = ({ video, onClose }: { video: TutorialVideo; onClose: () => v
         className="relative w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl bg-black"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
@@ -83,13 +78,12 @@ const VideoModal = ({ video, onClose }: { video: TutorialVideo; onClose: () => v
           <X className="w-5 h-5 text-white" />
         </button>
 
-        <video
-          ref={videoRef}
-          src={video.src}
+        <iframe
+          src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+          title={video.title}
           className="w-full aspect-video"
-          controls
-          playsInline
-          autoPlay
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
         />
 
         <div className="p-4 bg-background">
