@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   BookOpen, Clock, Users, Shield, Download, Image, Video, Mic,
-  Upload, Layers, Share2, Heart, ChevronRight, Play, Headphones,
-  Sparkles, Lock, TreePine, Star, Check, ArrowRight, Crown, Building2,
+  Upload, Layers, Share2, Heart, Play, Headphones,
+  Sparkles, TreePine, Check, ArrowRight,
   Zap, Eye, Volume2
 } from "lucide-react";
-import { SEOHead } from "@/components/seo/SEOHead";
+import SEOHead from "@/components/seo/SEOHead";
 
 import heroImg from "@/assets/marketing/hero-memories.jpg";
 import podcastImg from "@/assets/marketing/podcast-feature.jpg";
@@ -21,7 +21,7 @@ const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: (i: number = 0) => ({
     opacity: 1, y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as const }
   })
 };
 
