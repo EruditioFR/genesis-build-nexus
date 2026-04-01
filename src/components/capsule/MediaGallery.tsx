@@ -49,6 +49,47 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOw
   const [pickerPosition, setPickerPosition] = useState<{ x: number; y: number } | null>(null);
   const [familyPersons, setFamilyPersons] = useState<FamilyPersonBasic[]>([]);
 
+  // Fetch family persons for tagging (only if owner)
+  useEffect(() => {
+    const fetchPersons = async () => {
+      if (!user || !isOwner) return;
+      const { data: trees } = await supabase
+        .from('family_trees')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+      if (trees && trees.length > 0) {
+        const { data: persons } = await supabase
+          .from('family_persons')
+          .select('id, first_names, last_name, profile_photo_url')
+          .eq('tree_id', trees[0].id)
+          .order('first_names');
+        if (persons) setFamilyPersons(persons);
+      }
+    };
+    fetchPersons();
+  }, [user, isOwner]);
+
+  // Fetch existing tags for image medias
+  useEffect(() => {
+    const imageMediaIds = medias.filter(m => m.file_type.startsWith('image/')).map(m => m.id);
+    if (imageMediaIds.length > 0) {
+      fetchTagsForMedias(imageMediaIds);
+    }
+  }, [medias, fetchTagsForMedias]);
+
+  const handleTagClick = (x: number, y: number) => {
+    setPickerPosition({ x, y });
+  };
+
+  const handleSelectPerson = async (person: FamilyPersonBasic) => {
+    if (!pickerPosition || selectedIndex === null) return;
+    const media = medias[selectedIndex];
+    if (!media) return;
+    await addTag(media.id, person.id, pickerPosition.x, pickerPosition.y, `${person.first_names} ${person.last_name}`);
+    setPickerPosition(null);
+  };
+
   // Generate signed URLs for all medias with caching
   useEffect(() => {
     const generateSignedUrls = async () => {
