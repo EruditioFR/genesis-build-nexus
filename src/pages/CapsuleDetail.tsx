@@ -50,6 +50,7 @@ import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import HeaderImageSelector from '@/components/capsule/HeaderImageSelector';
 import EmotionReactions from '@/components/capsule/EmotionReactions';
+import PodcastGenerator from '@/components/capsule/PodcastGenerator';
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
