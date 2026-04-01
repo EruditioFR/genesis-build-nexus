@@ -33,13 +33,21 @@ interface FamilyPersonBasic {
   profile_photo_url?: string | null;
 }
 
-const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: MediaGalleryProps) => {
+const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOwner = false }: MediaGalleryProps) => {
+  const { user } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
   const [settingThumbnail, setSettingThumbnail] = useState<string | null>(null);
   const [currentThumbnail, setCurrentThumbnail] = useState<string | null>(thumbnailUrl || null);
+
+  // Photo tagging state
+  const { fetchTagsForMedias, addTag, removeTag, getTagsForMedia } = usePhotoTags();
+  const [showTags, setShowTags] = useState(true);
+  const [isTagging, setIsTagging] = useState(false);
+  const [pickerPosition, setPickerPosition] = useState<{ x: number; y: number } | null>(null);
+  const [familyPersons, setFamilyPersons] = useState<FamilyPersonBasic[]>([]);
 
   // Generate signed URLs for all medias with caching
   useEffect(() => {
