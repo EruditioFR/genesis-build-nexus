@@ -241,59 +241,77 @@ Termine par une phrase douce et évocatrice.`,
 
     const { access_token } = await tokenResponse.json();
 
-    console.log("Calling Google Cloud TTS with OAuth2...");
-    const ttsResponse = await fetch(
-      "https://texttospeech.googleapis.com/v1/text:synthesize",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
-        body: JSON.stringify({
-          input: { text: narrativeScript },
-          voice: {
-            languageCode: "fr-FR",
-            name: "fr-FR-Wavenet-C",
-            ssmlGender: "FEMALE",
-          },
-          audioConfig: {
-            audioEncoding: "MP3",
-            speakingRate: 0.95,
-            pitch: 0,
-            effectsProfileId: ["headphone-class-device"],
-          },
-        }),
+    // Split text into chunks under 4800 bytes for TTS limit
+    const encoder = new TextEncoder();
+    const splitTts = (text: string, max = 4800): string[] => {
+      const parts: string[] = [];
+      let cur = "";
+      for (const s of text.match(/[^.!?\n]+[.!?\n]*/g) || [text]) {
+        if (encoder.encode(cur + s).length > max) {
+          if (cur) parts.push(cur.trim());
+          cur = s;
+        } else {
+          cur += s;
+        }
       }
-    );
+      if (cur.trim()) parts.push(cur.trim());
+      return parts;
+    };
 
-    if (!ttsResponse.ok) {
-      const ttsError = await ttsResponse.text();
-      console.error("Google TTS error:", ttsResponse.status, ttsError);
-      return new Response(JSON.stringify({ error: "Erreur lors de la synthèse vocale", details: ttsError }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    const chunks = splitTts(narrativeScript);
+    console.log(`Calling Google Cloud TTS with OAuth2... (${chunks.length} chunks)`);
+
+    const ttsVoice = { languageCode: "fr-FR", name: "fr-FR-Wavenet-C", ssmlGender: "FEMALE" };
+    const ttsAudioConfig = { audioEncoding: "MP3", speakingRate: 0.95, pitch: 0, effectsProfileId: ["headphone-class-device"] };
+
+    const audioParts: Uint8Array[] = [];
+    for (const chunk of chunks) {
+      const ttsResponse = await fetch(
+        "https://texttospeech.googleapis.com/v1/text:synthesize",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+          body: JSON.stringify({
+            input: { text: chunk },
+            voice: ttsVoice,
+            audioConfig: ttsAudioConfig,
+          }),
+        }
+      );
+
+      if (!ttsResponse.ok) {
+        const ttsError = await ttsResponse.text();
+        console.error("Google TTS error:", ttsResponse.status, ttsError);
+        return new Response(JSON.stringify({ error: "Erreur lors de la synthèse vocale", details: ttsError }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const ttsData = await ttsResponse.json();
+      if (!ttsData.audioContent) {
+        return new Response(JSON.stringify({ error: "Audio vide retourné par Google TTS" }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const bin = atob(ttsData.audioContent);
+      const part = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) part[i] = bin.charCodeAt(i);
+      audioParts.push(part);
     }
 
-    const ttsData = await ttsResponse.json();
-    const audioContent = ttsData.audioContent;
-
-    if (!audioContent) {
-      return new Response(JSON.stringify({ error: "Audio vide retourné par Google TTS" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Step 3: Upload MP3 to storage
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const adminSupabase = createClient(supabaseUrl, serviceRoleKey);
-
-    const binaryStr = atob(audioContent);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
+    // Merge all audio parts
+    const totalLength = audioParts.reduce((n, a) => n + a.length, 0);
+    const bytes = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const a of audioParts) {
+      bytes.set(a, offset);
+      offset += a.length;
     }
 
     const fileName = `podcasts/${capsuleId}/${Date.now()}.mp3`;
