@@ -879,6 +879,14 @@ const CapsuleDetail = () => {
                 ) : null;
               })()}
 
+              {/* Podcast Generator (Admin only) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.28 }}>
+                <PodcastGenerator capsuleId={capsule.id} capsuleTitle={capsule.title} />
+              </motion.div>
+
               {/* Emotion Reactions */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
