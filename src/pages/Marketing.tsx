@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   BookOpen, Clock, Users, Shield, Download, Image, Video, Mic,
-  Upload, Layers, Share2, Heart, Play, Headphones,
-  Sparkles, TreePine, Check, ArrowRight,
-  Zap, Eye, Volume2, Sprout, Flower2, Leaf
+  Play, Headphones, TreePine, Check,
+  Eye, Volume2, Sprout, Flower2, Leaf
 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 
