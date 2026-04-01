@@ -420,6 +420,35 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOw
           >
             {/* Top actions bar */}
             <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              {/* Tag toggle buttons - only for images */}
+              {medias[selectedIndex].file_type.startsWith('image/') && familyPersons.length > 0 && (
+                <>
+                  {isOwner && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`text-white hover:bg-white/10 ${isTagging ? 'bg-secondary hover:bg-secondary/80' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsTagging(!isTagging);
+                        setPickerPosition(null);
+                      }}
+                      title="Taguer des personnes"
+                    >
+                      <UserPlus className="w-5 h-5" />
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`text-white hover:bg-white/10 ${showTags ? 'bg-white/20' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setShowTags(!showTags); }}
+                    title={showTags ? 'Masquer les tags' : 'Afficher les tags'}
+                  >
+                    <Users className="w-5 h-5" />
+                  </Button>
+                </>
+              )}
               {capsuleId && medias[selectedIndex].file_type.startsWith('image/') && (
                 <Button
                   variant="ghost"
