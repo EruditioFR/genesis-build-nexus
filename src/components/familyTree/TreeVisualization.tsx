@@ -248,8 +248,29 @@ function layoutUnified(
       }
     }
   } else {
-    for (const [id] of genOf) {
-      activeIds.add(id);
+    // Hourglass: collect both ascendants and descendants from root
+    const hourglassQueue = [rootId];
+    const visited = new Set<string>();
+    while (hourglassQueue.length > 0) {
+      const currentId = hourglassQueue.shift()!;
+      if (visited.has(currentId)) continue;
+      visited.add(currentId);
+      if (!genOf.has(currentId)) continue;
+      activeIds.add(currentId);
+      // Go up (parents)
+      for (const pid of graph.getParentIds(currentId)) {
+        if (!visited.has(pid)) hourglassQueue.push(pid);
+      }
+      // Go down (children)
+      for (const cid of graph.getChildIds(currentId)) {
+        if (!visited.has(cid)) hourglassQueue.push(cid);
+      }
+      // Include spouses
+      for (const sid of graph.getSpouseIds(currentId)) {
+        if (!visited.has(sid) && genOf.has(sid)) {
+          activeIds.add(sid);
+        }
+      }
     }
   }
 
