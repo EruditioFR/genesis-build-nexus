@@ -23,6 +23,14 @@ interface MediaGalleryProps {
   capsuleId?: string;
   thumbnailUrl?: string | null;
   onThumbnailChange?: (url: string | null) => void;
+  isOwner?: boolean;
+}
+
+interface FamilyPersonBasic {
+  id: string;
+  first_names: string;
+  last_name: string;
+  profile_photo_url?: string | null;
 }
 
 const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: MediaGalleryProps) => {
