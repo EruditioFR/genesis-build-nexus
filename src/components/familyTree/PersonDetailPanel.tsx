@@ -1054,6 +1054,11 @@ export function PersonDetailPanel({
           <TabsContent value="capsules" className="p-4 m-0">
             <PersonCapsulesList person={person} onUpdate={onUpdate} />
           </TabsContent>
+
+          {/* Medias Tab */}
+          <TabsContent value="medias" className="p-4 m-0">
+            <PersonTaggedMedias person={person} />
+          </TabsContent>
         </ScrollArea>
       </Tabs>
 
