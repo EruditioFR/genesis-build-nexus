@@ -210,12 +210,14 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOw
   const goToPrev = () => {
     if (selectedIndex !== null && selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1);
+      setPickerPosition(null);
     }
   };
 
   const goToNext = () => {
     if (selectedIndex !== null && selectedIndex < medias.length - 1) {
       setSelectedIndex(selectedIndex + 1);
+      setPickerPosition(null);
     }
   };
 
@@ -271,6 +273,14 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOw
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center gap-2">
                       <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
+                    
+                    {/* Tag count indicator */}
+                    {getTagsForMedia(media.id).length > 0 && (
+                      <div className="absolute bottom-2 left-2 bg-black/60 text-white rounded-full px-1.5 py-0.5 flex items-center gap-1 text-xs">
+                        <Users className="w-3 h-3" />
+                        {getTagsForMedia(media.id).length}
+                      </div>
+                    )}
                     
                     {/* Thumbnail indicator */}
                     {isCurrentThumbnail && (
