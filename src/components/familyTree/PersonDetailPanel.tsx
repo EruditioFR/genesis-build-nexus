@@ -57,6 +57,7 @@ import type { FamilyPerson, FamilyUnion, ParentChildRelationship } from '@/types
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
+import { PersonTaggedMedias } from './PersonTaggedMedias';
 import { PersonValidationWarnings } from './PersonValidationWarnings';
 import { UnionEditDialog } from './UnionEditDialog';
 import { RelationshipEditDialog } from './RelationshipEditDialog';
