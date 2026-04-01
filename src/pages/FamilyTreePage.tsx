@@ -388,7 +388,7 @@ export default function FamilyTreePage() {
       await loadTree();
       centerOnPerson(person.id);
     },
-    [tree?.id, addRelationTarget, addRelationType, unions, relationships, addRelationship, addUnion, loadTree]
+    [tree?.id, addRelationTarget, addRelationType, unions, relationships, addRelationship, addUnion, loadTree, centerOnPerson]
   );
 
   const handleDeletePerson = async (personId: string) => {
