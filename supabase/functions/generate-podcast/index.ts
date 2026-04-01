@@ -170,21 +170,61 @@ Termine par une phrase douce et évocatrice.`,
 
     console.log(`Script generated: ${narrativeScript.length} chars`);
 
-    // Step 2: Convert to audio with Google Cloud TTS
-    const GOOGLE_TTS_API_KEY = Deno.env.get("GOOGLE_TTS_API_KEY");
-    if (!GOOGLE_TTS_API_KEY) {
-      return new Response(JSON.stringify({ error: "GOOGLE_TTS_API_KEY non configurée" }), {
+    // Step 2: Convert to audio with Google Cloud TTS (OAuth2 service account)
+    const GOOGLE_SA_JSON = Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON");
+    if (!GOOGLE_SA_JSON) {
+      return new Response(JSON.stringify({ error: "GOOGLE_SERVICE_ACCOUNT_JSON non configuré" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const sa = JSON.parse(GOOGLE_SA_JSON);
+
+    // Mint OAuth2 access token from service account
+    const now = Math.floor(Date.now() / 1000);
+    const privateKeyPem = sa.private_key;
+    const privateKey = await jose.importPKCS8(privateKeyPem, "RS256");
+
+    const jwtToken = await new jose.SignJWT({
+      iss: sa.client_email,
+      scope: "https://www.googleapis.com/auth/cloud-platform",
+      aud: "https://oauth2.googleapis.com/token",
+      iat: now,
+      exp: now + 3600,
+    })
+      .setProtectedHeader({ alg: "RS256", typ: "JWT" })
+      .sign(privateKey);
+
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        assertion: jwtToken,
+      }),
+    });
+
+    if (!tokenResponse.ok) {
+      const tokenError = await tokenResponse.text();
+      console.error("OAuth token error:", tokenError);
+      return new Response(JSON.stringify({ error: "Erreur d'authentification Google" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { access_token } = await tokenResponse.json();
+
     console.log("Calling Google Cloud TTS...");
     const ttsResponse = await fetch(
-      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`,
+      "https://texttospeech.googleapis.com/v1/text:synthesize",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           input: { text: narrativeScript },
           voice: {
