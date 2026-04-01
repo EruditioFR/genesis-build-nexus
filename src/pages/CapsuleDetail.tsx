@@ -50,6 +50,7 @@ import type { Database } from '@/integrations/supabase/types';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import HeaderImageSelector from '@/components/capsule/HeaderImageSelector';
 import EmotionReactions from '@/components/capsule/EmotionReactions';
+import PodcastGenerator from '@/components/capsule/PodcastGenerator';
 type Capsule = Database['public']['Tables']['capsules']['Row'];
 type CapsuleType = Database['public']['Enums']['capsule_type'];
 type CapsuleStatus = Database['public']['Enums']['capsule_status'];
@@ -877,6 +878,14 @@ const CapsuleDetail = () => {
                   </motion.div>
                 ) : null;
               })()}
+
+              {/* Podcast Generator (Admin only) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.28 }}>
+                <PodcastGenerator capsuleId={capsule.id} capsuleTitle={capsule.title} />
+              </motion.div>
 
               {/* Emotion Reactions */}
               <motion.div
