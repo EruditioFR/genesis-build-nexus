@@ -785,6 +785,9 @@ export default function FamilyTreePage() {
             <div className="px-3 sm:px-4 py-2 sm:py-3">
               <div className="flex items-center justify-between gap-2 min-w-0">
                 <div className="flex items-center gap-2 min-w-0 shrink">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => navigate('/dashboard')}>
+                    <Home className="w-4 h-4" />
+                  </Button>
                   <TreeDeciduous className="w-5 h-5 sm:w-6 sm:h-6 text-secondary shrink-0" />
                   <div className="min-w-0">
                     <h1 className="font-semibold text-sm sm:text-base truncate">{tree?.name || t('defaultTreeName')}</h1>
