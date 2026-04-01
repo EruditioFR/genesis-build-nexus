@@ -57,6 +57,7 @@ import type { FamilyPerson, FamilyUnion, ParentChildRelationship } from '@/types
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
 import { PersonCapsulesList } from './PersonCapsuleLink';
+import { PersonTaggedMedias } from './PersonTaggedMedias';
 import { PersonValidationWarnings } from './PersonValidationWarnings';
 import { UnionEditDialog } from './UnionEditDialog';
 import { RelationshipEditDialog } from './RelationshipEditDialog';
@@ -612,10 +613,11 @@ export function PersonDetailPanel({
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-3 mx-4 mt-2">
+        <TabsList className="grid grid-cols-4 mx-4 mt-2">
           <TabsTrigger value="overview">{t('familyTree:detail.tabs.overview')}</TabsTrigger>
           <TabsTrigger value="relations">{t('familyTree:detail.tabs.relations')}</TabsTrigger>
           <TabsTrigger value="capsules">{t('familyTree:detail.tabs.capsules')}</TabsTrigger>
+          <TabsTrigger value="medias">Médias</TabsTrigger>
         </TabsList>
 
         <ScrollArea className="flex-1">
@@ -1051,6 +1053,11 @@ export function PersonDetailPanel({
           {/* Capsules Tab */}
           <TabsContent value="capsules" className="p-4 m-0">
             <PersonCapsulesList person={person} onUpdate={onUpdate} />
+          </TabsContent>
+
+          {/* Medias Tab */}
+          <TabsContent value="medias" className="p-4 m-0">
+            <PersonTaggedMedias person={person} />
           </TabsContent>
         </ScrollArea>
       </Tabs>
