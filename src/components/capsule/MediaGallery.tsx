@@ -533,11 +533,24 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOw
               onClick={(e) => e.stopPropagation()}
             >
               {medias[selectedIndex].file_type.startsWith('image/') ? (
-                <img
-                  src={getMediaUrl(medias[selectedIndex])}
-                  alt={medias[selectedIndex].file_name || 'Image'}
-                  className="max-w-full max-h-[85vh] object-contain rounded-lg"
-                />
+                <div className="relative inline-block">
+                  <img
+                    src={getMediaUrl(medias[selectedIndex])}
+                    alt={medias[selectedIndex].file_name || 'Image'}
+                    className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                  />
+                  <PhotoTagOverlay
+                    tags={getTagsForMedia(medias[selectedIndex].id)}
+                    isEditing={isTagging}
+                    onClickImage={handleTagClick}
+                    onRemoveTag={(tagId) => removeTag(tagId, medias[selectedIndex].id)}
+                    showTags={showTags}
+                    pickerPosition={pickerPosition}
+                    persons={familyPersons}
+                    onSelectPerson={handleSelectPerson}
+                    onCancelPicker={() => setPickerPosition(null)}
+                  />
+                </div>
               ) : medias[selectedIndex].file_type.startsWith('video/') ? (
                 <video
                   src={getMediaUrl(medias[selectedIndex])}
