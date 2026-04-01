@@ -929,6 +929,51 @@ export type Database = {
           },
         ]
       }
+      media_person_tags: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          media_id: string
+          person_id: string
+          position_x: number
+          position_y: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          media_id: string
+          person_id: string
+          position_x: number
+          position_y: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          media_id?: string
+          person_id?: string
+          position_x?: number
+          position_y?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_person_tags_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "capsule_medias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_person_tags_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "family_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string

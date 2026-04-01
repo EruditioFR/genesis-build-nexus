@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download, Star, Check } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download, Star, Check, UserPlus, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSignedUrls } from '@/lib/signedUrlCache';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioPlayer } from './AudioPlayer';
+import { usePhotoTags } from '@/hooks/usePhotoTags';
+import { PhotoTagOverlay } from './PhotoTagOverlay';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Media {
   id: string;
@@ -20,15 +23,72 @@ interface MediaGalleryProps {
   capsuleId?: string;
   thumbnailUrl?: string | null;
   onThumbnailChange?: (url: string | null) => void;
+  isOwner?: boolean;
 }
 
-const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: MediaGalleryProps) => {
+interface FamilyPersonBasic {
+  id: string;
+  first_names: string;
+  last_name: string;
+  profile_photo_url?: string | null;
+}
+
+const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange, isOwner = false }: MediaGalleryProps) => {
+  const { user } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
   const [settingThumbnail, setSettingThumbnail] = useState<string | null>(null);
   const [currentThumbnail, setCurrentThumbnail] = useState<string | null>(thumbnailUrl || null);
+
+  // Photo tagging state
+  const { fetchTagsForMedias, addTag, removeTag, getTagsForMedia } = usePhotoTags();
+  const [showTags, setShowTags] = useState(true);
+  const [isTagging, setIsTagging] = useState(false);
+  const [pickerPosition, setPickerPosition] = useState<{ x: number; y: number } | null>(null);
+  const [familyPersons, setFamilyPersons] = useState<FamilyPersonBasic[]>([]);
+
+  // Fetch family persons for tagging (only if owner)
+  useEffect(() => {
+    const fetchPersons = async () => {
+      if (!user || !isOwner) return;
+      const { data: trees } = await supabase
+        .from('family_trees')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+      if (trees && trees.length > 0) {
+        const { data: persons } = await supabase
+          .from('family_persons')
+          .select('id, first_names, last_name, profile_photo_url')
+          .eq('tree_id', trees[0].id)
+          .order('first_names');
+        if (persons) setFamilyPersons(persons);
+      }
+    };
+    fetchPersons();
+  }, [user, isOwner]);
+
+  // Fetch existing tags for image medias
+  useEffect(() => {
+    const imageMediaIds = medias.filter(m => m.file_type.startsWith('image/')).map(m => m.id);
+    if (imageMediaIds.length > 0) {
+      fetchTagsForMedias(imageMediaIds);
+    }
+  }, [medias, fetchTagsForMedias]);
+
+  const handleTagClick = (x: number, y: number) => {
+    setPickerPosition({ x, y });
+  };
+
+  const handleSelectPerson = async (person: FamilyPersonBasic) => {
+    if (!pickerPosition || selectedIndex === null) return;
+    const media = medias[selectedIndex];
+    if (!media) return;
+    await addTag(media.id, person.id, pickerPosition.x, pickerPosition.y, `${person.first_names} ${person.last_name}`);
+    setPickerPosition(null);
+  };
 
   // Generate signed URLs for all medias with caching
   useEffect(() => {
@@ -150,12 +210,14 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
   const goToPrev = () => {
     if (selectedIndex !== null && selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1);
+      setPickerPosition(null);
     }
   };
 
   const goToNext = () => {
     if (selectedIndex !== null && selectedIndex < medias.length - 1) {
       setSelectedIndex(selectedIndex + 1);
+      setPickerPosition(null);
     }
   };
 
@@ -211,6 +273,14 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors flex items-center justify-center gap-2">
                       <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
+                    
+                    {/* Tag count indicator */}
+                    {getTagsForMedia(media.id).length > 0 && (
+                      <div className="absolute bottom-2 left-2 bg-black/60 text-white rounded-full px-1.5 py-0.5 flex items-center gap-1 text-xs">
+                        <Users className="w-3 h-3" />
+                        {getTagsForMedia(media.id).length}
+                      </div>
+                    )}
                     
                     {/* Thumbnail indicator */}
                     {isCurrentThumbnail && (
@@ -360,6 +430,35 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
           >
             {/* Top actions bar */}
             <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              {/* Tag toggle buttons - only for images */}
+              {medias[selectedIndex].file_type.startsWith('image/') && familyPersons.length > 0 && (
+                <>
+                  {isOwner && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`text-white hover:bg-white/10 ${isTagging ? 'bg-secondary hover:bg-secondary/80' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsTagging(!isTagging);
+                        setPickerPosition(null);
+                      }}
+                      title="Taguer des personnes"
+                    >
+                      <UserPlus className="w-5 h-5" />
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`text-white hover:bg-white/10 ${showTags ? 'bg-white/20' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setShowTags(!showTags); }}
+                    title={showTags ? 'Masquer les tags' : 'Afficher les tags'}
+                  >
+                    <Users className="w-5 h-5" />
+                  </Button>
+                </>
+              )}
               {capsuleId && medias[selectedIndex].file_type.startsWith('image/') && (
                 <Button
                   variant="ghost"
@@ -444,11 +543,24 @@ const MediaGallery = ({ medias, capsuleId, thumbnailUrl, onThumbnailChange }: Me
               onClick={(e) => e.stopPropagation()}
             >
               {medias[selectedIndex].file_type.startsWith('image/') ? (
-                <img
-                  src={getMediaUrl(medias[selectedIndex])}
-                  alt={medias[selectedIndex].file_name || 'Image'}
-                  className="max-w-full max-h-[85vh] object-contain rounded-lg"
-                />
+                <div className="relative inline-block">
+                  <img
+                    src={getMediaUrl(medias[selectedIndex])}
+                    alt={medias[selectedIndex].file_name || 'Image'}
+                    className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                  />
+                  <PhotoTagOverlay
+                    tags={getTagsForMedia(medias[selectedIndex].id)}
+                    isEditing={isTagging}
+                    onClickImage={handleTagClick}
+                    onRemoveTag={(tagId) => removeTag(tagId, medias[selectedIndex].id)}
+                    showTags={showTags}
+                    pickerPosition={pickerPosition}
+                    persons={familyPersons}
+                    onSelectPerson={handleSelectPerson}
+                    onCancelPicker={() => setPickerPosition(null)}
+                  />
+                </div>
               ) : medias[selectedIndex].file_type.startsWith('video/') ? (
                 <video
                   src={getMediaUrl(medias[selectedIndex])}

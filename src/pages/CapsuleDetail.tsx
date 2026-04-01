@@ -771,6 +771,7 @@ const CapsuleDetail = () => {
                   medias={medias}
                   capsuleId={capsule.id}
                   thumbnailUrl={capsule.thumbnail_url}
+                  isOwner={isOwner}
                   onThumbnailChange={(url) => setCapsule((prev) => prev ? { ...prev, thumbnail_url: url } : null)} />
                 
                 </motion.div>
