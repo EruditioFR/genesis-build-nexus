@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download, Star, Check } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Loader2, Download, Star, Check, UserPlus, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSignedUrls } from '@/lib/signedUrlCache';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { AudioPlayer } from './AudioPlayer';
+import { usePhotoTags } from '@/hooks/usePhotoTags';
+import { PhotoTagOverlay } from './PhotoTagOverlay';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Media {
   id: string;
