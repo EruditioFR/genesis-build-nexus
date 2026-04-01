@@ -163,6 +163,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
   const { startTour, welcomeDialogProps } = useOnboardingTour();
   const { tier, adminOverride } = useSubscription();
 
+  if (!user) return null;
+
   const isPremium = tier === 'premium' || tier === 'heritage';
   const isHeritage = tier === 'heritage';
   const hideUpgrade = isHeritage || adminOverride;
