@@ -6,7 +6,7 @@ import {
   BookOpen, Clock, Users, Shield, Download, Image, Video, Mic,
   Upload, Layers, Share2, Heart, Play, Headphones,
   Sparkles, TreePine, Check, ArrowRight,
-  Zap, Eye, Volume2
+  Zap, Eye, Volume2, Sprout, Flower2, Leaf
 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 
@@ -29,11 +29,11 @@ const Marketing = () => {
   return (
     <>
       <SEOHead
-        title="FamilyGarden — Vos souvenirs méritent un écrin numérique"
-        description="Centralisez photos, vidéos, textes et audio dans un espace privé et sécurisé. Partagez avec vos proches. Écoutez vos souvenirs en podcast audio."
+        title="FamilyGarden — Cultivez vos souvenirs, récoltez votre histoire"
+        description="Plantez vos souvenirs dans un jardin numérique privé et sécurisé. Photos, vidéos, textes, audio. Regardez votre histoire familiale fleurir et porter ses fruits."
       />
 
-      {/* ========== HERO — PAIN POINT ========== */}
+      {/* ========== HERO — JARDIN / RACINES ========== */}
       <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0f0f1a]">
         <div className="absolute inset-0">
           <img src={heroImg} alt="" className="w-full h-full object-cover opacity-30" width={1920} height={1080} />
@@ -45,27 +45,28 @@ const Marketing = () => {
             initial="hidden" animate="visible" variants={fadeUp} custom={0}
             className="max-w-4xl"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 border border-accent/30 text-accent text-sm font-semibold mb-8">
-              <Sparkles className="w-4 h-4" /> Le journal familial nouvelle génération
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-sm font-semibold mb-8">
+              <Sprout className="w-4 h-4" /> Cultivez votre jardin de souvenirs
             </span>
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-white leading-[1.1] mb-6">
-              Vos souvenirs sont
-              <span className="block text-accent"> éparpillés partout.</span>
+              Plantez vos souvenirs.
+              <span className="block text-emerald-400"> Regardez-les fleurir.</span>
               <span className="block text-secondary mt-2 text-3xl sm:text-4xl md:text-5xl">
-                Il est temps de les réunir.
+                Récoltez votre histoire familiale.
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-white/70 max-w-2xl mb-10 leading-relaxed">
-              Photos perdues dans votre téléphone. Vidéos oubliées sur un disque dur. Histoires qui s'effacent avec le temps.
-              <strong className="text-white"> FamilyGarden</strong> rassemble tout dans un espace privé, sécurisé et magnifique.
+              Comme un jardinier prend soin de ses plantes, prenez soin de vos souvenirs.
+              <strong className="text-white"> FamilyGarden</strong> est le terreau fertile où chaque photo, vidéo, texte et audio
+              prend racine pour créer un héritage qui traverse les générations.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white text-lg px-8 py-6 rounded-xl shadow-lg shadow-accent/30">
+              <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg shadow-emerald-500/30">
                 <Link to="/signup">
-                  Créer mon espace gratuit <ArrowRight className="ml-2 w-5 h-5" />
+                  Planter ma première graine <Sprout className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-6 rounded-xl">
@@ -76,18 +77,18 @@ const Marketing = () => {
             </div>
           </motion.div>
 
-          {/* Pain point stats */}
+          {/* Garden metaphor stats */}
           <motion.div
             initial="hidden" animate="visible" variants={fadeUp} custom={3}
             className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl"
           >
             {[
-              { stat: "73%", desc: "des familles n'ont aucune sauvegarde organisée de leurs souvenirs" },
-              { stat: "2 000+", desc: "photos prises par an en moyenne — combien seront retrouvées dans 10 ans ?" },
-              { stat: "1 sur 4", desc: "disque dur tombe en panne dans les 4 premières années" },
+              { stat: "🌱", num: "73%", desc: "des familles laissent leurs souvenirs faner, sans aucune sauvegarde organisée" },
+              { stat: "🍂", num: "2 000+", desc: "photos par an — autant de graines perdues si elles ne sont pas plantées" },
+              { stat: "🥀", num: "1 sur 4", desc: "disque dur tombe en panne : comme un jardin sans soin, tout s'éteint" },
             ].map((item, i) => (
               <div key={i} className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
-                <div className="text-3xl font-display font-bold text-secondary mb-2">{item.stat}</div>
+                <div className="text-3xl font-display font-bold text-emerald-400 mb-2">{item.stat} {item.num}</div>
                 <p className="text-sm text-white/60">{item.desc}</p>
               </div>
             ))}
@@ -95,8 +96,8 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== LE PROBLÈME ========== */}
-      <section className="py-20 sm:py-28 bg-[#f5f0e8]">
+      {/* ========== LE PROBLÈME — JARDIN ABANDONNÉ ========== */}
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-[#f5f0e8] to-[#e8f0e8]">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -104,33 +105,33 @@ const Marketing = () => {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-6">
-              Vos souvenirs méritent mieux qu'un
-              <span className="text-destructive"> dossier en vrac</span>
+              Sans soin, même le plus beau jardin
+              <span className="text-destructive"> se fane</span> 🥀
             </h2>
             <p className="text-lg text-[#1a1a2e]/70">
-              Google Photos mélange tout. Les albums papier se détériorent.
-              Les clés USB se perdent. Et vos histoires ? Elles restent dans votre tête.
+              Vos souvenirs sont comme des fleurs fragiles : dispersés, ils se perdent.
+              Rassemblés et cultivés, ils deviennent un jardin magnifique.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
-              { icon: "😰", title: "Le problème", items: ["Photos dispersées sur 5 appareils", "Vidéos trop lourdes à envoyer", "Pas de contexte : qui, quand, où ?", "Aucune sauvegarde fiable"] },
-              { icon: "💡", title: "La solution", items: ["Un espace unique et privé", "Multi-média : photo, vidéo, audio, texte", "Date, lieu, personnes associées", "Sauvegarde sécurisée en Europe"] },
-              { icon: "🎁", title: "Le résultat", items: ["Une histoire familiale complète", "Partagée avec vos proches", "Transmise aux générations futures", "Écoutable en podcast audio !"] },
+              { icon: "🍂", title: "Le jardin en friche", items: ["Photos dispersées comme des feuilles au vent", "Vidéos oubliées — des fruits qui pourrissent", "Pas de contexte : des fleurs sans étiquette", "Aucune protection — le gel détruit tout"] },
+              { icon: "🌱", title: "Le terreau fertile", items: ["Un seul jardin privé et sécurisé", "Photos, vidéos, audio, texte : toutes les espèces", "Date, lieu, personnes : chaque plante identifiée", "Hébergement européen : une serre protectrice"] },
+              { icon: "🌳", title: "La récolte", items: ["Un arbre familial complet et vivant", "Des fruits partagés avec vos proches", "Des racines transmises aux générations futures", "Un podcast audio : l'histoire racontée !"] },
             ].map((col, i) => (
               <motion.div
                 key={i}
                 initial="hidden" whileInView="visible" viewport={{ once: true }}
                 variants={fadeUp} custom={i}
-                className="bg-white rounded-3xl p-8 border border-primary/10 shadow-lg"
+                className="bg-white rounded-3xl p-8 border border-emerald-100 shadow-lg"
               >
                 <div className="text-4xl mb-4">{col.icon}</div>
                 <h3 className="text-xl font-display font-bold text-[#1a1a2e] mb-4">{col.title}</h3>
                 <ul className="space-y-3">
                   {col.items.map((item, j) => (
                     <li key={j} className="flex items-start gap-2 text-[#1a1a2e]/70">
-                      <Check className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+                      <Check className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -141,7 +142,7 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== CE QU'EST UN SOUVENIR ========== */}
+      {/* ========== CE QU'EST UN SOUVENIR — ANATOMIE D'UNE GRAINE ========== */}
       <section className="py-20 sm:py-28 bg-[#1a1a2e] overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
@@ -149,25 +150,25 @@ const Marketing = () => {
             variants={fadeUp}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary text-sm font-semibold mb-6">
-              <Zap className="w-4 h-4" /> Stories multimédia
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold mb-6">
+              <Flower2 className="w-4 h-4" /> Une graine multimédia
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-6">
-              Bien plus qu'une simple photo :
-              <span className="text-secondary"> un souvenir vivant</span>
+              Chaque souvenir est une
+              <span className="text-emerald-400"> graine précieuse</span>
             </h2>
             <p className="text-lg text-white/70">
-              Chaque souvenir sur FamilyGarden combine photos, vidéos, texte et audio pour capturer un moment dans toute sa richesse.
+              Plantez des graines riches : photos, vidéos, texte et audio. Chacune germe en un moment vivant, prêt à être partagé et transmis.
             </p>
           </motion.div>
 
-          {/* Media types showcase */}
+          {/* Media types as garden elements */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mb-16">
             {[
-              { icon: Image, label: "Photos", desc: "Uploadez et organisez vos photos avec dates et légendes", color: "from-blue-500 to-blue-700" },
-              { icon: Video, label: "Vidéos", desc: "Intégrez vos vidéos et liens YouTube directement", color: "from-rose-500 to-rose-700" },
-              { icon: Mic, label: "Audio", desc: "Enregistrez la voix de vos proches, leurs histoires", color: "from-amber-500 to-amber-700" },
-              { icon: BookOpen, label: "Textes", desc: "Racontez l'histoire derrière chaque moment", color: "from-emerald-500 to-emerald-700" },
+              { icon: Image, label: "Photos", desc: "Les pétales de vos souvenirs : capturez la beauté de chaque instant", color: "from-emerald-500 to-emerald-700", emoji: "🌸" },
+              { icon: Video, label: "Vidéos", desc: "Les racines vivantes : le mouvement et la vie de vos moments", color: "from-amber-500 to-amber-700", emoji: "🌿" },
+              { icon: Mic, label: "Audio", desc: "Le parfum de vos souvenirs : la voix de ceux que vous aimez", color: "from-rose-500 to-rose-700", emoji: "🌺" },
+              { icon: BookOpen, label: "Textes", desc: "La sève de votre histoire : les mots qui nourrissent la mémoire", color: "from-teal-500 to-teal-700", emoji: "🍃" },
             ].map((type, i) => (
               <motion.div
                 key={i}
@@ -176,8 +177,11 @@ const Marketing = () => {
                 className="group"
               >
                 <div className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 h-full">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <type.icon className="w-7 h-7 text-white" />
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                      <type.icon className="w-7 h-7 text-white" />
+                    </div>
+                    <span className="text-2xl">{type.emoji}</span>
                   </div>
                   <h3 className="text-lg font-display font-bold text-white mb-2">{type.label}</h3>
                   <p className="text-sm text-white/60">{type.desc}</p>
@@ -190,22 +194,22 @@ const Marketing = () => {
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp}
-            className="max-w-4xl mx-auto bg-gradient-to-br from-white/10 to-white/5 backdrop-blur border border-white/10 rounded-3xl p-8 sm:p-12"
+            className="max-w-4xl mx-auto bg-gradient-to-br from-emerald-900/30 to-white/5 backdrop-blur border border-emerald-500/20 rounded-3xl p-8 sm:p-12"
           >
             <h3 className="text-2xl font-display font-bold text-white mb-8 text-center">
-              🎬 Anatomie d'un souvenir
+              🌱 Anatomie d'une graine de souvenir
             </h3>
             <div className="grid sm:grid-cols-2 gap-8">
               <div className="space-y-4">
                 {[
-                  { step: "1", text: "Titre et description de votre moment" },
-                  { step: "2", text: "Photos et vidéos (glissez-déposez)" },
-                  { step: "3", text: "Enregistrement audio ou podcast" },
-                  { step: "4", text: "Date, lieu et personnes concernées" },
-                  { step: "5", text: "Catégorie et étiquettes" },
+                  { step: "🌰", text: "Titre et description : la graine" },
+                  { step: "🌸", text: "Photos et vidéos : les pétales" },
+                  { step: "🎵", text: "Enregistrement audio : le parfum" },
+                  { step: "📍", text: "Date, lieu, personnes : les racines" },
+                  { step: "🏷️", text: "Catégorie et étiquettes : le terroir" },
                 ].map((item) => (
                   <div key={item.step} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-secondary/20 text-secondary font-bold flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-xl flex items-center justify-center shrink-0">
                       {item.step}
                     </div>
                     <span className="text-white/80">{item.text}</span>
@@ -221,7 +225,7 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== PODCAST AUDIO — STAR FEATURE ========== */}
+      {/* ========== PODCAST AUDIO — LE FRUIT DE VOS SOUVENIRS ========== */}
       <section className="py-20 sm:py-28 bg-gradient-to-br from-[#1a0a2e] via-[#0f0f1a] to-[#0a1a2e] overflow-hidden relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]" />
@@ -235,30 +239,27 @@ const Marketing = () => {
               variants={fadeUp}
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm font-semibold mb-6">
-                <Headphones className="w-4 h-4" /> Exclusivité FamilyGarden
+                <Headphones className="w-4 h-4" /> 🍎 Le plus beau fruit de votre jardin
               </span>
 
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-6 leading-tight">
-                Écoutez vos souvenirs
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-accent"> comme un podcast</span>
+                Récoltez vos souvenirs
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-accent"> en podcast audio</span>
               </h2>
 
               <p className="text-lg text-white/70 mb-8 leading-relaxed">
-                Transformez vos souvenirs en histoires audio racontées ! L'IA génère un podcast à partir de vos textes, photos et contextes.
-                Écoutez l'histoire de votre famille en marchant, en cuisinant, ou partagez-la avec un proche au téléphone.
+                Le plus beau fruit de votre jardin de souvenirs : l'IA transforme vos textes, photos et contextes
+                en une histoire racontée. Écoutez votre histoire familiale en marchant, en cuisinant, ou offrez-la comme un bouquet à un proche.
               </p>
 
               <div className="space-y-4 mb-8">
                 {[
-                  "Génération automatique à partir de vos souvenirs écrits",
-                  "Voix naturelle et narration fluide grâce à l'IA",
-                  "Téléchargeable en fichier audio MP3",
-                  "Parfait pour les personnes malvoyantes ou les seniors",
+                  "🌰 Vos souvenirs écrits sont la graine du podcast",
+                  "🌿 L'IA fait germer une narration fluide et naturelle",
+                  "🍎 Récoltez un fichier audio MP3 à écouter partout",
+                  "👵 Parfait pour les seniors — comme raconter au coin du feu",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-accent flex items-center justify-center shrink-0">
-                      <Check className="w-3.5 h-3.5 text-white" />
-                    </div>
                     <span className="text-white/80">{item}</span>
                   </div>
                 ))}
@@ -266,7 +267,7 @@ const Marketing = () => {
 
               <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-accent hover:from-purple-700 hover:to-accent/90 text-white text-lg px-8 py-6 rounded-xl shadow-lg">
                 <Link to="/signup">
-                  Essayer le podcast audio <Volume2 className="ml-2 w-5 h-5" />
+                  Récolter mon premier podcast <Volume2 className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
             </motion.div>
@@ -279,14 +280,13 @@ const Marketing = () => {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/20">
                 <img src={podcastImg} alt="Podcast audio familial" className="w-full" loading="lazy" />
               </div>
-              {/* Audio waveform decorative */}
               <div className="absolute -bottom-6 -left-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-6 py-4 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-accent flex items-center justify-center">
                   <Play className="w-5 h-5 text-white ml-0.5" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-white">Vacances d'été 1998</div>
-                  <div className="text-xs text-white/50">3:42 • Généré par IA</div>
+                  <div className="text-xs text-white/50">3:42 • Fruit de vos souvenirs 🍎</div>
                 </div>
               </div>
             </motion.div>
@@ -294,28 +294,31 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== FONCTIONNALITÉS CLÉS ========== */}
-      <section className="py-20 sm:py-28 bg-[#f5f0e8]">
+      {/* ========== FONCTIONNALITÉS — OUTILS DU JARDINIER ========== */}
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-[#e8f0e8] to-[#f5f0e8]">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp}
             className="text-center max-w-3xl mx-auto mb-16"
           >
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-6">
+              <Leaf className="w-4 h-4" /> Les outils du jardinier
+            </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-6">
-              Tout ce dont vous avez besoin pour
-              <span className="text-secondary"> préserver votre histoire</span>
+              Tout pour cultiver et faire
+              <span className="text-emerald-600"> prospérer votre jardin</span>
             </h2>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[
-              { icon: Clock, title: "Timeline interactive", desc: "Naviguez par décennies dans vos souvenirs. Visualisez votre histoire familiale sur une frise chronologique immersive.", color: "bg-accent" },
-              { icon: Users, title: "Cercles de partage", desc: "Famille proche, grands-parents, amis d'enfance : choisissez qui voit quoi avec des cercles privés sécurisés.", color: "bg-violet-600" },
-              { icon: Eye, title: "Mode Story", desc: "Visionnez vos souvenirs comme des stories Instagram : immersif, fluide, avec musique de fond.", color: "bg-blue-600" },
-              { icon: TreePine, title: "Arbre généalogique", desc: "Construisez votre arbre familial interactif et reliez chaque souvenir aux personnes concernées.", color: "bg-emerald-600" },
-              { icon: Shield, title: "Sécurité & confidentialité", desc: "Hébergement européen RGPD, accès contrôlé, vos données restent les vôtres.", color: "bg-primary" },
-              { icon: Download, title: "Export PDF & backup", desc: "Exportez vos souvenirs en PDF, récupérez vos médias à tout moment.", color: "bg-rose-500" },
+              { icon: Clock, title: "🌿 Timeline interactive", desc: "Parcourez les saisons de votre vie. Naviguez par décennies dans votre jardin de souvenirs, comme un arbre qui révèle ses cernes.", color: "bg-emerald-600" },
+              { icon: Users, title: "🌻 Cercles de partage", desc: "Partagez les fruits de votre jardin : famille proche, grands-parents, amis. Choisissez qui cueille quoi.", color: "bg-amber-600" },
+              { icon: Eye, title: "🌸 Mode Story", desc: "Visitez votre jardin en mode immersif : vos souvenirs s'enchaînent comme une promenade fleurie.", color: "bg-rose-500" },
+              { icon: TreePine, title: "🌳 Arbre généalogique", desc: "Visualisez vos racines ! Construisez votre arbre familial et reliez chaque souvenir à ses branches.", color: "bg-emerald-700" },
+              { icon: Shield, title: "🏡 Serre sécurisée", desc: "Votre jardin est protégé : hébergement européen RGPD, accès contrôlé, vos données à l'abri du gel.", color: "bg-primary" },
+              { icon: Download, title: "🧺 Récolte & export", desc: "Cueillez vos souvenirs en PDF, récupérez vos médias : votre récolte vous appartient toujours.", color: "bg-teal-600" },
             ].map((feat, i) => (
               <motion.div
                 key={i}
@@ -323,7 +326,7 @@ const Marketing = () => {
                 variants={fadeUp} custom={i}
                 className="group"
               >
-                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-primary/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-emerald-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
                   <div className={`w-14 h-14 rounded-xl ${feat.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
                     <feat.icon className="w-7 h-7 text-white" />
                   </div>
@@ -336,7 +339,7 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== COMMENT ÇA MARCHE — PAS À PAS ========== */}
+      {/* ========== COMMENT ÇA MARCHE — CULTIVER EN 4 SAISONS ========== */}
       <section className="py-20 sm:py-28 bg-[#1a1a2e] overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
@@ -344,31 +347,32 @@ const Marketing = () => {
             variants={fadeUp}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary text-sm font-semibold mb-6">
-              <Sparkles className="w-4 h-4" /> Simple comme bonjour
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold mb-6">
+              <Sprout className="w-4 h-4" /> De la graine à l'arbre
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-6">
-              Commencez en
-              <span className="text-secondary"> 4 étapes simples</span>
+              Cultivez votre jardin en
+              <span className="text-emerald-400"> 4 saisons</span>
             </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {[
-              { icon: Upload, num: "01", title: "Créez votre compte", desc: "Inscription gratuite en 30 secondes. Aucune carte bancaire requise.", color: "from-primary to-primary/70" },
-              { icon: Layers, num: "02", title: "Ajoutez un souvenir", desc: "Uploadez photos, vidéos, enregistrez votre voix et racontez l'histoire.", color: "from-secondary to-secondary/70" },
-              { icon: Share2, num: "03", title: "Organisez & partagez", desc: "Classez par catégories, invitez votre famille dans des cercles privés.", color: "from-accent to-accent/70" },
-              { icon: Heart, num: "04", title: "Revivez à l'infini", desc: "Timeline, mode story, podcast audio : retrouvez vos moments à tout instant.", color: "from-purple-500 to-purple-700" },
+              { icon: Sprout, num: "🌱", title: "Préparez le terrain", desc: "Inscription gratuite en 30 secondes. Votre parcelle vous attend.", color: "from-emerald-500 to-emerald-700", season: "Printemps" },
+              { icon: Flower2, num: "🌸", title: "Plantez vos graines", desc: "Uploadez photos, vidéos, enregistrez votre voix, racontez l'histoire.", color: "from-rose-400 to-rose-600", season: "Été" },
+              { icon: Leaf, num: "🍂", title: "Cultivez & partagez", desc: "Organisez par catégories, invitez votre famille à jardiner ensemble.", color: "from-amber-500 to-amber-700", season: "Automne" },
+              { icon: TreePine, num: "🌳", title: "Récoltez les fruits", desc: "Timeline, mode story, podcast audio : savourez votre récolte à tout instant.", color: "from-emerald-600 to-emerald-800", season: "Hiver" },
             ].map((step, i) => (
               <motion.div
                 key={i}
                 initial="hidden" whileInView="visible" viewport={{ once: true }}
                 variants={fadeUp} custom={i}
               >
-                <div className="relative bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 sm:p-8 hover:bg-white/10 transition-all h-full">
-                  <div className="absolute -top-4 -right-4 text-[80px] font-display font-bold text-white/5 select-none pointer-events-none">
-                    {step.num}
+                <div className="relative bg-white/5 backdrop-blur border border-emerald-500/10 rounded-2xl p-6 sm:p-8 hover:bg-white/10 transition-all h-full">
+                  <div className="absolute -top-3 right-4 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300">
+                    {step.season}
                   </div>
+                  <div className="text-4xl mb-4">{step.num}</div>
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-5`}>
                     <step.icon className="w-7 h-7 text-white" />
                   </div>
@@ -382,7 +386,7 @@ const Marketing = () => {
       </section>
 
       {/* ========== VIDÉO DÉMO ========== */}
-      <section id="demo-video" className="py-20 sm:py-28 bg-[#f5f0e8]">
+      <section id="demo-video" className="py-20 sm:py-28 bg-gradient-to-b from-[#f5f0e8] to-[#e8f0e8]">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -390,11 +394,11 @@ const Marketing = () => {
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#1a1a2e] mb-6">
-              Découvrez FamilyGarden
-              <span className="text-secondary"> en action</span>
+              Visitez le jardin
+              <span className="text-emerald-600"> en vidéo</span> 🌿
             </h2>
             <p className="text-lg text-[#1a1a2e]/70">
-              Regardez comment créer votre premier souvenir en quelques minutes
+              Découvrez comment planter votre premier souvenir en quelques minutes
             </p>
           </motion.div>
 
@@ -403,7 +407,7 @@ const Marketing = () => {
             variants={fadeUp} custom={1}
             className="max-w-4xl mx-auto"
           >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-primary/10">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-emerald-100">
               <div className="aspect-video">
                 <iframe
                   src="https://www.youtube.com/embed/afoWU3vDcOg?rel=0"
@@ -419,7 +423,7 @@ const Marketing = () => {
         </div>
       </section>
 
-      {/* ========== PARTAGE FAMILIAL ========== */}
+      {/* ========== PARTAGE FAMILIAL — L'ARBRE QUI RASSEMBLE ========== */}
       <section className="py-20 sm:py-28 bg-[#1a1a2e] overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-6xl mx-auto">
@@ -434,22 +438,21 @@ const Marketing = () => {
               variants={fadeUp} custom={1}
             >
               <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-6">
-                Des souvenirs qui
-                <span className="text-secondary"> rapprochent les générations</span>
+                Un arbre dont chaque branche
+                <span className="text-emerald-400"> porte des fruits</span> 🌳
               </h2>
               <p className="text-lg text-white/70 mb-8 leading-relaxed">
-                Invitez grands-parents, parents, enfants et petits-enfants à contribuer ensemble.
-                Chacun ajoute ses souvenirs, commente ceux des autres, et l'histoire familiale se construit collectivement.
+                Comme un arbre centenaire, votre histoire familiale se nourrit de chaque génération.
+                Grands-parents, parents, enfants : chacun apporte sa sève, ses fleurs et ses fruits.
               </p>
               <div className="space-y-4">
                 {[
-                  "Cercles privés avec invitations par email",
-                  "Chaque membre peut ajouter ses propres souvenirs",
-                  "Réactions et commentaires sur chaque souvenir",
-                  "Gardiens de mémoire pour la transmission",
+                  "🌿 Chaque branche = un cercle privé de partage",
+                  "🌸 Chaque membre plante ses propres souvenirs",
+                  "💬 Commentaires et réactions : la pollinisation des émotions",
+                  "🛡️ Gardiens de mémoire : les racines du futur",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-secondary shrink-0" />
                     <span className="text-white/80">{item}</span>
                   </div>
                 ))}
@@ -465,9 +468,9 @@ const Marketing = () => {
       </Suspense>
 
       {/* ========== CTA FINAL ========== */}
-      <section className="py-20 sm:py-28 bg-gradient-to-br from-[#1a1a2e] via-primary to-[#1a1a2e] relative overflow-hidden">
+      <section className="py-20 sm:py-28 bg-gradient-to-br from-[#0a2e1a] via-emerald-900 to-[#1a1a2e] relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[120px]" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[120px]" />
         </div>
 
@@ -477,21 +480,22 @@ const Marketing = () => {
             variants={fadeUp}
             className="max-w-3xl mx-auto"
           >
+            <div className="text-6xl mb-6">🌱</div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-6">
-              Chaque jour qui passe, un souvenir risque de
-              <span className="text-accent"> disparaître</span>
+              Chaque jour sans soin, un souvenir
+              <span className="text-emerald-400"> se fane</span>
             </h2>
             <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto">
-              Commencez dès maintenant : créez votre premier souvenir en 1 minute.
-              Gratuit, sans engagement, sans carte bancaire.
+              Plantez votre première graine dès maintenant. En 1 minute, votre jardin de souvenirs commence à pousser.
+              Gratuit, sans engagement.
             </p>
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white text-xl px-10 py-7 rounded-xl shadow-lg shadow-accent/30">
+            <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl px-10 py-7 rounded-xl shadow-lg shadow-emerald-500/30">
               <Link to="/signup">
-                Créer mon journal familial <ArrowRight className="ml-2 w-6 h-6" />
+                Planter ma première graine <Sprout className="ml-2 w-6 h-6" />
               </Link>
             </Button>
             <p className="mt-6 text-sm text-white/50">
-              ✓ Inscription gratuite • ✓ Aucune carte bancaire • ✓ Données hébergées en Europe
+              🌱 Inscription gratuite • 🔒 Aucune carte bancaire • 🇪🇺 Données hébergées en Europe
             </p>
           </motion.div>
         </div>
@@ -500,7 +504,7 @@ const Marketing = () => {
       {/* Simple footer link back */}
       <div className="bg-[#0f0f1a] py-8 text-center">
         <Link to="/" className="text-white/50 hover:text-white transition text-sm">
-          ← Retour à l'accueil FamilyGarden
+          ← Retour au jardin FamilyGarden
         </Link>
       </div>
     </>
