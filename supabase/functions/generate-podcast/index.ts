@@ -164,21 +164,92 @@ Termine par une phrase douce et évocatrice.`,
 
     console.log(`Script generated: ${narrativeScript.length} chars`);
 
-    // Step 2: Convert to audio with Google Cloud TTS using API key
-    const GOOGLE_TTS_API_KEY = Deno.env.get("GOOGLE_TTS_API_KEY");
-    if (!GOOGLE_TTS_API_KEY) {
-      return new Response(JSON.stringify({ error: "GOOGLE_TTS_API_KEY non configurée" }), {
+    // Step 2: Get OAuth2 access token from service account
+    const serviceAccountJson = Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON");
+    if (!serviceAccountJson) {
+      return new Response(JSON.stringify({ error: "GOOGLE_SERVICE_ACCOUNT_JSON non configurée" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    console.log("Calling Google Cloud TTS...");
+    const serviceAccount = JSON.parse(serviceAccountJson);
+
+    // Create JWT for token exchange
+    const now = Math.floor(Date.now() / 1000);
+    const jwtHeader = { alg: "RS256", typ: "JWT" };
+    const jwtPayload = {
+      iss: serviceAccount.client_email,
+      scope: "https://www.googleapis.com/auth/cloud-platform",
+      aud: "https://oauth2.googleapis.com/token",
+      iat: now,
+      exp: now + 3600,
+    };
+
+    const base64url = (data: object | Uint8Array) => {
+      const str = typeof data === "object" && !(data instanceof Uint8Array)
+        ? new TextEncoder().encode(JSON.stringify(data))
+        : data;
+      return btoa(String.fromCharCode(...str))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+    };
+
+    const signingInput = `${base64url(jwtHeader)}.${base64url(jwtPayload)}`;
+
+    // Import the private key and sign
+    const pemContent = serviceAccount.private_key
+      .replace("-----BEGIN PRIVATE KEY-----", "")
+      .replace("-----END PRIVATE KEY-----", "")
+      .replace(/\n/g, "");
+    const binaryKey = Uint8Array.from(atob(pemContent), (c) => c.charCodeAt(0));
+
+    const cryptoKey = await crypto.subtle.importKey(
+      "pkcs8",
+      binaryKey,
+      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+
+    const signature = new Uint8Array(
+      await crypto.subtle.sign(
+        "RSASSA-PKCS1-v1_5",
+        cryptoKey,
+        new TextEncoder().encode(signingInput)
+      )
+    );
+
+    const jwt = `${signingInput}.${base64url(signature)}`;
+
+    // Exchange JWT for access token
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
+    });
+
+    if (!tokenResponse.ok) {
+      const tokenError = await tokenResponse.text();
+      console.error("Token exchange error:", tokenError);
+      return new Response(JSON.stringify({ error: "Erreur d'authentification Google" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { access_token } = await tokenResponse.json();
+
+    console.log("Calling Google Cloud TTS with OAuth2...");
     const ttsResponse = await fetch(
-      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`,
+      "https://texttospeech.googleapis.com/v1/text:synthesize",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
         body: JSON.stringify({
           input: { text: narrativeScript },
           voice: {
