@@ -61,6 +61,7 @@ const AdminContactMessages = lazy(() => import("./pages/admin/AdminContactMessag
 const AdminFamilyTrees = lazy(() => import("./pages/admin/AdminFamilyTrees"));
 const AdminCloudUsage = lazy(() => import("./pages/admin/AdminCloudUsage"));
 const AdminFeedback = lazy(() => import("./pages/admin/AdminFeedback"));
+const AdminCircles = lazy(() => import("./pages/admin/AdminCircles"));
 
 const queryClient = new QueryClient();
 
@@ -130,6 +131,7 @@ const App = () => (
                     <Route path="family-trees" element={<AdminFamilyTrees />} />
                     <Route path="cloud-usage" element={<AdminCloudUsage />} />
                     <Route path="feedback" element={<AdminFeedback />} />
+                    <Route path="circles" element={<AdminCircles />} />
                     <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   
