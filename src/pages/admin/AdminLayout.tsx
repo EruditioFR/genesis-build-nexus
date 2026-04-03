@@ -15,7 +15,8 @@ import {
   Cloud,
   MessageSquareHeart,
   Menu,
-  X
+  X,
+  CircleDot
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useAuth } from "@/hooks/useAuth";
