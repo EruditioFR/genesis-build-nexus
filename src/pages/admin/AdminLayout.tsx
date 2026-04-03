@@ -37,7 +37,7 @@ const navItems = [
   { to: "/admin/family-trees", label: "Arbres", icon: TreePine },
   { to: "/admin/cloud-usage", label: "Usage Cloud", icon: Cloud },
   { to: "/admin/feedback", label: "Évaluations", icon: MessageSquareHeart },
-  { to: "/admin/circles", label: "Cercles", icon: Users },
+  { to: "/admin/circles", label: "Cercles", icon: CircleDot },
   { to: "/admin/contact", label: "Contact", icon: Mail },
 ];
 
