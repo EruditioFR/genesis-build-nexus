@@ -191,15 +191,15 @@ const DashboardInspirationWidget = () => {
             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
 
-          {/* Dots */}
-          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 sm:gap-2">
+          {/* Dots - hidden on mobile */}
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
             {memoryCategories.map((_, i) => (
               <button
                 key={i}
                 onClick={(e) => { e.stopPropagation(); goTo(i); }}
                 className={cn(
-                  'h-1.5 sm:h-2 rounded-full transition-all duration-300',
-                  i === currentSlide ? 'w-5 sm:w-6 bg-white' : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white/70'
+                  'h-2 rounded-full transition-all duration-300',
+                  i === currentSlide ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
                 )}
                 aria-label={`Slide ${i + 1}`}
               />
