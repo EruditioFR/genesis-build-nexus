@@ -40,7 +40,7 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
       return;
     }
 
-    // Validate file size (max 5MB)
+    // Validate file size (max 1MB after optimization)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('L\'image ne doit pas dépasser 5 Mo');
       return;
