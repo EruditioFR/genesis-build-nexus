@@ -143,7 +143,7 @@ const DashboardInspirationWidget = () => {
                 </span>
 
                 {/* Question */}
-                <p className="text-white text-lg sm:text-xl md:text-2xl font-display leading-snug mb-4 drop-shadow-md whitespace-nowrap overflow-hidden text-ellipsis">
+                <p className="text-white text-lg sm:text-xl md:text-2xl font-display leading-snug mb-4 drop-shadow-md max-w-[80%]">
                   « {slideQuestion} »
                 </p>
 
