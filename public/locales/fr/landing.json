@@ -247,5 +247,110 @@
       "legalNotice": "Mentions légales",
       "gdpr": "RGPD"
     }
+  },
+  "v2": {
+    "hero": {
+      "badge": "🌱 Préservez ce qui compte vraiment",
+      "title": "Vos souvenirs sont éparpillés.",
+      "titleHighlight": "Un jour, ils disparaîtront.",
+      "subtitle": "Entre le cloud, les réseaux sociaux et les vieux disques durs, vos photos et vidéos de famille se perdent. Family Garden les réunit dans un espace privé, durable et organisé.",
+      "cta": "Protéger mes souvenirs",
+      "trust": {
+        "private": "100% privé",
+        "durable": "Stockage durable",
+        "family": "Pour toute la famille"
+      }
+    },
+    "painPoints": {
+      "badge": "Le problème",
+      "title": "Vos souvenirs méritent mieux que ça",
+      "subtitle": "Les outils que vous utilisez aujourd’hui ne sont pas faits pour préserver vos souvenirs de famille.",
+      "items": {
+        "scattered": {
+          "title": "Éparpillés dans 10 apps",
+          "description": "Google Photos, iCloud, WhatsApp, Instagram... Vos souvenirs sont dispersés et impossibles à retrouver."
+        },
+        "ephemeral": {
+          "title": "Stories éphémères",
+          "description": "Les stories disparaissent en 24h. Les posts sont noyés dans le flux. Rien ne dure."
+        },
+        "public": {
+          "title": "Réseaux sociaux = public",
+          "description": "Vos moments intimes sont exposés, monétisés, et ne vous appartiennent plus vraiment."
+        }
+      },
+      "vs": {
+        "organized": {
+          "title": "Tout au même endroit",
+          "description": "Photos, vidéos, textes et audio : chaque souvenir est complet et facile à retrouver."
+        },
+        "durable": {
+          "title": "Fait pour durer",
+          "description": "Pas de stories éphémères. Vos souvenirs sont sauvegardés et transmissibles aux générations futures."
+        },
+        "private": {
+          "title": "Privé par défaut",
+          "description": "Vous choisissez qui voit quoi. Pas de publicité, pas d’algorithme, pas de données revendues."
+        }
+      }
+    },
+    "solution": {
+      "badge": "La solution",
+      "title": "Conçu pour",
+      "titleHighlight": "vos souvenirs de famille",
+      "subtitle": "Chaque fonctionnalité répond à un vrai besoin des familles qui veulent préserver leur histoire.",
+      "features": {
+        "multimedia": {
+          "title": "Souvenirs multimédias",
+          "description": "Combinez photos, vidéos, texte et audio dans un seul souvenir riche et complet."
+        },
+        "timeline": {
+          "title": "Chronologie interactive",
+          "description": "Naviguez dans votre histoire familiale par décennies sur une frise visuelle."
+        },
+        "circles": {
+          "title": "Cercles de partage",
+          "description": "Partagez en privé avec les bonnes personnes : famille proche, grands-parents, amis."
+        },
+        "export": {
+          "title": "Export & sauvegarde",
+          "description": "Exportez en PDF, récupérez vos médias. Vos souvenirs restent à vous, toujours."
+        },
+        "familyTree": {
+          "title": "Arbre généalogique",
+          "description": "Reliez vos souvenirs aux personnes de votre famille et visualisez vos liens."
+        },
+        "podcast": {
+          "title": "Podcast souvenir",
+          "description": "Transformez vos récits en podcasts audio à écouter et partager en famille."
+        }
+      }
+    },
+    "audience": {
+      "badge": "Pour qui ?",
+      "title": "Pensé pour",
+      "titleHighlight": "les familles comme la vôtre",
+      "profiles": {
+        "parents": {
+          "title": "Jeunes parents",
+          "description": "Capturez les premiers pas, premiers mots et tous ces moments magiques avant qu’ils ne s’effacent."
+        },
+        "families": {
+          "title": "Familles multigénérationnelles",
+          "description": "Connectez grands-parents, parents et enfants autour d’une histoire commune."
+        },
+        "legacy": {
+          "title": "Transmettre un héritage",
+          "description": "Préservez les récits, les traditions et les souvenirs pour les générations futures."
+        }
+      }
+    },
+    "ctaFinal": {
+      "title": "Commencez avant que",
+      "titleHighlight": "le prochain souvenir ne se perde",
+      "subtitle": "Créez votre premier souvenir en 1 minute. Gratuit, sans engagement.",
+      "button": "Créer mon premier souvenir",
+      "trust": "Inscription gratuite • Sans carte bancaire • Données privées"
+    }
   }
 }

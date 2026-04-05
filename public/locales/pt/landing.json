@@ -247,5 +247,110 @@
       "legalNotice": "Aviso legal",
       "gdpr": "RGPD"
     }
+  },
+  "v2": {
+    "hero": {
+      "badge": "🌱 Preserve o que realmente importa",
+      "title": "As suas memórias estão espalhadas.",
+      "titleHighlight": "Um dia, vão desaparecer.",
+      "subtitle": "Entre a nuvem, as redes sociais e os discos rígidos antigos, as suas fotos e vídeos de família estão a perder-se. O Family Garden reúne-os num espaço privado, duradouro e organizado.",
+      "cta": "Proteger as minhas memórias",
+      "trust": {
+        "private": "100% privado",
+        "durable": "Armazenamento duradouro",
+        "family": "Para toda a família"
+      }
+    },
+    "painPoints": {
+      "badge": "O problema",
+      "title": "As suas memórias merecem melhor",
+      "subtitle": "As ferramentas que usa hoje não foram feitas para preservar memórias de família.",
+      "items": {
+        "scattered": {
+          "title": "Espalhadas em 10 apps",
+          "description": "Google Photos, iCloud, WhatsApp, Instagram... As suas memórias estão dispersas e impossíveis de encontrar."
+        },
+        "ephemeral": {
+          "title": "Stories efémeras",
+          "description": "As stories desaparecem em 24 horas. Os posts perdem-se no feed. Nada dura."
+        },
+        "public": {
+          "title": "Redes sociais = público",
+          "description": "Os seus momentos íntimos estão expostos, monetizados e já não lhe pertencem verdadeiramente."
+        }
+      },
+      "vs": {
+        "organized": {
+          "title": "Tudo num só lugar",
+          "description": "Fotos, vídeos, textos e áudio: cada memória é completa e fácil de encontrar."
+        },
+        "durable": {
+          "title": "Feito para durar",
+          "description": "Sem stories efémeras. As suas memórias são guardadas e podem ser transmitidas às gerações futuras."
+        },
+        "private": {
+          "title": "Privado por defeito",
+          "description": "Você escolhe quem vê o quê. Sem anúncios, sem algoritmos, sem dados vendidos."
+        }
+      }
+    },
+    "solution": {
+      "badge": "A solução",
+      "title": "Concebido para",
+      "titleHighlight": "as suas memórias de família",
+      "subtitle": "Cada funcionalidade responde a uma necessidade real das famílias que querem preservar a sua história.",
+      "features": {
+        "multimedia": {
+          "title": "Memórias multimédia",
+          "description": "Combine fotos, vídeos, texto e áudio numa única memória rica e completa."
+        },
+        "timeline": {
+          "title": "Linha do tempo interativa",
+          "description": "Navegue pela sua história familiar por décadas numa linha visual."
+        },
+        "circles": {
+          "title": "Círculos de partilha",
+          "description": "Partilhe em privado com as pessoas certas: família próxima, avós, amigos."
+        },
+        "export": {
+          "title": "Exportação e backup",
+          "description": "Exporte em PDF, recupere os seus média. As suas memórias são sempre suas."
+        },
+        "familyTree": {
+          "title": "Árvore genealógica",
+          "description": "Ligue as suas memórias aos membros da família e visualize as suas ligações."
+        },
+        "podcast": {
+          "title": "Podcast de memórias",
+          "description": "Transforme as suas histórias em podcasts áudio para ouvir e partilhar em família."
+        }
+      }
+    },
+    "audience": {
+      "badge": "Para quem?",
+      "title": "Pensado para",
+      "titleHighlight": "famílias como a sua",
+      "profiles": {
+        "parents": {
+          "title": "Pais jovens",
+          "description": "Capture os primeiros passos, primeiras palavras e todos os momentos mágicos antes que desapareçam."
+        },
+        "families": {
+          "title": "Famílias multigeracionais",
+          "description": "Conecte avós, pais e filhos em torno de uma história partilhada."
+        },
+        "legacy": {
+          "title": "Transmitir um legado",
+          "description": "Preserve histórias, tradições e memórias para as gerações futuras."
+        }
+      }
+    },
+    "ctaFinal": {
+      "title": "Comece antes que",
+      "titleHighlight": "a próxima memória se perca",
+      "subtitle": "Crie a sua primeira memória em 1 minuto. Grátis, sem compromisso.",
+      "button": "Criar a minha primeira memória",
+      "trust": "Registo gratuito • Sem cartão de crédito • Os seus dados ficam privados"
+    }
   }
 }

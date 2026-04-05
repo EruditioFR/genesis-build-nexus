@@ -247,5 +247,110 @@
       "legalNotice": "Legal Notice",
       "gdpr": "GDPR"
     }
+  },
+  "v2": {
+    "hero": {
+      "badge": "🌱 Preserve what truly matters",
+      "title": "Your memories are scattered.",
+      "titleHighlight": "One day, they’ll disappear.",
+      "subtitle": "Between the cloud, social media, and old hard drives, your family photos and videos are getting lost. Family Garden brings them together in a private, lasting, and organized space.",
+      "cta": "Protect my memories",
+      "trust": {
+        "private": "100% private",
+        "durable": "Lasting storage",
+        "family": "For the whole family"
+      }
+    },
+    "painPoints": {
+      "badge": "The problem",
+      "title": "Your memories deserve better",
+      "subtitle": "The tools you use today weren’t built to preserve family memories.",
+      "items": {
+        "scattered": {
+          "title": "Scattered across 10 apps",
+          "description": "Google Photos, iCloud, WhatsApp, Instagram... Your memories are dispersed and impossible to find."
+        },
+        "ephemeral": {
+          "title": "Ephemeral stories",
+          "description": "Stories vanish in 24 hours. Posts drown in the feed. Nothing lasts."
+        },
+        "public": {
+          "title": "Social media = public",
+          "description": "Your intimate moments are exposed, monetized, and no longer truly yours."
+        }
+      },
+      "vs": {
+        "organized": {
+          "title": "Everything in one place",
+          "description": "Photos, videos, texts and audio: each memory is complete and easy to find."
+        },
+        "durable": {
+          "title": "Built to last",
+          "description": "No ephemeral stories. Your memories are backed up and can be passed on to future generations."
+        },
+        "private": {
+          "title": "Private by default",
+          "description": "You choose who sees what. No ads, no algorithms, no data sold."
+        }
+      }
+    },
+    "solution": {
+      "badge": "The solution",
+      "title": "Designed for",
+      "titleHighlight": "your family memories",
+      "subtitle": "Every feature answers a real need of families who want to preserve their history.",
+      "features": {
+        "multimedia": {
+          "title": "Multimedia memories",
+          "description": "Combine photos, videos, text and audio in a single rich memory."
+        },
+        "timeline": {
+          "title": "Interactive timeline",
+          "description": "Navigate your family history by decades on a visual timeline."
+        },
+        "circles": {
+          "title": "Sharing circles",
+          "description": "Share privately with the right people: close family, grandparents, friends."
+        },
+        "export": {
+          "title": "Export & backup",
+          "description": "Export to PDF, retrieve your media. Your memories stay yours, always."
+        },
+        "familyTree": {
+          "title": "Family tree",
+          "description": "Link your memories to family members and visualize your connections."
+        },
+        "podcast": {
+          "title": "Memory podcast",
+          "description": "Turn your stories into audio podcasts to listen to and share with family."
+        }
+      }
+    },
+    "audience": {
+      "badge": "Who is it for?",
+      "title": "Made for",
+      "titleHighlight": "families like yours",
+      "profiles": {
+        "parents": {
+          "title": "Young parents",
+          "description": "Capture first steps, first words, and all those magical moments before they fade."
+        },
+        "families": {
+          "title": "Multi-generational families",
+          "description": "Connect grandparents, parents and children around a shared story."
+        },
+        "legacy": {
+          "title": "Pass on a legacy",
+          "description": "Preserve stories, traditions and memories for future generations."
+        }
+      }
+    },
+    "ctaFinal": {
+      "title": "Start before",
+      "titleHighlight": "the next memory is lost",
+      "subtitle": "Create your first memory in 1 minute. Free, no commitment.",
+      "button": "Create my first memory",
+      "trust": "Free signup • No credit card • Your data stays private"
+    }
   }
 }
