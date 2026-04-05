@@ -64,7 +64,7 @@ const AvatarUpload = ({ userId, currentAvatarUrl, displayName, onAvatarUpdate }:
       // Upload new avatar
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, { upsert: true });
+        .upload(fileName, processedFile, { upsert: true });
 
       if (uploadError) throw uploadError;
 
