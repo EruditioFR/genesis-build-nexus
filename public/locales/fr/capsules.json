@@ -131,10 +131,15 @@
       "all": "Toutes catégories"
     },
     "sort": {
-      "newest": "Plus récentes",
-      "oldest": "Plus anciennes",
-      "title": "Titre A-Z"
+      "newest": "Plus récents",
+      "oldest": "Plus anciens",
+      "title": "Titre A-Z",
+      "memoryDate": "Date du souvenir"
     },
+    "activeFilters": "Filtres actifs :",
+    "clearFilters": "Tout effacer",
+    "filteredCount_one": "{{count}} souvenir trouvé",
+    "filteredCount_other": "{{count}} souvenirs trouvés",
     "actions": {
       "view": "Voir",
       "edit": "Modifier",
