@@ -41,8 +41,16 @@ const AvatarUpload = ({ userId, currentAvatarUrl, displayName, onAvatarUpdate }:
     setIsUploading(true);
 
     try {
+      // Optimize image: resize to 1600px max + WebP conversion (target < 1MB)
+      let processedFile: File = file;
+      try {
+        processedFile = await optimizeImageForUpload(file);
+      } catch {
+        // Continue with original if optimization fails
+      }
+
       // Generate unique filename
-      const fileExt = file.name.split('.').pop();
+      const fileExt = processedFile.name.split('.').pop();
       const fileName = `${userId}/avatar-${Date.now()}.${fileExt}`;
 
       // Delete old avatar if exists
