@@ -179,10 +179,10 @@ const UnifiedMediaSection = ({
       let processedFile = file;
       if (file.type.startsWith('image/')) {
         try {
-          // Step 1: Resize to 2048px max + convert to WebP
+          // Step 1: Resize to 1600px max + convert to WebP
           processedFile = await optimizeImageForUpload(processedFile);
-          // Step 2: Compress further if still over 3MB
-          if (processedFile.size > 3 * 1024 * 1024) {
+          // Step 2: Compress further if still over 1MB
+          if (processedFile.size > 1 * 1024 * 1024) {
             processedFile = await compressImageIfNeeded(processedFile);
           }
           if (processedFile !== file) {
