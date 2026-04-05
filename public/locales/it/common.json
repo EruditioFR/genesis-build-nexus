@@ -1,0 +1,303 @@
+{
+  "nav": {
+    "features": "Funzionalità",
+    "howItWorks": "Come funziona",
+    "pricing": "Prezzi",
+    "about": "Chi siamo",
+    "contact": "Contatti",
+    "login": "Accedi",
+    "signup": "Inizia gratis",
+    "dashboard": "Home",
+    "profile": "Il mio profilo",
+    "logout": "Esci"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "startFree": "Inizia gratis"
+  },
+  "footer": {
+    "tagline": "Conserva i ricordi di famiglia per le generazioni future.",
+    "product": "Prodotto",
+    "features": "Funzionalità",
+    "howItWorks": "Come funziona",
+    "pricing": "Prezzi",
+    "faq": "FAQ",
+    "legal": "Note legali",
+    "privacyPolicy": "Informativa sulla privacy",
+    "termsOfUse": "Condizioni d'uso",
+    "termsOfSale": "Condizioni di vendita",
+    "legalNotice": "Note legali",
+    "contact": "Contatti",
+    "email": "contact@familygarden.fr",
+    "copyright": "© {{year}} FamilyGarden. Tutti i diritti riservati.",
+    "madeWith": "Fatto con",
+    "inFrance": "in Francia"
+  },
+  "buttons": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "create": "Crea",
+    "close": "Chiudi",
+    "confirm": "Conferma",
+    "back": "Indietro",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "loading": "Caricamento..."
+  },
+  "validation": {
+    "required": "Questo campo è obbligatorio",
+    "email": "Indirizzo email non valido",
+    "minLength": "Minimo {{count}} caratteri",
+    "maxLength": "Massimo {{count}} caratteri"
+  },
+  "search": {
+    "placeholder": "Cerca...",
+    "inputPlaceholder": "Cerca per titolo, descrizione o parole chiave...",
+    "dialogTitle": "Ricerca globale",
+    "noResults": "Nessun ricordo trovato per \"{{query}}\"",
+    "resultsCount": "{{count}} risultato",
+    "resultsCount_other": "{{count}} risultati",
+    "startTyping": "Inizia a digitare per cercare nei tuoi ricordi",
+    "searchingIn": "Ricerca nei tuoi ricordi",
+    "select": "seleziona",
+    "close": "chiudi"
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "markAllRead": "Segna tutto come letto",
+    "empty": "Nessuna notifica"
+  },
+  "tour": {
+    "buttons": {
+      "next": "Continua",
+      "prev": "Indietro",
+      "done": "Fine 🎉",
+      "progress": "Passo {{current}}/{{total}}",
+      "skip": "Salta"
+    },
+    "welcome": {
+      "dashboard": {
+        "title": "Scopri il tuo spazio",
+        "description": "Una breve visita guidata per familiarizzare con tutte le funzionalità della tua dashboard."
+      },
+      "capsule": {
+        "title": "Crea il tuo primo ricordo",
+        "description": "Scopri come creare e organizzare i tuoi ricordi in pochi semplici passi."
+      },
+      "familyTree": {
+        "title": "Esplora il tuo albero",
+        "description": "Scopri come costruire e navigare nel tuo albero genealogico interattivo."
+      },
+      "circles": {
+        "title": "Condividi con la famiglia",
+        "description": "Scopri come creare cerchie di condivisione per i tuoi cari."
+      },
+      "duration": "~{{minutes}} min",
+      "start": "Inizia il tour",
+      "later": "Forse più tardi",
+      "skipHint": "Puoi riprendere questo tour dal menu in qualsiasi momento"
+    },
+    "titles": {
+      "dashboard": "Scopri la dashboard",
+      "capsule": "Aiuto alla creazione",
+      "familyTree": "Scopri l'albero",
+      "circles": "Scopri le cerchie"
+    },
+    "dashboard": {
+      "welcome": {
+        "title": "👋 Benvenuto su Family Garden!",
+        "description": "Il tuo spazio personale per conservare e condividere i ricordi di famiglia. Segui questo tour per scoprire tutte le funzionalità in pochi minuti.",
+        "descriptionCompact": "Conserva e condividi i ricordi di famiglia."
+      },
+      "quickActions": {
+        "title": "🚀 Crea il tuo primo ricordo",
+        "description": "Tutto inizia qui! Clicca su \"Nuovo ricordo\" per aggiungere le tue foto, video, testi o registrazioni audio.",
+        "descriptionCompact": "Aggiungi foto, video o testi qui."
+      },
+      "stats": {
+        "title": "📊 La tua dashboard in numeri",
+        "description": "Vedi a colpo d'occhio l'evoluzione della tua collezione: numero di ricordi creati, file multimediali archiviati e cerchie di condivisione attive.",
+        "descriptionCompact": "Le tue statistiche a colpo d'occhio."
+      },
+      "storage": {
+        "title": "💾 Il tuo spazio di archiviazione",
+        "description": "Monitora l'utilizzo del tuo spazio. Il piano gratuito include 500 MB. Passa a Premium per archiviazione illimitata!",
+        "descriptionCompact": "500 MB gratis, illimitato con Premium."
+      },
+      "recentCapsules": {
+        "title": "📦 I tuoi ricordi recenti",
+        "description": "Trova istantaneamente le tue ultime creazioni. Clicca su una scheda per visualizzare, modificare o condividere questo ricordo.",
+        "descriptionCompact": "Le tue ultime creazioni qui."
+      },
+      "navCapsules": {
+        "title": "🗂️ Libreria completa",
+        "description": "Accedi a tutti i tuoi ricordi organizzati per categorie: Viaggi, Famiglia, Eventi... Usa i filtri per trovare facilmente un momento specifico.",
+        "descriptionCompact": "Tutti i ricordi per categoria."
+      },
+      "navTimeline": {
+        "title": "📅 Timeline visuale",
+        "description": "Viaggia nel tempo! Visualizza i tuoi ricordi su una timeline interattiva, dagli anni '40 a oggi.",
+        "descriptionCompact": "Ricordi attraverso il tempo."
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 Cerchie di condivisione",
+        "description": "Condividi in modo confidenziale con i tuoi cari. Crea cerchie e invitali via email.",
+        "descriptionCompact": "Condividi con i tuoi cari."
+      },
+      "navFamilyTree": {
+        "title": "🌳 Albero genealogico",
+        "description": "Costruisci il tuo albero genealogico interattivo! Aggiungi i tuoi antenati e collega i ricordi a ogni persona. Disponibile con Premium.",
+        "descriptionCompact": "Il tuo albero genealogico (Premium)."
+      },
+      "search": {
+        "title": "🔍 Ricerca intelligente",
+        "description": "Trova qualsiasi ricordo istantaneamente. Digita una parola chiave, un nome o una data per esplorare la tua collezione.",
+        "descriptionCompact": "Trova qualsiasi ricordo."
+      },
+      "notifications": {
+        "title": "🔔 Resta connesso",
+        "description": "Ricevi notifiche quando qualcuno condivide un ricordo, commenta le tue creazioni o quando si avvicina un evento importante.",
+        "descriptionCompact": "Avvisi di condivisioni e commenti."
+      },
+      "userMenu": {
+        "title": "👤 Il tuo spazio personale",
+        "description": "Gestisci il tuo profilo, personalizza le impostazioni, controlla il tuo abbonamento o riavvia questo tour guidato in qualsiasi momento.",
+        "descriptionCompact": "Profilo e impostazioni."
+      },
+      "complete": {
+        "title": "🎉 Sei pronto!",
+        "description": "Perfetto, ora conosci le basi! Inizia creando il tuo primo ricordo — ogni momento conta.",
+        "descriptionCompact": "Crea il tuo primo ricordo!"
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 Categoria",
+        "description": "Scegli una categoria per organizzare il tuo ricordo. Puoi anche creare categorie personalizzate.",
+        "descriptionCompact": "Organizza per tema."
+      },
+      "type": {
+        "title": "📷 Tipo di ricordo",
+        "description": "Seleziona il tipo di contenuto: testo, foto, video, audio o misto a seconda di ciò che vuoi salvare.",
+        "descriptionCompact": "Foto, video, testo o audio."
+      },
+      "title": {
+        "title": "✏️ Titolo e descrizione",
+        "description": "Dai al tuo ricordo un titolo evocativo e aggiungi una descrizione per trovarlo facilmente.",
+        "descriptionCompact": "Dai un nome al tuo ricordo."
+      },
+      "media": {
+        "title": "📎 File multimediali",
+        "description": "Aggiungi le tue foto, video o file audio. Puoi trascinare e rilasciare o cliccare per selezionare.",
+        "descriptionCompact": "Aggiungi i tuoi file qui."
+      },
+      "date": {
+        "title": "📅 Data del ricordo",
+        "description": "Indica quando è avvenuto questo momento. Puoi scegliere una data precisa o un periodo.",
+        "descriptionCompact": "Quando è successo."
+      },
+      "tags": {
+        "title": "🏷️ Tag",
+        "description": "Aggiungi parole chiave per trovare facilmente questo ricordo in seguito.",
+        "descriptionCompact": "Parole chiave per trovarlo."
+      },
+      "actions": {
+        "title": "💾 Salva",
+        "description": "Salva come bozza per continuare dopo, o pubblica il tuo ricordo direttamente.",
+        "descriptionCompact": "Bozza o pubblica."
+      },
+      "complete": {
+        "title": "🎉 Tocca a te!",
+        "description": "Ora conosci tutti i passaggi per creare un ricordo. Inizia scegliendo una categoria!",
+        "descriptionCompact": "Andiamo!"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 Il tuo albero genealogico",
+        "description": "Visualizza la tua famiglia come un albero interattivo. Clicca su una persona per vederne i dettagli.",
+        "descriptionCompact": "Clicca per i dettagli."
+      },
+      "addPerson": {
+        "title": "➕ Aggiungi una persona",
+        "description": "Clicca qui per aggiungere un nuovo membro al tuo albero genealogico.",
+        "descriptionCompact": "Nuovo membro qui."
+      },
+      "zoom": {
+        "title": "🔍 Zoom e navigazione",
+        "description": "Usa i controlli dello zoom per regolare la vista. Puoi anche trascinare l'albero.",
+        "descriptionCompact": "Zoom e trascina."
+      },
+      "viewMode": {
+        "title": "👁️ Modalità di visualizzazione",
+        "description": "Cambia la modalità di visualizzazione: discendenti, antenati o vista a clessidra centrata su una persona.",
+        "descriptionCompact": "Discendenti o antenati."
+      },
+      "search": {
+        "title": "🔎 Cerca",
+        "description": "Trova rapidamente una persona nel tuo albero usando la ricerca.",
+        "descriptionCompact": "Trova una persona."
+      },
+      "center": {
+        "title": "🎯 Centra su...",
+        "description": "Seleziona una persona per centrare la vista su di essa.",
+        "descriptionCompact": "Centra la vista."
+      },
+      "importExport": {
+        "title": "📥 Importa/Esporta",
+        "description": "Importa un file GEDCOM o esporta il tuo albero come PDF o GEDCOM.",
+        "descriptionCompact": "GEDCOM e PDF."
+      },
+      "personsList": {
+        "title": "📋 Elenco persone",
+        "description": "Visualizza l'elenco completo di tutte le persone nel tuo albero.",
+        "descriptionCompact": "Vedi tutti."
+      },
+      "minimap": {
+        "title": "🗺️ Minimappa",
+        "description": "Usa la minimappa per navigare rapidamente in un albero grande.",
+        "descriptionCompact": "Navigazione rapida."
+      },
+      "complete": {
+        "title": "🎉 Pronto per esplorare!",
+        "description": "Il tuo albero genealogico ti aspetta. Inizia aggiungendo i tuoi cari!",
+        "descriptionCompact": "Aggiungi i tuoi cari!"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 Le tue cerchie di condivisione",
+        "description": "Le cerchie ti permettono di condividere i tuoi ricordi con gruppi specifici: famiglia, amici, ecc.",
+        "descriptionCompact": "Gruppi di condivisione."
+      },
+      "create": {
+        "title": "➕ Crea una cerchia",
+        "description": "Clicca qui per creare una nuova cerchia di condivisione.",
+        "descriptionCompact": "Nuova cerchia qui."
+      },
+      "list": {
+        "title": "📋 Le tue cerchie",
+        "description": "Trova tutte le tue cerchie qui. Clicca su una cerchia per vederne i membri.",
+        "descriptionCompact": "I tuoi gruppi attivi."
+      },
+      "details": {
+        "title": "👥 Dettagli cerchia",
+        "description": "Visualizza e gestisci i membri della tua cerchia da questo pannello.",
+        "descriptionCompact": "Gestisci i membri."
+      },
+      "invite": {
+        "title": "✉️ Invita membri",
+        "description": "Invita nuove persone via email. Riceveranno un link per unirsi alla tua cerchia.",
+        "descriptionCompact": "Invita via email."
+      },
+      "complete": {
+        "title": "🎉 Condividi i tuoi ricordi!",
+        "description": "Crea la tua prima cerchia e invita i tuoi cari a condividere i tuoi ricordi in privato.",
+        "descriptionCompact": "Invita i tuoi cari!"
+      }
+    }
+  }
+}

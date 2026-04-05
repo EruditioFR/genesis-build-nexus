@@ -1,0 +1,251 @@
+{
+  "hero": {
+    "badge": "Crea il tuo diario di famiglia, semplicemente",
+    "title": "Tutti i tuoi ricordi, finalmente insieme",
+    "subtitle": "Foto, video, testi e audio: raccogli i tuoi ricordi in uno spazio privato, sicuro e pieno di emozioni, per condividerli facilmente con i tuoi cari.",
+    "cta": {
+      "primary": "Inizia gratis",
+      "secondary": "Guarda la demo"
+    },
+    "trust": {
+      "encryption": "Dati sicuri",
+      "gdpr": "Hosting UE (GDPR)",
+      "legacy": "Cerchie private"
+    }
+  },
+  "features": {
+    "badge": "Funzionalità",
+    "title": "Tutto ciò che serve per",
+    "titleHighlight": "rivivere i tuoi ricordi ogni giorno",
+    "subtitle": "Crea ricordi completi (media + storia), organizzali in una timeline e condividili privatamente con la tua famiglia.",
+    "mediaTypes": {
+      "photos": "Foto",
+      "videos": "Video",
+      "audio": "Audio",
+      "texts": "Testi"
+    },
+    "items": {
+      "capsules": {
+        "title": "Ricordi multimediali",
+        "description": "Ogni ricordo raccoglie foto, video, testo e audio, con una data, un luogo e le persone coinvolte."
+      },
+      "timeline": {
+        "title": "Timeline interattiva per decenni",
+        "description": "Visualizza la storia della tua famiglia su una timeline interattiva. Naviga per decenni ed esplora i tuoi ricordi nel loro contesto temporale."
+      },
+      "circles": {
+        "title": "Cerchie di condivisione sicure",
+        "description": "Crea cerchie (famiglia stretta, nonni, padrini) e scegli chi vede cosa."
+      },
+      "security": {
+        "title": "Privacy e controllo",
+        "description": "Accesso protetto, condivisione controllata e hosting conforme: mantieni il controllo sui tuoi ricordi."
+      },
+      "export": {
+        "title": "Esportazione PDF e backup",
+        "description": "Esporta in PDF e recupera i tuoi media: i tuoi ricordi restano tuoi."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "Come funziona?",
+    "title": "Crea un ricordo",
+    "titleHighlight": "in 4 semplici passi",
+    "stepLabel": "Passo",
+    "capsuleExplainer": {
+      "title": "Cos'è un \"ricordo\" su FamilyGarden?",
+      "description": "Un ricordo = un momento completo: foto/video + testo + audio, organizzato e condivisibile privatamente."
+    },
+    "steps": {
+      "step1": {
+        "title": "Crea il tuo account",
+        "description": "Registrati gratuitamente e inizia a documentare la tua storia in pochi minuti."
+      },
+      "step2": {
+        "title": "Aggiungi i tuoi ricordi",
+        "description": "Carica foto, video, registrazioni audio e scrivi le tue storie con il nostro editor intuitivo."
+      },
+      "step3": {
+        "title": "Organizza e condividi",
+        "description": "Struttura i tuoi ricordi in capitoli di vita e invita la tua famiglia a contribuire."
+      },
+      "step4": {
+        "title": "Rivivi quando vuoi",
+        "description": "Ritrova i tuoi momenti in un attimo grazie alla timeline e condividili con i tuoi cari."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Testimonianze",
+    "title": "Conservano il loro",
+    "titleHighlight": "patrimonio",
+    "items": {
+      "t1": {
+        "quote": "Ho potuto conservare tutte le storie di mia nonna. I miei nipoti scopriranno il suo incredibile percorso.",
+        "author": "Maria D.",
+        "role": "Pensionata, 68 anni"
+      },
+      "t2": {
+        "quote": "Come imprenditore, documentare il mio percorso era essenziale. Family Garden mi offre una piattaforma elegante per ispirare le generazioni future.",
+        "author": "Davide L.",
+        "role": "Imprenditore, 45 anni"
+      },
+      "t3": {
+        "quote": "Grazie alle funzionalità collaborative, tutta la mia famiglia ha potuto contribuire alla memoria di nostro padre. Un regalo impagabile.",
+        "author": "Sofia M.",
+        "role": "Caregiver familiare, 35 anni"
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Prezzi",
+    "title": "Un supporto per ogni",
+    "titleHighlight": "storia di vita",
+    "subtitle": "Inizia gratis e scala secondo le tue esigenze. Nessun costo nascosto.",
+    "monthly": "Mensile",
+    "yearly": "Annuale",
+    "discount": "-17%",
+    "perMonth": "mese",
+    "perYear": "anno",
+    "popular": "Più popolare",
+    "loading": "Caricamento...",
+    "error": "Errore nella creazione del pagamento",
+    "cta": {
+      "free": "Inizia gratis",
+      "premium": "Prova Premium",
+      "heritage": "Scegli Heritage"
+    },
+    "plans": {
+      "free": {
+        "name": "Gratuito",
+        "description": "Perfetto per iniziare a conservare i tuoi ricordi",
+        "features": {
+          "storage": "250 MB di archiviazione",
+          "formats": "Ricordi testo e foto",
+          "sharing": "Condivisioni illimitate",
+          "timeline": "Timeline base",
+          "ads": "Nessuna pubblicità"
+        }
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "Per creatori di contenuti regolari",
+        "promo": "Offerta lancio",
+        "promoDetail": "-50% per 3 mesi",
+        "promoAfter": "poi {{price}}€/mese dopo 3 mesi",
+        "originalPrice": "9,99",
+        "features": {
+          "storage": "10 GB di archiviazione",
+          "formats": "Ricordi testo, foto, video e audio",
+          "sharing": "Condivisioni illimitate",
+          "timeline": "Timeline avanzata",
+          "noAds": "Nessuna pubblicità"
+        }
+      },
+      "heritage": {
+        "name": "Heritage",
+        "description": "Costruisci il tuo albero genealogico e collega i ricordi alle persone",
+        "features": {
+          "storage": "20 GB di archiviazione",
+          "formats": "Ricordi testo, foto, video e audio",
+          "sharing": "Condivisioni illimitate",
+          "timeline": "Timeline avanzata",
+          "familyTree": "Albero genealogico interattivo",
+          "podcast": "Crea un podcast dai tuoi ricordi",
+          "vipSupport": "Supporto VIP via WhatsApp",
+          "noAds": "Nessuna pubblicità"
+        }
+      }
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Domande",
+    "titleHighlight": "frequenti",
+    "items": {
+      "q1": {
+        "question": "Cos'è un ricordo su FamilyGarden?",
+        "answer": "Un ricordo è un contenitore digitale sicuro che conserva i tuoi momenti come testi, foto, video e audio. È la tua storia personale, organizzata cronologicamente e pronta per essere tramandata alle generazioni future. Ogni ricordo è privato e accessibile solo alle persone che autorizzi."
+      },
+      "q2": {
+        "question": "I miei dati sono al sicuro?",
+        "answer": "Assolutamente. I tuoi dati sono crittografati con i più alti standard (AES-256), salvati quotidianamente su server sicuri, e mantieni il pieno controllo su chi può accedervi. Il nostro impegno: i tuoi ricordi restano privati."
+      },
+      "q3": {
+        "question": "Come funziona la condivisione familiare?",
+        "answer": "Puoi creare cerchie di fiducia (famiglia, amici) e invitare membri via email. Per ogni cerchia, definisci i permessi: solo lettura, commenti o contribuzione. I membri possono aggiungere le proprie prospettive sui tuoi ricordi condivisi."
+      },
+      "q4": {
+        "question": "Cosa succede ai miei dati se non rinnovo?",
+        "answer": "I tuoi dati non vengono mai eliminati automaticamente. Se passi da Premium a Gratuito, mantieni l'accesso in lettura a tutti i tuoi contenuti. Solo le funzionalità avanzate vengono disabilitate. Puoi sempre esportare i tuoi dati in qualsiasi momento."
+      },
+      "q5": {
+        "question": "Come funziona il lascito postumo?",
+        "answer": "Con l'offerta Heritage, designi contatti di fiducia che saranno notificati e riceveranno accesso a determinati ricordi secondo i tuoi desideri. Puoi programmare rivelazioni ritardate, definire condizioni di accesso e lasciare messaggi personali."
+      },
+      "q6": {
+        "question": "C'è un'app mobile?",
+        "answer": "La piattaforma web è completamente responsive e funziona perfettamente su mobile. Un'app nativa iOS e Android è prevista nella nostra roadmap per consentire la registrazione diretta e la modalità offline."
+      }
+    }
+  },
+  "contact": {
+    "badge": "Contatti",
+    "title": "Hai una domanda?",
+    "titleHighlight": "Contattaci",
+    "subtitle": "Il nostro team risponde entro 48 ore. Non esitare a contattarci per qualsiasi domanda.",
+    "fields": {
+      "name": "Il tuo nome",
+      "email": "La tua email",
+      "subject": "Oggetto",
+      "message": "Il tuo messaggio"
+    },
+    "placeholders": {
+      "name": "Mario Rossi",
+      "email": "mario@esempio.com",
+      "subject": "Domanda su FamilyGarden",
+      "message": "Buongiorno, vorrei..."
+    },
+    "submit": "Invia messaggio",
+    "sending": "Invio in corso...",
+    "success": "Messaggio inviato! Ti risponderemo presto.",
+    "error": "Si è verificato un errore. Riprova."
+  },
+  "cta": {
+    "title": "I tuoi ricordi meritano",
+    "titleHighlight": "di essere conservati",
+    "subtitle": "Inizia oggi: crea il tuo primo ricordo in 1 minuto. Gratis, senza impegno.",
+    "button": "Crea il mio primo ricordo",
+    "trust": "Registrazione gratuita • Nessuna carta di credito richiesta • I tuoi dati restano privati"
+  },
+  "footer": {
+    "description": "Uno spazio privato per raccontare i tuoi ricordi e condividere i momenti che contano.",
+    "copyright": "Tutti i diritti riservati.",
+    "madeWith": "Fatto con",
+    "toPreserve": "per conservare i tuoi ricordi",
+    "categories": {
+      "product": "Prodotto",
+      "company": "Azienda",
+      "resources": "Risorse",
+      "legal": "Legale"
+    },
+    "links": {
+      "features": "Funzionalità",
+      "pricing": "Prezzi",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog",
+      "about": "Chi siamo",
+      "blog": "Blog",
+      "careers": "Carriere",
+      "partners": "Partner",
+      "helpCenter": "Centro assistenza",
+      "faq": "FAQ",
+      "guides": "Guide",
+      "community": "Comunità",
+      "privacy": "Privacy",
+      "terms": "Condizioni di vendita",
+      "legalNotice": "Note legali",
+      "gdpr": "GDPR"
+    }
+  }
+}
