@@ -1,0 +1,30 @@
+{
+  "generic": "Si è verificato un errore. Riprova.",
+  "network": "Errore di connessione. Controlla la tua connessione internet.",
+  "unauthorized": "Devi essere connesso per accedere a questa pagina.",
+  "forbidden": "Non hai i permessi per effettuare questa azione.",
+  "notFound": "La pagina richiesta non esiste.",
+  "serverError": "Errore del server. Il nostro team è stato avvisato.",
+  "timeout": "La richiesta ha impiegato troppo tempo. Riprova.",
+  "validation": "Controlla le informazioni inserite.",
+  "fileUpload": {
+    "tooLarge": "Il file è troppo grande (max {{size}})",
+    "invalidType": "Tipo di file non supportato",
+    "failed": "Caricamento del file fallito"
+  },
+  "auth": {
+    "sessionExpired": "La tua sessione è scaduta. Accedi di nuovo.",
+    "invalidToken": "Link non valido o scaduto."
+  },
+  "capsule": {
+    "createFailed": "Impossibile creare il ricordo",
+    "updateFailed": "Impossibile aggiornare il ricordo",
+    "deleteFailed": "Impossibile eliminare il ricordo",
+    "loadFailed": "Impossibile caricare il ricordo"
+  },
+  "circle": {
+    "createFailed": "Impossibile creare la cerchia",
+    "inviteFailed": "Impossibile inviare l'invito",
+    "joinFailed": "Impossibile unirsi alla cerchia"
+  }
+}
