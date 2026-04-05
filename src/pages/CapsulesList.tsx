@@ -270,6 +270,8 @@ const CapsulesList = () => {
   const [typeFilter, setTypeFilter] = useState<CapsuleType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<CapsuleStatus | 'all'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'title' | 'memory_date'>('newest');
+  const [showFilters, setShowFilters] = useState(false);
   
   // Delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
