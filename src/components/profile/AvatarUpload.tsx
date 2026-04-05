@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { optimizeImageForUpload } from '@/lib/imageCompression';
 
 interface AvatarUploadProps {
   userId: string;
@@ -40,8 +41,16 @@ const AvatarUpload = ({ userId, currentAvatarUrl, displayName, onAvatarUpdate }:
     setIsUploading(true);
 
     try {
+      // Optimize image: resize to 1600px max + WebP conversion (target < 1MB)
+      let processedFile: File = file;
+      try {
+        processedFile = await optimizeImageForUpload(file);
+      } catch {
+        // Continue with original if optimization fails
+      }
+
       // Generate unique filename
-      const fileExt = file.name.split('.').pop();
+      const fileExt = processedFile.name.split('.').pop();
       const fileName = `${userId}/avatar-${Date.now()}.${fileExt}`;
 
       // Delete old avatar if exists
@@ -55,7 +64,7 @@ const AvatarUpload = ({ userId, currentAvatarUrl, displayName, onAvatarUpdate }:
       // Upload new avatar
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, { upsert: true });
+        .upload(fileName, processedFile, { upsert: true });
 
       if (uploadError) throw uploadError;
 
