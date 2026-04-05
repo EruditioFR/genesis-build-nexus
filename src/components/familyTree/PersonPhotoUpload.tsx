@@ -76,10 +76,10 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
         }
       }
 
-      // Upload new photo
+      // Upload new photo (optimized)
       const { error: uploadError } = await supabase.storage
         .from('family-photos')
-        .upload(fileName, file, {
+        .upload(fileName, processedFile, {
           cacheControl: '3600',
           upsert: false
         });
