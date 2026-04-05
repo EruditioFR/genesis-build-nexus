@@ -81,7 +81,7 @@ const DashboardInspirationWidget = () => {
     if (touchStart.current === null) return;
     const diff = touchStart.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      diff > 0 ? next() : prev();
+      if (diff > 0) { next(); } else { prev(); }
     }
     touchStart.current = null;
   }, [next, prev]);
@@ -114,7 +114,7 @@ const DashboardInspirationWidget = () => {
         className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group"
       >
         {/* Background image with overlay */}
-        <div className="relative h-48 sm:h-48 md:h-52">
+        <div className="relative h-48 sm:h-48 md:h-52" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentSlide}
