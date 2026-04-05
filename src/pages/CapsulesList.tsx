@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Plus, Search, Filter, Clock, ArrowLeft,
-  MoreHorizontal, Edit, Trash2, Share2, Eye
+  MoreHorizontal, Edit, Trash2, Share2, Eye,
+  SortAsc, X, SlidersHorizontal
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
@@ -269,6 +270,8 @@ const CapsulesList = () => {
   const [typeFilter, setTypeFilter] = useState<CapsuleType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<CapsuleStatus | 'all'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'title' | 'memory_date'>('newest');
+  const [showFilters, setShowFilters] = useState(false);
   
   // Delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -398,18 +401,45 @@ const CapsulesList = () => {
     setDeleteDialogOpen(true);
   };
 
+  const hasActiveFilters = typeFilter !== 'all' || statusFilter !== 'all' || categoryFilter !== 'all' || searchQuery !== '';
+  const activeFilterCount = [typeFilter !== 'all', statusFilter !== 'all', categoryFilter !== 'all', searchQuery !== ''].filter(Boolean).length;
+
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setTypeFilter('all');
+    setStatusFilter('all');
+    setCategoryFilter('all');
+  };
+
   // Filter capsules
-  const filteredCapsules = capsules.filter(capsule => {
-    const matchesSearch = searchQuery === '' || 
-      capsule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      capsule.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      capsule.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
-    const matchesCategory = categoryFilter === 'all' || 
-      (capsuleCategories[capsule.id]?.id === categoryFilter);
-    return matchesSearch && matchesType && matchesStatus && matchesCategory;
-  });
+  const filteredCapsules = capsules
+    .filter(capsule => {
+      const matchesSearch = searchQuery === '' || 
+        capsule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
+      const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
+      const matchesCategory = categoryFilter === 'all' || 
+        (capsuleCategories[capsule.id]?.id === categoryFilter);
+      return matchesSearch && matchesType && matchesStatus && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'memory_date':
+          const dateA = a.memory_date ? new Date(a.memory_date).getTime() : 0;
+          const dateB = b.memory_date ? new Date(b.memory_date).getTime() : 0;
+          return dateB - dateA;
+        case 'newest':
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
 
   if (loading || isLoading) {
     return (
@@ -486,66 +516,151 @@ const CapsulesList = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-6 p-4 rounded-2xl border border-border bg-card"
+          className="mb-6 space-y-3"
         >
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* Search + toggle filters row */}
+          <div className="flex gap-2">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder={t('list.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 pr-10"
               />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
-            
-            <div className="flex gap-3 overflow-x-auto">
-              <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as CapsuleType | 'all')}>
-                <SelectTrigger className="w-[140px]">
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t('list.typeFilters.all')}</SelectItem>
-                  <SelectItem value="text">{t('list.typeFilters.text')}</SelectItem>
-                  <SelectItem value="photo">{t('list.typeFilters.photo')}</SelectItem>
-                  <SelectItem value="video">{t('list.typeFilters.video')}</SelectItem>
-                  <SelectItem value="audio">{t('list.typeFilters.audio')}</SelectItem>
-                  <SelectItem value="mixed">{t('list.typeFilters.mixed')}</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CapsuleStatus | 'all')}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Statut" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t('list.statusFilters.all')}</SelectItem>
-                  <SelectItem value="draft">{t('list.statusFilters.draft')}</SelectItem>
-                  <SelectItem value="published">{t('list.statusFilters.published')}</SelectItem>
-                  <SelectItem value="scheduled">{t('list.statusFilters.scheduled')}</SelectItem>
-                  <SelectItem value="archived">{t('list.statusFilters.archived')}</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="w-[160px]">
-                  <SelectValue placeholder={t('list.categoryFilters.all')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t('list.categoryFilters.all')}</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <span className="flex items-center gap-2">
-                        <span>{category.icon}</span>
-                        <span>{category.name_fr}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Button
+              variant={showFilters ? "secondary" : "outline"}
+              size="icon"
+              onClick={() => setShowFilters(!showFilters)}
+              className="relative shrink-0"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {activeFilterCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[10px] flex items-center justify-center font-bold">
+                  {activeFilterCount}
+                </span>
+              )}
+            </Button>
           </div>
+
+          {/* Expandable filter panel */}
+          {showFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="p-4 rounded-2xl border border-border bg-card space-y-3"
+            >
+              <div className="flex flex-wrap gap-3">
+                <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as CapsuleType | 'all')}>
+                  <SelectTrigger className="w-[140px]">
+                    <Filter className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t('list.typeFilters.all')}</SelectItem>
+                    <SelectItem value="text">{t('list.typeFilters.text')}</SelectItem>
+                    <SelectItem value="photo">{t('list.typeFilters.photo')}</SelectItem>
+                    <SelectItem value="video">{t('list.typeFilters.video')}</SelectItem>
+                    <SelectItem value="audio">{t('list.typeFilters.audio')}</SelectItem>
+                    <SelectItem value="mixed">{t('list.typeFilters.mixed')}</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CapsuleStatus | 'all')}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t('list.statusFilters.all')}</SelectItem>
+                    <SelectItem value="draft">{t('list.statusFilters.draft')}</SelectItem>
+                    <SelectItem value="published">{t('list.statusFilters.published')}</SelectItem>
+                    <SelectItem value="scheduled">{t('list.statusFilters.scheduled')}</SelectItem>
+                    <SelectItem value="archived">{t('list.statusFilters.archived')}</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="w-[160px]">
+                    <SelectValue placeholder={t('list.categoryFilters.all')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t('list.categoryFilters.all')}</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        <span className="flex items-center gap-2">
+                          <span>{category.icon}</span>
+                          <span>{category.name_fr}</span>
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
+                  <SelectTrigger className="w-[160px]">
+                    <SortAsc className="w-4 h-4 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">{t('list.sort.newest')}</SelectItem>
+                    <SelectItem value="oldest">{t('list.sort.oldest')}</SelectItem>
+                    <SelectItem value="title">{t('list.sort.title')}</SelectItem>
+                    <SelectItem value="memory_date">{t('list.sort.memoryDate', 'Date du souvenir')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Active filters chips */}
+              {hasActiveFilters && (
+                <div className="flex items-center gap-2 flex-wrap pt-1">
+                  <span className="text-xs text-muted-foreground">{t('list.activeFilters', 'Filtres actifs :')}</span>
+                  {searchQuery && (
+                    <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-destructive/10" onClick={() => setSearchQuery('')}>
+                      « {searchQuery.slice(0, 20)}{searchQuery.length > 20 ? '…' : ''} »
+                      <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  {typeFilter !== 'all' && (
+                    <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-destructive/10" onClick={() => setTypeFilter('all')}>
+                      {t(`list.typeFilters.${typeFilter}`)}
+                      <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  {statusFilter !== 'all' && (
+                    <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-destructive/10" onClick={() => setStatusFilter('all')}>
+                      {t(`list.statusFilters.${statusFilter}`)}
+                      <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  {categoryFilter !== 'all' && (
+                    <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-destructive/10" onClick={() => setCategoryFilter('all')}>
+                      {categories.find(c => c.id === categoryFilter)?.name_fr}
+                      <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  <button onClick={clearAllFilters} className="text-xs text-primary hover:underline ml-1">
+                    {t('list.clearFilters', 'Tout effacer')}
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Results count with active filter hint */}
+          {hasActiveFilters && (
+            <p className="text-sm text-muted-foreground">
+              {filteredCapsules.length === 0
+                ? t('list.noResults')
+                : t('list.filteredCount', '{{count}} souvenir(s) trouvé(s)', { count: filteredCapsules.length })}
+            </p>
+          )}
         </motion.div>
 
         {/* Capsules - Featured + Grid */}
