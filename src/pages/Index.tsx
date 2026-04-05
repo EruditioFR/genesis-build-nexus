@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useABVariant } from "@/lib/abTest";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
@@ -18,10 +19,12 @@ const ContactSection = lazy(() => import("@/components/landing/ContactSection"))
 const CTASection = lazy(() => import("@/components/landing/CTASection"));
 const Footer = lazy(() => import("@/components/landing/Footer"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
+const IndexV2 = lazy(() => import("@/pages/IndexV2"));
 
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const variant = useABVariant('landing', 2);
 
   useEffect(() => {
     if (!loading && user) {
@@ -41,6 +44,19 @@ const Index = () => {
   // If user is logged in, they'll be redirected
   if (user) {
     return null;
+  }
+
+  // A/B test: variant 1 = new modern landing page
+  if (variant === 1) {
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
+          <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        <IndexV2 />
+      </Suspense>
+    );
   }
 
   return (

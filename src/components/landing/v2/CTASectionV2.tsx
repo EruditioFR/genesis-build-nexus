@@ -1,0 +1,49 @@
+import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+
+const CTASectionV2 = () => {
+  const { t } = useTranslation('landing');
+  const navigate = useNavigate();
+
+  return (
+    <section className="py-20 md:py-28 bg-gradient-to-br from-[hsl(var(--navy))] via-[hsl(220,30%,15%)] to-[hsl(var(--navy))] relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-10 right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl" />
+      </div>
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6">
+            {t('v2.ctaFinal.title')}
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--gold-light))] to-[hsl(var(--terracotta-light))]">
+              {t('v2.ctaFinal.titleHighlight')}
+            </span>
+          </h2>
+          <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
+            {t('v2.ctaFinal.subtitle')}
+          </p>
+          <Button
+            size="lg"
+            onClick={() => navigate('/signup')}
+            className="bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--terracotta))] hover:opacity-90 text-white text-lg px-8 py-6 rounded-xl shadow-2xl shadow-accent/30"
+          >
+            {t('v2.ctaFinal.button')}
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+          <p className="text-white/50 text-sm mt-6">{t('v2.ctaFinal.trust')}</p>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default CTASectionV2;

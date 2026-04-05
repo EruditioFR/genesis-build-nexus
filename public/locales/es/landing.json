@@ -194,8 +194,18 @@
     "title": "¿Tienes alguna pregunta?",
     "titleHighlight": "Escríbenos",
     "subtitle": "Nuestro equipo responde en 48 horas. No dudes en contactarnos.",
-    "fields": { "name": "Tu nombre", "email": "Tu email", "subject": "Asunto", "message": "Tu mensaje" },
-    "placeholders": { "name": "Juan Pérez", "email": "juan@ejemplo.com", "subject": "Pregunta sobre FamilyGarden", "message": "Hola, me gustaría..." },
+    "fields": {
+      "name": "Tu nombre",
+      "email": "Tu email",
+      "subject": "Asunto",
+      "message": "Tu mensaje"
+    },
+    "placeholders": {
+      "name": "Juan Pérez",
+      "email": "juan@ejemplo.com",
+      "subject": "Pregunta sobre FamilyGarden",
+      "message": "Hola, me gustaría..."
+    },
     "submit": "Enviar mensaje",
     "sending": "Enviando...",
     "success": "¡Mensaje enviado! Te responderemos pronto.",
@@ -236,6 +246,111 @@
       "terms": "Términos",
       "legalNotice": "Aviso legal",
       "gdpr": "RGPD"
+    }
+  },
+  "v2": {
+    "hero": {
+      "badge": "🌱 Preserva lo que realmente importa",
+      "title": "Tus recuerdos están dispersos.",
+      "titleHighlight": "Un día, desaparecerán.",
+      "subtitle": "Entre la nube, las redes sociales y los viejos discos duros, tus fotos y vídeos familiares se están perdiendo. Family Garden los reúne en un espacio privado, duradero y organizado.",
+      "cta": "Proteger mis recuerdos",
+      "trust": {
+        "private": "100% privado",
+        "durable": "Almacenamiento duradero",
+        "family": "Para toda la familia"
+      }
+    },
+    "painPoints": {
+      "badge": "El problema",
+      "title": "Tus recuerdos merecen algo mejor",
+      "subtitle": "Las herramientas que usas hoy no fueron diseñadas para preservar recuerdos familiares.",
+      "items": {
+        "scattered": {
+          "title": "Dispersos en 10 apps",
+          "description": "Google Photos, iCloud, WhatsApp, Instagram... Tus recuerdos están dispersos e imposibles de encontrar."
+        },
+        "ephemeral": {
+          "title": "Stories efímeras",
+          "description": "Las stories desaparecen en 24 horas. Los posts se pierden en el feed. Nada perdura."
+        },
+        "public": {
+          "title": "Redes sociales = público",
+          "description": "Tus momentos íntimos están expuestos, monetizados y ya no te pertenecen realmente."
+        }
+      },
+      "vs": {
+        "organized": {
+          "title": "Todo en un solo lugar",
+          "description": "Fotos, vídeos, textos y audio: cada recuerdo es completo y fácil de encontrar."
+        },
+        "durable": {
+          "title": "Hecho para durar",
+          "description": "Sin stories efímeras. Tus recuerdos están respaldados y pueden transmitirse a futuras generaciones."
+        },
+        "private": {
+          "title": "Privado por defecto",
+          "description": "Tú eliges quién ve qué. Sin anuncios, sin algoritmos, sin datos vendidos."
+        }
+      }
+    },
+    "solution": {
+      "badge": "La solución",
+      "title": "Diseñado para",
+      "titleHighlight": "tus recuerdos familiares",
+      "subtitle": "Cada función responde a una necesidad real de las familias que quieren preservar su historia.",
+      "features": {
+        "multimedia": {
+          "title": "Recuerdos multimedia",
+          "description": "Combina fotos, vídeos, texto y audio en un solo recuerdo rico y completo."
+        },
+        "timeline": {
+          "title": "Línea de tiempo interactiva",
+          "description": "Navega por tu historia familiar por décadas en una línea visual."
+        },
+        "circles": {
+          "title": "Círculos de compartir",
+          "description": "Comparte en privado con las personas adecuadas: familia cercana, abuelos, amigos."
+        },
+        "export": {
+          "title": "Exportación y respaldo",
+          "description": "Exporta a PDF, recupera tus medios. Tus recuerdos siempre son tuyos."
+        },
+        "familyTree": {
+          "title": "Árbol genealógico",
+          "description": "Vincula tus recuerdos a miembros de la familia y visualiza tus conexiones."
+        },
+        "podcast": {
+          "title": "Podcast de recuerdos",
+          "description": "Convierte tus relatos en podcasts de audio para escuchar y compartir en familia."
+        }
+      }
+    },
+    "audience": {
+      "badge": "¿Para quién?",
+      "title": "Pensado para",
+      "titleHighlight": "familias como la tuya",
+      "profiles": {
+        "parents": {
+          "title": "Padres jóvenes",
+          "description": "Captura los primeros pasos, primeras palabras y todos esos momentos mágicos antes de que se desvanezcan."
+        },
+        "families": {
+          "title": "Familias multigeneracionales",
+          "description": "Conecta abuelos, padres e hijos en torno a una historia compartida."
+        },
+        "legacy": {
+          "title": "Transmitir un legado",
+          "description": "Preserva relatos, tradiciones y recuerdos para las futuras generaciones."
+        }
+      }
+    },
+    "ctaFinal": {
+      "title": "Empieza antes de que",
+      "titleHighlight": "el próximo recuerdo se pierda",
+      "subtitle": "Crea tu primer recuerdo en 1 minuto. Gratis, sin compromiso.",
+      "button": "Crear mi primer recuerdo",
+      "trust": "Registro gratuito • Sin tarjeta de crédito • Tus datos son privados"
     }
   }
 }
