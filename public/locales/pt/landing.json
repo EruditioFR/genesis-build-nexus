@@ -1,0 +1,251 @@
+{
+  "hero": {
+    "badge": "Crie o seu diário de família, simplesmente",
+    "title": "Todas as suas memórias finalmente reunidas",
+    "subtitle": "Fotos, vídeos, textos e áudios: reúna as suas memórias num espaço privado, seguro e cheio de emoção, para as partilhar simplesmente com os seus entes queridos.",
+    "cta": {
+      "primary": "Começar gratuitamente",
+      "secondary": "Ver a demonstração"
+    },
+    "trust": {
+      "encryption": "Dados seguros",
+      "gdpr": "Alojamento UE (RGPD)",
+      "legacy": "Círculos privados"
+    }
+  },
+  "features": {
+    "badge": "Funcionalidades",
+    "title": "Tudo o que precisa para",
+    "titleHighlight": "reviver as suas memórias no dia a dia",
+    "subtitle": "Crie memórias completas (média + relato), organize-as numa cronologia e partilhe-as em privado com a sua família.",
+    "mediaTypes": {
+      "photos": "Fotos",
+      "videos": "Vídeos",
+      "audio": "Áudio",
+      "texts": "Textos"
+    },
+    "items": {
+      "capsules": {
+        "title": "Memórias multimédia",
+        "description": "Cada memória reúne fotos, vídeos, texto e áudio, com uma data, um local e as pessoas associadas."
+      },
+      "timeline": {
+        "title": "Cronologia Interativa por Décadas",
+        "description": "Visualize a sua história familiar numa linha cronológica interativa. Navegue por décadas e explore as suas memórias no seu contexto temporal."
+      },
+      "circles": {
+        "title": "Círculos de Partilha Seguros",
+        "description": "Crie círculos (família próxima, avós, padrinhos/madrinhas) e escolha quem vê o quê."
+      },
+      "security": {
+        "title": "Confidencialidade e controlo",
+        "description": "Acesso protegido, partilha controlada e alojamento conforme: mantém o controlo sobre as suas memórias."
+      },
+      "export": {
+        "title": "Exportação PDF e Backup",
+        "description": "Exporte em PDF e recupere os seus média: as suas memórias continuam a ser suas."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "Como funciona?",
+    "title": "Crie uma memória",
+    "titleHighlight": "em 4 passos simples",
+    "stepLabel": "Passo",
+    "capsuleExplainer": {
+      "title": "O que é uma \"memória\" no FamilyGarden?",
+      "description": "Uma memória = um momento completo: fotos/vídeo + texto + áudio, organizado e partilhável em privado."
+    },
+    "steps": {
+      "step1": {
+        "title": "Crie a sua conta",
+        "description": "Registe-se gratuitamente e comece a documentar a sua história em poucos minutos."
+      },
+      "step2": {
+        "title": "Adicione as suas memórias",
+        "description": "Carregue fotos, vídeos, gravações áudio e escreva as suas histórias com o nosso editor intuitivo."
+      },
+      "step3": {
+        "title": "Organize e partilhe",
+        "description": "Estruture as suas memórias em capítulos de vida e convide a sua família a contribuir."
+      },
+      "step4": {
+        "title": "Reviva quando quiser",
+        "description": "Encontre os seus momentos num instante graças à cronologia, e partilhe-os com os seus entes queridos."
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Testemunhos",
+    "title": "Eles preservam o seu",
+    "titleHighlight": "legado",
+    "items": {
+      "t1": {
+        "quote": "Consegui preservar todas as histórias da minha avó. Os meus netos vão descobrir o seu incrível percurso.",
+        "author": "Maria D.",
+        "role": "Reformada, 68 anos"
+      },
+      "t2": {
+        "quote": "Como empresário, documentar o meu percurso era essencial. O Family Garden oferece-me uma plataforma elegante para inspirar as futuras gerações.",
+        "author": "David L.",
+        "role": "Empresário, 45 anos"
+      },
+      "t3": {
+        "quote": "Graças às funcionalidades colaborativas, toda a minha família pôde contribuir para a memória do nosso pai. Um presente inestimável.",
+        "author": "Sofia M.",
+        "role": "Cuidadora familiar, 35 anos"
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Preços",
+    "title": "Um acompanhamento para cada",
+    "titleHighlight": "história de vida",
+    "subtitle": "Comece gratuitamente e evolua conforme as suas necessidades. Sem custos ocultos.",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "discount": "-17%",
+    "perMonth": "mês",
+    "perYear": "ano",
+    "popular": "O mais popular",
+    "loading": "A carregar...",
+    "error": "Erro ao criar o pagamento",
+    "cta": {
+      "free": "Começar gratuitamente",
+      "premium": "Experimentar Premium",
+      "heritage": "Escolher Legado"
+    },
+    "plans": {
+      "free": {
+        "name": "Gratuito",
+        "description": "Perfeito para começar a preservar as suas memórias",
+        "features": {
+          "storage": "250 MB de armazenamento",
+          "formats": "Memórias em formato texto e foto",
+          "sharing": "Partilhas ilimitadas",
+          "timeline": "Cronologia básica",
+          "ads": "Sem publicidade"
+        }
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "Para os criadores de conteúdo regulares",
+        "promo": "Oferta de lançamento",
+        "promoDetail": "-50% durante 3 meses",
+        "promoAfter": "depois {{price}}€/mês após 3 meses",
+        "originalPrice": "9,99",
+        "features": {
+          "storage": "10 GB de armazenamento",
+          "formats": "Memórias em formato texto, foto, vídeo e áudio",
+          "sharing": "Partilhas ilimitadas",
+          "timeline": "Cronologia avançada",
+          "noAds": "Sem publicidade"
+        }
+      },
+      "heritage": {
+        "name": "Legado",
+        "description": "Para criar a sua árvore genealógica e ligar as suas memórias a pessoas",
+        "features": {
+          "storage": "20 GB de armazenamento",
+          "formats": "Memórias em formato texto, foto, vídeo e áudio",
+          "sharing": "Partilhas ilimitadas",
+          "timeline": "Cronologia avançada",
+          "familyTree": "Árvore genealógica interativa",
+          "podcast": "Criação de podcast a partir das suas memórias",
+          "vipSupport": "Suporte VIP via WhatsApp",
+          "noAds": "Sem publicidade"
+        }
+      }
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Perguntas",
+    "titleHighlight": "frequentes",
+    "items": {
+      "q1": {
+        "question": "O que é uma memória no FamilyGarden?",
+        "answer": "Uma memória é um contentor digital seguro que preserva os seus momentos sob a forma de textos, fotos, vídeos e áudio. É a sua história pessoal, organizada cronologicamente e pronta para ser transmitida às gerações futuras. Cada memória é privada e acessível apenas às pessoas que autorizar."
+      },
+      "q2": {
+        "question": "Os meus dados estão seguros?",
+        "answer": "Absolutamente. Os seus dados são encriptados com os padrões mais elevados (AES-256), guardados diariamente em servidores seguros, e mantém controlo total sobre quem pode aceder. O nosso compromisso: as suas memórias permanecem privadas."
+      },
+      "q3": {
+        "question": "Como funciona a partilha familiar?",
+        "answer": "Pode criar círculos de confiança (família, amigos) e convidar membros por email. Para cada círculo, define as permissões: apenas leitura, comentários ou contribuição. Os membros podem adicionar as suas próprias perspetivas sobre as suas memórias partilhadas."
+      },
+      "q4": {
+        "question": "O que acontece com os meus dados se não renovar?",
+        "answer": "Os seus dados nunca são eliminados automaticamente. Se passar de Premium para Gratuito, mantém o acesso de leitura a todo o seu conteúdo. Apenas as funcionalidades avançadas são desativadas. Pode sempre exportar os seus dados a qualquer momento."
+      },
+      "q5": {
+        "question": "Como funciona o legado póstumo?",
+        "answer": "Com a oferta Legado, designa contactos de confiança que serão notificados e receberão acesso a certas memórias conforme os seus desejos. Pode programar revelações diferidas, definir condições de acesso e deixar mensagens pessoais."
+      },
+      "q6": {
+        "question": "Existe uma aplicação móvel?",
+        "answer": "A plataforma web é totalmente responsiva e funciona perfeitamente em dispositivos móveis. Uma aplicação nativa iOS e Android está prevista no nosso roteiro para permitir a gravação direta e o modo offline."
+      }
+    }
+  },
+  "contact": {
+    "badge": "Contacto",
+    "title": "Tem uma pergunta?",
+    "titleHighlight": "Escreva-nos",
+    "subtitle": "A nossa equipa responde-lhe em 48h. Não hesite em contactar-nos para qualquer questão.",
+    "fields": {
+      "name": "O seu nome",
+      "email": "O seu email",
+      "subject": "Assunto",
+      "message": "A sua mensagem"
+    },
+    "placeholders": {
+      "name": "João Silva",
+      "email": "joao@exemplo.pt",
+      "subject": "Questão sobre o FamilyGarden",
+      "message": "Olá, gostaria de..."
+    },
+    "submit": "Enviar mensagem",
+    "sending": "A enviar...",
+    "success": "Mensagem enviada! Responderemos em breve.",
+    "error": "Ocorreu um erro. Por favor, tente novamente."
+  },
+  "cta": {
+    "title": "As suas memórias merecem",
+    "titleHighlight": "ser preservadas",
+    "subtitle": "Comece hoje: crie a sua primeira memória em 1 minuto. Gratuito, sem compromisso.",
+    "button": "Criar a minha primeira memória",
+    "trust": "Registo gratuito • Sem cartão de crédito necessário • Os seus dados permanecem privados"
+  },
+  "footer": {
+    "description": "Um espaço privado para contar as suas memórias e partilhar os momentos que contam.",
+    "copyright": "Todos os direitos reservados.",
+    "madeWith": "Feito com",
+    "toPreserve": "para preservar as suas memórias",
+    "categories": {
+      "product": "Produto",
+      "company": "Empresa",
+      "resources": "Recursos",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Funcionalidades",
+      "pricing": "Preços",
+      "roadmap": "Roteiro",
+      "changelog": "Novidades",
+      "about": "Sobre",
+      "blog": "Blog",
+      "careers": "Carreiras",
+      "partners": "Parceiros",
+      "helpCenter": "Centro de ajuda",
+      "faq": "FAQ",
+      "guides": "Guias",
+      "community": "Comunidade",
+      "privacy": "Privacidade",
+      "terms": "Condições de venda",
+      "legalNotice": "Aviso legal",
+      "gdpr": "RGPD"
+    }
+  }
+}
