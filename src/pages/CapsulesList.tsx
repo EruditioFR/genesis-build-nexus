@@ -401,18 +401,45 @@ const CapsulesList = () => {
     setDeleteDialogOpen(true);
   };
 
+  const hasActiveFilters = typeFilter !== 'all' || statusFilter !== 'all' || categoryFilter !== 'all' || searchQuery !== '';
+  const activeFilterCount = [typeFilter !== 'all', statusFilter !== 'all', categoryFilter !== 'all', searchQuery !== ''].filter(Boolean).length;
+
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setTypeFilter('all');
+    setStatusFilter('all');
+    setCategoryFilter('all');
+  };
+
   // Filter capsules
-  const filteredCapsules = capsules.filter(capsule => {
-    const matchesSearch = searchQuery === '' || 
-      capsule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      capsule.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      capsule.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
-    const matchesCategory = categoryFilter === 'all' || 
-      (capsuleCategories[capsule.id]?.id === categoryFilter);
-    return matchesSearch && matchesType && matchesStatus && matchesCategory;
-  });
+  const filteredCapsules = capsules
+    .filter(capsule => {
+      const matchesSearch = searchQuery === '' || 
+        capsule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        capsule.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesType = typeFilter === 'all' || capsule.capsule_type === typeFilter;
+      const matchesStatus = statusFilter === 'all' || capsule.status === statusFilter;
+      const matchesCategory = categoryFilter === 'all' || 
+        (capsuleCategories[capsule.id]?.id === categoryFilter);
+      return matchesSearch && matchesType && matchesStatus && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'memory_date':
+          const dateA = a.memory_date ? new Date(a.memory_date).getTime() : 0;
+          const dateB = b.memory_date ? new Date(b.memory_date).getTime() : 0;
+          return dateB - dateA;
+        case 'newest':
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
 
   if (loading || isLoading) {
     return (
