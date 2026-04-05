@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Plus, Search, Filter, Clock, ArrowLeft,
-  MoreHorizontal, Edit, Trash2, Share2, Eye
+  MoreHorizontal, Edit, Trash2, Share2, Eye,
+  SortAsc, X, SlidersHorizontal
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
