@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   Sparkles,
   ChevronRight,
   ChevronDown,
+  ChevronLeft,
   Check,
   Trophy,
-  Lightbulb,
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -22,51 +22,184 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
+import enfanceImg from '@/assets/inspirations/enfance.jpg';
+import ecoleImg from '@/assets/inspirations/ecole.jpg';
+import musiquesImg from '@/assets/inspirations/musiques.jpg';
+import familleImg from '@/assets/inspirations/famille.jpg';
+import vieImg from '@/assets/inspirations/vie.jpg';
+
+const SLIDE_IMAGES: Record<string, string> = {
+  enfance: enfanceImg,
+  ecole: ecoleImg,
+  musiques: musiquesImg,
+  famille: familleImg,
+  'vie-personnelle': vieImg,
+};
+
+const SLIDE_QUESTIONS: Record<string, string> = {
+  enfance: 'À quoi ressemblait la maison de ton enfance ?',
+  ecole: 'Un professeur t\'a marqué. Pourquoi ?',
+  musiques: 'Quelle chanson te ramène instantanément en arrière ?',
+  famille: 'Quelle tradition aimerais-tu transmettre ?',
+  'vie-personnelle': 'Quel moment a changé le cours de ta vie ?',
+};
+
+const AUTOPLAY_INTERVAL = 6000;
+
 const DashboardInspirationWidget = () => {
   const { usedPromptIds, loading, memoryCategories, getCategoryProgress, getTotalProgress } = useMemoryPrompts();
   const [open, setOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(1);
 
   const totalProgress = getTotalProgress();
+  const slideCount = memoryCategories.length;
+
+  const goTo = useCallback((index: number, dir?: number) => {
+    setDirection(dir ?? (index > currentSlide ? 1 : -1));
+    setCurrentSlide(index);
+  }, [currentSlide]);
+
+  const next = useCallback(() => {
+    setDirection(1);
+    setCurrentSlide(prev => (prev + 1) % slideCount);
+  }, [slideCount]);
+
+  const prev = useCallback(() => {
+    setDirection(-1);
+    setCurrentSlide(prev => (prev - 1 + slideCount) % slideCount);
+  }, [slideCount]);
+
+  // Autoplay
+  useEffect(() => {
+    if (dismissed || open) return;
+    const timer = setInterval(next, AUTOPLAY_INTERVAL);
+    return () => clearInterval(timer);
+  }, [dismissed, open, next]);
 
   if (loading || dismissed) return null;
 
+  const currentCategory = memoryCategories[currentSlide];
+  const slideImage = SLIDE_IMAGES[currentCategory?.id] || enfanceImg;
+  const slideQuestion = SLIDE_QUESTIONS[currentCategory?.id] || '';
+
+  const variants = {
+    enter: (d: number) => ({ x: d > 0 ? 300 : -300, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (d: number) => ({ x: d > 0 ? -300 : 300, opacity: 0 }),
+  };
+
   return (
     <>
-      {/* Sticky banner - warm & joyful */}
+      {/* Slider banner */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-30 -mx-4 sm:-mx-6 md:-mx-8 mb-5"
+        className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group"
       >
-        <button
-          onClick={() => setOpen(true)}
-          className={cn(
-            'w-full px-4 sm:px-6 py-3 flex items-center justify-center gap-3',
-            'bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400',
-            'hover:from-amber-500 hover:via-orange-500 hover:to-rose-500',
-            'transition-all cursor-pointer group',
-            'shadow-md shadow-orange-200/50 dark:shadow-orange-900/30'
-          )}
-        >
-          <span className="text-lg animate-bounce">✍️</span>
-          <span className="text-sm sm:text-base font-bold text-white drop-shadow-sm">
-            50 questions pour vous guider dans l'écriture de vos souvenirs
-          </span>
-          <span className="text-xs sm:text-sm font-medium text-white/90 hidden sm:inline">
-            — Laissez-vous inspirer, question par question !
-          </span>
-          <ChevronRight className="h-4 w-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
-        </button>
-        {/* Dismiss button */}
-        <button
-          onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-white/60 hover:text-white hover:bg-white/20 transition-colors"
-          aria-label="Fermer"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        {/* Background image with overlay */}
+        <div className="relative h-44 sm:h-48 md:h-52">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={currentSlide}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              className="absolute inset-0"
+            >
+              <img
+                src={slideImage}
+                alt={currentCategory?.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Content overlay */}
+          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 z-10">
+            <AnimatePresence custom={direction} mode="wait">
+              <motion.div
+                key={currentSlide}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.4, ease: 'easeInOut', delay: 0.1 }}
+                className="max-w-lg"
+              >
+                {/* Category badge */}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-3">
+                  <span>{currentCategory?.emoji}</span>
+                  {currentCategory?.title}
+                </span>
+
+                {/* Question */}
+                <p className="text-white text-lg sm:text-xl md:text-2xl font-display leading-snug mb-4 drop-shadow-md">
+                  « {slideQuestion} »
+                </p>
+
+                {/* CTA */}
+                <button
+                  onClick={() => setOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/90 hover:bg-white text-foreground text-sm font-semibold transition-all shadow-md hover:shadow-lg"
+                >
+                  <Sparkles className="h-4 w-4 text-amber-500" />
+                  Laissez-vous guider par nos 50 questions
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation arrows */}
+          <button
+            onClick={(e) => { e.stopPropagation(); prev(); }}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors opacity-0 group-hover:opacity-100"
+            aria-label="Précédent"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); next(); }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors opacity-0 group-hover:opacity-100"
+            aria-label="Suivant"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          {/* Dots */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {memoryCategories.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => { e.stopPropagation(); goTo(i); }}
+                className={cn(
+                  'h-2 rounded-full transition-all duration-300',
+                  i === currentSlide ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
+                )}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Dismiss */}
+          <button
+            onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
+            className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white/70 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+            aria-label="Fermer"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </motion.div>
 
       {/* Dialog with categories & questions */}
