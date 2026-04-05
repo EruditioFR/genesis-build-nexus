@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useABVariant } from "@/lib/abTest";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
@@ -18,6 +19,7 @@ const ContactSection = lazy(() => import("@/components/landing/ContactSection"))
 const CTASection = lazy(() => import("@/components/landing/CTASection"));
 const Footer = lazy(() => import("@/components/landing/Footer"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
+const IndexV2 = lazy(() => import("@/pages/IndexV2"));
 
 const Index = () => {
   const { user, loading } = useAuth();
