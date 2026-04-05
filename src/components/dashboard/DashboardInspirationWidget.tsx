@@ -135,7 +135,7 @@ const DashboardInspirationWidget = () => {
                 loading="lazy"
               />
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent" />
             </motion.div>
           </AnimatePresence>
 
