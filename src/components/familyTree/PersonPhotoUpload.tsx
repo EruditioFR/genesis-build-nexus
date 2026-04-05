@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { useFamilyPhotoUrl } from '@/hooks/useFamilyPhotoUrl';
+import { optimizeImageForUpload } from '@/lib/imageCompression';
 import type { FamilyPerson } from '@/types/familyTree';
 
 /** Extract relative storage path from either a full public URL or a relative path */
@@ -49,6 +50,13 @@ export function PersonPhotoUpload({ person, onUpdate }: PersonPhotoUploadProps) 
     setIsUploading(true);
 
     try {
+      // Optimize image before upload (resize + WebP conversion, target < 1MB)
+      let processedFile: File = file;
+      try {
+        processedFile = await optimizeImageForUpload(file);
+      } catch {
+        // Continue with original if optimization fails
+      }
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
