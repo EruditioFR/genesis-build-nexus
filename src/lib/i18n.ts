@@ -6,6 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 export const supportedLanguages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
   { code: 'ko', name: '한국어', flag: '🇰🇷' },
   { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -19,7 +20,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'fr',
-    supportedLngs: ['fr', 'en', 'ko', 'zh', 'es'],
+    supportedLngs: ['fr', 'en', 'pt', 'ko', 'zh', 'es'],
     ns: ['common', 'landing', 'auth', 'dashboard', 'capsules', 'errors', 'familyTree', 'legal'],
     defaultNS: 'common',
     backend: {
