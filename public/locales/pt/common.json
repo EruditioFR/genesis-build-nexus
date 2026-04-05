@@ -1,0 +1,303 @@
+{
+  "nav": {
+    "features": "Funcionalidades",
+    "howItWorks": "Como funciona",
+    "pricing": "Preços",
+    "about": "Sobre",
+    "contact": "Contacto",
+    "login": "Iniciar sessão",
+    "signup": "Começar gratuitamente",
+    "dashboard": "Início",
+    "profile": "O meu perfil",
+    "logout": "Terminar sessão"
+  },
+  "auth": {
+    "signIn": "Iniciar sessão",
+    "signOut": "Terminar sessão",
+    "startFree": "Começar gratuitamente"
+  },
+  "footer": {
+    "tagline": "Preserve as suas memórias familiares para as gerações futuras.",
+    "product": "Produto",
+    "features": "Funcionalidades",
+    "howItWorks": "Como funciona",
+    "pricing": "Preços",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "privacyPolicy": "Política de privacidade",
+    "termsOfUse": "Termos de utilização",
+    "termsOfSale": "Condições de venda",
+    "legalNotice": "Aviso legal",
+    "contact": "Contacto",
+    "email": "contact@familygarden.fr",
+    "copyright": "© {{year}} FamilyGarden. Todos os direitos reservados.",
+    "madeWith": "Feito com",
+    "inFrance": "em França"
+  },
+  "buttons": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Criar",
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "back": "Voltar",
+    "next": "Seguinte",
+    "previous": "Anterior",
+    "loading": "A carregar..."
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "email": "Endereço de email inválido",
+    "minLength": "Mínimo {{count}} caracteres",
+    "maxLength": "Máximo {{count}} caracteres"
+  },
+  "search": {
+    "placeholder": "Pesquisar...",
+    "inputPlaceholder": "Pesquisar por título, descrição ou palavras-chave...",
+    "dialogTitle": "Pesquisa global",
+    "noResults": "Nenhuma memória encontrada para \"{{query}}\"",
+    "resultsCount": "{{count}} resultado",
+    "resultsCount_other": "{{count}} resultados",
+    "startTyping": "Comece a escrever para pesquisar as suas memórias",
+    "searchingIn": "A pesquisar nas suas memórias",
+    "select": "selecionar",
+    "close": "fechar"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar tudo como lido",
+    "empty": "Sem notificações"
+  },
+  "tour": {
+    "buttons": {
+      "next": "Continuar",
+      "prev": "Voltar",
+      "done": "Concluir 🎉",
+      "progress": "Passo {{current}}/{{total}}",
+      "skip": "Saltar"
+    },
+    "welcome": {
+      "dashboard": {
+        "title": "Descubra o seu espaço",
+        "description": "Uma visita guiada rápida para se familiarizar com todas as funcionalidades do seu painel de controlo."
+      },
+      "capsule": {
+        "title": "Crie a sua primeira memória",
+        "description": "Aprenda a criar e organizar as suas memórias em alguns passos simples."
+      },
+      "familyTree": {
+        "title": "Explore a sua árvore",
+        "description": "Descubra como construir e navegar na sua árvore genealógica interativa."
+      },
+      "circles": {
+        "title": "Partilhe em família",
+        "description": "Aprenda a criar círculos de partilha para os seus entes queridos."
+      },
+      "duration": "~{{minutes}} min",
+      "start": "Iniciar a visita",
+      "later": "Mais tarde",
+      "skipHint": "Pode reiniciar esta visita a partir do menu a qualquer momento"
+    },
+    "titles": {
+      "dashboard": "Descobrir o painel de controlo",
+      "capsule": "Ajuda na criação de memórias",
+      "familyTree": "Descobrir a árvore",
+      "circles": "Descobrir os círculos"
+    },
+    "dashboard": {
+      "welcome": {
+        "title": "👋 Bem-vindo ao Family Garden!",
+        "description": "O seu espaço pessoal para preservar e transmitir as suas memórias de família. Siga esta visita para descobrir todas as funcionalidades em poucos minutos.",
+        "descriptionCompact": "Preserve e partilhe as suas memórias de família."
+      },
+      "quickActions": {
+        "title": "🚀 Crie a sua primeira memória",
+        "description": "É aqui que tudo começa! Clique em \"Nova memória\" para adicionar as suas fotos, vídeos, textos ou gravações áudio.",
+        "descriptionCompact": "Adicione fotos, vídeos ou textos aqui."
+      },
+      "stats": {
+        "title": "📊 O seu painel em números",
+        "description": "Visualize de relance a evolução da sua coleção: número de memórias criadas, ficheiros multimédia armazenados e círculos de partilha ativos.",
+        "descriptionCompact": "As suas estatísticas de relance."
+      },
+      "storage": {
+        "title": "💾 O seu espaço de armazenamento",
+        "description": "Acompanhe o seu consumo de espaço. A oferta gratuita inclui 500 MB. Passe para Premium para armazenamento ilimitado!",
+        "descriptionCompact": "500 MB gratuitos, ilimitado em Premium."
+      },
+      "recentCapsules": {
+        "title": "📦 As suas memórias recentes",
+        "description": "Encontre instantaneamente as suas últimas criações. Clique num cartão para consultar, modificar ou partilhar essa memória.",
+        "descriptionCompact": "As suas últimas criações aqui."
+      },
+      "navCapsules": {
+        "title": "🗂️ Biblioteca completa",
+        "description": "Aceda a todas as suas memórias organizadas por categorias: Viagens, Família, Eventos... Utilize os filtros para encontrar facilmente um momento preciso.",
+        "descriptionCompact": "Todas as suas memórias por categoria."
+      },
+      "navTimeline": {
+        "title": "📅 Cronologia visual",
+        "description": "Viaje no tempo! Visualize as suas memórias numa linha cronológica interativa, dos anos 40 até hoje.",
+        "descriptionCompact": "As suas memórias no tempo."
+      },
+      "navCircles": {
+        "title": "👨‍👩‍👧‍👦 Círculos de partilha",
+        "description": "Partilhe com total confidencialidade com os seus entes queridos. Crie círculos e convide-os por email.",
+        "descriptionCompact": "Partilhe com os seus entes queridos."
+      },
+      "navFamilyTree": {
+        "title": "🌳 Árvore genealógica",
+        "description": "Construa a sua árvore familiar interativa! Adicione os seus antepassados e associe memórias a cada pessoa. Disponível com Premium.",
+        "descriptionCompact": "A sua árvore familiar (Premium)."
+      },
+      "search": {
+        "title": "🔍 Pesquisa inteligente",
+        "description": "Encontre qualquer memória num instante. Escreva uma palavra-chave, um nome ou uma data para explorar a sua coleção.",
+        "descriptionCompact": "Encontre qualquer memória."
+      },
+      "notifications": {
+        "title": "🔔 Mantenha-se ligado",
+        "description": "Receba notificações quando um ente querido partilha uma memória, comenta as suas criações ou quando um evento importante se aproxima.",
+        "descriptionCompact": "Alertas de partilhas e comentários."
+      },
+      "userMenu": {
+        "title": "👤 O seu espaço pessoal",
+        "description": "Gerencie o seu perfil, personalize as suas definições, consulte a sua subscrição ou reinicie esta visita guiada a qualquer momento.",
+        "descriptionCompact": "Perfil e definições."
+      },
+      "complete": {
+        "title": "🎉 Está pronto!",
+        "description": "Parabéns, agora conhece as bases! Comece por criar a sua primeira memória — cada momento conta.",
+        "descriptionCompact": "Crie a sua primeira memória!"
+      }
+    },
+    "capsule": {
+      "category": {
+        "title": "📂 Categoria",
+        "description": "Escolha uma categoria para organizar a sua memória. Também pode criar categorias personalizadas.",
+        "descriptionCompact": "Organize por tema."
+      },
+      "type": {
+        "title": "📷 Tipo de memória",
+        "description": "Selecione o tipo de conteúdo: texto, foto, vídeo, áudio ou misto, conforme o que deseja guardar.",
+        "descriptionCompact": "Foto, vídeo, texto ou áudio."
+      },
+      "title": {
+        "title": "✏️ Título e descrição",
+        "description": "Dê um título evocativo à sua memória e adicione uma descrição para a encontrar facilmente.",
+        "descriptionCompact": "Dê nome à sua memória."
+      },
+      "media": {
+        "title": "📎 Ficheiros multimédia",
+        "description": "Adicione as suas fotos, vídeos ou ficheiros áudio. Pode arrastar e largar ou clicar para selecionar.",
+        "descriptionCompact": "Adicione os seus ficheiros aqui."
+      },
+      "date": {
+        "title": "📅 Data da memória",
+        "description": "Indique quando este momento aconteceu. Pode escolher uma data exata ou um período.",
+        "descriptionCompact": "Quando aconteceu."
+      },
+      "tags": {
+        "title": "🏷️ Etiquetas",
+        "description": "Adicione palavras-chave para encontrar facilmente esta memória mais tarde.",
+        "descriptionCompact": "Palavras-chave para encontrar."
+      },
+      "actions": {
+        "title": "💾 Guardar",
+        "description": "Guarde como rascunho para continuar mais tarde, ou publique diretamente a sua memória.",
+        "descriptionCompact": "Rascunho ou publicar."
+      },
+      "complete": {
+        "title": "🎉 É a sua vez!",
+        "description": "Agora conhece todos os passos para criar uma memória. Comece por escolher uma categoria!",
+        "descriptionCompact": "Vamos lá!"
+      }
+    },
+    "familyTree": {
+      "visualization": {
+        "title": "🌳 A sua árvore genealógica",
+        "description": "Visualize a sua família em forma de árvore interativa. Clique numa pessoa para ver os seus detalhes.",
+        "descriptionCompact": "Clique para ver os detalhes."
+      },
+      "addPerson": {
+        "title": "➕ Adicionar uma pessoa",
+        "description": "Clique aqui para adicionar um novo membro à sua árvore familiar.",
+        "descriptionCompact": "Novo membro aqui."
+      },
+      "zoom": {
+        "title": "🔍 Zoom e navegação",
+        "description": "Utilize os controlos de zoom para ajustar a vista. Também pode arrastar a árvore.",
+        "descriptionCompact": "Faça zoom e arraste."
+      },
+      "viewMode": {
+        "title": "👁️ Modo de vista",
+        "description": "Mude o modo de visualização: descendentes, ascendentes ou vista ampulheta centrada numa pessoa.",
+        "descriptionCompact": "Descendentes ou ascendentes."
+      },
+      "search": {
+        "title": "🔎 Pesquisar",
+        "description": "Encontre rapidamente uma pessoa na sua árvore através da pesquisa.",
+        "descriptionCompact": "Encontre uma pessoa."
+      },
+      "center": {
+        "title": "🎯 Centrar em...",
+        "description": "Selecione uma pessoa para centrar a vista nela.",
+        "descriptionCompact": "Centrar a vista."
+      },
+      "importExport": {
+        "title": "📥 Importar/Exportar",
+        "description": "Importe um ficheiro GEDCOM ou exporte a sua árvore em PDF ou GEDCOM.",
+        "descriptionCompact": "GEDCOM e PDF."
+      },
+      "personsList": {
+        "title": "📋 Lista de pessoas",
+        "description": "Consulte a lista completa de todas as pessoas da sua árvore.",
+        "descriptionCompact": "Ver toda a gente."
+      },
+      "minimap": {
+        "title": "🗺️ Mini-mapa",
+        "description": "Utilize o mini-mapa para navegar rapidamente numa árvore grande.",
+        "descriptionCompact": "Navegação rápida."
+      },
+      "complete": {
+        "title": "🎉 Pronto para explorar!",
+        "description": "A sua árvore genealógica espera por si. Comece por adicionar os seus entes queridos!",
+        "descriptionCompact": "Adicione os seus entes queridos!"
+      }
+    },
+    "circles": {
+      "header": {
+        "title": "👨‍👩‍👧‍👦 Os seus círculos de partilha",
+        "description": "Os círculos permitem-lhe partilhar as suas memórias com grupos específicos: família, amigos, etc.",
+        "descriptionCompact": "Grupos de partilha."
+      },
+      "create": {
+        "title": "➕ Criar um círculo",
+        "description": "Clique aqui para criar um novo círculo de partilha.",
+        "descriptionCompact": "Novo círculo aqui."
+      },
+      "list": {
+        "title": "📋 Os seus círculos",
+        "description": "Encontre todos os seus círculos aqui. Clique num círculo para ver os seus membros.",
+        "descriptionCompact": "Os seus grupos ativos."
+      },
+      "details": {
+        "title": "👥 Detalhes do círculo",
+        "description": "Consulte e gerencie os membros do seu círculo a partir deste painel.",
+        "descriptionCompact": "Gerencie os membros."
+      },
+      "invite": {
+        "title": "✉️ Convidar membros",
+        "description": "Convide novas pessoas por email. Elas receberão um link para se juntar ao seu círculo.",
+        "descriptionCompact": "Convide por email."
+      },
+      "complete": {
+        "title": "🎉 Partilhe as suas memórias!",
+        "description": "Crie o seu primeiro círculo e convide os seus entes queridos para partilhar as suas memórias com toda a intimidade.",
+        "descriptionCompact": "Convide os seus entes queridos!"
+      }
+    }
+  }
+}

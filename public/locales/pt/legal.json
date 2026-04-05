@@ -1,0 +1,519 @@
+{
+  "common": {
+    "backToHome": "Voltar ao início",
+    "lastUpdated": "Última atualização: {{date}}",
+    "contactEmail": "contact@familygarden.fr",
+    "privacyEmail": "privacy@familygarden.fr",
+    "dpoEmail": "dpo@familygarden.fr"
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "sections": {
+      "introduction": {
+        "title": "1. Introdução",
+        "content": "O Family Garden compromete-se a proteger a privacidade dos seus utilizadores. Esta política de privacidade explica como recolhemos, utilizamos, armazenamos e protegemos os seus dados pessoais em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD) de 27 de abril de 2016 e a lei Informatique et Libertés de 6 de janeiro de 1978 alterada.",
+        "controller": "Responsável pelo tratamento:",
+        "controllerName": "Family Garden SAS",
+        "email": "Email:"
+      },
+      "dataCollected": {
+        "title": "2. Dados recolhidos",
+        "intro": "Recolhemos os seguintes tipos de dados:",
+        "items": {
+          "identification": "Dados de identificação:",
+          "identificationDesc": "nome, apelido, endereço de email",
+          "profile": "Dados de perfil:",
+          "profileDesc": "foto de perfil, biografia, data de nascimento",
+          "userContent": "Conteúdo do utilizador:",
+          "userContentDesc": "memórias digitais, fotos, vídeos, textos, árvores genealógicas",
+          "technical": "Dados técnicos:",
+          "technicalDesc": "endereço IP, tipo de navegador, dados de ligação, registos de acesso",
+          "payment": "Dados de pagamento:",
+          "paymentDesc": "tratados exclusivamente pelo nosso prestador Stripe (nunca armazenamos os seus dados bancários)"
+        }
+      },
+      "dataUsage": {
+        "title": "3. Utilização dos dados",
+        "intro": "Os seus dados são utilizados para:",
+        "items": [
+          "Fornecer e melhorar os nossos serviços de memórias digitais",
+          "Gerir a sua conta e as suas subscrições",
+          "Processar os seus pagamentos de forma segura",
+          "Enviar-lhe notificações relativas às suas memórias e à sua abertura programada",
+          "Garantir a segurança e a disponibilidade da plataforma",
+          "Responder aos seus pedidos de assistência"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Base legal do tratamento",
+        "intro": "Tratamos os seus dados nas seguintes bases legais:",
+        "contract": "Execução do contrato (Art. 6.1.b RGPD):",
+        "contractDesc": "para fornecer os nossos serviços de memórias digitais",
+        "consent": "Consentimento (Art. 6.1.a RGPD):",
+        "consentDesc": "para comunicações de marketing e cookies analíticos",
+        "legitimateInterest": "Interesse legítimo (Art. 6.1.f RGPD):",
+        "legitimateInterestDesc": "para melhorar os nossos serviços e garantir a segurança",
+        "legalObligation": "Obrigação legal (Art. 6.1.c RGPD):",
+        "legalObligationDesc": "para dados de faturação e fiscais"
+      },
+      "retention": {
+        "title": "5. Conservação dos dados",
+        "content": "Os seus dados são conservados durante toda a duração da sua conta ativa. Em caso de eliminação da conta, os seus dados pessoais serão eliminados num prazo de 30 dias, salvo obrigação legal de conservação (dados de faturação: 10 anos).",
+        "capsules": "As memórias são conservadas de acordo com as definições que definiu, incluindo as memórias de legado digital que podem ser transmitidas aos seus guardiões designados."
+      },
+      "hosting": {
+        "title": "6. Alojamento e localização dos dados",
+        "location": {
+          "title": "Localização dos dados",
+          "content": "Os seus dados pessoais são armazenados em servidores situados na União Europeia (regiões AWS eu-west-1 Irlanda e eu-central-1 Frankfurt), garantindo uma proteção conforme o RGPD sem transferência para países terceiros."
+        },
+        "infrastructure": {
+          "title": "Infraestrutura técnica",
+          "database": "Base de dados:",
+          "databaseDesc": "PostgreSQL alojada na AWS (região UE)",
+          "files": "Ficheiros e média:",
+          "filesDesc": "AWS S3 (região UE) com encriptação",
+          "auth": "Autenticação:",
+          "authDesc": "Supabase Auth (região UE)",
+          "cdn": "CDN:",
+          "cdnDesc": "Distribuição de conteúdo a partir de servidores europeus"
+        },
+        "encryption": {
+          "title": "Encriptação e proteção",
+          "atRest": "Encriptação em repouso:",
+          "atRestDesc": "AES-256 para todos os dados armazenados",
+          "inTransit": "Encriptação em trânsito:",
+          "inTransitDesc": "TLS 1.2 / TLS 1.3 para todas as comunicações",
+          "backups": "Cópias de segurança:",
+          "backupsDesc": "Diárias, encriptadas, com retenção de 30 dias",
+          "replication": "Replicação:",
+          "replicationDesc": "Dados replicados dentro da região UE para alta disponibilidade"
+        }
+      },
+      "rights": {
+        "title": "7. Os seus direitos",
+        "intro": "Em conformidade com o RGPD (artigos 15 a 22), dispõe dos seguintes direitos:",
+        "access": "Direito de acesso (Art. 15):",
+        "accessDesc": "obter uma cópia dos seus dados pessoais",
+        "rectification": "Direito de retificação (Art. 16):",
+        "rectificationDesc": "corrigir dados inexatos",
+        "erasure": "Direito ao apagamento (Art. 17):",
+        "erasureDesc": "solicitar a eliminação dos seus dados",
+        "restriction": "Direito à limitação (Art. 18):",
+        "restrictionDesc": "restringir o tratamento dos seus dados",
+        "portability": "Direito à portabilidade (Art. 20):",
+        "portabilityDesc": "receber os seus dados num formato estruturado",
+        "objection": "Direito de oposição (Art. 21):",
+        "objectionDesc": "opor-se ao tratamento dos seus dados",
+        "withdrawal": "Direito de retirada do consentimento:",
+        "withdrawalDesc": "retirar o seu consentimento a qualquer momento",
+        "exerciseRights": "Para exercer estes direitos, contacte-nos em:",
+        "responseTime": "Responderemos ao seu pedido num prazo de um mês em conformidade com o RGPD."
+      },
+      "security": {
+        "title": "8. Segurança dos dados",
+        "technical": {
+          "title": "Medidas técnicas",
+          "items": [
+            "Encriptação AES-256 para todos os dados em repouso",
+            "Protocolo TLS 1.2+ para todas as comunicações de rede",
+            "Autenticação de dois fatores (2FA) disponível",
+            "Controlo de acesso baseado em funções (Row Level Security - RLS)",
+            "Monitorização contínua dos acessos e deteção de anomalias",
+            "Testes de penetração regulares por peritos independentes",
+            "Firewall aplicacional (WAF) e proteção DDoS"
+          ]
+        },
+        "organizational": {
+          "title": "Medidas organizacionais",
+          "items": [
+            "Acesso restrito aos dados com base no princípio do menor privilégio",
+            "Formação regular do pessoal em proteção de dados",
+            "Procedimentos documentados de gestão de incidentes de segurança",
+            "Auditorias de segurança anuais",
+            "Política de gestão de vulnerabilidades"
+          ]
+        },
+        "certifications": "Certificações dos nossos subcontratantes"
+      },
+      "transfers": {
+        "title": "9. Transferências internacionais de dados",
+        "intro": "Os seus dados são principalmente armazenados na União Europeia. No entanto, alguns dos nossos subcontratantes estão situados nos Estados Unidos. Estas transferências são enquadradas por garantias apropriadas:",
+        "stripe": "Pagamentos seguros",
+        "resend": "Envio de emails transacionais",
+        "analytics": "Análise de tráfego",
+        "guarantees": {
+          "title": "Garantias jurídicas",
+          "scc": "Cláusulas Contratuais Tipo (CCT) aprovadas pela Comissão Europeia (Decisão de execução 2021/914 de 4 de junho de 2021)",
+          "dpf": "Data Privacy Framework (DPF) para as empresas americanas certificadas (Decisão de adequação de 10 de julho de 2023)",
+          "additional": "Medidas adicionais: encriptação de ponta a ponta, pseudonimização, avaliação de impacto das transferências"
+        },
+        "table": {
+          "subprocessor": "Subcontratante",
+          "purpose": "Finalidade",
+          "guarantees": "Garantias"
+        },
+        "copyRequest": "Pode solicitar uma cópia das garantias apropriadas contactando-nos em"
+      },
+      "cookies": {
+        "title": "10. Cookies",
+        "intro": "Utilizamos cookies essenciais para o funcionamento do site e cookies analíticos (com o seu consentimento) para melhorar os nossos serviços.",
+        "typesTitle": "Tipos de cookies utilizados",
+        "essential": "Cookies essenciais:",
+        "essentialDesc": "autenticação, preferências de idioma, segurança (duração: sessão)",
+        "analytics": "Cookies analíticos:",
+        "analyticsDesc": "Google Analytics com anonimização IP (duração: 13 meses máximo)"
+      },
+      "contact": {
+        "title": "11. Contacto e reclamações",
+        "contactTitle": "Contactar a nossa equipa",
+        "dpo": "Encarregado da Proteção de Dados (DPO):",
+        "authority": {
+          "title": "Autoridade de controlo",
+          "intro": "Tem o direito de apresentar uma reclamação junto da CNIL:",
+          "name": "CNIL - Commission Nationale de l'Informatique et des Libertés",
+          "address": "3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07",
+          "website": "Site web:"
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Termos de Utilização",
+    "sections": {
+      "presentation": {
+        "title": "1. Apresentação do serviço",
+        "content": "O Family Garden é uma plataforma de preservação de memórias familiares que permite aos utilizadores criar, armazenar e partilhar memórias digitais. Estas memórias podem conter textos, fotos, vídeos, gravações áudio e outros conteúdos multimédia destinados a ser preservados e transmitidos às gerações futuras."
+      },
+      "acceptance": {
+        "title": "2. Aceitação das condições",
+        "content": "A utilização do Family Garden implica a aceitação plena e integral dos presentes Termos de Utilização. Se não aceitar estas condições, por favor não utilize o nosso serviço. Reservamo-nos o direito de modificar estes Termos a qualquer momento. As modificações entrarão em vigor a partir da sua publicação no site."
+      },
+      "registration": {
+        "title": "3. Registo e conta de utilizador",
+        "intro": "Para aceder às funcionalidades do Family Garden, deve criar uma conta de utilizador fornecendo informações exatas e completas. É responsável por:",
+        "items": [
+          "A confidencialidade das suas credenciais de acesso",
+          "Todas as atividades efetuadas na sua conta",
+          "A atualização das suas informações pessoais",
+          "A notificação imediata em caso de utilização não autorizada da sua conta"
+        ],
+        "ageRequirement": "Deve ter pelo menos 16 anos para criar uma conta. Os menores de 16 anos devem obter o consentimento parental."
+      },
+      "usage": {
+        "title": "4. Utilização do serviço",
+        "intro": "Compromete-se a utilizar o Family Garden de forma responsável e legal. É proibido:",
+        "items": [
+          "Publicar conteúdos ilegais, difamatórios, obscenos ou que violem os direitos de terceiros",
+          "Usurpar a identidade de outra pessoa",
+          "Tentar aceder às contas de outros utilizadores",
+          "Utilizar o serviço para fins comerciais não autorizados",
+          "Transmitir vírus ou códigos maliciosos",
+          "Perturbar o funcionamento normal da plataforma",
+          "Recolher dados pessoais de outros utilizadores sem o seu consentimento"
+        ]
+      },
+      "userContent": {
+        "title": "5. Conteúdos dos utilizadores",
+        "intro": "Mantém todos os direitos de propriedade intelectual sobre os conteúdos que publica no Family Garden. Ao carregar conteúdo, concede-nos uma licença não exclusiva para:",
+        "items": [
+          "Armazenar, exibir e transmitir os seus conteúdos de acordo com as suas definições de partilha",
+          "Criar cópias de segurança para a preservação dos seus dados",
+          "Adaptar tecnicamente os seus conteúdos para diferentes dispositivos (redimensionamento, compressão)"
+        ],
+        "guarantee": "Garante que dispõe dos direitos necessários sobre todos os conteúdos que publica e que estes não violam os direitos de terceiros."
+      },
+      "capsules": {
+        "title": "6. Memórias e funcionalidade Legado",
+        "intro": "O Family Garden propõe uma funcionalidade única de transmissão de memórias após o falecimento do utilizador. Esta funcionalidade implica:",
+        "items": [
+          "A designação de guardiões de confiança que poderão desbloquear as suas memórias",
+          "A definição de condições de desbloqueio (data, evento, falecimento)",
+          "A responsabilidade de manter atualizadas as informações dos seus guardiões"
+        ],
+        "disclaimer": "O Family Garden não pode garantir a transmissão em caso de cessação do serviço. Recomendamos que conserve cópias dos seus conteúdos mais importantes."
+      },
+      "circles": {
+        "title": "7. Círculos de partilha",
+        "content": "Os círculos permitem-lhe partilhar as suas memórias com grupos de pessoas de confiança. É responsável pela gestão dos seus círculos e das pessoas que convida. Os membros de um círculo podem visualizar as memórias partilhadas de acordo com as permissões que definir."
+      },
+      "storage": {
+        "title": "8. Armazenamento e conservação",
+        "intro": "O Family Garden compromete-se a preservar os seus conteúdos com o maior cuidado. No entanto:",
+        "items": [
+          "O espaço de armazenamento é limitado de acordo com o seu tipo de subscrição",
+          "Efetuamos cópias de segurança regulares mas não garantimos uma recuperação a 100% em caso de sinistro grave",
+          "As contas inativas há mais de 2 anos (gratuitas) podem ser objeto de eliminação após notificação"
+        ]
+      },
+      "ip": {
+        "title": "9. Propriedade intelectual",
+        "content": "A plataforma Family Garden, incluindo o seu design, logótipo, funcionalidades e código fonte, está protegida pelos direitos de propriedade intelectual. Qualquer reprodução, modificação ou utilização não autorizada é estritamente proibida."
+      },
+      "liability": {
+        "title": "10. Limitação de responsabilidade",
+        "intro": "O Family Garden é fornecido \"tal como está\". Não podemos ser responsabilizados:",
+        "items": [
+          "Pelas interrupções temporárias do serviço para manutenção",
+          "Pelas perdas de dados causadas por circunstâncias excecionais",
+          "Pela utilização que faz do serviço",
+          "Pelos conteúdos publicados por outros utilizadores",
+          "Pelos danos indiretos ligados à utilização do serviço"
+        ]
+      },
+      "termination": {
+        "title": "11. Suspensão e rescisão",
+        "intro": "Reservamo-nos o direito de suspender ou rescindir a sua conta em caso de:",
+        "items": [
+          "Violação dos presentes Termos",
+          "Atividade fraudulenta ou ilegal",
+          "Não pagamento das subscrições (para contas premium)",
+          "Pedido das autoridades competentes"
+        ],
+        "deletion": "Pode a qualquer momento eliminar a sua conta a partir do seu espaço pessoal. A eliminação implica o apagamento definitivo dos seus dados após um prazo de 30 dias."
+      },
+      "dataProtection": {
+        "title": "12. Proteção de dados pessoais",
+        "content": "O tratamento dos seus dados pessoais está detalhado na nossa",
+        "privacyLink": "Política de Privacidade",
+        "commitment": ". Comprometemo-nos a respeitar o Regulamento Geral sobre a Proteção de Dados (RGPD) e a proteger as suas informações pessoais."
+      },
+      "modifications": {
+        "title": "13. Modificações do serviço",
+        "content": "O Family Garden poderá modificar, suspender ou interromper a totalidade ou parte do serviço, de forma temporária ou permanente. Esforçar-nos-emos por avisá-lo com antecedência razoável em caso de modificações importantes."
+      },
+      "law": {
+        "title": "14. Lei aplicável e jurisdição",
+        "content": "Os presentes Termos são regidos pela lei francesa. Qualquer litígio relativo à sua interpretação ou execução será submetido aos tribunais franceses competentes, após tentativa de resolução amigável."
+      },
+      "contact": {
+        "title": "15. Contacto",
+        "content": "Para qualquer questão relativa a estes Termos de Utilização, pode contactar-nos em:"
+      }
+    }
+  },
+  "legalNotice": {
+    "title": "Aviso Legal",
+    "sections": {
+      "editor": {
+        "title": "1. Editor do site",
+        "siret": "SIRET:",
+        "email": "Email:",
+        "phone": "Telefone:"
+      },
+      "director": {
+        "title": "2. Diretor da publicação",
+        "name": "Nome:"
+      },
+      "hosting": {
+        "title": "3. Alojamento e infraestrutura técnica",
+        "appHost": {
+          "title": "Alojamento da aplicação",
+          "platform": "Plataforma:",
+          "infrastructure": "Infraestrutura:",
+          "region": "Região de armazenamento:",
+          "regionValue": "União Europeia (eu-west-1 Irlanda / eu-central-1 Frankfurt)",
+          "website": "Site web:"
+        },
+        "dbHost": {
+          "title": "Alojamento da base de dados e armazenamento",
+          "company": "Empresa:",
+          "address": "Morada:",
+          "infrastructure": "Infraestrutura:",
+          "region": "Região:",
+          "regionValue": "União Europeia",
+          "website": "Site web:"
+        },
+        "cloudInfra": {
+          "title": "Infraestrutura cloud",
+          "provider": "Fornecedor:",
+          "region": "Região:",
+          "regionValue": "Europa (Irlanda eu-west-1, Frankfurt eu-central-1)",
+          "website": "Site web:"
+        },
+        "payment": {
+          "title": "Prestador de pagamento",
+          "company": "Empresa:",
+          "address": "Morada:",
+          "website": "Site web:"
+        },
+        "email": {
+          "title": "Prestador de envio de emails",
+          "company": "Empresa:",
+          "website": "Site web:"
+        }
+      },
+      "subprocessors": {
+        "title": "4. Subcontratantes e transferências de dados",
+        "intro": "Em conformidade com o artigo 28 do RGPD, recorremos aos seguintes subcontratantes para o tratamento dos seus dados:",
+        "table": {
+          "subprocessor": "Subcontratante",
+          "purpose": "Finalidade",
+          "location": "Localização",
+          "guarantees": "Garantias"
+        },
+        "guaranteesTitle": "Garantias para transferências fora da UE",
+        "scc": "Cláusulas Contratuais Tipo (CCT) aprovadas pela Comissão Europeia (Decisão 2021/914)",
+        "dpf": "Data Privacy Framework (DPF) para empresas americanas certificadas",
+        "additional": "Medidas adicionais: encriptação de ponta a ponta, pseudonimização dos dados"
+      },
+      "ip": {
+        "title": "5. Propriedade intelectual",
+        "content": "Todo o conteúdo deste site (excluindo conteúdos dos utilizadores: textos, imagens, vídeos, logótipos, ícones, sons, software, etc.) é propriedade exclusiva do Family Garden ou dos seus parceiros. Qualquer reprodução, representação, modificação, publicação, transmissão, descaracterização, total ou parcial do site ou do seu conteúdo, por qualquer processo e em qualquer suporte, é proibida sem autorização escrita prévia do Family Garden."
+      },
+      "dataProtection": {
+        "title": "6. Proteção de dados pessoais",
+        "intro": "Em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD) e a lei Informatique et Libertés, dispõe de um direito de acesso, retificação, apagamento e portabilidade dos seus dados pessoais.",
+        "moreInfo": "Para mais informações sobre o tratamento dos seus dados, consulte a nossa",
+        "privacyLink": "Política de Privacidade",
+        "dpo": "Encarregado da Proteção de Dados (DPO)",
+        "email": "Email:",
+        "authority": "Autoridade de controlo:",
+        "cnil": "CNIL - Commission Nationale de l'Informatique et des Libertés",
+        "website": "Site web:",
+        "address": "Morada:"
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "content": "Este site utiliza cookies para melhorar a experiência do utilizador e analisar o tráfego. Os cookies essenciais são necessários para o funcionamento do site. Os cookies analíticos ajudam-nos a compreender como os visitantes interagem com o site.",
+        "manage": "Pode gerir as suas preferências de cookies nas definições do seu navegador."
+      },
+      "links": {
+        "title": "8. Hiperligações",
+        "content": "Este site pode conter ligações para outros sites web. O Family Garden não é responsável pelo conteúdo desses sites externos e não pode ser responsabilizado por danos resultantes da sua utilização."
+      },
+      "law": {
+        "title": "9. Lei aplicável",
+        "content": "O presente aviso legal é regido pela lei francesa. Em caso de litígio, e após o insucesso de qualquer tentativa de resolução amigável, os tribunais franceses serão os únicos competentes."
+      },
+      "contact": {
+        "title": "10. Contacto",
+        "content": "Para qualquer questão relativa a este aviso legal, pode contactar-nos em:"
+      }
+    }
+  },
+  "sales": {
+    "title": "Condições Gerais de Venda",
+    "sections": {
+      "object": {
+        "title": "1. Objeto",
+        "content": "As presentes Condições Gerais de Venda (CGV) regem as relações contratuais entre o Family Garden e os seus utilizadores para a subscrição dos serviços pagos propostos na plataforma."
+      },
+      "services": {
+        "title": "2. Serviços propostos",
+        "intro": "O Family Garden propõe as seguintes subscrições:",
+        "free": "Gratuito:",
+        "freeDesc": "Acesso limitado às funcionalidades básicas",
+        "premium": "Premium:",
+        "premiumDesc": "Acesso completo às funcionalidades avançadas, armazenamento alargado",
+        "heritage": "Legado:",
+        "heritageDesc": "Funcionalidades Premium + opções de transmissão póstuma"
+      },
+      "pricing": {
+        "title": "3. Preços e pagamento",
+        "content": "Os preços são indicados em euros com IVA incluído. O pagamento efetua-se por cartão bancário através do nosso prestador seguro Stripe. As subscrições são faturadas mensalmente ou anualmente conforme a opção escolhida.",
+        "modification": "Os preços podem ser modificados a qualquer momento. Em caso de modificação, o novo preço aplicar-se-á ao próximo período de faturação, após notificação prévia de 30 dias."
+      },
+      "duration": {
+        "title": "4. Duração e renovação",
+        "content": "A subscrição é efetuada por um período de um mês ou de um ano conforme a opção escolhida. É renovada automaticamente em cada vencimento, salvo rescisão pelo utilizador antes da data de renovação."
+      },
+      "withdrawal": {
+        "title": "5. Direito de retratação",
+        "content": "Em conformidade com o artigo L221-28 do Código do Consumo, o direito de retratação não se aplica aos contratos de fornecimento de conteúdo digital não fornecido em suporte material cuja execução tenha começado com o acordo do consumidor.",
+        "guarantee": "No entanto, oferecemos uma garantia \"satisfeito ou reembolsado\" de 14 dias para qualquer nova subscrição Premium ou Legado."
+      },
+      "termination": {
+        "title": "6. Rescisão",
+        "content": "O utilizador pode rescindir a sua subscrição a qualquer momento a partir do seu espaço pessoal ou através do portal de gestão de subscrição. A rescisão produz efeitos no final do período de faturação em curso.",
+        "access": "Em caso de rescisão, o utilizador mantém o acesso às funcionalidades pagas até ao final do período já pago."
+      },
+      "liability": {
+        "title": "7. Responsabilidade",
+        "content": "O Family Garden compromete-se a fornecer os serviços com diligência. Não podemos ser responsabilizados por interrupções de serviço independentes da nossa vontade, nem por danos indiretos ligados à utilização dos nossos serviços."
+      },
+      "dataProtection": {
+        "title": "8. Proteção de dados",
+        "content": "O tratamento dos seus dados pessoais é regido pela nossa Política de Privacidade, acessível a partir do nosso site. Comprometemo-nos a proteger os seus dados em conformidade com o RGPD."
+      },
+      "modifications": {
+        "title": "9. Modificação das CGV",
+        "content": "Reservamo-nos o direito de modificar estas CGV. As modificações serão notificadas aos utilizadores por email pelo menos 30 dias antes da sua entrada em vigor."
+      },
+      "law": {
+        "title": "10. Lei aplicável e litígios",
+        "content": "As presentes CGV são submetidas à lei francesa. Em caso de litígio, uma solução amigável será procurada antes de qualquer ação judicial. Na sua ausência, os tribunais franceses serão os únicos competentes."
+      },
+      "contact": {
+        "title": "11. Contacto",
+        "content": "Para qualquer questão relativa às CGV, contacte-nos em:"
+      }
+    }
+  },
+  "sale": {
+    "title": "Condições Gerais de Venda",
+    "sections": {
+      "purpose": {
+        "title": "1. Objeto",
+        "content": "As presentes Condições Gerais de Venda (CGV) regem as vendas de serviços propostos pela Family Garden SAS aos seus utilizadores através da plataforma familygarden.fr. Qualquer subscrição de um plano pago implica a aceitação sem reservas das presentes CGV."
+      },
+      "services": {
+        "title": "2. Serviços propostos",
+        "intro": "O Family Garden propõe as seguintes subscrições:",
+        "plans": {
+          "free": {
+            "name": "Gratuito",
+            "description": "Acesso limitado com armazenamento básico (500 MB), criação de memórias texto e foto, 1 círculo de partilha."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Armazenamento alargado (10 GB), memórias vídeo e áudio, até 5 círculos de partilha, memórias agendadas, exportação PDF."
+          },
+          "legacy": {
+            "name": "Legado",
+            "description": "Todas as funcionalidades Premium + árvore genealógica ilimitada, memórias de legado digital, guardiões de confiança, círculos ilimitados, armazenamento 20 GB."
+          }
+        }
+      },
+      "pricing": {
+        "title": "3. Preços e pagamento",
+        "content": "Os preços das subscrições são indicados em euros com IVA incluído na página de preços. O pagamento efetua-se por cartão bancário através do nosso prestador seguro Stripe. A faturação é mensal ou anual conforme a opção escolhida.",
+        "modifications": "O Family Garden reserva-se o direito de modificar os seus preços a qualquer momento. Os novos preços aplicar-se-ão às novas subscrições e às renovações após notificação prévia de 30 dias."
+      },
+      "duration": {
+        "title": "4. Duração e renovação",
+        "content": "As subscrições são celebradas por uma duração mensal ou anual conforme a opção escolhida. São renovadas automaticamente no seu vencimento, salvo rescisão pelo utilizador antes da data de renovação através do seu espaço pessoal ou do portal cliente Stripe."
+      },
+      "withdrawal": {
+        "title": "5. Direito de retratação",
+        "content": "Em conformidade com o artigo L221-28 do Código do Consumo, o direito de retratação não se aplica aos serviços plenamente executados antes do final do prazo de retratação e cuja execução tenha começado após acordo prévio expresso do consumidor.",
+        "guarantee": "No entanto, o Family Garden oferece uma garantia satisfeito ou reembolsado de 14 dias para qualquer nova subscrição Premium ou Legado. Para beneficiar desta garantia, contacte-nos em contact@familygarden.fr."
+      },
+      "cancellation": {
+        "title": "6. Rescisão",
+        "content": "Pode rescindir a sua subscrição a qualquer momento a partir do seu espaço pessoal. A rescisão produz efeitos no final do período em curso, sem reembolso proporcional.",
+        "access": "Após rescisão, a sua conta será automaticamente convertida para o plano gratuito. Os seus dados que excedam os limites do plano gratuito permanecerão acessíveis em modo de leitura durante 30 dias."
+      },
+      "liability": {
+        "title": "7. Responsabilidade",
+        "content": "O Family Garden compromete-se a fornecer os seus serviços com diligência. No entanto, a sua responsabilidade não poderá ser comprometida em caso de força maior, facto de terceiro ou culpa do utilizador. A responsabilidade do Family Garden é limitada ao montante das somas efetivamente pagas pelo utilizador nos últimos 12 meses."
+      },
+      "dataProtection": {
+        "title": "8. Proteção de dados",
+        "content": "O tratamento dos dados pessoais no âmbito das subscrições é regido pela nossa Política de Privacidade acessível no nosso site. Os dados de pagamento são tratados exclusivamente pelo Stripe e nunca são armazenados nos nossos servidores."
+      },
+      "modifications": {
+        "title": "9. Modificação das CGV",
+        "content": "O Family Garden reserva-se o direito de modificar as presentes CGV. Os utilizadores serão informados por email de qualquer modificação substancial pelo menos 30 dias antes da sua entrada em vigor. A utilização contínua do serviço após essa data vale como aceitação das novas condições."
+      },
+      "jurisdiction": {
+        "title": "10. Lei aplicável e litígios",
+        "content": "As presentes CGV são regidas pela lei francesa. Em caso de litígio, uma solução amigável será procurada em prioridade. Na sua ausência, os tribunais franceses serão competentes. Em conformidade com as disposições do Código do Consumo, pode recorrer gratuitamente ao serviço de mediação MEDICYS (www.medicys.fr)."
+      },
+      "contact": {
+        "title": "11. Contacto",
+        "content": "Para qualquer questão relativa às presentes CGV ou à sua subscrição, contacte-nos em:"
+      }
+    }
+  }
+}

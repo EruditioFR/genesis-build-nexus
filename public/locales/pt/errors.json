@@ -1,0 +1,30 @@
+{
+  "generic": "Ocorreu um erro. Por favor, tente novamente.",
+  "network": "Erro de ligação. Verifique a sua ligação à internet.",
+  "unauthorized": "Deve iniciar sessão para aceder a esta página.",
+  "forbidden": "Não tem permissão para realizar esta ação.",
+  "notFound": "A página solicitada não existe.",
+  "serverError": "Erro do servidor. A nossa equipa foi notificada.",
+  "timeout": "O pedido demorou demasiado. Tente novamente.",
+  "validation": "Por favor, verifique as informações introduzidas.",
+  "fileUpload": {
+    "tooLarge": "O ficheiro é demasiado grande (máx {{size}})",
+    "invalidType": "Tipo de ficheiro não suportado",
+    "failed": "Falha ao carregar o ficheiro"
+  },
+  "auth": {
+    "sessionExpired": "A sua sessão expirou. Por favor, inicie sessão novamente.",
+    "invalidToken": "Ligação inválida ou expirada."
+  },
+  "capsule": {
+    "createFailed": "Não foi possível criar a memória",
+    "updateFailed": "Não foi possível atualizar a memória",
+    "deleteFailed": "Não foi possível eliminar a memória",
+    "loadFailed": "Não foi possível carregar a memória"
+  },
+  "circle": {
+    "createFailed": "Não foi possível criar o círculo",
+    "inviteFailed": "Não foi possível enviar o convite",
+    "joinFailed": "Não foi possível juntar-se ao círculo"
+  }
+}
