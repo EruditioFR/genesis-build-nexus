@@ -341,6 +341,10 @@
     "year": {
       "close": "Chiudi",
       "backToYears": "Anni {{decade}}"
-    }
+  },
+  "inspiration": {
+    "findInspiration": "Trova ispirazione",
+    "guidedQuestions": "Lasciati guidare dalle nostre 50 domande"
   }
+}
 }
