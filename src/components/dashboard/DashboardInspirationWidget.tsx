@@ -72,6 +72,20 @@ const DashboardInspirationWidget = () => {
     setCurrentSlide(prev => (prev - 1 + slideCount) % slideCount);
   }, [slideCount]);
 
+  // Swipe handling
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? next() : prev();
+    }
+    touchStart.current = null;
+  }, [next, prev]);
+
   // Autoplay
   useEffect(() => {
     if (dismissed || open) return;
