@@ -100,7 +100,7 @@ const DashboardInspirationWidget = () => {
         className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group"
       >
         {/* Background image with overlay */}
-        <div className="relative h-44 sm:h-48 md:h-52">
+        <div className="relative h-48 sm:h-48 md:h-52">
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentSlide}
@@ -119,12 +119,12 @@ const DashboardInspirationWidget = () => {
                 loading="lazy"
               />
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/20" />
             </motion.div>
           </AnimatePresence>
 
           {/* Content overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 z-10">
+          <div className="absolute inset-0 flex flex-col justify-center px-4 sm:px-10 z-10">
             <AnimatePresence custom={direction} mode="wait">
               <motion.div
                 key={currentSlide}
@@ -137,54 +137,55 @@ const DashboardInspirationWidget = () => {
                 className="max-w-lg"
               >
                 {/* Category badge */}
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-3">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-[11px] sm:text-xs font-medium mb-2 sm:mb-3">
                   <span>{currentCategory?.emoji}</span>
                   {currentCategory?.title}
                 </span>
 
                 {/* Question */}
-                <p className="text-white text-lg sm:text-xl md:text-2xl font-display leading-snug mb-4 drop-shadow-md max-w-[80%]">
+                <p className="text-white text-base sm:text-xl md:text-2xl font-display leading-snug mb-3 sm:mb-4 drop-shadow-md max-w-[85%] sm:max-w-[80%]">
                   « {slideQuestion} »
                 </p>
 
                 {/* CTA */}
                 <button
                   onClick={() => setOpen(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/90 hover:bg-white text-foreground text-sm font-semibold transition-all shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white/90 hover:bg-white text-foreground text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg"
                 >
-                  <Sparkles className="h-4 w-4 text-amber-500" />
-                  Laissez-vous guider par nos 50 questions
-                  <ChevronRight className="h-4 w-4" />
+                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500 flex-shrink-0" />
+                  <span className="sm:hidden">Nos 50 questions</span>
+                  <span className="hidden sm:inline">Laissez-vous guider par nos 50 questions</span>
+                  <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
                 </button>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Navigation arrows */}
+          {/* Navigation arrows - always visible on mobile via touch */}
           <button
             onClick={(e) => { e.stopPropagation(); prev(); }}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors opacity-0 group-hover:opacity-100"
+            className="absolute left-1.5 sm:left-2 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
             aria-label="Précédent"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); next(); }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors opacity-0 group-hover:opacity-100"
+            className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
             aria-label="Suivant"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 sm:gap-2">
             {memoryCategories.map((_, i) => (
               <button
                 key={i}
                 onClick={(e) => { e.stopPropagation(); goTo(i); }}
                 className={cn(
-                  'h-2 rounded-full transition-all duration-300',
-                  i === currentSlide ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
+                  'h-1.5 sm:h-2 rounded-full transition-all duration-300',
+                  i === currentSlide ? 'w-5 sm:w-6 bg-white' : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white/70'
                 )}
                 aria-label={`Slide ${i + 1}`}
               />
@@ -194,10 +195,10 @@ const DashboardInspirationWidget = () => {
           {/* Dismiss */}
           <button
             onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
-            className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white/70 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 p-1 sm:p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white/70 hover:text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
             aria-label="Fermer"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </button>
         </div>
       </motion.div>
