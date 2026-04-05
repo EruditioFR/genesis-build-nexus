@@ -37,11 +37,11 @@ const SLIDE_IMAGES: Record<string, string> = {
 };
 
 const SLIDE_QUESTIONS: Record<string, string> = {
-  enfance: 'À quoi ressemblait la maison de ton enfance ?',
-  ecole: 'Un professeur t\'a marqué. Pourquoi ?',
-  musiques: 'Quelle chanson te ramène instantanément en arrière ?',
-  famille: 'Quelle tradition aimerais-tu transmettre ?',
-  'vie-personnelle': 'Quel moment a changé le cours de ta vie ?',
+  enfance: 'À quoi ressemblait la maison de votre enfance ?',
+  ecole: 'Un professeur vous a marqué. Pourquoi ?',
+  musiques: 'Quelle chanson vous ramène instantanément en arrière ?',
+  famille: 'Quelle tradition aimeriez-vous transmettre ?',
+  'vie-personnelle': 'Quel moment a changé le cours de votre vie ?',
 };
 
 const AUTOPLAY_INTERVAL = 6000;
