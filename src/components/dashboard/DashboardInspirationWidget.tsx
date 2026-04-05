@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -47,6 +48,7 @@ const SLIDE_QUESTIONS: Record<string, string> = {
 const AUTOPLAY_INTERVAL = 6000;
 
 const DashboardInspirationWidget = () => {
+  const { t } = useTranslation('dashboard');
   const { usedPromptIds, loading, memoryCategories, getCategoryProgress, getTotalProgress } = useMemoryPrompts();
   const [open, setOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -167,8 +169,8 @@ const DashboardInspirationWidget = () => {
                   className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white/90 hover:bg-white text-foreground text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg"
                 >
                   <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500 flex-shrink-0" />
-                  <span className="sm:hidden">Nos 50 questions</span>
-                  <span className="hidden sm:inline">Laissez-vous guider par nos 50 questions</span>
+                  <span className="sm:hidden">{t('inspiration.findInspiration')}</span>
+                  <span className="hidden sm:inline">{t('inspiration.guidedQuestions')}</span>
                   <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
                 </button>
               </motion.div>

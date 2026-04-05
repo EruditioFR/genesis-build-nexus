@@ -342,5 +342,9 @@
       "close": "닫기",
       "backToYears": "{{decade}}년대"
     }
+  },
+  "inspiration": {
+    "findInspiration": "영감 찾기",
+    "guidedQuestions": "50가지 질문으로 안내받으세요"
   }
 }

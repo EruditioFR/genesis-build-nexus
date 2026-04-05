@@ -342,5 +342,9 @@
       "close": "关闭",
       "backToYears": "{{decade}}年代"
     }
+  },
+  "inspiration": {
+    "findInspiration": "寻找灵感",
+    "guidedQuestions": "让我们的50个问题引导您"
   }
 }
