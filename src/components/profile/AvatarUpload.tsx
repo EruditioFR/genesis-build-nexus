@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { optimizeImageForUpload } from '@/lib/imageCompression';
 
 interface AvatarUploadProps {
   userId: string;
