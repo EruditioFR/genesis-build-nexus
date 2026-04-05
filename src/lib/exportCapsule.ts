@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import JSZip from 'jszip';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -36,114 +36,184 @@ interface CommentExportData {
   user_name: string | null;
 }
 
+const COLORS = {
+  primary: rgb(30 / 255, 58 / 255, 95 / 255),
+  text: rgb(0, 0, 0),
+  muted: rgb(100 / 255, 100 / 255, 100 / 255),
+  separator: rgb(200 / 255, 200 / 255, 200 / 255),
+  footer: rgb(150 / 255, 150 / 255, 150 / 255),
+};
+
+/** Simple word-wrap that splits text into lines fitting within maxWidth */
+function wrapText(text: string, font: any, fontSize: number, maxWidth: number): string[] {
+  const words = text.split(/\s+/);
+  const lines: string[] = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    const test = currentLine ? `${currentLine} ${word}` : word;
+    const width = font.widthOfTextAtSize(test, fontSize);
+    if (width > maxWidth && currentLine) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = test;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  return lines.length ? lines : [''];
+}
+
+/** Strip basic HTML tags for plain-text export */
+function stripHtml(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+async function buildCapsulePdf(
+  capsule: CapsuleExportData,
+  medias: MediaExportData[],
+  sharedCircles: SharedCircleData[],
+  comments: CommentExportData[] = []
+): Promise<PDFDocument> {
+  const pdfDoc = await PDFDocument.create();
+  const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+  const pageWidth = 595.28; // A4
+  const pageHeight = 841.89;
+  const margin = 56; // ~20mm
+  const contentWidth = pageWidth - margin * 2;
+
+  let page = pdfDoc.addPage([pageWidth, pageHeight]);
+  let y = pageHeight - margin;
+
+  const ensureSpace = (needed: number) => {
+    if (y - needed < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      y = pageHeight - margin;
+    }
+  };
+
+  const drawText = (text: string, fontSize: number, options: { font?: any; color?: any; maxWidth?: number } = {}) => {
+    const font = options.font || helvetica;
+    const color = options.color || COLORS.text;
+    const maxW = options.maxWidth || contentWidth;
+    const lines = wrapText(text, font, fontSize, maxW);
+
+    for (const line of lines) {
+      ensureSpace(fontSize + 4);
+      page.drawText(line, { x: margin, y, size: fontSize, font, color });
+      y -= fontSize * 1.4;
+    }
+    y -= 4;
+  };
+
+  // Title
+  drawText(capsule.title, 22, { font: helveticaBold, color: COLORS.primary });
+  y -= 8;
+
+  // Metadata
+  const formattedDate = format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr });
+  const typeLabels: Record<string, string> = { text: 'Texte', photo: 'Photo', video: 'Vidéo', audio: 'Audio', mixed: 'Mixte' };
+  const statusLabels: Record<string, string> = { draft: 'Brouillon', published: 'Publiée', scheduled: 'Programmée', archived: 'Archivée' };
+  const metaLine = `Type: ${typeLabels[capsule.capsule_type] || capsule.capsule_type} • Statut: ${statusLabels[capsule.status] || capsule.status} • Créée le ${formattedDate}`;
+  drawText(metaLine, 9, { color: COLORS.muted });
+  y -= 6;
+
+  // Separator
+  ensureSpace(10);
+  page.drawLine({ start: { x: margin, y }, end: { x: pageWidth - margin, y }, thickness: 0.5, color: COLORS.separator });
+  y -= 16;
+
+  // Description
+  if (capsule.description) {
+    drawText('Description', 13, { font: helveticaBold });
+    drawText(stripHtml(capsule.description), 10);
+    y -= 8;
+  }
+
+  // Content
+  if (capsule.content) {
+    drawText('Contenu', 13, { font: helveticaBold });
+    drawText(stripHtml(capsule.content), 10);
+    y -= 8;
+  }
+
+  // Tags
+  if (capsule.tags && capsule.tags.length > 0) {
+    drawText('Tags', 13, { font: helveticaBold });
+    drawText(capsule.tags.join(', '), 10);
+    y -= 8;
+  }
+
+  // Shared circles
+  if (sharedCircles.length > 0) {
+    drawText('Partagé avec', 13, { font: helveticaBold });
+    drawText(sharedCircles.map(c => c.name).join(', '), 10);
+    y -= 8;
+  }
+
+  // Comments
+  if (comments.length > 0) {
+    drawText('Commentaires', 13, { font: helveticaBold });
+    y -= 4;
+    for (const comment of comments) {
+      const commentDate = format(new Date(comment.created_at), 'd MMM yyyy à HH:mm', { locale: fr });
+      const author = comment.user_name || 'Anonyme';
+      drawText(`${author} - ${commentDate}`, 9, { font: helveticaBold, color: COLORS.muted });
+      drawText(comment.content, 9);
+      y -= 4;
+    }
+    y -= 4;
+  }
+
+  // Medias
+  if (medias.length > 0) {
+    drawText('Médias', 13, { font: helveticaBold });
+    medias.forEach((media, index) => {
+      const info = `${index + 1}. ${media.file_name || 'Fichier'} (${media.file_type})${media.caption ? ` - ${media.caption}` : ''}`;
+      drawText(info, 9);
+    });
+  }
+
+  // Footer on all pages
+  const pages = pdfDoc.getPages();
+  for (const p of pages) {
+    p.drawText(
+      `Exporté depuis Family Garden le ${format(new Date(), 'd MMMM yyyy à HH:mm', { locale: fr })}`,
+      { x: margin, y: 28, size: 7, font: helvetica, color: COLORS.footer }
+    );
+  }
+
+  return pdfDoc;
+}
+
 export async function exportCapsuleToPDF(
   capsule: CapsuleExportData,
   medias: MediaExportData[],
   sharedCircles: SharedCircleData[]
 ): Promise<void> {
-  const pdf = new jsPDF();
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const margin = 20;
-  const contentWidth = pageWidth - margin * 2;
-  let y = 20;
+  const pdfDoc = await buildCapsulePdf(capsule, medias, sharedCircles);
+  const pdfBytes = await pdfDoc.save();
 
-  // Helper to add text with word wrap
-  const addText = (text: string, fontSize: number, isBold = false, color: [number, number, number] = [0, 0, 0]) => {
-    pdf.setFontSize(fontSize);
-    pdf.setFont('helvetica', isBold ? 'bold' : 'normal');
-    pdf.setTextColor(...color);
-    const lines = pdf.splitTextToSize(text, contentWidth);
-    
-    lines.forEach((line: string) => {
-      if (y > 270) {
-        pdf.addPage();
-        y = 20;
-      }
-      pdf.text(line, margin, y);
-      y += fontSize * 0.5;
-    });
-    y += 5;
-  };
-
-  // Title
-  addText(capsule.title, 24, true, [30, 58, 95]);
-  y += 5;
-
-  // Metadata line
-  const formattedDate = format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr });
-  const typeLabels: Record<string, string> = {
-    text: 'Texte',
-    photo: 'Photo',
-    video: 'Vidéo',
-    audio: 'Audio',
-    mixed: 'Mixte',
-  };
-  const statusLabels: Record<string, string> = {
-    draft: 'Brouillon',
-    published: 'Publiée',
-    scheduled: 'Programmée',
-    archived: 'Archivée',
-  };
-
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(100, 100, 100);
-  pdf.text(`Type: ${typeLabels[capsule.capsule_type] || capsule.capsule_type} • Statut: ${statusLabels[capsule.status] || capsule.status} • Créée le ${formattedDate}`, margin, y);
-  y += 15;
-
-  // Separator
-  pdf.setDrawColor(200, 200, 200);
-  pdf.line(margin, y, pageWidth - margin, y);
-  y += 15;
-
-  // Description
-  if (capsule.description) {
-    addText('Description', 14, true);
-    addText(capsule.description, 11);
-    y += 10;
-  }
-
-  // Content
-  if (capsule.content) {
-    addText('Contenu', 14, true);
-    addText(capsule.content, 11);
-    y += 10;
-  }
-
-  // Tags
-  if (capsule.tags && capsule.tags.length > 0) {
-    addText('Tags', 14, true);
-    addText(capsule.tags.join(', '), 11);
-    y += 10;
-  }
-
-  // Shared circles
-  if (sharedCircles.length > 0) {
-    addText('Partagé avec', 14, true);
-    addText(sharedCircles.map(c => c.name).join(', '), 11);
-    y += 10;
-  }
-
-  // Medias info
-  if (medias.length > 0) {
-    addText('Médias', 14, true);
-    medias.forEach((media, index) => {
-      const mediaInfo = `${index + 1}. ${media.file_name || 'Fichier'} (${media.file_type})${media.caption ? ` - ${media.caption}` : ''}`;
-      addText(mediaInfo, 10);
-    });
-  }
-
-  // Footer
-  pdf.setFontSize(8);
-  pdf.setTextColor(150, 150, 150);
-  pdf.text(
-    `Exporté depuis TimeCapsule le ${format(new Date(), 'd MMMM yyyy à HH:mm', { locale: fr })}`,
-    margin,
-    285
-  );
-
-  // Save
-  pdf.save(`capsule-${capsule.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`);
+  const blob = new Blob([pdfBytes as unknown as ArrayBuffer], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `capsule-${capsule.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 export async function exportCapsuleToZIP(
@@ -154,123 +224,10 @@ export async function exportCapsuleToZIP(
 ): Promise<void> {
   const zip = new JSZip();
 
-  // Generate PDF with all text content
-  const pdf = new jsPDF();
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const margin = 20;
-  const contentWidth = pageWidth - margin * 2;
-  let y = 20;
-
-  const addPdfText = (text: string, fontSize: number, isBold = false, color: [number, number, number] = [0, 0, 0]) => {
-    pdf.setFontSize(fontSize);
-    pdf.setFont('helvetica', isBold ? 'bold' : 'normal');
-    pdf.setTextColor(...color);
-    const lines = pdf.splitTextToSize(text, contentWidth);
-    
-    lines.forEach((line: string) => {
-      if (y > 270) {
-        pdf.addPage();
-        y = 20;
-      }
-      pdf.text(line, margin, y);
-      y += fontSize * 0.5;
-    });
-    y += 5;
-  };
-
-  // Title
-  addPdfText(capsule.title, 24, true, [30, 58, 95]);
-  y += 5;
-
-  // Metadata
-  const formattedDate = format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr });
-  const typeLabels: Record<string, string> = {
-    text: 'Texte',
-    photo: 'Photo',
-    video: 'Vidéo',
-    audio: 'Audio',
-    mixed: 'Mixte',
-  };
-  const statusLabels: Record<string, string> = {
-    draft: 'Brouillon',
-    published: 'Publiée',
-    scheduled: 'Programmée',
-    archived: 'Archivée',
-  };
-
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(100, 100, 100);
-  pdf.text(`Type: ${typeLabels[capsule.capsule_type] || capsule.capsule_type} • Statut: ${statusLabels[capsule.status] || capsule.status} • Créée le ${formattedDate}`, margin, y);
-  y += 15;
-
-  // Separator
-  pdf.setDrawColor(200, 200, 200);
-  pdf.line(margin, y, pageWidth - margin, y);
-  y += 15;
-
-  // Description
-  if (capsule.description) {
-    addPdfText('Description', 14, true);
-    addPdfText(capsule.description, 11);
-    y += 10;
-  }
-
-  // Content
-  if (capsule.content) {
-    addPdfText('Contenu', 14, true);
-    addPdfText(capsule.content, 11);
-    y += 10;
-  }
-
-  // Tags
-  if (capsule.tags && capsule.tags.length > 0) {
-    addPdfText('Mots-clés', 14, true);
-    addPdfText(capsule.tags.join(', '), 11);
-    y += 10;
-  }
-
-  // Shared circles
-  if (sharedCircles.length > 0) {
-    addPdfText('Partagé avec', 14, true);
-    addPdfText(sharedCircles.map(c => c.name).join(', '), 11);
-    y += 10;
-  }
-
-  // Comments section
-  if (comments.length > 0) {
-    addPdfText('Commentaires', 14, true);
-    y += 5;
-    comments.forEach((comment) => {
-      const commentDate = format(new Date(comment.created_at), 'd MMM yyyy à HH:mm', { locale: fr });
-      const author = comment.user_name || 'Anonyme';
-      addPdfText(`${author} - ${commentDate}`, 10, true, [80, 80, 80]);
-      addPdfText(comment.content, 10);
-      y += 5;
-    });
-  }
-
-  // Medias info
-  if (medias.length > 0) {
-    addPdfText('Médias', 14, true);
-    medias.forEach((media, index) => {
-      const mediaInfo = `${index + 1}. ${media.file_name || 'Fichier'} (${media.file_type})${media.caption ? ` - ${media.caption}` : ''}`;
-      addPdfText(mediaInfo, 10);
-    });
-  }
-
-  // Footer
-  pdf.setFontSize(8);
-  pdf.setTextColor(150, 150, 150);
-  pdf.text(
-    `Exporté depuis TimeCapsule le ${format(new Date(), 'd MMMM yyyy à HH:mm', { locale: fr })}`,
-    margin,
-    285
-  );
-
-  // Add PDF to ZIP
-  const pdfBlob = pdf.output('blob');
-  zip.file('souvenir.pdf', pdfBlob);
+  // Generate PDF
+  const pdfDoc = await buildCapsulePdf(capsule, medias, sharedCircles, comments);
+  const pdfBytes = await pdfDoc.save();
+  zip.file('souvenir.pdf', pdfBytes);
 
   // Add capsule metadata as JSON
   const metadata = {
@@ -297,31 +254,17 @@ export async function exportCapsuleToZIP(
     })),
     exported_at: new Date().toISOString(),
   };
-
   zip.file('capsule.json', JSON.stringify(metadata, null, 2));
 
-  // Add a readable text version
+  // Add readable text version
   let readableContent = `# ${capsule.title}\n\n`;
   readableContent += `Type: ${capsule.capsule_type}\n`;
   readableContent += `Statut: ${capsule.status}\n`;
   readableContent += `Créée le: ${format(new Date(capsule.created_at), 'd MMMM yyyy', { locale: fr })}\n\n`;
-
-  if (capsule.description) {
-    readableContent += `## Description\n${capsule.description}\n\n`;
-  }
-
-  if (capsule.content) {
-    readableContent += `## Contenu\n${capsule.content}\n\n`;
-  }
-
-  if (capsule.tags && capsule.tags.length > 0) {
-    readableContent += `## Tags\n${capsule.tags.join(', ')}\n\n`;
-  }
-
-  if (sharedCircles.length > 0) {
-    readableContent += `## Partagé avec\n${sharedCircles.map(c => c.name).join(', ')}\n\n`;
-  }
-
+  if (capsule.description) readableContent += `## Description\n${capsule.description}\n\n`;
+  if (capsule.content) readableContent += `## Contenu\n${capsule.content}\n\n`;
+  if (capsule.tags?.length) readableContent += `## Tags\n${capsule.tags.join(', ')}\n\n`;
+  if (sharedCircles.length > 0) readableContent += `## Partagé avec\n${sharedCircles.map(c => c.name).join(', ')}\n\n`;
   if (medias.length > 0) {
     readableContent += `## Médias\n`;
     medias.forEach((media, index) => {
@@ -330,32 +273,22 @@ export async function exportCapsuleToZIP(
       readableContent += '\n';
     });
   }
-
   zip.file('capsule.md', readableContent);
 
-  // Create medias folder and download media files
+  // Download media files
   if (medias.length > 0) {
     const mediasFolder = zip.folder('medias');
-    
     for (let i = 0; i < medias.length; i++) {
       const media = medias[i];
       try {
-        // Generate signed URL for the media file
         const signedUrl = await getSignedUrl('capsule-medias', media.file_url, 3600);
-        
-        if (!signedUrl) {
-          console.error(`Failed to get signed URL for: ${media.file_url}`);
-          continue;
-        }
-        
+        if (!signedUrl) continue;
         const response = await fetch(signedUrl);
         if (response.ok) {
           const blob = await response.blob();
           const extension = media.file_type.split('/')[1] || 'bin';
           const fileName = media.file_name || `media-${i + 1}.${extension}`;
           mediasFolder?.file(fileName, blob);
-        } else {
-          console.error(`Failed to fetch media: ${response.status} ${response.statusText}`);
         }
       } catch (error) {
         console.error(`Failed to download media: ${media.file_url}`, error);
@@ -363,7 +296,7 @@ export async function exportCapsuleToZIP(
     }
   }
 
-  // Generate and download
+  // Generate and download ZIP
   const content = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(content);
   const a = document.createElement('a');
