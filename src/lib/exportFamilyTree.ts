@@ -269,8 +269,7 @@ export async function exportFamilyTreeToPDF(options: ExportOptions): Promise<voi
 
   // Save
   const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([pdfBytes.buffer], { type: 'application/pdf' });
   const a = document.createElement('a');
   a.href = url;
   a.download = `arbre-${tree.name.toLowerCase().replace(/\s+/g, '-')}-${format(new Date(), 'yyyy-MM-dd')}.pdf`;

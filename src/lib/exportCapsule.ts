@@ -205,8 +205,7 @@ export async function exportCapsuleToPDF(
   const pdfDoc = await buildCapsulePdf(capsule, medias, sharedCircles);
   const pdfBytes = await pdfDoc.save();
 
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([pdfBytes.buffer], { type: 'application/pdf' });
   const a = document.createElement('a');
   a.href = url;
   a.download = `capsule-${capsule.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`;
