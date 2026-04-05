@@ -138,7 +138,7 @@ const MediaUpload = ({
     for (const file of filesToAdd) {
       // Auto-compress images before validation
       let processedFile = file;
-      if (file.type.startsWith('image/') && file.size > 3 * 1024 * 1024) {
+      if (file.type.startsWith('image/') && file.size > 1 * 1024 * 1024) {
         try {
           processedFile = await compressImageIfNeeded(file);
           if (processedFile !== file) {
