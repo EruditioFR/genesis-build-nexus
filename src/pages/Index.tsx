@@ -46,6 +46,19 @@ const Index = () => {
     return null;
   }
 
+  // A/B test: variant 1 = new modern landing page
+  if (variant === 1) {
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
+          <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        <IndexV2 />
+      </Suspense>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <SEOHead
