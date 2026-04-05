@@ -50,12 +50,12 @@ const DashboardInspirationWidget = () => {
             'shadow-md shadow-orange-200/50 dark:shadow-orange-900/30'
           )}
         >
-          <span className="text-lg animate-bounce">💡</span>
+          <span className="text-lg animate-bounce">✍️</span>
           <span className="text-sm sm:text-base font-bold text-white drop-shadow-sm">
-            En panne d'inspiration pour écrire un souvenir ?
+            50 questions pour vous guider dans l'écriture de vos souvenirs
           </span>
-          <span className="text-xs sm:text-sm font-medium text-white/80 hidden sm:inline">
-            — Découvrez nos 50 idées !
+          <span className="text-xs sm:text-sm font-medium text-white/90 hidden sm:inline">
+            — Laissez-vous inspirer, question par question !
           </span>
           <ChevronRight className="h-4 w-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
         </button>
