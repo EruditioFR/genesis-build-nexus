@@ -24,6 +24,7 @@ const IndexV2 = lazy(() => import("@/pages/IndexV2"));
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const variant = useABVariant('landing', 2);
 
   useEffect(() => {
     if (!loading && user) {
