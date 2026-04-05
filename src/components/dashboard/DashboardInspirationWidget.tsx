@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -72,6 +72,20 @@ const DashboardInspirationWidget = () => {
     setCurrentSlide(prev => (prev - 1 + slideCount) % slideCount);
   }, [slideCount]);
 
+  // Swipe handling
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) { next(); } else { prev(); }
+    }
+    touchStart.current = null;
+  }, [next, prev]);
+
   // Autoplay
   useEffect(() => {
     if (dismissed || open) return;
@@ -100,7 +114,7 @@ const DashboardInspirationWidget = () => {
         className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group"
       >
         {/* Background image with overlay */}
-        <div className="relative h-48 sm:h-48 md:h-52">
+        <div className="relative h-48 sm:h-48 md:h-52" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentSlide}
