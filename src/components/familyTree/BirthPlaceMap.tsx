@@ -4,10 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { MapPin, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { geocodeAndCachePersons, type GeocodeProgress } from '@/lib/geocoding';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster';
 import type { FamilyPerson } from '@/types/familyTree';
 
 // Fix default marker icon issue with bundlers
@@ -52,18 +53,6 @@ function formatDates(person: FamilyPerson) {
   return death !== null ? `${birth} – ${death}` : `${birth}`;
 }
 
-// Auto-fit bounds component
-function FitBounds({ positions }: { positions: [number, number][] }) {
-  const map = useMap();
-  useEffect(() => {
-    if (positions.length > 0) {
-      const bounds = L.latLngBounds(positions.map(p => L.latLng(p[0], p[1])));
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 10 });
-    }
-  }, [positions, map]);
-  return null;
-}
-
 interface BirthPlaceMapProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -76,8 +65,10 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
   const [geocodedCoords, setGeocodedCoords] = useState<Map<string, { lat: number; lng: number }>>(new Map());
   const [isGeocoding, setIsGeocoding] = useState(false);
   const hasStarted = useRef(false);
+  const mapRef = useRef<L.Map | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
 
-  // Persons already with coords + freshly geocoded
   const markers = useMemo(() => {
     const result: Array<{ person: FamilyPerson; lat: number; lng: number }> = [];
     for (const p of persons) {
@@ -90,7 +81,58 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     return result;
   }, [persons, geocodedCoords]);
 
-  const positions = useMemo(() => markers.map(m => [m.lat, m.lng] as [number, number]), [markers]);
+  const personsWithPlace = persons.filter(p => p.birth_place);
+
+  // Initialize map when dialog opens
+  useEffect(() => {
+    if (!open || !mapContainerRef.current || mapRef.current) return;
+
+    const map = L.map(mapContainerRef.current).setView([46.6, 2.3], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    const clusterGroup = L.markerClusterGroup();
+    map.addLayer(clusterGroup);
+
+    mapRef.current = map;
+    clusterGroupRef.current = clusterGroup;
+
+    // Fix map size after dialog animation
+    setTimeout(() => map.invalidateSize(), 300);
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      clusterGroupRef.current = null;
+    };
+  }, [open]);
+
+  // Update markers when data changes
+  useEffect(() => {
+    if (!clusterGroupRef.current || !mapRef.current) return;
+
+    const cluster = clusterGroupRef.current;
+    cluster.clearLayers();
+
+    for (const { person, lat, lng } of markers) {
+      const marker = L.marker([lat, lng], { icon: getIcon(person.gender) });
+      const maidenInfo = person.maiden_name ? ` (${t('person.born')} ${person.maiden_name})` : '';
+      marker.bindPopup(`
+        <div style="min-width:150px">
+          <p style="font-weight:600;margin:0">${person.first_names} ${person.last_name}${maidenInfo}</p>
+          <p style="font-size:12px;color:#6b7280;margin:2px 0">${formatDates(person)}</p>
+          <p style="font-size:12px;margin:2px 0">${person.birth_place || ''}</p>
+        </div>
+      `);
+      cluster.addLayer(marker);
+    }
+
+    if (markers.length > 0) {
+      const bounds = L.latLngBounds(markers.map(m => L.latLng(m.lat, m.lng)));
+      mapRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 10 });
+    }
+  }, [markers, t]);
 
   // Start geocoding when dialog opens
   useEffect(() => {
@@ -109,7 +151,6 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
       supabase,
       (progress) => {
         setGeoCodeProgress(progress);
-        // Update geocoded coords incrementally
         setGeocodedCoords(new Map(progress.results));
       }
     ).then(() => {
@@ -126,8 +167,6 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
       setIsGeocoding(false);
     }
   }, [open]);
-
-  const personsWithPlace = persons.filter(p => p.birth_place);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -157,34 +196,7 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
               </div>
             </div>
           ) : (
-            <MapContainer
-              center={[46.6, 2.3]}
-              zoom={5}
-              style={{ width: '100%', height: '100%' }}
-              className="rounded-b-lg"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {positions.length > 0 && <FitBounds positions={positions} />}
-              <MarkerClusterGroup chunkedLoading>
-                {markers.map(({ person, lat, lng }) => (
-                  <Marker key={person.id} position={[lat, lng]} icon={getIcon(person.gender)}>
-                    <Popup>
-                      <div className="text-sm space-y-1 min-w-[150px]">
-                        <p className="font-semibold">
-                          {person.first_names} {person.last_name}
-                          {person.maiden_name ? ` (${t('person.born')} ${person.maiden_name})` : ''}
-                        </p>
-                        <p className="text-xs text-gray-500">{formatDates(person)}</p>
-                        <p className="text-xs">{person.birth_place}</p>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
-              </MarkerClusterGroup>
-            </MapContainer>
+            <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} className="rounded-b-lg" />
           )}
         </div>
       </DialogContent>
