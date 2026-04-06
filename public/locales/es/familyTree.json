@@ -1,4 +1,10 @@
 {
+  "map": {
+    "title": "Mapa de lugares de nacimiento",
+    "noLocations": "No hay lugar de nacimiento registrado en el árbol.",
+    "personsLocated": "{{located}} / {{total}} personas localizadas",
+    "geocoding": "Geocodificando… {{done}}/{{total}}"
+  },
   "loading": "Cargando árbol...",
   "defaultTreeName": "Mi árbol genealógico",
   "defaultTreeDescription": "Mi historia familiar",
