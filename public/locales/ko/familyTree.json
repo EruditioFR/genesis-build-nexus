@@ -58,5 +58,8 @@
     "description": "첫 번째 사람을 추가하거나 기존 가계도를 가져오세요.",
     "addPerson": "사람 추가",
     "importGedcom": "GEDCOM 가져오기"
-  }
+  },
+  "generation": { "self": "나", "children": "자녀", "parents": "부모", "grandchildren": "손자녀", "grandparents": "조부모", "greatGrandchildren": "증손자녀", "greatGrandparents": "증조부모", "plus": "{{n}}세대 아래", "minus": "{{n}}세대 위" },
+  "ghost": { "ancestors": "명의 조상", "descendants": "명의 후손" },
+  "toast": { "loadTreesError": "가계도 로딩 오류", "treeCreated": "가계도 생성 완료", "treeCreateError": "가계도 생성 오류", "loadTreeError": "가계도 로딩 오류", "personAdded": "사람 추가됨", "personAddError": "사람 추가 오류", "personUpdated": "사람 업데이트됨", "personUpdateError": "업데이트 오류", "personDeleted": "사람 삭제됨", "personDeleteError": "삭제 오류", "relationAdded": "관계 추가됨", "relationAddError": "관계 추가 오류", "relationUpdated": "관계 업데이트됨", "relationUpdateError": "관계 업데이트 오류", "relationDeleted": "관계 삭제됨", "relationDeleteError": "관계 삭제 오류", "unionAdded": "결합 추가됨", "unionAddError": "결합 추가 오류", "unionUpdated": "결합 업데이트됨", "unionUpdateError": "결합 업데이트 오류", "unionDeleted": "결합 삭제됨", "unionDeleteError": "결합 삭제 오류", "treeDeleted": "가계도 삭제됨", "treeDeleteError": "삭제 오류", "merged": "사람 합치기 성공", "mergeError": "사람 합치기 오류" }
 }

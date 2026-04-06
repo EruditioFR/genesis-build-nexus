@@ -180,6 +180,9 @@ export function PersonDetailPanel({
     occupation: string;
     nationality: string;
     biography: string;
+    burial_date: string;
+    burial_place: string;
+    residences: Array<{ place: string; from?: string; to?: string }>;
   }>({
     first_names: person.first_names,
     last_name: person.last_name,
@@ -192,10 +195,13 @@ export function PersonDetailPanel({
     death_place: person.death_place || '',
     occupation: person.occupation || '',
     nationality: person.nationality || '',
-    biography: person.biography || ''
+    biography: person.biography || '',
+    burial_date: (person as any).burial_date || '',
+    burial_place: (person as any).burial_place || '',
+    residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
   });
 
-  const { updatePerson, updateUnion, updateRelationship } = useFamilyTree();
+  const { updatePerson, updateUnion, updateRelationship, deleteUnion, deleteRelationship } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
@@ -231,7 +237,10 @@ export function PersonDetailPanel({
       death_place: person.death_place || '',
       occupation: person.occupation || '',
       nationality: person.nationality || '',
-      biography: person.biography || ''
+      biography: person.biography || '',
+      burial_date: (person as any).burial_date || '',
+      burial_place: (person as any).burial_place || '',
+      residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
     });
     setIsEditing(true);
   };
@@ -250,13 +259,16 @@ export function PersonDetailPanel({
       death_place: person.death_place || '',
       occupation: person.occupation || '',
       nationality: person.nationality || '',
-      biography: person.biography || ''
+      biography: person.biography || '',
+      burial_date: (person as any).burial_date || '',
+      burial_place: (person as any).burial_place || '',
+      residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
     });
   };
 
   const handleSave = async () => {
     if (!editData.first_names.trim() || !editData.last_name.trim()) {
-      toast.error('Le prénom et le nom sont obligatoires');
+      toast.error(t('detail.requiredFields'));
       return;
     }
 
@@ -274,19 +286,22 @@ export function PersonDetailPanel({
         death_place: !editData.is_alive ? editData.death_place.trim() || null : null,
         occupation: editData.occupation.trim() || null,
         nationality: editData.nationality.trim() || null,
-        biography: editData.biography.trim() || null
-      });
+        biography: editData.biography.trim() || null,
+        burial_date: !editData.is_alive ? editData.burial_date || null : null,
+        burial_place: !editData.is_alive ? editData.burial_place.trim() || null : null,
+        residences: editData.residences.length > 0 ? editData.residences : undefined
+      } as any);
 
       if (success) {
-        toast.success('Personne mise à jour avec succès');
+        toast.success(t('detail.updateSuccess'));
         setIsEditing(false);
         onUpdate();
       } else {
-        toast.error('Erreur lors de la mise à jour');
+        toast.error(t('detail.updateError'));
       }
     } catch (error) {
       console.error('Error updating person:', error);
-      toast.error('Erreur lors de la mise à jour');
+      toast.error(t('detail.updateError'));
     } finally {
       setIsSaving(false);
     }
@@ -712,6 +727,96 @@ export function PersonDetailPanel({
                     </div>
                   </>
                 )}
+
+                <Separator />
+
+                {/* Burial info - only if not alive */}
+                {!editData.is_alive && (
+                  <>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">{t('detail.fields.burialDate')}</Label>
+                      <Input
+                        type="date"
+                        value={editData.burial_date}
+                        onChange={(e) => setEditData(prev => ({ ...prev, burial_date: e.target.value }))}
+                        className="h-9"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">{t('detail.fields.burialPlace')}</Label>
+                      <Input
+                        value={editData.burial_place}
+                        onChange={(e) => setEditData(prev => ({ ...prev, burial_place: e.target.value }))}
+                        placeholder={t('detail.fields.burialPlacePlaceholder')}
+                        className="h-9"
+                      />
+                    </div>
+                  </>
+                )}
+
+                <Separator />
+
+                {/* Residences */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">{t('detail.fields.residences')}</Label>
+                  {editData.residences.map((res, idx) => (
+                    <div key={idx} className="flex gap-2 items-end p-2 bg-muted/50 rounded-lg">
+                      <div className="flex-1 space-y-1">
+                        <Input
+                          value={res.place}
+                          onChange={(e) => {
+                            const updated = [...editData.residences];
+                            updated[idx] = { ...updated[idx], place: e.target.value };
+                            setEditData(prev => ({ ...prev, residences: updated }));
+                          }}
+                          placeholder={t('detail.fields.residencePlace')}
+                          className="h-8 text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <Input
+                            value={res.from || ''}
+                            onChange={(e) => {
+                              const updated = [...editData.residences];
+                              updated[idx] = { ...updated[idx], from: e.target.value };
+                              setEditData(prev => ({ ...prev, residences: updated }));
+                            }}
+                            placeholder={t('detail.fields.residenceFrom')}
+                            className="h-7 text-xs"
+                          />
+                          <Input
+                            value={res.to || ''}
+                            onChange={(e) => {
+                              const updated = [...editData.residences];
+                              updated[idx] = { ...updated[idx], to: e.target.value };
+                              setEditData(prev => ({ ...prev, residences: updated }));
+                            }}
+                            placeholder={t('detail.fields.residenceTo')}
+                            className="h-7 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs text-destructive"
+                        onClick={() => {
+                          const updated = editData.residences.filter((_, i) => i !== idx);
+                          setEditData(prev => ({ ...prev, residences: updated }));
+                        }}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full h-8 text-xs"
+                    onClick={() => setEditData(prev => ({ ...prev, residences: [...prev.residences, { place: '' }] }))}
+                  >
+                    {t('detail.fields.addResidence')}
+                  </Button>
+                </div>
 
                 <Separator />
 

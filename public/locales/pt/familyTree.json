@@ -178,7 +178,16 @@
       "biography": "Biografia",
       "biographyPlaceholder": "Informações biográficas...",
       "firstName": "Nome(s) próprio(s)",
-      "lastName": "Apelido"
+      "lastName": "Apelido",
+      "burialDate": "Data de sepultamento",
+      "burialPlace": "Local de sepultamento",
+      "burialPlacePlaceholder": "Cemitério, Cidade",
+      "residences": "Residências",
+      "residencePlace": "Local",
+      "residenceFrom": "De",
+      "residenceTo": "A",
+      "addResidence": "Adicionar residência",
+      "removeResidence": "Remover"
     },
     "relations": {
       "link": "Ligar",
@@ -347,5 +356,8 @@
     "readError": "Erro ao ler o ficheiro. Verifique o formato.",
     "fileRejected": "Ficheiro recusado: {{errors}}. Tente um ficheiro .ged ou .gedcom.",
     "importErrorMsg": "Erro durante a importação. Por favor, tente novamente."
-  }
+  },
+  "generation": { "self": "Você", "children": "Filhos", "parents": "Pais", "grandchildren": "Netos", "grandparents": "Avós", "greatGrandchildren": "Bisnetos", "greatGrandparents": "Bisavós", "plus": "Ger. +{{n}}", "minus": "Ger. -{{n}}" },
+  "ghost": { "ancestors": "ancestrais", "descendants": "descendentes" },
+  "toast": { "loadTreesError": "Erro ao carregar as árvores", "treeCreated": "Árvore criada com sucesso", "treeCreateError": "Erro ao criar a árvore", "loadTreeError": "Erro ao carregar a árvore", "personAdded": "Pessoa adicionada", "personAddError": "Erro ao adicionar a pessoa", "personUpdated": "Pessoa atualizada", "personUpdateError": "Erro ao atualizar", "personDeleted": "Pessoa eliminada", "personDeleteError": "Erro ao eliminar", "relationAdded": "Relação adicionada", "relationAddError": "Erro ao adicionar a relação", "relationUpdated": "Relação atualizada", "relationUpdateError": "Erro ao atualizar a relação", "relationDeleted": "Relação eliminada", "relationDeleteError": "Erro ao eliminar a relação", "unionAdded": "União adicionada", "unionAddError": "Erro ao adicionar a união", "unionUpdated": "União atualizada", "unionUpdateError": "Erro ao atualizar a união", "unionDeleted": "União eliminada", "unionDeleteError": "Erro ao eliminar a união", "treeDeleted": "Árvore eliminada", "treeDeleteError": "Erro ao eliminar", "merged": "Pessoas fundidas com sucesso", "mergeError": "Erro ao fundir as pessoas" }
 }
