@@ -324,5 +324,8 @@
     "readError": "Errore nella lettura del file. Verifica il formato.",
     "fileRejected": "File rifiutato: {{errors}}. Prova un file .ged o .gedcom.",
     "importErrorMsg": "Errore durante l'importazione. Riprova."
-  }
+  },
+  "generation": { "self": "Tu", "children": "Figli", "parents": "Genitori", "grandchildren": "Nipoti", "grandparents": "Nonni", "greatGrandchildren": "Pronipoti", "greatGrandparents": "Bisnonni", "plus": "Gen. +{{n}}", "minus": "Gen. -{{n}}" },
+  "ghost": { "ancestors": "antenati", "descendants": "discendenti" },
+  "toast": { "loadTreesError": "Errore nel caricamento degli alberi", "treeCreated": "Albero creato con successo", "treeCreateError": "Errore nella creazione dell'albero", "loadTreeError": "Errore nel caricamento dell'albero", "personAdded": "Persona aggiunta", "personAddError": "Errore nell'aggiunta della persona", "personUpdated": "Persona aggiornata", "personUpdateError": "Errore nell'aggiornamento", "personDeleted": "Persona eliminata", "personDeleteError": "Errore nell'eliminazione", "relationAdded": "Relazione aggiunta", "relationAddError": "Errore nell'aggiunta della relazione", "relationUpdated": "Relazione aggiornata", "relationUpdateError": "Errore nell'aggiornamento della relazione", "relationDeleted": "Relazione eliminata", "relationDeleteError": "Errore nell'eliminazione della relazione", "unionAdded": "Unione aggiunta", "unionAddError": "Errore nell'aggiunta dell'unione", "unionUpdated": "Unione aggiornata", "unionUpdateError": "Errore nell'aggiornamento dell'unione", "unionDeleted": "Unione eliminata", "unionDeleteError": "Errore nell'eliminazione dell'unione", "treeDeleted": "Albero eliminato", "treeDeleteError": "Errore nell'eliminazione", "merged": "Persone unite con successo", "mergeError": "Errore nell'unione delle persone" }
 }
