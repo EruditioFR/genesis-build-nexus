@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { MapPin, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { geocodeAndCachePersons, type GeocodeProgress } from '@/lib/geocoding';
@@ -68,6 +68,7 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const markers = useMemo(() => {
     const result: Array<{ person: FamilyPerson; lat: number; lng: number }> = [];
@@ -87,7 +88,8 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
   useEffect(() => {
     if (!open || !mapContainerRef.current || mapRef.current) return;
 
-    const map = L.map(mapContainerRef.current).setView([46.6, 2.3], 5);
+    const container = mapContainerRef.current;
+    const map = L.map(container).setView([46.6, 2.3], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
@@ -98,10 +100,28 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     mapRef.current = map;
     clusterGroupRef.current = clusterGroup;
 
-    // Fix map size after dialog animation
-    setTimeout(() => map.invalidateSize(), 300);
+    const syncMapSize = () => {
+      window.requestAnimationFrame(() => {
+        map.invalidateSize(false);
+      });
+    };
+
+    const initialTimers = [
+      window.setTimeout(syncMapSize, 0),
+      window.setTimeout(syncMapSize, 250),
+      window.setTimeout(syncMapSize, 600),
+    ];
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(() => syncMapSize());
+      observer.observe(container);
+      resizeObserverRef.current = observer;
+    }
 
     return () => {
+      initialTimers.forEach((timer) => window.clearTimeout(timer));
+      resizeObserverRef.current?.disconnect();
+      resizeObserverRef.current = null;
       map.remove();
       mapRef.current = null;
       clusterGroupRef.current = null;
@@ -114,6 +134,7 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
 
     const cluster = clusterGroupRef.current;
     cluster.clearLayers();
+    mapRef.current.invalidateSize(false);
 
     for (const { person, lat, lng } of markers) {
       const marker = L.marker([lat, lng], { icon: getIcon(person.gender) });
@@ -170,12 +191,15 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] w-[95vw] h-[85vh] max-h-[85vh] p-0 flex flex-col">
+      <DialogContent className="w-[95vw] max-w-[95vw] h-[85dvh] max-h-[85dvh] overflow-hidden p-0 flex flex-col">
         <DialogHeader className="px-4 pt-4 pb-2 flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary" />
             {t('map.title')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('map.personsLocated', { located: markers.length, total: personsWithPlace.length })}
+          </DialogDescription>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>{t('map.personsLocated', { located: markers.length, total: personsWithPlace.length })}</span>
             {isGeocoding && geocodeProgress && (
@@ -187,7 +211,7 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
           </div>
         </DialogHeader>
 
-        <div className="flex-1 relative min-h-0">
+        <div className="relative flex-1 min-h-[320px]">
           {personsWithPlace.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center space-y-2">
@@ -196,7 +220,11 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
               </div>
             </div>
           ) : (
-            <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} className="rounded-b-lg" />
+            <div
+              ref={mapContainerRef}
+              style={{ width: '100%', height: '100%', minHeight: 320 }}
+              className="h-full w-full rounded-b-lg"
+            />
           )}
         </div>
       </DialogContent>
