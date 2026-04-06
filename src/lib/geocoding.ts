@@ -63,9 +63,9 @@ export async function geocodeBirthPlace(place: string): Promise<GeoResult | null
 
 export interface PersonToGeocode {
   id: string;
-  birth_place: string | null;
-  birth_place_lat: number | null;
-  birth_place_lng: number | null;
+  birth_place?: string | null;
+  birth_place_lat?: number | null;
+  birth_place_lng?: number | null;
 }
 
 export interface GeocodeProgress {

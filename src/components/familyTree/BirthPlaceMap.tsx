@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { MapPin, Loader2, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MapPin, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { geocodeAndCachePersons, type GeocodeProgress } from '@/lib/geocoding';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
