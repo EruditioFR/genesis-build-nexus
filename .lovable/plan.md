@@ -1,43 +1,66 @@
 
 
-## Plan : Test A/B sur la page d'accueil
+## Plan : Améliorations complètes de l'arbre généalogique
 
-### Concept
+### 1. Corriger les bugs logiques
 
-Ajouter un système de test A/B simple qui affiche aléatoirement (50/50) l'une des deux variantes de la page d'accueil aux visiteurs non identifiés. La variante est persistée en `localStorage` pour que le visiteur voie toujours la meme version.
+**A. Calcul réel du nombre de générations** (`useFamilyTree.tsx`)
+- Remplacer le `generationsCount: 1 // TODO` par un algorithme BFS réel : charger les relations parent-enfant, construire un graphe orienté, calculer la profondeur maximale depuis les personnes sans parents (ancêtres racine).
 
-### Variante B — Positionnement "moderne / jeune"
+**B. Ajouter `deleteUnion` et `deleteRelationship`** (`useFamilyTree.tsx`)
+- Créer `deleteUnion(unionId: string)` : supprime l'union dans `family_unions` + met à null les `union_id` dans `family_parent_child` qui référencent cette union.
+- Créer `deleteRelationship(relationshipId: string)` : supprime le lien parent-enfant dans `family_parent_child`.
+- Exposer les deux fonctions dans le return du hook et les câbler dans `PersonDetailPanel.tsx` (boutons "Supprimer" sur chaque relation et union, avec confirmation).
 
-Structure narrative en storytelling, axée sur le problème et la solution :
+---
 
-1. **Hero** — Accroche émotionnelle sur la douleur : "Vos souvenirs sont éparpillés entre 10 apps. Un jour, ils disparaîtront." CTA fort.
-2. **Section Problème** — 3 pain points illustrés (photos perdues dans le cloud, stories éphémères, réseaux sociaux = public). Comparaison visuelle Family Garden vs réseaux sociaux.
-3. **Section Solution / Fonctionnalités** — Cards modernes avec les fonctionnalités clés présentées comme des réponses aux douleurs (privé vs public, durable vs éphémère, organisé vs chaos).
-4. **Section Public concerné** — 3 profils cibles : jeunes parents, familles multigénérationnelles, personnes souhaitant transmettre un héritage.
-5. **Section Social Proof** — Témoignages + chiffres clés.
-6. **CTA final** — Urgence douce : "Commencez avant que le prochain souvenir ne se perde."
-7. Footer (réutilisé).
+### 2. Internationaliser tous les labels codés en dur
 
-### Implémentation technique
+**A. `getGenerationLabel`** (`TreeVisualization.tsx`, ligne 728)
+- Remplacer les labels français ("Vous", "Enfants", "Parents", etc.) par des clés i18n. Comme `getGenerationLabel` est une fonction pure hors composant, passer le `t` en paramètre ou déplacer la logique dans un hook.
 
-**Fichiers créés :**
-- `src/lib/abTest.ts` — Hook `useABVariant('landing', 2)` qui tire au sort une variante (0 ou 1), la stocke dans `localStorage`, et envoie un event Google Analytics (`ab_test_variant`).
-- `src/components/landing/v2/HeroSectionV2.tsx` — Hero storytelling sombre/moderne.
-- `src/components/landing/v2/PainPointsSection.tsx` — Section "Le problème" avec comparaison réseaux sociaux.
-- `src/components/landing/v2/SolutionSection.tsx` — Fonctionnalités comme réponses aux douleurs.
-- `src/components/landing/v2/AudienceSection.tsx` — 3 profils cibles.
-- `src/pages/IndexV2.tsx` — Assemblage de la variante B (réutilise Header, Footer, PricingSection, FAQSection, TestimonialsSection, CookieBanner existants).
+**B. Ghost labels** (`TreeVisualization.tsx`, lignes 615-619)
+- Remplacer `+${ghostCount} ancêtres` / `+${ghostCount} descendants` par des clés i18n `familyTree:ghost.ancestors` / `familyTree:ghost.descendants`.
 
-**Fichier modifié :**
-- `src/pages/Index.tsx` — Utilise le hook A/B pour rendre soit le contenu actuel (variante A), soit `IndexV2` (variante B).
+**C. Toasts dans `useFamilyTree.tsx`**
+- Remplacer les ~20 messages toast français codés en dur par des appels `t(...)` du namespace `familyTree`. Comme `useFamilyTree` n'est pas un composant React mais un hook, on peut y utiliser `useTranslation`.
 
-**Traductions :** Ajout de clés `landingV2` dans les fichiers `landing.json` des 7 langues (fr, en, es, pt, it, ko, zh).
+**D. Fichiers de traduction**
+- Ajouter les clés manquantes dans `familyTree.json` pour les 7 langues (fr, en, es, pt, it, ko, zh) :
+  - `generation.self`, `generation.children`, `generation.parents`, `generation.grandchildren`, `generation.grandparents`, `generation.greatGrandchildren`, `generation.greatGrandparents`, `generation.plus`, `generation.minus`
+  - `ghost.ancestors`, `ghost.descendants`
+  - `toast.personAdded`, `toast.personUpdated`, `toast.personDeleted`, `toast.relationAdded`, `toast.unionAdded`, `toast.unionUpdated`, `toast.unionDeleted`, `toast.relationDeleted`, `toast.treeCreated`, `toast.treeDeleted`, `toast.merged`, etc.
 
-### Tracking A/B
+---
 
-Le hook envoie automatiquement un événement GA `ab_test_variant` avec la variante attribuée. Cela permet de comparer les taux de conversion (inscription) entre les deux versions dans Google Analytics.
+### 3. Exploiter les champs DB inutilisés
 
-### Sections réutilisées de la V1
+**A. `PersonDetailPanel.tsx`** — onglet "Info" en mode édition
+- Ajouter les champs : `burial_date` (input date), `burial_place` (input texte), `residences` (liste dynamique : lieu + période from/to, bouton ajouter/supprimer).
+- En mode lecture, afficher ces informations si renseignées.
 
-PricingSection, FAQSection, TestimonialsSection, Footer et CookieBanner sont partagés entre les deux variantes pour garder la cohérence et limiter le code dupliqué.
+**B. `useFamilyTree.tsx` — `updatePerson`**
+- Inclure `burial_date`, `burial_place`, `residences` dans l'objet d'update (actuellement omis).
+
+**C. `AddPersonDialog.tsx`**
+- Ajouter un volet "Plus d'informations" pliable avec `burial_date`, `burial_place`, `residences`.
+
+**D. Traductions**
+- Ajouter les clés `detail.fields.burialDate`, `detail.fields.burialPlace`, `detail.fields.residences`, `detail.fields.residencePlace`, `detail.fields.residenceFrom`, `detail.fields.residenceTo`, `detail.fields.addResidence` dans les 7 langues.
+
+---
+
+### Fichiers impactés
+
+| Fichier | Modifications |
+|---|---|
+| `src/hooks/useFamilyTree.tsx` | `deleteUnion`, `deleteRelationship`, `getTreeStatistics` fix, `updatePerson` champs manquants, i18n toasts |
+| `src/components/familyTree/TreeVisualization.tsx` | i18n `getGenerationLabel` + ghost labels |
+| `src/components/familyTree/PersonDetailPanel.tsx` | UI burial/residences, boutons delete union/relation |
+| `src/components/familyTree/AddPersonDialog.tsx` | Champs burial/residences |
+| `public/locales/*/familyTree.json` (×7) | Nouvelles clés traduction |
+
+### Estimation
+
+~8 fichiers modifiés, ~300 lignes ajoutées/modifiées. Pas de migration DB nécessaire (les colonnes existent déjà).
 
