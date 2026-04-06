@@ -237,6 +237,8 @@ export function PersonDetailPanel({
       gender: person.gender || '',
       birth_date: person.birth_date || '',
       birth_place: person.birth_place || '',
+      birth_place_lat: (person as any).birth_place_lat ?? null,
+      birth_place_lng: (person as any).birth_place_lng ?? null,
       is_alive: person.is_alive ?? true,
       death_date: person.death_date || '',
       death_place: person.death_place || '',
