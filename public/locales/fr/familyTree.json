@@ -1,9 +1,13 @@
 {
   "map": {
-    "title": "Carte des lieux de naissance",
-    "noLocations": "Aucun lieu de naissance renseigné dans l'arbre.",
+    "title": "Carte des lieux",
+    "noLocations": "Aucun lieu renseigné dans l'arbre.",
     "personsLocated": "{{located}} / {{total}} personnes localisées",
-    "geocoding": "Géocodage en cours… {{done}}/{{total}}"
+    "geocoding": "Géocodage en cours… {{done}}/{{total}}",
+    "birthPlace": "Lieu de naissance",
+    "deathPlace": "Lieu de décès",
+    "birthCount": "{{count}} naissance(s)",
+    "deathCount": "{{count}} décès"
   },
   "loading": "Chargement de l'arbre...",
   "defaultTreeName": "Mon arbre généalogique",
