@@ -329,7 +329,7 @@ export default function FamilyTreePage() {
     geocodeAndCachePersons(needsGeocode, supabase).catch(() => {});
   }, [persons, tree?.id]);
 
-
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreen) {
         setIsFullscreen(false);
