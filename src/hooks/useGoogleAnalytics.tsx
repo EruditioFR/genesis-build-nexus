@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
 const COOKIE_CONSENT_KEY = "familygarden-cookie-consent";
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-173H7GYR34";
 
 // Déclarations pour TypeScript
 declare global {
