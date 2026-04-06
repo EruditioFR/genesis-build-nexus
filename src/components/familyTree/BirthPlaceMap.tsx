@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { MapPin, Loader2 } from 'lucide-react';
@@ -66,9 +66,10 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
   const [isGeocoding, setIsGeocoding] = useState(false);
   const hasStarted = useRef(false);
   const mapRef = useRef<L.Map | null>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const containerElRef = useRef<HTMLDivElement | null>(null);
+  const initTimerRef = useRef<number | null>(null);
 
   const markers = useMemo(() => {
     const result: Array<{ person: FamilyPerson; lat: number; lng: number }> = [];
@@ -84,49 +85,65 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
 
   const personsWithPlace = persons.filter(p => p.birth_place);
 
-  // Initialize map when dialog opens
-  useEffect(() => {
-    if (!open || !mapContainerRef.current || mapRef.current) return;
-
-    const container = mapContainerRef.current;
-    const map = L.map(container).setView([46.6, 2.3], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-
-    const clusterGroup = L.markerClusterGroup();
-    map.addLayer(clusterGroup);
-
-    mapRef.current = map;
-    clusterGroupRef.current = clusterGroup;
-
-    const syncMapSize = () => {
-      window.requestAnimationFrame(() => {
-        map.invalidateSize(false);
-      });
-    };
-
-    const initialTimers = [
-      window.setTimeout(syncMapSize, 0),
-      window.setTimeout(syncMapSize, 250),
-      window.setTimeout(syncMapSize, 600),
-    ];
-
-    if (typeof ResizeObserver !== 'undefined') {
-      const observer = new ResizeObserver(() => syncMapSize());
-      observer.observe(container);
-      resizeObserverRef.current = observer;
+  // Destroy map helper
+  const destroyMap = useCallback(() => {
+    if (initTimerRef.current != null) {
+      window.clearTimeout(initTimerRef.current);
+      initTimerRef.current = null;
     }
-
-    return () => {
-      initialTimers.forEach((timer) => window.clearTimeout(timer));
-      resizeObserverRef.current?.disconnect();
-      resizeObserverRef.current = null;
-      map.remove();
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = null;
+    if (mapRef.current) {
+      mapRef.current.remove();
       mapRef.current = null;
-      clusterGroupRef.current = null;
-    };
-  }, [open]);
+    }
+    clusterGroupRef.current = null;
+  }, []);
+
+  // Initialize map via callback ref – fires when the div actually mounts in the DOM
+  const mapCallbackRef = useCallback((node: HTMLDivElement | null) => {
+    containerElRef.current = node;
+    if (!node) return;
+
+    // Delay initialisation so the Radix dialog animation finishes and the
+    // container has real dimensions.
+    initTimerRef.current = window.setTimeout(() => {
+      if (mapRef.current) return; // already initialised
+
+      const map = L.map(node, { zoomControl: true }).setView([46.6, 2.3], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+
+      const clusterGroup = L.markerClusterGroup();
+      map.addLayer(clusterGroup);
+
+      mapRef.current = map;
+      clusterGroupRef.current = clusterGroup;
+
+      // Belt-and-suspenders: invalidate after animation is certainly done
+      const t1 = window.setTimeout(() => map.invalidateSize(false), 100);
+      const t2 = window.setTimeout(() => map.invalidateSize(false), 400);
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const observer = new ResizeObserver(() => {
+          window.requestAnimationFrame(() => map.invalidateSize(false));
+        });
+        observer.observe(node);
+        resizeObserverRef.current = observer;
+      }
+
+      // Store extra timers for cleanup
+      (map as any)._extraTimers = [t1, t2];
+    }, 350); // 350ms ≈ Radix dialog open animation duration
+  }, []);
+
+  // Cleanup when dialog closes
+  useEffect(() => {
+    if (!open) {
+      destroyMap();
+    }
+  }, [open, destroyMap]);
 
   // Update markers when data changes
   useEffect(() => {
@@ -134,7 +151,6 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
 
     const cluster = clusterGroupRef.current;
     cluster.clearLayers();
-    mapRef.current.invalidateSize(false);
 
     for (const { person, lat, lng } of markers) {
       const marker = L.marker([lat, lng], { icon: getIcon(person.gender) });
@@ -189,6 +205,11 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     }
   }, [open]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => destroyMap();
+  }, [destroyMap]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-[95vw] h-[85dvh] max-h-[85dvh] overflow-hidden p-0 !flex !flex-col">
@@ -221,9 +242,9 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
             </div>
           ) : (
             <div
-              ref={mapContainerRef}
-              style={{ width: '100%', height: '100%', minHeight: 320 }}
-              className="h-full w-full rounded-b-lg"
+              ref={mapCallbackRef}
+              style={{ position: 'absolute', inset: 0, minHeight: 320 }}
+              className="rounded-b-lg"
             />
           )}
         </div>
