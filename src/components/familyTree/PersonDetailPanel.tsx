@@ -180,6 +180,9 @@ export function PersonDetailPanel({
     occupation: string;
     nationality: string;
     biography: string;
+    burial_date: string;
+    burial_place: string;
+    residences: Array<{ place: string; from?: string; to?: string }>;
   }>({
     first_names: person.first_names,
     last_name: person.last_name,
@@ -192,10 +195,13 @@ export function PersonDetailPanel({
     death_place: person.death_place || '',
     occupation: person.occupation || '',
     nationality: person.nationality || '',
-    biography: person.biography || ''
+    biography: person.biography || '',
+    burial_date: (person as any).burial_date || '',
+    burial_place: (person as any).burial_place || '',
+    residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
   });
 
-  const { updatePerson, updateUnion, updateRelationship } = useFamilyTree();
+  const { updatePerson, updateUnion, updateRelationship, deleteUnion, deleteRelationship } = useFamilyTree();
 
   const initials = `${person.first_names[0] || ''}${person.last_name[0] || ''}`.toUpperCase();
 
@@ -231,7 +237,10 @@ export function PersonDetailPanel({
       death_place: person.death_place || '',
       occupation: person.occupation || '',
       nationality: person.nationality || '',
-      biography: person.biography || ''
+      biography: person.biography || '',
+      burial_date: (person as any).burial_date || '',
+      burial_place: (person as any).burial_place || '',
+      residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
     });
     setIsEditing(true);
   };
@@ -250,13 +259,16 @@ export function PersonDetailPanel({
       death_place: person.death_place || '',
       occupation: person.occupation || '',
       nationality: person.nationality || '',
-      biography: person.biography || ''
+      biography: person.biography || '',
+      burial_date: (person as any).burial_date || '',
+      burial_place: (person as any).burial_place || '',
+      residences: (person.residences as Array<{ place: string; from?: string; to?: string }>) || []
     });
   };
 
   const handleSave = async () => {
     if (!editData.first_names.trim() || !editData.last_name.trim()) {
-      toast.error('Le prénom et le nom sont obligatoires');
+      toast.error(t('detail.requiredFields'));
       return;
     }
 
@@ -274,19 +286,22 @@ export function PersonDetailPanel({
         death_place: !editData.is_alive ? editData.death_place.trim() || null : null,
         occupation: editData.occupation.trim() || null,
         nationality: editData.nationality.trim() || null,
-        biography: editData.biography.trim() || null
-      });
+        biography: editData.biography.trim() || null,
+        burial_date: !editData.is_alive ? editData.burial_date || null : null,
+        burial_place: !editData.is_alive ? editData.burial_place.trim() || null : null,
+        residences: editData.residences.length > 0 ? editData.residences : undefined
+      } as any);
 
       if (success) {
-        toast.success('Personne mise à jour avec succès');
+        toast.success(t('detail.updateSuccess'));
         setIsEditing(false);
         onUpdate();
       } else {
-        toast.error('Erreur lors de la mise à jour');
+        toast.error(t('detail.updateError'));
       }
     } catch (error) {
       console.error('Error updating person:', error);
-      toast.error('Erreur lors de la mise à jour');
+      toast.error(t('detail.updateError'));
     } finally {
       setIsSaving(false);
     }
