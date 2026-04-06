@@ -56,6 +56,7 @@ import { downloadGedcom } from '@/lib/gedcomExporter';
 import { validateFamilyTree } from '@/lib/familyTreeValidation';
 import { TreeValidationPanel } from '@/components/familyTree/TreeValidationPanel';
 import { BirthPlaceMap } from '@/components/familyTree/BirthPlaceMap';
+import { geocodeAndCachePersons } from '@/lib/geocoding';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
