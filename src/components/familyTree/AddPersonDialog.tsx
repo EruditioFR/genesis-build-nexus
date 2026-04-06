@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { CalendarIcon, User, Loader2, Users, Search, X, UserPlus, Baby, ChevronDown } from 'lucide-react';
+import { PlaceAutocomplete } from './PlaceAutocomplete';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -81,6 +82,7 @@ export function AddPersonDialog({
   const [gender, setGender] = useState<'male' | 'female' | 'other'>('male');
   const [birthDate, setBirthDate] = useState<Date>();
   const [birthPlace, setBirthPlace] = useState('');
+  const [birthPlaceCoords, setBirthPlaceCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [isAlive, setIsAlive] = useState(true);
   const [deathDate, setDeathDate] = useState<Date>();
   const [deathPlace, setDeathPlace] = useState('');
@@ -124,6 +126,7 @@ export function AddPersonDialog({
     setGender('male');
     setBirthDate(undefined);
     setBirthPlace('');
+    setBirthPlaceCoords(null);
     setIsAlive(true);
     setDeathDate(undefined);
     setDeathPlace('');
@@ -151,6 +154,8 @@ export function AddPersonDialog({
       gender,
       birth_date: birthDate ? format(birthDate, 'yyyy-MM-dd') : null,
       birth_place: birthPlace || null,
+      birth_place_lat: birthPlaceCoords?.lat ?? null,
+      birth_place_lng: birthPlaceCoords?.lng ?? null,
       is_alive: isAlive,
       death_date: !isAlive && deathDate ? format(deathDate, 'yyyy-MM-dd') : null,
       death_place: !isAlive ? deathPlace || null : null,
@@ -281,11 +286,13 @@ export function AddPersonDialog({
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="birthPlace" className="text-sm">{t('addPerson.birthPlace')}</Label>
-            <Input
+            <PlaceAutocomplete
               id="birthPlace"
-              placeholder="Paris, France"
               value={birthPlace}
-              onChange={(e) => setBirthPlace(e.target.value)}
+              onChange={(val, coords) => {
+                setBirthPlace(val);
+                if (coords) setBirthPlaceCoords(coords);
+              }}
               className="h-11"
             />
           </div>
