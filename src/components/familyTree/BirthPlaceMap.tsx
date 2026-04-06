@@ -191,7 +191,7 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-[95vw] h-[85dvh] max-h-[85dvh] overflow-hidden p-0 flex flex-col">
+      <DialogContent className="w-[95vw] max-w-[95vw] h-[85dvh] max-h-[85dvh] overflow-hidden p-0 !flex !flex-col">
         <DialogHeader className="px-4 pt-4 pb-2 flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary" />
