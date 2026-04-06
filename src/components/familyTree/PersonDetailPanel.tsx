@@ -56,6 +56,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FamilyPerson, FamilyUnion, ParentChildRelationship } from '@/types/familyTree';
 import { useFamilyTree } from '@/hooks/useFamilyTree';
 import { PersonPhotoUpload } from './PersonPhotoUpload';
+import { PlaceAutocomplete } from './PlaceAutocomplete';
 import { PersonCapsulesList } from './PersonCapsuleLink';
 import { PersonTaggedMedias } from './PersonTaggedMedias';
 import { PersonValidationWarnings } from './PersonValidationWarnings';
@@ -174,6 +175,8 @@ export function PersonDetailPanel({
     gender: 'male' | 'female' | 'other' | 'unknown' | '';
     birth_date: string;
     birth_place: string;
+    birth_place_lat: number | null;
+    birth_place_lng: number | null;
     is_alive: boolean;
     death_date: string;
     death_place: string;
@@ -190,6 +193,8 @@ export function PersonDetailPanel({
     gender: person.gender || '',
     birth_date: person.birth_date || '',
     birth_place: person.birth_place || '',
+    birth_place_lat: (person as any).birth_place_lat ?? null,
+    birth_place_lng: (person as any).birth_place_lng ?? null,
     is_alive: person.is_alive ?? true,
     death_date: person.death_date || '',
     death_place: person.death_place || '',
@@ -232,6 +237,8 @@ export function PersonDetailPanel({
       gender: person.gender || '',
       birth_date: person.birth_date || '',
       birth_place: person.birth_place || '',
+      birth_place_lat: (person as any).birth_place_lat ?? null,
+      birth_place_lng: (person as any).birth_place_lng ?? null,
       is_alive: person.is_alive ?? true,
       death_date: person.death_date || '',
       death_place: person.death_place || '',
@@ -254,6 +261,8 @@ export function PersonDetailPanel({
       gender: person.gender || '',
       birth_date: person.birth_date || '',
       birth_place: person.birth_place || '',
+      birth_place_lat: (person as any).birth_place_lat ?? null,
+      birth_place_lng: (person as any).birth_place_lng ?? null,
       is_alive: person.is_alive ?? true,
       death_date: person.death_date || '',
       death_place: person.death_place || '',
@@ -281,6 +290,8 @@ export function PersonDetailPanel({
         gender: editData.gender || null,
         birth_date: editData.birth_date || null,
         birth_place: editData.birth_place.trim() || null,
+        birth_place_lat: editData.birth_place_lat,
+        birth_place_lng: editData.birth_place_lng,
         is_alive: editData.is_alive,
         death_date: !editData.is_alive ? editData.death_date || null : null,
         death_place: !editData.is_alive ? editData.death_place.trim() || null : null,
@@ -684,10 +695,13 @@ export function PersonDetailPanel({
 
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Lieu de naissance</Label>
-                  <Input
+                  <PlaceAutocomplete
                     value={editData.birth_place}
-                    onChange={(e) => setEditData(prev => ({ ...prev, birth_place: e.target.value }))}
-                    placeholder="Ville, Pays"
+                    onChange={(val, coords) => setEditData(prev => ({
+                      ...prev,
+                      birth_place: val,
+                      ...(coords ? { birth_place_lat: coords.lat, birth_place_lng: coords.lng } : {}),
+                    }))}
                     className="h-9"
                   />
                 </div>
