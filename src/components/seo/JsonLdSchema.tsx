@@ -24,14 +24,14 @@ const organizationSchema = {
     "@type": "Country",
     "name": "France"
   },
-  "knowsLanguage": ["fr", "en", "es", "ko", "zh"],
+  "knowsLanguage": ["fr", "en", "es", "ko", "zh", "it", "pt"],
   "slogan": "Un espace privé pour raconter ses souvenirs, et partager les moments qui comptent.",
   "keywords": "journal de famille, capsule mémorielle, souvenirs familiaux, arbre généalogique, héritage numérique, album photo sécurisé, partage familial privé, RGPD, chronologie familiale",
   "sameAs": [],
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer service",
-    "availableLanguage": ["French", "English", "Spanish", "Korean", "Chinese"],
+    "availableLanguage": ["French", "English", "Spanish", "Korean", "Chinese", "Italian", "Portuguese"],
     "url": "https://www.familygarden.fr/#contact"
   }
 };
@@ -92,12 +92,12 @@ const softwareApplicationSchema = {
     "Chiffrement AES-256 de niveau bancaire",
     "Hébergement sur serveurs européens conformes RGPD",
     "Mode senior-friendly simplifié",
-    "Support multilingue (FR, EN, ES, KO, ZH)",
+    "Support multilingue (FR, EN, ES, KO, ZH, IT, PT)",
     "Suggestions et inspirations guidées de souvenirs",
     "Catégories thématiques personnalisables"
   ],
   "screenshot": "https://www.familygarden.fr/og-image.png",
-  "availableLanguage": ["fr", "en", "es", "ko", "zh"],
+  "availableLanguage": ["fr", "en", "es", "ko", "zh", "it", "pt"],
   "inLanguage": "fr",
   "isAccessibleForFree": true,
   "provider": {

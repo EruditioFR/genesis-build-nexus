@@ -20,15 +20,7 @@ export const websiteSchema = {
   "url": SITE_URL,
   "description": "Plateforme française de journal de famille privé. Créez des capsules mémorielles multimédia, organisez-les sur une chronologie interactive et partagez-les en cercles privés avec vos proches.",
   "publisher": { "@id": `${SITE_URL}/#organization` },
-  "inLanguage": ["fr", "en", "es", "ko", "zh"],
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": {
-      "@type": "EntryPoint",
-      "urlTemplate": `${SITE_URL}/capsules?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
+  "inLanguage": ["fr", "en", "es", "ko", "zh", "it", "pt"],
 };
 
 export const howToSchema = {

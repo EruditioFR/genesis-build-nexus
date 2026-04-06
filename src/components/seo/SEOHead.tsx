@@ -14,7 +14,8 @@ interface SEOHeadProps {
 }
 
 const SITE_URL = 'https://www.familygarden.fr';
-const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ko', 'zh'];
+const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ko', 'zh', 'it', 'pt'];
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 const LANG_TO_LOCALE: Record<string, string> = {
   fr: 'fr_FR',
@@ -22,6 +23,8 @@ const LANG_TO_LOCALE: Record<string, string> = {
   es: 'es_ES',
   ko: 'ko_KR',
   zh: 'zh_CN',
+  it: 'it_IT',
+  pt: 'pt_BR',
 };
 
 const SEOHead = ({
@@ -85,9 +88,7 @@ const SEOHead = ({
       alternateLocaleEls.push(el);
     });
 
-    if (ogImage) {
-      setMeta('property', 'og:image', ogImage);
-    }
+    setMeta('property', 'og:image', ogImage || DEFAULT_OG_IMAGE);
 
     // Hreflang tags
     const hreflangLinks: HTMLLinkElement[] = [];
