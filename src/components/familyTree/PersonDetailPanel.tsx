@@ -730,6 +730,96 @@ export function PersonDetailPanel({
 
                 <Separator />
 
+                {/* Burial info - only if not alive */}
+                {!editData.is_alive && (
+                  <>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">{t('detail.fields.burialDate')}</Label>
+                      <Input
+                        type="date"
+                        value={editData.burial_date}
+                        onChange={(e) => setEditData(prev => ({ ...prev, burial_date: e.target.value }))}
+                        className="h-9"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">{t('detail.fields.burialPlace')}</Label>
+                      <Input
+                        value={editData.burial_place}
+                        onChange={(e) => setEditData(prev => ({ ...prev, burial_place: e.target.value }))}
+                        placeholder={t('detail.fields.burialPlacePlaceholder')}
+                        className="h-9"
+                      />
+                    </div>
+                  </>
+                )}
+
+                <Separator />
+
+                {/* Residences */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">{t('detail.fields.residences')}</Label>
+                  {editData.residences.map((res, idx) => (
+                    <div key={idx} className="flex gap-2 items-end p-2 bg-muted/50 rounded-lg">
+                      <div className="flex-1 space-y-1">
+                        <Input
+                          value={res.place}
+                          onChange={(e) => {
+                            const updated = [...editData.residences];
+                            updated[idx] = { ...updated[idx], place: e.target.value };
+                            setEditData(prev => ({ ...prev, residences: updated }));
+                          }}
+                          placeholder={t('detail.fields.residencePlace')}
+                          className="h-8 text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <Input
+                            value={res.from || ''}
+                            onChange={(e) => {
+                              const updated = [...editData.residences];
+                              updated[idx] = { ...updated[idx], from: e.target.value };
+                              setEditData(prev => ({ ...prev, residences: updated }));
+                            }}
+                            placeholder={t('detail.fields.residenceFrom')}
+                            className="h-7 text-xs"
+                          />
+                          <Input
+                            value={res.to || ''}
+                            onChange={(e) => {
+                              const updated = [...editData.residences];
+                              updated[idx] = { ...updated[idx], to: e.target.value };
+                              setEditData(prev => ({ ...prev, residences: updated }));
+                            }}
+                            placeholder={t('detail.fields.residenceTo')}
+                            className="h-7 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs text-destructive"
+                        onClick={() => {
+                          const updated = editData.residences.filter((_, i) => i !== idx);
+                          setEditData(prev => ({ ...prev, residences: updated }));
+                        }}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full h-8 text-xs"
+                    onClick={() => setEditData(prev => ({ ...prev, residences: [...prev.residences, { place: '' }] }))}
+                  >
+                    {t('detail.fields.addResidence')}
+                  </Button>
+                </div>
+
+                <Separator />
+
                 {/* Professional info */}
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Profession</Label>
