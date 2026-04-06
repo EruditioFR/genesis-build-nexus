@@ -1,9 +1,13 @@
 {
   "map": {
-    "title": "出生地地图",
-    "noLocations": "家谱中未记录出生地。",
+    "title": "地点地图",
+    "noLocations": "家谱中未记录地点。",
     "personsLocated": "{{located}} / {{total}} 人已定位",
-    "geocoding": "地理编码中… {{done}}/{{total}}"
+    "geocoding": "地理编码中… {{done}}/{{total}}",
+    "birthPlace": "出生地",
+    "deathPlace": "逝世地",
+    "birthCount": "出生 {{count}} 处",
+    "deathCount": "逝世 {{count}} 处"
   },
   "loading": "正在加载家谱...",
   "defaultTreeName": "我的家谱",

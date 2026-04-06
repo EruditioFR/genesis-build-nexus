@@ -1,9 +1,13 @@
 {
   "map": {
-    "title": "Birthplace Map",
-    "noLocations": "No birthplace recorded in the tree.",
+    "title": "Places Map",
+    "noLocations": "No location recorded in the tree.",
     "personsLocated": "{{located}} / {{total}} persons located",
-    "geocoding": "Geocoding… {{done}}/{{total}}"
+    "geocoding": "Geocoding… {{done}}/{{total}}",
+    "birthPlace": "Birthplace",
+    "deathPlace": "Place of death",
+    "birthCount": "{{count}} birth(s)",
+    "deathCount": "{{count}} death(s)"
   },
   "loading": "Loading tree...",
   "defaultTreeName": "My family tree",
