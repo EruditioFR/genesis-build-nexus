@@ -58,5 +58,8 @@
     "description": "Comienza añadiendo la primera persona o importa un árbol existente.",
     "addPerson": "Añadir una persona",
     "importGedcom": "Importar GEDCOM"
-  }
+  },
+  "generation": { "self": "Tú", "children": "Hijos", "parents": "Padres", "grandchildren": "Nietos", "grandparents": "Abuelos", "greatGrandchildren": "Bisnietos", "greatGrandparents": "Bisabuelos", "plus": "Gen. +{{n}}", "minus": "Gen. -{{n}}" },
+  "ghost": { "ancestors": "ancestros", "descendants": "descendientes" },
+  "toast": { "loadTreesError": "Error al cargar los árboles", "treeCreated": "Árbol creado con éxito", "treeCreateError": "Error al crear el árbol", "loadTreeError": "Error al cargar el árbol", "personAdded": "Persona añadida", "personAddError": "Error al añadir la persona", "personUpdated": "Persona actualizada", "personUpdateError": "Error al actualizar", "personDeleted": "Persona eliminada", "personDeleteError": "Error al eliminar", "relationAdded": "Relación añadida", "relationAddError": "Error al añadir la relación", "relationUpdated": "Relación actualizada", "relationUpdateError": "Error al actualizar la relación", "relationDeleted": "Relación eliminada", "relationDeleteError": "Error al eliminar la relación", "unionAdded": "Unión añadida", "unionAddError": "Error al añadir la unión", "unionUpdated": "Unión actualizada", "unionUpdateError": "Error al actualizar la unión", "unionDeleted": "Unión eliminada", "unionDeleteError": "Error al eliminar la unión", "treeDeleted": "Árbol eliminado", "treeDeleteError": "Error al eliminar", "merged": "Personas fusionadas con éxito", "mergeError": "Error al fusionar las personas" }
 }

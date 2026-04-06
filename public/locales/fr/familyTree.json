@@ -347,5 +347,48 @@
     "readError": "Erreur lors de la lecture du fichier. Vérifiez le format.",
     "fileRejected": "Fichier refusé : {{errors}}. Essayez un fichier .ged ou .gedcom.",
     "importErrorMsg": "Erreur lors de l'import. Veuillez réessayer."
+  },
+  "generation": {
+    "self": "Vous",
+    "children": "Enfants",
+    "parents": "Parents",
+    "grandchildren": "Petits-enfants",
+    "grandparents": "Grands-parents",
+    "greatGrandchildren": "Arr.-petits-enfants",
+    "greatGrandparents": "Arr.-grands-parents",
+    "plus": "Gén. +{{n}}",
+    "minus": "Gén. -{{n}}"
+  },
+  "ghost": {
+    "ancestors": "ancêtres",
+    "descendants": "descendants"
+  },
+  "toast": {
+    "loadTreesError": "Erreur lors du chargement des arbres",
+    "treeCreated": "Arbre créé avec succès",
+    "treeCreateError": "Erreur lors de la création de l'arbre",
+    "loadTreeError": "Erreur lors du chargement de l'arbre",
+    "personAdded": "Personne ajoutée",
+    "personAddError": "Erreur lors de l'ajout de la personne",
+    "personUpdated": "Personne mise à jour",
+    "personUpdateError": "Erreur lors de la mise à jour",
+    "personDeleted": "Personne supprimée",
+    "personDeleteError": "Erreur lors de la suppression",
+    "relationAdded": "Relation ajoutée",
+    "relationAddError": "Erreur lors de l'ajout de la relation",
+    "relationUpdated": "Relation mise à jour",
+    "relationUpdateError": "Erreur lors de la mise à jour de la relation",
+    "relationDeleted": "Relation supprimée",
+    "relationDeleteError": "Erreur lors de la suppression de la relation",
+    "unionAdded": "Union ajoutée",
+    "unionAddError": "Erreur lors de l'ajout de l'union",
+    "unionUpdated": "Union mise à jour",
+    "unionUpdateError": "Erreur lors de la mise à jour de l'union",
+    "unionDeleted": "Union supprimée",
+    "unionDeleteError": "Erreur lors de la suppression de l'union",
+    "treeDeleted": "Arbre supprimé",
+    "treeDeleteError": "Erreur lors de la suppression",
+    "merged": "Personnes fusionnées avec succès",
+    "mergeError": "Erreur lors de la fusion des personnes"
   }
 }

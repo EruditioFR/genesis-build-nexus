@@ -58,5 +58,8 @@
     "description": "从添加第一个人开始，或导入现有的家谱。",
     "addPerson": "添加成员",
     "importGedcom": "导入 GEDCOM"
-  }
+  },
+  "generation": { "self": "您", "children": "子女", "parents": "父母", "grandchildren": "孙辈", "grandparents": "祖父母", "greatGrandchildren": "曾孙辈", "greatGrandparents": "曾祖父母", "plus": "第+{{n}}代", "minus": "第-{{n}}代" },
+  "ghost": { "ancestors": "位祖先", "descendants": "位后代" },
+  "toast": { "loadTreesError": "加载家谱时出错", "treeCreated": "家谱创建成功", "treeCreateError": "创建家谱时出错", "loadTreeError": "加载家谱时出错", "personAdded": "已添加成员", "personAddError": "添加成员时出错", "personUpdated": "成员已更新", "personUpdateError": "更新时出错", "personDeleted": "成员已删除", "personDeleteError": "删除时出错", "relationAdded": "关系已添加", "relationAddError": "添加关系时出错", "relationUpdated": "关系已更新", "relationUpdateError": "更新关系时出错", "relationDeleted": "关系已删除", "relationDeleteError": "删除关系时出错", "unionAdded": "婚姻关系已添加", "unionAddError": "添加婚姻关系时出错", "unionUpdated": "婚姻关系已更新", "unionUpdateError": "更新婚姻关系时出错", "unionDeleted": "婚姻关系已删除", "unionDeleteError": "删除婚姻关系时出错", "treeDeleted": "家谱已删除", "treeDeleteError": "删除时出错", "merged": "成员合并成功", "mergeError": "合并成员时出错" }
 }
