@@ -870,8 +870,6 @@ export default function FamilyTreePage() {
                             <MapPin className="w-4 h-4" />
                           </Button>
                         )}
-                          <ShieldCheck className="w-4 h-4" />
-                        </Button>
                       </div>
 
                       <Button onClick={() => handleAddPerson('child')} size="icon" className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 shrink-0" data-tour="tree-add-person">
