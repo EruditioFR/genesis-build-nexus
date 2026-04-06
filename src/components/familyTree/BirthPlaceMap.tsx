@@ -19,6 +19,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
+// --- Birth icons (colored circles) ---
 function createColoredIcon(color: string) {
   return L.divIcon({
     className: 'custom-marker',
@@ -39,11 +40,32 @@ const maleIcon = createColoredIcon('#3b82f6');
 const femaleIcon = createColoredIcon('#ec4899');
 const otherIcon = createColoredIcon('#9ca3af');
 
-function getIcon(gender: string | null) {
+function getBirthIcon(gender: string | null) {
   if (gender === 'male') return maleIcon;
   if (gender === 'female') return femaleIcon;
   return otherIcon;
 }
+
+// --- Death icons (black circle with white cross ✝) ---
+function createDeathIcon() {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `<div style="
+      background: #1a1a1a;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; line-height: 1;
+    ">✝</div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -12],
+  });
+}
+
+const deathIcon = createDeathIcon();
 
 function formatDates(person: FamilyPerson) {
   const birth = person.birth_date ? new Date(person.birth_date).getFullYear() : '?';
@@ -51,6 +73,13 @@ function formatDates(person: FamilyPerson) {
     ? new Date(person.death_date).getFullYear()
     : person.is_alive === false ? '?' : null;
   return death !== null ? `${birth} – ${death}` : `${birth}`;
+}
+
+interface MapMarker {
+  person: FamilyPerson;
+  lat: number;
+  lng: number;
+  type: 'birth' | 'death';
 }
 
 interface BirthPlaceMapProps {
@@ -72,18 +101,27 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
   const initTimerRef = useRef<number | null>(null);
 
   const markers = useMemo(() => {
-    const result: Array<{ person: FamilyPerson; lat: number; lng: number }> = [];
+    const result: MapMarker[] = [];
     for (const p of persons) {
-      const lat = p.birth_place_lat ?? geocodedCoords.get(p.id)?.lat;
-      const lng = p.birth_place_lng ?? geocodedCoords.get(p.id)?.lng;
-      if (lat != null && lng != null) {
-        result.push({ person: p, lat: Number(lat), lng: Number(lng) });
+      // Birth markers
+      const bLat = p.birth_place_lat ?? geocodedCoords.get(p.id)?.lat;
+      const bLng = p.birth_place_lng ?? geocodedCoords.get(p.id)?.lng;
+      if (bLat != null && bLng != null) {
+        result.push({ person: p, lat: Number(bLat), lng: Number(bLng), type: 'birth' });
+      }
+      // Death markers
+      const dLat = p.death_place_lat ?? geocodedCoords.get(`${p.id}:death`)?.lat;
+      const dLng = p.death_place_lng ?? geocodedCoords.get(`${p.id}:death`)?.lng;
+      if (dLat != null && dLng != null) {
+        result.push({ person: p, lat: Number(dLat), lng: Number(dLng), type: 'death' });
       }
     }
     return result;
   }, [persons, geocodedCoords]);
 
-  const personsWithPlace = persons.filter(p => p.birth_place);
+  const personsWithPlace = persons.filter(p => p.birth_place || p.death_place);
+  const birthMarkers = markers.filter(m => m.type === 'birth');
+  const deathMarkers = markers.filter(m => m.type === 'death');
 
   // Destroy map helper
   const destroyMap = useCallback(() => {
@@ -100,15 +138,13 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     clusterGroupRef.current = null;
   }, []);
 
-  // Initialize map via callback ref – fires when the div actually mounts in the DOM
+  // Initialize map via callback ref
   const mapCallbackRef = useCallback((node: HTMLDivElement | null) => {
     containerElRef.current = node;
     if (!node) return;
 
-    // Delay initialisation so the Radix dialog animation finishes and the
-    // container has real dimensions.
     initTimerRef.current = window.setTimeout(() => {
-      if (mapRef.current) return; // already initialised
+      if (mapRef.current) return;
 
       const map = L.map(node, { zoomControl: true }).setView([46.6, 2.3], 5);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -121,7 +157,6 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
       mapRef.current = map;
       clusterGroupRef.current = clusterGroup;
 
-      // Belt-and-suspenders: invalidate after animation is certainly done
       const t1 = window.setTimeout(() => map.invalidateSize(false), 100);
       const t2 = window.setTimeout(() => map.invalidateSize(false), 400);
 
@@ -133,16 +168,13 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
         resizeObserverRef.current = observer;
       }
 
-      // Store extra timers for cleanup
       (map as any)._extraTimers = [t1, t2];
-    }, 350); // 350ms ≈ Radix dialog open animation duration
+    }, 350);
   }, []);
 
   // Cleanup when dialog closes
   useEffect(() => {
-    if (!open) {
-      destroyMap();
-    }
+    if (!open) destroyMap();
   }, [open, destroyMap]);
 
   // Update markers when data changes
@@ -152,14 +184,18 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     const cluster = clusterGroupRef.current;
     cluster.clearLayers();
 
-    for (const { person, lat, lng } of markers) {
-      const marker = L.marker([lat, lng], { icon: getIcon(person.gender) });
+    for (const { person, lat, lng, type } of markers) {
+      const icon = type === 'death' ? deathIcon : getBirthIcon(person.gender ?? null);
+      const marker = L.marker([lat, lng], { icon });
       const maidenInfo = person.maiden_name ? ` (${t('person.born')} ${person.maiden_name})` : '';
+      const placeLabel = type === 'death' ? (person.death_place || '') : (person.birth_place || '');
+      const typeLabel = type === 'death' ? `✝ ${t('map.deathPlace')}` : `🎂 ${t('map.birthPlace')}`;
       marker.bindPopup(`
         <div style="min-width:150px">
           <p style="font-weight:600;margin:0">${person.first_names} ${person.last_name}${maidenInfo}</p>
           <p style="font-size:12px;color:#6b7280;margin:2px 0">${formatDates(person)}</p>
-          <p style="font-size:12px;margin:2px 0">${person.birth_place || ''}</p>
+          <p style="font-size:11px;font-weight:500;margin:4px 0 1px">${typeLabel}</p>
+          <p style="font-size:12px;margin:2px 0">${placeLabel}</p>
         </div>
       `);
       cluster.addLayer(marker);
@@ -177,7 +213,8 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
     hasStarted.current = true;
 
     const personsToGeocode = persons.filter(
-      p => p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null)
+      p => (p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null))
+        || (p.death_place && (p.death_place_lat == null || p.death_place_lng == null))
     );
 
     if (personsToGeocode.length === 0) return;
@@ -219,10 +256,11 @@ export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProp
             {t('map.title')}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            {t('map.personsLocated', { located: markers.length, total: personsWithPlace.length })}
+            {t('map.personsLocated', { located: birthMarkers.length, total: personsWithPlace.length })}
           </DialogDescription>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <span>{t('map.personsLocated', { located: markers.length, total: personsWithPlace.length })}</span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+            <span>🎂 {t('map.birthCount', { count: birthMarkers.length })}</span>
+            <span>✝ {t('map.deathCount', { count: deathMarkers.length })}</span>
             {isGeocoding && geocodeProgress && (
               <span className="flex items-center gap-1">
                 <Loader2 className="w-3 h-3 animate-spin" />
