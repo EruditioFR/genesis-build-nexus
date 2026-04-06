@@ -533,6 +533,8 @@ export default function FamilyTreePage() {
       toast.success(t('importSuccess', { persons: result.personsCreated, relations: result.relationsCreated }));
     }
     
+    // Reset geocode ref so background geocoding re-runs with new persons
+    geocodeRunRef.current = null;
     await loadTree();
     setShowGedcomImport(false);
   };
