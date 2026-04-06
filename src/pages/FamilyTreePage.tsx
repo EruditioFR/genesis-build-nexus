@@ -308,7 +308,28 @@ export default function FamilyTreePage() {
     }
   }, [tree?.id, fetchTree, fetchBranch]);
 
+  // Background pre-geocoding: runs silently when persons are loaded
+  const geocodeRunRef = useRef<string | null>(null);
   useEffect(() => {
+    if (persons.length === 0) return;
+    const treeId = tree?.id;
+    if (!treeId || geocodeRunRef.current === treeId) return;
+
+    const needsGeocode = persons.filter(
+      p => (p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null))
+        || (p.death_place && (p.death_place_lat == null || p.death_place_lng == null))
+    );
+    if (needsGeocode.length === 0) {
+      geocodeRunRef.current = treeId;
+      return;
+    }
+
+    geocodeRunRef.current = treeId;
+    // Fire-and-forget background geocoding
+    geocodeAndCachePersons(needsGeocode, supabase).catch(() => {});
+  }, [persons, tree?.id]);
+
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreen) {
         setIsFullscreen(false);
