@@ -155,7 +155,16 @@
       "biography": "Biografia",
       "biographyPlaceholder": "Informazioni biografiche...",
       "firstName": "Nome/i",
-      "lastName": "Cognome"
+      "lastName": "Cognome",
+      "burialDate": "Data di sepoltura",
+      "burialPlace": "Luogo di sepoltura",
+      "burialPlacePlaceholder": "Cimitero, Città",
+      "residences": "Residenze",
+      "residencePlace": "Luogo",
+      "residenceFrom": "Da",
+      "residenceTo": "A",
+      "addResidence": "Aggiungi residenza",
+      "removeResidence": "Rimuovi"
     },
     "relations": {
       "link": "Collega",
