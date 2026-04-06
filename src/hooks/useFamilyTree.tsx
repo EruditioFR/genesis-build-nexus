@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import type { 
   FamilyTree, 
   FamilyPerson, 
@@ -13,6 +14,7 @@ import type { GedcomParseResult } from '@/lib/gedcomParser';
 
 export function useFamilyTree() {
   const { user } = useAuth();
+  const { t } = useTranslation('familyTree');
   const [loading, setLoading] = useState(false);
 
   // Fetch all trees for current user
@@ -47,7 +49,7 @@ export function useFamilyTree() {
       return treesWithCounts;
     } catch (error) {
       console.error('Error fetching trees:', error);
-      toast.error('Erreur lors du chargement des arbres');
+      toast.error(t('toast.loadTreesError'));
       return [];
     } finally {
       setLoading(false);
@@ -109,11 +111,11 @@ export function useFamilyTree() {
         }
       }
 
-      toast.success('Arbre créé avec succès');
+      toast.success(t('toast.treeCreated'));
       return tree as FamilyTree;
     } catch (error) {
       console.error('Error creating tree:', error);
-      toast.error('Erreur lors de la création de l\'arbre');
+      toast.error(t('toast.treeCreateError'));
       return null;
     } finally {
       setLoading(false);
@@ -189,7 +191,7 @@ export function useFamilyTree() {
       };
     } catch (error) {
       console.error('Error fetching tree:', error);
-      toast.error('Erreur lors du chargement de l\'arbre');
+      toast.error(t('toast.loadTreeError'));
       return { tree: null, persons: [], relationships: [], unions: [] };
     } finally {
       setLoading(false);
@@ -229,11 +231,11 @@ export function useFamilyTree() {
         .single();
 
       if (error) throw error;
-      toast.success('Personne ajoutée');
+      toast.success(t('toast.personAdded'));
       return data as FamilyPerson;
     } catch (error) {
       console.error('Error adding person:', error);
-      toast.error('Erreur lors de l\'ajout de la personne');
+      toast.error(t('toast.personAddError'));
       return null;
     }
   }, [user]);
@@ -261,19 +263,22 @@ export function useFamilyTree() {
           profile_photo_url: updates.profile_photo_url,
           occupation: updates.occupation,
           nationality: updates.nationality,
-          biography: updates.biography
+          biography: updates.biography,
+          burial_date: updates.burial_date,
+          burial_place: updates.burial_place,
+          residences: updates.residences
         })
         .eq('id', personId);
 
       if (error) throw error;
-      toast.success('Personne mise à jour');
+      toast.success(t('toast.personUpdated'));
       return true;
     } catch (error) {
       console.error('Error updating person:', error);
-      toast.error('Erreur lors de la mise à jour');
+      toast.error(t('toast.personUpdateError'));
       return false;
     }
-  }, []);
+  }, [t]);
 
   // Delete a person
   const deletePerson = useCallback(async (personId: string): Promise<boolean> => {
@@ -284,11 +289,11 @@ export function useFamilyTree() {
         .eq('id', personId);
 
       if (error) throw error;
-      toast.success('Personne supprimée');
+      toast.success(t('toast.personDeleted'));
       return true;
     } catch (error) {
       console.error('Error deleting person:', error);
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('toast.personDeleteError'));
       return false;
     }
   }, []);
@@ -329,11 +334,11 @@ export function useFamilyTree() {
         });
 
       if (error) throw error;
-      toast.success('Relation ajoutée');
+      toast.success(t('toast.relationAdded'));
       return true;
     } catch (error) {
       console.error('Error adding relationship:', error);
-      toast.error('Erreur lors de l\'ajout de la relation');
+      toast.error(t('toast.relationAddError'));
       return false;
     }
   }, []);
@@ -354,11 +359,11 @@ export function useFamilyTree() {
         .eq('id', relationshipId);
 
       if (error) throw error;
-      toast.success('Relation mise à jour');
+      toast.success(t('toast.relationUpdated'));
       return true;
     } catch (error) {
       console.error('Error updating relationship:', error);
-      toast.error('Erreur lors de la mise à jour de la relation');
+      toast.error(t('toast.relationUpdateError'));
       return false;
     }
   }, []);
@@ -382,11 +387,11 @@ export function useFamilyTree() {
         });
 
       if (error) throw error;
-      toast.success('Union ajoutée');
+      toast.success(t('toast.unionAdded'));
       return true;
     } catch (error) {
       console.error('Error adding union:', error);
-      toast.error('Erreur lors de l\'ajout de l\'union');
+      toast.error(t('toast.unionAddError'));
       return false;
     }
   }, []);
@@ -411,11 +416,11 @@ export function useFamilyTree() {
         .eq('id', unionId);
 
       if (error) throw error;
-      toast.success('Union mise à jour');
+      toast.success(t('toast.unionUpdated'));
       return true;
     } catch (error) {
       console.error('Error updating union:', error);
-      toast.error('Erreur lors de la mise à jour de l\'union');
+      toast.error(t('toast.unionUpdateError'));
       return false;
     }
   }, []);
@@ -429,30 +434,107 @@ export function useFamilyTree() {
         .eq('id', treeId);
 
       if (error) throw error;
-      toast.success('Arbre supprimé');
+      toast.success(t('toast.treeDeleted'));
       return true;
     } catch (error) {
       console.error('Error deleting tree:', error);
-      toast.error('Erreur lors de la suppression');
+      toast.error(t('toast.treeDeleteError'));
       return false;
     }
   }, []);
 
+  // Delete a union
+  const deleteUnion = useCallback(async (unionId: string): Promise<boolean> => {
+    try {
+      // Clear union_id references in parent-child relationships
+      await supabase
+        .from('family_parent_child')
+        .update({ union_id: null })
+        .eq('union_id', unionId);
+
+      const { error } = await supabase
+        .from('family_unions')
+        .delete()
+        .eq('id', unionId);
+
+      if (error) throw error;
+      toast.success(t('toast.unionDeleted'));
+      return true;
+    } catch (error) {
+      console.error('Error deleting union:', error);
+      toast.error(t('toast.unionDeleteError'));
+      return false;
+    }
+  }, [t]);
+
+  // Delete a parent-child relationship
+  const deleteRelationship = useCallback(async (relationshipId: string): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('family_parent_child')
+        .delete()
+        .eq('id', relationshipId);
+
+      if (error) throw error;
+      toast.success(t('toast.relationDeleted'));
+      return true;
+    } catch (error) {
+      console.error('Error deleting relationship:', error);
+      toast.error(t('toast.relationDeleteError'));
+      return false;
+    }
+  }, [t]);
+
   // Calculate tree statistics
   const getTreeStatistics = useCallback(async (treeId: string): Promise<TreeStatistics | null> => {
     try {
-      const { data: persons, error } = await supabase
-        .from('family_persons')
-        .select('*')
-        .eq('tree_id', treeId);
+      const [personsResult, relsResult] = await Promise.all([
+        supabase.from('family_persons').select('*').eq('tree_id', treeId),
+        supabase.rpc('get_tree_relationships', { p_tree_id: treeId })
+      ]);
 
-      if (error) throw error;
+      if (personsResult.error) throw personsResult.error;
+      const persons = personsResult.data || [];
+      const relationships = relsResult.data || [];
 
-      const totalPersons = persons?.length || 0;
-      const livingPersons = persons?.filter(p => p.is_alive).length || 0;
+      const totalPersons = persons.length;
+      const livingPersons = persons.filter(p => p.is_alive).length;
       const deceasedPersons = totalPersons - livingPersons;
-      const withPhoto = persons?.filter(p => p.profile_photo_url).length || 0;
-      const withBiography = persons?.filter(p => p.biography && p.biography.length > 50).length || 0;
+      const withPhoto = persons.filter(p => p.profile_photo_url).length;
+      const withBiography = persons.filter(p => p.biography && p.biography.length > 50).length;
+
+      // Calculate generations via BFS from root ancestors
+      let generationsCount = 0;
+      if (totalPersons > 0 && relationships.length > 0) {
+        const childrenOf = new Map<string, string[]>();
+        const parentSet = new Set<string>();
+        const childSet = new Set<string>();
+        for (const r of relationships) {
+          if (!childrenOf.has(r.parent_id)) childrenOf.set(r.parent_id, []);
+          childrenOf.get(r.parent_id)!.push(r.child_id);
+          parentSet.add(r.parent_id);
+          childSet.add(r.child_id);
+        }
+        // Root ancestors = parents who are not children
+        const roots = Array.from(parentSet).filter(id => !childSet.has(id));
+        if (roots.length === 0) roots.push(persons[0].id);
+
+        let maxDepth = 0;
+        const visited = new Set<string>();
+        const queue: Array<{ id: string; depth: number }> = roots.map(id => ({ id, depth: 0 }));
+        while (queue.length > 0) {
+          const { id, depth } = queue.shift()!;
+          if (visited.has(id)) continue;
+          visited.add(id);
+          if (depth > maxDepth) maxDepth = depth;
+          for (const childId of childrenOf.get(id) || []) {
+            if (!visited.has(childId)) queue.push({ id: childId, depth: depth + 1 });
+          }
+        }
+        generationsCount = maxDepth + 1;
+      } else {
+        generationsCount = totalPersons > 0 ? 1 : 0;
+      }
 
       const completenessScore = totalPersons > 0 
         ? Math.round(((withPhoto / totalPersons) * 30) + ((withBiography / totalPersons) * 30) + 40)
@@ -462,7 +544,7 @@ export function useFamilyTree() {
         totalPersons,
         livingPersons,
         deceasedPersons,
-        generationsCount: 1, // TODO: Calculate actual generations
+        generationsCount,
         completenessScore,
         withPhoto,
         withBiography
@@ -779,11 +861,11 @@ export function useFamilyTree() {
         throw deleteError;
       }
 
-      toast.success('Personnes fusionnées avec succès');
+      toast.success(t('toast.merged'));
       return true;
     } catch (error) {
       console.error('Error merging persons:', error);
-      toast.error('Erreur lors de la fusion des personnes');
+      toast.error(t('toast.mergeError'));
       return false;
     } finally {
       setLoading(false);
@@ -871,8 +953,10 @@ export function useFamilyTree() {
     deletePerson,
     addRelationship,
     updateRelationship,
+    deleteRelationship,
     addUnion,
     updateUnion,
+    deleteUnion,
     deleteTree,
     getTreeStatistics,
     importFromGedcom,
