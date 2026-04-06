@@ -612,9 +612,9 @@ function computeLayout(
         // Determine direction
         const rootPos = allPositions.get(rootPerson.id);
         if (rootPos && pos.generation < rootPos.generation) {
-          ghostLabel = `+${ghostCount} ancêtres`;
+          ghostLabel = `+${ghostCount} ${tFunc('ghost.ancestors')}`;
         } else if (rootPos && pos.generation > rootPos.generation) {
-          ghostLabel = `+${ghostCount} descendants`;
+          ghostLabel = `+${ghostCount} ${tFunc('ghost.descendants')}`;
         } else {
           ghostLabel = `+${ghostCount}`;
         }
@@ -633,7 +633,7 @@ function computeLayout(
       isGhost,
       isRoot: rootPersonId === id,
       appearDelay,
-      generationLabel: getGenerationLabel(genDiff),
+      generationLabel: getGenerationLabel(genDiff, tFunc),
       ghostCount,
       ghostLabel,
     });
@@ -725,16 +725,16 @@ function computeLayout(
   return { layoutNodes, structuralEdges, junctionNodes, positionData };
 }
 
-function getGenerationLabel(diff: number): string {
-  if (diff === 0) return 'Vous';
-  if (diff === 1) return 'Enfants';
-  if (diff === -1) return 'Parents';
-  if (diff === 2) return 'Petits-enfants';
-  if (diff === -2) return 'Grands-parents';
-  if (diff === 3) return 'Arr.-petits-enfants';
-  if (diff === -3) return 'Arr.-grands-parents';
-  if (diff > 0) return `Gén. +${diff}`;
-  return `Gén. ${diff}`;
+function getGenerationLabel(diff: number, t: (key: string, opts?: Record<string, unknown>) => string): string {
+  if (diff === 0) return t('generation.self');
+  if (diff === 1) return t('generation.children');
+  if (diff === -1) return t('generation.parents');
+  if (diff === 2) return t('generation.grandchildren');
+  if (diff === -2) return t('generation.grandparents');
+  if (diff === 3) return t('generation.greatGrandchildren');
+  if (diff === -3) return t('generation.greatGrandparents');
+  if (diff > 0) return t('generation.plus', { n: diff });
+  return t('generation.minus', { n: Math.abs(diff) });
 }
 
 // Invisible junction node for union midpoints
