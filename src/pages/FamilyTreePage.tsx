@@ -838,6 +838,19 @@ export default function FamilyTreePage() {
                     <Maximize2 className="w-4 h-4" />
                   </Button>
 
+                  {/* Map button visible for everyone including admin viewers */}
+                  {persons.length > 0 && (
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      className="h-8 w-8 sm:h-9 sm:w-9 shrink-0"
+                      onClick={() => setShowBirthPlaceMap(true)}
+                      title={t('map.title')}
+                    >
+                      <MapPin className="w-4 h-4" />
+                    </Button>
+                  )}
+
                   {!isAdminViewing && (
                     <>
                       <div data-tour="tree-import-export" className="flex items-center gap-1">
@@ -883,17 +896,6 @@ export default function FamilyTreePage() {
                         >
                           <ShieldCheck className="w-4 h-4" />
                         </Button>
-                        {persons.length > 0 && (
-                          <Button 
-                            variant="outline" 
-                            size="icon"
-                            className="h-8 w-8 sm:h-9 sm:w-9 shrink-0"
-                            onClick={() => setShowBirthPlaceMap(true)}
-                            title={t('map.title')}
-                          >
-                            <MapPin className="w-4 h-4" />
-                          </Button>
-                        )}
                       </div>
 
                       <Button onClick={() => handleAddPerson('child')} size="icon" className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 shrink-0" data-tour="tree-add-person">
