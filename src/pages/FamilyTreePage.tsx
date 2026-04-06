@@ -56,6 +56,7 @@ import { downloadGedcom } from '@/lib/gedcomExporter';
 import { validateFamilyTree } from '@/lib/familyTreeValidation';
 import { TreeValidationPanel } from '@/components/familyTree/TreeValidationPanel';
 import { BirthPlaceMap } from '@/components/familyTree/BirthPlaceMap';
+import { geocodeAndCachePersons } from '@/lib/geocoding';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
@@ -307,6 +308,27 @@ export default function FamilyTreePage() {
     }
   }, [tree?.id, fetchTree, fetchBranch]);
 
+  // Background pre-geocoding: runs silently when persons are loaded
+  const geocodeRunRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (persons.length === 0) return;
+    const treeId = tree?.id;
+    if (!treeId || geocodeRunRef.current === treeId) return;
+
+    const needsGeocode = persons.filter(
+      p => (p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null))
+        || (p.death_place && (p.death_place_lat == null || p.death_place_lng == null))
+    );
+    if (needsGeocode.length === 0) {
+      geocodeRunRef.current = treeId;
+      return;
+    }
+
+    geocodeRunRef.current = treeId;
+    // Fire-and-forget background geocoding
+    geocodeAndCachePersons(needsGeocode, supabase).catch(() => {});
+  }, [persons, tree?.id]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreen) {
@@ -511,6 +533,8 @@ export default function FamilyTreePage() {
       toast.success(t('importSuccess', { persons: result.personsCreated, relations: result.relationsCreated }));
     }
     
+    // Reset geocode ref so background geocoding re-runs with new persons
+    geocodeRunRef.current = null;
     await loadTree();
     setShowGedcomImport(false);
   };
