@@ -1,4 +1,10 @@
 {
+  "map": {
+    "title": "출생지 지도",
+    "noLocations": "가계도에 출생지가 기록되지 않았습니다.",
+    "personsLocated": "{{located}} / {{total}}명 위치 확인됨",
+    "geocoding": "지오코딩 중… {{done}}/{{total}}"
+  },
   "loading": "가계도 불러오는 중...",
   "defaultTreeName": "내 가계도",
   "defaultTreeDescription": "내 가족 역사",

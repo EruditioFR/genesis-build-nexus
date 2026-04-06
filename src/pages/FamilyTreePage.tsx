@@ -17,6 +17,7 @@ import {
   FileDown,
   Focus,
   Map as MapIcon,
+  MapPin,
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,7 @@ import { exportFamilyTreeToPDF } from '@/lib/exportFamilyTree';
 import { downloadGedcom } from '@/lib/gedcomExporter';
 import { validateFamilyTree } from '@/lib/familyTreeValidation';
 import { TreeValidationPanel } from '@/components/familyTree/TreeValidationPanel';
+import { BirthPlaceMap } from '@/components/familyTree/BirthPlaceMap';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import NoIndex from '@/components/seo/NoIndex';
@@ -106,6 +108,7 @@ export default function FamilyTreePage() {
   const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [mergeSourcePerson, setMergeSourcePerson] = useState<FamilyPerson | null>(null);
   const [showValidationPanel, setShowValidationPanel] = useState(false);
+  const [showBirthPlaceMap, setShowBirthPlaceMap] = useState(false);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMinimap, setShowMinimap] = useState(true);
@@ -856,6 +859,17 @@ export default function FamilyTreePage() {
                         >
                           <ShieldCheck className="w-4 h-4" />
                         </Button>
+                        {persons.length > 0 && (
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            className="h-8 w-8 sm:h-9 sm:w-9 shrink-0"
+                            onClick={() => setShowBirthPlaceMap(true)}
+                            title={t('map.title')}
+                          >
+                            <MapPin className="w-4 h-4" />
+                          </Button>
+                        )}
                       </div>
 
                       <Button onClick={() => handleAddPerson('child')} size="icon" className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 shrink-0" data-tour="tree-add-person">
@@ -997,6 +1011,12 @@ export default function FamilyTreePage() {
             setShowValidationPanel(false);
           }
         }}
+      />
+
+      <BirthPlaceMap
+        open={showBirthPlaceMap}
+        onOpenChange={setShowBirthPlaceMap}
+        persons={persons}
       />
     </div>
   );

@@ -1,4 +1,10 @@
 {
+  "map": {
+    "title": "出生地地图",
+    "noLocations": "家谱中未记录出生地。",
+    "personsLocated": "{{located}} / {{total}} 人已定位",
+    "geocoding": "地理编码中… {{done}}/{{total}}"
+  },
   "loading": "正在加载家谱...",
   "defaultTreeName": "我的家谱",
   "defaultTreeDescription": "我的家族历史",
