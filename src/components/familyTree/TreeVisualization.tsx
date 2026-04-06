@@ -798,6 +798,7 @@ function TreeVisualizationInner({
   expandedNodeIds = EMPTY_SET,
 }: TreeVisualizationProps) {
   const { fitView, setCenter } = useReactFlow();
+  const { t } = useTranslation('familyTree');
   const lastPositionCountRef = useRef(0);
 
   // STEP 1: Layout computation — only depends on structural data
@@ -810,8 +811,9 @@ function TreeVisualizationInner({
       viewMode,
       maxVisibleGenerations,
       expandedNodeIds,
+      t,
     );
-  }, [persons, relationships, unions, rootPersonId, viewMode, maxVisibleGenerations, expandedNodeIds]);
+  }, [persons, relationships, unions, rootPersonId, viewMode, maxVisibleGenerations, expandedNodeIds, t]);
 
   // STEP 2: Visual state — cheap, only updates node data properties
   const nodes = useMemo(() => {
