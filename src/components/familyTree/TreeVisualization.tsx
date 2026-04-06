@@ -1,4 +1,5 @@
 import { memo as reactMemo, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ReactFlow,
   Node,
@@ -482,6 +483,7 @@ function computeLayout(
   viewMode: TreeViewMode,
   maxVisibleGenerations: number,
   expandedNodeIds: Set<string>,
+  tFunc: (key: string, opts?: Record<string, unknown>) => string,
 ): LayoutResult {
   if (persons.length === 0) {
     return { layoutNodes: [], structuralEdges: [], junctionNodes: [], positionData: [] };
