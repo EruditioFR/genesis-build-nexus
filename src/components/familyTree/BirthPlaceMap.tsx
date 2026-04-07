@@ -209,30 +209,51 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
     }
   }, [markers, t]);
 
-  // Start geocoding when dialog opens
+  // Fetch ALL persons from the tree when dialog opens
   useEffect(() => {
-    if (!open || hasStarted.current) return;
+    if (!open || !treeId || hasStarted.current) return;
     hasStarted.current = true;
 
-    const personsToGeocode = persons.filter(
-      p => (p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null))
-        || (p.death_place && (p.death_place_lat == null || p.death_place_lng == null))
-    );
-
-    if (personsToGeocode.length === 0) return;
-
-    setIsGeocoding(true);
-    geocodeAndCachePersons(
-      personsToGeocode,
-      supabase,
-      (progress) => {
-        setGeoCodeProgress(progress);
-        setGeocodedCoords(new Map(progress.results));
+    const fetchAllPersons = async () => {
+      setIsLoadingPersons(true);
+      const { data, error } = await supabase
+        .from('family_persons')
+        .select('*')
+        .eq('tree_id', treeId);
+      
+      if (error) {
+        console.error('Error fetching all persons for map:', error);
+        setIsLoadingPersons(false);
+        return;
       }
-    ).then(() => {
-      setIsGeocoding(false);
-    });
-  }, [open, persons]);
+
+      const allPersons = (data ?? []) as unknown as FamilyPerson[];
+      setPersons(allPersons);
+      setIsLoadingPersons(false);
+
+      // Start geocoding
+      const personsToGeocode = allPersons.filter(
+        p => (p.birth_place && (p.birth_place_lat == null || p.birth_place_lng == null))
+          || (p.death_place && (p.death_place_lat == null || p.death_place_lng == null))
+      );
+
+      if (personsToGeocode.length === 0) return;
+
+      setIsGeocoding(true);
+      geocodeAndCachePersons(
+        personsToGeocode,
+        supabase,
+        (progress) => {
+          setGeoCodeProgress(progress);
+          setGeocodedCoords(new Map(progress.results));
+        }
+      ).then(() => {
+        setIsGeocoding(false);
+      });
+    };
+
+    fetchAllPersons();
+  }, [open, treeId]);
 
   // Reset on close
   useEffect(() => {
