@@ -295,7 +295,11 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
         </DialogHeader>
 
         <div className="relative flex-1 min-h-[320px]">
-          {personsWithPlace.length === 0 ? (
+          {isLoadingPersons ? (
+            <div className="flex items-center justify-center h-full">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : personsWithPlace.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center space-y-2">
                 <MapPin className="w-12 h-12 mx-auto text-muted-foreground/40" />
