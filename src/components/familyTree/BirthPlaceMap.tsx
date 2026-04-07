@@ -85,11 +85,13 @@ interface MapMarker {
 interface BirthPlaceMapProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  persons: FamilyPerson[];
+  treeId: string | null;
 }
 
-export function BirthPlaceMap({ open, onOpenChange, persons }: BirthPlaceMapProps) {
+export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps) {
   const { t } = useTranslation('familyTree');
+  const [persons, setPersons] = useState<FamilyPerson[]>([]);
+  const [isLoadingPersons, setIsLoadingPersons] = useState(false);
   const [geocodeProgress, setGeoCodeProgress] = useState<GeocodeProgress | null>(null);
   const [geocodedCoords, setGeocodedCoords] = useState<Map<string, { lat: number; lng: number }>>(new Map());
   const [isGeocoding, setIsGeocoding] = useState(false);
