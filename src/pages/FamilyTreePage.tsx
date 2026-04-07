@@ -1042,7 +1042,7 @@ export default function FamilyTreePage() {
       <BirthPlaceMap
         open={showBirthPlaceMap}
         onOpenChange={setShowBirthPlaceMap}
-        persons={persons}
+        treeId={tree?.id ?? null}
       />
     </div>
   );
