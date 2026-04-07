@@ -16,7 +16,7 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { loc: "/login", changefreq: "monthly", priority: 0.8 },
   { loc: "/signup", changefreq: "monthly", priority: 0.8 },
   { loc: "/premium", changefreq: "monthly", priority: 0.9 },
-  { loc: "/inspirations", changefreq: "weekly", priority: 0.7 },
+  
   { loc: "/faq", changefreq: "monthly", priority: 0.7 },
   { loc: "/about", changefreq: "monthly", priority: 0.7 },
   { loc: "/marketing", changefreq: "monthly", priority: 0.8 },
@@ -24,7 +24,7 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { loc: "/terms", changefreq: "yearly", priority: 0.5 },
   { loc: "/cgv", changefreq: "yearly", priority: 0.5 },
   { loc: "/mentions-legales", changefreq: "yearly", priority: 0.5 },
-  { loc: "/beta-feedback", changefreq: "monthly", priority: 0.4 },
+  
 ];
 
 function buildSitemap(entries: SitemapEntry[]): string {
