@@ -27,6 +27,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: Bingbot
 Allow: /
@@ -45,6 +47,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 # --- Réseaux sociaux ---
 
@@ -65,6 +69,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: facebookexternalhit
 Allow: /
@@ -83,6 +89,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 # --- LLM / AI Crawlers (GEO) ---
 
@@ -105,6 +113,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: ChatGPT-User
 Allow: /
@@ -125,6 +135,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: Google-Extended
 Allow: /
@@ -145,6 +157,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: ClaudeBot
 Allow: /
@@ -165,6 +179,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: PerplexityBot
 Allow: /
@@ -185,6 +201,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: Bytespider
 Allow: /
@@ -205,6 +223,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: cohere-ai
 Allow: /
@@ -225,6 +245,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: anthropic-ai
 Allow: /
@@ -245,6 +267,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 User-agent: Meta-ExternalAgent
 Allow: /
@@ -265,6 +289,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 # --- Tous les autres bots ---
 
@@ -285,6 +311,8 @@ Disallow: /admin
 Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
+Disallow: /beta-feedback
+Disallow: /inspirations
 
 # Sitemap (static fallback + dynamic endpoint)
 Sitemap: https://www.familygarden.fr/sitemap.xml
