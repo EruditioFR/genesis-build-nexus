@@ -437,7 +437,18 @@ export const useFeatureTour = (tourType: TourType) => {
   }, [t]);
 
   const startDriverTour = useCallback(() => {
-    const steps = getTourSteps(tourType);
+    const allSteps = getTourSteps(tourType);
+
+    // Filter out steps whose target element is not currently in the DOM
+    // (conditional renders, mobile-hidden elements, etc.)
+    const steps = allSteps.filter((step) => {
+      if (!step.element) return true; // No element = modal step, always keep
+      const el = document.querySelector(step.element as string);
+      return !!el;
+    });
+
+    if (steps.length === 0) return;
+
     const totalSteps = steps.length;
     
     injectTourStyles(totalSteps);
