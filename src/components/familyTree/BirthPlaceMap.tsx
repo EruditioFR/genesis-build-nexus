@@ -259,6 +259,7 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
   useEffect(() => {
     if (!open) {
       hasStarted.current = false;
+      setPersons([]);
       setGeoCodeProgress(null);
       setGeocodedCoords(new Map());
       setIsGeocoding(false);
