@@ -95,6 +95,7 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
   const [geocodeProgress, setGeoCodeProgress] = useState<GeocodeProgress | null>(null);
   const [geocodedCoords, setGeocodedCoords] = useState<Map<string, { lat: number; lng: number }>>(new Map());
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const hasStarted = useRef(false);
   const mapRef = useRef<L.Map | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
