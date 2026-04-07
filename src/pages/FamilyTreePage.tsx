@@ -59,6 +59,7 @@ import { BirthPlaceMap } from '@/components/familyTree/BirthPlaceMap';
 import { geocodeAndCachePersons } from '@/lib/geocoding';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { TourButton } from '@/components/tour/TourButton';
 import NoIndex from '@/components/seo/NoIndex';
 import type { 
   FamilyTree, 
@@ -829,6 +830,7 @@ export default function FamilyTreePage() {
                         : t('toolbar.persons', { count: totalPersonsCount })}
                     </p>
                   </div>
+                  <TourButton tourType="familyTree" size="icon" variant="ghost" className="h-8 w-8 shrink-0" skipWelcome={false} />
                 </div>
 
                 <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide shrink-0">
