@@ -286,7 +286,7 @@ Disallow: /shared-with-me
 Disallow: /email-confirmation
 Disallow: /capsule/
 
-# Sitemap
+# Sitemap (static fallback + dynamic endpoint)
 Sitemap: https://www.familygarden.fr/sitemap.xml
 
 # LLM-optimized content
