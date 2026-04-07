@@ -59,6 +59,7 @@ import { BirthPlaceMap } from '@/components/familyTree/BirthPlaceMap';
 import { geocodeAndCachePersons } from '@/lib/geocoding';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { TourButton } from '@/components/tour/TourButton';
 import NoIndex from '@/components/seo/NoIndex';
 import type { 
   FamilyTree, 
@@ -745,7 +746,7 @@ export default function FamilyTreePage() {
         </DropdownMenu>
       )}
 
-      <div className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1">
+      <div className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1" data-tour="tree-minimap">
         <MapIcon className="w-4 h-4 text-muted-foreground" />
         <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
       </div>
@@ -829,6 +830,7 @@ export default function FamilyTreePage() {
                         : t('toolbar.persons', { count: totalPersonsCount })}
                     </p>
                   </div>
+                  <TourButton tourType="familyTree" size="icon" variant="ghost" className="h-8 w-8 shrink-0" skipWelcome={false} />
                 </div>
 
                 <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide shrink-0">
@@ -846,6 +848,7 @@ export default function FamilyTreePage() {
                       className="h-8 w-8 sm:h-9 sm:w-9 shrink-0"
                       onClick={() => setShowBirthPlaceMap(true)}
                       title={t('map.title')}
+                      data-tour="tree-map"
                     >
                       <MapPin className="w-4 h-4" />
                     </Button>

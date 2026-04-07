@@ -261,6 +261,11 @@
         "description": "Use the minimap to quickly navigate in a large tree.",
         "descriptionCompact": "Quick navigation."
       },
+      "map": {
+        "title": "📍 Places map",
+        "description": "View all birth and death locations of your family members on an interactive map.",
+        "descriptionCompact": "Births and deaths on the map."
+      },
       "complete": {
         "title": "🎉 Ready to explore!",
         "description": "Your family tree awaits. Start by adding your loved ones!",

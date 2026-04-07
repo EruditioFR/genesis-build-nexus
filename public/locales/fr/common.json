@@ -261,6 +261,11 @@
         "description": "Utilisez la mini-carte pour naviguer rapidement dans un grand arbre.",
         "descriptionCompact": "Navigation rapide."
       },
+      "map": {
+        "title": "📍 Carte des lieux",
+        "description": "Visualisez sur une carte tous les lieux de naissance et de décès des membres de votre arbre.",
+        "descriptionCompact": "Naissances et décès sur la carte."
+      },
       "complete": {
         "title": "🎉 Prêt à explorer !",
         "description": "Votre arbre généalogique vous attend. Commencez par ajouter vos proches !",
