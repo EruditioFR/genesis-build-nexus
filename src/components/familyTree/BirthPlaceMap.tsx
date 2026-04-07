@@ -139,6 +139,7 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
       mapRef.current = null;
     }
     clusterGroupRef.current = null;
+    setMapReady(false);
   }, []);
 
   // Initialize map via callback ref
