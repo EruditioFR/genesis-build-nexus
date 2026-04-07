@@ -159,6 +159,7 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
 
       mapRef.current = map;
       clusterGroupRef.current = clusterGroup;
+      setMapReady(true);
 
       const t1 = window.setTimeout(() => map.invalidateSize(false), 100);
       const t2 = window.setTimeout(() => map.invalidateSize(false), 400);
@@ -180,9 +181,9 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
     if (!open) destroyMap();
   }, [open, destroyMap]);
 
-  // Update markers when data changes
+  // Update markers when data or map changes
   useEffect(() => {
-    if (!clusterGroupRef.current || !mapRef.current) return;
+    if (!mapReady || !clusterGroupRef.current || !mapRef.current) return;
 
     const cluster = clusterGroupRef.current;
     cluster.clearLayers();
@@ -208,7 +209,7 @@ export function BirthPlaceMap({ open, onOpenChange, treeId }: BirthPlaceMapProps
       const bounds = L.latLngBounds(markers.map(m => L.latLng(m.lat, m.lng)));
       mapRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 10 });
     }
-  }, [markers, t]);
+  }, [markers, mapReady, t]);
 
   // Fetch ALL persons from the tree when dialog opens
   useEffect(() => {
