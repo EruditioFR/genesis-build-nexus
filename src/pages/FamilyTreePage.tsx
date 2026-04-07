@@ -745,7 +745,7 @@ export default function FamilyTreePage() {
         </DropdownMenu>
       )}
 
-      <div className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1">
+      <div className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1" data-tour="tree-minimap">
         <MapIcon className="w-4 h-4 text-muted-foreground" />
         <Switch checked={showMinimap} onCheckedChange={setShowMinimap} className="scale-75" />
       </div>
@@ -846,6 +846,7 @@ export default function FamilyTreePage() {
                       className="h-8 w-8 sm:h-9 sm:w-9 shrink-0"
                       onClick={() => setShowBirthPlaceMap(true)}
                       title={t('map.title')}
+                      data-tour="tree-map"
                     >
                       <MapPin className="w-4 h-4" />
                     </Button>

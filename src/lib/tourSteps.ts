@@ -217,63 +217,68 @@ const getCapsuleTourSteps = (): TourStep[] => [
   },
 ];
 
-// Family tree tour steps
-const getFamilyTreeTourSteps = (): TourStep[] => [
-  {
-    element: '[data-tour="tree-visualization"]',
-    popover: {
-      title: t('tour.familyTree.visualization.title'),
-      description: getDescription('tour.familyTree.visualization.description'),
-      side: 'bottom',
-      align: 'center',
+// Family tree tour steps — mobile-aware (skips elements hidden on small screens)
+const getFamilyTreeTourSteps = (): TourStep[] => {
+  const mobile = isMobile();
+  const steps: TourStep[] = [
+    {
+      element: '[data-tour="tree-visualization"]',
+      popover: {
+        title: t('tour.familyTree.visualization.title'),
+        description: getDescription('tour.familyTree.visualization.description'),
+        side: mobile ? 'top' : 'bottom',
+        align: 'center',
+      },
     },
-  },
-  {
-    element: '[data-tour="tree-add-person"]',
-    popover: {
-      title: t('tour.familyTree.addPerson.title'),
-      description: getDescription('tour.familyTree.addPerson.description'),
-      side: 'bottom',
-      align: 'start',
+    {
+      element: '[data-tour="tree-add-person"]',
+      popover: {
+        title: t('tour.familyTree.addPerson.title'),
+        description: getDescription('tour.familyTree.addPerson.description'),
+        side: 'bottom',
+        align: 'start',
+      },
     },
-  },
-  {
-    element: '[data-tour="tree-zoom"]',
-    popover: {
-      title: t('tour.familyTree.zoom.title'),
-      description: getDescription('tour.familyTree.zoom.description'),
-      side: 'bottom',
-      align: 'center',
+    {
+      element: '[data-tour="tree-search"]',
+      popover: {
+        title: t('tour.familyTree.search.title'),
+        description: getDescription('tour.familyTree.search.description'),
+        side: 'bottom',
+        align: mobile ? 'center' : 'end',
+      },
     },
-  },
-  {
-    element: '[data-tour="tree-view-mode"]',
-    popover: {
-      title: t('tour.familyTree.viewMode.title'),
-      description: getDescription('tour.familyTree.viewMode.description'),
-      side: 'bottom',
-      align: 'center',
+    {
+      element: '[data-tour="tree-persons-list"]',
+      popover: {
+        title: t('tour.familyTree.personsList.title'),
+        description: getDescription('tour.familyTree.personsList.description'),
+        side: 'bottom',
+        align: 'end',
+      },
     },
-  },
-  {
-    element: '[data-tour="tree-search"]',
-    popover: {
-      title: t('tour.familyTree.search.title'),
-      description: getDescription('tour.familyTree.search.description'),
-      side: 'bottom',
-      align: 'end',
+    {
+      element: '[data-tour="tree-center"]',
+      popover: {
+        title: t('tour.familyTree.center.title'),
+        description: getDescription('tour.familyTree.center.description'),
+        side: 'bottom',
+        align: 'center',
+      },
     },
-  },
-  {
-    element: '[data-tour="tree-center"]',
-    popover: {
-      title: t('tour.familyTree.center.title'),
-      description: getDescription('tour.familyTree.center.description'),
-      side: 'bottom',
-      align: 'center',
+    {
+      element: '[data-tour="tree-map"]',
+      popover: {
+        title: t('tour.familyTree.map.title'),
+        description: getDescription('tour.familyTree.map.description'),
+        side: 'bottom',
+        align: 'end',
+      },
     },
-  },
-  {
+  ];
+
+  // Import/export only visible when not in admin view — always in toolbar
+  steps.push({
     element: '[data-tour="tree-import-export"]',
     popover: {
       title: t('tour.familyTree.importExport.title'),
@@ -281,32 +286,31 @@ const getFamilyTreeTourSteps = (): TourStep[] => [
       side: 'bottom',
       align: 'end',
     },
-  },
-  {
-    element: '[data-tour="tree-persons-list"]',
-    popover: {
-      title: t('tour.familyTree.personsList.title'),
-      description: getDescription('tour.familyTree.personsList.description'),
-      side: 'bottom',
-      align: 'end',
-    },
-  },
-  {
-    element: '[data-tour="tree-minimap"]',
-    popover: {
-      title: t('tour.familyTree.minimap.title'),
-      description: getDescription('tour.familyTree.minimap.description'),
-      side: 'left',
-      align: 'end',
-    },
-  },
-  {
+  });
+
+  // Minimap toggle is hidden on mobile (hidden sm:flex)
+  if (!mobile) {
+    steps.push({
+      element: '[data-tour="tree-minimap"]',
+      popover: {
+        title: t('tour.familyTree.minimap.title'),
+        description: getDescription('tour.familyTree.minimap.description'),
+        side: 'left',
+        align: 'end',
+      },
+    });
+  }
+
+  // Completion step
+  steps.push({
     popover: {
       title: t('tour.familyTree.complete.title'),
       description: getDescription('tour.familyTree.complete.description'),
     },
-  },
-];
+  });
+
+  return steps;
+};
 
 // Circles tour steps
 const getCirclesTourSteps = (): TourStep[] => [
