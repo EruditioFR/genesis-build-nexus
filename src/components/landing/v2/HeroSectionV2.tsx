@@ -1,12 +1,31 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ShieldCheck, Cloud, Heart } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Cloud, Heart, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+
+const INSPIRATION_QUESTIONS = [
+  { emoji: '🌱', question: 'À quoi ressemblait la maison de votre enfance ?' },
+  { emoji: '🎓', question: 'Un professeur vous a marqué. Pourquoi ?' },
+  { emoji: '🎵', question: 'Quelle chanson vous ramène instantanément en arrière ?' },
+  { emoji: '👨‍👩‍👧‍👦', question: 'Quelle tradition aimeriez-vous transmettre ?' },
+  { emoji: '❤️', question: 'Quel moment a changé le cours de votre vie ?' },
+];
 
 const HeroSectionV2 = () => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuestion(prev => (prev + 1) % INSPIRATION_QUESTIONS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const q = INSPIRATION_QUESTIONS[currentQuestion];
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-[hsl(var(--navy))] via-[hsl(220,30%,15%)] to-[hsl(var(--navy))]">
@@ -46,15 +65,43 @@ const HeroSectionV2 = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-8 leading-relaxed"
           >
             {t('v2.hero.subtitle')}
           </motion.p>
 
+          {/* Inspiration Question Rotator */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="mb-8 sm:mb-10"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-white/70 text-xs sm:text-sm mb-3">
+              <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--gold-light))]" />
+              <span>{t('inspiration.heroBadge', '50 questions pour réveiller vos souvenirs')}</span>
+            </div>
+            <div className="relative h-12 sm:h-14 flex items-center justify-center overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={currentQuestion}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute text-white/90 text-base sm:text-xl md:text-2xl font-display italic px-4"
+                >
+                  <span className="mr-2">{q.emoji}</span>
+                  « {q.question} »
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.35 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
             <Button
