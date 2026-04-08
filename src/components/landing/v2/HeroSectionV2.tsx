@@ -138,7 +138,7 @@ const HeroSectionV2 = () => {
               </span>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10 drop-shadow-lg">
-                « {slide.question} »
+                {slide.question}
               </h1>
             </motion.div>
           </AnimatePresence>
