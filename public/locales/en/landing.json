@@ -132,7 +132,7 @@
         "description": "For regular content creators",
         "promo": "Launch offer",
         "promoDetail": "-50% for 3 months",
-        "promoAfter": "then {{price}} euros/month after 3 months",
+        "promoAfter": "then {{price}}€/month after 3 months",
         "originalPrice": "9",
         "features": {
           "storage": "10 GB storage",
@@ -147,7 +147,7 @@
         "description": "Build your family tree and link your memories to family members",
         "promo": "Launch offer",
         "promoDetail": "9 euros/month for 3 months",
-        "promoAfter": "then {{price}} euros/month after 3 months",
+        "promoAfter": "then {{price}}€/month after 3 months",
         "features": {
           "storage": "20 GB storage",
           "formats": "Text, photo, video and audio memories",

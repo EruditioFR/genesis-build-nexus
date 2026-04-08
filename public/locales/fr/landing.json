@@ -132,7 +132,7 @@
         "description": "Pour écrire et partager vos souvenirs en utilisant le texte, la vidéo, la photo et l'audio",
         "promo": "Offre de lancement",
         "promoDetail": "-50% pendant 3 mois",
-        "promoAfter": "puis {{price}} euros/mois après 3 mois",
+        "promoAfter": "puis {{price}}€/mois après 3 mois",
         "originalPrice": "9",
         "features": {
           "storage": "10 Go de stockage",
@@ -147,7 +147,7 @@
         "description": "Pour créer son arbre généalogique et relier vos souvenirs à des membres de votre famille",
         "promo": "Offre de lancement",
         "promoDetail": "9 euros/mois pendant 3 mois",
-        "promoAfter": "puis {{price}} euros/mois après 3 mois",
+        "promoAfter": "puis {{price}}€/mois après 3 mois",
         "features": {
           "storage": "20 Go de stockage",
           "formats": "Souvenirs au format texte, photo, vidéo et audio",
