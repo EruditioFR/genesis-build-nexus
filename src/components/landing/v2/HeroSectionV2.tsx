@@ -102,12 +102,12 @@ const HeroSectionV2 = () => {
       </AnimatePresence>
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
 
       {/* Content */}
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
-        <div className="max-w-3xl bg-black/15 backdrop-blur-[2px] rounded-3xl p-8 sm:p-10">
+        <div className="max-w-3xl bg-black/10 backdrop-blur-[3px] rounded-3xl p-8 sm:p-10">
 
           {/* Category pill + rotating question — fixed height to prevent layout shift */}
           <div className="min-h-[180px] sm:min-h-[200px] md:min-h-[220px] lg:min-h-[260px] flex flex-col justify-center">
