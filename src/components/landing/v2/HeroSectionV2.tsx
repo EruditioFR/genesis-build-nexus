@@ -79,7 +79,7 @@ const HeroSectionV2 = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden group"
+      className="relative min-h-[100svh] flex items-center overflow-hidden group"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -107,10 +107,10 @@ const HeroSectionV2 = () => {
 
       {/* Content */}
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
-        <div className="max-w-3xl bg-black/10 backdrop-blur-[3px] rounded-3xl p-8 sm:p-10">
+        <div className="max-w-3xl bg-black/10 backdrop-blur-[3px] rounded-3xl p-6 sm:p-8 md:p-10">
 
           {/* Category pill + rotating question — fixed height to prevent layout shift */}
-          <div className="min-h-[180px] sm:min-h-[200px] md:min-h-[220px] lg:min-h-[260px] flex flex-col justify-center">
+          <div className="h-[160px] sm:h-[200px] md:h-[220px] lg:h-[260px] flex flex-col justify-center overflow-hidden">
             <AnimatePresence custom={direction} mode="wait">
               <motion.div
                 key={current}
@@ -121,24 +121,24 @@ const HeroSectionV2 = () => {
                 exit="exit"
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
               >
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-3 sm:mb-4">
                   <span>{slide.emoji}</span>
                   {slide.label}
                 </span>
 
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-6 sm:mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
                   {slide.question}
                 </h1>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Subtitle */}
+          {/* Subtitle — condensed */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-8 leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-white/90 max-w-md mx-auto mb-6 sm:mb-8 leading-snug font-medium"
             style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
           >
             {t('v2.hero.subtitle')}
@@ -167,22 +167,22 @@ const HeroSectionV2 = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-10 sm:mt-14 flex flex-wrap gap-4 sm:gap-8 text-white/70 text-sm justify-center"
+            className="mt-8 sm:mt-14 flex flex-wrap gap-3 sm:gap-8 text-white/70 text-xs sm:text-sm justify-center"
           >
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
               <span>{t('v2.hero.trust.private')}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{t('v2.hero.trust.durable')}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               <span>{t('v2.hero.trust.family')}</span>
@@ -191,17 +191,17 @@ const HeroSectionV2 = () => {
         </div>
       </div>
 
-      {/* Navigation arrows */}
+      {/* Navigation arrows — hidden on mobile (swipe instead) */}
       <button
         onClick={prev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Précédent"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
         onClick={next}
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Suivant"
       >
         <ChevronRight className="h-5 w-5" />
