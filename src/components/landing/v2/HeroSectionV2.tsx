@@ -52,7 +52,7 @@ const HeroSectionV2 = () => {
     if (touchStart.current === null) return;
     const diff = touchStart.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      diff > 0 ? next() : prev();
+      if (diff > 0) { next(); } else { prev(); }
     }
     touchStart.current = null;
   }, [next, prev]);
