@@ -53,7 +53,7 @@ const PricingSection = () => {
     {
       nameKey: "pricing.plans.heritage.name",
       icon: Building2,
-      price: { monthly: 19.99, yearly: 199 },
+      price: { monthly: 14.99, yearly: 149 },
       descriptionKey: "pricing.plans.heritage.description",
       featuresKeys: [
         "pricing.plans.heritage.features.storage",
@@ -204,6 +204,12 @@ const PricingSection = () => {
                     🔥 {t('pricing.plans.premium.promo')} : {t('pricing.plans.premium.promoDetail')}
                   </div>
                 )}
+                {/* Promo badge for heritage monthly */}
+                {plan.tier === "heritage" && !isYearly && (
+                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 bg-accent/10 text-accent`}>
+                    🔥 {t('pricing.plans.heritage.promo')} : {t('pricing.plans.heritage.promoDetail')}
+                  </div>
+                )}
                 <div className="flex items-baseline justify-center gap-1">
                   {plan.tier === "premium" && !isYearly ? (
                     <>
@@ -216,6 +222,15 @@ const PricingSection = () => {
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
                         4,99€
+                      </span>
+                    </>
+                  ) : plan.tier === "heritage" && !isYearly ? (
+                    <>
+                      <span className={`text-xl sm:text-2xl line-through opacity-50 font-display text-foreground`}>
+                        {plan.price.monthly}€
+                      </span>
+                      <span className={`text-3xl sm:text-5xl font-display font-bold text-foreground`}>
+                        9,99€
                       </span>
                     </>
                   ) : (
@@ -232,6 +247,11 @@ const PricingSection = () => {
                 {plan.tier === "premium" && !isYearly && (
                   <p className={`text-xs mt-1 ${plan.popular ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
                     {t('pricing.plans.premium.promoAfter', { price: '9,99' })}
+                  </p>
+                )}
+                {plan.tier === "heritage" && !isYearly && (
+                  <p className={`text-xs mt-1 text-muted-foreground`}>
+                    {t('pricing.plans.heritage.promoAfter', { price: '14,99' })}
                   </p>
                 )}
               </div>
