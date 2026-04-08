@@ -211,6 +211,29 @@
     "success": "¡Mensaje enviado! Te responderemos pronto.",
     "error": "Ocurrió un error. Por favor, inténtalo de nuevo."
   },
+  "inspiration": {
+    "landingBadge": "Encuentra inspiración",
+    "landingTitle": "50 preguntas para despertar tus recuerdos",
+    "landingSubtitle": "No necesitas ser escritor. Nuestras preguntas guiadas te ayudan a contar tus mejores momentos, fácilmente.",
+    "landingCta": "Comenzar gratis"
+  },
+  "productPreview": {
+    "badge": "Descubre la experiencia",
+    "title": "Te guiamos",
+    "titleHighlight": "en cada paso",
+    "create": {
+      "title": "Crea tus recuerdos",
+      "desc": "Añade fotos, vídeos, textos y audio para componer recuerdos ricos y completos."
+    },
+    "organize": {
+      "title": "Organiza por épocas",
+      "desc": "Encuentra cada momento en una cronología interactiva, clasificado por décadas."
+    },
+    "share": {
+      "title": "Comparte en privado",
+      "desc": "Invita a tus seres queridos a círculos seguros para revivir juntos vuestros recuerdos."
+    }
+  },
   "cta": {
     "title": "Tus recuerdos merecen",
     "titleHighlight": "ser preservados",

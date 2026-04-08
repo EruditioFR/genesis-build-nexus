@@ -211,6 +211,29 @@
     "success": "Mensagem enviada! Responderemos em breve.",
     "error": "Ocorreu um erro. Por favor, tente novamente."
   },
+  "inspiration": {
+    "landingBadge": "Encontre inspiração",
+    "landingTitle": "50 perguntas para despertar as suas memórias",
+    "landingSubtitle": "Não precisa de ser escritor. As nossas perguntas guiadas ajudam-no a contar os seus melhores momentos, de forma simples.",
+    "landingCta": "Começar gratuitamente"
+  },
+  "productPreview": {
+    "badge": "Descubra a experiência",
+    "title": "É guiado",
+    "titleHighlight": "a cada passo",
+    "create": {
+      "title": "Crie as suas memórias",
+      "desc": "Adicione fotos, vídeos, textos e áudio para compor memórias ricas e completas."
+    },
+    "organize": {
+      "title": "Organize por épocas",
+      "desc": "Encontre cada momento numa cronologia interativa, organizado por décadas."
+    },
+    "share": {
+      "title": "Partilhe em privado",
+      "desc": "Convide os seus entes queridos para círculos seguros para reviver memórias juntos."
+    }
+  },
   "cta": {
     "title": "As suas memórias merecem",
     "titleHighlight": "ser preservadas",

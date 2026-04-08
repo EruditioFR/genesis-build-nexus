@@ -211,6 +211,29 @@
     "success": "Messaggio inviato! Ti risponderemo presto.",
     "error": "Si è verificato un errore. Riprova."
   },
+  "inspiration": {
+    "landingBadge": "Trova ispirazione",
+    "landingTitle": "50 domande per risvegliare i tuoi ricordi",
+    "landingSubtitle": "Non serve essere scrittori. Le nostre domande guidate ti aiutano a raccontare i tuoi momenti più belli, semplicemente.",
+    "landingCta": "Inizia gratis"
+  },
+  "productPreview": {
+    "badge": "Scopri l'esperienza",
+    "title": "Sei guidato",
+    "titleHighlight": "ad ogni passo",
+    "create": {
+      "title": "Crea i tuoi ricordi",
+      "desc": "Aggiungi foto, video, testi e audio per comporre ricordi ricchi e completi."
+    },
+    "organize": {
+      "title": "Organizza per epoche",
+      "desc": "Ritrova ogni momento su una cronologia interattiva, ordinata per decenni."
+    },
+    "share": {
+      "title": "Condividi in privato",
+      "desc": "Invita i tuoi cari in cerchie sicure per rivivere insieme i vostri ricordi."
+    }
+  },
   "cta": {
     "title": "I tuoi ricordi meritano",
     "titleHighlight": "di essere conservati",
