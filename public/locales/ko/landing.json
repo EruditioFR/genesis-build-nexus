@@ -144,7 +144,10 @@
       },
       "heritage": {
         "name": "헤리티지",
-        "description": "가계도를 만들고 추억을 사람들과 연결하세요",
+        "description": "가계도를 만들고 추억을 가족과 연결하세요",
+        "promo": "런칭 오퍼",
+        "promoDetail": "3개월간 9 euros/월",
+        "promoAfter": "3개월 후 {{price}} euros/월",
         "features": {
           "storage": "20 GB 저장공간",
           "formats": "텍스트, 사진, 비디오, 오디오 추억",

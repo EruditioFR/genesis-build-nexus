@@ -144,7 +144,10 @@
       },
       "heritage": {
         "name": "传承版",
-        "description": "创建家谱，将回忆与人物关联",
+        "description": "创建家谱，将回忆与家人关联",
+        "promo": "上线优惠",
+        "promoDetail": "3个月9 euros/月",
+        "promoAfter": "3个月后{{price}} euros/月",
         "features": {
           "storage": "20 GB存储空间",
           "formats": "文字、照片、视频和音频回忆",

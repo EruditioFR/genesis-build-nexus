@@ -144,7 +144,10 @@
       },
       "heritage": {
         "name": "Heritage",
-        "description": "Costruisci il tuo albero genealogico e collega i ricordi alle persone",
+        "description": "Costruisci il tuo albero genealogico e collega i ricordi ai tuoi familiari",
+        "promo": "Offerta lancio",
+        "promoDetail": "9 euros/mese per 3 mesi",
+        "promoAfter": "poi {{price}} euros/mese dopo 3 mesi",
         "features": {
           "storage": "20 GB di archiviazione",
           "formats": "Ricordi testo, foto, video e audio",

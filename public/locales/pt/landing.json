@@ -144,7 +144,10 @@
       },
       "heritage": {
         "name": "Legado",
-        "description": "Para criar a sua árvore genealógica e ligar as suas memórias a pessoas",
+        "description": "Para criar a sua árvore genealógica e ligar as suas memórias a membros da família",
+        "promo": "Oferta de lançamento",
+        "promoDetail": "9 euros/mês durante 3 meses",
+        "promoAfter": "depois {{price}} euros/mês após 3 meses",
         "features": {
           "storage": "20 GB de armazenamento",
           "formats": "Memórias em formato texto, foto, vídeo e áudio",
