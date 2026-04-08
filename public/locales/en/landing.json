@@ -211,6 +211,29 @@
     "success": "Message sent! We'll get back to you soon.",
     "error": "An error occurred. Please try again."
   },
+  "inspiration": {
+    "landingBadge": "Find inspiration",
+    "landingTitle": "50 questions to awaken your memories",
+    "landingSubtitle": "No need to be a writer. Our guided questions help you tell your most beautiful moments, simply.",
+    "landingCta": "Get started free"
+  },
+  "productPreview": {
+    "badge": "Discover the experience",
+    "title": "You're guided",
+    "titleHighlight": "every step of the way",
+    "create": {
+      "title": "Create your memories",
+      "desc": "Add photos, videos, texts and audio to compose rich, complete memories."
+    },
+    "organize": {
+      "title": "Organize by era",
+      "desc": "Find every moment on an interactive timeline, sorted by decades."
+    },
+    "share": {
+      "title": "Share privately",
+      "desc": "Invite your loved ones into secure circles to relive memories together."
+    }
+  },
   "cta": {
     "title": "Your memories deserve",
     "titleHighlight": "to be preserved",

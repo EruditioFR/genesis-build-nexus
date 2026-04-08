@@ -211,6 +211,29 @@
     "success": "Message envoyé ! Nous vous répondrons rapidement.",
     "error": "Une erreur est survenue. Veuillez réessayer."
   },
+  "inspiration": {
+    "landingBadge": "Trouvez l'inspiration",
+    "landingTitle": "50 questions pour réveiller vos souvenirs",
+    "landingSubtitle": "Pas besoin d'être écrivain. Nos questions guidées vous aident à raconter vos plus beaux moments, simplement.",
+    "landingCta": "Commencer gratuitement"
+  },
+  "productPreview": {
+    "badge": "Découvrez l'expérience",
+    "title": "Vous êtes guidé",
+    "titleHighlight": "à chaque étape",
+    "create": {
+      "title": "Créez vos souvenirs",
+      "desc": "Ajoutez photos, vidéos, textes et audio pour composer des souvenirs riches et complets."
+    },
+    "organize": {
+      "title": "Organisez par époques",
+      "desc": "Retrouvez chaque moment sur une chronologie interactive, classé par décennies."
+    },
+    "share": {
+      "title": "Partagez en privé",
+      "desc": "Invitez vos proches dans des cercles sécurisés pour revivre ensemble vos souvenirs."
+    }
+  },
   "cta": {
     "title": "Vos souvenirs méritent",
     "titleHighlight": "d'être préservés",
