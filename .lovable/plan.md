@@ -1,96 +1,30 @@
 
 
-## Objectif
+## Rendre le Hero V2 plus lumineux
 
-Rendre la landing page plus attractive en y intégrant deux éléments actuellement réservés au dashboard :
-1. **Un slider d'inspirations "hero-size"** — version publique (sans login requis), plus grand et visuellement impactant
-2. **Les cartes "Bienvenue sur Family Garden"** — les 3 feature cards (Créer, Organiser, Partager) + le "Comment ça marche" en 4 étapes
+### Probleme actuel
+Les deux overlays sombres combinés (`from-black/65 via-black/40 to-black/20` + `from-black/50 via-transparent to-black/20`) assombrissent fortement les aquarelles. Le résultat est lisible mais "triste".
 
-L'idée : le prospect voit immédiatement le produit en action et comprend qu'il sera guidé.
+### Approche
+Alléger les overlays tout en gardant le contraste texte/fond grâce à un `text-shadow` plus marqué sur les textes et un léger fond flou derrière le bloc de contenu.
 
----
+### Modifications dans `HeroSectionV2.tsx`
 
-## Plan d'implémentation
+1. **Réduire les overlays** :
+   - Overlay horizontal : `from-black/40 via-black/20 to-transparent` (au lieu de 65/40/20)
+   - Overlay vertical : `from-black/35 via-transparent to-black/10` (au lieu de 50/transparent/20)
 
-### 1. Créer un composant `LandingInspirationSlider`
+2. **Ajouter un fond semi-transparent flou derrière le bloc texte** :
+   - Wraper le `max-w-3xl` dans un `div` avec `bg-black/15 backdrop-blur-[2px] rounded-3xl px-8 py-10` pour créer un "glass card" subtil qui isole le texte sans noircir toute l'image
 
-Nouveau fichier : `src/components/landing/LandingInspirationSlider.tsx`
+3. **Renforcer les text-shadows** :
+   - Sur le `h1` : ajouter un style inline `textShadow: '0 2px 12px rgba(0,0,0,0.5)'`
+   - Sur le subtitle : `textShadow: '0 1px 8px rgba(0,0,0,0.4)'`
 
-- Reprend la mécanique du `DashboardInspirationWidget` (carrousel avec les 5 images aquarelles + questions) mais :
-  - **Pas de dépendance à `useMemoryPrompts`** (pas de Supabase, pas de login) — utilise directement `memoryCategories` et `SLIDE_QUESTIONS`
-  - **Plus grand** : hauteur `h-72 sm:h-80 md:h-96` (format hero) au lieu de `h-48`
-  - **Pas de bouton dismiss** (c'est du contenu marketing, pas dismissable)
-  - **CTA = "Commencer gratuitement"** → lien vers `/signup` au lieu d'ouvrir le dialog
-  - Autoplay, swipe, flèches de navigation, dots — même logique
-  - Texte d'accroche au-dessus : "Trouvez l'inspiration pour vos premiers souvenirs"
+4. **Boutons de navigation** : alléger de `bg-black/30` a `bg-white/20 hover:bg-white/35` pour coller au ton lumineux
 
-### 2. Créer un composant `LandingProductPreview`
+5. **Category pill** : passer de `bg-white/15` a `bg-white/25` pour plus de visibilite
 
-Nouveau fichier : `src/components/landing/LandingProductPreview.tsx`
-
-- Reprend les 3 cartes du `WelcomeSection` (Créer / Organiser / Partager) dans une section dédiée
-- Titre de section : "Un espace pensé pour vous guider"
-- Les 3 cartes avec icônes, titre et description (réutilise les clés i18n existantes ou en crée de nouvelles dans `landing.json`)
-- Sous les cartes : résumé compact du "Comment ça marche" en 4 étapes (icônes numérotées + titre, sans les descriptions longues du `HowItWorksSection` actuel — format plus condensé)
-- Animation au scroll (framer-motion `whileInView`)
-
-### 3. Intégrer dans les deux variantes de landing
-
-**`src/pages/Index.tsx` (V1)** :
-- Ajouter `LandingInspirationSlider` juste après le `HeroSection`
-- Ajouter `LandingProductPreview` après le slider, avant `FeaturesSection`
-
-**`src/pages/IndexV2.tsx` (V2)** :
-- Ajouter `LandingInspirationSlider` après `PainPointsSection` (= après avoir exposé le problème, on montre la solution concrète)
-- Ajouter `LandingProductPreview` après le slider, avant `SolutionSection`
-
-### 4. Ajouter les traductions
-
-Dans `public/locales/fr/landing.json` et `public/locales/en/landing.json` :
-- `productPreview.badge` : "Découvrez l'expérience" / "Discover the experience"
-- `productPreview.title` : "Vous êtes guidé" / "You're guided"
-- `productPreview.titleHighlight` : "à chaque étape" / "every step of the way"
-- `inspiration.landingTitle` : "Trouvez l'inspiration pour vos premiers souvenirs"
-- `inspiration.landingCta` : "Commencer gratuitement"
-- Clés pour les 3 feature cards (Créer, Organiser, Partager) adaptées au contexte prospect
-
----
-
-## Structure visuelle
-
-```text
-┌──────────────────────────────────────────┐
-│  HERO (existant)                         │
-├──────────────────────────────────────────┤
-│  INSPIRATION SLIDER (nouveau, hero-size) │
-│  ┌────────────────────────────────────┐  │
-│  │ 🌱 Enfance                        │  │
-│  │ « À quoi ressemblait la maison    │  │
-│  │   de votre enfance ? »            │  │
-│  │                                    │  │
-│  │ [Commencer gratuitement →]        │  │
-│  └────────────────────────────────────┘  │
-├──────────────────────────────────────────┤
-│  PRODUCT PREVIEW (nouveau)               │
-│  "Un espace pensé pour vous guider"      │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐   │
-│  │ 📷      │ │ ⏰      │ │ 👥      │   │
-│  │ Créer   │ │Organiser│ │Partager │   │
-│  └─────────┘ └─────────┘ └─────────┘   │
-│                                          │
-│  1→ 2→ 3→ 4  (mini How It Works)        │
-├──────────────────────────────────────────┤
-│  FEATURES (existant)                     │
-│  ...                                     │
-└──────────────────────────────────────────┘
-```
-
----
-
-## Points techniques
-
-- Le `LandingInspirationSlider` importe directement `memoryCategories` depuis `@/lib/memoryCategories` et les images depuis `@/assets/inspirations/` — aucune requête Supabase, donc chargement instantané
-- Lazy-load les deux nouveaux composants pour ne pas impacter le LCP du hero
-- Les images aquarelles sont déjà dans les assets (enfance, ecole, musiques, famille, vie) — pas besoin de nouveaux visuels
-- Responsive : sur mobile, le slider occupe toute la largeur, les 3 cards passent en colonne
+### Resultat attendu
+Les aquarelles sont nettement plus visibles, l'ambiance est chaleureuse et lumineuse. Le texte reste parfaitement lisible grace au glass effect et aux text-shadows.
 
