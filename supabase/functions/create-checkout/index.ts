@@ -11,21 +11,21 @@ const corsHeaders = {
 const SUBSCRIPTION_TIERS = {
   premium: {
     monthly: {
-      price_id: "price_1SrzsNRc375UxOm0w9dJmRFf",
+      price_id: "price_1TJui8Rc375UxOm00OZ6fLi5",
       product_id: "prod_TpfCfW2XoivaMo",
     },
     yearly: {
-      price_id: "price_1SrzsjRc375UxOm0SEiXQkW6",
+      price_id: "price_1TJuiXRc375UxOm0UZDmhv9S",
       product_id: "prod_TpfDVWEiQyAskK",
     },
   },
   heritage: {
     monthly: {
-      price_id: "price_1SrztIRc375UxOm0U452itnc",
+      price_id: "price_1TJuimRc375UxOm0TUYpMlJa",
       product_id: "prod_TpfDHDc4suNNpU",
     },
     yearly: {
-      price_id: "price_1SrzthRc375UxOm0JeYmlaIM",
+      price_id: "price_1TJujARc375UxOm04FIZg7er",
       product_id: "prod_TpfEpqH8Z3zaDh",
     },
   },
