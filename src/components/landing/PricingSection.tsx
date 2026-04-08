@@ -221,9 +221,6 @@ const PricingSection = () => {
                     </>
                   ) : plan.tier === "heritage" && !isYearly ? (
                     <>
-                      <span className="text-base sm:text-lg line-through opacity-60 font-display text-foreground">
-                        {plan.price.monthly}<span className="text-[0.6em]">€</span>/{t('pricing.perMonth')}
-                      </span>
                       <span className="text-4xl sm:text-5xl font-display font-bold text-foreground">
                         9<span className="text-[0.5em]">€</span>
                       </span>
