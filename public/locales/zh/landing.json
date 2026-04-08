@@ -211,6 +211,29 @@
     "success": "消息已发送！我们会尽快回复。",
     "error": "发生错误，请重试。"
   },
+  "inspiration": {
+    "landingBadge": "寻找灵感",
+    "landingTitle": "50个问题唤醒您的回忆",
+    "landingSubtitle": "无需成为作家。我们的引导问题帮助您轻松讲述最美好的时刻。",
+    "landingCta": "免费开始"
+  },
+  "productPreview": {
+    "badge": "探索体验",
+    "title": "每一步都有",
+    "titleHighlight": "引导陪伴",
+    "create": {
+      "title": "创建您的回忆",
+      "desc": "添加照片、视频、文字和音频，组成丰富完整的回忆。"
+    },
+    "organize": {
+      "title": "按年代整理",
+      "desc": "在互动时间线上按年代分类，轻松找到每个时刻。"
+    },
+    "share": {
+      "title": "私密分享",
+      "desc": "邀请亲人加入安全圈子，一起重温美好回忆。"
+    }
+  },
   "cta": {
     "title": "您的回忆值得",
     "titleHighlight": "被保存",
