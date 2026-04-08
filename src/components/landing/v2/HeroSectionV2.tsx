@@ -101,9 +101,9 @@ const HeroSectionV2 = () => {
         />
       </AnimatePresence>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-black/10 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+      {/* Overlays — stronger on mobile for readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/25 to-black/10 sm:from-black/25 sm:via-black/10 sm:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/15 to-transparent sm:from-black/25 sm:via-transparent sm:to-transparent" />
 
       {/* Content */}
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
