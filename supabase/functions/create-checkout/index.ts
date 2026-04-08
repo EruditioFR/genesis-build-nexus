@@ -90,14 +90,14 @@ serve(async (req) => {
 
     // Auto-apply launch promo for premium monthly: -5€ for 3 months
     if (tier === "premium" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "U3dOnzFj" }];
-      logStep("Auto-applied premium launch promo coupon");
+      discounts = [{ coupon: "wOK9mvry" }];
+      logStep("Auto-applied premium launch promo coupon (-50% for 3 months)");
     }
 
     // Auto-apply launch promo for heritage monthly: -5€ for 3 months (14.99 -> 9.99)
     if (tier === "heritage" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "heritage_launch_3m" }];
-      logStep("Auto-applied heritage launch promo coupon");
+      discounts = [{ coupon: "btgCwbO1" }];
+      logStep("Auto-applied heritage launch promo coupon (9€ for 3 months)");
     }
 
     const session = await stripe.checkout.sessions.create({
