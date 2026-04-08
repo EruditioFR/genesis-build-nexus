@@ -199,7 +199,7 @@ const PricingSection = () => {
                 {/* Promo badge for premium monthly */}
                 {plan.tier === "premium" && !isYearly && (
                   <div className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 ${
-                    plan.popular ? "bg-secondary/20 text-white" : "bg-accent/10 text-white"
+                    plan.popular ? "bg-secondary text-secondary-foreground" : "bg-accent/10 text-white"
                   }`}>
                     🔥 {t('pricing.plans.premium.promo')} : {t('pricing.plans.premium.promoDetail')}
                   </div>
