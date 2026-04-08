@@ -216,28 +216,28 @@ const PricingSection = () => {
                       <span className={`text-base sm:text-lg line-through opacity-60 font-display ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
-                        {plan.price.monthly}€/{t('pricing.perMonth')}
+                        {plan.price.monthly} euros/{t('pricing.perMonth')}
                       </span>
                       <span className={`text-4xl sm:text-5xl font-display font-bold ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
-                        4,99€
+                        4,99 euros
                       </span>
                     </>
                   ) : plan.tier === "heritage" && !isYearly ? (
                     <>
                       <span className="text-base sm:text-lg line-through opacity-60 font-display text-foreground">
-                        {plan.price.monthly}€/{t('pricing.perMonth')}
+                        {plan.price.monthly} euros/{t('pricing.perMonth')}
                       </span>
                       <span className="text-4xl sm:text-5xl font-display font-bold text-foreground">
-                        9,99€
+                        9,99 euros
                       </span>
                     </>
                   ) : (
                     <span className={`text-4xl sm:text-5xl font-display font-bold ${
                       plan.popular ? "text-primary-foreground" : "text-foreground"
                     }`}>
-                      {isYearly ? plan.price.yearly : plan.price.monthly}€
+                      {isYearly ? plan.price.yearly : plan.price.monthly} euros
                     </span>
                   )}
                   <span className={`text-sm mt-1 ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
