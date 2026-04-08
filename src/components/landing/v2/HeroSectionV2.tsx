@@ -133,16 +133,26 @@ const HeroSectionV2 = () => {
             </AnimatePresence>
           </div>
 
-          {/* Subtitle — condensed */}
-          <motion.p
+          {/* Subtitle — two lines */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-sm sm:text-base md:text-lg text-white/90 max-w-md mx-auto mb-6 sm:mb-8 leading-snug font-medium"
-            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+            className="max-w-md mx-auto mb-6 sm:mb-8"
           >
-            {t('v2.hero.subtitle')}
-          </motion.p>
+            <p
+              className="text-sm sm:text-base md:text-lg text-white font-semibold leading-snug"
+              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+            >
+              {t('v2.hero.subtitle')}
+            </p>
+            <p
+              className="text-xs sm:text-sm md:text-base text-white/80 mt-1.5 leading-snug font-medium"
+              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+            >
+              {t('v2.hero.subtitle2')}
+            </p>
+          </motion.div>
 
           {/* CTA */}
           <motion.div
