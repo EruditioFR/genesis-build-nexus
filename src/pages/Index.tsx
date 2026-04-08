@@ -9,6 +9,8 @@ import SEOHead from "@/components/seo/SEOHead";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 
 // Lazy load below-the-fold components to improve LCP
+const LandingInspirationSlider = lazy(() => import("@/components/landing/LandingInspirationSlider"));
+const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
 const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSection"));
 const HowItWorksVideo = lazy(() => import("@/components/dashboard/HowItWorksVideo"));
@@ -72,6 +74,8 @@ const Index = () => {
       <main>
         <HeroSection />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
+          <LandingInspirationSlider />
+          <LandingProductPreview />
           <FeaturesSection />
           <HowItWorksSection />
           <HowItWorksVideo variant="landing" />
