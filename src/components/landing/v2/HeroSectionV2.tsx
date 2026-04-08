@@ -108,18 +108,6 @@ const HeroSectionV2 = () => {
       {/* Content */}
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
         <div className="max-w-3xl">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-6"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-sm font-medium">
-              <Sparkles className="h-4 w-4 text-secondary" />
-              {t('inspiration.heroBadge', '50 questions pour réveiller vos souvenirs')}
-            </span>
-          </motion.div>
 
           {/* Category pill + rotating question */}
           <AnimatePresence custom={direction} mode="wait">
