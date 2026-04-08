@@ -109,27 +109,29 @@ const HeroSectionV2 = () => {
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
         <div className="max-w-3xl bg-black/15 backdrop-blur-[2px] rounded-3xl p-8 sm:p-10">
 
-          {/* Category pill + rotating question */}
-          <AnimatePresence custom={direction} mode="wait">
-            <motion.div
-              key={current}
-              custom={direction}
-              variants={textVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
-            >
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
-                <span>{slide.emoji}</span>
-                {slide.label}
-              </span>
+          {/* Category pill + rotating question — fixed height to prevent layout shift */}
+          <div className="min-h-[180px] sm:min-h-[200px] md:min-h-[220px] lg:min-h-[260px] flex flex-col justify-center">
+            <AnimatePresence custom={direction} mode="wait">
+              <motion.div
+                key={current}
+                custom={direction}
+                variants={textVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+              >
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
+                  <span>{slide.emoji}</span>
+                  {slide.label}
+                </span>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
-                {slide.question}
-              </h1>
-            </motion.div>
-          </AnimatePresence>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+                  {slide.question}
+                </h1>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           {/* Subtitle */}
           <motion.p
