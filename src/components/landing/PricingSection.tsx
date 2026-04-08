@@ -216,21 +216,21 @@ const PricingSection = () => {
                       <span className={`text-base sm:text-lg line-through opacity-60 font-display ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
-                        {plan.price.monthly} euros/{t('pricing.perMonth')}
+                        {plan.price.monthly}<span className="text-[0.6em]">€</span>/{t('pricing.perMonth')}
                       </span>
                       <span className={`text-4xl sm:text-5xl font-display font-bold ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
-                        5 euros
+                        5<span className="text-[0.5em]">€</span>
                       </span>
                     </>
                   ) : plan.tier === "heritage" && !isYearly ? (
                     <>
                       <span className="text-base sm:text-lg line-through opacity-60 font-display text-foreground">
-                        {plan.price.monthly} euros/{t('pricing.perMonth')}
+                        {plan.price.monthly}<span className="text-[0.6em]">€</span>/{t('pricing.perMonth')}
                       </span>
                       <span className="text-4xl sm:text-5xl font-display font-bold text-foreground">
-                        9 euros
+                        9<span className="text-[0.5em]">€</span>
                       </span>
                     </>
                   ) : plan.price.monthly === 0 ? (
@@ -243,12 +243,12 @@ const PricingSection = () => {
                     <span className={`text-4xl sm:text-5xl font-display font-bold ${
                       plan.popular ? "text-primary-foreground" : "text-foreground"
                     }`}>
-                      {isYearly ? plan.price.yearly : plan.price.monthly} euros
+                      {isYearly ? plan.price.yearly : plan.price.monthly}<span className="text-[0.5em]">€</span>
                     </span>
                   )}
                   {plan.price.monthly > 0 && (
                     <span className={`text-sm mt-1 ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                      /{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
+                      TTC /{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
                     </span>
                   )}
                 </div>
