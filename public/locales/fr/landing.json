@@ -129,7 +129,7 @@
       },
       "premium": {
         "name": "Premium",
-        "description": "Pour les créateurs de contenu réguliers",
+        "description": "Pour écrire et partager vos souvenirs en utilisant le texte, la vidéo, la photo et l'audio",
         "promo": "Offre de lancement",
         "promoDetail": "-50% pendant 3 mois",
         "promoAfter": "puis {{price}}€/mois après 3 mois",
