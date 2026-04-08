@@ -201,7 +201,7 @@ const PricingSection = () => {
                   <div className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 ${
                     plan.popular ? "bg-secondary text-secondary-foreground" : "bg-accent/10 text-white"
                   }`}>
-                    🔥 {t('pricing.plans.premium.promo')} : {t('pricing.plans.premium.promoDetail')}
+                    🔥 {t('pricing.plans.premium.promo')}
                   </div>
                 )}
                 {/* Promo badge for heritage monthly */}
