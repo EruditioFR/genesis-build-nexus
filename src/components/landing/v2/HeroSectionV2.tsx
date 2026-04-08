@@ -102,12 +102,12 @@ const HeroSectionV2 = () => {
       </AnimatePresence>
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
 
       {/* Content */}
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl bg-black/15 backdrop-blur-[2px] rounded-3xl p-8 sm:p-10">
 
           {/* Category pill + rotating question */}
           <AnimatePresence custom={direction} mode="wait">
@@ -120,12 +120,12 @@ const HeroSectionV2 = () => {
               exit="exit"
               transition={{ duration: 0.5, ease: 'easeInOut' }}
             >
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
                 <span>{slide.emoji}</span>
                 {slide.label}
               </span>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10 drop-shadow-lg">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
                 {slide.question}
               </h1>
             </motion.div>
@@ -137,6 +137,7 @@ const HeroSectionV2 = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-8 leading-relaxed"
+            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
           >
             {t('v2.hero.subtitle')}
           </motion.p>
@@ -191,14 +192,14 @@ const HeroSectionV2 = () => {
       {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Précédent"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
         onClick={next}
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Suivant"
       >
         <ChevronRight className="h-5 w-5" />
