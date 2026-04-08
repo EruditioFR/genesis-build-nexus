@@ -213,11 +213,6 @@ const PricingSection = () => {
                 <div className="flex flex-col items-center gap-1">
                   {plan.tier === "premium" && !isYearly ? (
                     <>
-                      <span className={`text-base sm:text-lg line-through opacity-60 font-display ${
-                        plan.popular ? "text-primary-foreground" : "text-foreground"
-                      }`}>
-                        {plan.price.monthly}<span className="text-[0.6em]">€</span>/{t('pricing.perMonth')}
-                      </span>
                       <span className={`text-4xl sm:text-5xl font-display font-bold ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
