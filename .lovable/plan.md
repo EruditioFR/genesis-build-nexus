@@ -1,50 +1,96 @@
 
 
-## Plan : Carte interactive des lieux de naissance
+## Objectif
 
-### Concept
+Rendre la landing page plus attractive en y intégrant deux éléments actuellement réservés au dashboard :
+1. **Un slider d'inspirations "hero-size"** — version publique (sans login requis), plus grand et visuellement impactant
+2. **Les cartes "Bienvenue sur Family Garden"** — les 3 feature cards (Créer, Organiser, Partager) + le "Comment ça marche" en 4 étapes
 
-Ajouter un bouton "Carte" dans la toolbar de l'arbre généalogique qui ouvre un dialog plein écran affichant une carte Leaflet avec un marqueur pour chaque membre ayant un lieu de naissance. Les lieux sans coordonnées sont géocodés à la volée via Nominatim (gratuit, côté client) puis cachés en base.
+L'idée : le prospect voit immédiatement le produit en action et comprend qu'il sera guidé.
 
-### Fichiers à créer
+---
 
-**1. `src/lib/geocoding.ts`** — Utilitaire de géocodage Nominatim
-- File d'attente avec délai 1.1s entre requêtes (rate-limit Nominatim)
-- Cache mémoire pour éviter les appels répétés dans la même session
-- Fonction `geocodeBirthPlace(place: string)` → `{ lat, lng } | null`
-- Fonction `geocodeAndCachePersons(persons, supabaseClient)` : pour chaque personne ayant `birth_place` mais pas de coordonnées, géocode puis met à jour `birth_place_lat/lng` en base
+## Plan d'implémentation
 
-**2. `src/components/familyTree/BirthPlaceMap.tsx`** — Composant carte
-- Dialog plein écran avec carte Leaflet (tiles OpenStreetMap)
-- Clustering via `react-leaflet-cluster` pour les marqueurs proches
-- Marqueurs colorés : bleu (homme), rose (femme), gris (autre/inconnu)
-- Popup au clic : nom complet, dates, lieu
-- `fitBounds` automatique pour englober tous les marqueurs
-- Indicateur de progression du géocodage (spinner + "X/Y lieux géocodés")
-- Message vide si aucun lieu renseigné
+### 1. Créer un composant `LandingInspirationSlider`
 
-### Fichiers à modifier
+Nouveau fichier : `src/components/landing/LandingInspirationSlider.tsx`
 
-**3. `src/pages/FamilyTreePage.tsx`**
-- Import du composant `BirthPlaceMap`
-- Ajout d'un state `showMap` et d'un bouton MapPin dans la toolbar
-- Passer la liste des personnes au composant carte
+- Reprend la mécanique du `DashboardInspirationWidget` (carrousel avec les 5 images aquarelles + questions) mais :
+  - **Pas de dépendance à `useMemoryPrompts`** (pas de Supabase, pas de login) — utilise directement `memoryCategories` et `SLIDE_QUESTIONS`
+  - **Plus grand** : hauteur `h-72 sm:h-80 md:h-96` (format hero) au lieu de `h-48`
+  - **Pas de bouton dismiss** (c'est du contenu marketing, pas dismissable)
+  - **CTA = "Commencer gratuitement"** → lien vers `/signup` au lieu d'ouvrir le dialog
+  - Autoplay, swipe, flèches de navigation, dots — même logique
+  - Texte d'accroche au-dessus : "Trouvez l'inspiration pour vos premiers souvenirs"
 
-**4. `public/locales/*/familyTree.json` (7 langues)**
-- Nouvelles clés : `map.title`, `map.noLocations`, `map.personsLocated`, `map.geocoding`
+### 2. Créer un composant `LandingProductPreview`
 
-### Dépendances à installer
+Nouveau fichier : `src/components/landing/LandingProductPreview.tsx`
 
-- `leaflet` + `react-leaflet` + `@types/leaflet` + `react-leaflet-cluster`
+- Reprend les 3 cartes du `WelcomeSection` (Créer / Organiser / Partager) dans une section dédiée
+- Titre de section : "Un espace pensé pour vous guider"
+- Les 3 cartes avec icônes, titre et description (réutilise les clés i18n existantes ou en crée de nouvelles dans `landing.json`)
+- Sous les cartes : résumé compact du "Comment ça marche" en 4 étapes (icônes numérotées + titre, sans les descriptions longues du `HowItWorksSection` actuel — format plus condensé)
+- Animation au scroll (framer-motion `whileInView`)
 
-### Détails techniques
+### 3. Intégrer dans les deux variantes de landing
 
-- Nominatim est appelé uniquement côté client (navigateur), zéro coût cloud
-- Les coordonnées sont persistées en base via un simple `UPDATE` sur `family_persons` (colonnes `birth_place_lat/lng` existantes), ce qui fait que le géocodage ne se produit qu'une fois par lieu
-- Rate-limit : 1 requête/seconde via une queue séquentielle avec `setTimeout`
-- Pas de migration DB nécessaire (les colonnes lat/lng existent déjà)
+**`src/pages/Index.tsx` (V1)** :
+- Ajouter `LandingInspirationSlider` juste après le `HeroSection`
+- Ajouter `LandingProductPreview` après le slider, avant `FeaturesSection`
 
-### Estimation
+**`src/pages/IndexV2.tsx` (V2)** :
+- Ajouter `LandingInspirationSlider` après `PainPointsSection` (= après avoir exposé le problème, on montre la solution concrète)
+- Ajouter `LandingProductPreview` après le slider, avant `SolutionSection`
 
-~2 fichiers créés, ~1 fichier modifié, ~7 fichiers de traduction mis à jour. ~300 lignes ajoutées.
+### 4. Ajouter les traductions
+
+Dans `public/locales/fr/landing.json` et `public/locales/en/landing.json` :
+- `productPreview.badge` : "Découvrez l'expérience" / "Discover the experience"
+- `productPreview.title` : "Vous êtes guidé" / "You're guided"
+- `productPreview.titleHighlight` : "à chaque étape" / "every step of the way"
+- `inspiration.landingTitle` : "Trouvez l'inspiration pour vos premiers souvenirs"
+- `inspiration.landingCta` : "Commencer gratuitement"
+- Clés pour les 3 feature cards (Créer, Organiser, Partager) adaptées au contexte prospect
+
+---
+
+## Structure visuelle
+
+```text
+┌──────────────────────────────────────────┐
+│  HERO (existant)                         │
+├──────────────────────────────────────────┤
+│  INSPIRATION SLIDER (nouveau, hero-size) │
+│  ┌────────────────────────────────────┐  │
+│  │ 🌱 Enfance                        │  │
+│  │ « À quoi ressemblait la maison    │  │
+│  │   de votre enfance ? »            │  │
+│  │                                    │  │
+│  │ [Commencer gratuitement →]        │  │
+│  └────────────────────────────────────┘  │
+├──────────────────────────────────────────┤
+│  PRODUCT PREVIEW (nouveau)               │
+│  "Un espace pensé pour vous guider"      │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐   │
+│  │ 📷      │ │ ⏰      │ │ 👥      │   │
+│  │ Créer   │ │Organiser│ │Partager │   │
+│  └─────────┘ └─────────┘ └─────────┘   │
+│                                          │
+│  1→ 2→ 3→ 4  (mini How It Works)        │
+├──────────────────────────────────────────┤
+│  FEATURES (existant)                     │
+│  ...                                     │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## Points techniques
+
+- Le `LandingInspirationSlider` importe directement `memoryCategories` depuis `@/lib/memoryCategories` et les images depuis `@/assets/inspirations/` — aucune requête Supabase, donc chargement instantané
+- Lazy-load les deux nouveaux composants pour ne pas impacter le LCP du hero
+- Les images aquarelles sont déjà dans les assets (enfance, ecole, musiques, famille, vie) — pas besoin de nouveaux visuels
+- Responsive : sur mobile, le slider occupe toute la largeur, les 3 cards passent en colonne
 
