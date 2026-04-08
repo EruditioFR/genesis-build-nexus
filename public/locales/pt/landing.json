@@ -104,7 +104,7 @@
     "subtitle": "Comece gratuitamente e evolua conforme as suas necessidades. Sem custos ocultos.",
     "monthly": "Mensal",
     "yearly": "Anual",
-    "discount": "-17%",
+    "discount": "2 meses grátis",
     "perMonth": "mês",
     "perYear": "ano",
     "popular": "O mais popular",
@@ -132,8 +132,8 @@
         "description": "Para os criadores de conteúdo regulares",
         "promo": "Oferta de lançamento",
         "promoDetail": "-50% durante 3 meses",
-        "promoAfter": "depois {{price}}€/mês após 3 meses",
-        "originalPrice": "9,99",
+        "promoAfter": "depois {{price}} euros/mês após 3 meses",
+        "originalPrice": "9",
         "features": {
           "storage": "10 GB de armazenamento",
           "formats": "Memórias em formato texto, foto, vídeo e áudio",
@@ -144,7 +144,10 @@
       },
       "heritage": {
         "name": "Legado",
-        "description": "Para criar a sua árvore genealógica e ligar as suas memórias a pessoas",
+        "description": "Para criar a sua árvore genealógica e ligar as suas memórias a membros da família",
+        "promo": "Oferta de lançamento",
+        "promoDetail": "9 euros/mês durante 3 meses",
+        "promoAfter": "depois {{price}} euros/mês após 3 meses",
         "features": {
           "storage": "20 GB de armazenamento",
           "formats": "Memórias em formato texto, foto, vídeo e áudio",
