@@ -132,7 +132,7 @@
         "description": "Para creadores de contenido regulares",
         "promo": "Oferta de lanzamiento",
         "promoDetail": "-50% durante 3 meses",
-        "promoAfter": "luego {{price}} euros/mes después de 3 meses",
+        "promoAfter": "luego {{price}}€/mes después de 3 meses",
         "originalPrice": "9",
         "features": {
           "storage": "10 GB de almacenamiento",
@@ -147,7 +147,7 @@
         "description": "Crea tu árbol genealógico y vincula tus recuerdos a miembros de tu familia",
         "promo": "Oferta de lanzamiento",
         "promoDetail": "9 euros/mes durante 3 meses",
-        "promoAfter": "luego {{price}} euros/mes después de 3 meses",
+        "promoAfter": "luego {{price}}€/mes después de 3 meses",
         "features": {
           "storage": "20 GB de almacenamiento",
           "formats": "Recuerdos de texto, foto, video y audio",
