@@ -106,7 +106,7 @@ const HeroSectionV2 = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
       {/* Content */}
-      <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24">
+      <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
         <div className="max-w-3xl">
           {/* Badge */}
           <motion.div
@@ -137,7 +137,7 @@ const HeroSectionV2 = () => {
                 {slide.label}
               </span>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-6 drop-shadow-lg">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-10 drop-shadow-lg">
                 « {slide.question} »
               </h1>
             </motion.div>
@@ -148,7 +148,7 @@ const HeroSectionV2 = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mb-8 leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-8 leading-relaxed"
           >
             {t('v2.hero.subtitle')}
           </motion.p>
