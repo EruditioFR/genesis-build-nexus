@@ -5,6 +5,8 @@ import SEOHead from '@/components/seo/SEOHead';
 import JsonLdSchema from '@/components/seo/JsonLdSchema';
 import { websiteSchema, howToSchema } from '@/lib/seoSchemas';
 
+const LandingInspirationSlider = lazy(() => import('@/components/landing/LandingInspirationSlider'));
+const LandingProductPreview = lazy(() => import('@/components/landing/LandingProductPreview'));
 const PainPointsSection = lazy(() => import('@/components/landing/v2/PainPointsSection'));
 const SolutionSection = lazy(() => import('@/components/landing/v2/SolutionSection'));
 const AudienceSection = lazy(() => import('@/components/landing/v2/AudienceSection'));
@@ -29,6 +31,8 @@ const IndexV2 = () => {
         <HeroSectionV2 />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
           <PainPointsSection />
+          <LandingInspirationSlider />
+          <LandingProductPreview />
           <SolutionSection />
           <AudienceSection />
           <TestimonialsSection />
