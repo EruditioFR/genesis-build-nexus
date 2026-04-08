@@ -1,30 +1,24 @@
 
 
-## Rendre le Hero V2 plus lumineux
+## Rendre les tarifs plus lisibles
 
-### Probleme actuel
-Les deux overlays sombres combinés (`from-black/65 via-black/40 to-black/20` + `from-black/50 via-transparent to-black/20`) assombrissent fortement les aquarelles. Le résultat est lisible mais "triste".
+### Probleme
+Le bloc prix est dense : le badge promo, le prix barré, le prix promo, le "/mois" et le texte "puis X€/mois" sont tous entassés avec peu d'espacement et des tailles trop proches, rendant la lecture difficile.
 
-### Approche
-Alléger les overlays tout en gardant le contraste texte/fond grâce à un `text-shadow` plus marqué sur les textes et un léger fond flou derrière le bloc de contenu.
+### Modifications dans `PricingSection.tsx`
 
-### Modifications dans `HeroSectionV2.tsx`
+1. **Séparer visuellement prix barré et prix promo** : passer de `flex items-baseline gap-1` à `flex flex-col items-center gap-1` pour empiler le prix barré au-dessus du prix promo au lieu de les mettre côte à côte
 
-1. **Réduire les overlays** :
-   - Overlay horizontal : `from-black/40 via-black/20 to-transparent` (au lieu de 65/40/20)
-   - Overlay vertical : `from-black/35 via-transparent to-black/10` (au lieu de 50/transparent/20)
+2. **Agrandir le prix principal** : augmenter la taille du prix promo/actuel à `text-4xl sm:text-5xl` pour qu'il domine visuellement
 
-2. **Ajouter un fond semi-transparent flou derrière le bloc texte** :
-   - Wraper le `max-w-3xl` dans un `div` avec `bg-black/15 backdrop-blur-[2px] rounded-3xl px-8 py-10` pour créer un "glass card" subtil qui isole le texte sans noircir toute l'image
+3. **Réduire et styliser le prix barré** : le passer en `text-base sm:text-lg` avec `opacity-60` pour un effet plus discret
 
-3. **Renforcer les text-shadows** :
-   - Sur le `h1` : ajouter un style inline `textShadow: '0 2px 12px rgba(0,0,0,0.5)'`
-   - Sur le subtitle : `textShadow: '0 1px 8px rgba(0,0,0,0.4)'`
+4. **Mettre "/mois" sur sa propre ligne** : sortir le "/mois" du flex des prix et l'afficher en dessous en `text-sm text-muted-foreground` avec un `mt-1`
 
-4. **Boutons de navigation** : alléger de `bg-black/30` a `bg-white/20 hover:bg-white/35` pour coller au ton lumineux
+5. **Espacer le texte "puis X€/mois"** : ajouter `mt-2` au lieu de `mt-1` et passer en `text-sm` (au lieu de `text-xs`) pour plus de lisibilité
 
-5. **Category pill** : passer de `bg-white/15` a `bg-white/25` pour plus de visibilite
+6. **Badge promo** : augmenter légèrement la taille à `text-sm` et ajouter `mb-4` pour plus de respiration avant le prix
 
 ### Resultat attendu
-Les aquarelles sont nettement plus visibles, l'ambiance est chaleureuse et lumineuse. Le texte reste parfaitement lisible grace au glass effect et aux text-shadows.
+Chaque information tarifaire occupe son propre espace visuel : badge promo en haut, prix barré discret, gros prix promo dominant, période en dessous, et mention post-promo bien séparée.
 
