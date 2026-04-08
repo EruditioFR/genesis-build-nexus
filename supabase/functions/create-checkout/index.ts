@@ -94,6 +94,12 @@ serve(async (req) => {
       logStep("Auto-applied premium launch promo coupon");
     }
 
+    // Auto-apply launch promo for heritage monthly: -5€ for 3 months (14.99 -> 9.99)
+    if (tier === "heritage" && billingPeriod === "monthly" && !discounts) {
+      discounts = [{ coupon: "heritage_launch_3m" }];
+      logStep("Auto-applied heritage launch promo coupon");
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
