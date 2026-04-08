@@ -145,6 +145,9 @@
       "heritage": {
         "name": "Héritage",
         "description": "Pour créer son arbre généalogique et relier vos souvenirs à des personnes",
+        "promo": "Offre de lancement",
+        "promoDetail": "9,99€/mois pendant 3 mois",
+        "promoAfter": "puis {{price}}€/mois après 3 mois",
         "features": {
           "storage": "20 Go de stockage",
           "formats": "Souvenirs au format texte, photo, vidéo et audio",

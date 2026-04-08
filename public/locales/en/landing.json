@@ -145,6 +145,9 @@
       "heritage": {
         "name": "Heritage",
         "description": "Build your family tree and link your memories to people",
+        "promo": "Launch offer",
+        "promoDetail": "€9.99/month for 3 months",
+        "promoAfter": "then {{price}}€/month after 3 months",
         "features": {
           "storage": "20 GB storage",
           "formats": "Text, photo, video and audio memories",
