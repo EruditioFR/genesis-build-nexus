@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { memoryCategories } from "@/lib/memoryCategories";
+
 import heroBackground from "@/assets/hero-background.webp";
 import heroEtudes from "@/assets/hero-slides/etudes.jpeg";
 import heroVoyages from "@/assets/hero-slides/voyages.jpeg";
