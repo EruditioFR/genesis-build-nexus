@@ -1,32 +1,26 @@
 import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useABVariant } from "@/lib/abTest";
 import Header from "@/components/landing/Header";
-import HeroSection from "@/components/landing/HeroSection";
-import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import HeroSectionV2 from "@/components/landing/v2/HeroSectionV2";
 import SEOHead from "@/components/seo/SEOHead";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 
-// Lazy load below-the-fold components to improve LCP
-
 const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
-const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
-const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSection"));
-const HowItWorksVideo = lazy(() => import("@/components/dashboard/HowItWorksVideo"));
-const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
+const PainPointsSection = lazy(() => import("@/components/landing/v2/PainPointsSection"));
+const SolutionSection = lazy(() => import("@/components/landing/v2/SolutionSection"));
+const AudienceSection = lazy(() => import("@/components/landing/v2/AudienceSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
+const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
-const ContactSection = lazy(() => import("@/components/landing/ContactSection"));
-const CTASection = lazy(() => import("@/components/landing/CTASection"));
+const CTASectionV2 = lazy(() => import("@/components/landing/v2/CTASectionV2"));
 const Footer = lazy(() => import("@/components/landing/Footer"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
-const IndexV2 = lazy(() => import("@/pages/IndexV2"));
 
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const variant = useABVariant('landing', 2);
 
   useEffect(() => {
     if (!loading && user) {
@@ -34,7 +28,6 @@ const Index = () => {
     }
   }, [user, loading, navigate]);
 
-  // Show nothing while checking auth to prevent flash
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
@@ -43,22 +36,8 @@ const Index = () => {
     );
   }
 
-  // If user is logged in, they'll be redirected
   if (user) {
     return null;
-  }
-
-  // A/B test: variant 1 = new modern landing page
-  if (variant === 1) {
-    return (
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
-          <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
-        <IndexV2 />
-      </Suspense>
-    );
   }
 
   return (
@@ -68,22 +47,19 @@ const Index = () => {
         description="Créez votre journal de famille privé : rassemblez photos, vidéos, audio et textes, organisez-les simplement et partagez-les en cercles avec vos proches. Hébergement européen RGPD."
         jsonLd={[websiteSchema, howToSchema]}
       />
-      {/* JSON-LD Structured Data for GEO optimization */}
       <JsonLdSchema type="all" />
       <Header />
       <main>
-        <HeroSection />
+        <HeroSectionV2 />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
-          
+          <PainPointsSection />
           <LandingProductPreview />
-          <FeaturesSection />
-          <HowItWorksSection />
-          <HowItWorksVideo variant="landing" />
+          <SolutionSection />
+          <AudienceSection />
           <TestimonialsSection />
           <PricingSection />
           <FAQSection />
-          <ContactSection />
-          <CTASection />
+          <CTASectionV2 />
         </Suspense>
       </main>
       <Suspense fallback={null}>
