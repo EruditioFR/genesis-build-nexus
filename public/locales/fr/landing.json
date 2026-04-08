@@ -144,7 +144,7 @@
       },
       "heritage": {
         "name": "Héritage",
-        "description": "Pour créer son arbre généalogique et relier vos souvenirs à des personnes",
+        "description": "Pour créer son arbre généalogique et relier vos souvenirs à des membres de votre famille",
         "promo": "Offre de lancement",
         "promoDetail": "9,99€/mois pendant 3 mois",
         "promoAfter": "puis {{price}}€/mois après 3 mois",
