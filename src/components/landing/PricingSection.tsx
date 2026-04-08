@@ -207,7 +207,7 @@ const PricingSection = () => {
                 {/* Promo badge for heritage monthly */}
                 {plan.tier === "heritage" && !isYearly && (
                   <div className="inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 bg-secondary/20 text-white">
-                    🔥 {t('pricing.plans.heritage.promo')} : {t('pricing.plans.heritage.promoDetail')}
+                    🔥 {t('pricing.plans.heritage.promo')}
                   </div>
                 )}
                 <div className="flex flex-col items-center gap-1">
