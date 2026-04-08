@@ -198,7 +198,7 @@ const PricingSection = () => {
               <div className="text-center mb-6 sm:mb-8">
                 {/* Promo badge for premium monthly */}
                 {plan.tier === "premium" && !isYearly && (
-                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
+                  <div className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 ${
                     plan.popular ? "bg-secondary/20 text-secondary" : "bg-accent/10 text-accent"
                   }`}>
                     🔥 {t('pricing.plans.premium.promo')} : {t('pricing.plans.premium.promoDetail')}
@@ -206,19 +206,19 @@ const PricingSection = () => {
                 )}
                 {/* Promo badge for heritage monthly */}
                 {plan.tier === "heritage" && !isYearly && (
-                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 bg-accent/10 text-accent`}>
+                  <div className="inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 bg-accent/10 text-accent">
                     🔥 {t('pricing.plans.heritage.promo')} : {t('pricing.plans.heritage.promoDetail')}
                   </div>
                 )}
-                <div className="flex items-baseline justify-center gap-1">
+                <div className="flex flex-col items-center gap-1">
                   {plan.tier === "premium" && !isYearly ? (
                     <>
-                      <span className={`text-xl sm:text-2xl line-through opacity-50 font-display ${
+                      <span className={`text-base sm:text-lg line-through opacity-60 font-display ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
-                        {plan.price.monthly}€
+                        {plan.price.monthly}€/{t('pricing.perMonth')}
                       </span>
-                      <span className={`text-3xl sm:text-5xl font-display font-bold ${
+                      <span className={`text-4xl sm:text-5xl font-display font-bold ${
                         plan.popular ? "text-primary-foreground" : "text-foreground"
                       }`}>
                         4,99€
@@ -226,31 +226,31 @@ const PricingSection = () => {
                     </>
                   ) : plan.tier === "heritage" && !isYearly ? (
                     <>
-                      <span className={`text-xl sm:text-2xl line-through opacity-50 font-display text-foreground`}>
-                        {plan.price.monthly}€
+                      <span className="text-base sm:text-lg line-through opacity-60 font-display text-foreground">
+                        {plan.price.monthly}€/{t('pricing.perMonth')}
                       </span>
-                      <span className={`text-3xl sm:text-5xl font-display font-bold text-foreground`}>
+                      <span className="text-4xl sm:text-5xl font-display font-bold text-foreground">
                         9,99€
                       </span>
                     </>
                   ) : (
-                    <span className={`text-3xl sm:text-5xl font-display font-bold ${
+                    <span className={`text-4xl sm:text-5xl font-display font-bold ${
                       plan.popular ? "text-primary-foreground" : "text-foreground"
                     }`}>
                       {isYearly ? plan.price.yearly : plan.price.monthly}€
                     </span>
                   )}
-                  <span className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                  <span className={`text-sm mt-1 ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                     /{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
                   </span>
                 </div>
                 {plan.tier === "premium" && !isYearly && (
-                  <p className={`text-xs mt-1 ${plan.popular ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
+                  <p className={`text-sm mt-2 ${plan.popular ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
                     {t('pricing.plans.premium.promoAfter', { price: '9,99' })}
                   </p>
                 )}
                 {plan.tier === "heritage" && !isYearly && (
-                  <p className={`text-xs mt-1 text-muted-foreground`}>
+                  <p className="text-sm mt-2 text-muted-foreground">
                     {t('pricing.plans.heritage.promoAfter', { price: '14,99' })}
                   </p>
                 )}
