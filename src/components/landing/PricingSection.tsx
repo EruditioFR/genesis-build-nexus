@@ -113,10 +113,6 @@ const PricingSection = () => {
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-3 sm:mb-4">
             {t('pricing.badge')}
           </span>
-          <h2 className="text-3xl sm:text-3xl md:text-5xl font-display font-bold text-foreground mb-4 sm:mb-6">
-            {t('pricing.title')}
-            <span className="text-secondary"> {t('pricing.titleHighlight')}</span>
-          </h2>
           <p className="text-base sm:text-lg text-muted-foreground px-2">
             {t('pricing.subtitle')}
           </p>
