@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Camera, Clock, Users, ArrowRight, Shield } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import capsuleImg from '@/assets/mockups/capsule-create.jpg';

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const TESTIMONIAL_KEYS = ["t1", "t2", "t3"] as const;
