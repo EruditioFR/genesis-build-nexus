@@ -89,7 +89,7 @@ const HeroSectionV2 = () => {
             className="max-w-3xl mx-auto"
           >
             <h1
-              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
+              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-relaxed"
             >
               {t('v2.hero.subtitle')}
             </h1>
