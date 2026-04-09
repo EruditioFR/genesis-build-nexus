@@ -89,12 +89,12 @@ const HeroSectionV2 = () => {
             className="max-w-3xl mx-auto"
           >
             <h1
-              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-loose"
+              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-secondary leading-loose"
             >
               <Trans
                 i18nKey="v2.hero.subtitle"
                 ns="landing"
-                components={{ gold: <span className="text-secondary" /> }}
+                components={{ white: <span className="text-white" /> }}
               />
             </h1>
             <p
