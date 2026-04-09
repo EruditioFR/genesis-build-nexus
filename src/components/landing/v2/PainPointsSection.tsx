@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { CloudOff, Timer, Eye, ArrowRight, Lock, Clock, FolderHeart, Check, X } from 'lucide-react';
+import { CloudOff, Timer, Eye, Lock, Clock, FolderHeart, Check, X } from 'lucide-react';
 
 const PainPointsSection = () => {
   const { t } = useTranslation('landing');
