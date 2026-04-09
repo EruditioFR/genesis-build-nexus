@@ -65,19 +65,16 @@ const PainPointsSection = () => {
         </div>
 
         {/* VS divider */}
-        <div className="flex items-center justify-center gap-4 my-12">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[hsl(var(--gold))]/15 to-[hsl(var(--sage))]/15 border border-[hsl(var(--gold))]/30 text-[hsl(var(--gold-light))] font-bold text-sm"
-          >
-            <ArrowRight className="h-4 w-4" />
-            Family Garden
-          </motion.div>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center my-14"
+        >
+          <h2 className="font-display text-2xl md:text-4xl font-bold text-foreground">
+            Pourquoi <span className="text-secondary">Family Garden</span> est la solution idéale ?
+          </h2>
+        </motion.div>
 
         {/* Solutions with check marks */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
