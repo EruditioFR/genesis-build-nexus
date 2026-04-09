@@ -109,8 +109,29 @@ const HeroSectionV2 = () => {
       <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
         <div className="max-w-3xl bg-black/10 backdrop-blur-[3px] rounded-3xl p-6 sm:p-8 md:p-10">
 
+          {/* Punchline — above rotating questions */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mb-4 sm:mb-6"
+          >
+            <h1
+              className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white leading-tight"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
+            >
+              {t('v2.hero.subtitle')}
+            </h1>
+            <p
+              className="text-xs sm:text-sm md:text-base text-white/80 mt-1.5 leading-snug font-medium"
+              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+            >
+              {t('v2.hero.subtitle2')}
+            </p>
+          </motion.div>
+
           {/* Category pill + rotating question — fixed height to prevent layout shift */}
-          <div className="h-[160px] sm:h-[200px] md:h-[220px] lg:h-[260px] flex flex-col justify-center overflow-hidden">
+          <div className="h-[120px] sm:h-[160px] md:h-[180px] lg:h-[200px] flex flex-col justify-center overflow-hidden">
             <AnimatePresence custom={direction} mode="wait">
               <motion.div
                 key={current}
@@ -126,33 +147,12 @@ const HeroSectionV2 = () => {
                   {slide.label}
                 </span>
 
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mb-6 sm:mb-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+                <p className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
                   {slide.question}
-                </h1>
+                </p>
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Subtitle — two lines */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="max-w-md mx-auto mb-6 sm:mb-8"
-          >
-            <p
-              className="text-sm sm:text-base md:text-lg text-white font-semibold leading-snug"
-              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
-            >
-              {t('v2.hero.subtitle')}
-            </p>
-            <p
-              className="text-xs sm:text-sm md:text-base text-white/80 mt-1.5 leading-snug font-medium"
-              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
-            >
-              {t('v2.hero.subtitle2')}
-            </p>
-          </motion.div>
 
           {/* CTA */}
           <motion.div
