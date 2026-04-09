@@ -317,7 +317,7 @@
           "description": "Pas de stories éphémères. Vos souvenirs sont sauvegardés et transmissibles aux générations futures."
         },
         "private": {
-          "title": "Privé par défaut",
+          "title": "Espace privé & sécurisé",
           "description": "Vous choisissez qui voit quoi. Pas de publicité, pas d’algorithme, pas de données revendues."
         }
       }
