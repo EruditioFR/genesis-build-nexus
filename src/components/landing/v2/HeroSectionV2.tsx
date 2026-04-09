@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -91,7 +91,11 @@ const HeroSectionV2 = () => {
             <h1
               className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-loose"
             >
-              {t('v2.hero.subtitle')}
+              <Trans
+                i18nKey="v2.hero.subtitle"
+                ns="landing"
+                components={{ gold: <span className="text-secondary" /> }}
+              />
             </h1>
             <p
               className="text-sm sm:text-base md:text-lg text-white/70 mt-2 sm:mt-3 leading-snug font-medium"
