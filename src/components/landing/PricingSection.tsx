@@ -110,9 +110,9 @@ const PricingSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground mb-3 sm:mb-4">
-            Vos souvenirs méritent d'être racontés à ceux que vous aimez, aujourd'hui et demain.
-          </h1>
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-3 sm:mb-4">
+            {t('pricing.badge')}
+          </span>
           <p className="text-base sm:text-lg text-muted-foreground px-2">
             {t('pricing.subtitle')}
           </p>
