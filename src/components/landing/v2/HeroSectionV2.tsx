@@ -96,7 +96,7 @@ const HeroSectionV2 = () => {
             <p
               className="text-sm sm:text-base md:text-lg text-white/70 mt-2 sm:mt-3 leading-snug font-medium"
             >
-              {t('v2.hero.subtitle2')}
+              {t('v2.hero.subtitle2')}<br />{t('v2.hero.subtitle3')}
             </p>
           </motion.div>
 
