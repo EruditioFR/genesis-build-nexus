@@ -78,95 +78,41 @@ const HeroSectionV2 = () => {
   };
 
   return (
-    <section
-      className="relative min-h-[100svh] flex items-center overflow-hidden group"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Full-screen background image slider */}
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={current}
-          src={slide.image}
-          alt={slide.label}
-          className="absolute inset-0 w-full h-full object-cover"
-          variants={imgVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
-      </AnimatePresence>
-
-      {/* Overlays — stronger on mobile for readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/25 to-black/10 sm:from-black/25 sm:via-black/10 sm:to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/15 to-transparent sm:from-black/25 sm:via-transparent sm:to-transparent" />
-
-      {/* Content */}
-      <div className="container mx-auto px-5 sm:px-6 relative z-10 pt-28 pb-20 sm:pt-36 sm:pb-24 flex flex-col items-center text-center">
-        <div className="max-w-3xl bg-black/10 backdrop-blur-[3px] rounded-3xl p-6 sm:p-8 md:p-10">
-
-          {/* Punchline — above rotating questions */}
+    <>
+      {/* ── Punchline block ── */}
+      <section className="bg-[#1a1a2e] pt-24 sm:pt-32 pb-8 sm:pb-12 text-center">
+        <div className="container mx-auto px-5 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mb-4 sm:mb-6"
+            className="max-w-3xl mx-auto"
           >
             <h1
-              className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white leading-tight"
-              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
+              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
             >
               {t('v2.hero.subtitle')}
             </h1>
             <p
-              className="text-xs sm:text-sm md:text-base text-white/80 mt-1.5 leading-snug font-medium"
-              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+              className="text-sm sm:text-base md:text-lg text-white/70 mt-2 sm:mt-3 leading-snug font-medium"
             >
               {t('v2.hero.subtitle2')}
             </p>
           </motion.div>
-
-          {/* Category pill + rotating question — fixed height to prevent layout shift */}
-          <div className="h-[120px] sm:h-[160px] md:h-[180px] lg:h-[200px] flex flex-col justify-center overflow-hidden">
-            <AnimatePresence custom={direction} mode="wait">
-              <motion.div
-                key={current}
-                custom={direction}
-                variants={textVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-              >
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-3 sm:mb-4">
-                  <span>{slide.emoji}</span>
-                  {slide.label}
-                </span>
-
-                <p className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
-                  {slide.question}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
 
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="mt-6 sm:mt-8 flex justify-center"
           >
             <Button
               size="lg"
               onClick={() => navigate('/signup')}
-              className="bg-white/90 hover:bg-white text-foreground text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold"
             >
-              <Sparkles className="h-4 w-4 mr-2 text-amber-500" />
+              <Sparkles className="h-4 w-4 mr-2" />
               {t('hero.cta.primary')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -177,7 +123,7 @@ const HeroSectionV2 = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-8 sm:mt-14 flex flex-wrap gap-3 sm:gap-8 text-white/70 text-xs sm:text-sm justify-center"
+            className="mt-6 sm:mt-10 flex flex-wrap gap-3 sm:gap-8 text-white/50 text-xs sm:text-sm justify-center"
           >
             <div className="flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -199,39 +145,99 @@ const HeroSectionV2 = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Navigation arrows — hidden on mobile (swipe instead) */}
-      <button
-        onClick={prev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
-        aria-label="Précédent"
+      {/* ── Image slider block ── */}
+      <section
+        className="relative h-[50vh] sm:h-[60vh] md:h-[65vh] overflow-hidden group"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
-        aria-label="Suivant"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
-        {SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            className={cn(
-              'h-2 rounded-full transition-all duration-300',
-              i === current ? 'w-7 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
-            )}
-            aria-label={`Slide ${i + 1}`}
+        {/* Background image */}
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={current}
+            src={slide.image}
+            alt={slide.label}
+            className="absolute inset-0 w-full h-full object-cover"
+            variants={imgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
-        ))}
-      </div>
-    </section>
+        </AnimatePresence>
+
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/25 to-black/10 sm:from-black/25 sm:via-black/10 sm:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
+
+        {/* Category pill + rotating question */}
+        <div className="absolute inset-0 flex items-center justify-center z-10 px-5 sm:px-6">
+          <div className="max-w-3xl w-full text-center">
+            <div className="h-[100px] sm:h-[140px] md:h-[160px] lg:h-[180px] flex flex-col justify-center overflow-hidden">
+              <AnimatePresence custom={direction} mode="wait">
+                <motion.div
+                  key={current}
+                  custom={direction}
+                  variants={textVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+                    <span>{slide.emoji}</span>
+                    {slide.label}
+                  </span>
+
+                  <p
+                    className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
+                    style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
+                  >
+                    {slide.question}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation arrows — hidden on mobile */}
+        <button
+          onClick={prev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
+          aria-label="Précédent"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          onClick={next}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition-colors hidden sm:block sm:opacity-0 sm:group-hover:opacity-100"
+          aria-label="Suivant"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+
+        {/* Dots — hidden on mobile */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={cn(
+                'h-2 rounded-full transition-all duration-300',
+                i === current ? 'w-7 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
+              )}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+    </>
   );
 };
 
