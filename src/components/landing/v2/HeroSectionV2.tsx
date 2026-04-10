@@ -94,7 +94,7 @@ const HeroSectionV2 = () => {
               <Trans
                 i18nKey="v2.hero.subtitle"
                 ns="landing"
-                components={{ gold: <span className="text-secondary" /> }}
+                components={{ gold: <span className="text-secondary" />, br: <br /> }}
               />
             </h1>
             <p
