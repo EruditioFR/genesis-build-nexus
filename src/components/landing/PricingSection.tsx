@@ -141,14 +141,9 @@ const PricingSection = () => {
               }`}
             />
           </button>
-          <div className="flex flex-col items-start">
-            <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
-              {t('pricing.yearly')}
-            </span>
-            <span className="text-accent text-xs font-medium">
-              {t('pricing.discount')}
-            </span>
-          </div>
+          <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+            {t('pricing.yearly')}
+          </span>
         </motion.div>
 
         {/* Pricing Cards */}
