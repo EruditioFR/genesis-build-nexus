@@ -24,7 +24,7 @@ const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
+  
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
