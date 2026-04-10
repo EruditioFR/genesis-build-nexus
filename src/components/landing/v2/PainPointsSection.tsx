@@ -72,7 +72,7 @@ const PainPointsSection = () => {
           className="text-center my-14"
         >
           <h2 className="font-display text-2xl md:text-4xl font-bold text-foreground">
-            Pourquoi <span className="text-secondary">Family Garden</span> est la solution idéale ?
+            Avec <span className="text-secondary">Family Garden</span>, tout devient simple
           </h2>
         </motion.div>
 
