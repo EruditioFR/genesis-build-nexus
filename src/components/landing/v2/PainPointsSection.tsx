@@ -1,15 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { CloudOff, Timer, Eye, Lock, Clock, FolderHeart, Check, X } from 'lucide-react';
-
-const PainPointsSection = () => {
-  const { t } = useTranslation('landing');
-
-  const pains = [
-    { icon: CloudOff, key: 'scattered', color: 'text-red-400', bg: 'bg-red-500/10' },
-    { icon: Timer, key: 'ephemeral', color: 'text-orange-400', bg: 'bg-orange-500/10' },
-    { icon: Eye, key: 'public', color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
-  ];
+import { Lock, Clock, FolderHeart, Check } from 'lucide-react';
 
   const solutions = [
     { icon: FolderHeart, key: 'organized', color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
