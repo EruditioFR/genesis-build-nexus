@@ -124,7 +124,7 @@ const PricingSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center justify-center mb-6 sm:mb-[10px]"
+          className="flex items-center justify-center mb-6 sm:mb-[50px]"
         >
           <div className="inline-flex items-center gap-2 sm:gap-3 bg-muted/50 rounded-full px-3 sm:px-5 py-1.5 sm:py-2 border border-border/50">
             <span className={`text-xs sm:text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
