@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import parentsImg from '@/assets/audience/parents.jpg';
 import familiesImg from '@/assets/audience/families.jpg';
 import legacyImg from '@/assets/audience/legacy.jpg';
+import eventsImg from '@/assets/audience/events.jpg';
 
 const AudienceSection = () => {
   const { t } = useTranslation('landing');
@@ -12,6 +13,7 @@ const AudienceSection = () => {
     { key: 'parents', image: parentsImg },
     { key: 'families', image: familiesImg },
     { key: 'legacy', image: legacyImg },
+    { key: 'events', image: eventsImg },
   ];
 
   return (

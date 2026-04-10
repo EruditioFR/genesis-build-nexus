@@ -374,6 +374,10 @@
         "legacy": {
           "title": "Pass on a legacy",
           "description": "Preserve stories, traditions and memories for future generations."
+        },
+        "events": {
+          "title": "Family reunions & events",
+          "description": "Gather photos and memories from your family gatherings in one shared, private space."
         }
       }
     },

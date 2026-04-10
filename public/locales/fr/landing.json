@@ -374,6 +374,10 @@
         "legacy": {
           "title": "Transmettre un héritage",
           "description": "Préservez les récits, les traditions et les souvenirs pour les générations futures."
+        },
+        "events": {
+          "title": "Cousinades, événements familiaux",
+          "description": "Rassemblez les photos et souvenirs de vos retrouvailles familiales dans un espace unique et partagé."
         }
       }
     },
