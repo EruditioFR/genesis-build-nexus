@@ -291,9 +291,9 @@
       }
     },
     "painPoints": {
-      "badge": "Le problème",
-      "title": "Vos souvenirs méritent mieux que ça",
-      "subtitle": "Les outils que vous utilisez aujourd’hui ne sont pas faits pour préserver vos souvenirs de famille.",
+      "badge": "Le constat",
+      "title": "Vos souvenirs méritent un vrai écrin",
+      "subtitle": "Aujourd'hui, vos moments précieux sont dispersés. Imaginez les réunir simplement, en un seul endroit.",
       "items": {
         "scattered": {
           "title": "Éparpillés dans 10 apps",

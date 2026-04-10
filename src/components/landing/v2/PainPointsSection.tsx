@@ -26,7 +26,7 @@ const PainPointsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-destructive/10 text-destructive text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
             {t('v2.painPoints.badge')}
           </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
@@ -72,7 +72,7 @@ const PainPointsSection = () => {
           className="text-center my-14"
         >
           <h2 className="font-display text-2xl md:text-4xl font-bold text-foreground">
-            Pourquoi <span className="text-secondary">Family Garden</span> est la solution idéale ?
+            Avec <span className="text-secondary">Family Garden</span>, tout devient simple
           </h2>
         </motion.div>
 
