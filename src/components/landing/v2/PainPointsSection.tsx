@@ -2,6 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Lock, Clock, FolderHeart, Check } from 'lucide-react';
 
+const PainPointsSection = () => {
+  const { t } = useTranslation('landing');
+
   const solutions = [
     { icon: FolderHeart, key: 'organized', color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
     { icon: Clock, key: 'durable', color: 'text-[hsl(var(--gold-light))]', bg: 'bg-[hsl(var(--gold))]/15' },
