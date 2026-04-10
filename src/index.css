@@ -459,3 +459,9 @@
     border-radius: 1rem;
   }
 }
+
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 28px;
+  }
+}
