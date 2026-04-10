@@ -168,7 +168,7 @@ const HeroSectionV2 = () => {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
             loading="eager"
             fetchPriority="high"
             decoding="async"
@@ -191,7 +191,7 @@ const HeroSectionV2 = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-3 sm:mb-4">
                     <span>{slide.emoji}</span>
