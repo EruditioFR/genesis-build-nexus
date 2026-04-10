@@ -161,8 +161,8 @@ const PricingSection = () => {
                 plan.popular
                   ? "bg-primary text-primary-foreground shadow-elevated lg:scale-105 z-10 pt-8 sm:pt-8"
                   : plan.tier === "heritage"
-                  ? "bg-gradient-to-br from-[hsl(var(--secondary)/0.08)] via-card to-[hsl(var(--secondary)/0.15)] shadow-lg border border-secondary/30 ring-1 ring-secondary/10"
-                  : "bg-card shadow-card border border-border"
+                  ? "bg-gradient-to-br from-[hsl(var(--secondary)/0.08)] via-card to-[hsl(var(--secondary)/0.15)] shadow-lg border border-secondary/30 ring-1 ring-secondary/10 mb-5 sm:mb-0"
+                  : "bg-card shadow-card border border-border mb-5 sm:mb-0"
               }`}
             >
               {/* Popular Badge */}
