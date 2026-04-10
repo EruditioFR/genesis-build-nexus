@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "A realidade",
-      "title": "As suas memórias merecem um verdadeiro lar",
+      "title": "As suas memórias merecem",
+      "titleHighlight": "um lugar à parte",
       "subtitle": "Hoje, os seus momentos preciosos estão dispersos. Imagine reuni-los simplesmente, num só lugar.",
       "items": {
         "scattered": {

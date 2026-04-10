@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "现实",
-      "title": "您的回忆值得拥有一个真正的家",
+      "title": "您的回忆值得",
+      "titleHighlight": "一个独特的空间",
       "subtitle": "如今，您珍贵的时刻散落各处。想象一下，将它们简单地汇聚在一个地方。",
       "items": {
         "scattered": {
