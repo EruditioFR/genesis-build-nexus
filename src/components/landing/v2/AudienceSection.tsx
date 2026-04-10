@@ -25,7 +25,7 @@ const AudienceSection = () => {
         >
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
             {t('v2.audience.title')}{' '}
-            <span className="text-secondary">{t('v2.audience.titleHighlight')}</span>
+            <span className="text-[hsl(var(--gold))]">{t('v2.audience.titleHighlight')}</span>
           </h2>
         </motion.div>
 
