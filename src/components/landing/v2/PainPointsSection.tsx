@@ -36,7 +36,7 @@ const PainPointsSection = () => {
         </motion.div>
 
         {/* Pain points with X marks */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           {pains.map((pain, i) => (
             <motion.div
               key={i}
@@ -44,18 +44,20 @@ const PainPointsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative p-6 rounded-2xl border border-destructive/20 bg-card group hover:border-destructive/40 transition-colors"
+              className="relative p-4 rounded-xl border border-destructive/20 bg-card group hover:border-destructive/40 transition-colors"
             >
-              <div className="absolute top-4 right-4">
-                <X className="h-5 w-5 text-destructive/40" />
+              <div className="absolute top-3 right-3">
+                <X className="h-4 w-4 text-destructive/40" />
               </div>
-              <div className={`w-12 h-12 rounded-xl ${pain.bg} flex items-center justify-center mb-4`}>
-                <pain.icon className={`h-6 w-6 ${pain.color}`} />
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-9 h-9 rounded-lg ${pain.bg} flex items-center justify-center shrink-0`}>
+                  <pain.icon className={`h-4 w-4 ${pain.color}`} />
+                </div>
+                <h3 className="text-base font-semibold text-foreground">
+                  {t(`v2.painPoints.items.${pain.key}.title`)}
+                </h3>
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">
-                {t(`v2.painPoints.items.${pain.key}.title`)}
-              </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-sm leading-snug">
                 {t(`v2.painPoints.items.${pain.key}.description`)}
               </p>
             </motion.div>
