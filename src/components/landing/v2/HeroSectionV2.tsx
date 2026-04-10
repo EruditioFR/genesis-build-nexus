@@ -199,7 +199,7 @@ const HeroSectionV2 = () => {
                   </span>
 
                   <p
-                    className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
                     style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
                   >
                     {slide.question}
