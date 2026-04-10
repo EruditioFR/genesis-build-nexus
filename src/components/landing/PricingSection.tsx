@@ -126,23 +126,23 @@ const PricingSection = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex items-center justify-center mb-6 sm:mb-8"
         >
-          <div className="inline-flex items-center gap-3 bg-muted/50 rounded-full px-5 py-2 border border-border/50">
-            <span className={`text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-muted/50 rounded-full px-3 sm:px-5 py-1.5 sm:py-2 border border-border/50">
+            <span className={`text-xs sm:text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
               {t('pricing.monthly')}
             </span>
             <button
               onClick={() => setIsYearly(!isYearly)}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
+              className={`relative w-10 sm:w-12 h-5 sm:h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
                 isYearly ? "bg-secondary" : "bg-border"
               }`}
             >
               <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
-                  isYearly ? "translate-x-6" : "translate-x-0"
+                className={`absolute top-0.5 left-0.5 w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
+                  isYearly ? "translate-x-5 sm:translate-x-6" : "translate-x-0"
                 }`}
               />
             </button>
-            <span className={`text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+            <span className={`text-xs sm:text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
               {t('pricing.yearly')}
             </span>
           </div>
