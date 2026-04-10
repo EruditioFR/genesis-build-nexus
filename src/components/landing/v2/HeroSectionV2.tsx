@@ -66,15 +66,15 @@ const HeroSectionV2 = () => {
   const slide = SLIDES[current];
 
   const imgVariants = {
-    enter: { opacity: 0, scale: 1.05 },
-    center: { opacity: 1, scale: 1 },
+    enter: { opacity: 0 },
+    center: { opacity: 1 },
     exit: { opacity: 0 },
   };
 
   const textVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
   };
 
   return (
