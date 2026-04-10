@@ -144,7 +144,7 @@ const Signup = () => {
           displayName: fullName,
           locale: i18n.language,
           country,
-          city,
+          city: '',
           redirectTo: `${window.location.origin}/login?confirmed=true`,
         },
       });
