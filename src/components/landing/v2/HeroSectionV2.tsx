@@ -89,7 +89,7 @@ const HeroSectionV2 = () => {
             className="max-w-3xl mx-auto"
           >
             <h1
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mt-5"
             >
               <Trans
                 i18nKey="v2.hero.subtitle"
