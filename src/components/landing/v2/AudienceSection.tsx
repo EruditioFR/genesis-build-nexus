@@ -12,8 +12,8 @@ const AudienceSection = () => {
   const profiles = [
     { key: 'parents', image: parentsImg },
     { key: 'families', image: familiesImg },
-    { key: 'legacy', image: legacyImg },
     { key: 'events', image: eventsImg },
+    { key: 'legacy', image: legacyImg },
   ];
 
   return (
