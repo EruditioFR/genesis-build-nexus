@@ -14,7 +14,7 @@ import { lovable } from '@/integrations/lovable';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
 import { CountrySelector } from '@/components/signup/CountrySelector';
-import { CitySelector } from '@/components/signup/CitySelector';
+
 import SEOHead from '@/components/seo/SEOHead';
 
 const Signup = () => {
@@ -339,16 +339,9 @@ const Signup = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.country')}</Label>
-                <CountrySelector value={country} onChange={setCountry} />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.city')}</Label>
-                <CitySelector value={city} onChange={setCity} countryCode={country} />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.country')}</Label>
+              <CountrySelector value={country} onChange={setCountry} />
             </div>
 
             <div className="space-y-2">

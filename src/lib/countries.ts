@@ -217,12 +217,22 @@ export function getCountryName(code: string, language: string): string {
   return country.names[lang] || country.names.en;
 }
 
+const PRIORITY_CODES = ['FR', 'BE'];
+
 export function getCountriesForLanguage(language: string): { code: string; name: string }[] {
   const lang = language as keyof Country['names'];
-  return countries
-    .map(c => ({
-      code: c.code,
-      name: c.names[lang] || c.names.en,
-    }))
+  const all = countries.map(c => ({
+    code: c.code,
+    name: c.names[lang] || c.names.en,
+  }));
+
+  const priority = PRIORITY_CODES
+    .map(code => all.find(c => c.code === code)!)
+    .filter(Boolean);
+
+  const rest = all
+    .filter(c => !PRIORITY_CODES.includes(c.code))
     .sort((a, b) => a.name.localeCompare(b.name, language));
+
+  return [...priority, ...rest];
 }
