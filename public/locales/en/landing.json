@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "The reality",
-      "title": "Your memories deserve a real home",
+      "title": "Your memories deserve",
+      "titleHighlight": "a place apart",
       "subtitle": "Today, your precious moments are scattered. Imagine bringing them together simply, in one place.",
       "items": {
         "scattered": {

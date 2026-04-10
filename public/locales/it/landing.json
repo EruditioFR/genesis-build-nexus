@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "La realtà",
-      "title": "I tuoi ricordi meritano un vero scrigno",
+      "title": "I tuoi ricordi meritano",
+      "titleHighlight": "un posto speciale",
       "subtitle": "Oggi, i tuoi momenti preziosi sono sparsi ovunque. Immagina di riunirli semplicemente, in un unico posto.",
       "items": {
         "scattered": {

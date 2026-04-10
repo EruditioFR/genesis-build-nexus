@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "La realidad",
-      "title": "Tus recuerdos merecen un verdadero hogar",
+      "title": "Tus recuerdos merecen",
+      "titleHighlight": "un lugar especial",
       "subtitle": "Hoy, tus momentos preciosos están dispersos. Imagina reunirlos fácilmente, en un solo lugar.",
       "items": {
         "scattered": {

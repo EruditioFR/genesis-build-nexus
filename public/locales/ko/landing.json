@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "현실",
-      "title": "소중한 추억에 진정한 보금자리를",
+      "title": "소중한 추억에",
+      "titleHighlight": "특별한 공간을",
       "subtitle": "지금 소중한 순간들이 여기저기 흩어져 있습니다. 한 곳에 간단히 모아보세요.",
       "items": {
         "scattered": {

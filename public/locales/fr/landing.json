@@ -292,7 +292,8 @@
     },
     "painPoints": {
       "badge": "Le constat",
-      "title": "Vos souvenirs méritent un bel écrin",
+      "title": "Vos souvenirs méritent",
+      "titleHighlight": "un lieu à part",
       "subtitle": "Aujourd'hui, vos moments précieux sont dispersés.\nImaginez les réunir simplement, en un seul endroit.",
       "items": {
         "scattered": {
