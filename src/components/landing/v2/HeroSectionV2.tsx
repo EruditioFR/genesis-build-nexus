@@ -66,15 +66,15 @@ const HeroSectionV2 = () => {
   const slide = SLIDES[current];
 
   const imgVariants = {
-    enter: { opacity: 0, scale: 1.05 },
-    center: { opacity: 1, scale: 1 },
+    enter: { opacity: 0 },
+    center: { opacity: 1 },
     exit: { opacity: 0 },
   };
 
   const textVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
   };
 
   return (
@@ -168,7 +168,7 @@ const HeroSectionV2 = () => {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
             loading="eager"
             fetchPriority="high"
             decoding="async"
@@ -191,7 +191,7 @@ const HeroSectionV2 = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-3 sm:mb-4">
                     <span>{slide.emoji}</span>
