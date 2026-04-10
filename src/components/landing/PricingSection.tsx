@@ -124,7 +124,7 @@ const PricingSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12"
+          className="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8"
         >
           <span className={`text-sm font-medium ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
             {t('pricing.monthly')}
