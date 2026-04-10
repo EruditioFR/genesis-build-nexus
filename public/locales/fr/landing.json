@@ -378,7 +378,8 @@
       }
     },
     "ctaFinal": {
-      "title": "Commencez avant que",
+      "title": "Commencez",
+      "titleMiddle": "avant que",
       "titleHighlight": "le prochain souvenir ne se perde",
       "subtitle": "Créez votre premier souvenir en 1 minute. Gratuit, sans engagement.",
       "button": "Créer mon premier souvenir",
