@@ -30,7 +30,7 @@ const PainPointsSection = () => {
             {t('v2.painPoints.title')}{' '}
             <span className="text-[hsl(var(--gold))]">{t('v2.painPoints.titleHighlight')}</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto whitespace-pre-line">
+          <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto whitespace-pre-line">
             {t('v2.painPoints.subtitle')}
           </p>
         </motion.div>
