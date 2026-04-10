@@ -34,6 +34,8 @@ const CTASectionV2 = () => {
           <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6">
             {t('v2.ctaFinal.title')}
             <br />
+            {t('v2.ctaFinal.titleMiddle')}
+            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--gold-light))] to-[hsl(var(--terracotta-light))]">
               {t('v2.ctaFinal.titleHighlight')}
             </span>

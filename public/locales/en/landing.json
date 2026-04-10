@@ -378,7 +378,8 @@
       }
     },
     "ctaFinal": {
-      "title": "Start before",
+      "title": "Start",
+      "titleMiddle": "before",
       "titleHighlight": "the next memory is lost",
       "subtitle": "Create your first memory in 1 minute. Free, no commitment.",
       "button": "Create my first memory",
