@@ -35,34 +35,6 @@ const PainPointsSection = () => {
           </p>
         </motion.div>
 
-        {/* Pain points with X marks */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-          {pains.map((pain, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative p-4 rounded-xl border border-destructive/20 bg-card group hover:border-destructive/40 transition-colors"
-            >
-              <div className="absolute top-3 right-3">
-                <X className="h-4 w-4 text-destructive/40" />
-              </div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`w-9 h-9 rounded-lg ${pain.bg} flex items-center justify-center shrink-0`}>
-                  <pain.icon className={`h-4 w-4 ${pain.color}`} />
-                </div>
-                <h3 className="text-base font-semibold text-foreground">
-                  {t(`v2.painPoints.items.${pain.key}.title`)}
-                </h3>
-              </div>
-              <p className="text-muted-foreground text-sm leading-snug">
-                {t(`v2.painPoints.items.${pain.key}.description`)}
-              </p>
-            </motion.div>
-          ))}
-        </div>
 
         {/* VS divider */}
         <motion.div
