@@ -106,14 +106,6 @@ const Signup = () => {
       });
       return;
     }
-    if (!city.trim()) {
-      toast({
-        variant: 'destructive',
-        title: t('signup.errors.title'),
-        description: t('signup.errors.cityRequired')
-      });
-      return;
-    }
     if (email !== confirmEmail) {
       toast({
         variant: 'destructive',
