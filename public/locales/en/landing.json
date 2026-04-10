@@ -322,7 +322,9 @@
           "title": "Private by default",
           "description": "You choose who sees what. No ads, no algorithms, no data sold."
         }
-      }
+      },
+      "subtitleLine1": "Today, your precious moments are scattered.",
+      "subtitleLine2": "Imagine bringing them together simply, in one place."
     },
     "solution": {
       "badge": "The solution",
