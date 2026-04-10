@@ -24,7 +24,7 @@ const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
+  
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -106,14 +106,6 @@ const Signup = () => {
       });
       return;
     }
-    if (!city.trim()) {
-      toast({
-        variant: 'destructive',
-        title: t('signup.errors.title'),
-        description: t('signup.errors.cityRequired')
-      });
-      return;
-    }
     if (email !== confirmEmail) {
       toast({
         variant: 'destructive',
@@ -152,7 +144,7 @@ const Signup = () => {
           displayName: fullName,
           locale: i18n.language,
           country,
-          city,
+          city: '',
           redirectTo: `${window.location.origin}/login?confirmed=true`,
         },
       });
