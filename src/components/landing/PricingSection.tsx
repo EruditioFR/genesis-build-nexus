@@ -157,9 +157,9 @@ const PricingSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex-1 flex flex-col overflow-hidden ${
+              className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex-1 flex flex-col overflow-visible ${
                 plan.popular
-                  ? "bg-primary text-primary-foreground shadow-elevated lg:scale-105 z-10 order-first lg:order-none"
+                  ? "bg-primary text-primary-foreground shadow-elevated lg:scale-105 z-10 order-first lg:order-none pt-8 sm:pt-8"
                   : plan.tier === "heritage"
                   ? "bg-gradient-to-br from-[hsl(var(--secondary)/0.08)] via-card to-[hsl(var(--secondary)/0.15)] shadow-lg border border-secondary/30 ring-1 ring-secondary/10"
                   : "bg-card shadow-card border border-border"
