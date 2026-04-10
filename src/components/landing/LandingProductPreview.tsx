@@ -16,7 +16,7 @@ const LandingProductPreview = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-20 md:py-28 bg-muted/40">
+    <section className="py-14 sm:py-16 md:py-20 bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
