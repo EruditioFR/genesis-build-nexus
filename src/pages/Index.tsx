@@ -11,6 +11,7 @@ const LandingProductPreview = lazy(() => import("@/components/landing/LandingPro
 const PainPointsSection = lazy(() => import("@/components/landing/v2/PainPointsSection"));
 const SolutionSection = lazy(() => import("@/components/landing/v2/SolutionSection"));
 const AudienceSection = lazy(() => import("@/components/landing/v2/AudienceSection"));
+const VideoPreviewSection = lazy(() => import("@/components/landing/v2/VideoPreviewSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
 const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
@@ -56,6 +57,7 @@ const Index = () => {
           <LandingProductPreview />
           {/* <SolutionSection /> */}
           <AudienceSection />
+          <VideoPreviewSection />
           <TestimonialsSection />
           <PricingSection />
           <FAQSection />
