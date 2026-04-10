@@ -23,9 +23,6 @@ const AudienceSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
-            {t('v2.audience.badge')}
-          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
             {t('v2.audience.title')}{' '}
             <span className="text-secondary">{t('v2.audience.titleHighlight')}</span>
