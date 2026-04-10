@@ -322,7 +322,9 @@
           "title": "Espace privé & sécurisé",
           "description": "Vous choisissez qui voit quoi. Pas de publicité, pas d’algorithme, pas de données revendues."
         }
-      }
+      },
+      "subtitleLine1": "Aujourd’hui, vos moments précieux sont dispersés.",
+      "subtitleLine2": "Imaginez les réunir simplement, en un seul endroit."
     },
     "solution": {
       "badge": "La solution",

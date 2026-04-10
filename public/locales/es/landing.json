@@ -322,7 +322,9 @@
           "title": "Privado por defecto",
           "description": "Tú eliges quién ve qué. Sin anuncios, sin algoritmos, sin datos vendidos."
         }
-      }
+      },
+      "subtitleLine1": "Hoy, tus momentos preciosos están dispersos.",
+      "subtitleLine2": "Imagina reunirlos simplemente, en un solo lugar."
     },
     "solution": {
       "badge": "La solución",
