@@ -167,7 +167,7 @@ const PricingSection = () => {
             >
               {/* Popular Badge */}
               {plan.popular && (
-                <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2">
+                <div className="absolute top-0 sm:-top-4 left-1/2 -translate-x-1/2 -translate-y-1/2">
                   <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
                     {t('pricing.popular')}
                   </span>
