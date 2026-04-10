@@ -14,7 +14,7 @@ import { lovable } from '@/integrations/lovable';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
 import { CountrySelector } from '@/components/signup/CountrySelector';
-import { CitySelector } from '@/components/signup/CitySelector';
+
 import SEOHead from '@/components/seo/SEOHead';
 
 const Signup = () => {
