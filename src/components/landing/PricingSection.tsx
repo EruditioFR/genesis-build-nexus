@@ -141,12 +141,14 @@ const PricingSection = () => {
               }`}
             />
           </button>
-          <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
-            {t('pricing.yearly')}
-          </span>
-          <span className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
-            {t('pricing.discount')}
-          </span>
+          <div className="flex flex-col items-start">
+            <span className={`text-sm font-medium ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+              {t('pricing.yearly')}
+            </span>
+            <span className="text-accent text-xs font-medium">
+              {t('pricing.discount')}
+            </span>
+          </div>
         </motion.div>
 
         {/* Pricing Cards */}
