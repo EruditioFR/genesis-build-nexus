@@ -40,7 +40,7 @@ const CTASectionV2 = () => {
               {t('v2.ctaFinal.titleHighlight')}
             </span>
           </h2>
-          <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
+          <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto whitespace-pre-line">
             {t('v2.ctaFinal.subtitle')}
           </p>
           <Button
