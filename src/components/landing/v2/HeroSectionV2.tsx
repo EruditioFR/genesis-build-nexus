@@ -182,7 +182,7 @@ const HeroSectionV2 = () => {
         {/* Category pill + rotating question */}
         <div className="absolute inset-0 flex items-center justify-center z-10 px-5 sm:px-6">
           <div className="max-w-3xl w-full text-center">
-            <div className="h-[100px] sm:h-[140px] md:h-[160px] lg:h-[180px] flex flex-col justify-center overflow-hidden">
+            <div className="min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px] flex flex-col justify-center">
               <AnimatePresence custom={direction} mode="wait">
                 <motion.div
                   key={current}
