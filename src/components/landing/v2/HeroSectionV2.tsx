@@ -159,19 +159,19 @@ const HeroSectionV2 = () => {
       >
         {/* Background image */}
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.video
             key={current}
-            src={slide.image}
-            alt={slide.label}
+            src={slide.video}
             className="absolute inset-0 w-full h-full object-cover"
             variants={imgVariants}
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            autoPlay
+            muted
+            loop
+            playsInline
           />
         </AnimatePresence>
 
