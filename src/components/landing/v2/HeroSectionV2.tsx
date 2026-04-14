@@ -6,18 +6,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-import enfanceImg from '@/assets/inspirations/enfance.jpg';
-import ecoleImg from '@/assets/inspirations/ecole.jpg';
-import musiquesImg from '@/assets/inspirations/musiques.jpg';
-import familleImg from '@/assets/inspirations/famille.jpg';
-import vieImg from '@/assets/inspirations/vie.jpg';
+import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
+import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
+import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
+import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
+import vieVideo from '@/assets/inspirations/vie-video.mp4.asset.json';
 
 const SLIDES = [
-  { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', image: enfanceImg },
-  { emoji: '🎓', label: 'École', question: 'Un professeur vous a marqué. Pourquoi ?', image: ecoleImg },
-  { emoji: '🎵', label: 'Musiques', question: 'Quelle chanson vous ramène instantanément en arrière ?', image: musiquesImg },
-  { emoji: '👨‍👩‍👧‍👦', label: 'Famille', question: 'Quelle tradition aimeriez-vous transmettre ?', image: familleImg },
-  { emoji: '❤️', label: 'Vie personnelle', question: 'Quel moment a changé le cours de votre vie ?', image: vieImg },
+  { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', video: enfanceVideo.url },
+  { emoji: '🎓', label: 'École', question: 'Un professeur vous a marqué. Pourquoi ?', video: ecoleVideo.url },
+  { emoji: '🎵', label: 'Musiques', question: 'Quelle chanson vous ramène instantanément en arrière ?', video: musiquesVideo.url },
+  { emoji: '👨‍👩‍👧‍👦', label: 'Famille', question: 'Quelle tradition aimeriez-vous transmettre ?', video: familleVideo.url },
+  { emoji: '❤️', label: 'Vie personnelle', question: 'Quel moment a changé le cours de votre vie ?', video: vieVideo.url },
 ];
 
 const AUTOPLAY_INTERVAL = 5000;
@@ -159,19 +159,19 @@ const HeroSectionV2 = () => {
       >
         {/* Background image */}
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.video
             key={current}
-            src={slide.image}
-            alt={slide.label}
+            src={slide.video}
             className="absolute inset-0 w-full h-full object-cover"
             variants={imgVariants}
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            autoPlay
+            muted
+            loop
+            playsInline
           />
         </AnimatePresence>
 
