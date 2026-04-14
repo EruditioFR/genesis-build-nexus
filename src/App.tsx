@@ -62,6 +62,11 @@ const AdminFamilyTrees = lazy(() => import("./pages/admin/AdminFamilyTrees"));
 const AdminCloudUsage = lazy(() => import("./pages/admin/AdminCloudUsage"));
 const AdminFeedback = lazy(() => import("./pages/admin/AdminFeedback"));
 const AdminCircles = lazy(() => import("./pages/admin/AdminCircles"));
+const AdminBlog = lazy(() => import("./pages/admin/AdminBlog"));
+
+// Blog pages
+const BlogList = lazy(() => import("./pages/BlogList"));
+const BlogPostPage = lazy(() => import("./pages/BlogPost"));
 
 const queryClient = new QueryClient();
 
@@ -118,6 +123,8 @@ const App = () => (
                   <Route path="/mentions-legales" element={<LegalNotice />} />
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/blog" element={<BlogList />} />
+                  <Route path="/blog/:slug" element={<BlogPostPage />} />
                   
                   {/* Admin routes */}
                   <Route path="/admin" element={<AdminLayout />}>
@@ -132,6 +139,7 @@ const App = () => (
                     <Route path="cloud-usage" element={<AdminCloudUsage />} />
                     <Route path="feedback" element={<AdminFeedback />} />
                     <Route path="circles" element={<AdminCircles />} />
+                    <Route path="blog" element={<AdminBlog />} />
                     <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   

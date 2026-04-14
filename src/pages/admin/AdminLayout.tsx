@@ -16,7 +16,8 @@ import {
   MessageSquareHeart,
   Menu,
   X,
-  CircleDot
+  CircleDot,
+  Newspaper
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useAuth } from "@/hooks/useAuth";
@@ -38,6 +39,7 @@ const navItems = [
   { to: "/admin/cloud-usage", label: "Usage Cloud", icon: Cloud },
   { to: "/admin/feedback", label: "Évaluations", icon: MessageSquareHeart },
   { to: "/admin/circles", label: "Cercles", icon: CircleDot },
+  { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/contact", label: "Contact", icon: Mail },
 ];
 
