@@ -10,7 +10,7 @@ import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
 import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
 import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
 import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
-import vieVideo from '@/assets/inspirations/vie-video.mp4.asset.json';
+const vieVideo = { url: '/videos/vie-video.mp4' };
 
 const SLIDES = [
   { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', video: enfanceVideo.url },
