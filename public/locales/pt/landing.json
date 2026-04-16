@@ -374,6 +374,18 @@
         "legacy": {
           "title": "Transmitir um legado",
           "description": "Preserve histórias, tradições e memórias para as gerações futuras."
+        },
+        "events": {
+          "title": "Reuniões e eventos familiares",
+          "description": "Reúna fotos e memórias dos seus encontros familiares num espaço único e partilhado."
+        },
+        "mariage": {
+          "title": "Casamento",
+          "description": "Reviva o seu dia mais bonito: cerimónia, receção, emoções… tudo reunido num álbum privado e partilhável."
+        },
+        "voyage": {
+          "title": "Viagem",
+          "description": "Guarde um registo das suas aventuras em família: fotos, anedotas e descobertas para reviver juntos."
         }
       }
     },
