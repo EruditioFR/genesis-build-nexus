@@ -5,15 +5,19 @@ import parentsImg from '@/assets/audience/parents.jpg';
 import familiesImg from '@/assets/audience/families.jpg';
 import legacyImg from '@/assets/audience/legacy.jpg';
 import eventsImg from '@/assets/audience/events.jpg';
+import mariageImg from '@/assets/audience/mariage.jpg';
+import voyageImg from '@/assets/audience/voyage.jpg';
 
 const AudienceSection = () => {
   const { t } = useTranslation('landing');
 
   const profiles = [
-    { key: 'parents', image: parentsImg },
     { key: 'families', image: familiesImg },
-    { key: 'events', image: eventsImg },
     { key: 'legacy', image: legacyImg },
+    { key: 'mariage', image: mariageImg },
+    { key: 'voyage', image: voyageImg },
+    { key: 'events', image: eventsImg },
+    { key: 'parents', image: parentsImg },
   ];
 
   return (
@@ -31,7 +35,7 @@ const AudienceSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
           {profiles.map((profile, i) => (
             <motion.div
               key={profile.key}
@@ -41,7 +45,6 @@ const AudienceSection = () => {
               transition={{ delay: i * 0.15 }}
               className="group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
-              {/* Image */}
               <img
                 src={profile.image}
                 alt={t(`v2.audience.profiles.${profile.key}.title`)}
@@ -50,9 +53,7 @@ const AudienceSection = () => {
                 width={400}
                 height={400}
               />
-              {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              {/* Text */}
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h3 className="text-xl font-display font-bold text-white mb-2">
                   {t(`v2.audience.profiles.${profile.key}.title`)}

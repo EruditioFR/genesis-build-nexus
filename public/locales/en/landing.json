@@ -378,6 +378,14 @@
         "events": {
           "title": "Family reunions & events",
           "description": "Gather photos and memories from your family gatherings in one shared, private space."
+        },
+        "mariage": {
+          "title": "Wedding",
+          "description": "Relive your most beautiful day: ceremony, reception, emotions… all gathered in a private, shareable album."
+        },
+        "voyage": {
+          "title": "Travel",
+          "description": "Keep a trace of your family adventures: photos, anecdotes and discoveries to relive together."
         }
       }
     },

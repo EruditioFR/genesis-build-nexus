@@ -374,6 +374,18 @@
         "legacy": {
           "title": "Trasmettere un patrimonio",
           "description": "Preserva racconti, tradizioni e ricordi per le generazioni future."
+        },
+        "events": {
+          "title": "Riunioni ed eventi familiari",
+          "description": "Raccogli foto e ricordi dei vostri ritrovi familiari in uno spazio unico e condiviso."
+        },
+        "mariage": {
+          "title": "Matrimonio",
+          "description": "Rivivi il tuo giorno più bello: cerimonia, ricevimento, emozioni… tutto raccolto in un album privato e condivisibile."
+        },
+        "voyage": {
+          "title": "Viaggio",
+          "description": "Conserva una traccia delle vostre avventure in famiglia: foto, aneddoti e scoperte da rivivere insieme."
         }
       }
     },
