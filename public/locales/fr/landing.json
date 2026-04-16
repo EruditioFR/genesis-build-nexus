@@ -365,11 +365,11 @@
       "profiles": {
         "parents": {
           "title": "Jeunes parents",
-          "description": "Capturez les premiers pas, premiers mots et tous ces moments magiques avant qu’ils ne s’effacent."
+          "description": "Capturez les premiers pas, premiers mots et tous ces moments magiques avant qu'ils ne s'effacent."
         },
         "families": {
           "title": "Familles",
-          "description": "Connectez grands-parents, parents et enfants autour d’une histoire commune."
+          "description": "Connectez grands-parents, parents et enfants autour d'une histoire commune."
         },
         "legacy": {
           "title": "Transmettre un héritage",
@@ -378,6 +378,14 @@
         "events": {
           "title": "Cousinades, événements familiaux",
           "description": "Rassemblez les photos et souvenirs de vos retrouvailles familiales dans un espace unique et partagé."
+        },
+        "mariage": {
+          "title": "Mariage",
+          "description": "Revivez votre plus beau jour : cérémonie, réception, émotions… tout réuni dans un album privé et partageable."
+        },
+        "voyage": {
+          "title": "Voyage",
+          "description": "Gardez une trace de vos aventures en famille : photos, anecdotes et découvertes à revivre ensemble."
         }
       }
     },
