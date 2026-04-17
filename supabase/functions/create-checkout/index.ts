@@ -88,10 +88,10 @@ serve(async (req) => {
       logStep("Promo code applied", { code: promoCode });
     }
 
-    // Auto-apply launch promo for premium monthly: -5€ for 3 months
+    // Auto-apply launch promo for premium monthly: -4€ for 3 months (9€ -> 5€)
     if (tier === "premium" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "wOK9mvry" }];
-      logStep("Auto-applied premium launch promo coupon (-50% for 3 months)");
+      discounts = [{ coupon: "Brb2OIqJ" }];
+      logStep("Auto-applied premium launch promo coupon (-4€ for 3 months)");
     }
 
     // Auto-apply launch promo for heritage monthly: -5€ for 3 months (14.99 -> 9.99)
