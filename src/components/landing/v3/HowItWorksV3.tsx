@@ -147,9 +147,9 @@ const HowItWorksV3 = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[hsl(215_50%_18%)] leading-[1.1] tracking-tight"
           >
-            Du chaos numérique
+            Protégez les souvenirs
             <br className="hidden sm:block" />
-            <span className="text-[hsl(var(--gold))]"> à la mémoire transmise.</span>
+            <span className="text-[hsl(var(--gold))]"> de votre famille</span>
           </motion.h2>
 
           <motion.p
