@@ -31,7 +31,7 @@ const secondaryTestimonials = [
   },
   {
     name: "Jean P.",
-    role: "Retraité, 78 ans — Bordeaux",
+    role: "Retraité, 92 ans — Bordeaux",
     avatar: jeanImg,
     quote:
       "J'ai pu enregistrer ma voix racontant mon enfance pendant la guerre. Mes arrière-petits-enfants pourront m'écouter dans cinquante ans. C'est la plus belle chose que je laisserai derrière moi.",
