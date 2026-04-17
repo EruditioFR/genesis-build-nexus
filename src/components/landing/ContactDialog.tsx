@@ -142,6 +142,19 @@ const ContactDialog = ({ trigger, open, onOpenChange }: ContactDialogProps) => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+            {/* Honeypot anti-spam — invisible aux humains */}
+            <div aria-hidden="true" className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden" tabIndex={-1}>
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                type="text"
+                name="website"
+                autoComplete="off"
+                tabIndex={-1}
+                value={form.website}
+                onChange={(e) => setForm({ ...form, website: e.target.value })}
+              />
+            </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-1.5 flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
