@@ -27,8 +27,10 @@ const Premium = () => {
   const highlightHeritage = requestedTier === 'heritage';
 
   const handleSubscribe = async (selectedTier: 'premium' | 'heritage') => {
+    // Guest (not logged in) → simplified checkout flow
     if (!user) {
-      navigate('/signup');
+      const billing = isYearly ? 'yearly' : 'monthly';
+      navigate(`/checkout?plan=${selectedTier}&billing=${billing}`);
       return;
     }
 

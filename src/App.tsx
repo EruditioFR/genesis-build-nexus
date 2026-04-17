@@ -40,6 +40,8 @@ const InspirationsPage = lazy(() => import("./pages/InspirationsPage"));
 const SharedWithMePage = lazy(() => import("./pages/SharedWithMePage"));
 const BetaFeedback = lazy(() => import("./pages/BetaFeedback"));
 const Marketing = lazy(() => import("./pages/Marketing"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 
 // Legal pages - lazy loaded
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -106,6 +108,8 @@ const App = () => (
                   <Route path="/statistics" element={<Statistics />} />
                   
                   <Route path="/premium" element={<Premium />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/checkout/success" element={<CheckoutSuccess />} />
                   <Route path="/family-tree" element={<FamilyTreePage />} />
                   <Route path="/invite/:token" element={<InviteAccept />} />
                   <Route path="/guardian/verify/:token" element={<GuardianVerify />} />
