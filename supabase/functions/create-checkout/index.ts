@@ -73,7 +73,7 @@ serve(async (req) => {
 
     // Check if customer exists
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId;
+    let customerId: string | undefined;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
       logStep("Existing customer found", { customerId });
@@ -81,6 +81,121 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "https://fngbrxoblmbukqzzdwxp.lovable.app";
 
+    // ========== PLAN CHANGE FLOW ==========
+    // If customer already has an active subscription, update it instead of creating a new one
+    if (customerId) {
+      const existingSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "active",
+        limit: 10,
+      });
+
+      if (existingSubs.data.length > 0) {
+        // Find the subscription matching one of our managed prices
+        const managedPriceIds = Object.values(SUBSCRIPTION_TIERS).flatMap(t =>
+          Object.values(t).map(p => p.price_id)
+        );
+        const currentSub = existingSubs.data.find(s =>
+          s.items.data.some(item => managedPriceIds.includes(item.price.id))
+        ) || existingSubs.data[0];
+
+        const currentItem = currentSub.items.data[0];
+        const currentPriceId = currentItem.price.id;
+
+        // Already on the requested plan
+        if (currentPriceId === selectedPrice.price_id) {
+          logStep("User already on requested plan", { priceId: currentPriceId });
+          return new Response(
+            JSON.stringify({ url: `${origin}/profile?subscription=already-active` }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+          );
+        }
+
+        // Determine current tier to decide upgrade vs downgrade
+        const tierOrder: Record<string, number> = { premium: 1, heritage: 2 };
+        let currentTierKey: 'premium' | 'heritage' | null = null;
+        for (const [tKey, tCfg] of Object.entries(SUBSCRIPTION_TIERS)) {
+          for (const period of Object.values(tCfg)) {
+            if (period.price_id === currentPriceId) {
+              currentTierKey = tKey as 'premium' | 'heritage';
+              break;
+            }
+          }
+          if (currentTierKey) break;
+        }
+
+        const isUpgrade = currentTierKey
+          ? tierOrder[tier] > tierOrder[currentTierKey]
+          : true;
+
+        logStep("Plan change detected", {
+          from: currentTierKey,
+          to: tier,
+          isUpgrade,
+          subscriptionId: currentSub.id,
+        });
+
+        // Check if current subscription has launch promo coupon still active
+        // (Premium launch coupon = "Brb2OIqJ", 3 months repeating)
+        // If yes, the user is within the launch promo window → carry over remaining months to Heritage
+        let carryOverDiscounts: Array<{ coupon: string }> | undefined;
+        if (isUpgrade && tier === "heritage" && billingPeriod === "monthly") {
+          const activeDiscount = currentSub.discount;
+          const isLaunchPromoActive = activeDiscount?.coupon?.id === "Brb2OIqJ";
+          
+          if (isLaunchPromoActive) {
+            // Compute remaining months on the launch promo
+            // Coupon is 3 months repeating; check how many invoices were already discounted.
+            // Stripe exposes `end` on the discount when the coupon is repeating.
+            const discountEnd = activeDiscount.end; // unix timestamp or null
+            const now = Math.floor(Date.now() / 1000);
+            const monthsRemaining = discountEnd && discountEnd > now
+              ? Math.max(1, Math.ceil((discountEnd - now) / (30 * 24 * 3600)))
+              : 0;
+
+            if (monthsRemaining > 0) {
+              // Apply Heritage launch coupon (also 3 months repeating, -5€)
+              carryOverDiscounts = [{ coupon: "btgCwbO1" }];
+              logStep("Carrying over launch promo to Heritage", { monthsRemaining });
+            }
+          }
+        }
+
+        // Update the existing subscription
+        const updated = await stripe.subscriptions.update(currentSub.id, {
+          items: [
+            {
+              id: currentItem.id,
+              price: selectedPrice.price_id,
+            },
+          ],
+          // Upgrade: prorate immediately and bill the difference now
+          // Downgrade: switch at end of current period, no proration
+          proration_behavior: isUpgrade ? "create_prorations" : "none",
+          billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
+          ...(carryOverDiscounts ? { discounts: carryOverDiscounts } : {}),
+          metadata: {
+            user_id: user.id,
+            tier: tier,
+            billing: billingPeriod,
+            plan_change: isUpgrade ? "upgrade" : "downgrade",
+            previous_tier: currentTierKey || "unknown",
+          },
+        });
+
+        logStep("Subscription updated", { subscriptionId: updated.id });
+
+        return new Response(
+          JSON.stringify({
+            url: `${origin}/profile?subscription=success&change=${isUpgrade ? "upgrade" : "downgrade"}`,
+            updated: true,
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+        );
+      }
+    }
+
+    // ========== NEW SUBSCRIPTION FLOW (Checkout) ==========
     // Handle promo code "Mamie" (case-insensitive) -> 50% off
     let discounts: Array<{ coupon: string }> | undefined;
     if (promoCode && promoCode.toLowerCase() === "mamie") {
