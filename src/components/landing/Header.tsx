@@ -108,6 +108,22 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
               }
             };
 
+            if (link.isContact) {
+              return (
+                <ContactDialog
+                  key={link.label}
+                  trigger={
+                    <button
+                      type="button"
+                      className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
+                    >
+                      {link.label}
+                    </button>
+                  }
+                />
+              );
+            }
+
             return link.isRoute ? (
               <Link
                 key={link.label}
