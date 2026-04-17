@@ -57,7 +57,6 @@ const Index = () => {
         <HeroSectionV3 />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
           <SocialProofBand />
-          <PainPointsSection />
           <HowItWorksV3 />
           <LandingProductPreview />
           {/* <SolutionSection /> */}
