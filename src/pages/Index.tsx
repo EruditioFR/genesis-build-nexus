@@ -10,6 +10,7 @@ import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
 const AudienceStrip = lazy(() => import("@/components/landing/v2/AudienceStrip"));
 const PainPointsSection = lazy(() => import("@/components/landing/v2/PainPointsSection"));
+const HowItWorksV3 = lazy(() => import("@/components/landing/v3/HowItWorksV3"));
 const SolutionSection = lazy(() => import("@/components/landing/v2/SolutionSection"));
 const AudienceSection = lazy(() => import("@/components/landing/v2/AudienceSection"));
 const VideoPreviewSection = lazy(() => import("@/components/landing/v2/VideoPreviewSection"));
