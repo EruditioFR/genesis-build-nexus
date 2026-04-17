@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 
 import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
 import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
