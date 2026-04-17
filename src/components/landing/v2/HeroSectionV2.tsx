@@ -26,8 +26,14 @@ const AUTOPLAY_INTERVAL = 5000;
 const HeroSectionV2 = () => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
+  const { trackEvent } = useGoogleAnalytics();
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+
+  const handleCtaClick = useCallback(() => {
+    trackEvent('hero_cta_click', 'conversion', 'signup_from_hero');
+    navigate('/signup');
+  }, [navigate, trackEvent]);
 
   const next = useCallback(() => {
     setDirection(1);
