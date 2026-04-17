@@ -2,7 +2,7 @@ import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/landing/Header";
-import HeroSectionV2 from "@/components/landing/v2/HeroSectionV2";
+import HeroSectionV3 from "@/components/landing/v3/HeroSectionV3";
 import SEOHead from "@/components/seo/SEOHead";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
@@ -52,7 +52,7 @@ const Index = () => {
       <JsonLdSchema type="all" />
       <Header />
       <main>
-        <HeroSectionV2 />
+        <HeroSectionV3 />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
           <AudienceStrip />
           <PainPointsSection />
