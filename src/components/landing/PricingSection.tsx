@@ -36,7 +36,7 @@ const PricingSection = () => {
     {
       nameKey: "pricing.plans.premium.name",
       icon: Crown,
-      price: { monthly: 9, yearly: 90 },
+      price: { monthly: 9, yearly: 50 },
       descriptionKey: "pricing.plans.premium.description",
       featuresKeys: [
         "pricing.plans.premium.features.storage",
@@ -53,7 +53,7 @@ const PricingSection = () => {
     {
       nameKey: "pricing.plans.heritage.name",
       icon: Building2,
-      price: { monthly: 15, yearly: 150 },
+      price: { monthly: 15, yearly: 99 },
       descriptionKey: "pricing.plans.heritage.description",
       featuresKeys: [
         "pricing.plans.heritage.features.storage",
