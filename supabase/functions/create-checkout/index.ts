@@ -15,7 +15,7 @@ const SUBSCRIPTION_TIERS = {
       product_id: "prod_TpfCfW2XoivaMo",
     },
     yearly: {
-      price_id: "price_1TJuiXRc375UxOm0UZDmhv9S",
+      price_id: "price_1TNEO3Rc375UxOm0yGVRPGrd",
       product_id: "prod_TpfDVWEiQyAskK",
     },
   },
@@ -25,7 +25,7 @@ const SUBSCRIPTION_TIERS = {
       product_id: "prod_TpfDHDc4suNNpU",
     },
     yearly: {
-      price_id: "price_1TJujARc375UxOm04FIZg7er",
+      price_id: "price_1TNEORRc375UxOm07mgOMq3E",
       product_id: "prod_TpfEpqH8Z3zaDh",
     },
   },
