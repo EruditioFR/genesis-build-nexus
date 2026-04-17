@@ -268,7 +268,7 @@ const HowItWorksV3 = () => {
           className="mt-20 sm:mt-28 text-center"
         >
           <p className="text-base sm:text-lg text-muted-foreground mb-5 max-w-xl mx-auto">
-            Commencez aujourd'hui — votre première capsule prend moins de 3 minutes.
+            Commencez aujourd'hui : créer votre première capsule prend moins de 3 minutes.
           </p>
           <Button
             size="lg"
