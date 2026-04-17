@@ -76,9 +76,9 @@ const HeroSectionV3 = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.05] tracking-tight"
           >
-            Ne laissez plus vos souvenirs
+            Protégez les souvenirs
             <br className="hidden sm:block" />
-            <span className="text-[hsl(var(--gold))]"> se perdre dans le cloud.</span>
+            <span className="text-[hsl(var(--gold))]"> de votre famille</span>
           </motion.h1>
 
           {/* Sous-titre */}
