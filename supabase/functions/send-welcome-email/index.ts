@@ -109,7 +109,7 @@ serve(async (req) => {
       type: "recovery",
       email,
       options: {
-        redirectTo: "https://www.familygarden.fr/forgot-password?welcome=true",
+        redirectTo: "https://www.familygarden.fr/reset-password",
       },
     });
 
