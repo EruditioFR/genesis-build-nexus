@@ -26,7 +26,7 @@ const translations: Record<string, {
     tierLine: (tier) => `Votre forfait : <strong>${tier}</strong>`,
     buttonText: "Définir mon mot de passe et me connecter",
     linkInstruction: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :",
-    expiry: "Ce lien est valide pendant 24 heures.",
+    expiry: "Ce lien est valide pendant plusieurs heures. Si nécessaire, vous pourrez en redemander un nouveau depuis la page de connexion.",
     footer: "Si vous avez la moindre question, écrivez-nous à web@familygarden.fr",
   },
   en: {
@@ -36,7 +36,7 @@ const translations: Record<string, {
     tierLine: (tier) => `Your plan: <strong>${tier}</strong>`,
     buttonText: "Set my password and log in",
     linkInstruction: "If the button doesn't work, copy this link into your browser:",
-    expiry: "This link is valid for 24 hours.",
+    expiry: "This link is valid for several hours. You can request a new one from the login page if needed.",
     footer: "If you have any questions, write to us at web@familygarden.fr",
   },
 };
@@ -104,12 +104,12 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Generate password recovery link → user lands on /reset-password style flow
+    // Generate a magic link (longer-lived than recovery) → user lands logged-in on /reset-password
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "recovery",
+      type: "magiclink",
       email,
       options: {
-        redirectTo: "https://www.familygarden.fr/forgot-password?welcome=true",
+        redirectTo: "https://www.familygarden.fr/reset-password",
       },
     });
 
