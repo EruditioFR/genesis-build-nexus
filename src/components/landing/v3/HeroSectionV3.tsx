@@ -89,7 +89,7 @@ const HeroSectionV3 = () => {
             className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
           >
             Family Garden réunit photos, vidéos, voix et récits dans un journal de famille
-            privé — organisé, durable, transmissible.
+            privé, organisé, durable, transmissible.
           </motion.p>
 
           {/* CTAs */}
