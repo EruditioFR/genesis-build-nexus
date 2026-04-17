@@ -15,3 +15,12 @@ verify_jwt = false
 
 [functions.send-contact-email]
 verify_jwt = false
+
+[functions.create-guest-checkout]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.send-welcome-email]
+verify_jwt = false
