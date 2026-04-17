@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock, Shield, Heart } from 'lucide-react';
+import { ArrowRight, Lock, Shield, Heart, Volume2, VolumeX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useCallback } from 'react';
+import { useCallback, useState, useRef } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 
 /**
