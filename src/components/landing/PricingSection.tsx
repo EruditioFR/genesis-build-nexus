@@ -73,16 +73,18 @@ const PricingSection = () => {
   ];
 
   const handleSubscribe = async (plan: typeof plans[0]) => {
+    // Free plan → signup
     if (!plan.tier) {
       navigate('/signup');
       return;
     }
-
+    // Paid plans, guest → direct checkout (no account required)
     if (!user) {
-      navigate('/signup');
+      const billing = isYearly ? 'yearly' : 'monthly';
+      navigate(`/checkout?plan=${plan.tier}&billing=${billing}`);
       return;
     }
-
+    // Paid plans, logged-in → Stripe checkout via subscription hook
     setLoadingTier(plan.tier);
     try {
       await createCheckout(plan.tier);
