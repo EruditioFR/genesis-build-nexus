@@ -273,7 +273,7 @@ const Premium = () => {
                 <li key={item.feature} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span className={`text-sm ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/90'}`}>
-                    {item.feature}: {typeof item.value === 'boolean' ? 'Inclus' : item.value}
+                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
                   </span>
                 </li>
               ))}
@@ -382,7 +382,7 @@ const Premium = () => {
                 <li key={item.feature} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span className={`text-sm ${highlightHeritage ? 'text-primary-foreground/90' : 'text-muted-foreground'}`}>
-                    {item.feature}: {typeof item.value === 'boolean' ? 'Inclus' : item.value}
+                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
                   </span>
                 </li>
               ))}
