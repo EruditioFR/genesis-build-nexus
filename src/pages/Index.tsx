@@ -14,7 +14,7 @@ const HowItWorksV3 = lazy(() => import("@/components/landing/v3/HowItWorksV3"));
 const SolutionSection = lazy(() => import("@/components/landing/v2/SolutionSection"));
 const AudienceSectionV3 = lazy(() => import("@/components/landing/v3/AudienceSectionV3"));
 const VideoPreviewSection = lazy(() => import("@/components/landing/v2/VideoPreviewSection"));
-const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
+const TestimonialsSection = lazy(() => import("@/components/landing/v3/TestimonialsSectionV3"));
 const PricingSectionV3 = lazy(() => import("@/components/landing/v3/PricingSectionV3"));
 const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
 const CTASectionV2 = lazy(() => import("@/components/landing/v2/CTASectionV2"));
