@@ -6,6 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
+import ContactDialog from "@/components/landing/ContactDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +51,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     { label: t('nav.howItWorks'), href: "#how-it-works" },
     { label: t('nav.pricing'), href: "#pricing" },
     { label: t('nav.about'), href: "/about", isRoute: true },
-    { label: t('nav.contact'), href: "#contact" },
+    { label: t('nav.contact'), href: "#contact", isContact: true },
   ];
 
   const getInitials = () => {
