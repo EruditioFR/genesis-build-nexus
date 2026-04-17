@@ -149,7 +149,7 @@ const HowItWorksV3 = () => {
           >
             Simple, en
             <br className="hidden sm:block" />
-            <span className="text-[hsl(var(--gold))]"> quatre étapes</span>
+            <span className="text-[hsl(var(--gold))]"> trois étapes</span>
           </motion.h2>
 
           <motion.p
