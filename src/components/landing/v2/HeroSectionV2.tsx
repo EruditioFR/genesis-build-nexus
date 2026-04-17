@@ -96,7 +96,7 @@ const HeroSectionV2 = () => {
             className="max-w-3xl mx-auto"
           >
             <h1
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mt-5"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight mt-3 sm:mt-5"
             >
               <Trans
                 i18nKey="v2.hero.subtitle"
@@ -105,7 +105,7 @@ const HeroSectionV2 = () => {
               />
             </h1>
             <p
-              className="text-sm sm:text-base md:text-lg text-white/70 mt-2 sm:mt-3 leading-snug font-medium"
+              className="text-base sm:text-lg md:text-xl text-white/80 mt-3 sm:mt-4 leading-snug font-medium"
             >
               {t('v2.hero.subtitle2')}<br />{t('v2.hero.subtitle3')}
             </p>
@@ -116,15 +116,15 @@ const HeroSectionV2 = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6 sm:mt-8 flex justify-center"
+            className="mt-5 sm:mt-8 flex justify-center"
           >
             <Button
               size="lg"
-              onClick={() => navigate('/signup')}
+              onClick={handleCtaClick}
               className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold"
             >
               <Sparkles className="h-4 w-4 mr-2" />
-              {t('hero.cta.primary')}
+              {t('v2.hero.cta')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>
