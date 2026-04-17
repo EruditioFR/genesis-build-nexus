@@ -20,7 +20,7 @@ const secondaryTestimonials = [
     role: "Papa de deux enfants, 45 ans",
     avatar: thomasImg,
     quote:
-      "Mes enfants adorent regarder les souvenirs ensemble le dimanche soir. C'est devenu notre rituel familial. Et tout est en sécurité, hébergé en France — ça compte pour nous.",
+      "Mes enfants adorent regarder les souvenirs ensemble le dimanche soir. C'est devenu notre rituel familial. Et tout est en sécurité.\nCa compte pour nous.",
   },
   {
     name: "Sophie M.",
