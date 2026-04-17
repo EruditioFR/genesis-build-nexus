@@ -359,7 +359,7 @@ const Premium = () => {
                   {promoApplied ? (
                     <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">15€</s> 7,50</>}€</>
                   ) : (
-                    <>{isYearly ? '99' : isLoading === null ? '9' : '15'}€</>
+                    <>{isYearly ? '99' : '9'}€</>
                   )}
                 </span>
                 <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
