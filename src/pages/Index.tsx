@@ -8,7 +8,7 @@ import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 
 const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
-const AudienceStrip = lazy(() => import("@/components/landing/v2/AudienceStrip"));
+const SocialProofBand = lazy(() => import("@/components/landing/v3/SocialProofBand"));
 const PainPointsSection = lazy(() => import("@/components/landing/v2/PainPointsSection"));
 const HowItWorksV3 = lazy(() => import("@/components/landing/v3/HowItWorksV3"));
 const SolutionSection = lazy(() => import("@/components/landing/v2/SolutionSection"));
@@ -55,7 +55,7 @@ const Index = () => {
       <main>
         <HeroSectionV3 />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
-          <AudienceStrip />
+          <SocialProofBand />
           <PainPointsSection />
           <HowItWorksV3 />
           <LandingProductPreview />
