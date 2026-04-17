@@ -16,7 +16,7 @@ const AudienceSectionV3 = lazy(() => import("@/components/landing/v3/AudienceSec
 const VideoPreviewSection = lazy(() => import("@/components/landing/v2/VideoPreviewSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
 const PricingSectionV3 = lazy(() => import("@/components/landing/v3/PricingSectionV3"));
-const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
+const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
 const CTASectionV2 = lazy(() => import("@/components/landing/v2/CTASectionV2"));
 const Footer = lazy(() => import("@/components/landing/Footer"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
@@ -64,7 +64,7 @@ const Index = () => {
           <VideoPreviewSection />
           <TestimonialsSection />
           <PricingSectionV3 />
-          <FAQSection />
+          <FAQSectionV3 />
           <CTASectionV2 />
         </Suspense>
       </main>
