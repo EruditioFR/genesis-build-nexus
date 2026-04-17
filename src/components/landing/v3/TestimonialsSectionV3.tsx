@@ -131,7 +131,7 @@ const TestimonialsSectionV3 = () => {
                 <Quote className="w-5 h-5 text-[hsl(var(--gold))]/40 group-hover:text-[hsl(var(--gold))] transition-colors" />
               </div>
 
-              <blockquote className="text-foreground/90 leading-relaxed text-[15px] flex-1 italic">
+              <blockquote className="text-foreground/90 leading-relaxed text-[15px] flex-1 italic whitespace-pre-line">
                 « {t.quote} »
               </blockquote>
 
