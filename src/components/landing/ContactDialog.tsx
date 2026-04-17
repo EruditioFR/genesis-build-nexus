@@ -40,13 +40,14 @@ const ContactDialog = ({ trigger, open, onOpenChange }: ContactDialogProps) => {
     onOpenChange?.(v);
   };
 
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "", website: "" });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
+  const [mountedAt] = useState(() => Date.now());
 
   const reset = () => {
-    setForm({ name: "", email: "", subject: "", message: "" });
+    setForm({ name: "", email: "", subject: "", message: "", website: "" });
     setErrors({});
     setSuccess(false);
   };
@@ -54,6 +55,16 @@ const ContactDialog = ({ trigger, open, onOpenChange }: ContactDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+
+    // Honeypot: si rempli ou soumission < 2s après ouverture → bot
+    if (form.website || Date.now() - mountedAt < 2000) {
+      setSuccess(true); // Faux succès silencieux
+      setTimeout(() => {
+        setDialogOpen(false);
+        setTimeout(reset, 300);
+      }, 2500);
+      return;
+    }
 
     const result = contactSchema.safeParse(form);
     if (!result.success) {
@@ -67,16 +78,7 @@ const ContactDialog = ({ trigger, open, onOpenChange }: ContactDialogProps) => {
 
     setLoading(true);
     try {
-      const { error: dbError } = await supabase.from("contact_messages" as any).insert({
-        name: result.data.name,
-        email: result.data.email,
-        subject: result.data.subject || null,
-        message: result.data.message,
-      } as any);
-
-      if (dbError) throw dbError;
-
-      await supabase.functions.invoke("send-contact-email", {
+      const { data, error } = await supabase.functions.invoke("send-contact-email", {
         body: {
           name: result.data.name,
           email: result.data.email,
@@ -85,10 +87,19 @@ const ContactDialog = ({ trigger, open, onOpenChange }: ContactDialogProps) => {
         },
       });
 
+      if (error || (data && (data as any).error)) {
+        const code = (data as any)?.code;
+        if (code === "rate_limited") {
+          toast.error(t("contact.rateLimited", "Trop de messages envoyés. Réessayez dans une heure."));
+          setLoading(false);
+          return;
+        }
+        throw error || new Error("send_failed");
+      }
+
       setSuccess(true);
       toast.success(t("contact.success"));
 
-      // Auto-close après 2.5s
       setTimeout(() => {
         setDialogOpen(false);
         setTimeout(reset, 300);
