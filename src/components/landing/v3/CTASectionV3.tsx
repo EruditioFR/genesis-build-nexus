@@ -62,7 +62,7 @@ const CTASectionV3 = () => {
           >
             {t('v2.ctaFinal.title')}{' '}
             {t('v2.ctaFinal.titleMiddle')}{' '}
-            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--terracotta-light))]">
+            <span className="block mt-2 pb-2 text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--terracotta-light))]">
               {t('v2.ctaFinal.titleHighlight')}.
             </span>
           </motion.h2>
