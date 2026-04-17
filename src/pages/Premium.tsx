@@ -69,7 +69,7 @@ const Premium = () => {
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <SEOHead
         title="Tarifs et abonnements | Family Garden"
-        description="Découvrez les forfaits Family Garden : Gratuit, Premium (9,99€/mois) et Héritage (19,99€/mois). Préservez vos souvenirs sans limite."
+        description="Découvrez les forfaits Family Garden : Gratuit, Premium (9€/mois ou 50€/an) et Héritage (15€/mois ou 99€/an). Préservez vos souvenirs sans limite."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "Tarifs", url: "/premium" },
@@ -244,11 +244,11 @@ const Premium = () => {
                   highlightHeritage ? 'text-foreground' : 'text-primary-foreground'
                 }`}>
                   {promoApplied ? (
-                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">4,99€</s> 2,49</>}€</>
+                    <>{isYearly ? <><s className="text-3xl opacity-50">50€</s> 25</> : <><s className="text-3xl opacity-50">9€</s> 4,50</>}€</>
                   ) : (
                     <>
-                      {isYearly ? '99' : (
-                        <><s className="text-3xl opacity-50">9,99€</s> 4,99</>
+                      {isYearly ? '50' : (
+                        <><s className="text-3xl opacity-50">9€</s> 5</>
                       )}€
                     </>
                   )}
@@ -259,11 +259,11 @@ const Premium = () => {
               </div>
               {isYearly ? (
                 <p className={`text-sm mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
-                  soit 8,25€/mois
+                  soit 4,17€/mois
                 </p>
               ) : (
                 <p className={`text-xs mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
-                  puis 9,99€/mois après 3 mois
+                  puis 9€/mois après 3 mois
                 </p>
               )}
             </div>
@@ -350,9 +350,9 @@ const Premium = () => {
                   highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
                 }`}>
                   {promoApplied ? (
-                    <>{isYearly ? <><s className="text-3xl opacity-50">199€</s> 99,50</> : <><s className="text-3xl opacity-50">19,99€</s> 9,99</>}€</>
+                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">15€</s> 7,50</>}€</>
                   ) : (
-                    <>{isYearly ? '199' : '19,99'}€</>
+                    <>{isYearly ? '99' : '15'}€</>
                   )}
                 </span>
                 <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
@@ -361,7 +361,7 @@ const Premium = () => {
               </div>
               {isYearly && (
                 <p className={`text-sm mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                  soit 16,58€/mois
+                  soit 8,25€/mois
                 </p>
               )}
             </div>
