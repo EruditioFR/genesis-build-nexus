@@ -160,11 +160,20 @@ const Profile = () => {
     setProfileLoading(false);
   }, [user, form]);
 
-  // Detect subscription success from URL params
+  // Detect subscription status from URL params
   useEffect(() => {
     const subscriptionStatus = searchParams.get('subscription');
-    
-    if (subscriptionStatus === 'success' && user) {
+    const change = searchParams.get('change');
+
+    if (!subscriptionStatus || !user) return;
+
+    const cleanUrl = () => {
+      searchParams.delete('subscription');
+      searchParams.delete('change');
+      setSearchParams(searchParams, { replace: true });
+    };
+
+    if (subscriptionStatus === 'success') {
       // Launch confetti celebration
       const duration = 3000;
       const end = Date.now() + duration;
@@ -191,15 +200,23 @@ const Profile = () => {
       };
       frame();
 
-      // Refresh subscription status
       checkSubscription();
-      // Refresh profile to get updated storage limits
       fetchProfile();
-      // Show success notification
-      toast.success(t('profile.subscriptionSuccess'));
-      // Clean URL
-      searchParams.delete('subscription');
-      setSearchParams(searchParams, { replace: true });
+
+      if (change === 'upgrade') {
+        toast.success(t('profile.subscriptionUpgradeSuccess', { defaultValue: 'Votre forfait a été mis à niveau. La différence est facturée au prorata des jours restants.' }));
+      } else if (change === 'downgrade') {
+        toast.success(t('profile.subscriptionDowngradeScheduled', { defaultValue: 'Le changement prendra effet à la fin de votre période en cours.' }));
+      } else {
+        toast.success(t('profile.subscriptionSuccess'));
+      }
+      cleanUrl();
+    } else if (subscriptionStatus === 'already-active') {
+      toast.info(t('profile.subscriptionAlreadyActive', { defaultValue: 'Vous bénéficiez déjà de ce forfait.' }));
+      cleanUrl();
+    } else if (subscriptionStatus === 'canceled') {
+      toast.info(t('profile.subscriptionCanceled', { defaultValue: 'Paiement annulé. Aucun changement n\'a été effectué.' }));
+      cleanUrl();
     }
   }, [searchParams, setSearchParams, user, checkSubscription, fetchProfile, t]);
 
