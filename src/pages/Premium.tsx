@@ -345,6 +345,13 @@ const Premium = () => {
             </div>
 
             <div className="text-center mb-6">
+              {!isYearly && (
+                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
+                  highlightHeritage ? 'bg-secondary/20 text-secondary' : 'bg-accent/10 text-accent'
+                }`}>
+                  🔥 Offre de lancement : 9€/mois pendant 3 mois
+                </div>
+              )}
               <div className="flex items-baseline justify-center gap-1">
                 <span className={`text-5xl font-display font-bold ${
                   highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
@@ -352,16 +359,20 @@ const Premium = () => {
                   {promoApplied ? (
                     <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">15€</s> 7,50</>}€</>
                   ) : (
-                    <>{isYearly ? '99' : '15'}€</>
+                    <>{isYearly ? '99' : isLoading === null ? '9' : '15'}€</>
                   )}
                 </span>
                 <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
                   /{isYearly ? 'an' : 'mois'}
                 </span>
               </div>
-              {isYearly && (
+              {isYearly ? (
                 <p className={`text-sm mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
                   soit 8,25€/mois
+                </p>
+              ) : (
+                <p className={`text-xs mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
+                  puis 15€/mois après 3 mois
                 </p>
               )}
             </div>
