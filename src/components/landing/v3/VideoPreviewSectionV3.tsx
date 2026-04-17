@@ -95,15 +95,12 @@ const VideoPreviewSectionV3 = () => {
                 {/* Video thumbnail area */}
                 <div className="relative aspect-video bg-black">
                   <img
-                    src={`https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`}
+                    src={`https://img.youtube.com/vi/${YOUTUBE_ID}/hqdefault.jpg`}
                     alt="Aperçu de la démo Family Garden"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     loading="lazy"
-                    width={1280}
-                    height={720}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
-                    }}
+                    width={480}
+                    height={360}
                   />
                   {/* Vignette overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
