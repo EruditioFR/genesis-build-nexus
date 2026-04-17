@@ -178,6 +178,7 @@ const Signup = () => {
           description: isEmailExists ? t('signup.errors.emailExistsDescription') : errorMsg,
         });
       } else {
+        trackEvent('signup_completed', 'conversion', 'signup_funnel_step_2');
         navigate('/email-confirmation', { state: { email } });
       }
     } catch (err: any) {
