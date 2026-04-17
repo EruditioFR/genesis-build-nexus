@@ -44,21 +44,21 @@ const Premium = () => {
   };
 
   const premiumFeatures = [
-    { feature: 'Espace de stockage', value: '10 Go', icon: HardDrive },
-    { feature: 'Tous les formats de capsules', value: 'Texte, photo, vidéo, audio', icon: Sparkles },
+    { feature: '10 Go de stockage', value: true, icon: HardDrive },
+    { feature: 'Souvenirs au format texte, photo, vidéo et audio', value: true, icon: Sparkles },
+    { feature: 'Partages illimités', value: true, icon: Users },
     { feature: 'Chronologie avancée', value: true, icon: Zap },
-    { feature: 'Partage de souvenirs', value: '5 personnes (famille, amis...)', icon: Users },
     { feature: 'Sans publicité', value: true, icon: Shield },
   ];
 
   const heritageFeatures = [
-    { feature: 'Espace de stockage', value: '20 Go', icon: HardDrive },
-    { feature: 'Tous les formats de capsules', value: 'Texte, photo, vidéo, audio', icon: Sparkles },
+    { feature: '20 Go de stockage', value: true, icon: HardDrive },
+    { feature: 'Souvenirs au format texte, photo, vidéo et audio', value: true, icon: Sparkles },
+    { feature: 'Partages illimités', value: true, icon: Users },
     { feature: 'Chronologie avancée', value: true, icon: Zap },
-    { feature: 'Partages illimités', value: 'Famille & amis', icon: Users },
     { feature: 'Arbre généalogique interactif', value: true, icon: TreePine },
-    { feature: 'Podcast de vos souvenirs', value: true, icon: Mic },
-    { feature: 'Support VIP WhatsApp', value: true, icon: Crown },
+    { feature: 'Création d\'un podcast à partir de vos souvenirs', value: true, icon: Mic },
+    { feature: 'Support VIP via WhatsApp', value: true, icon: Crown },
     { feature: 'Sans publicité', value: true, icon: Shield },
   ];
 
@@ -273,7 +273,7 @@ const Premium = () => {
                 <li key={item.feature} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span className={`text-sm ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/90'}`}>
-                    {item.feature}: {typeof item.value === 'boolean' ? 'Inclus' : item.value}
+                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
                   </span>
                 </li>
               ))}
@@ -382,7 +382,7 @@ const Premium = () => {
                 <li key={item.feature} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-secondary flex-shrink-0" />
                   <span className={`text-sm ${highlightHeritage ? 'text-primary-foreground/90' : 'text-muted-foreground'}`}>
-                    {item.feature}: {typeof item.value === 'boolean' ? 'Inclus' : item.value}
+                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
                   </span>
                 </li>
               ))}
