@@ -1,10 +1,27 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock, Shield, Heart, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useCallback, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCallback, useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
+
+import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
+import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
+import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
+import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
+const vieVideo = { url: '/videos/vie-video.mp4' };
+
+const SLIDES = [
+  { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', video: enfanceVideo.url },
+  { emoji: '🎓', label: 'École', question: 'Un professeur vous a marqué. Pourquoi ?', video: ecoleVideo.url },
+  { emoji: '🎵', label: 'Musiques', question: 'Quelle chanson vous ramène instantanément en arrière ?', video: musiquesVideo.url },
+  { emoji: '👨‍👩‍👧‍👦', label: 'Famille', question: 'Quelle tradition aimeriez-vous transmettre ?', video: familleVideo.url },
+  { emoji: '❤️', label: 'Vie personnelle', question: 'Quel moment a changé le cours de votre vie ?', video: vieVideo.url },
+];
+
+const AUTOPLAY_INTERVAL = 5000;
 
 /**
  * HeroSectionV3 — Hero de conversion
