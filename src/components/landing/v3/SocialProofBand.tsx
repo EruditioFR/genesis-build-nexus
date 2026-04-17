@@ -11,7 +11,7 @@ type Testimonial = {
 const testimonials: Testimonial[] = [
   {
     quote:
-      "J'ai enfin pu enregistrer la voix de ma mère avant qu'elle ne nous quitte. Ce souvenir n'a pas de prix.",
+      "J'ai enregistré la voix de ma mère qui raconte mon enfance. Un cadeau inestimable pour mes enfants.",
     author: 'Camille',
     role: 'Maman de 2 enfants',
     initials: 'C',
