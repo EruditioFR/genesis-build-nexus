@@ -159,7 +159,7 @@ const HowItWorksV3 = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
           >
-            Trois étapes pour reprendre la main sur la mémoire de votre famille — sans
+            Trois étapes pour reprendre la main sur la mémoire de votre famille, sans
             compétences techniques, sans abonnement obligatoire.
           </motion.p>
         </div>
