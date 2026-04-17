@@ -16,6 +16,7 @@ import heroBackground from '@/assets/hero-background.webp';
 import { CountrySelector } from '@/components/signup/CountrySelector';
 
 import SEOHead from '@/components/seo/SEOHead';
+import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 
 const Signup = () => {
   const {
@@ -42,6 +43,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard?welcome=true';
+  const { trackEvent } = useGoogleAnalytics();
+
+  // Track signup page arrival once
+  useEffect(() => {
+    trackEvent('signup_page_view', 'conversion', 'signup_funnel_step_1');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Debounced email check
   const checkEmailExists = useCallback(async (emailToCheck: string) => {
