@@ -17,8 +17,8 @@ const VideoPreviewSection = lazy(() => import("@/components/landing/v2/VideoPrev
 const TestimonialsSection = lazy(() => import("@/components/landing/v3/TestimonialsSectionV3"));
 const PricingSectionV3 = lazy(() => import("@/components/landing/v3/PricingSectionV3"));
 const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
-const CTASectionV2 = lazy(() => import("@/components/landing/v2/CTASectionV2"));
-const Footer = lazy(() => import("@/components/landing/Footer"));
+const CTASectionV3 = lazy(() => import("@/components/landing/v3/CTASectionV3"));
+const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
 const CookieBanner = lazy(() => import("@/components/CookieBanner"));
 
 const Index = () => {
@@ -65,7 +65,7 @@ const Index = () => {
           <TestimonialsSection />
           <PricingSectionV3 />
           <FAQSectionV3 />
-          <CTASectionV2 />
+          <CTASectionV3 />
         </Suspense>
       </main>
       <Suspense fallback={null}>
