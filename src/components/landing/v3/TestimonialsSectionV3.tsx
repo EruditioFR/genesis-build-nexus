@@ -10,7 +10,7 @@ const heroTestimonial = {
   role: "Grand-mère, 68 ans — Lyon",
   avatar: marieImg,
   quote:
-    "Pendant trente ans, j'ai gardé des cartons entiers de photos, de lettres, de cassettes audio. Avec Family Garden, j'ai enfin pu tout rassembler en un seul endroit, raconter chaque histoire à mes mots, et partager avec mes enfants et petits-enfants. Aujourd'hui, ma famille connaît son histoire — et c'est moi qui la leur ai transmise.",
+    "Pendant trente ans, j'ai gardé des cartons entiers de photos, de lettres, de cassettes audio. Avec Family Garden, j'ai enfin pu tout rassembler en un seul endroit, raconter chaque histoire avec mes mots, et partager avec mes enfants et petits-enfants. Aujourd'hui, ma famille connaît son histoire — et c'est moi qui la leur ai transmise.",
   highlight: "ma famille connaît son histoire",
 };
 
