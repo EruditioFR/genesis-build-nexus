@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import ContactDialog from "@/components/landing/ContactDialog";
 import { HelpCircle, Mail, ArrowRight } from "lucide-react";
 import {
   Accordion,
@@ -124,13 +124,17 @@ const FAQSectionV3 = () => {
                 Notre équipe vous répond personnellement sous 48h. Toutes les questions
                 sont les bienvenues, même les plus basiques.
               </p>
-              <Link
-                to="/#contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(var(--gold))] text-[hsl(215_50%_18%)] font-semibold text-sm sm:text-base hover:bg-[hsl(var(--gold))]/90 transition-colors group"
-              >
-                Nous écrire
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+              <ContactDialog
+                trigger={
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(var(--gold))] text-[hsl(215_50%_18%)] font-semibold text-sm sm:text-base hover:bg-[hsl(var(--gold))]/90 transition-colors group"
+                  >
+                    Nous écrire
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                }
+              />
             </div>
           </div>
         </motion.div>

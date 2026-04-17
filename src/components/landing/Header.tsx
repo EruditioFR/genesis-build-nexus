@@ -6,6 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
+import ContactDialog from "@/components/landing/ContactDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +51,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
     { label: t('nav.howItWorks'), href: "#how-it-works" },
     { label: t('nav.pricing'), href: "#pricing" },
     { label: t('nav.about'), href: "/about", isRoute: true },
-    { label: t('nav.contact'), href: "#contact" },
+    { label: t('nav.contact'), href: "#contact", isContact: true },
   ];
 
   const getInitials = () => {
@@ -106,6 +107,22 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                 navigate("/" + link.href);
               }
             };
+
+            if (link.isContact) {
+              return (
+                <ContactDialog
+                  key={link.label}
+                  trigger={
+                    <button
+                      type="button"
+                      className="text-sm font-medium transition-colors duration-300 hover:text-secondary text-primary-foreground/90"
+                    >
+                      {link.label}
+                    </button>
+                  }
+                />
+              );
+            }
 
             return link.isRoute ? (
               <Link
@@ -217,6 +234,23 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                     navigate("/" + link.href);
                   }
                 };
+
+                if (link.isContact) {
+                  return (
+                    <ContactDialog
+                      key={link.label}
+                      trigger={
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="text-left text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
+                        >
+                          {link.label}
+                        </button>
+                      }
+                    />
+                  );
+                }
 
                 return link.isRoute ? (
                   <Link
