@@ -155,9 +155,15 @@ const HeroSectionV3 = () => {
               <span className="w-3 h-3 rounded-full bg-[#28ca42]" />
               <span className="ml-3 text-[10px] text-white/40 font-mono">familygarden.fr/dashboard</span>
             </div>
-            {/* PLACEHOLDER — remplacer par <img src="/screenshots/dashboard-fr.png" /> */}
-            <div className="aspect-[16/10] flex items-center justify-center bg-gradient-to-br from-[hsl(35_20%_92%)] to-[hsl(35_15%_85%)] text-[hsl(215_50%_18%)]/40 text-sm font-medium">
-              [ Capture dashboard à insérer ici ]
+            {/* Vidéo tuto */}
+            <div className="aspect-[16/10] bg-black">
+              <iframe
+                src="https://www.youtube.com/embed/afoWU3vDcOg?rel=0&modestbranding=1"
+                title="Tutoriel Family Garden"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
 
