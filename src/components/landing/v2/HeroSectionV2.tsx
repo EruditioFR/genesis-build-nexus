@@ -179,6 +179,7 @@ const HeroSectionV2 = () => {
             muted
             loop
             playsInline
+            preload={current === 0 ? 'auto' : 'metadata'}
           />
         </AnimatePresence>
 
