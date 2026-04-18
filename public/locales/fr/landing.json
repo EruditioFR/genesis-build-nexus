@@ -397,5 +397,241 @@
       "button": "Créer mon premier souvenir",
       "trust": "Inscription gratuite • Sans carte bancaire • Données privées"
     }
+  },
+  "v3": {
+    "hero": {
+      "badge": "Espace privé pour votre famille",
+      "title": "Protégez les souvenirs",
+      "titleHighlight": "de votre famille",
+      "subtitle": "Family Garden réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable, transmissible.",
+      "ctaPrimary": "Créer mon espace gratuit",
+      "ctaSecondary": "Voir comment ça marche",
+      "trust1": "Gratuit, sans carte bancaire",
+      "trust2": "Hébergement européen RGPD",
+      "trust3": "0 publicité",
+      "slidePrev": "Précédent",
+      "slideNext": "Suivant",
+      "slides": {
+        "enfance": {
+          "label": "Enfance",
+          "question": "À quoi ressemblait la maison de votre enfance ?"
+        },
+        "ecole": {
+          "label": "École",
+          "question": "Un professeur vous a marqué. Pourquoi ?"
+        },
+        "musiques": {
+          "label": "Musiques",
+          "question": "Quelle chanson vous ramène instantanément en arrière ?"
+        },
+        "famille": {
+          "label": "Famille",
+          "question": "Quelle tradition aimeriez-vous transmettre ?"
+        },
+        "vie": {
+          "label": "Vie personnelle",
+          "question": "Quel moment a changé le cours de votre vie ?"
+        }
+      }
+    },
+    "howItWorks": {
+      "badge": "Comment ça marche",
+      "title": "Simple, en",
+      "titleHighlight": "trois étapes",
+      "subtitle": "Trois étapes pour reprendre la main sur la mémoire de votre famille, sans compétences techniques, sans abonnement obligatoire.",
+      "before": "Avant",
+      "after": "Avec Family Garden",
+      "ctaText": "Commencez aujourd'hui : créer votre première capsule prend moins de 3 minutes.",
+      "cta": "Créer mon espace gratuit",
+      "ctaTrust": "Gratuit, sans carte bancaire · Hébergement européen RGPD",
+      "steps": {
+        "s1": {
+          "beforeTitle": "Aujourd'hui : vos souvenirs sont partout",
+          "beforeItems": [
+            "Conversations WhatsApp qui s'effacent",
+            "iCloud, Google Photos… c'est à qui déjà ?",
+            "Vieux disques durs, USB oubliées",
+            "Cartons de photos jamais numérisés"
+          ],
+          "afterTitle": "Vous rassemblez tout, en un seul endroit",
+          "afterDescription": "Importez photos, vidéos, audios et textes en quelques clics. Family Garden devient le coffre unique de votre famille.",
+          "afterPoints": [
+            "Glisser-déposer depuis téléphone ou ordinateur",
+            "Enregistrement vocal direct (votre voix compte)",
+            "Tout est privé par défaut, hébergé en Europe"
+          ]
+        },
+        "s2": {
+          "beforeTitle": "Demain : impossible de retrouver un souvenir précis",
+          "beforeItems": [
+            "« Le mariage de mamie, c'était quelle année ? »",
+            "Photos mélangées sur 15 ans, sans contexte",
+            "Personne ne sait qui est sur la photo"
+          ],
+          "afterTitle": "Tout est organisé, sans effort",
+          "afterDescription": "Chronologie automatique, catégories (enfance, mariage, voyages…), arbre généalogique relié aux souvenirs. On retrouve tout en quelques secondes.",
+          "afterPoints": [
+            "Vue Chronologie par décennie, année, mois",
+            "Arbre généalogique avec photos et lieux de naissance",
+            "Tags personnes : Mamie apparaît partout où elle est"
+          ]
+        },
+        "s3": {
+          "beforeTitle": "Un jour : tout sera perdu",
+          "beforeItems": [
+            "Disques durs qui meurent en silence",
+            "Comptes fermés après un décès",
+            "Histoires que personne n'a jamais racontées"
+          ],
+          "afterTitle": "Vous transmettez, vraiment",
+          "afterDescription": "Partagez des cercles privés avec vos enfants, petits-enfants, frères et sœurs. Programmez des souvenirs à délivrer plus tard. Votre mémoire continue.",
+          "afterPoints": [
+            "Cercles familiaux privés (pas de réseau social)",
+            "Souvenirs à délivrer à une date précise",
+            "Mode Héritage : gardiens de confiance pour la suite"
+          ]
+        }
+      }
+    },
+    "audience": {
+      "badge": "Pour qui ?",
+      "title": "Une réponse différente pour chaque",
+      "titleHighlight": "moment de famille",
+      "subtitle": "Family Garden s'adapte à votre histoire — qu'il s'agisse de bâtir un héritage, de garder trace d'une enfance ou de rassembler un mariage.",
+      "today": "Aujourd'hui",
+      "withFG": "Avec Family Garden",
+      "personas": {
+        "families": {
+          "badge": "Familles multigénérationnelles",
+          "title": "Reconnecter les générations autour d'une histoire commune",
+          "problem": "Les souvenirs des grands-parents restent dans leur tête, les photos des parents sur leur téléphone, et les enfants ne savent presque rien de ceux qui les ont précédés.",
+          "promise": "Family Garden réunit grands-parents, parents et enfants dans un même espace privé : chacun ajoute ses souvenirs, et toute la famille en hérite.",
+          "cta": "Réunir ma famille"
+        },
+        "parents": {
+          "badge": "Jeunes parents",
+          "title": "Garder une trace de chaque \"première fois\" avant qu'elle ne s'efface",
+          "problem": "Premiers pas, premiers mots, fous rires du soir : tout va si vite. Les vidéos s'entassent dans la pellicule, les anecdotes se perdent, et dans dix ans il ne restera que des bribes.",
+          "promise": "Créez le journal de votre enfant en quelques secondes : photo, mot, vidéo, daté et raconté. Un livre vivant qu'il pourra lire un jour.",
+          "cta": "Commencer le journal de bébé"
+        },
+        "legacy": {
+          "badge": "Transmission",
+          "title": "Transmettre ce qui ne s'écrit nulle part ailleurs",
+          "problem": "Les histoires de famille, les recettes, les valeurs, la voix d'un parent... Tout cela disparaît avec ceux qui les portent, faute d'avoir été enregistré à temps.",
+          "promise": "Programmez la diffusion de souvenirs choisis, désignez des proches de confiance et laissez un héritage vivant — pas seulement matériel.",
+          "cta": "Préparer ma transmission"
+        },
+        "mariage": {
+          "badge": "Mariage",
+          "title": "Revivre le plus beau jour, au-delà de l'album du photographe",
+          "problem": "Vous recevez des centaines de photos et vidéos de vos invités, éparpillées sur WhatsApp, Drive, AirDrop. Six mois plus tard, plus personne ne sait où elles sont.",
+          "promise": "Centralisez tous les médias du mariage dans un album privé partagé : invités, témoins et famille déposent leurs souvenirs au même endroit, organisés et sauvegardés.",
+          "cta": "Créer l'album de mariage"
+        },
+        "voyage": {
+          "badge": "Voyages en famille",
+          "title": "Garder vivantes les aventures, pas seulement les photos",
+          "problem": "Au retour d'un voyage, on partage 10 photos sur Instagram, puis tout disparaît dans la pellicule. Les anecdotes, les rencontres, les fous rires : oubliés.",
+          "promise": "Racontez chaque étape avec photos, vidéos, audio et texte. Vos enfants pourront un jour rouvrir le carnet de bord de vos voyages — comme s'ils y étaient.",
+          "cta": "Créer un carnet de voyage"
+        },
+        "events": {
+          "badge": "Réunions & événements de famille",
+          "title": "Faire vivre les retrouvailles bien après la fin de la fête",
+          "problem": "Anniversaires, baptêmes, retrouvailles d'été : tout le monde prend des photos, personne ne les partage vraiment. La magie du moment s'évapore en quelques jours.",
+          "promise": "Ouvrez un espace dédié à l'événement, invitez la famille à y déposer ses souvenirs, et conservez le tout dans un cercle privé accessible à vie.",
+          "cta": "Créer un espace événement"
+        }
+      }
+    },
+    "videoPreview": {
+      "badge": "Démo",
+      "title": "Découvrez Family Garden",
+      "titleHighlight": "en mouvement",
+      "subtitle": "Une minute pour voir comment vous allez créer, organiser et partager vos souvenirs de famille.",
+      "playLabel": "Lire la vidéo de présentation",
+      "imageAlt": "Aperçu de la démo Family Garden",
+      "duration": "Visite guidée — 1 min",
+      "quality": "HD · Sans son nécessaire",
+      "closeLabel": "Fermer la vidéo",
+      "iframeTitle": "Démo Family Garden"
+    },
+    "socialProof": {
+      "tagline": "Plébiscité par les familles qui veulent",
+      "taglineHighlight": "préserver l'essentiel",
+      "items": {
+        "t1": {
+          "quote": "J'ai enregistré la voix de ma mère qui raconte mon enfance. Un cadeau inestimable pour mes enfants.",
+          "author": "Camille",
+          "role": "Maman de 2 enfants"
+        },
+        "t2": {
+          "quote": "Trois générations qui contribuent au même journal de famille. Mes parents adorent y revenir le dimanche.",
+          "author": "Julien",
+          "role": "Papa, Lyon"
+        },
+        "t3": {
+          "quote": "Tout est privé, sans pub, sans algorithme. Enfin un endroit où mes souvenirs m'appartiennent vraiment.",
+          "author": "Sophie",
+          "role": "Photographe"
+        }
+      }
+    },
+    "testimonialsV3": {
+      "badge": "Témoignages",
+      "title": "Des familles qui ont retrouvé",
+      "titleHighlight": "leur mémoire",
+      "subtitle": "Plus de mille familles utilisent Family Garden pour préserver et transmettre leurs souvenirs.",
+      "starsLabel": "5 étoiles sur 5",
+      "hero": {
+        "name": "Marie L.",
+        "role": "Grand-mère, 68 ans — Lyon",
+        "quote": "Pendant trente ans, j'ai gardé des cartons entiers de photos, de lettres, de cassettes audio. Avec Family Garden, j'ai enfin pu tout rassembler en un seul endroit, raconter chaque histoire avec mes mots, et partager avec mes enfants et petits-enfants. Aujourd'hui, ma famille connaît son histoire — et c'est moi qui la leur ai transmise.",
+        "highlight": "ma famille connaît son histoire"
+      },
+      "items": {
+        "thomas": {
+          "name": "Thomas D.",
+          "role": "Papa de deux enfants, 45 ans",
+          "quote": "Mes enfants adorent regarder les souvenirs ensemble le dimanche soir. C'est devenu notre rituel familial. Et tout est en sécurité.\nCa compte pour nous."
+        },
+        "sophie": {
+          "name": "Sophie M.",
+          "role": "Petite-fille, 35 ans",
+          "quote": "J'ai créé un compte pour ma grand-mère. Elle a 82 ans et se débrouille toute seule grâce à l'interface très simple. Elle nous envoie des souvenirs chaque semaine. Un vrai cadeau."
+        },
+        "jean": {
+          "name": "Jean P.",
+          "role": "Retraité, 92 ans — Bordeaux",
+          "quote": "J'ai pu enregistrer ma voix racontant mon enfance pendant la guerre. Mes arrière-petits-enfants pourront m'écouter dans cinquante ans. C'est la plus belle chose que je laisserai derrière moi."
+        }
+      }
+    },
+    "trust": {
+      "tagline": "Vous êtes entre de bonnes mains",
+      "items": {
+        "encryption": {
+          "title": "Chiffrement 256-bit",
+          "description": "Protection bancaire"
+        },
+        "eu": {
+          "title": "Serveurs en UE",
+          "description": "Hébergement RGPD"
+        },
+        "noAds": {
+          "title": "Sans publicité",
+          "description": "Aucun tracking"
+        },
+        "noAi": {
+          "title": "Sans IA d'entraînement",
+          "description": "Vos données vous appartiennent"
+        },
+        "cancel": {
+          "title": "Résiliation 1 clic",
+          "description": "Sans engagement"
+        }
+      }
+    }
   }
 }

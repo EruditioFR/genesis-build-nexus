@@ -13,40 +13,16 @@ import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
 import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
 const vieVideo = { url: '/videos/vie-video.mp4' };
 
-const SLIDES = [
-  { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', video: enfanceVideo.url },
-  { emoji: '🎓', label: 'École', question: 'Un professeur vous a marqué. Pourquoi ?', video: ecoleVideo.url },
-  { emoji: '🎵', label: 'Musiques', question: 'Quelle chanson vous ramène instantanément en arrière ?', video: musiquesVideo.url },
-  { emoji: '👨‍👩‍👧‍👦', label: 'Famille', question: 'Quelle tradition aimeriez-vous transmettre ?', video: familleVideo.url },
-  { emoji: '❤️', label: 'Vie personnelle', question: 'Quel moment a changé le cours de votre vie ?', video: vieVideo.url },
+const SLIDE_KEYS = [
+  { key: 'enfance', emoji: '🌱', video: enfanceVideo.url },
+  { key: 'ecole', emoji: '🎓', video: ecoleVideo.url },
+  { key: 'musiques', emoji: '🎵', video: musiquesVideo.url },
+  { key: 'famille', emoji: '👨‍👩‍👧‍👦', video: familleVideo.url },
+  { key: 'vie', emoji: '❤️', video: vieVideo.url },
 ];
 
 const AUTOPLAY_INTERVAL = 5000;
 
-/**
- * HeroSectionV3 — Hero de conversion
- *
- * Structure :
- *  ┌──────────────────────────────────────────────┐
- *  │  [Badge "Espace privé"]                      │
- *  │  Titre fort (2 lignes max)                   │
- *  │  Sous-titre court (1 phrase)                 │
- *  │  [CTA Primaire]  [CTA Secondaire]            │
- *  │  Micro-réassurance (3 puces inline)          │
- *  │                                              │
- *  │  ┌────────── Mockup laptop ────────────┐    │
- *  │  │                                       │    │
- *  │  │   (capture dashboard sera ici)        │    │
- *  │  │                                       │    │
- *  │  └───────────────────────────────────────┘    │
- *  │      ┌─── mockup mobile ───┐                  │
- *  │      │ (capture mobile)    │                  │
- *  │      └─────────────────────┘                  │
- *  └──────────────────────────────────────────────┘
- *
- * Les mockups sont des placeholders — remplacer les <img src=""> par les
- * captures réelles dès que l'utilisateur les fournit.
- */
 const HeroSectionV3 = () => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
@@ -63,24 +39,22 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
-  // Slider de vidéos d'inspiration
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
   const next = useCallback(() => {
     setDirection(1);
-    setCurrent((p) => (p + 1) % SLIDES.length);
+    setCurrent((p) => (p + 1) % SLIDE_KEYS.length);
   }, []);
   const prev = useCallback(() => {
     setDirection(-1);
-    setCurrent((p) => (p - 1 + SLIDES.length) % SLIDES.length);
+    setCurrent((p) => (p - 1 + SLIDE_KEYS.length) % SLIDE_KEYS.length);
   }, []);
   const goTo = useCallback((i: number) => {
     setDirection(i > current ? 1 : -1);
     setCurrent(i);
   }, [current]);
 
-  // Swipe
   const touchStart = useRef<number | null>(null);
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStart.current = e.touches[0].clientX;
@@ -94,13 +68,12 @@ const HeroSectionV3 = () => {
     touchStart.current = null;
   }, [next, prev]);
 
-  // Autoplay
   useEffect(() => {
     const timer = setInterval(next, AUTOPLAY_INTERVAL);
     return () => clearInterval(timer);
   }, [next]);
 
-  const slide = SLIDES[current];
+  const slide = SLIDE_KEYS[current];
   const textVariants = {
     enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
@@ -109,7 +82,6 @@ const HeroSectionV3 = () => {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
-      {/* Subtle decorative background */}
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage: 'radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
@@ -117,9 +89,7 @@ const HeroSectionV3 = () => {
       />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
-        {/* ── Texte hero ── */}
         <div className="max-w-3xl mx-auto text-center">
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -127,33 +97,29 @@ const HeroSectionV3 = () => {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 text-white/85 text-xs sm:text-sm font-medium mb-6"
           >
             <Lock className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-            <span>Espace privé pour votre famille</span>
+            <span>{t('v3.hero.badge')}</span>
           </motion.div>
 
-          {/* Titre */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.05] tracking-tight"
           >
-            Protégez les souvenirs
+            {t('v3.hero.title')}
             <br className="hidden sm:block" />
-            <span className="text-[hsl(var(--gold))]"> de votre famille</span>
+            <span className="text-[hsl(var(--gold))]"> {t('v3.hero.titleHighlight')}</span>
           </motion.h1>
 
-          {/* Sous-titre */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
           >
-            Family Garden réunit photos, vidéos, voix et récits dans un journal de famille
-            privé, organisé, durable, transmissible.
+            {t('v3.hero.subtitle')}
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,7 +131,7 @@ const HeroSectionV3 = () => {
               onClick={handlePrimaryCta}
               className="w-full sm:w-auto bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-[hsl(215_50%_18%)] text-base sm:text-lg px-8 py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group"
             >
-              Créer mon espace gratuit
+              {t('v3.hero.ctaPrimary')}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button
@@ -174,11 +140,10 @@ const HeroSectionV3 = () => {
               onClick={handleSecondaryCta}
               className="w-full sm:w-auto text-white hover:bg-white/10 hover:text-white text-base sm:text-lg px-6 py-6 rounded-xl font-medium"
             >
-              Voir comment ça marche
+              {t('v3.hero.ctaSecondary')}
             </Button>
           </motion.div>
 
-          {/* Micro-réassurance */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -187,36 +152,32 @@ const HeroSectionV3 = () => {
           >
             <span className="inline-flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
-              Gratuit, sans carte bancaire
+              {t('v3.hero.trust1')}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
-              Hébergement européen RGPD
+              {t('v3.hero.trust2')}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
-              0 publicité
+              {t('v3.hero.trust3')}
             </span>
           </motion.div>
         </div>
 
-        {/* ── Mockups produit ── */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-14 sm:mt-20 max-w-5xl mx-auto relative"
         >
-          {/* Mockup laptop (placeholder) */}
           <div className="relative mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_30%_15%)]">
-            {/* Faux barre macOS */}
             <div className="flex items-center gap-1.5 px-4 py-2.5 bg-[hsl(215_25%_12%)] border-b border-white/5">
               <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
               <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
               <span className="w-3 h-3 rounded-full bg-[#28ca42]" />
               <span className="ml-3 text-[10px] text-white/40 font-mono">familygarden.fr/dashboard</span>
             </div>
-            {/* Slider de vidéos d'inspiration */}
             <div
               className="relative aspect-[16/10] bg-black overflow-hidden"
               onTouchStart={handleTouchStart}
@@ -239,10 +200,8 @@ const HeroSectionV3 = () => {
                 />
               </AnimatePresence>
 
-              {/* Overlay dégradé */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
 
-              {/* Question + label */}
               <div className="absolute inset-0 flex items-end p-5 sm:p-8 pointer-events-none">
                 <AnimatePresence custom={direction} mode="wait">
                   <motion.div
@@ -256,38 +215,36 @@ const HeroSectionV3 = () => {
                   >
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/25 backdrop-blur-sm text-white text-sm sm:text-base font-semibold mb-3">
                       <span className="text-base sm:text-lg">{slide.emoji}</span>
-                      {slide.label}
+                      {t(`v3.hero.slides.${slide.key}.label`)}
                     </span>
                     <p
                       className="font-display italic font-medium text-white leading-[1.1] tracking-tight max-w-3xl text-xl sm:text-2xl md:text-3xl lg:text-4xl relative"
                       style={{ textShadow: '0 4px 32px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.7)' }}
                     >
                       <span className="absolute -left-3 sm:-left-5 -top-3 sm:-top-5 text-[hsl(var(--gold))]/70 text-4xl sm:text-5xl md:text-6xl font-display not-italic leading-none select-none">"</span>
-                      {slide.question}
+                      {t(`v3.hero.slides.${slide.key}.question`)}
                     </p>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Flèches nav */}
               <button
                 onClick={prev}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
-                aria-label="Précédent"
+                aria-label={t('v3.hero.slidePrev')}
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={next}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
-                aria-label="Suivant"
+                aria-label={t('v3.hero.slideNext')}
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
 
-              {/* Dots */}
               <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-                {SLIDES.map((_, i) => (
+                {SLIDE_KEYS.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => goTo(i)}
@@ -302,7 +259,6 @@ const HeroSectionV3 = () => {
             </div>
           </div>
 
-          {/* Lueur dorée derrière */}
           <div className="absolute -inset-x-10 -bottom-10 h-32 bg-[hsl(var(--gold))]/15 blur-3xl rounded-full -z-10" />
         </motion.div>
       </div>

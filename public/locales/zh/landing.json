@@ -396,5 +396,241 @@
       "button": "创建我的第一个回忆",
       "trust": "免费注册 • 无需信用卡 • 数据保持私密"
     }
+  },
+  "v3": {
+    "hero": {
+      "badge": "您家庭的私密空间",
+      "title": "守护回忆",
+      "titleHighlight": "守护您家人的回忆",
+      "subtitle": "Family Garden 将照片、视频、声音和故事汇聚于一本私密、有序、持久且可传承的家庭日记中。",
+      "ctaPrimary": "创建我的免费空间",
+      "ctaSecondary": "了解运作方式",
+      "trust1": "免费,无需信用卡",
+      "trust2": "欧盟 GDPR 托管",
+      "trust3": "零广告",
+      "slidePrev": "上一个",
+      "slideNext": "下一个",
+      "slides": {
+        "enfance": {
+          "label": "童年",
+          "question": "您童年的家是什么样子的?"
+        },
+        "ecole": {
+          "label": "学校",
+          "question": "有哪位老师让您印象深刻?为什么?"
+        },
+        "musiques": {
+          "label": "音乐",
+          "question": "哪首歌能瞬间把您带回过去?"
+        },
+        "famille": {
+          "label": "家庭",
+          "question": "您想传承哪种传统?"
+        },
+        "vie": {
+          "label": "个人生活",
+          "question": "哪个时刻改变了您的人生轨迹?"
+        }
+      }
+    },
+    "howItWorks": {
+      "badge": "如何运作",
+      "title": "简单,只需",
+      "titleHighlight": "三个步骤",
+      "subtitle": "无需技术能力,无需强制订阅,通过三个步骤重新掌握家族记忆。",
+      "before": "之前",
+      "after": "使用 Family Garden",
+      "ctaText": "今天开始:创建您的第一段回忆只需不到 3 分钟。",
+      "cta": "创建我的免费空间",
+      "ctaTrust": "免费,无需信用卡 · 欧盟 GDPR 托管",
+      "steps": {
+        "s1": {
+          "beforeTitle": "今天:您的回忆散落各处",
+          "beforeItems": [
+            "逐渐消失的 WhatsApp 对话",
+            "iCloud、Google Photos…到底是谁的?",
+            "旧硬盘、被遗忘的 U 盘",
+            "从未数字化的照片箱子"
+          ],
+          "afterTitle": "您将一切汇聚于一处",
+          "afterDescription": "几次点击即可导入照片、视频、音频和文字。Family Garden 成为您家庭的唯一保险库。",
+          "afterPoints": [
+            "从手机或电脑拖放",
+            "直接录音(您的声音很重要)",
+            "默认私密,托管于欧洲"
+          ]
+        },
+        "s2": {
+          "beforeTitle": "明天:无法找到具体的回忆",
+          "beforeItems": [
+            "«奶奶的婚礼是哪一年来着?»",
+            "15 年的照片混在一起,毫无背景",
+            "没人知道照片里是谁"
+          ],
+          "afterTitle": "一切井然有序,毫不费力",
+          "afterDescription": "自动时间线、分类(童年、婚礼、旅行…)、与回忆相连的家谱。几秒钟内找到一切。",
+          "afterPoints": [
+            "按十年、年、月查看时间线",
+            "带照片和出生地的家谱",
+            "人物标签:奶奶在所有出现过的地方都会显示"
+          ]
+        },
+        "s3": {
+          "beforeTitle": "终有一天:一切都会失去",
+          "beforeItems": [
+            "静悄悄死去的硬盘",
+            "去世后被关闭的账户",
+            "从来没人讲过的故事"
+          ],
+          "afterTitle": "您真正地传承下去",
+          "afterDescription": "与您的孩子、孙辈、兄弟姐妹共享私密圈子。安排稍后投递的回忆。您的记忆将延续。",
+          "afterPoints": [
+            "私密家庭圈子(并非社交网络)",
+            "在指定日期投递的回忆",
+            "传承模式:为未来准备值得信赖的守护者"
+          ]
+        }
+      }
+    },
+    "audience": {
+      "badge": "适合谁?",
+      "title": "为每一个家庭时刻提供",
+      "titleHighlight": "不同的答案",
+      "subtitle": "无论您是在构建遗产、记录童年还是汇集婚礼,Family Garden 都会与您的故事相适应。",
+      "today": "今天",
+      "withFG": "使用 Family Garden",
+      "personas": {
+        "families": {
+          "badge": "多代家庭",
+          "title": "围绕共同的故事重新连接几代人",
+          "problem": "祖父母的回忆只在他们脑海中,父母的照片只在他们的手机里,孩子们对前辈几乎一无所知。",
+          "promise": "Family Garden 将祖父母、父母和孩子聚于同一个私密空间:每个人都添加自己的回忆,整个家庭都会继承。",
+          "cta": "团聚我的家人"
+        },
+        "parents": {
+          "badge": "年轻父母",
+          "title": "在每个\"第一次\"消失之前留下记录",
+          "problem": "第一步、第一句话、夜晚的笑声:一切都如此飞快。视频堆在相册里,趣事被遗忘,十年后只剩零碎片段。",
+          "promise": "几秒钟内创建孩子的日记:照片、文字、视频,都有日期和叙述。一本他将来某天可以阅读的活书。",
+          "cta": "开始宝宝日记"
+        },
+        "legacy": {
+          "badge": "传承",
+          "title": "传承那些别处无处可写的内容",
+          "problem": "家族故事、食谱、价值观、父母的声音…所有这些都会随承载者一起消失,因为没有及时被记录。",
+          "promise": "安排所选回忆的发布,指定可信赖的亲人,留下活生生的遗产——而不仅仅是物质遗产。",
+          "cta": "准备我的传承"
+        },
+        "mariage": {
+          "badge": "婚礼",
+          "title": "重温最美好的一天,超越摄影师的相册",
+          "problem": "您收到客人发来的数百张照片和视频,散落在 WhatsApp、Drive、AirDrop 中。六个月后,没人知道它们在哪。",
+          "promise": "将婚礼的所有媒体集中到共享的私密相册中:宾客、伴郎伴娘和家人在同一个地方留下他们井然有序、安全保存的回忆。",
+          "cta": "创建婚礼相册"
+        },
+        "voyage": {
+          "badge": "家庭旅行",
+          "title": "让冒险鲜活,而不仅仅是照片",
+          "problem": "旅行回来后,在 Instagram 分享 10 张照片,然后一切消失在相册里。趣事、相遇、欢笑:被遗忘。",
+          "promise": "用照片、视频、音频和文字讲述每一段旅程。您的孩子有一天可以重新打开您的旅行航海日志,仿佛身临其境。",
+          "cta": "创建旅行日志"
+        },
+        "events": {
+          "badge": "家庭聚会与活动",
+          "title": "在派对结束后让重聚继续鲜活",
+          "problem": "生日、洗礼、夏季聚会:每个人都拍照,却没人真正分享。那一刻的魔力在几天内蒸发。",
+          "promise": "为活动开辟专属空间,邀请家人在此留下回忆,并将一切保存在终身可访问的私密圈子中。",
+          "cta": "创建活动空间"
+        }
+      }
+    },
+    "videoPreview": {
+      "badge": "演示",
+      "title": "在动态中发现",
+      "titleHighlight": "Family Garden",
+      "subtitle": "用一分钟看看您将如何创建、整理和分享家庭回忆。",
+      "playLabel": "播放介绍视频",
+      "imageAlt": "Family Garden 演示预览",
+      "duration": "导览 — 1 分钟",
+      "quality": "HD · 无需声音",
+      "closeLabel": "关闭视频",
+      "iframeTitle": "Family Garden 演示"
+    },
+    "socialProof": {
+      "tagline": "受到希望以下目标的家庭一致好评:",
+      "taglineHighlight": "守护本质",
+      "items": {
+        "t1": {
+          "quote": "我录下了母亲讲述我童年的声音。这是给我孩子们无价的礼物。",
+          "author": "Camille",
+          "role": "两个孩子的妈妈"
+        },
+        "t2": {
+          "quote": "三代人共同贡献于同一本家庭日记。我父母喜欢周日回来翻看。",
+          "author": "Julien",
+          "role": "爸爸,里昂"
+        },
+        "t3": {
+          "quote": "一切都是私密的,没有广告,没有算法。终于有了一个我的回忆真正属于我自己的地方。",
+          "author": "Sophie",
+          "role": "摄影师"
+        }
+      }
+    },
+    "testimonialsV3": {
+      "badge": "用户评价",
+      "title": "重新找回",
+      "titleHighlight": "记忆的家庭",
+      "subtitle": "超过一千个家庭使用 Family Garden 来守护和传承他们的回忆。",
+      "starsLabel": "5 星满分 5 星",
+      "hero": {
+        "name": "Marie L.",
+        "role": "祖母,68 岁 — 里昂",
+        "quote": "三十年来,我保存了一整箱箱的照片、信件、磁带。有了 Family Garden,我终于能把一切汇聚一处,用我自己的话讲述每个故事,并与子女和孙辈分享。今天,我的家人了解了她的历史——而那是我传承给他们的。",
+        "highlight": "我的家人了解了她的历史"
+      },
+      "items": {
+        "thomas": {
+          "name": "Thomas D.",
+          "role": "两个孩子的父亲,45 岁",
+          "quote": "我的孩子们喜欢周日晚上一起看回忆。它已成为我们的家庭仪式。一切都很安全。\n这对我们很重要。"
+        },
+        "sophie": {
+          "name": "Sophie M.",
+          "role": "孙女,35 岁",
+          "quote": "我为奶奶创建了一个账户。她 82 岁了,但因为界面非常简单,她可以独立操作。她每周都给我们发回忆。这是真正的礼物。"
+        },
+        "jean": {
+          "name": "Jean P.",
+          "role": "退休,92 岁 — 波尔多",
+          "quote": "我能够录下自己讲述战时童年的声音。我的曾孙们五十年后还能听到我。这是我留给后人最美好的事物。"
+        }
+      }
+    },
+    "trust": {
+      "tagline": "您处于可靠的庇护之下",
+      "items": {
+        "encryption": {
+          "title": "256 位加密",
+          "description": "银行级保护"
+        },
+        "eu": {
+          "title": "欧盟服务器",
+          "description": "GDPR 托管"
+        },
+        "noAds": {
+          "title": "无广告",
+          "description": "无追踪"
+        },
+        "noAi": {
+          "title": "无 AI 训练",
+          "description": "您的数据归您所有"
+        },
+        "cancel": {
+          "title": "一键取消",
+          "description": "无承诺"
+        }
+      }
+    }
   }
 }
