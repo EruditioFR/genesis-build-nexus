@@ -1,10 +1,27 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock, Shield, Heart, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useCallback, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCallback, useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
+
+import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
+import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
+import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
+import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
+const vieVideo = { url: '/videos/vie-video.mp4' };
+
+const SLIDES = [
+  { emoji: '🌱', label: 'Enfance', question: 'À quoi ressemblait la maison de votre enfance ?', video: enfanceVideo.url },
+  { emoji: '🎓', label: 'École', question: 'Un professeur vous a marqué. Pourquoi ?', video: ecoleVideo.url },
+  { emoji: '🎵', label: 'Musiques', question: 'Quelle chanson vous ramène instantanément en arrière ?', video: musiquesVideo.url },
+  { emoji: '👨‍👩‍👧‍👦', label: 'Famille', question: 'Quelle tradition aimeriez-vous transmettre ?', video: familleVideo.url },
+  { emoji: '❤️', label: 'Vie personnelle', question: 'Quel moment a changé le cours de votre vie ?', video: vieVideo.url },
+];
+
+const AUTOPLAY_INTERVAL = 5000;
 
 /**
  * HeroSectionV3 — Hero de conversion
@@ -46,19 +63,49 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
-  const videoRef = useRef<HTMLIFrameElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
+  // Slider de vidéos d'inspiration
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
 
-  const toggleSound = useCallback(() => {
-    const iframe = videoRef.current;
-    if (!iframe?.contentWindow) return;
-    const command = isMuted ? 'unMute' : 'mute';
-    iframe.contentWindow.postMessage(
-      JSON.stringify({ event: 'command', func: command, args: [] }),
-      '*'
-    );
-    setIsMuted((m) => !m);
-  }, [isMuted]);
+  const next = useCallback(() => {
+    setDirection(1);
+    setCurrent((p) => (p + 1) % SLIDES.length);
+  }, []);
+  const prev = useCallback(() => {
+    setDirection(-1);
+    setCurrent((p) => (p - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+  const goTo = useCallback((i: number) => {
+    setDirection(i > current ? 1 : -1);
+    setCurrent(i);
+  }, [current]);
+
+  // Swipe
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) next(); else prev();
+    }
+    touchStart.current = null;
+  }, [next, prev]);
+
+  // Autoplay
+  useEffect(() => {
+    const timer = setInterval(next, AUTOPLAY_INTERVAL);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  const slide = SLIDES[current];
+  const textVariants = {
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
@@ -169,33 +216,88 @@ const HeroSectionV3 = () => {
               <span className="w-3 h-3 rounded-full bg-[#28ca42]" />
               <span className="ml-3 text-[10px] text-white/40 font-mono">familygarden.fr/dashboard</span>
             </div>
-            {/* Vidéo tuto — autoplay muet */}
-            <div className="relative aspect-[16/10] bg-black">
-              <iframe
-                ref={videoRef}
-                src="https://www.youtube.com/embed/afoWU3vDcOg?autoplay=1&mute=1&loop=1&playlist=afoWU3vDcOg&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-                title="Tutoriel Family Garden"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-              <button
-                type="button"
-                onClick={toggleSound}
-                className="absolute bottom-3 right-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/70 hover:bg-black/85 backdrop-blur-sm text-white text-xs font-medium border border-white/20 transition-colors shadow-lg"
-                aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                {isMuted ? 'Activer le son' : 'Couper le son'}
-              </button>
-            </div>
-          </div>
+            {/* Slider de vidéos d'inspiration */}
+            <div
+              className="relative aspect-[16/10] bg-black overflow-hidden"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <AnimatePresence mode="wait">
+                <motion.video
+                  key={current}
+                  src={slide.video}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload={current === 0 ? 'auto' : 'metadata'}
+                />
+              </AnimatePresence>
 
-          {/* Mockup mobile (placeholder) — superposé en bas à droite */}
-          <div className="hidden md:block absolute -bottom-10 -right-4 w-[180px] rounded-[28px] overflow-hidden shadow-2xl border-[6px] border-[hsl(215_25%_12%)] bg-[hsl(215_25%_12%)]">
-            {/* PLACEHOLDER — remplacer par <img src="/screenshots/souvenir-mobile-fr.png" /> */}
-            <div className="aspect-[9/19] flex items-center justify-center bg-gradient-to-br from-[hsl(35_20%_92%)] to-[hsl(35_15%_82%)] text-[hsl(215_50%_18%)]/40 text-[10px] font-medium text-center px-2">
-              [ Capture mobile<br />souvenir ]
+              {/* Overlay dégradé */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
+
+              {/* Question + label */}
+              <div className="absolute inset-0 flex items-end p-5 sm:p-8 pointer-events-none">
+                <AnimatePresence custom={direction} mode="wait">
+                  <motion.div
+                    key={current}
+                    custom={direction}
+                    variants={textVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  >
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-2">
+                      <span>{slide.emoji}</span>
+                      {slide.label}
+                    </span>
+                    <p
+                      className="text-lg sm:text-2xl md:text-3xl font-display font-semibold text-white leading-tight max-w-2xl"
+                      style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
+                    >
+                      « {slide.question} »
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Flèches nav */}
+              <button
+                onClick={prev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
+                aria-label="Précédent"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
+                aria-label="Suivant"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Dots */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                {SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    className={cn(
+                      'h-1.5 rounded-full transition-all duration-300',
+                      i === current ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/70'
+                    )}
+                    aria-label={`Slide ${i + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
