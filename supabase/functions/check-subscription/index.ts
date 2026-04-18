@@ -200,7 +200,24 @@ serve(async (req) => {
       subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
     }
 
-    logStep("Active subscription found", { tier, subscriptionEnd, productId });
+    // Subscription start date (used to detect launch promo window: 3 first months)
+    let subscriptionStart: string | null = null;
+    if (subscription.start_date && typeof subscription.start_date === 'number') {
+      subscriptionStart = new Date(subscription.start_date * 1000).toISOString();
+    } else if (subscription.created && typeof subscription.created === 'number') {
+      subscriptionStart = new Date(subscription.created * 1000).toISOString();
+    }
+
+    // Detect if a discount/coupon is currently active on the subscription
+    const activeDiscount = (subscription as any).discount;
+    const discountEndUnix: number | null = activeDiscount?.end ?? null;
+    const hasActiveLaunchPromo = Boolean(
+      activeDiscount?.coupon &&
+      (discountEndUnix === null || discountEndUnix * 1000 > Date.now())
+    );
+    const promoEnd = discountEndUnix ? new Date(discountEndUnix * 1000).toISOString() : null;
+
+    logStep("Active subscription found", { tier, subscriptionEnd, productId, hasActiveLaunchPromo });
 
     // Update the user's profile with the subscription level
     const subscriptionLevel = tier === "heritage" ? "legacy" : tier;
@@ -216,6 +233,9 @@ serve(async (req) => {
       subscribed: true,
       tier,
       subscription_end: subscriptionEnd,
+      subscription_start: subscriptionStart,
+      promo_active: hasActiveLaunchPromo,
+      promo_end: promoEnd,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
