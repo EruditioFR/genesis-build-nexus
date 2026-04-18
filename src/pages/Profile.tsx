@@ -59,7 +59,7 @@ type ProfileFormValues = {
 const Profile = () => {
   const { t, i18n } = useTranslation('dashboard');
   const { user, loading, signOut } = useAuth();
-  const { createCheckout, openCustomerPortal, subscriptionEnd, tier, invoices, invoicesLoading, fetchInvoices, checkSubscription } = useSubscription();
+  const { createCheckout, openCustomerPortal, subscriptionEnd, subscriptionStart, promoActive, promoEnd, tier, invoices, invoicesLoading, fetchInvoices, checkSubscription } = useSubscription();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
