@@ -67,9 +67,29 @@ export const useSubscription = () => {
   const [state, setState] = useState<SubscriptionState>(() => {
     const cached = getCache();
     if (cached) {
-      return { subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null, adminOverride: false };
+      return {
+        subscribed: cached.subscribed,
+        tier: cached.tier,
+        subscriptionEnd: cached.subscriptionEnd,
+        subscriptionStart: cached.subscriptionStart ?? null,
+        promoActive: cached.promoActive ?? false,
+        promoEnd: cached.promoEnd ?? null,
+        loading: false,
+        error: null,
+        adminOverride: false,
+      };
     }
-    return { subscribed: false, tier: 'free', subscriptionEnd: null, loading: true, error: null, adminOverride: false };
+    return {
+      subscribed: false,
+      tier: 'free',
+      subscriptionEnd: null,
+      subscriptionStart: null,
+      promoActive: false,
+      promoEnd: null,
+      loading: true,
+      error: null,
+      adminOverride: false,
+    };
   });
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
