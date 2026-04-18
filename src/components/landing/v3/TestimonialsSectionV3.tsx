@@ -1,59 +1,41 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Quote, Star } from "lucide-react";
 import marieImg from "@/assets/testimonials/testimonial-marie.jpg";
 import thomasImg from "@/assets/testimonials/testimonial-thomas.jpg";
 import sophieImg from "@/assets/testimonials/testimonial-sophie.jpg";
 import jeanImg from "@/assets/testimonials/testimonial-jean.jpg";
 
-const heroTestimonial = {
-  name: "Marie L.",
-  role: "Grand-mère, 68 ans — Lyon",
-  avatar: marieImg,
-  quote:
-    "Pendant trente ans, j'ai gardé des cartons entiers de photos, de lettres, de cassettes audio. Avec Family Garden, j'ai enfin pu tout rassembler en un seul endroit, raconter chaque histoire avec mes mots, et partager avec mes enfants et petits-enfants. Aujourd'hui, ma famille connaît son histoire — et c'est moi qui la leur ai transmise.",
-  highlight: "ma famille connaît son histoire",
-};
-
-const secondaryTestimonials = [
-  {
-    name: "Thomas D.",
-    role: "Papa de deux enfants, 45 ans",
-    avatar: thomasImg,
-    quote:
-      "Mes enfants adorent regarder les souvenirs ensemble le dimanche soir. C'est devenu notre rituel familial. Et tout est en sécurité.\nCa compte pour nous.",
-  },
-  {
-    name: "Sophie M.",
-    role: "Petite-fille, 35 ans",
-    avatar: sophieImg,
-    quote:
-      "J'ai créé un compte pour ma grand-mère. Elle a 82 ans et se débrouille toute seule grâce à l'interface très simple. Elle nous envoie des souvenirs chaque semaine. Un vrai cadeau.",
-  },
-  {
-    name: "Jean P.",
-    role: "Retraité, 92 ans — Bordeaux",
-    avatar: jeanImg,
-    quote:
-      "J'ai pu enregistrer ma voix racontant mon enfance pendant la guerre. Mes arrière-petits-enfants pourront m'écouter dans cinquante ans. C'est la plus belle chose que je laisserai derrière moi.",
-  },
+const SECONDARY = [
+  { key: 'thomas', avatar: thomasImg },
+  { key: 'sophie', avatar: sophieImg },
+  { key: 'jean', avatar: jeanImg },
 ];
 
-const Stars = ({ size = 16 }: { size?: number }) => (
-  <div className="flex items-center gap-0.5" aria-label="5 étoiles sur 5">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <Star key={i} size={size} className="fill-[hsl(var(--gold))] text-[hsl(var(--gold))]" />
-    ))}
-  </div>
-);
-
 const TestimonialsSectionV3 = () => {
+  const { t } = useTranslation('landing');
+
+  const Stars = ({ size = 16 }: { size?: number }) => (
+    <div className="flex items-center gap-0.5" aria-label={t('v3.testimonialsV3.starsLabel')}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} size={size} className="fill-[hsl(var(--gold))] text-[hsl(var(--gold))]" />
+      ))}
+    </div>
+  );
+
+  const heroQuote = t('v3.testimonialsV3.hero.quote');
+  const heroHighlight = t('v3.testimonialsV3.hero.highlight');
+  const heroName = t('v3.testimonialsV3.hero.name');
+  const heroRole = t('v3.testimonialsV3.hero.role');
+  const [beforeHL, afterHL] = heroQuote.includes(heroHighlight)
+    ? [heroQuote.split(heroHighlight)[0], heroQuote.split(heroHighlight)[1]]
+    : [heroQuote, ''];
+
   return (
     <section id="testimonials" className="py-20 md:py-28 bg-background relative overflow-hidden">
-      {/* Soft background ornaments */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[hsl(var(--gold))]/[0.04] rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -62,18 +44,17 @@ const TestimonialsSectionV3 = () => {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="inline-block text-xs uppercase tracking-[0.2em] text-[hsl(var(--gold))] font-medium mb-4">
-            Témoignages
+            {t('v3.testimonialsV3.badge')}
           </span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
-            Des familles qui ont retrouvé{" "}
-            <span className="text-[hsl(var(--gold))]">leur mémoire</span>
+            {t('v3.testimonialsV3.title')}{" "}
+            <span className="text-[hsl(var(--gold))]">{t('v3.testimonialsV3.titleHighlight')}</span>
           </h2>
           <p className="mt-4 text-base md:text-lg text-muted-foreground">
-            Plus de mille familles utilisent Family Garden pour préserver et transmettre leurs souvenirs.
+            {t('v3.testimonialsV3.subtitle')}
           </p>
         </motion.div>
 
-        {/* Hero testimonial */}
         <motion.article
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,8 +66,8 @@ const TestimonialsSectionV3 = () => {
             <div className="relative mx-auto md:mx-0">
               <div className="absolute inset-0 bg-[hsl(var(--gold))]/20 rounded-full blur-2xl" />
               <img
-                src={heroTestimonial.avatar}
-                alt={`Portrait de ${heroTestimonial.name}`}
+                src={marieImg}
+                alt={heroName}
                 width={1024}
                 height={1024}
                 loading="lazy"
@@ -100,59 +81,63 @@ const TestimonialsSectionV3 = () => {
             <div className="text-center md:text-left">
               <Stars size={20} />
               <blockquote className="mt-4 font-display text-xl md:text-2xl lg:text-[26px] leading-relaxed text-foreground italic">
-                « {heroTestimonial.quote.split(heroTestimonial.highlight)[0]}
+                « {beforeHL}
                 <span className="not-italic font-semibold text-[hsl(var(--gold))]">
-                  {heroTestimonial.highlight}
+                  {heroHighlight}
                 </span>
-                {heroTestimonial.quote.split(heroTestimonial.highlight)[1]} »
+                {afterHL} »
               </blockquote>
               <footer className="mt-6 flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-                <cite className="not-italic font-semibold text-foreground">{heroTestimonial.name}</cite>
+                <cite className="not-italic font-semibold text-foreground">{heroName}</cite>
                 <span className="hidden md:inline text-muted-foreground">·</span>
-                <span className="text-sm text-muted-foreground">{heroTestimonial.role}</span>
+                <span className="text-sm text-muted-foreground">{heroRole}</span>
               </footer>
             </div>
           </div>
         </motion.article>
 
-        {/* Secondary testimonials */}
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {secondaryTestimonials.map((t, idx) => (
-            <motion.article
-              key={t.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 + idx * 0.1 }}
-              className="group bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <Stars size={14} />
-                <Quote className="w-5 h-5 text-[hsl(var(--gold))]/40 group-hover:text-[hsl(var(--gold))] transition-colors" />
-              </div>
-
-              <blockquote className="text-foreground/90 leading-relaxed text-[15px] flex-1 italic whitespace-pre-line">
-                « {t.quote} »
-              </blockquote>
-
-              <footer className="mt-6 pt-5 border-t border-border flex items-center gap-3">
-                <img
-                  src={t.avatar}
-                  alt={`Portrait de ${t.name}`}
-                  width={1024}
-                  height={1024}
-                  loading="lazy"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[hsl(var(--gold))]/20"
-                />
-                <div className="min-w-0">
-                  <cite className="not-italic font-semibold text-foreground text-sm block truncate">
-                    {t.name}
-                  </cite>
-                  <span className="text-xs text-muted-foreground block truncate">{t.role}</span>
+          {SECONDARY.map((s, idx) => {
+            const name = t(`v3.testimonialsV3.items.${s.key}.name`);
+            const role = t(`v3.testimonialsV3.items.${s.key}.role`);
+            const quote = t(`v3.testimonialsV3.items.${s.key}.quote`);
+            return (
+              <motion.article
+                key={s.key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 + idx * 0.1 }}
+                className="group bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <Stars size={14} />
+                  <Quote className="w-5 h-5 text-[hsl(var(--gold))]/40 group-hover:text-[hsl(var(--gold))] transition-colors" />
                 </div>
-              </footer>
-            </motion.article>
-          ))}
+
+                <blockquote className="text-foreground/90 leading-relaxed text-[15px] flex-1 italic whitespace-pre-line">
+                  « {quote} »
+                </blockquote>
+
+                <footer className="mt-6 pt-5 border-t border-border flex items-center gap-3">
+                  <img
+                    src={s.avatar}
+                    alt={name}
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-[hsl(var(--gold))]/20"
+                  />
+                  <div className="min-w-0">
+                    <cite className="not-italic font-semibold text-foreground text-sm block truncate">
+                      {name}
+                    </cite>
+                    <span className="text-xs text-muted-foreground block truncate">{role}</span>
+                  </div>
+                </footer>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>
