@@ -216,33 +216,88 @@ const HeroSectionV3 = () => {
               <span className="w-3 h-3 rounded-full bg-[#28ca42]" />
               <span className="ml-3 text-[10px] text-white/40 font-mono">familygarden.fr/dashboard</span>
             </div>
-            {/* Vidéo tuto — autoplay muet */}
-            <div className="relative aspect-[16/10] bg-black">
-              <iframe
-                ref={videoRef}
-                src="https://www.youtube.com/embed/afoWU3vDcOg?autoplay=1&mute=1&loop=1&playlist=afoWU3vDcOg&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-                title="Tutoriel Family Garden"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-              <button
-                type="button"
-                onClick={toggleSound}
-                className="absolute bottom-3 right-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/70 hover:bg-black/85 backdrop-blur-sm text-white text-xs font-medium border border-white/20 transition-colors shadow-lg"
-                aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                {isMuted ? 'Activer le son' : 'Couper le son'}
-              </button>
-            </div>
-          </div>
+            {/* Slider de vidéos d'inspiration */}
+            <div
+              className="relative aspect-[16/10] bg-black overflow-hidden"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <AnimatePresence mode="wait">
+                <motion.video
+                  key={current}
+                  src={slide.video}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload={current === 0 ? 'auto' : 'metadata'}
+                />
+              </AnimatePresence>
 
-          {/* Mockup mobile (placeholder) — superposé en bas à droite */}
-          <div className="hidden md:block absolute -bottom-10 -right-4 w-[180px] rounded-[28px] overflow-hidden shadow-2xl border-[6px] border-[hsl(215_25%_12%)] bg-[hsl(215_25%_12%)]">
-            {/* PLACEHOLDER — remplacer par <img src="/screenshots/souvenir-mobile-fr.png" /> */}
-            <div className="aspect-[9/19] flex items-center justify-center bg-gradient-to-br from-[hsl(35_20%_92%)] to-[hsl(35_15%_82%)] text-[hsl(215_50%_18%)]/40 text-[10px] font-medium text-center px-2">
-              [ Capture mobile<br />souvenir ]
+              {/* Overlay dégradé */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
+
+              {/* Question + label */}
+              <div className="absolute inset-0 flex items-end p-5 sm:p-8 pointer-events-none">
+                <AnimatePresence custom={direction} mode="wait">
+                  <motion.div
+                    key={current}
+                    custom={direction}
+                    variants={textVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  >
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-2">
+                      <span>{slide.emoji}</span>
+                      {slide.label}
+                    </span>
+                    <p
+                      className="text-lg sm:text-2xl md:text-3xl font-display font-semibold text-white leading-tight max-w-2xl"
+                      style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
+                    >
+                      « {slide.question} »
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Flèches nav */}
+              <button
+                onClick={prev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
+                aria-label="Précédent"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors backdrop-blur-sm"
+                aria-label="Suivant"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Dots */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                {SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    className={cn(
+                      'h-1.5 rounded-full transition-all duration-300',
+                      i === current ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/70'
+                    )}
+                    aria-label={`Slide ${i + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
