@@ -233,6 +233,9 @@ serve(async (req) => {
       subscribed: true,
       tier,
       subscription_end: subscriptionEnd,
+      subscription_start: subscriptionStart,
+      promo_active: hasActiveLaunchPromo,
+      promo_end: promoEnd,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
