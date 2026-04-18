@@ -259,10 +259,10 @@ const HeroSectionV3 = () => {
                       {slide.label}
                     </span>
                     <p
-                      className="font-display italic font-medium text-white leading-[1.05] tracking-tight max-w-4xl text-3xl sm:text-5xl md:text-6xl lg:text-7xl relative"
+                      className="font-display italic font-medium text-white leading-[1.1] tracking-tight max-w-3xl text-xl sm:text-2xl md:text-3xl lg:text-4xl relative"
                       style={{ textShadow: '0 4px 32px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.7)' }}
                     >
-                      <span className="absolute -left-4 sm:-left-8 -top-4 sm:-top-8 text-[hsl(var(--gold))]/70 text-6xl sm:text-8xl md:text-9xl font-display not-italic leading-none select-none">"</span>
+                      <span className="absolute -left-3 sm:-left-5 -top-3 sm:-top-5 text-[hsl(var(--gold))]/70 text-4xl sm:text-5xl md:text-6xl font-display not-italic leading-none select-none">"</span>
                       {slide.question}
                     </p>
                   </motion.div>
