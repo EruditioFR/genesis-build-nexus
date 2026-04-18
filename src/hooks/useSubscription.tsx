@@ -178,7 +178,18 @@ export const useSubscription = () => {
         body: { tier, billing, promoCode },
       });
       if (error) throw error;
+
+      const isImmediatePlanUpdate = Boolean(data?.updated) || data?.url?.includes('subscription=already-active');
+
+      if (isImmediatePlanUpdate) {
+        invalidateSubscriptionCache();
+        await checkSubscription(true);
+        if (data?.url) window.location.assign(data.url);
+        return data;
+      }
+
       if (data?.url) window.open(data.url, '_blank');
+      return data;
     } catch (error: any) {
       console.error('Error creating checkout:', error);
       throw error;

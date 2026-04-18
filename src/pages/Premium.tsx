@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Check, X, Crown, Sparkles, Loader2, Shield, Zap, Users, HardDrive, Building2, TreePine, Mic, Tag } from 'lucide-react';
@@ -14,7 +14,7 @@ import { createBreadcrumbSchema } from '@/lib/seoSchemas';
 
 const Premium = () => {
   const { user } = useAuth();
-  const { createCheckout, tier: currentTier } = useSubscription();
+  const { createCheckout, tier: currentTier, checkSubscription } = useSubscription();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState<'premium' | 'heritage' | null>(null);
@@ -26,12 +26,26 @@ const Premium = () => {
   const requestedTier = searchParams.get('tier');
   const highlightHeritage = requestedTier === 'heritage';
 
+  useEffect(() => {
+    if (user) {
+      void checkSubscription(true);
+    }
+  }, [user, checkSubscription]);
+
   const handleSubscribe = async (selectedTier: 'premium' | 'heritage') => {
     // Guest (not logged in) → simplified checkout flow
     if (!user) {
       const billing = isYearly ? 'yearly' : 'monthly';
       navigate(`/checkout?plan=${selectedTier}&billing=${billing}`);
       return;
+    }
+
+    const isUpgradeToHeritage = currentTier === 'premium' && selectedTier === 'heritage';
+    if (isUpgradeToHeritage) {
+      const confirmed = window.confirm(
+        'Le passage à Héritage active le nouveau forfait immédiatement. Un ajustement au prorata peut être facturé pour la période en cours. Voulez-vous continuer ?'
+      );
+      if (!confirmed) return;
     }
 
     setIsLoading(selectedTier);
