@@ -121,7 +121,14 @@ export const useSubscription = () => {
       if (error) throw error;
 
       if (data.subscribed && data.tier) {
-        const result = { subscribed: data.subscribed, tier: data.tier || 'free', subscriptionEnd: data.subscription_end };
+        const result = {
+          subscribed: data.subscribed,
+          tier: data.tier || 'free',
+          subscriptionEnd: data.subscription_end,
+          subscriptionStart: data.subscription_start ?? null,
+          promoActive: Boolean(data.promo_active),
+          promoEnd: data.promo_end ?? null,
+        };
         setCache(result);
         setState(prev => ({ ...prev, ...result, loading: false, error: null }));
         initialCheckDone.current = true;
@@ -138,14 +145,14 @@ export const useSubscription = () => {
 
       if (profileData?.subscription_level && profileData.subscription_level !== 'free') {
         const tier = profileData.subscription_level === 'legacy' ? 'heritage' : profileData.subscription_level as 'free' | 'premium' | 'heritage';
-        const result = { subscribed: true, tier, subscriptionEnd: null };
+        const result = { subscribed: true, tier, subscriptionEnd: null, subscriptionStart: null, promoActive: false, promoEnd: null };
         setCache(result);
         setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
         initialCheckDone.current = true;
         return;
       }
 
-      const result = { subscribed: false, tier: 'free' as const, subscriptionEnd: null };
+      const result = { subscribed: false, tier: 'free' as const, subscriptionEnd: null, subscriptionStart: null, promoActive: false, promoEnd: null };
       setCache(result);
       setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
       initialCheckDone.current = true;
