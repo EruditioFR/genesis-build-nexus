@@ -570,9 +570,40 @@ const Profile = () => {
                 <>
                   {profile.subscription_level !== 'free' && (
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-foreground">{t('profile.price')} :</span>
-                        <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9 €' : '15 €' })}</span>
+                        {(() => {
+                          const regularPrice = tier === 'premium' ? '9 €' : '15 €';
+                          const promoPrice = tier === 'premium' ? '5 €' : '9 €';
+                          // Show promo if Stripe reports an active discount, OR fallback: subscription started < 3 months ago
+                          const startedRecently = subscriptionStart
+                            ? (Date.now() - new Date(subscriptionStart).getTime()) < 1000 * 60 * 60 * 24 * 92
+                            : false;
+                          const showPromo = promoActive || startedRecently;
+                          return showPromo ? (
+                            <>
+                              <span className="text-foreground font-semibold">
+                                {t('profile.priceMonth', { price: promoPrice })}
+                              </span>
+                              <span className="text-muted-foreground line-through">
+                                {t('profile.priceMonth', { price: regularPrice })}
+                              </span>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary/20 text-secondary-foreground text-xs font-medium">
+                                {t('profile.launchOffer', 'Offre de lancement (3 mois)')}
+                              </span>
+                              {promoEnd && (
+                                <span className="text-xs text-muted-foreground">
+                                  {t('profile.regularPriceFrom', 'puis {{price}} dès le {{date}}', {
+                                    price: t('profile.priceMonth', { price: regularPrice }),
+                                    date: format(new Date(promoEnd), 'd MMMM yyyy', { locale: getLocale() }),
+                                  })}
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span>{t('profile.priceMonth', { price: regularPrice })}</span>
+                          );
+                        })()}
                       </div>
                       {subscriptionEnd && (
                         <div className="flex items-center gap-2">
