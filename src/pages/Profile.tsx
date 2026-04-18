@@ -572,7 +572,7 @@ const Profile = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground border-t border-border pt-4">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-foreground">{t('profile.price')} :</span>
-                        <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9,99 €' : '19,99 €' })}</span>
+                        <span>{t('profile.priceMonth', { price: tier === 'premium' ? '9 €' : '15 €' })}</span>
                       </div>
                       {subscriptionEnd && (
                         <div className="flex items-center gap-2">
