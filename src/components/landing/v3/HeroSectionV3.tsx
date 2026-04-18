@@ -63,19 +63,49 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
-  const videoRef = useRef<HTMLIFrameElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
+  // Slider de vidéos d'inspiration
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
 
-  const toggleSound = useCallback(() => {
-    const iframe = videoRef.current;
-    if (!iframe?.contentWindow) return;
-    const command = isMuted ? 'unMute' : 'mute';
-    iframe.contentWindow.postMessage(
-      JSON.stringify({ event: 'command', func: command, args: [] }),
-      '*'
-    );
-    setIsMuted((m) => !m);
-  }, [isMuted]);
+  const next = useCallback(() => {
+    setDirection(1);
+    setCurrent((p) => (p + 1) % SLIDES.length);
+  }, []);
+  const prev = useCallback(() => {
+    setDirection(-1);
+    setCurrent((p) => (p - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+  const goTo = useCallback((i: number) => {
+    setDirection(i > current ? 1 : -1);
+    setCurrent(i);
+  }, [current]);
+
+  // Swipe
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) next(); else prev();
+    }
+    touchStart.current = null;
+  }, [next, prev]);
+
+  // Autoplay
+  useEffect(() => {
+    const timer = setInterval(next, AUTOPLAY_INTERVAL);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  const slide = SLIDES[current];
+  const textVariants = {
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
