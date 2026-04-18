@@ -254,13 +254,13 @@ const HeroSectionV3 = () => {
                     exit="exit"
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                   >
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-2">
-                      <span>{slide.emoji}</span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/25 backdrop-blur-sm text-white text-sm sm:text-base font-semibold mb-3">
+                      <span className="text-base sm:text-lg">{slide.emoji}</span>
                       {slide.label}
                     </span>
                     <p
-                      className="text-lg sm:text-2xl md:text-3xl font-display font-semibold text-white leading-tight max-w-2xl"
-                      style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
+                      className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-[1.1] max-w-4xl"
+                      style={{ textShadow: '0 4px 24px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6)' }}
                     >
                       « {slide.question} »
                     </p>
