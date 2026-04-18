@@ -19,6 +19,9 @@ interface SubscriptionState {
   subscribed: boolean;
   tier: 'free' | 'premium' | 'heritage';
   subscriptionEnd: string | null;
+  subscriptionStart: string | null;
+  promoActive: boolean;
+  promoEnd: string | null;
   loading: boolean;
   error: string | null;
   adminOverride: boolean;
@@ -28,6 +31,9 @@ interface CachedSubscription {
   subscribed: boolean;
   tier: 'free' | 'premium' | 'heritage';
   subscriptionEnd: string | null;
+  subscriptionStart: string | null;
+  promoActive: boolean;
+  promoEnd: string | null;
   timestamp: number;
 }
 
