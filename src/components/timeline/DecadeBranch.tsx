@@ -154,18 +154,32 @@ const DecadeBranch = ({
             {t('timeline.empty.title', { defaultValue: 'Aucun souvenir' })}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div
+            ref={cardsContainerRef}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          >
             {expandedCapsules.map((capsule, idx) => {
               const media = capsuleMedias[capsule.id];
               const date = getCapsuleDate(capsule);
+              const isHighlighted = highlightedId === capsule.id;
               return (
                 <motion.button
                   key={capsule.id}
+                  data-capsule-id={capsule.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
                   onClick={() => onCapsuleClick(capsule.id)}
-                  className="group text-left rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-foreground/20 transition-all"
+                  className={`group text-left rounded-2xl border bg-card overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-foreground/20 transition-all ${
+                    isHighlighted
+                      ? 'ring-4 ring-offset-2 ring-offset-background shadow-xl border-transparent'
+                      : 'border-border'
+                  }`}
+                  style={
+                    isHighlighted
+                      ? { ['--tw-ring-color' as string]: 'hsl(var(--gold))' }
+                      : undefined
+                  }
                 >
                   <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                     {media && media.file_type.startsWith('image/') ? (
