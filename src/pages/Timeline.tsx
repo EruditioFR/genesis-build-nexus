@@ -433,6 +433,241 @@ const Timeline = () => {
 
   if (!user) return null;
 
+  // Reusable header + filters block (used both on the main timeline and the years view)
+  const headerAndFilters = (
+    <>
+      <TimelineHeader
+        filteredCount={filteredCapsules.length}
+        totalCount={capsules.length}
+        activeFiltersCount={activeFiltersCount}
+        storyLoading={storyLoading}
+        onLaunchStory={() => openStory(filteredCapsules)}
+        hasCapules={capsules.length > 0}
+      />
+
+      {capsules.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="mb-8 flex flex-wrap items-center justify-center gap-2"
+        >
+          {/* Type Filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
+                <Layers className="w-4 h-4" />
+                <span className="hidden xs:inline">{t('timeline.filterType')}</span>
+                {selectedTypes.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                    {selectedTypes.length}
+                  </Badge>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="w-48 bg-popover">
+              <DropdownMenuLabel>{t('timeline.filterTypeLabel')}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {(Object.keys(capsuleTypeIcons) as CapsuleType[]).map((type) => {
+                const Icon = capsuleTypeIcons[type];
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={type}
+                    checked={selectedTypes.includes(type)}
+                    onCheckedChange={() => toggleType(type)}
+                  >
+                    <Icon className="w-4 h-4 mr-2" />
+                    {t(`timeline.types.${type}`)}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Status Filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
+                <Filter className="w-4 h-4" />
+                <span className="hidden xs:inline">{t('timeline.filterStatus')}</span>
+                {selectedStatuses.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                    {selectedStatuses.length}
+                  </Badge>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="w-48 bg-popover">
+              <DropdownMenuLabel>{t('timeline.filterStatus')}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {(['draft', 'published', 'scheduled', 'archived'] as CapsuleStatus[]).map((status) => (
+                <DropdownMenuCheckboxItem
+                  key={status}
+                  checked={selectedStatuses.includes(status)}
+                  onCheckedChange={() => toggleStatus(status)}
+                >
+                  {t(`timeline.statuses.${status}`)}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Tags Filter */}
+          {allTags.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
+                  <span className="hidden xs:inline">{t('timeline.filterTags')}</span>
+                  <span className="xs:hidden">#</span>
+                  {selectedTags.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                      {selectedTags.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48 max-h-64 overflow-y-auto bg-popover">
+                <DropdownMenuLabel>{t('timeline.filterTags')}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {allTags.map((tag) => (
+                  <DropdownMenuCheckboxItem
+                    key={tag}
+                    checked={selectedTags.includes(tag)}
+                    onCheckedChange={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+          {/* Category Filter */}
+          {categories.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
+                  <Folder className="w-4 h-4" />
+                  <span className="hidden xs:inline">{t('timeline.filterCategories')}</span>
+                  {selectedCategoriesFilter.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                      {selectedCategoriesFilter.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-56 max-h-64 overflow-y-auto bg-popover">
+                <DropdownMenuLabel>{t('timeline.filterCategories')}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {categories.map((category) => {
+                  const categoryNameKey = `categoryNames.${category.slug}`;
+                  const localizedName = t(categoryNameKey);
+                  const displayName = localizedName !== categoryNameKey ? localizedName : category.name_fr;
+
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={category.id}
+                      checked={selectedCategoriesFilter.includes(category.id)}
+                      onCheckedChange={() => toggleCategory(category.id)}
+                    >
+                      <span className="mr-2">{category.icon}</span>
+                      {displayName}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+          {/* Date Range Filter */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
+                <CalendarRange className="w-4 h-4" />
+                <span className="hidden xs:inline">{t('timeline.filterDate')}</span>
+                {(dateFrom || dateTo) && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                    {(dateFrom ? 1 : 0) + (dateTo ? 1 : 0)}
+                  </Badge>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-4" align="center">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-foreground">{t('timeline.filterDateFrom')}</p>
+                  <CalendarComponent
+                    mode="single"
+                    selected={dateFrom}
+                    onSelect={setDateFrom}
+                    locale={getLocale()}
+                    disabled={(date) => dateTo ? isAfter(date, dateTo) : false}
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                  {dateFrom && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        {format(dateFrom, 'd MMMM yyyy', { locale: getLocale() })}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDateFrom(undefined)}
+                        className="h-6 px-2 text-xs"
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="border-t border-border pt-4 space-y-2">
+                  <p className="text-sm font-medium text-foreground">{t('timeline.filterDateTo')}</p>
+                  <CalendarComponent
+                    mode="single"
+                    selected={dateTo}
+                    onSelect={setDateTo}
+                    locale={getLocale()}
+                    disabled={(date) => dateFrom ? isBefore(date, dateFrom) : false}
+                    className="pointer-events-auto"
+                  />
+                  {dateTo && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        {format(dateTo, 'd MMMM yyyy', { locale: getLocale() })}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDateTo(undefined)}
+                        className="h-6 px-2 text-xs"
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Clear filters */}
+          {activeFiltersCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="gap-1 text-muted-foreground hover:text-foreground h-9"
+            >
+              <X className="w-4 h-4" />
+              <span className="hidden sm:inline">{t('timeline.clearFilters')}</span> ({activeFiltersCount})
+            </Button>
+          )}
+        </motion.div>
+      )}
+    </>
+  );
+
   return (
     <>
       <NoIndex />
@@ -456,6 +691,7 @@ const Timeline = () => {
         onClose={() => setSelectedDecade(null)}
         onYearClick={(year) => setSelectedYear(year)}
         onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+        headerSlot={headerAndFilters}
       />
 
       {/* Year Modal */}
@@ -483,238 +719,7 @@ const Timeline = () => {
         onSignOut={handleSignOut}
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {/* Header */}
-          <TimelineHeader
-            filteredCount={filteredCapsules.length}
-            totalCount={capsules.length}
-            activeFiltersCount={activeFiltersCount}
-            storyLoading={storyLoading}
-            onLaunchStory={() => openStory(filteredCapsules)}
-            hasCapules={capsules.length > 0}
-          />
-
-          {/* Filters */}
-          {capsules.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="mb-8 flex flex-wrap items-center justify-center gap-2"
-            >
-              {/* Type Filter */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                    <Layers className="w-4 h-4" />
-                    <span className="hidden xs:inline">{t('timeline.filterType')}</span>
-                    {selectedTypes.length > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                        {selectedTypes.length}
-                      </Badge>
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="w-48 bg-popover">
-                  <DropdownMenuLabel>{t('timeline.filterTypeLabel')}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {(Object.keys(capsuleTypeIcons) as CapsuleType[]).map((type) => {
-                    const Icon = capsuleTypeIcons[type];
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={type}
-                        checked={selectedTypes.includes(type)}
-                        onCheckedChange={() => toggleType(type)}
-                      >
-                        <Icon className="w-4 h-4 mr-2" />
-                        {t(`timeline.types.${type}`)}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Status Filter */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                    <Filter className="w-4 h-4" />
-                    <span className="hidden xs:inline">{t('timeline.filterStatus')}</span>
-                    {selectedStatuses.length > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                        {selectedStatuses.length}
-                      </Badge>
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="w-48 bg-popover">
-                  <DropdownMenuLabel>{t('timeline.filterStatus')}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {(['draft', 'published', 'scheduled', 'archived'] as CapsuleStatus[]).map((status) => (
-                    <DropdownMenuCheckboxItem
-                      key={status}
-                      checked={selectedStatuses.includes(status)}
-                      onCheckedChange={() => toggleStatus(status)}
-                    >
-                      {t(`timeline.statuses.${status}`)}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Tags Filter */}
-              {allTags.length > 0 && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                      <span className="hidden xs:inline">{t('timeline.filterTags')}</span>
-                      <span className="xs:hidden">#</span>
-                      {selectedTags.length > 0 && (
-                        <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                          {selectedTags.length}
-                        </Badge>
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" className="w-48 max-h-64 overflow-y-auto bg-popover">
-                    <DropdownMenuLabel>{t('timeline.filterTags')}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {allTags.map((tag) => (
-                      <DropdownMenuCheckboxItem
-                        key={tag}
-                        checked={selectedTags.includes(tag)}
-                        onCheckedChange={() => toggleTag(tag)}
-                      >
-                        {tag}
-                      </DropdownMenuCheckboxItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-
-              {/* Category Filter */}
-              {categories.length > 0 && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                      <Folder className="w-4 h-4" />
-                      <span className="hidden xs:inline">{t('timeline.filterCategories')}</span>
-                      {selectedCategoriesFilter.length > 0 && (
-                        <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                          {selectedCategoriesFilter.length}
-                        </Badge>
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" className="w-56 max-h-64 overflow-y-auto bg-popover">
-                    <DropdownMenuLabel>{t('timeline.filterCategories')}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {categories.map((category) => {
-                      // Try to get localized category name
-                      const categoryNameKey = `categoryNames.${category.slug}`;
-                      const localizedName = t(categoryNameKey);
-                      const displayName = localizedName !== categoryNameKey ? localizedName : category.name_fr;
-                      
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={category.id}
-                          checked={selectedCategoriesFilter.includes(category.id)}
-                          onCheckedChange={() => toggleCategory(category.id)}
-                        >
-                          <span className="mr-2">{category.icon}</span>
-                          {displayName}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-
-              {/* Date Range Filter */}
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm h-9 px-3">
-                    <CalendarRange className="w-4 h-4" />
-                    <span className="hidden xs:inline">{t('timeline.filterDate')}</span>
-                    {(dateFrom || dateTo) && (
-                      <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                        {(dateFrom ? 1 : 0) + (dateTo ? 1 : 0)}
-                      </Badge>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-4" align="center">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-foreground">{t('timeline.filterDateFrom')}</p>
-                      <CalendarComponent
-                        mode="single"
-                        selected={dateFrom}
-                        onSelect={setDateFrom}
-                        locale={getLocale()}
-                        disabled={(date) => dateTo ? isAfter(date, dateTo) : false}
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                      {dateFrom && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            {format(dateFrom, 'd MMMM yyyy', { locale: getLocale() })}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setDateFrom(undefined)}
-                            className="h-6 px-2 text-xs"
-                          >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                    <div className="border-t border-border pt-4 space-y-2">
-                      <p className="text-sm font-medium text-foreground">{t('timeline.filterDateTo')}</p>
-                      <CalendarComponent
-                        mode="single"
-                        selected={dateTo}
-                        onSelect={setDateTo}
-                        locale={getLocale()}
-                        disabled={(date) => dateFrom ? isBefore(date, dateFrom) : false}
-                        className="pointer-events-auto"
-                      />
-                      {dateTo && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            {format(dateTo, 'd MMMM yyyy', { locale: getLocale() })}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setDateTo(undefined)}
-                            className="h-6 px-2 text-xs"
-                          >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-
-              {/* Clear filters */}
-              {activeFiltersCount > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearAllFilters}
-                  className="gap-1 text-muted-foreground hover:text-foreground h-9"
-                >
-                  <X className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t('timeline.clearFilters')}</span> ({activeFiltersCount})
-                </Button>
-              )}
-            </motion.div>
-          )}
+          {headerAndFilters}
 
           {/* Content */}
           {capsules.length === 0 ? (

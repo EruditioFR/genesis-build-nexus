@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import CosmicTimeline from './CosmicTimeline';
@@ -18,6 +18,8 @@ interface CosmicYearsViewProps {
   onClose: () => void;
   onYearClick: (year: string) => void;
   onSatelliteClick: (capsuleId: string) => void;
+  /** Optional slot rendered above the years (e.g. TimelineHeader + filters) */
+  headerSlot?: ReactNode;
 }
 
 const CosmicYearsView = ({
@@ -26,6 +28,7 @@ const CosmicYearsView = ({
   onClose,
   onYearClick,
   onSatelliteClick,
+  headerSlot,
 }: CosmicYearsViewProps) => {
   const { t } = useTranslation('dashboard');
 
@@ -76,6 +79,13 @@ const CosmicYearsView = ({
               </div>
             </div>
           </div>
+
+          {/* Optional header slot (TimelineHeader + filters from parent) */}
+          {headerSlot && (
+            <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6">
+              {headerSlot}
+            </div>
+          )}
 
           {/* Years rendered with the EXACT same CosmicTimeline interface */}
           <div className="relative w-full px-4 sm:px-6 lg:px-8 py-8">
