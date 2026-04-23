@@ -2,20 +2,19 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { HelpCircle, MessageSquareHeart, ArrowRight } from 'lucide-react';
+import { MessageSquareHeart, ArrowRight, HelpCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
-import StatsCards from '@/components/dashboard/StatsCards';
-
+import DashboardHero from '@/components/dashboard/DashboardHero';
+import DashboardStorageMini from '@/components/dashboard/DashboardStorageMini';
+import ExploreSection from '@/components/dashboard/ExploreSection';
 import RecentCapsules from '@/components/dashboard/RecentCapsules';
 import FamilyTreeCard from '@/components/dashboard/FamilyTreeCard';
 import PremiumPromoCard from '@/components/dashboard/PremiumPromoCard';
-import QuickActions from '@/components/dashboard/QuickActions';
 import WelcomeSection from '@/components/dashboard/WelcomeSection';
-import MemoryPrompts from '@/components/dashboard/MemoryPrompts';
 import DashboardInspirationWidget from '@/components/dashboard/DashboardInspirationWidget';
 import HowItWorksVideo from '@/components/dashboard/HowItWorksVideo';
 import { useOnboardingTour } from '@/hooks/useOnboardingTour';
@@ -308,25 +307,17 @@ const Dashboard = () => {
         onSignOut={handleSignOut}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6 md:mb-8"
-          data-tour="welcome"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-1 md:mb-2">
-                {t('welcome', { name: profile?.display_name?.split(' ')[0] || '' })} 👋
-              </h1>
-              <p className="text-muted-foreground text-base">
-                {stats.totalCapsules === 0 
-                  ? t('subtitleEmpty')
-                  : t('subtitle')}
-              </p>
-            </div>
-            {hideWelcome && (
+          {/* 1. HERO navy */}
+          <DashboardHero
+            displayName={profile?.display_name || undefined}
+            totalCapsules={stats.totalCapsules}
+            totalMedias={stats.totalMedias}
+            sharedCircles={stats.sharedCircles}
+          />
+
+          {/* 2. Show-guide button if welcome was hidden */}
+          {hideWelcome && (
+            <div className="flex justify-end mb-4">
               <button
                 onClick={() => {
                   setHideWelcome(false);
@@ -336,84 +327,81 @@ const Dashboard = () => {
                 title={t('welcomeSection.showGuide')}
               >
                 <HelpCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('welcomeSection.showGuide')}</span>
+                <span>{t('welcomeSection.showGuide')}</span>
               </button>
-            )}
-          </div>
-        </motion.div>
+            </div>
+          )}
 
-        {/* Inspiration sticky banner */}
-        <DashboardInspirationWidget />
+          {/* 3. Welcome guide (compact, dismissible) */}
+          {!hideWelcome && (
+            <div className="mb-6 md:mb-8">
+              <WelcomeSection
+                totalCapsules={stats.totalCapsules}
+                onHide={() => {
+                  setHideWelcome(true);
+                  localStorage.setItem('welcome_section_hidden', 'true');
+                }}
+              />
+            </div>
+          )}
 
-        {/* Welcome Section for empty accounts */}
-        {!hideWelcome && (
-          <div className="mb-6 md:mb-8">
-            <WelcomeSection
-              totalCapsules={stats.totalCapsules}
-              onHide={() => {
-                setHideWelcome(true);
-                localStorage.setItem('welcome_section_hidden', 'true');
-              }}
-            />
-          </div>
-        )}
-
-        {/* Quick Actions */}
-        <div className="mb-6 md:mb-8">
-          <QuickActions />
-        </div>
-
-        {/* Stats Cards */}
-        <div className="mb-6 md:mb-8">
-          <StatsCards stats={stats} />
-        </div>
-
-        {/* Beta Feedback Banner for legacy users */}
-        {profile?.subscription_level === 'legacy' && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 md:mb-8"
-          >
-            <Link
-              to="/beta-feedback"
-              className="flex items-center gap-4 p-4 rounded-2xl border border-secondary/30 bg-gradient-to-r from-secondary/5 to-secondary/10 hover:from-secondary/10 hover:to-secondary/15 transition-all group"
+          {/* 4. Beta feedback for legacy users */}
+          {profile?.subscription_level === 'legacy' && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 md:mb-8"
             >
-              <div className="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0">
-                <MessageSquareHeart className="w-6 h-6 text-secondary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground text-sm md:text-base">Donnez votre avis de beta testeur</p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">Aidez-nous à améliorer Family Garden — formulaire rapide (5 min)</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-secondary shrink-0 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </motion.div>
-        )}
+              <Link
+                to="/beta-feedback"
+                className="flex items-center gap-4 p-4 rounded-2xl border border-secondary/30 bg-gradient-to-r from-secondary/5 to-secondary/10 hover:from-secondary/10 hover:to-secondary/15 transition-all group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0">
+                  <MessageSquareHeart className="w-6 h-6 text-secondary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-foreground text-sm md:text-base">Donnez votre avis de beta testeur</p>
+                  <p className="text-xs md:text-sm text-muted-foreground truncate">Aidez-nous à améliorer Family Garden, formulaire rapide (5 min)</p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-secondary shrink-0 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </motion.div>
+          )}
 
-        {/* Main Grid - RecentCapsules first */}
+          {/* 5. Main grid: content + sticky sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+            {/* Left: 8/12 — Recent souvenirs */}
+            <div className="lg:col-span-8 space-y-6">
+              <RecentCapsules capsules={recentCapsules} />
+            </div>
 
-        {/* Main Grid - RecentCapsules first */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Left Column - 2/3 width */}
-          <div className="lg:col-span-2 space-y-4 md:space-y-6">
-            <RecentCapsules capsules={recentCapsules} />
+            {/* Right: 4/12 — Sticky sidebar */}
+            <aside className="lg:col-span-4">
+              <div className="lg:sticky lg:top-24 space-y-5">
+                <DashboardInspirationWidget />
+                {isPremium ? (
+                  <FamilyTreeCard personsCount={familyPersonsCount} />
+                ) : (
+                  <PremiumPromoCard />
+                )}
+                {profile && (
+                  <DashboardStorageMini
+                    usedMb={profile.storage_used_mb}
+                    limitMb={profile.storage_limit_mb}
+                    subscriptionLevel={profile.subscription_level}
+                  />
+                )}
+              </div>
+            </aside>
           </div>
 
-          {/* Right Column - 1/3 width */}
-          <div className="lg:col-span-1">
-            {isPremium ? (
-              <FamilyTreeCard personsCount={familyPersonsCount} />
-            ) : (
-              <PremiumPromoCard />
-            )}
-          </div>
-        </div>
+          {/* 6. Explore section */}
+          <ExploreSection />
 
-        {/* Tutoriels vidéo - bottom of page */}
-        <div className="mt-8 md:mt-12">
-          <HowItWorksVideo variant="dashboard" />
-        </div>
+          {/* 7. Tutorials at the bottom */}
+          <div className="mt-10 md:mt-14">
+            <HowItWorksVideo variant="dashboard" />
+          </div>
         </div>
       </AuthenticatedLayout>
     </>
