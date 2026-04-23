@@ -691,6 +691,7 @@ const Timeline = () => {
         onClose={() => setSelectedDecade(null)}
         onYearClick={(year) => setSelectedYear(year)}
         onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+        headerSlot={headerAndFilters}
       />
 
       {/* Year Modal */}
