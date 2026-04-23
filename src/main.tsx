@@ -1,6 +1,17 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+
+// One-time migration: remove legacy auto-cached language so navigator language
+// is detected by default. Users keep their explicit choice via 'i18nextLng_user'.
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('i18nextLng');
+  } catch {
+    // ignore
+  }
+}
+
 import "./lib/i18n";
 
 // Defer font loading to not block initial render
