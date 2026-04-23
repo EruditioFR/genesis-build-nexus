@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HardDrive, ArrowUpRight } from 'lucide-react';
+import storageCover from '@/assets/dashboard/storage-cover.jpg';
 
 interface DashboardStorageMiniProps {
   usedMb: number;

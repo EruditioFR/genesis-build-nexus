@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { TreeDeciduous, Crown, Sparkles, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import premiumCover from '@/assets/dashboard/premium-cover.jpg';
 
 const PremiumPromoCard = () => {
   return (
@@ -12,11 +13,23 @@ const PremiumPromoCard = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/10">
+        {/* Cover image */}
+        <div className="relative h-32 w-full overflow-hidden">
+          <img
+            src={premiumCover}
+            alt=""
+            loading="lazy"
+            width={1024}
+            height={512}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+        </div>
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-secondary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
         
-        <CardContent className="p-6 relative">
+        <CardContent className="p-6 pt-4 relative">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary/10 rounded-xl shrink-0">
               <TreeDeciduous className="h-8 w-8 text-primary" />
