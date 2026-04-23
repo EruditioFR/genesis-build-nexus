@@ -341,6 +341,14 @@
     "year": {
       "close": "Fermer",
       "backToYears": "Années {{decade}}"
+    },
+    "cosmic": {
+      "satellite": {
+        "photo": "Photo souvenir",
+        "video": "Vidéo souvenir",
+        "place": "Lieu",
+        "openMemory": "Ouvrir le souvenir"
+      }
     }
   },
   "inspiration": {

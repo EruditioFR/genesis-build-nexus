@@ -341,6 +341,14 @@
     "year": {
       "close": "닫기",
       "backToYears": "{{decade}}년대"
+    },
+    "cosmic": {
+      "satellite": {
+        "photo": "추억 사진",
+        "video": "추억 영상",
+        "place": "장소",
+        "openMemory": "추억 열기"
+      }
     }
   },
   "inspiration": {
