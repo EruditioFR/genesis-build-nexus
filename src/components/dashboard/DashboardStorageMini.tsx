@@ -41,8 +41,20 @@ const DashboardStorageMini = ({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.3 }}
-      className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+      className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden"
     >
+      <div className="relative h-24 w-full overflow-hidden">
+        <img
+          src={storageCover}
+          alt=""
+          loading="lazy"
+          width={1024}
+          height={512}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+      </div>
+      <div className="p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div
