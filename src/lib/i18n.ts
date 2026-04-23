@@ -22,15 +22,20 @@ i18n
   .init({
     fallbackLng: 'fr',
     supportedLngs: ['fr', 'en', 'pt', 'it', 'ko', 'zh', 'es'],
+    // Normalize 'fr-FR', 'en-US', etc. to base language code
+    load: 'languageOnly',
+    nonExplicitSupportedLngs: true,
     ns: ['common', 'landing', 'auth', 'dashboard', 'capsules', 'errors', 'familyTree', 'legal'],
     defaultNS: 'common',
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     detection: {
-      order: ['localStorage', 'navigator'],
+      // Only honor localStorage when the user made an explicit choice
+      // (key 'i18nextLng_user'). Otherwise, follow the browser/device language.
+      order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'i18nextLng',
+      lookupLocalStorage: 'i18nextLng_user',
     },
     interpolation: {
       escapeValue: false,
