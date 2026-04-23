@@ -24,56 +24,39 @@ const TimelineHeader = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
+      initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="relative rounded-3xl overflow-hidden shadow-md mb-8"
+      transition={{ duration: 0.3 }}
+      className="relative rounded-2xl overflow-hidden shadow-sm mb-5"
       style={{ background: 'hsl(215 50% 18%)' }}
     >
-      {/* Subtle dot pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.07] pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(hsl(0 0% 100%) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
-      />
-
-      {/* Subtle decorative blob */}
-      <div
-        className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-30"
-        style={{ background: 'hsl(var(--gold) / 0.4)' }}
-      />
-
-      <div className="relative p-6 md:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6">
+      <div className="relative px-4 py-3 md:px-5 md:py-3.5">
+        <div className="flex items-center gap-3">
           {/* Icon */}
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
+            className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
             style={{ background: 'hsl(var(--gold) / 0.18)' }}
           >
             <Clock
-              className="w-7 h-7"
-              style={{ color: 'hsl(var(--gold))' }}
+              className="w-4.5 h-4.5"
+              style={{ color: 'hsl(var(--gold))', width: 18, height: 18 }}
               strokeWidth={2.25}
             />
           </div>
 
-          {/* Title + meta */}
+          {/* Title + meta inline */}
           <div className="flex-1 min-w-0">
             <h1
-              className="font-display font-semibold text-2xl sm:text-3xl mb-2"
+              className="font-display font-semibold text-base sm:text-lg leading-tight"
               style={{ color: 'hsl(0 0% 100%)' }}
             >
               {t('timeline.header.title')}
             </h1>
-
             <div
-              className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm"
-              style={{ color: 'hsl(0 0% 100% / 0.7)' }}
+              className="flex flex-wrap items-center gap-x-2 text-xs mt-0.5"
+              style={{ color: 'hsl(0 0% 100% / 0.65)' }}
             >
-              <span className="inline-flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />
+              <span className="inline-flex items-center gap-1">
                 <span
                   className="font-semibold tabular-nums"
                   style={{ color: 'hsl(0 0% 100%)' }}
@@ -82,16 +65,11 @@ const TimelineHeader = ({
                 </span>
                 <span>{t('timeline.memories', { count: filteredCount })}</span>
               </span>
-
               {activeFiltersCount > 0 && (
-                <span style={{ color: 'hsl(0 0% 100% / 0.55)' }}>
-                  {t('timeline.header.outOf', { total: totalCount })}
+                <span style={{ color: 'hsl(0 0% 100% / 0.5)' }}>
+                  · {t('timeline.header.outOf', { total: totalCount })}
                 </span>
               )}
-
-              <span style={{ color: 'hsl(0 0% 100% / 0.55)' }}>
-                {t('timeline.header.organizedBy')}
-              </span>
             </div>
           </div>
 
@@ -100,17 +78,19 @@ const TimelineHeader = ({
             <Button
               onClick={onLaunchStory}
               disabled={storyLoading}
-              size="lg"
-              className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 gap-2 shrink-0"
+              size="sm"
+              className="shadow-sm hover:shadow transition-all gap-1.5 shrink-0 h-8 px-3 text-xs"
               style={{
                 background: 'hsl(var(--gold))',
                 color: 'hsl(0 0% 100%)',
               }}
             >
-              <Play className="w-4 h-4" strokeWidth={2.5} />
-              {storyLoading
-                ? t('timeline.header.loadingStory')
-                : t('timeline.header.launchStory')}
+              <Play className="w-3.5 h-3.5" strokeWidth={2.5} />
+              <span className="hidden sm:inline">
+                {storyLoading
+                  ? t('timeline.header.loadingStory')
+                  : t('timeline.header.launchStory')}
+              </span>
             </Button>
           )}
         </div>
