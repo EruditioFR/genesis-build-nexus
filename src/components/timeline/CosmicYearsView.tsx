@@ -90,6 +90,7 @@ const CosmicYearsView = ({
                 decadeSatellites={yearSatellites}
                 onDecadeClick={onYearClick}
                 onSatelliteClick={onSatelliteClick}
+                isYearMode
               />
             )}
           </div>
