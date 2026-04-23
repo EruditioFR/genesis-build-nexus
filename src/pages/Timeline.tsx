@@ -743,6 +743,7 @@ const Timeline = () => {
                     capsuleMedias={capsuleMedias}
                     onCapsuleClick={goToCapsule}
                     initialExpandedYear={initialOpenYear}
+                    highlightCapsuleId={highlightCapsuleId}
                   />
                 ) : null
               }

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Calendar, ChevronDown, ImageIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
@@ -33,6 +33,8 @@ interface DecadeBranchProps {
   onCapsuleClick: (capsuleId: string) => void;
   /** If provided, the branch will open with this year already expanded */
   initialExpandedYear?: string | null;
+  /** If provided, the matching memory card is scrolled into view + briefly highlighted */
+  highlightCapsuleId?: string | null;
 }
 
 const getCapsuleDate = (capsule: Capsule): Date => {
