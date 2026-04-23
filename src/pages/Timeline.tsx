@@ -200,37 +200,7 @@ const Timeline = () => {
     };
   }, [filteredCapsules, capsuleMedias, allMedias]);
 
-  // Get years for selected decade with thumbnails
-  const yearsForDecade = useMemo(() => {
-    if (!selectedDecade) return {};
-    const years: Record<string, { count: number; thumbnails: string[]; hasVideo: boolean }> = {};
-    
-    filteredCapsules.forEach((capsule) => {
-      const date = getCapsuleDate(capsule);
-      const year = format(date, 'yyyy');
-      const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
-      
-      if (decade === selectedDecade) {
-        if (!years[year]) {
-          years[year] = { count: 0, thumbnails: [], hasVideo: false };
-        }
-        years[year].count++;
-        
-        const media = capsuleMedias[capsule.id];
-        if (media) {
-          if (media.file_type.startsWith('video/')) {
-            years[year].hasVideo = true;
-          }
-          // Only add images as thumbnails
-          if (media.file_type.startsWith('image/') && years[year].thumbnails.length < 2) {
-            years[year].thumbnails.push(media.file_url);
-          }
-        }
-      }
-    });
-    
-    return years;
-  }, [filteredCapsules, selectedDecade, capsuleMedias]);
+  // (yearsForDecade legacy record removed; replaced by yearsForDecadeCosmic)
 
   // Cosmic years view: per-year count + satellites (photos/videos/places)
   const yearsForDecadeCosmic = useMemo(() => {
