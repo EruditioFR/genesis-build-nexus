@@ -90,17 +90,7 @@ const OrbitingSatellite = ({
             />
           ) : satellite.type === 'video' ? (
             <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center relative">
-              {satellite.url ? (
-                <video
-                  src={satellite.url}
-                  className="w-full h-full object-cover"
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  preload="metadata"
-                />
-              ) : null}
+              {satellite.url ? <LazyVideoPreview src={satellite.url} /> : null}
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
                 <Video className="w-4 h-4 text-white drop-shadow" />
               </div>
