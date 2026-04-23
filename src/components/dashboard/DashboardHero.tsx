@@ -65,18 +65,6 @@ const DashboardHero = ({
         <div className="grid gap-8 md:grid-cols-[1.4fr,1fr] md:items-center">
           {/* Left: Greeting + CTAs */}
           <div>
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium mb-4 backdrop-blur-sm"
-              style={{
-                background: 'hsl(var(--gold) / 0.15)',
-                color: 'hsl(var(--gold-light))',
-                border: '1px solid hsl(var(--gold) / 0.3)',
-              }}
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              Family Garden
-            </span>
-
             <h1 className="text-3xl md:text-5xl font-display font-bold text-white leading-tight mb-3">
               {t('welcome', { name: firstName })}{' '}
               <span style={{ color: 'hsl(var(--gold-light))' }}>👋</span>
