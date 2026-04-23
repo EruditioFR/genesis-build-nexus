@@ -115,4 +115,46 @@ const OrbitingSatellite = ({
   );
 };
 
+/**
+ * Plays a muted looping video preview only when visible in viewport.
+ * Saves bandwidth/CPU on mobile by pausing off-screen videos.
+ */
+const LazyVideoPreview = ({ src }: { src: string }) => {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.25 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (isVisible) {
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [isVisible]);
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      className="w-full h-full object-cover"
+      muted
+      loop
+      playsInline
+      preload="metadata"
+    />
+  );
+};
+
 export default OrbitingSatellite;
