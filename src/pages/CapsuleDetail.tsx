@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
@@ -89,6 +89,23 @@ const CapsuleDetail = () => {
   const { id } = useParams<{id: string;}>();
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Detect navigation context: did the user come from the timeline?
+  const navState = (location.state || {}) as { from?: string; openDecade?: string | null; openYear?: string | null };
+  const cameFromTimeline = navState.from === 'timeline';
+
+  const handleBack = () => {
+    if (cameFromTimeline) {
+      navigate('/timeline', {
+        state: { openDecade: navState.openDecade, openYear: navState.openYear },
+      });
+    } else {
+      navigate('/capsules');
+    }
+  };
+
+  const backLabelKey = cameFromTimeline ? 'backToTimeline' : 'backToList';
 
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [medias, setMedias] = useState<Media[]>([]);
