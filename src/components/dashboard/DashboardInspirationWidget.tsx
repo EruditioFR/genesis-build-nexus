@@ -109,14 +109,18 @@ const DashboardInspirationWidget = () => {
 
   return (
     <>
-      {/* Slider banner */}
+      {/* Vertical premium card */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group"
+        className="relative mb-6 rounded-2xl overflow-hidden shadow-lg group bg-card border border-border"
       >
-        {/* Background image with overlay */}
-        <div className="relative h-48 sm:h-48 md:h-52" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        {/* Top image (landscape) */}
+        <div
+          className="relative h-44 sm:h-52 overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentSlide}
@@ -134,88 +138,103 @@ const DashboardInspirationWidget = () => {
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent" />
+              {/* Subtle gradient for badge legibility */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/20" />
             </motion.div>
           </AnimatePresence>
 
-          {/* Content overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center px-4 sm:px-10 z-10">
-            <AnimatePresence custom={direction} mode="wait">
-              <motion.div
-                key={currentSlide}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, ease: 'easeInOut', delay: 0.1 }}
-                className="max-w-lg"
-              >
-                {/* Category badge */}
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-[11px] sm:text-xs font-medium mb-2 sm:mb-3">
-                  <span>{currentCategory?.emoji}</span>
-                  {currentCategory?.title}
-                </span>
+          {/* Floating category badge */}
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.span
+              key={`badge-${currentSlide}`}
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.3 }}
+              className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-foreground text-xs font-semibold shadow-md"
+            >
+              <span>{currentCategory?.emoji}</span>
+              {currentCategory?.title}
+            </motion.span>
+          </AnimatePresence>
 
-                {/* Question */}
-                <p className="text-white text-base sm:text-xl md:text-2xl font-display leading-snug mb-3 sm:mb-4 drop-shadow-md max-w-[85%] sm:max-w-[80%]">
-                  « {slideQuestion} »
-                </p>
+          {/* Dismiss */}
+          <button
+            onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
+            className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
+            aria-label="Fermer"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
 
-                {/* CTA */}
-                <button
-                  onClick={() => setOpen(true)}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white/90 hover:bg-white text-foreground text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg"
-                >
-                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500 flex-shrink-0" />
-                  <span className="sm:hidden">{t('inspiration.findInspiration')}</span>
-                  <span className="hidden sm:inline">{t('inspiration.guidedQuestions')}</span>
-                  <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
-                </button>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation arrows - always visible on mobile via touch */}
+          {/* Navigation arrows */}
           <button
             onClick={(e) => { e.stopPropagation(); prev(); }}
-            className="absolute left-1.5 sm:left-2 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-all sm:opacity-0 sm:group-hover:opacity-100"
             aria-label="Précédent"
           >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+            <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); next(); }}
-            className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-all sm:opacity-0 sm:group-hover:opacity-100"
             aria-label="Suivant"
           >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Content area */}
+        <div className="p-5 sm:p-6 space-y-4">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={`content-${currentSlide}`}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.4, ease: 'easeInOut', delay: 0.05 }}
+            >
+              <p className="text-foreground text-lg sm:text-xl font-display leading-snug">
+                « {slideQuestion} »
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <button
+            onClick={() => setOpen(true)}
+            className="group/cta inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5"
+            style={{
+              background: 'hsl(var(--gold))',
+              color: 'hsl(0 0% 100%)',
+            }}
+          >
+            <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+            <span>{t('inspiration.findInspiration')}</span>
+            <ChevronRight className="h-4 w-4 group-hover/cta:translate-x-0.5 transition-transform" />
           </button>
 
-          {/* Dots - hidden on mobile */}
-          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
+          <p className="text-center text-xs text-muted-foreground">
+            {t('inspiration.guidedQuestionsHint', { defaultValue: 'Laissez-vous guider par nos 50 questions' })}
+          </p>
+
+          {/* Dots navigation */}
+          <div className="flex justify-center gap-2 pt-1">
             {memoryCategories.map((_, i) => (
               <button
                 key={i}
-                onClick={(e) => { e.stopPropagation(); goTo(i); }}
+                onClick={() => goTo(i)}
                 className={cn(
                   'h-2 rounded-full transition-all duration-300',
-                  i === currentSlide ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/70'
+                  i === currentSlide
+                    ? 'w-6 bg-foreground'
+                    : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 )}
                 aria-label={`Slide ${i + 1}`}
               />
             ))}
           </div>
-
-          {/* Dismiss */}
-          <button
-            onClick={(e) => { e.stopPropagation(); setDismissed(true); }}
-            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 p-1 sm:p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white/70 hover:text-white transition-colors sm:opacity-0 sm:group-hover:opacity-100"
-            aria-label="Fermer"
-          >
-            <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          </button>
         </div>
       </motion.div>
 
