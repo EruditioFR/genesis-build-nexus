@@ -684,29 +684,16 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      {/* Cosmic Years View (replaces DecadeModal) */}
+      {/* Cosmic Years View — clicking a year now expands a branch inline (no modal) */}
       <CosmicYearsView
-        decade={selectedDecade && !selectedYear ? selectedDecade : null}
+        decade={selectedDecade}
         years={yearsForDecadeCosmic}
         onClose={() => setSelectedDecade(null)}
-        onYearClick={(year) => setSelectedYear(year)}
         onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
-        headerSlot={headerAndFilters}
-      />
-
-      {/* Year Modal */}
-      <YearModal
-        year={selectedYear}
-        decade={selectedDecade}
-        capsules={capsulesForYear}
-        capsuleCategories={capsuleCategories}
-        capsuleMedias={capsuleMedias}
-        onClose={() => {
-          setSelectedYear(null);
-          setSelectedDecade(null);
-        }}
-        onBackToDecade={() => setSelectedYear(null)}
         onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
+        capsules={filteredCapsules}
+        capsuleMedias={capsuleMedias}
+        headerSlot={headerAndFilters}
       />
 
       <AuthenticatedLayout
