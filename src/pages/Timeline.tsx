@@ -352,8 +352,7 @@ const Timeline = () => {
                 const isImage = media.file_type.startsWith('image/');
                 const isVideo = media.file_type.startsWith('video/');
 
-                if (isImage) {
-                  // Get signed URL for thumbnail
+                if (isImage || isVideo) {
                   const { data: signedData } = await supabase.storage
                     .from('capsule-medias')
                     .createSignedUrl(media.file_url, 3600);
@@ -365,21 +364,14 @@ const Timeline = () => {
                       file_url: signedData.signedUrl,
                       file_type: media.file_type
                     };
+
                     mediasWithUrls.push(mediaWithUrl);
 
                     // Only keep first image per capsule for thumbnails
-                    if (!mediaMap[media.capsule_id]) {
+                    if (isImage && !mediaMap[media.capsule_id]) {
                       mediaMap[media.capsule_id] = mediaWithUrl;
                     }
                   }
-                } else if (isVideo) {
-                  // Track video presence (no URL needed for satellite icon)
-                  mediasWithUrls.push({
-                    id: media.id,
-                    capsule_id: media.capsule_id,
-                    file_url: '',
-                    file_type: media.file_type,
-                  });
                 }
               }
               
