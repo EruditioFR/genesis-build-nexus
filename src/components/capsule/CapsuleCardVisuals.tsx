@@ -46,7 +46,7 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
       <CapsuleThumbnail
         thumbnailUrl={capsule.thumbnail}
         fallbackIcon={null}
-        className={cn("w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105", className)}
+        className={cn("w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105", className)}
       />
     );
   }
@@ -56,7 +56,7 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
         <img
           src={`https://img.youtube.com/vi/${capsule.youtubeId}/hqdefault.jpg`}
           alt="YouTube"
-          className={cn("w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105", className)}
+          className={cn("w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105", className)}
         />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className={cn("rounded-full bg-red-600 flex items-center justify-center shadow-2xl", iconClasses)}>
@@ -71,7 +71,7 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
       <div className="relative w-full h-full">
         <video
           src={capsule.firstVideoUrl}
-          className={cn("w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105", className)}
+          className={cn("w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105", className)}
           muted
           preload="metadata"
           onMouseEnter={(e) => { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); }}
@@ -90,7 +90,7 @@ export const CapsuleVisual = ({ capsule, className, iconSize = 'md' }: { capsule
       <CapsuleThumbnail
         thumbnailUrl={capsule.firstMediaUrl}
         fallbackIcon={null}
-        className={cn("w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105", className)}
+        className={cn("w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105", className)}
       />
     );
   }
