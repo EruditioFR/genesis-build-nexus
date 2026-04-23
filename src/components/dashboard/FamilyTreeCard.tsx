@@ -96,6 +96,7 @@ const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
           </Button>
         </div>
       )}
+      </div>
     </motion.div>
   );
 };
