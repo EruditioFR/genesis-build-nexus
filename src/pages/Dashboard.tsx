@@ -324,10 +324,15 @@ const Dashboard = () => {
                   setHideWelcome(false);
                   localStorage.removeItem('welcome_section_hidden');
                 }}
-                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-secondary transition-colors"
                 title={t('welcomeSection.showGuide')}
+                className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+                style={{
+                  background: 'hsl(var(--gold))',
+                  color: 'hsl(215 50% 14%)',
+                  border: '1px solid hsl(var(--gold))',
+                }}
               >
-                <HelpCircle className="w-4 h-4" />
+                <HelpCircle className="w-4 h-4" strokeWidth={2.5} />
                 <span>{t('welcomeSection.showGuide')}</span>
               </button>
             </div>
