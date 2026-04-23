@@ -212,9 +212,36 @@ const StoryViewer = ({
         );
       case 'video':
         return (
-          <motion.video key={currentItem.id} src={currentItem.url} className="max-h-full max-w-full object-contain"
-            autoPlay muted={isMuted} controls={false} onEnded={goNext} preload="auto"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+          <motion.video
+            key={currentItem.id}
+            src={currentItem.url}
+            className="max-h-full max-w-full object-contain"
+            autoPlay
+            muted={isMuted}
+            playsInline
+            // @ts-expect-error - iOS Safari specific
+            webkit-playsinline="true"
+            controls
+            controlsList="nodownload"
+            onEnded={goNext}
+            preload="auto"
+            ref={(el) => {
+              if (!el) return;
+              // iOS requires play() to be triggered; if it fails (no gesture), retry muted
+              const tryPlay = () => {
+                el.play().catch(() => {
+                  el.muted = true;
+                  el.play().catch(() => {});
+                });
+              };
+              if (el.readyState >= 2) tryPlay();
+              else el.addEventListener('loadedmetadata', tryPlay, { once: true });
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          />
         );
       case 'text':
         return (
