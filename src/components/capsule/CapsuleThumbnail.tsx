@@ -69,11 +69,11 @@ const CapsuleThumbnail = ({ thumbnailUrl, fallbackIcon, className = '', preferTh
   }
 
   return (
-    <div className={`overflow-hidden ${className}`}>
+    <div className="w-full h-full overflow-hidden">
       <img
         src={signedUrl || ''}
         alt="Thumbnail"
-        className="w-full h-full object-cover object-top"
+        className={`w-full h-full object-cover object-center ${className}`}
         onError={() => setError(true)}
       />
     </div>
