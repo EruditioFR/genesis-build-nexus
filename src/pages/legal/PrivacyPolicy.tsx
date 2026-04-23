@@ -36,8 +36,8 @@ const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Politique de confidentialité | Family Garden"
-        description="Découvrez comment Family Garden protège vos données personnelles. Chiffrement AES-256, hébergement européen RGPD, contrôle total de vos souvenirs."
+        title="Confidentialité : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Family Garden protège vos données personnelles, vos souvenirs et votre arbre généalogique : chiffrement AES-256, hébergement français RGPD, contrôle total de vos contenus."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "Confidentialité", url: "/privacy" },

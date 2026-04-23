@@ -84,8 +84,8 @@ const Premium = () => {
   return (
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <SEOHead
-        title="Tarifs et abonnements | Family Garden"
-        description="Découvrez les forfaits Family Garden : Gratuit, Premium (9€/mois ou 50€/an) et Héritage (15€/mois ou 99€/an). Préservez vos souvenirs sans limite."
+        title="Tarifs : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Choisissez votre forfait Family Garden pour préserver vos souvenirs et votre arbre généalogique : Gratuit, Premium (9€/mois) ou Héritage (15€/mois). Hébergement français RGPD."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "Tarifs", url: "/premium" },

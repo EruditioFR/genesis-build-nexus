@@ -72,8 +72,8 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="À propos de Family Garden | Le journal de famille privé"
-        description="Découvrez FamilyGarden : un journal de famille privé pour rassembler photos, vidéos, audios et textes, les organiser simplement et les partager en cercles avec vos proches."
+        title="À propos : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Découvrez Family Garden, le journal de famille privé pour rassembler photos, vidéos, audio et textes, construire votre arbre généalogique et partager vos souvenirs en toute sécurité avec vos proches."
         jsonLd={[
           aboutSchema,
           createBreadcrumbSchema([
