@@ -39,6 +39,7 @@ import {
 import { cn } from '@/lib/utils';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSelector from '@/components/LanguageSelector';
+import { supportedLanguages, type LanguageCode } from '@/lib/i18n';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import GlobalSearch from '@/components/search/GlobalSearch';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
