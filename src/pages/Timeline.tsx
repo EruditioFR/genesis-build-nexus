@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, Filter, X, Folder, CalendarRange, FileText, Image, Video, Music } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
@@ -64,7 +64,25 @@ const Timeline = () => {
   const { t, i18n } = useTranslation('dashboard');
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { categories } = useCategories();
+
+  // Navigate to a capsule, tagging that we come from the timeline so the detail
+  // page can offer a "back to timeline" action that restores the open decade/year.
+  const goToCapsule = (capsuleId: string) => {
+    const capsule = capsules.find((c) => c.id === capsuleId);
+    let openDecade: string | null = null;
+    let openYear: string | null = null;
+    if (capsule) {
+      const date = getCapsuleDate(capsule);
+      const year = format(date, 'yyyy');
+      openYear = year;
+      openDecade = (Math.floor(parseInt(year) / 10) * 10).toString();
+    }
+    navigate(`/capsules/${capsuleId}`, {
+      state: { from: 'timeline', openDecade, openYear },
+    });
+  };
 
   const getLocale = (): Locale => {
     const localeMap: Record<string, Locale> = { fr, en: enUS, es, ko, zh: zhCN };
