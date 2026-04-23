@@ -152,7 +152,11 @@ const LazyVideoPreview = ({ src }: { src: string }) => {
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="auto"
+      onLoadedMetadata={(e) => {
+        // Seek to first frame so a still image renders even before play
+        try { e.currentTarget.currentTime = 0.1; } catch {}
+      }}
     />
   );
 };
