@@ -50,6 +50,7 @@ const DecadeBranch = ({
   capsuleMedias,
   onCapsuleClick,
   initialExpandedYear = null,
+  highlightCapsuleId = null,
 }: DecadeBranchProps) => {
   const { t, i18n } = useTranslation('dashboard');
 
@@ -59,6 +60,27 @@ const DecadeBranch = ({
   };
 
   const [expandedYear, setExpandedYear] = useState<string | null>(initialExpandedYear);
+  const [highlightedId, setHighlightedId] = useState<string | null>(highlightCapsuleId);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Once the requested year is expanded and the matching card is in the DOM,
+  // smoothly scroll to it and apply a brief highlight ring.
+  useEffect(() => {
+    if (!highlightCapsuleId || expandedYear !== initialExpandedYear) return;
+    const t1 = window.setTimeout(() => {
+      const el = cardsContainerRef.current?.querySelector<HTMLElement>(
+        `[data-capsule-id="${highlightCapsuleId}"]`,
+      );
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 350);
+    const t2 = window.setTimeout(() => setHighlightedId(null), 2800);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [highlightCapsuleId, expandedYear, initialExpandedYear]);
 
   const yearKeys = useMemo(() => years.map((y) => y.year), [years]);
   const yearCounts = useMemo(() => {
