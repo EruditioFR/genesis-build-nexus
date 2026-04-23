@@ -156,11 +156,7 @@ export const useStoryMode = () => {
           title: capsule.title,
           description: capsule.description || undefined,
           content: capsule.content,
-          date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }),
+          date: formatCapsuleDate(capsule),
         });
       }
 
