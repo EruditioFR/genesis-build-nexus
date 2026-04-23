@@ -158,7 +158,7 @@ const QuickActionItem = ({
 );
 
 const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
-  const { t } = useTranslation('dashboard');
+  const { t, i18n } = useTranslation('dashboard');
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
