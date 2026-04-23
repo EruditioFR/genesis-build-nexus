@@ -98,6 +98,17 @@ const Timeline = () => {
   // Selected decade for the cosmic years view
   const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
 
+  // Restore decade/year if user is coming back from a capsule detail page
+  const navState = (location.state || {}) as { openDecade?: string | null; openYear?: string | null };
+  const initialOpenYear = navState.openYear ?? null;
+
+  useEffect(() => {
+    if (navState.openDecade) {
+      setSelectedDecade(navState.openDecade);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Story mode
   const { isOpen: storyOpen, items: storyItems, audioTracks: storyAudioTracks, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
 
@@ -689,16 +700,6 @@ const Timeline = () => {
           />
         )}
       </AnimatePresence>
-  // Restore decade/year if user is coming back from a capsule detail page
-  const navState = (location.state || {}) as { openDecade?: string | null; openYear?: string | null };
-  const initialOpenYear = navState.openYear ?? null;
-
-  useEffect(() => {
-    if (navState.openDecade) {
-      setSelectedDecade(navState.openDecade);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
       <AuthenticatedLayout
         user={{
