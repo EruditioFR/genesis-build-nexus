@@ -26,7 +26,7 @@ import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import CosmicTimeline from '@/components/timeline/CosmicTimeline';
 import CosmicYearsView from '@/components/timeline/CosmicYearsView';
-import YearModal from '@/components/timeline/YearModal';
+
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
 import type { Satellite } from '@/components/timeline/OrbitingSatellite';
 import NoIndex from '@/components/seo/NoIndex';
@@ -77,9 +77,8 @@ const Timeline = () => {
   const [capsuleMedias, setCapsuleMedias] = useState<Record<string, CapsuleMedia | null>>({});
   const [allMedias, setAllMedias] = useState<CapsuleMedia[]>([]);
 
-  // Modal states
+  // Selected decade for the cosmic years view
   const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
 
   // Story mode
   const { isOpen: storyOpen, items: storyItems, audioTracks: storyAudioTracks, initialIndex, loading: storyLoading, openStory, closeStory } = useStoryMode();
@@ -256,18 +255,7 @@ const Timeline = () => {
       });
   }, [filteredCapsules, selectedDecade, allMedias]);
 
-  // Get capsules for selected year
-  const capsulesForYear = useMemo(() => {
-    if (!selectedYear) return [];
-    return filteredCapsules.filter((capsule) => {
-      const date = getCapsuleDate(capsule);
-      return format(date, 'yyyy') === selectedYear;
-    }).sort((a, b) => {
-      const dateA = getCapsuleDate(a);
-      const dateB = getCapsuleDate(b);
-      return dateB.getTime() - dateA.getTime();
-    });
-  }, [filteredCapsules, selectedYear]);
+  // capsulesForYear removed: year expansion is now handled inline in CosmicYearsView
 
   const activeFiltersCount = selectedTypes.length + selectedStatuses.length + selectedTags.length + selectedCategoriesFilter.length + (dateFrom ? 1 : 0) + (dateTo ? 1 : 0);
 
@@ -684,29 +672,16 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      {/* Cosmic Years View (replaces DecadeModal) */}
+      {/* Cosmic Years View — clicking a year now expands a branch inline (no modal) */}
       <CosmicYearsView
-        decade={selectedDecade && !selectedYear ? selectedDecade : null}
+        decade={selectedDecade}
         years={yearsForDecadeCosmic}
         onClose={() => setSelectedDecade(null)}
-        onYearClick={(year) => setSelectedYear(year)}
         onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
-        headerSlot={headerAndFilters}
-      />
-
-      {/* Year Modal */}
-      <YearModal
-        year={selectedYear}
-        decade={selectedDecade}
-        capsules={capsulesForYear}
-        capsuleCategories={capsuleCategories}
-        capsuleMedias={capsuleMedias}
-        onClose={() => {
-          setSelectedYear(null);
-          setSelectedDecade(null);
-        }}
-        onBackToDecade={() => setSelectedYear(null)}
         onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
+        capsules={filteredCapsules}
+        capsuleMedias={capsuleMedias}
+        headerSlot={headerAndFilters}
       />
 
       <AuthenticatedLayout
