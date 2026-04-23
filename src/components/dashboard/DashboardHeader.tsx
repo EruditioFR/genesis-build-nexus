@@ -429,17 +429,21 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
           </NavigationMenu>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3 min-w-0">
             {/* Search */}
             <div className="hidden md:block" data-tour="search">
               {user.id && <GlobalSearch userId={user.id} />}
             </div>
 
-            {/* Language Selector */}
-            <LanguageSelector />
+            {/* Language Selector - hidden on mobile to prevent overflow */}
+            <div className="hidden sm:block">
+              <LanguageSelector />
+            </div>
 
-            {/* Theme Toggle */}
-            <ThemeToggle />
+            {/* Theme Toggle - hidden on mobile to prevent overflow */}
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
 
             {/* Notifications */}
             <div data-tour="notifications">
