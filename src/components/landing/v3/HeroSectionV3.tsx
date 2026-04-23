@@ -7,18 +7,18 @@ import { useCallback, useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 
-import enfanceVideo from '@/assets/inspirations/enfance-video.mp4.asset.json';
-import ecoleVideo from '@/assets/inspirations/ecole-video.mp4.asset.json';
-import musiquesVideo from '@/assets/inspirations/musiques-video.mp4.asset.json';
-import familleVideo from '@/assets/inspirations/famille-video.mp4.asset.json';
-const vieVideo = { url: '/videos/vie-video.mp4' };
+import enfanceImg from '@/assets/inspirations/enfance.jpg';
+import ecoleImg from '@/assets/inspirations/ecole.jpg';
+import musiquesImg from '@/assets/inspirations/musiques.jpg';
+import familleImg from '@/assets/inspirations/famille.jpg';
+import vieImg from '@/assets/inspirations/vie.jpg';
 
 const SLIDE_KEYS = [
-  { key: 'enfance', emoji: '🌱', video: enfanceVideo.url },
-  { key: 'ecole', emoji: '🎓', video: ecoleVideo.url },
-  { key: 'musiques', emoji: '🎵', video: musiquesVideo.url },
-  { key: 'famille', emoji: '👨‍👩‍👧‍👦', video: familleVideo.url },
-  { key: 'vie', emoji: '❤️', video: vieVideo.url },
+  { key: 'enfance', emoji: '🌱', image: enfanceImg },
+  { key: 'ecole', emoji: '🎓', image: ecoleImg },
+  { key: 'musiques', emoji: '🎵', image: musiquesImg },
+  { key: 'famille', emoji: '👨‍👩‍👧‍👦', image: familleImg },
+  { key: 'vie', emoji: '❤️', image: vieImg },
 ];
 
 const AUTOPLAY_INTERVAL = 5000;
@@ -184,19 +184,16 @@ const HeroSectionV3 = () => {
               onTouchEnd={handleTouchEnd}
             >
               <AnimatePresence mode="wait">
-                <motion.video
+                <motion.img
                   key={current}
-                  src={slide.video}
+                  src={slide.image}
+                  alt={t(`v3.hero.slides.${slide.key}.label`)}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload={current === 0 ? 'auto' : 'metadata'}
+                  loading={current === 0 ? 'eager' : 'lazy'}
                 />
               </AnimatePresence>
 
