@@ -11,6 +11,8 @@ interface DecadePlanetProps {
   index: number;
   onDecadeClick: (decade: string) => void;
   onSatelliteClick: (capsuleId: string) => void;
+  /** When true, omit the "'s" suffix and the decade label below the number (use for individual years) */
+  isYear?: boolean;
 }
 
 const decadeColors: Record<string, string> = {
@@ -35,6 +37,7 @@ const DecadePlanet = ({
   index,
   onDecadeClick,
   onSatelliteClick,
+  isYear = false,
 }: DecadePlanetProps) => {
   const { t } = useTranslation('dashboard');
   const isMobile = useIsMobile();
@@ -101,7 +104,7 @@ const DecadePlanet = ({
       <motion.button
         type="button"
         onClick={() => onDecadeClick(decade)}
-        aria-label={`${getDecadeLabel()}, ${count} ${t('timeline.memories', { count })}`}
+        aria-label={`${isYear ? decade : getDecadeLabel()}, ${count} ${t('timeline.memories', { count })}`}
         className={`relative z-10 rounded-full bg-gradient-to-br ${gradient} text-white shadow-2xl hover:shadow-[0_0_60px_-10px_hsl(var(--primary)/0.5)] focus:outline-none focus:ring-4 focus:ring-secondary/50 group overflow-hidden`}
         style={{ width: planetSize, height: planetSize }}
         whileHover={{ scale: 1.05 }}
@@ -112,11 +115,13 @@ const DecadePlanet = ({
 
         <div className="relative h-full w-full flex flex-col items-center justify-center p-3">
           <span className="text-2xl sm:text-3xl font-bold drop-shadow-lg leading-none">
-            {decade}'s
+            {isYear ? decade : `${decade}'s`}
           </span>
-          <span className="text-[10px] sm:text-xs font-medium text-white/85 mt-1 text-center drop-shadow leading-tight">
-            {getDecadeLabel()}
-          </span>
+          {!isYear && (
+            <span className="text-[10px] sm:text-xs font-medium text-white/85 mt-1 text-center drop-shadow leading-tight">
+              {getDecadeLabel()}
+            </span>
+          )}
           <div className="mt-2 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs sm:text-sm font-semibold flex items-center gap-1">
             {count} {t('timeline.memories', { count })}
           </div>

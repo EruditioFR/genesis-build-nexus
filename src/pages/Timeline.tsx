@@ -25,7 +25,7 @@ import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import CosmicTimeline from '@/components/timeline/CosmicTimeline';
-import DecadeModal from '@/components/timeline/DecadeModal';
+import CosmicYearsView from '@/components/timeline/CosmicYearsView';
 import YearModal from '@/components/timeline/YearModal';
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
 import type { Satellite } from '@/components/timeline/OrbitingSatellite';
@@ -200,37 +200,61 @@ const Timeline = () => {
     };
   }, [filteredCapsules, capsuleMedias, allMedias]);
 
-  // Get years for selected decade with thumbnails
-  const yearsForDecade = useMemo(() => {
-    if (!selectedDecade) return {};
-    const years: Record<string, { count: number; thumbnails: string[]; hasVideo: boolean }> = {};
-    
+  // (yearsForDecade legacy record removed; replaced by yearsForDecadeCosmic)
+
+  // Cosmic years view: per-year count + satellites (photos/videos/places)
+  const yearsForDecadeCosmic = useMemo(() => {
+    if (!selectedDecade) return [];
+    const byYear: Record<
+      string,
+      { photos: Satellite[]; videos: Satellite[]; places: Satellite[]; seenPlaces: Set<string>; count: number }
+    > = {};
+
     filteredCapsules.forEach((capsule) => {
       const date = getCapsuleDate(capsule);
       const year = format(date, 'yyyy');
       const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
-      
-      if (decade === selectedDecade) {
-        if (!years[year]) {
-          years[year] = { count: 0, thumbnails: [], hasVideo: false };
+      if (decade !== selectedDecade) return;
+
+      if (!byYear[year]) {
+        byYear[year] = { photos: [], videos: [], places: [], seenPlaces: new Set(), count: 0 };
+      }
+      byYear[year].count++;
+
+      const medias = allMedias.filter((m) => m.capsule_id === capsule.id);
+      medias.forEach((m) => {
+        if (m.file_type.startsWith('image/') && byYear[year].photos.length < 4) {
+          byYear[year].photos.push({ type: 'photo', url: m.file_url, capsuleId: capsule.id });
+        } else if (m.file_type.startsWith('video/') && byYear[year].videos.length < 2) {
+          byYear[year].videos.push({ type: 'video', url: m.file_url, capsuleId: capsule.id });
         }
-        years[year].count++;
-        
-        const media = capsuleMedias[capsule.id];
-        if (media) {
-          if (media.file_type.startsWith('video/')) {
-            years[year].hasVideo = true;
-          }
-          // Only add images as thumbnails
-          if (media.file_type.startsWith('image/') && years[year].thumbnails.length < 2) {
-            years[year].thumbnails.push(media.file_url);
-          }
+      });
+
+      const meta = (capsule.metadata as any) || {};
+      const place: string | undefined =
+        meta.location || meta.place || meta.city || meta.birth_place;
+      if (place && typeof place === 'string') {
+        const key = place.trim().toLowerCase();
+        if (!byYear[year].seenPlaces.has(key) && byYear[year].places.length < 2) {
+          byYear[year].seenPlaces.add(key);
+          byYear[year].places.push({ type: 'place', label: place.trim(), capsuleId: capsule.id });
         }
       }
     });
-    
-    return years;
-  }, [filteredCapsules, selectedDecade, capsuleMedias]);
+
+    return Object.entries(byYear)
+      .sort(([a], [b]) => parseInt(b) - parseInt(a))
+      .map(([year, data]) => {
+        const interleaved: Satellite[] = [];
+        const maxLen = Math.max(data.photos.length, data.videos.length, data.places.length);
+        for (let i = 0; i < maxLen; i++) {
+          if (data.photos[i]) interleaved.push(data.photos[i]);
+          if (data.videos[i]) interleaved.push(data.videos[i]);
+          if (data.places[i]) interleaved.push(data.places[i]);
+        }
+        return { year, count: data.count, satellites: interleaved.slice(0, 6) };
+      });
+  }, [filteredCapsules, selectedDecade, allMedias]);
 
   // Get capsules for selected year
   const capsulesForYear = useMemo(() => {
@@ -425,12 +449,13 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      {/* Decade Modal */}
-      <DecadeModal
+      {/* Cosmic Years View (replaces DecadeModal) */}
+      <CosmicYearsView
         decade={selectedDecade && !selectedYear ? selectedDecade : null}
-        years={yearsForDecade}
+        years={yearsForDecadeCosmic}
         onClose={() => setSelectedDecade(null)}
         onYearClick={(year) => setSelectedYear(year)}
+        onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
       />
 
       {/* Year Modal */}
