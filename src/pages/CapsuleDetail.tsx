@@ -459,24 +459,46 @@ const CapsuleDetail = () => {
 
         {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
-          {heroImageUrls.length > 0 ?
+          {heroItems.length > 0 ?
           <div className="relative">
-              <div className="relative h-72 sm:h-80 md:h-96 overflow-hidden">
+              <div className="relative h-72 sm:h-80 md:h-96 overflow-hidden bg-black">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                  key={heroSlideIndex}
-                  src={heroImageUrls[heroSlideIndex]}
-                  alt={capsule.title}
-                  className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.8, ease: 'easeInOut' }}
-                  style={{
-                    y: heroY,
-                    scale: heroScale,
-                    transformOrigin: 'center center'
-                  }} />
+                  {heroItems[heroSlideIndex]?.type === 'video' ? (
+                    <motion.video
+                      key={heroSlideIndex}
+                      src={heroItems[heroSlideIndex].url}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      style={{
+                        y: heroY,
+                        scale: heroScale,
+                        transformOrigin: 'center center'
+                      }}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  ) : (
+                    <motion.img
+                      key={heroSlideIndex}
+                      src={heroItems[heroSlideIndex]?.url}
+                      alt={capsule.title}
+                      className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      style={{
+                        y: heroY,
+                        scale: heroScale,
+                        transformOrigin: 'center center'
+                      }}
+                    />
+                  )}
                 </AnimatePresence>
               
                 {/* Gradient overlay - stronger on desktop where text sits on top */}
