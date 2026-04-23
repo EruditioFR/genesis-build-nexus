@@ -106,7 +106,7 @@ const CapsuleDetail = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [heroImageUrls, setHeroImageUrls] = useState<string[]>([]);
+  const [heroItems, setHeroItems] = useState<{ url: string; type: 'image' | 'video' }[]>([]);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
 
