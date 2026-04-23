@@ -195,6 +195,19 @@ const Login = () => {
         duration: 0.6
       }} className="w-full max-w-md">
 
+          {/* Highlighted signup CTA - placed above login form for visibility */}
+          <div className="mb-6 rounded-xl border-2 border-secondary/40 bg-secondary/5 px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[#1a1a2e] text-base font-medium text-center sm:text-left">
+              {t('login.noAccount')}
+            </p>
+            <Link
+              to={`/signup${redirectTo !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-secondary text-secondary-foreground font-semibold text-sm hover:bg-secondary/90 shadow-gold hover:shadow-lg transition-all whitespace-nowrap"
+            >
+              {t('login.createAccount')}
+            </Link>
+          </div>
+
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#1a1a2e] mb-2">
               {t('login.title')}
