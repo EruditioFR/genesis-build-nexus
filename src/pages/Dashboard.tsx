@@ -346,16 +346,16 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* 4. Beta feedback for legacy users */}
-          {profile?.subscription_level === 'legacy' && (
+          {/* 4. Beta feedback for legacy users (dismissible) */}
+          {profile?.subscription_level === 'legacy' && !hideBetaBanner && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 md:mb-8"
+              className="mb-6 md:mb-8 relative"
             >
               <Link
                 to="/beta-feedback"
-                className="flex items-center gap-4 p-4 rounded-2xl border border-secondary/30 bg-gradient-to-r from-secondary/5 to-secondary/10 hover:from-secondary/10 hover:to-secondary/15 transition-all group"
+                className="flex items-center gap-4 p-4 pr-12 rounded-2xl border border-secondary/30 bg-gradient-to-r from-secondary/5 to-secondary/10 hover:from-secondary/10 hover:to-secondary/15 transition-all group"
               >
                 <div className="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0">
                   <MessageSquareHeart className="w-6 h-6 text-secondary" />
@@ -366,6 +366,18 @@ const Dashboard = () => {
                 </div>
                 <ArrowRight className="w-5 h-5 text-secondary shrink-0 group-hover:translate-x-1 transition-transform" />
               </Link>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setHideBetaBanner(true);
+                  localStorage.setItem('beta_banner_hidden', 'true');
+                }}
+                aria-label="Masquer cette bannière"
+                className="absolute top-2 right-2 p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </motion.div>
           )}
 
