@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { MessageSquareHeart, ArrowRight, HelpCircle } from 'lucide-react';
+import { MessageSquareHeart, ArrowRight, HelpCircle, X } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
@@ -95,6 +95,7 @@ const Dashboard = () => {
   });
   const [dataLoading, setDataLoading] = useState(true);
   const [hideWelcome, setHideWelcome] = useState(() => localStorage.getItem('welcome_section_hidden') === 'true');
+  const [hideBetaBanner, setHideBetaBanner] = useState(() => localStorage.getItem('beta_banner_hidden') === 'true');
   const [tourTriggered, setTourTriggered] = useState(false);
 
   // Auto-start tour for new users
