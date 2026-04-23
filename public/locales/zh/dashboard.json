@@ -341,6 +341,14 @@
     "year": {
       "close": "关闭",
       "backToYears": "{{decade}}年代"
+    },
+    "cosmic": {
+      "satellite": {
+        "photo": "回忆照片",
+        "video": "回忆视频",
+        "place": "地点",
+        "openMemory": "打开回忆"
+      }
     }
   },
   "inspiration": {

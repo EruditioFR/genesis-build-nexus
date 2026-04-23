@@ -341,10 +341,18 @@
     "year": {
       "close": "Fechar",
       "backToYears": "Anos {{decade}}"
-  },
-  "inspiration": {
-    "findInspiration": "Encontre inspiração",
-    "guidedQuestions": "Deixe-se guiar pelas nossas 50 perguntas"
+    },
+    "inspiration": {
+      "findInspiration": "Encontre inspiração",
+      "guidedQuestions": "Deixe-se guiar pelas nossas 50 perguntas"
+    },
+    "cosmic": {
+      "satellite": {
+        "photo": "Foto de memória",
+        "video": "Vídeo de memória",
+        "place": "Lugar",
+        "openMemory": "Abrir memória"
+      }
+    }
   }
-}
 }
