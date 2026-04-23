@@ -10,6 +10,8 @@ interface CosmicTimelineProps {
   decadeSatellites: Record<string, Satellite[]>;
   onDecadeClick: (decade: string) => void;
   onSatelliteClick: (capsuleId: string) => void;
+  /** Treat each "decade" entry as a single year (no "'s" suffix, no decade label) */
+  isYearMode?: boolean;
 }
 
 const CosmicTimeline = ({
@@ -18,6 +20,7 @@ const CosmicTimeline = ({
   decadeSatellites,
   onDecadeClick,
   onSatelliteClick,
+  isYearMode = false,
 }: CosmicTimelineProps) => {
   const isMobile = useIsMobile();
   const scrollRef = useRef<HTMLDivElement>(null);
