@@ -76,10 +76,13 @@ const OrbitingSatellite = ({
           animate={reduceMotion ? { rotate: -rotateFrom } : { rotate: -rotateTo }}
           transition={
             reduceMotion
-              ? undefined
-              : { duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }
+              ? { scale: { duration: 0.25, ease: 'easeOut' } }
+              : {
+                  rotate: { duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' },
+                  scale: { duration: 0.25, ease: 'easeOut' },
+                }
           }
-          whileHover={{ scale: 1.8, transition: { duration: 0.25, ease: 'easeOut' } }}
+          whileHover={{ scale: 1.8 }}
         >
           {satellite.type === 'photo' && satellite.url ? (
             <img
