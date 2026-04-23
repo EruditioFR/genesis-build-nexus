@@ -25,7 +25,7 @@ import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import CosmicTimeline from '@/components/timeline/CosmicTimeline';
-import CosmicYearsView from '@/components/timeline/CosmicYearsView';
+import DecadeBranch from '@/components/timeline/DecadeBranch';
 
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
 import type { Satellite } from '@/components/timeline/OrbitingSatellite';
@@ -672,17 +672,6 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      {/* Cosmic Years View — clicking a year now expands a branch inline (no modal) */}
-      <CosmicYearsView
-        decade={selectedDecade}
-        years={yearsForDecadeCosmic}
-        onClose={() => setSelectedDecade(null)}
-        onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
-        onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
-        capsules={filteredCapsules}
-        capsuleMedias={capsuleMedias}
-        headerSlot={headerAndFilters}
-      />
 
       <AuthenticatedLayout
         user={{
@@ -706,8 +695,23 @@ const Timeline = () => {
               decades={decades}
               decadeCounts={decadeCounts}
               decadeSatellites={decadeSatellites}
-              onDecadeClick={setSelectedDecade}
+              onDecadeClick={(d) =>
+                setSelectedDecade((prev) => (prev === d ? null : d))
+              }
               onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+              expandedDecade={selectedDecade}
+              expandedBranch={
+                selectedDecade ? (
+                  <DecadeBranch
+                    decade={selectedDecade}
+                    years={yearsForDecadeCosmic}
+                    onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+                    capsules={filteredCapsules}
+                    capsuleMedias={capsuleMedias}
+                    onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
+                  />
+                ) : null
+              }
             />
           )}
         </div>
