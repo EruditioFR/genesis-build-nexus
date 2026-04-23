@@ -716,17 +716,18 @@ const Timeline = () => {
               onDecadeClick={(d) =>
                 setSelectedDecade((prev) => (prev === d ? null : d))
               }
-              onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+              onSatelliteClick={goToCapsule}
               expandedDecade={selectedDecade}
               expandedBranch={
                 selectedDecade ? (
                   <DecadeBranch
                     decade={selectedDecade}
                     years={yearsForDecadeCosmic}
-                    onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
+                    onSatelliteClick={goToCapsule}
                     capsules={filteredCapsules}
                     capsuleMedias={capsuleMedias}
-                    onCapsuleClick={(id) => navigate(`/capsules/${id}`)}
+                    onCapsuleClick={goToCapsule}
+                    initialExpandedYear={initialOpenYear}
                   />
                 ) : null
               }
