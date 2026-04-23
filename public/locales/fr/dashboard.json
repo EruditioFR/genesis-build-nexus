@@ -36,7 +36,7 @@
     "familyTreeDesc": "Ma famille"
   },
   "recentCapsules": {
-    "title": "Mes souvenirs",
+    "title": "Vos souvenirs",
     "empty": "Vous n'avez pas encore ajouté de souvenir",
     "emptySubtitle": "Créez votre premier souvenir pour commencer à préserver vos moments précieux.",
     "createFirst": "Ajouter mon premier souvenir",
@@ -102,7 +102,7 @@
   },
   "sidebar": {
     "home": "Accueil",
-    "capsules": "Mes souvenirs",
+    "capsules": "Vos souvenirs",
     "timeline": "Chronologie",
     "circles": "Cercles",
     "familyTree": "Arbre généalogique",

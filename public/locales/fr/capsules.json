@@ -96,7 +96,7 @@
     "youtubeVideo": "Vidéo YouTube"
   },
   "list": {
-    "title": "Mes souvenirs",
+    "title": "Vos souvenirs",
     "count_one": "{{count}} souvenir au total",
     "count_other": "{{count}} souvenirs au total",
     "newCapsule": "Nouveau souvenir",
