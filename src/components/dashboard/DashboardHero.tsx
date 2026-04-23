@@ -81,7 +81,7 @@ const DashboardHero = ({
                 className="rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
                 style={{
                   background: 'hsl(var(--gold))',
-                  color: 'hsl(215 50% 14%)',
+                  color: 'hsl(0 0% 100%)',
                 }}
               >
                 <Link to="/capsules/new">
