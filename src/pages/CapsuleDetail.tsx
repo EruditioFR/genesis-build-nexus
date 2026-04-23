@@ -453,149 +453,191 @@ const CapsuleDetail = () => {
         {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
           {heroImageUrls.length > 0 ?
-          <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.img
-                key={heroSlideIndex}
-                src={heroImageUrls[heroSlideIndex]}
-                alt={capsule.title}
-                className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.8, ease: 'easeInOut' }}
-                style={{
-                  y: heroY,
-                  scale: heroScale,
-                  transformOrigin: 'center center'
-                }} />
-              </AnimatePresence>
-            
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
-
-
+          <div className="relative">
+              <div className="relative h-72 sm:h-80 md:h-96 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                  key={heroSlideIndex}
+                  src={heroImageUrls[heroSlideIndex]}
+                  alt={capsule.title}
+                  className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.8, ease: 'easeInOut' }}
+                  style={{
+                    y: heroY,
+                    scale: heroScale,
+                    transformOrigin: 'center center'
+                  }} />
+                </AnimatePresence>
               
-              {/* Back button on hero */}
-              <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate('/capsules')}
-              className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
-              
-                <ArrowLeft className="w-4 h-4" />
-                {t('backToList')}
-              </Button>
+                {/* Gradient overlay - stronger on desktop where text sits on top */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent sm:from-black/80 sm:via-black/40" />
 
-              {/* Actions on hero - only for owner */}
-              {isOwner &&
-            <div className="absolute top-4 right-4 flex gap-2">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
+                {/* Back button on hero */}
+                <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/capsules')}
+                className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                
+                  <ArrowLeft className="w-4 h-4" />
+                  {t('backToList')}
+                </Button>
+
+                {/* Actions on hero - only for owner */}
+                {isOwner &&
+              <div className="absolute top-4 right-4 flex gap-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setHeaderSelectorOpen(true)}
+                            className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                            <ImagePlus className="w-4 h-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('detail.changeHeaderImage')}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setShareDialogOpen(true)}
+                            className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                            <Share2 className="w-4 h-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Partager</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
                         <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setHeaderSelectorOpen(true)}
-                          className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
-                          <ImagePlus className="w-4 h-4" />
+                      variant="ghost"
+                      size="icon"
+                      disabled={isExporting}
+                      className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                      
+                          <MoreHorizontal className="w-4 h-4" />
                         </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>{t('detail.changeHeaderImage')}</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setShareDialogOpen(true)}
-                          className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
-                          <Share2 className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Partager</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={isExporting}
-                    className="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild className="gap-2">
+                          <Link to={`/capsules/${capsule.id}/edit`}>
+                            <Edit className="w-4 h-4" />
+                            {t('detail.edit')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
+                          <FileDown className="w-4 h-4" />
+                          {t('detail.exportPdf')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
+                          <FolderArchive className="w-4 h-4" />
+                          {t('detail.exportZip')}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                      className="gap-2 text-destructive"
+                      onClick={() => setDeleteDialogOpen(true)}>
+                      
+                          <Trash2 className="w-4 h-4" />
+                          {t('detail.delete')}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+              }
+
+                {/* Title overlay on hero - desktop/tablet only */}
+                <div className="hidden sm:block absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                  <div className="max-w-4xl mx-auto">
+                    <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}>
                     
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild className="gap-2">
-                        <Link to={`/capsules/${capsule.id}/edit`}>
-                          <Edit className="w-4 h-4" />
-                          {t('detail.edit')}
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
-                        <FileDown className="w-4 h-4" />
-                        {t('detail.exportPdf')}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="gap-2" onClick={handleExportZIP} disabled={isExporting}>
-                        <FolderArchive className="w-4 h-4" />
-                        {t('detail.exportZip')}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                    className="gap-2 text-destructive"
-                    onClick={() => setDeleteDialogOpen(true)}>
-                    
-                        <Trash2 className="w-4 h-4" />
-                        {t('detail.delete')}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-            }
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <Badge className={`${statusInfo.color} backdrop-blur-sm`}>{statusInfo.label}</Badge>
+                        {capsuleCategories.map((cc) => cc.category &&
+                      <CategoryBadge
+                        key={cc.id}
+                        category={cc.category}
+                        isPrimary={cc.is_primary}
+                        size="sm" />
 
-              {/* Title overlay on hero */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <div className="max-w-4xl mx-auto">
-                  <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}>
-                  
-                    <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <Badge className={`${statusInfo.color} backdrop-blur-sm`}>{statusInfo.label}</Badge>
-                      {capsuleCategories.map((cc) => cc.category &&
-                    <CategoryBadge
-                      key={cc.id}
-                      category={cc.category}
-                      isPrimary={cc.is_primary}
-                      size="sm" />
+                      )}
+                      </div>
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-2 drop-shadow-lg">
+                        {capsule.title}
+                      </h1>
+                      {capsule.memory_date &&
+                    <p className="text-lg text-white/90 font-medium flex items-center gap-2">
+                          <CalendarHeart className="w-5 h-5" />
+                          {capsule.memory_date_precision === 'year' ?
+                      format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale }) :
+                      capsule.memory_date_precision === 'month' ?
+                      format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale }) :
+                      capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ?
+                      `${format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })} - ${capsule.memory_date_year_end}` :
 
-                    )}
-                    </div>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-2 drop-shadow-lg">
-                      {capsule.title}
-                    </h1>
-                    {capsule.memory_date &&
-                  <p className="text-lg text-white/90 font-medium flex items-center gap-2">
-                        <CalendarHeart className="w-5 h-5" />
-                        {capsule.memory_date_precision === 'year' ?
-                    format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale }) :
-                    capsule.memory_date_precision === 'month' ?
-                    format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale }) :
-                    capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ?
-                    `${format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })} - ${capsule.memory_date_year_end}` :
-
-                    format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: dateLocale })
+                      format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: dateLocale })
+                      }
+                        </p>
                     }
-                      </p>
-                  }
-                  </motion.div>
+                    </motion.div>
+                  </div>
                 </div>
+              </div>
+
+              {/* Title block below image - mobile only */}
+              <div className="sm:hidden bg-background px-4 pt-5 pb-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <h1 className="text-2xl font-display font-bold text-foreground leading-tight mb-2">
+                    {capsule.title}
+                  </h1>
+                  {capsule.memory_date &&
+                    <p className="text-base text-secondary font-medium flex items-center gap-2 mb-3">
+                      <CalendarHeart className="w-5 h-5 flex-shrink-0" />
+                      {capsule.memory_date_precision === 'year' ?
+                        format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale }) :
+                        capsule.memory_date_precision === 'month' ?
+                        format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale }) :
+                        capsule.memory_date_precision === 'range' && capsule.memory_date_year_end ?
+                        `${format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale })} - ${capsule.memory_date_year_end}` :
+                        format(new Date(capsule.memory_date), 'd MMMM yyyy', { locale: dateLocale })
+                      }
+                    </p>
+                  }
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
+                    {capsuleCategories.map((cc) => cc.category &&
+                      <CategoryBadge
+                        key={cc.id}
+                        category={cc.category}
+                        isPrimary={cc.is_primary}
+                        size="sm" />
+                    )}
+                    {capsuleSubCategories.map((csc) => csc.sub_category &&
+                      <SubCategoryBadge
+                        key={csc.id}
+                        subCategory={csc.sub_category}
+                        size="sm" />
+                    )}
+                  </div>
+                </motion.div>
               </div>
             </div> : (
 
