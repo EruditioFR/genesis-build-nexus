@@ -195,8 +195,8 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
       animate={{ y: 0, opacity: 1 }}
       className="sticky top-0 z-50 w-full bg-[hsl(215_50%_18%)] backdrop-blur-md border-b border-[hsl(215_50%_25%)] shadow-sm"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-2 min-w-0">
           {/* Logo */}
           <Link
             to="/dashboard"
