@@ -537,6 +537,30 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </DropdownMenuItem>
                   </>
                 )}
+                {/* Language selector - mobile only */}
+                <div className="sm:hidden">
+                  <DropdownMenuSeparator />
+                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <Globe className="h-3.5 w-3.5" />
+                    Langue
+                  </div>
+                  {supportedLanguages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.code}
+                      onClick={() => {
+                        i18n.changeLanguage(lang.code);
+                        document.documentElement.lang = lang.code;
+                      }}
+                      className="flex items-center gap-3 cursor-pointer"
+                    >
+                      <span className="text-base">{lang.flag}</span>
+                      <span className="flex-1">{lang.name}</span>
+                      {lang.code === i18n.language && (
+                        <Check className="h-4 w-4 text-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={onSignOut}
