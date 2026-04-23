@@ -91,8 +91,8 @@ const OrbitingSatellite = ({
           ) : satellite.type === 'video' ? (
             <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center relative">
               {satellite.url ? <LazyVideoPreview src={satellite.url} /> : null}
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-                <Video className="w-4 h-4 text-white drop-shadow" />
+              <div className="absolute bottom-0.5 right-0.5 w-4 h-4 rounded-full bg-black/60 flex items-center justify-center pointer-events-none">
+                <Video className="w-2.5 h-2.5 text-white" />
               </div>
             </div>
           ) : satellite.type === 'place' ? (
@@ -152,7 +152,11 @@ const LazyVideoPreview = ({ src }: { src: string }) => {
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="auto"
+      onLoadedMetadata={(e) => {
+        // Seek to first frame so a still image renders even before play
+        try { e.currentTarget.currentTime = 0.1; } catch {}
+      }}
     />
   );
 };
