@@ -116,46 +116,98 @@ const OrbitingSatellite = ({
 };
 
 /**
- * Plays a muted looping video preview only when visible in viewport.
- * Saves bandwidth/CPU on mobile by pausing off-screen videos.
+ * Global controller: limits the number of videos playing simultaneously.
+ * Visible videos register themselves; only the first MAX_ACTIVE play, others wait.
+ */
+const MAX_ACTIVE_VIDEOS = 3;
+const activeVideos = new Set<HTMLVideoElement>();
+const waitingVideos: HTMLVideoElement[] = [];
+
+const requestPlay = (el: HTMLVideoElement) => {
+  if (activeVideos.has(el)) return;
+  if (activeVideos.size < MAX_ACTIVE_VIDEOS) {
+    activeVideos.add(el);
+    el.play().catch(() => activeVideos.delete(el));
+  } else if (!waitingVideos.includes(el)) {
+    waitingVideos.push(el);
+  }
+};
+
+const releasePlay = (el: HTMLVideoElement) => {
+  if (activeVideos.has(el)) {
+    activeVideos.delete(el);
+    el.pause();
+    // Promote next waiting video
+    const next = waitingVideos.shift();
+    if (next) requestPlay(next);
+  } else {
+    const idx = waitingVideos.indexOf(el);
+    if (idx >= 0) waitingVideos.splice(idx, 1);
+  }
+};
+
+/**
+ * Plays a muted looping video preview only when visible in viewport
+ * AND when fewer than MAX_ACTIVE_VIDEOS are already playing.
+ * Lazy-loads the source: src is only attached once the element scrolls near viewport.
  */
 const LazyVideoPreview = ({ src }: { src: string }) => {
   const ref = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Step 1: lazy-load — only attach src once near viewport (200px margin)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Step 2: play/pause based on actual visibility (with throttling)
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !shouldLoad) return;
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.25 }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [shouldLoad]);
 
+  // Step 3: coordinate with global active-videos pool
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !shouldLoad) return;
     if (isVisible) {
-      el.play().catch(() => {});
+      requestPlay(el);
     } else {
-      el.pause();
+      releasePlay(el);
     }
-  }, [isVisible]);
+    return () => releasePlay(el);
+  }, [isVisible, shouldLoad]);
 
   return (
     <video
       ref={ref}
-      src={src}
+      src={shouldLoad ? src : undefined}
       className="w-full h-full object-cover"
       muted
       loop
       playsInline
-      preload="auto"
+      preload={shouldLoad ? 'auto' : 'none'}
       onLoadedMetadata={(e) => {
-        // Seek to first frame so a still image renders even before play
-        try { e.currentTarget.currentTime = 0.1; } catch {}
+        try { e.currentTarget.currentTime = 0.1; } catch { /* noop */ }
       }}
     />
   );
