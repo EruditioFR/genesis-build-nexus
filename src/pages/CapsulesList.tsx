@@ -488,9 +488,12 @@ const CapsulesList = () => {
           </Button>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-primary" />
+            <div className="flex items-center gap-4">
+              <div
+                className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-2xl items-center justify-center shadow-md"
+                style={{ background: 'hsl(var(--gold))' }}
+              >
+                <Clock className="w-6 h-6 text-white" strokeWidth={2.25} />
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground leading-tight">
