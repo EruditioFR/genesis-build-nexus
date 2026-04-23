@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Calendar, ChevronDown, ImageIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
@@ -33,6 +33,8 @@ interface DecadeBranchProps {
   onCapsuleClick: (capsuleId: string) => void;
   /** If provided, the branch will open with this year already expanded */
   initialExpandedYear?: string | null;
+  /** If provided, the matching memory card is scrolled into view + briefly highlighted */
+  highlightCapsuleId?: string | null;
 }
 
 const getCapsuleDate = (capsule: Capsule): Date => {
@@ -48,6 +50,7 @@ const DecadeBranch = ({
   capsuleMedias,
   onCapsuleClick,
   initialExpandedYear = null,
+  highlightCapsuleId = null,
 }: DecadeBranchProps) => {
   const { t, i18n } = useTranslation('dashboard');
 
@@ -57,6 +60,27 @@ const DecadeBranch = ({
   };
 
   const [expandedYear, setExpandedYear] = useState<string | null>(initialExpandedYear);
+  const [highlightedId, setHighlightedId] = useState<string | null>(highlightCapsuleId);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Once the requested year is expanded and the matching card is in the DOM,
+  // smoothly scroll to it and apply a brief highlight ring.
+  useEffect(() => {
+    if (!highlightCapsuleId || expandedYear !== initialExpandedYear) return;
+    const t1 = window.setTimeout(() => {
+      const el = cardsContainerRef.current?.querySelector<HTMLElement>(
+        `[data-capsule-id="${highlightCapsuleId}"]`,
+      );
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 350);
+    const t2 = window.setTimeout(() => setHighlightedId(null), 2800);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [highlightCapsuleId, expandedYear, initialExpandedYear]);
 
   const yearKeys = useMemo(() => years.map((y) => y.year), [years]);
   const yearCounts = useMemo(() => {
@@ -130,18 +154,32 @@ const DecadeBranch = ({
             {t('timeline.empty.title', { defaultValue: 'Aucun souvenir' })}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div
+            ref={cardsContainerRef}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          >
             {expandedCapsules.map((capsule, idx) => {
               const media = capsuleMedias[capsule.id];
               const date = getCapsuleDate(capsule);
+              const isHighlighted = highlightedId === capsule.id;
               return (
                 <motion.button
                   key={capsule.id}
+                  data-capsule-id={capsule.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
                   onClick={() => onCapsuleClick(capsule.id)}
-                  className="group text-left rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-foreground/20 transition-all"
+                  className={`group text-left rounded-2xl border bg-card overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-foreground/20 transition-all ${
+                    isHighlighted
+                      ? 'ring-4 ring-offset-2 ring-offset-background shadow-xl border-transparent'
+                      : 'border-border'
+                  }`}
+                  style={
+                    isHighlighted
+                      ? { ['--tw-ring-color' as string]: 'hsl(var(--gold))' }
+                      : undefined
+                  }
                 >
                   <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                     {media && media.file_type.startsWith('image/') ? (

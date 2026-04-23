@@ -98,7 +98,11 @@ const CapsuleDetail = () => {
   const handleBack = () => {
     if (cameFromTimeline) {
       navigate('/timeline', {
-        state: { openDecade: navState.openDecade, openYear: navState.openYear },
+        state: {
+          openDecade: navState.openDecade,
+          openYear: navState.openYear,
+          highlightCapsuleId: id,
+        },
       });
     } else {
       navigate('/capsules');

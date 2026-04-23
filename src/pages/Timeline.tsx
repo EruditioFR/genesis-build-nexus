@@ -99,8 +99,13 @@ const Timeline = () => {
   const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
 
   // Restore decade/year if user is coming back from a capsule detail page
-  const navState = (location.state || {}) as { openDecade?: string | null; openYear?: string | null };
+  const navState = (location.state || {}) as {
+    openDecade?: string | null;
+    openYear?: string | null;
+    highlightCapsuleId?: string | null;
+  };
   const initialOpenYear = navState.openYear ?? null;
+  const highlightCapsuleId = navState.highlightCapsuleId ?? null;
 
   useEffect(() => {
     if (navState.openDecade) {
@@ -738,6 +743,7 @@ const Timeline = () => {
                     capsuleMedias={capsuleMedias}
                     onCapsuleClick={goToCapsule}
                     initialExpandedYear={initialOpenYear}
+                    highlightCapsuleId={highlightCapsuleId}
                   />
                 ) : null
               }
