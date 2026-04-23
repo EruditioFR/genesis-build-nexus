@@ -258,45 +258,52 @@ const CapsuleDetail = () => {
     if (user && id) fetchData();
   }, [user, id, navigate, t]);
 
-  // Load hero image URLs - all images for slider
+  // Load hero items - images and videos for slider (first photo OR video)
   useEffect(() => {
-    const loadHeroImages = async () => {
+    const loadHeroItems = async () => {
       const { getSignedUrl } = await import('@/lib/signedUrlCache');
       const imageMedias = medias.filter((m) => m.file_type.startsWith('image/'));
-      
-      if (imageMedias.length === 0) {
-        setHeroImageUrls([]);
+      const videoMedias = medias.filter((m) => m.file_type.startsWith('video/'));
+
+      if (imageMedias.length === 0 && videoMedias.length === 0) {
+        setHeroItems([]);
         return;
       }
 
-      const urls: string[] = [];
-      
-      // If thumbnail is set, put it first
+      const items: { url: string; type: 'image' | 'video' }[] = [];
+
+      // If thumbnail is set, put it first (always treated as image)
       if (capsule?.thumbnail_url) {
         const thumbUrl = await getSignedUrl('capsule-medias', capsule.thumbnail_url, 3600);
-        if (thumbUrl) urls.push(thumbUrl);
+        if (thumbUrl) items.push({ url: thumbUrl, type: 'image' });
       }
 
+      // Then images
       for (const media of imageMedias) {
-        // Skip if already added as thumbnail
         if (capsule?.thumbnail_url && media.file_url === capsule.thumbnail_url) continue;
         const url = await getSignedUrl('capsule-medias', media.file_url, 3600);
-        if (url) urls.push(url);
+        if (url) items.push({ url, type: 'image' });
       }
 
-      setHeroImageUrls(urls);
+      // Then videos
+      for (const media of videoMedias) {
+        const url = await getSignedUrl('capsule-medias', media.file_url, 3600);
+        if (url) items.push({ url, type: 'video' });
+      }
+
+      setHeroItems(items);
     };
-    loadHeroImages();
+    loadHeroItems();
   }, [medias, capsule?.thumbnail_url]);
 
   // Auto-advance hero slider
   useEffect(() => {
-    if (heroImageUrls.length <= 1) return;
+    if (heroItems.length <= 1) return;
     const interval = setInterval(() => {
-      setHeroSlideIndex((prev) => (prev + 1) % heroImageUrls.length);
+      setHeroSlideIndex((prev) => (prev + 1) % heroItems.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [heroImageUrls.length]);
+  }, [heroItems.length]);
 
   const handleSignOut = async () => {
     await signOut();
