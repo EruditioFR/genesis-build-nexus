@@ -183,22 +183,22 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
       className="relative"
       data-tour="recent-capsules"
     >
-      <div className="flex items-end justify-between gap-4 mb-6 px-1 pb-4 border-b border-border">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6 px-1 pb-3 sm:pb-4 border-b border-border">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <div
             className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-2xl items-center justify-center shadow-md"
             style={{ background: 'hsl(var(--gold))' }}
           >
             <Clock className="w-6 h-6 text-white" strokeWidth={2.25} />
           </div>
-          <div>
-            <div className="flex items-center gap-2.5 mb-0.5">
-              <h3 className="text-2xl md:text-3xl font-display font-bold text-foreground leading-tight">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 mb-1 sm:mb-0.5">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-foreground leading-tight truncate">
                 {t('recentCapsules.title')}
               </h3>
               {capsules.length > 0 && (
                 <span
-                  className="px-2.5 py-0.5 rounded-full text-sm font-bold tabular-nums"
+                  className="px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold tabular-nums flex-shrink-0"
                   style={{
                     background: 'hsl(var(--gold) / 0.15)',
                     color: 'hsl(var(--gold))',
@@ -208,7 +208,7 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
                 </span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="hidden sm:block text-sm text-muted-foreground">
               {t('recentCapsules.subtitle', { defaultValue: 'Retrouvez tous vos souvenirs créés' })}
             </p>
           </div>
@@ -217,12 +217,12 @@ const RecentCapsules = ({ capsules }: RecentCapsulesProps) => {
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 font-semibold border-foreground/20 hover:border-foreground/40 hover:bg-muted shadow-sm flex-shrink-0"
+            className="gap-1.5 font-semibold border-foreground/20 hover:border-foreground/40 hover:bg-muted shadow-sm flex-shrink-0 h-9 px-3"
             asChild
           >
             <Link to="/capsules">
               <span className="hidden sm:inline">{t('recentCapsules.viewAll')}</span>
-              <span className="sm:hidden">{t('recentCapsules.viewAllShort', { defaultValue: 'Tout voir' })}</span>
+              <span className="sm:hidden text-xs">{t('recentCapsules.viewAllShort', { defaultValue: 'Tout voir' })}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
