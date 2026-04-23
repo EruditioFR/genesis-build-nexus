@@ -9,7 +9,45 @@ interface Capsule {
   content?: string;
   capsule_type: string;
   created_at: string;
+  memory_date?: string | null;
+  memory_date_precision?: string | null;
+  memory_date_year_end?: number | null;
 }
+
+const formatCapsuleDate = (capsule: Capsule): string => {
+  // Prefer memory_date (the actual date of the souvenir) over created_at
+  const raw = capsule.memory_date || capsule.created_at;
+  if (!raw) return '';
+
+  // Parse YYYY-MM-DD safely (avoid TZ shifts) — fall back to Date constructor for ISO timestamps
+  let date: Date;
+  const isoDateMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+  if (isoDateMatch) {
+    date = new Date(Date.UTC(+isoDateMatch[1], +isoDateMatch[2] - 1, +isoDateMatch[3]));
+  } else {
+    date = new Date(raw);
+  }
+  if (isNaN(date.getTime())) return '';
+
+  const precision = capsule.memory_date ? capsule.memory_date_precision : 'exact';
+
+  if (precision === 'year') {
+    return date.toLocaleDateString('fr-FR', { year: 'numeric', timeZone: 'UTC' });
+  }
+  if (precision === 'month') {
+    return date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  }
+  if (precision === 'range' && capsule.memory_date_year_end) {
+    const startYear = date.toLocaleDateString('fr-FR', { year: 'numeric', timeZone: 'UTC' });
+    return `${startYear} - ${capsule.memory_date_year_end}`;
+  }
+  return date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+};
 
 interface StoryItem {
   id: string;
@@ -106,11 +144,7 @@ export const useStoryMode = () => {
           url: signedUrlsMap[media.file_url] || undefined,
           title: capsule.title,
           description: media.caption || capsule.description || undefined,
-          date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }),
+          date: formatCapsuleDate(capsule),
         });
       });
 
@@ -122,11 +156,7 @@ export const useStoryMode = () => {
           title: capsule.title,
           description: capsule.description || undefined,
           content: capsule.content,
-          date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }),
+          date: formatCapsuleDate(capsule),
         });
       }
 
