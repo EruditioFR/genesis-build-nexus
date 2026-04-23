@@ -57,6 +57,7 @@ const CosmicTimeline = ({
                 index={idx}
                 onDecadeClick={onDecadeClick}
                 onSatelliteClick={onSatelliteClick}
+                isYear={isYearMode}
               />
             </div>
           ))}
