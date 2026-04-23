@@ -318,7 +318,7 @@ const Dashboard = () => {
 
           {/* 2. Show-guide button if welcome was hidden */}
           {hideWelcome && (
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-center mb-4">
               <button
                 onClick={() => {
                   setHideWelcome(false);
