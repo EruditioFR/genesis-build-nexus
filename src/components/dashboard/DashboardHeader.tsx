@@ -17,6 +17,8 @@ import {
   Plus,
   Sparkles,
   CirclePlay,
+  Globe,
+  Check,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,6 +39,7 @@ import {
 import { cn } from '@/lib/utils';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSelector from '@/components/LanguageSelector';
+import { supportedLanguages, type LanguageCode } from '@/lib/i18n';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import GlobalSearch from '@/components/search/GlobalSearch';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -156,7 +159,7 @@ const QuickActionItem = ({
 );
 
 const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
-  const { t } = useTranslation('dashboard');
+  const { t, i18n } = useTranslation('dashboard');
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdminOrModerator } = useAdminAuth();
@@ -534,6 +537,30 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                     </DropdownMenuItem>
                   </>
                 )}
+                {/* Language selector - mobile only */}
+                <div className="sm:hidden">
+                  <DropdownMenuSeparator />
+                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <Globe className="h-3.5 w-3.5" />
+                    Langue
+                  </div>
+                  {supportedLanguages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.code}
+                      onClick={() => {
+                        i18n.changeLanguage(lang.code);
+                        document.documentElement.lang = lang.code;
+                      }}
+                      className="flex items-center gap-3 cursor-pointer"
+                    >
+                      <span className="text-base">{lang.flag}</span>
+                      <span className="flex-1">{lang.name}</span>
+                      {lang.code === i18n.language && (
+                        <Check className="h-4 w-4 text-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={onSignOut}
