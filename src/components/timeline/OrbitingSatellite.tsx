@@ -82,7 +82,7 @@ const OrbitingSatellite = ({
                   scale: { duration: 0.25, ease: 'easeOut' },
                 }
           }
-          whileHover={{ scale: 1.8 }}
+          whileHover={{ scale: 3 }}
         >
           {satellite.type === 'photo' && satellite.url ? (
             <img
