@@ -219,8 +219,7 @@ const StoryViewer = ({
             autoPlay
             muted={isMuted}
             playsInline
-            // @ts-expect-error - iOS Safari specific
-            webkit-playsinline="true"
+            {...({ 'webkit-playsinline': 'true', 'x5-playsinline': 'true' } as Record<string, string>)}
             controls
             controlsList="nodownload"
             onEnded={goNext}
