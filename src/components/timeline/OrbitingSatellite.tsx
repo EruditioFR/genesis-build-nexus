@@ -71,7 +71,7 @@ const OrbitingSatellite = ({
           type="button"
           onClick={() => onClick(satellite.capsuleId)}
           aria-label={ariaLabel}
-          className="pointer-events-auto group relative w-full h-full rounded-full overflow-hidden bg-card border-2 border-white/80 shadow-lg hover:shadow-xl hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-secondary"
+          className="pointer-events-auto group relative w-full h-full rounded-full overflow-hidden bg-card border-2 border-white/80 shadow-lg transition-shadow hover:shadow-2xl hover:z-50 focus:outline-none focus:ring-2 focus:ring-secondary"
           initial={{ rotate: -rotateFrom }}
           animate={reduceMotion ? { rotate: -rotateFrom } : { rotate: -rotateTo }}
           transition={
@@ -79,7 +79,7 @@ const OrbitingSatellite = ({
               ? undefined
               : { duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }
           }
-          whileHover={{ scale: 1.15 }}
+          whileHover={{ scale: 1.8, transition: { duration: 0.25, ease: 'easeOut' } }}
         >
           {satellite.type === 'photo' && satellite.url ? (
             <img
