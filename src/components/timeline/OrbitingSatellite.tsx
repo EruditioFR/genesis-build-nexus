@@ -79,7 +79,8 @@ const OrbitingSatellite = ({
               ? undefined
               : { duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }
           }
-          whileHover={{ scale: 1.8, transition: { duration: 0.25, ease: 'easeOut' } }}
+          whileHover={{ scale: 1.8 }}
+          transition={{ scale: { duration: 0.25, ease: 'easeOut' } }}
         >
           {satellite.type === 'photo' && satellite.url ? (
             <img
