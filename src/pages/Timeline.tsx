@@ -232,6 +232,60 @@ const Timeline = () => {
     return years;
   }, [filteredCapsules, selectedDecade, capsuleMedias]);
 
+  // Cosmic years view: per-year count + satellites (photos/videos/places)
+  const yearsForDecadeCosmic = useMemo(() => {
+    if (!selectedDecade) return [];
+    const byYear: Record<
+      string,
+      { photos: Satellite[]; videos: Satellite[]; places: Satellite[]; seenPlaces: Set<string>; count: number }
+    > = {};
+
+    filteredCapsules.forEach((capsule) => {
+      const date = getCapsuleDate(capsule);
+      const year = format(date, 'yyyy');
+      const decade = (Math.floor(parseInt(year) / 10) * 10).toString();
+      if (decade !== selectedDecade) return;
+
+      if (!byYear[year]) {
+        byYear[year] = { photos: [], videos: [], places: [], seenPlaces: new Set(), count: 0 };
+      }
+      byYear[year].count++;
+
+      const medias = allMedias.filter((m) => m.capsule_id === capsule.id);
+      medias.forEach((m) => {
+        if (m.file_type.startsWith('image/') && byYear[year].photos.length < 4) {
+          byYear[year].photos.push({ type: 'photo', url: m.file_url, capsuleId: capsule.id });
+        } else if (m.file_type.startsWith('video/') && byYear[year].videos.length < 2) {
+          byYear[year].videos.push({ type: 'video', url: m.file_url, capsuleId: capsule.id });
+        }
+      });
+
+      const meta = (capsule.metadata as any) || {};
+      const place: string | undefined =
+        meta.location || meta.place || meta.city || meta.birth_place;
+      if (place && typeof place === 'string') {
+        const key = place.trim().toLowerCase();
+        if (!byYear[year].seenPlaces.has(key) && byYear[year].places.length < 2) {
+          byYear[year].seenPlaces.add(key);
+          byYear[year].places.push({ type: 'place', label: place.trim(), capsuleId: capsule.id });
+        }
+      }
+    });
+
+    return Object.entries(byYear)
+      .sort(([a], [b]) => parseInt(b) - parseInt(a))
+      .map(([year, data]) => {
+        const interleaved: Satellite[] = [];
+        const maxLen = Math.max(data.photos.length, data.videos.length, data.places.length);
+        for (let i = 0; i < maxLen; i++) {
+          if (data.photos[i]) interleaved.push(data.photos[i]);
+          if (data.videos[i]) interleaved.push(data.videos[i]);
+          if (data.places[i]) interleaved.push(data.places[i]);
+        }
+        return { year, count: data.count, satellites: interleaved.slice(0, 6) };
+      });
+  }, [filteredCapsules, selectedDecade, allMedias]);
+
   // Get capsules for selected year
   const capsulesForYear = useMemo(() => {
     if (!selectedYear) return [];
