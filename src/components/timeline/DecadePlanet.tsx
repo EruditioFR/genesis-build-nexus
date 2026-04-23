@@ -37,6 +37,7 @@ const DecadePlanet = ({
   index,
   onDecadeClick,
   onSatelliteClick,
+  isYear = false,
 }: DecadePlanetProps) => {
   const { t } = useTranslation('dashboard');
   const isMobile = useIsMobile();
