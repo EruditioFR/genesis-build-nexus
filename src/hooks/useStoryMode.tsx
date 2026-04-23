@@ -144,11 +144,7 @@ export const useStoryMode = () => {
           url: signedUrlsMap[media.file_url] || undefined,
           title: capsule.title,
           description: media.caption || capsule.description || undefined,
-          date: new Date(capsule.created_at).toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }),
+          date: formatCapsuleDate(capsule),
         });
       });
 
