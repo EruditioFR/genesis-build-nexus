@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HardDrive, ArrowUpRight } from 'lucide-react';
+import storageCover from '@/assets/dashboard/storage-cover.jpg';
 
 interface DashboardStorageMiniProps {
   usedMb: number;
@@ -40,8 +41,20 @@ const DashboardStorageMini = ({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.3 }}
-      className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+      className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden"
     >
+      <div className="relative h-24 w-full overflow-hidden">
+        <img
+          src={storageCover}
+          alt=""
+          loading="lazy"
+          width={1024}
+          height={512}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+      </div>
+      <div className="p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div
@@ -91,6 +104,7 @@ const DashboardStorageMini = ({
           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>
       )}
+      </div>
     </motion.div>
   );
 };
