@@ -29,8 +29,8 @@ const TermsOfSale = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Conditions Générales de Vente | Family Garden"
-        description="Consultez les conditions générales de vente de Family Garden : abonnements, paiements, garanties et politique de remboursement."
+        title="CGV : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Conditions générales de vente de Family Garden, votre journal de famille privé : abonnements, paiements, garanties et politique de remboursement."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "CGV", url: "/cgv" },

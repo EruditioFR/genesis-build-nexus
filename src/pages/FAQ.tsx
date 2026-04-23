@@ -169,8 +169,8 @@ const FAQ = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="FAQ — Questions fréquentes | Family Garden"
-        description="Trouvez rapidement des réponses à vos questions sur Family Garden : sécurité, partage familial, abonnements, gardiens, export et sauvegarde."
+        title="FAQ : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Trouvez les réponses à vos questions sur Family Garden : sécurité, partage familial, abonnements, gardiens, arbre généalogique, export et sauvegarde de vos souvenirs."
         jsonLd={[
           createFaqSchema(allFaqItems),
           createBreadcrumbSchema([

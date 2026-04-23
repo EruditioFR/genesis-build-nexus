@@ -101,8 +101,8 @@ const Login = () => {
   }];
   return <div className="min-h-screen flex flex-col lg:flex-row">
       <SEOHead
-        title="Connexion | Family Garden"
-        description="Connectez-vous à votre espace Family Garden pour retrouver et partager vos souvenirs de famille."
+        title="Connexion : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Connectez-vous à Family Garden pour retrouver vos souvenirs, votre arbre généalogique et partager vos moments avec vos proches en toute sécurité."
       />
       {/* Mobile Header - Dark background */}
       <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">

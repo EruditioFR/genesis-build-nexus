@@ -28,8 +28,8 @@ const Marketing = () => {
   return (
     <>
       <SEOHead
-        title="FamilyGarden — Cultivez vos souvenirs, récoltez votre histoire"
-        description="Plantez vos souvenirs dans un jardin numérique privé et sécurisé. Photos, vidéos, textes, audio. Regardez votre histoire familiale fleurir et porter ses fruits."
+        title="Cultivez vos souvenirs : journal de famille privé et arbre généalogique | Family Garden"
+        description="Plantez vos souvenirs dans Family Garden, votre jardin numérique privé et sécurisé : photos, vidéos, audio, textes et arbre généalogique. Regardez votre histoire familiale fleurir."
       />
 
       {/* ========== HERO — JARDIN / RACINES ========== */}

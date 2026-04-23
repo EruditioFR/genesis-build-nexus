@@ -46,8 +46,8 @@ const LegalNotice = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Mentions légales | Family Garden"
-        description="Mentions légales de Family Garden : éditeur, hébergement, sous-traitants, protection des données et informations de contact."
+        title="Mentions légales : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Mentions légales de Family Garden, votre journal de famille privé : éditeur, hébergement, sous-traitants, protection des données et informations de contact."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "Mentions légales", url: "/mentions-legales" },

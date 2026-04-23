@@ -29,8 +29,8 @@ const TermsOfUse = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Conditions Générales d'Utilisation | Family Garden"
-        description="Consultez les conditions générales d'utilisation de Family Garden : inscription, utilisation du service, propriété intellectuelle et responsabilités."
+        title="CGU : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Conditions générales d'utilisation de Family Garden, votre journal de famille privé : inscription, utilisation du service, propriété intellectuelle et responsabilités."
         jsonLd={createBreadcrumbSchema([
           { name: "Accueil", url: "/" },
           { name: "CGU", url: "/terms" },

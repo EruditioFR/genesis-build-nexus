@@ -228,8 +228,8 @@ const Signup = () => {
   }];
   return <div className="min-h-screen flex flex-col lg:flex-row">
       <SEOHead
-        title="Inscription gratuite | Family Garden"
-        description="Créez votre compte Family Garden gratuitement et commencez à préserver vos souvenirs de famille en toute sécurité."
+        title="Inscription gratuite : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
+        description="Créez gratuitement votre compte Family Garden et commencez à préserver vos souvenirs : photos, vidéos, audio, textes et arbre généalogique en toute sécurité."
       />
       {/* Mobile Header - Dark background */}
       <div className="lg:hidden bg-[#1a1a2e] px-5 py-4 flex items-center justify-between">
