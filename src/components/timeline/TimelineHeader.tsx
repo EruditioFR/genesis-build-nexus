@@ -27,12 +27,22 @@ const TimelineHeader = ({
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="relative rounded-3xl border border-border bg-card overflow-hidden shadow-sm mb-8"
+      className="relative rounded-3xl overflow-hidden shadow-md mb-8"
+      style={{ background: 'hsl(215 50% 18%)' }}
     >
+      {/* Subtle dot pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(hsl(0 0% 100%) 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      />
+
       {/* Subtle decorative blob */}
       <div
-        className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl pointer-events-none opacity-40"
-        style={{ background: 'hsl(var(--gold) / 0.18)' }}
+        className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-30"
+        style={{ background: 'hsl(var(--gold) / 0.4)' }}
       />
 
       <div className="relative p-6 md:p-8">
@@ -40,7 +50,7 @@ const TimelineHeader = ({
           {/* Icon */}
           <div
             className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
-            style={{ background: 'hsl(var(--gold) / 0.1)' }}
+            style={{ background: 'hsl(var(--gold) / 0.18)' }}
           >
             <Clock
               className="w-7 h-7"
@@ -51,26 +61,35 @@ const TimelineHeader = ({
 
           {/* Title + meta */}
           <div className="flex-1 min-w-0">
-            <h1 className="font-display font-semibold text-2xl sm:text-3xl text-foreground mb-2">
+            <h1
+              className="font-display font-semibold text-2xl sm:text-3xl mb-2"
+              style={{ color: 'hsl(0 0% 100%)' }}
+            >
               {t('timeline.header.title')}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+            <div
+              className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm"
+              style={{ color: 'hsl(0 0% 100% / 0.7)' }}
+            >
               <span className="inline-flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />
-                <span className="font-semibold text-foreground tabular-nums">
+                <span
+                  className="font-semibold tabular-nums"
+                  style={{ color: 'hsl(0 0% 100%)' }}
+                >
                   {filteredCount}
                 </span>
                 <span>{t('timeline.memories', { count: filteredCount })}</span>
               </span>
 
               {activeFiltersCount > 0 && (
-                <span className="text-muted-foreground/80">
+                <span style={{ color: 'hsl(0 0% 100% / 0.55)' }}>
                   {t('timeline.header.outOf', { total: totalCount })}
                 </span>
               )}
 
-              <span className="text-muted-foreground/80">
+              <span style={{ color: 'hsl(0 0% 100% / 0.55)' }}>
                 {t('timeline.header.organizedBy')}
               </span>
             </div>
