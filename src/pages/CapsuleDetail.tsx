@@ -106,7 +106,7 @@ const CapsuleDetail = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [heroImageUrls, setHeroImageUrls] = useState<string[]>([]);
+  const [heroItems, setHeroItems] = useState<{ url: string; type: 'image' | 'video' }[]>([]);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [headerSelectorOpen, setHeaderSelectorOpen] = useState(false);
 
@@ -258,45 +258,52 @@ const CapsuleDetail = () => {
     if (user && id) fetchData();
   }, [user, id, navigate, t]);
 
-  // Load hero image URLs - all images for slider
+  // Load hero items - images and videos for slider (first photo OR video)
   useEffect(() => {
-    const loadHeroImages = async () => {
+    const loadHeroItems = async () => {
       const { getSignedUrl } = await import('@/lib/signedUrlCache');
       const imageMedias = medias.filter((m) => m.file_type.startsWith('image/'));
-      
-      if (imageMedias.length === 0) {
-        setHeroImageUrls([]);
+      const videoMedias = medias.filter((m) => m.file_type.startsWith('video/'));
+
+      if (imageMedias.length === 0 && videoMedias.length === 0) {
+        setHeroItems([]);
         return;
       }
 
-      const urls: string[] = [];
-      
-      // If thumbnail is set, put it first
+      const items: { url: string; type: 'image' | 'video' }[] = [];
+
+      // If thumbnail is set, put it first (always treated as image)
       if (capsule?.thumbnail_url) {
         const thumbUrl = await getSignedUrl('capsule-medias', capsule.thumbnail_url, 3600);
-        if (thumbUrl) urls.push(thumbUrl);
+        if (thumbUrl) items.push({ url: thumbUrl, type: 'image' });
       }
 
+      // Then images
       for (const media of imageMedias) {
-        // Skip if already added as thumbnail
         if (capsule?.thumbnail_url && media.file_url === capsule.thumbnail_url) continue;
         const url = await getSignedUrl('capsule-medias', media.file_url, 3600);
-        if (url) urls.push(url);
+        if (url) items.push({ url, type: 'image' });
       }
 
-      setHeroImageUrls(urls);
+      // Then videos
+      for (const media of videoMedias) {
+        const url = await getSignedUrl('capsule-medias', media.file_url, 3600);
+        if (url) items.push({ url, type: 'video' });
+      }
+
+      setHeroItems(items);
     };
-    loadHeroImages();
+    loadHeroItems();
   }, [medias, capsule?.thumbnail_url]);
 
   // Auto-advance hero slider
   useEffect(() => {
-    if (heroImageUrls.length <= 1) return;
+    if (heroItems.length <= 1) return;
     const interval = setInterval(() => {
-      setHeroSlideIndex((prev) => (prev + 1) % heroImageUrls.length);
+      setHeroSlideIndex((prev) => (prev + 1) % heroItems.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [heroImageUrls.length]);
+  }, [heroItems.length]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -452,24 +459,46 @@ const CapsuleDetail = () => {
 
         {/* Hero Section with Image Slider and Parallax Effect */}
         <div className="relative" ref={heroRef}>
-          {heroImageUrls.length > 0 ?
+          {heroItems.length > 0 ?
           <div className="relative">
-              <div className="relative h-72 sm:h-80 md:h-96 overflow-hidden">
+              <div className="relative h-72 sm:h-80 md:h-96 overflow-hidden bg-black">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                  key={heroSlideIndex}
-                  src={heroImageUrls[heroSlideIndex]}
-                  alt={capsule.title}
-                  className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.8, ease: 'easeInOut' }}
-                  style={{
-                    y: heroY,
-                    scale: heroScale,
-                    transformOrigin: 'center center'
-                  }} />
+                  {heroItems[heroSlideIndex]?.type === 'video' ? (
+                    <motion.video
+                      key={heroSlideIndex}
+                      src={heroItems[heroSlideIndex].url}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      style={{
+                        y: heroY,
+                        scale: heroScale,
+                        transformOrigin: 'center center'
+                      }}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  ) : (
+                    <motion.img
+                      key={heroSlideIndex}
+                      src={heroItems[heroSlideIndex]?.url}
+                      alt={capsule.title}
+                      className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      style={{
+                        y: heroY,
+                        scale: heroScale,
+                        transformOrigin: 'center center'
+                      }}
+                    />
+                  )}
                 </AnimatePresence>
               
                 {/* Gradient overlay - stronger on desktop where text sits on top */}
