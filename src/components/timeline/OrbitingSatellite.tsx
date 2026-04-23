@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Image as ImageIcon, Video, MapPin } from 'lucide-react';
 
@@ -89,17 +90,7 @@ const OrbitingSatellite = ({
             />
           ) : satellite.type === 'video' ? (
             <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center relative">
-              {satellite.url ? (
-                <video
-                  src={satellite.url}
-                  className="w-full h-full object-cover"
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  preload="metadata"
-                />
-              ) : null}
+              {satellite.url ? <LazyVideoPreview src={satellite.url} /> : null}
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
                 <Video className="w-4 h-4 text-white drop-shadow" />
               </div>
@@ -121,6 +112,48 @@ const OrbitingSatellite = ({
         </motion.button>
       </div>
     </motion.div>
+  );
+};
+
+/**
+ * Plays a muted looping video preview only when visible in viewport.
+ * Saves bandwidth/CPU on mobile by pausing off-screen videos.
+ */
+const LazyVideoPreview = ({ src }: { src: string }) => {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.25 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (isVisible) {
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [isVisible]);
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      className="w-full h-full object-cover"
+      muted
+      loop
+      playsInline
+      preload="metadata"
+    />
   );
 };
 
