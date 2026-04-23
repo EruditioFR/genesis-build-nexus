@@ -98,6 +98,7 @@ const CosmicYearsView = ({
                     index={idx}
                     onDecadeClick={() => onYearClick(entry.year)}
                     onSatelliteClick={onSatelliteClick}
+                    isYear
                   />
                 ))}
               </div>
@@ -117,6 +118,7 @@ const CosmicYearsView = ({
                       index={idx}
                       onDecadeClick={() => onYearClick(entry.year)}
                       onSatelliteClick={onSatelliteClick}
+                      isYear
                     />
                   ))}
                 </div>
