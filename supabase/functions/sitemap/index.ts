@@ -23,6 +23,7 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { loc: "/faq", changefreq: "monthly", priority: 0.7 },
   { loc: "/about", changefreq: "monthly", priority: 0.7 },
   { loc: "/marketing", changefreq: "monthly", priority: 0.8 },
+  { loc: "/blog", changefreq: "weekly", priority: 0.7 },
   { loc: "/privacy", changefreq: "yearly", priority: 0.5 },
   { loc: "/terms", changefreq: "yearly", priority: 0.5 },
   { loc: "/cgv", changefreq: "yearly", priority: 0.5 },
