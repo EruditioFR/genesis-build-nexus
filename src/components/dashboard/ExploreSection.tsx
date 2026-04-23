@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Clock, Users, TreeDeciduous, FolderHeart, ArrowRight } from 'lucide-react';
+import { Clock, Users, GitBranch, FolderOpen, ArrowRight } from 'lucide-react';
 
 const ExploreSection = () => {
   const { t } = useTranslation('dashboard');
@@ -21,13 +21,13 @@ const ExploreSection = () => {
     },
     {
       to: '/family-tree',
-      icon: TreeDeciduous,
+      icon: GitBranch,
       labelKey: 'nav.familyTree',
       descKey: 'nav.familyTreeDesc',
     },
     {
       to: '/categories',
-      icon: FolderHeart,
+      icon: FolderOpen,
       labelKey: 'nav.categories',
       descKey: 'nav.categoriesDesc',
     },
