@@ -4,6 +4,7 @@
   "notFound": "Recuerdo no encontrado",
   "backToHome": "Volver al inicio",
   "backToList": "Volver",
+  "backToTimeline": "Volver a la cronología",
   "backToDetail": "Volver al recuerdo",
   "create": {
     "pageTitle": "Añadir un recuerdo",

@@ -4,6 +4,7 @@
   "notFound": "Memory not found",
   "backToHome": "Back to home",
   "backToList": "Back",
+  "backToTimeline": "Back to timeline",
   "backToDetail": "Back to memory",
   "create": {
     "pageTitle": "Add a memory",

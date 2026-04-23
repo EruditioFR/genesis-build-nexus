@@ -4,6 +4,7 @@
   "notFound": "Souvenir introuvable",
   "backToHome": "Retour à l'accueil",
   "backToList": "Retour",
+  "backToTimeline": "Retour à la chronologie",
   "backToDetail": "Retour au souvenir",
   "create": {
     "pageTitle": "Ajouter un souvenir",

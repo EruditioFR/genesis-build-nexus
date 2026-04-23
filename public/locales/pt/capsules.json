@@ -4,6 +4,7 @@
   "notFound": "Memória não encontrada",
   "backToHome": "Voltar ao início",
   "backToList": "Voltar",
+  "backToTimeline": "Voltar à cronologia",
   "backToDetail": "Voltar à memória",
   "create": {
     "pageTitle": "Adicionar uma memória",
