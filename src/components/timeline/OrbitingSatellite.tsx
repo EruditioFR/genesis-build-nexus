@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Image as ImageIcon, Video, MapPin } from 'lucide-react';
 
