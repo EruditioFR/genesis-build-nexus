@@ -25,7 +25,7 @@ import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
 import CosmicTimeline from '@/components/timeline/CosmicTimeline';
-import DecadeModal from '@/components/timeline/DecadeModal';
+import CosmicYearsView from '@/components/timeline/CosmicYearsView';
 import YearModal from '@/components/timeline/YearModal';
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
 import type { Satellite } from '@/components/timeline/OrbitingSatellite';
