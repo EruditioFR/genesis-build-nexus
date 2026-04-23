@@ -88,11 +88,21 @@ const OrbitingSatellite = ({
               loading="lazy"
             />
           ) : satellite.type === 'video' ? (
-            <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center relative">
               {satellite.url ? (
-                <img src={satellite.url} alt="" className="w-full h-full object-cover opacity-70" loading="lazy" />
+                <video
+                  src={satellite.url}
+                  className="w-full h-full object-cover"
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="metadata"
+                />
               ) : null}
-              <Video className="absolute w-5 h-5 text-white drop-shadow" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
+                <Video className="w-4 h-4 text-white drop-shadow" />
+              </div>
             </div>
           ) : satellite.type === 'place' ? (
             <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-600 flex flex-col items-center justify-center text-white px-1">

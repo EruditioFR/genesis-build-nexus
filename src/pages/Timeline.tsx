@@ -163,7 +163,7 @@ const Timeline = () => {
           if (m.file_type.startsWith('image/') && photoSats.length < 4) {
             photoSats.push({ type: 'photo', url: m.file_url, capsuleId: capsule.id });
           } else if (m.file_type.startsWith('video/') && videoSats.length < 2) {
-            videoSats.push({ type: 'video', capsuleId: capsule.id });
+            videoSats.push({ type: 'video', url: m.file_url, capsuleId: capsule.id });
           }
         });
 
