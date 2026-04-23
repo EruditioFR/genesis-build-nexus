@@ -116,18 +116,26 @@ const Timeline = () => {
     });
   }, [capsules, selectedTypes, selectedStatuses, selectedTags, selectedCategoriesFilter, capsuleCategories, dateFrom, dateTo]);
 
-  // Extract decades with counts and thumbnails
-  const { decades, decadeCounts, decadeThumbnails } = useMemo(() => {
+  // Extract decades with counts, thumbnails, and satellites
+  const { decades, decadeCounts, decadeThumbnails, decadeSatellites } = useMemo(() => {
     const counts: Record<string, number> = {};
     const thumbnails: Record<string, string[]> = {};
-    
+    const satellites: Record<string, Satellite[]> = {};
+    const seenPlacesByDecade: Record<string, Set<string>> = {};
+
+    // Group capsules by decade for ordered satellite extraction
+    const capsulesByDecade: Record<string, Capsule[]> = {};
+
     filteredCapsules.forEach((capsule) => {
       const date = getCapsuleDate(capsule);
       const year = parseInt(format(date, 'yyyy'));
       const decade = (Math.floor(year / 10) * 10).toString();
       counts[decade] = (counts[decade] || 0) + 1;
-      
-      // Collect thumbnails for this decade (images only)
+
+      if (!capsulesByDecade[decade]) capsulesByDecade[decade] = [];
+      capsulesByDecade[decade].push(capsule);
+
+      // Collect thumbnails (kept for backwards compat)
       const media = capsuleMedias[capsule.id];
       if (media && media.file_type.startsWith('image/')) {
         if (!thumbnails[decade]) thumbnails[decade] = [];
@@ -136,10 +144,61 @@ const Timeline = () => {
         }
       }
     });
-    
+
+    // Build satellites per decade (max 6) — mix photos, videos, places
+    Object.keys(capsulesByDecade).forEach((decade) => {
+      const decadeSats: Satellite[] = [];
+      seenPlacesByDecade[decade] = new Set<string>();
+      const capsulesList = capsulesByDecade[decade];
+
+      // 1) Photos from capsules in this decade
+      const photoSats: Satellite[] = [];
+      const videoSats: Satellite[] = [];
+      const placeSats: Satellite[] = [];
+
+      capsulesList.forEach((capsule) => {
+        // Find media for this capsule
+        const medias = allMedias.filter((m) => m.capsule_id === capsule.id);
+        medias.forEach((m) => {
+          if (m.file_type.startsWith('image/') && photoSats.length < 4) {
+            photoSats.push({ type: 'photo', url: m.file_url, capsuleId: capsule.id });
+          } else if (m.file_type.startsWith('video/') && videoSats.length < 2) {
+            videoSats.push({ type: 'video', capsuleId: capsule.id });
+          }
+        });
+
+        // Extract place from metadata or tags
+        const meta = (capsule.metadata as any) || {};
+        const place: string | undefined =
+          meta.location || meta.place || meta.city || meta.birth_place;
+        if (place && typeof place === 'string') {
+          const key = place.trim().toLowerCase();
+          if (!seenPlacesByDecade[decade].has(key) && placeSats.length < 2) {
+            seenPlacesByDecade[decade].add(key);
+            placeSats.push({ type: 'place', label: place.trim(), capsuleId: capsule.id });
+          }
+        }
+      });
+
+      // Mix: photos first, then a video, then a place, alternating
+      const interleaved: Satellite[] = [];
+      const maxLen = Math.max(photoSats.length, videoSats.length, placeSats.length);
+      for (let i = 0; i < maxLen; i++) {
+        if (photoSats[i]) interleaved.push(photoSats[i]);
+        if (videoSats[i]) interleaved.push(videoSats[i]);
+        if (placeSats[i]) interleaved.push(placeSats[i]);
+      }
+      satellites[decade] = interleaved.slice(0, 6);
+    });
+
     const sortedDecades = Object.keys(counts).sort((a, b) => parseInt(b) - parseInt(a));
-    return { decades: sortedDecades, decadeCounts: counts, decadeThumbnails: thumbnails };
-  }, [filteredCapsules, capsuleMedias]);
+    return {
+      decades: sortedDecades,
+      decadeCounts: counts,
+      decadeThumbnails: thumbnails,
+      decadeSatellites: satellites,
+    };
+  }, [filteredCapsules, capsuleMedias, allMedias]);
 
   // Get years for selected decade with thumbnails
   const yearsForDecade = useMemo(() => {
@@ -638,11 +697,12 @@ const Timeline = () => {
           ) : filteredCapsules.length === 0 ? (
             <TimelineEmpty type="no-results" onClearFilters={clearAllFilters} />
           ) : (
-            <DecadeGrid
+            <CosmicTimeline
               decades={decades}
               decadeCounts={decadeCounts}
-              decadeThumbnails={decadeThumbnails}
+              decadeSatellites={decadeSatellites}
               onDecadeClick={setSelectedDecade}
+              onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
             />
           )}
         </div>
