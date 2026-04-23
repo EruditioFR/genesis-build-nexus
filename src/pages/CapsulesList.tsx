@@ -493,7 +493,7 @@ const CapsulesList = () => {
                 <Clock className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-display font-bold text-foreground">
+                <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground leading-tight">
                   {t('list.title')}
                 </h1>
                 <p className="text-muted-foreground text-sm">
