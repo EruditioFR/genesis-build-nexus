@@ -560,10 +560,10 @@ const CapsulesList = () => {
               exit={{ opacity: 0, height: 0 }}
               className="p-4 rounded-2xl border border-border bg-card space-y-3"
             >
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3">
                 <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as CapsuleType | 'all')}>
-                  <SelectTrigger className="w-[140px]">
-                    <Filter className="w-4 h-4 mr-2" />
+                  <SelectTrigger className="w-full sm:w-[140px]">
+                    <Filter className="w-4 h-4 mr-2 flex-shrink-0" />
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -577,7 +577,7 @@ const CapsulesList = () => {
                 </Select>
 
                 <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CapsuleStatus | 'all')}>
-                  <SelectTrigger className="w-[140px]">
+                  <SelectTrigger className="w-full sm:w-[140px]">
                     <SelectValue placeholder="Statut" />
                   </SelectTrigger>
                   <SelectContent>
@@ -590,7 +590,7 @@ const CapsulesList = () => {
                 </Select>
 
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-[160px]">
+                  <SelectTrigger className="w-full sm:w-[160px]">
                     <SelectValue placeholder={t('list.categoryFilters.all')} />
                   </SelectTrigger>
                   <SelectContent>
@@ -607,8 +607,8 @@ const CapsulesList = () => {
                 </Select>
 
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
-                  <SelectTrigger className="w-[160px]">
-                    <SortAsc className="w-4 h-4 mr-2" />
+                  <SelectTrigger className="w-full sm:w-[160px]">
+                    <SortAsc className="w-4 h-4 mr-2 flex-shrink-0" />
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
