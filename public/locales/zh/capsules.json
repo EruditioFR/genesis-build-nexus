@@ -4,6 +4,7 @@
   "notFound": "回忆未找到",
   "backToHome": "返回首页",
   "backToList": "返回",
+  "backToTimeline": "返回时间线",
   "backToDetail": "返回回忆",
   "create": {
     "pageTitle": "添加回忆",

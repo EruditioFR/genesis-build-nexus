@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
@@ -89,6 +89,23 @@ const CapsuleDetail = () => {
   const { id } = useParams<{id: string;}>();
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Detect navigation context: did the user come from the timeline?
+  const navState = (location.state || {}) as { from?: string; openDecade?: string | null; openYear?: string | null };
+  const cameFromTimeline = navState.from === 'timeline';
+
+  const handleBack = () => {
+    if (cameFromTimeline) {
+      navigate('/timeline', {
+        state: { openDecade: navState.openDecade, openYear: navState.openYear },
+      });
+    } else {
+      navigate('/capsules');
+    }
+  };
+
+  const backLabelKey = cameFromTimeline ? 'backToTimeline' : 'backToList';
 
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [medias, setMedias] = useState<Media[]>([]);
@@ -508,11 +525,11 @@ const CapsuleDetail = () => {
                 <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate('/capsules')}
+                onClick={handleBack}
                 className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
                 
                   <ArrowLeft className="w-4 h-4" />
-                  {t('backToList')}
+                  {t(backLabelKey)}
                 </Button>
 
                 {/* Actions on hero - only for owner */}
@@ -676,11 +693,11 @@ const CapsuleDetail = () => {
                 <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate('/capsules')}
+                onClick={handleBack}
                 className="mb-4 gap-2 text-muted-foreground hover:text-foreground">
                 
                   <ArrowLeft className="w-4 h-4" />
-                  {t('backToList')}
+                  {t(backLabelKey)}
                 </Button>
 
                 <motion.div

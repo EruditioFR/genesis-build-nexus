@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Calendar, ChevronDown, ImageIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,8 @@ interface DecadeBranchProps {
   capsules: Capsule[];
   capsuleMedias: Record<string, CapsuleMedia | null>;
   onCapsuleClick: (capsuleId: string) => void;
+  /** If provided, the branch will open with this year already expanded */
+  initialExpandedYear?: string | null;
 }
 
 const getCapsuleDate = (capsule: Capsule): Date => {
@@ -45,6 +47,7 @@ const DecadeBranch = ({
   capsules,
   capsuleMedias,
   onCapsuleClick,
+  initialExpandedYear = null,
 }: DecadeBranchProps) => {
   const { t, i18n } = useTranslation('dashboard');
 
@@ -53,7 +56,7 @@ const DecadeBranch = ({
     return map[i18n.language] || fr;
   };
 
-  const [expandedYear, setExpandedYear] = useState<string | null>(null);
+  const [expandedYear, setExpandedYear] = useState<string | null>(initialExpandedYear);
 
   const yearKeys = useMemo(() => years.map((y) => y.year), [years]);
   const yearCounts = useMemo(() => {
