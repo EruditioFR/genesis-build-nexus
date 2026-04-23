@@ -479,12 +479,13 @@ const Timeline = () => {
         )}
       </AnimatePresence>
 
-      {/* Decade Modal */}
-      <DecadeModal
+      {/* Cosmic Years View (replaces DecadeModal) */}
+      <CosmicYearsView
         decade={selectedDecade && !selectedYear ? selectedDecade : null}
-        years={yearsForDecade}
+        years={yearsForDecadeCosmic}
         onClose={() => setSelectedDecade(null)}
         onYearClick={(year) => setSelectedYear(year)}
+        onSatelliteClick={(id) => navigate(`/capsules/${id}`)}
       />
 
       {/* Year Modal */}
