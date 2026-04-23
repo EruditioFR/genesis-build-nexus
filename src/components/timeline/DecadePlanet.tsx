@@ -48,11 +48,17 @@ const DecadePlanet = ({
     return translated !== labelKey ? translated : t('timeline.decade.labels.default', { decade });
   };
 
-  // Responsive sizing
-  const planetSize = isMobile ? 140 : 180;
-  const orbitRadius = isMobile ? 95 : 130;
-  const containerSize = isMobile ? 280 : 360;
-  const maxSatellites = isMobile ? 3 : 6;
+  // Responsive sizing — years are visually smaller & lighter than decades
+  const planetSize = isYear
+    ? (isMobile ? 96 : 120)
+    : (isMobile ? 140 : 180);
+  const orbitRadius = isYear
+    ? (isMobile ? 70 : 90)
+    : (isMobile ? 95 : 130);
+  const containerSize = isYear
+    ? (isMobile ? 210 : 260)
+    : (isMobile ? 280 : 360);
+  const maxSatellites = isYear ? (isMobile ? 2 : 4) : (isMobile ? 3 : 6);
   const visibleSatellites = satellites.slice(0, maxSatellites);
 
   const gradient = getDecadeColor(decade);
