@@ -525,11 +525,11 @@ const CapsuleDetail = () => {
                 <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate('/capsules')}
+                onClick={handleBack}
                 className="absolute top-4 left-4 gap-2 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm">
                 
                   <ArrowLeft className="w-4 h-4" />
-                  {t('backToList')}
+                  {t(backLabelKey)}
                 </Button>
 
                 {/* Actions on hero - only for owner */}
@@ -693,11 +693,11 @@ const CapsuleDetail = () => {
                 <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate('/capsules')}
+                onClick={handleBack}
                 className="mb-4 gap-2 text-muted-foreground hover:text-foreground">
                 
                   <ArrowLeft className="w-4 h-4" />
-                  {t('backToList')}
+                  {t(backLabelKey)}
                 </Button>
 
                 <motion.div
