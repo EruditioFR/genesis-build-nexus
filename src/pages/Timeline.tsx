@@ -24,10 +24,11 @@ import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import StoryViewer from '@/components/story/StoryViewer';
 import { useStoryMode } from '@/hooks/useStoryMode';
 import { useCategories, type Category } from '@/hooks/useCategories';
-import DecadeGrid from '@/components/timeline/DecadeGrid';
+import CosmicTimeline from '@/components/timeline/CosmicTimeline';
 import DecadeModal from '@/components/timeline/DecadeModal';
 import YearModal from '@/components/timeline/YearModal';
 import { TimelineEmpty, TimelineHeader } from '@/components/timeline';
+import type { Satellite } from '@/components/timeline/OrbitingSatellite';
 import NoIndex from '@/components/seo/NoIndex';
 
 import type { Database } from '@/integrations/supabase/types';

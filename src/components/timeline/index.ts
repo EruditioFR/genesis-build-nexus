@@ -1,5 +1,8 @@
+export { default as CosmicTimeline } from './CosmicTimeline';
 export { default as DecadeCard } from './DecadeCard';
 export { default as DecadeGrid } from './DecadeGrid';
+export { default as DecadePlanet } from './DecadePlanet';
+export { default as OrbitingSatellite } from './OrbitingSatellite';
 export { default as DecadeModal } from './DecadeModal';
 export { default as DecadeNavigation } from './DecadeNavigation';
 export { default as MonthGroup } from './MonthGroup';
