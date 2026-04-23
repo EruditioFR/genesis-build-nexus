@@ -48,11 +48,17 @@ const DecadePlanet = ({
     return translated !== labelKey ? translated : t('timeline.decade.labels.default', { decade });
   };
 
-  // Responsive sizing
-  const planetSize = isMobile ? 140 : 180;
-  const orbitRadius = isMobile ? 95 : 130;
-  const containerSize = isMobile ? 280 : 360;
-  const maxSatellites = isMobile ? 3 : 6;
+  // Responsive sizing — years are visually smaller & lighter than decades
+  const planetSize = isYear
+    ? (isMobile ? 96 : 120)
+    : (isMobile ? 140 : 180);
+  const orbitRadius = isYear
+    ? (isMobile ? 70 : 90)
+    : (isMobile ? 95 : 130);
+  const containerSize = isYear
+    ? (isMobile ? 210 : 260)
+    : (isMobile ? 280 : 360);
+  const maxSatellites = isYear ? (isMobile ? 2 : 4) : (isMobile ? 3 : 6);
   const visibleSatellites = satellites.slice(0, maxSatellites);
 
   const gradient = getDecadeColor(decade);
@@ -101,20 +107,38 @@ const DecadePlanet = ({
       ))}
 
       {/* Central planet */}
+      {/* Central planet — decades = filled gradient, years = outlined ring */}
       <motion.button
         type="button"
         onClick={() => onDecadeClick(decade)}
         aria-label={`${isYear ? decade : getDecadeLabel()}, ${count} ${t('timeline.memories', { count })}`}
-        className={`relative z-10 rounded-full bg-gradient-to-br ${gradient} text-white shadow-2xl hover:shadow-[0_0_60px_-10px_hsl(var(--primary)/0.5)] focus:outline-none focus:ring-4 focus:ring-secondary/50 group overflow-hidden`}
-        style={{ width: planetSize, height: planetSize }}
+        className={
+          isYear
+            ? `relative z-10 rounded-full bg-card border-2 border-dashed text-foreground shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-secondary/40 group overflow-hidden`
+            : `relative z-10 rounded-full bg-gradient-to-br ${gradient} text-white shadow-2xl hover:shadow-[0_0_60px_-10px_hsl(var(--primary)/0.5)] focus:outline-none focus:ring-4 focus:ring-secondary/50 group overflow-hidden`
+        }
+        style={{
+          width: planetSize,
+          height: planetSize,
+          ...(isYear ? { borderColor: 'hsl(var(--gold) / 0.55)' } : {}),
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
       >
-        {/* Glow */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent rounded-full" />
+        {/* Glow (decades only) */}
+        {!isYear && (
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent rounded-full" />
+        )}
 
         <div className="relative h-full w-full flex flex-col items-center justify-center p-3">
-          <span className="text-2xl sm:text-3xl font-bold drop-shadow-lg leading-none">
+          <span
+            className={
+              isYear
+                ? 'text-xl sm:text-2xl font-semibold leading-none'
+                : 'text-2xl sm:text-3xl font-bold drop-shadow-lg leading-none'
+            }
+            style={isYear ? { color: 'hsl(var(--gold))' } : undefined}
+          >
             {isYear ? decade : `${decade}'s`}
           </span>
           {!isYear && (
@@ -122,10 +146,23 @@ const DecadePlanet = ({
               {getDecadeLabel()}
             </span>
           )}
-          <div className="mt-2 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs sm:text-sm font-semibold flex items-center gap-1">
+          <div
+            className={
+              isYear
+                ? 'mt-1.5 px-2 py-0.5 rounded-full bg-muted text-[11px] sm:text-xs font-medium text-muted-foreground flex items-center gap-1'
+                : 'mt-2 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs sm:text-sm font-semibold flex items-center gap-1'
+            }
+          >
             {count} {t('timeline.memories', { count })}
           </div>
-          <ChevronRight className="absolute bottom-2 right-2 w-3 h-3 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+          <ChevronRight
+            className={
+              isYear
+                ? 'absolute bottom-1.5 right-1.5 w-3 h-3 opacity-40 group-hover:opacity-80 group-hover:translate-x-0.5 transition-all'
+                : 'absolute bottom-2 right-2 w-3 h-3 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all'
+            }
+            style={isYear ? { color: 'hsl(var(--gold))' } : undefined}
+          />
         </div>
       </motion.button>
     </motion.div>
