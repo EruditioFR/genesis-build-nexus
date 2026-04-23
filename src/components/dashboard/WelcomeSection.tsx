@@ -63,29 +63,7 @@ const WelcomeSection = ({ onHide, totalCapsules = 0 }: WelcomeSectionProps) => {
           <X className="w-4 h-4" />
         </button>
 
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-8 pr-8">
-          <div
-            className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-            style={{ background: 'hsl(var(--gold))' }}
-          >
-            <Sparkles className="w-6 h-6 text-white" strokeWidth={2.25} />
-          </div>
-          <div className="flex-1 pt-0.5">
-            <span
-              className="inline-block text-[11px] font-semibold tracking-widest uppercase mb-1.5"
-              style={{ color: 'hsl(var(--gold))' }}
-            >
-              {t('welcomeSection.eyebrow', { defaultValue: 'Bienvenue' })}
-            </span>
-            <h3 className="text-2xl md:text-[1.6rem] font-display font-bold text-foreground leading-tight mb-1.5">
-              {t('welcomeSection.title')}
-            </h3>
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl">
-              {t('welcomeSection.subtitle')}
-            </p>
-          </div>
-        </div>
+        {/* Header removed */}
 
         {/* 3 numbered steps */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-7">
