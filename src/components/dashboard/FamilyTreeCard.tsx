@@ -3,6 +3,7 @@ import { TreePine, Users, ArrowRight, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import familyTreeCover from '@/assets/dashboard/family-tree-cover.jpg';
 
 interface FamilyTreeCardProps {
   personsCount?: number;
@@ -16,8 +17,20 @@ const FamilyTreeCard = ({ personsCount = 0 }: FamilyTreeCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="p-6 rounded-2xl border border-border bg-gradient-to-br from-card to-muted/30"
+      className="rounded-2xl border border-border bg-gradient-to-br from-card to-muted/30 overflow-hidden"
     >
+      <div className="relative h-32 w-full overflow-hidden">
+        <img
+          src={familyTreeCover}
+          alt=""
+          loading="lazy"
+          width={1024}
+          height={512}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+      </div>
+      <div className="p-6 pt-4">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold">
           <TreePine className="w-5 h-5 text-primary-foreground" />
