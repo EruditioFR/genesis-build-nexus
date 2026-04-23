@@ -11,6 +11,8 @@ interface DecadePlanetProps {
   index: number;
   onDecadeClick: (decade: string) => void;
   onSatelliteClick: (capsuleId: string) => void;
+  /** When true, omit the "'s" suffix and the decade label below the number (use for individual years) */
+  isYear?: boolean;
 }
 
 const decadeColors: Record<string, string> = {
