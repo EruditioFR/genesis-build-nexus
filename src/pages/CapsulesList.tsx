@@ -233,7 +233,7 @@ const CompactListCard = ({ capsule, category, index, t, navigate, onDelete }: {
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Clock className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="text-xs sm:text-sm font-medium">
-              {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
+              {format(new Date(capsule.memory_date || capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
             </span>
           </div>
           <StatusBadge status={capsule.status} t={t} />
