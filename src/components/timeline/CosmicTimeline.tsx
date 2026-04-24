@@ -42,6 +42,7 @@ const CosmicTimeline = ({
       onDecadeClick={onDecadeClick}
       onSatelliteClick={onSatelliteClick}
       isYear={isYearMode}
+      isSelected={expandedDecade === decade}
     />
   );
 
