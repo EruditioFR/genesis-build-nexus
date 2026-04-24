@@ -156,7 +156,7 @@ const HeroSectionV3 = () => {
           >
             <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
@@ -172,27 +172,37 @@ const HeroSectionV3 = () => {
                     className="block w-full h-auto"
                     loading="lazy"
                   />
-                  {/* Gradient overlay for text readability */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
+                  {/* Gradient overlay for text readability — desktop only */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
 
-                  {/* Title + description */}
-                  <div className="absolute inset-x-0 bottom-0 px-12 sm:px-8 md:px-10 pt-5 pb-10 sm:pb-14 text-left">
-                    <h3 className="text-base sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
+                  {/* Title + description overlay — desktop only */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-14 text-left">
+                    <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
                       {SLIDES[currentSlide].title}
                     </h3>
-                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-base text-white/85 max-w-2xl drop-shadow line-clamp-2 sm:line-clamp-none">
+                    <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
                       {SLIDES[currentSlide].description}
                     </p>
                   </div>
                 </motion.div>
               </AnimatePresence>
 
-              {/* Prev arrow */}
+              {/* Mobile-only title + description below image */}
+              <div className="sm:hidden px-4 pt-4 pb-10 text-left">
+                <h3 className="text-base font-display font-semibold text-white leading-tight">
+                  {SLIDES[currentSlide].title}
+                </h3>
+                <p className="mt-1.5 text-xs text-white/80">
+                  {SLIDES[currentSlide].description}
+                </p>
+              </div>
+
+              {/* Prev arrow — only over the image area on mobile */}
               <button
                 type="button"
                 onClick={() => setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)}
                 aria-label="Slide précédent"
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+                className="absolute left-2 sm:left-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
               >
                 <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
@@ -202,7 +212,7 @@ const HeroSectionV3 = () => {
                 type="button"
                 onClick={() => setCurrentSlide((prev) => (prev + 1) % SLIDES.length)}
                 aria-label="Slide suivant"
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+                className="absolute right-2 sm:right-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
               >
                 <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
