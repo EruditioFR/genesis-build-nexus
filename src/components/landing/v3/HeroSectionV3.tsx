@@ -31,6 +31,14 @@ const HeroSectionV3 = () => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
   const { trackEvent } = useGoogleAnalytics();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+    }, SLIDE_INTERVAL);
+    return () => clearInterval(timer);
+  }, []);
 
   const handlePrimaryCta = useCallback(() => {
     trackEvent('hero_cta_click', 'conversion', 'signup_from_hero_v3');
