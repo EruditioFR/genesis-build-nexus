@@ -144,7 +144,7 @@ const HeroSectionV3 = () => {
           >
             <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)] aspect-[1264/848]">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
@@ -152,16 +152,16 @@ const HeroSectionV3 = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="absolute inset-0"
+                  className="relative"
                 >
                   <img
                     src={SLIDES[currentSlide].image}
                     alt={SLIDES[currentSlide].title}
-                    className="w-full h-full object-cover"
+                    className="block w-full h-auto"
                     loading="lazy"
                   />
                   {/* Gradient overlay for text readability */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
 
                   {/* Title + description */}
                   <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 text-left">
@@ -174,7 +174,6 @@ const HeroSectionV3 = () => {
                   </div>
                 </motion.div>
               </AnimatePresence>
-
             </div>
           </motion.div>
         </div>
