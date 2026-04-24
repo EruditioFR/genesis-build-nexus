@@ -135,7 +135,7 @@ const HeroSectionV3 = () => {
             </span>
           </motion.div>
 
-          {/* Timeline preview mockup */}
+          {/* Auto-rotating preview slider */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -143,14 +143,50 @@ const HeroSectionV3 = () => {
             className="mt-12 sm:mt-16 max-w-5xl mx-auto relative"
           >
             <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
-            <img
-              src={timelinePreview}
-              alt="Aperçu de votre chronologie familiale dans Family Garden"
-              className="relative w-full rounded-2xl shadow-2xl border border-white/10"
-              loading="lazy"
-              width={1264}
-              height={848}
-            />
+
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)] aspect-[1264/848]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0"
+                >
+                  <img
+                    src={SLIDES[currentSlide].image}
+                    alt={SLIDES[currentSlide].title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  {/* Gradient overlay for text readability */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent" />
+
+                  {/* Title + description */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 text-left">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg">
+                      {SLIDES[currentSlide].title}
+                    </h3>
+                    <p className="mt-2 text-sm sm:text-base text-white/85 max-w-2xl drop-shadow">
+                      {SLIDES[currentSlide].description}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Progress dots */}
+              <div className="absolute top-4 right-4 sm:top-5 sm:right-5 flex gap-1.5 z-10">
+                {SLIDES.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      i === currentSlide ? 'w-6 bg-[hsl(var(--gold))]' : 'w-1.5 bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
