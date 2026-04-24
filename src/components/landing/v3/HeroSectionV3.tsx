@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCallback } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
+import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
 
 const HeroSectionV3 = () => {
   const { t } = useTranslation('landing');
