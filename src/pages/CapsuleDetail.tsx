@@ -616,7 +616,6 @@ const CapsuleDetail = () => {
                     transition={{ duration: 0.5 }}>
                     
                       <div className="flex flex-wrap items-center gap-2 mb-3">
-                        <Badge className={`${statusInfo.color} backdrop-blur-sm`}>{statusInfo.label}</Badge>
                         {capsuleCategories.map((cc) => cc.category &&
                       <CategoryBadge
                         key={cc.id}
@@ -672,7 +671,6 @@ const CapsuleDetail = () => {
                     </p>
                   }
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
                     {capsuleCategories.map((cc) => cc.category &&
                       <CategoryBadge
                         key={cc.id}
@@ -733,7 +731,6 @@ const CapsuleDetail = () => {
                         </p>
                     }
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge className={statusInfo.color}>{statusInfo.label}</Badge>
                         {capsuleCategories.map((cc) => cc.category &&
                       <CategoryBadge
                         key={cc.id}
