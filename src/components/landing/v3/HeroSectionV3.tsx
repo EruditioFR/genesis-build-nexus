@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
+import organisezSouvenirs from '@/assets/mockups/organisez-souvenirs.png';
+import interfaceClaire from '@/assets/mockups/interface-claire.png';
 
 const SLIDES = [
   {
@@ -22,6 +24,16 @@ const SLIDES = [
     image: timelinePreview,
     title: 'Vos Souvenirs précieux',
     description: 'Photos, vidéos, audio et textes : rassemblez et partagez vos moments les plus chers en toute sécurité.',
+  },
+  {
+    image: interfaceClaire,
+    title: 'Une interface claire et simple',
+    description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
+  },
+  {
+    image: organisezSouvenirs,
+    title: 'Organisez vos souvenirs facilement',
+    description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
   },
 ];
 
