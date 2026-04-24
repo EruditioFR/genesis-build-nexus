@@ -69,15 +69,6 @@ const HeroSectionV3 = () => {
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 text-white/85 text-xs sm:text-sm font-medium mb-6"
-          >
-            <Lock className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-            <span>{t('v3.hero.badge')}</span>
-          </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
