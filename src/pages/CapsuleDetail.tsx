@@ -832,12 +832,36 @@ const CapsuleDetail = () => {
           <div className="grid min-w-0 gap-6 md:grid-cols-3">
             {/* Main Column */}
             <div className="md:col-span-2 min-w-0 space-y-6">
-              {/* Media Gallery - Prominent position */}
+              {/* Description - Text first */}
+              {capsule.description &&
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="prose prose-lg max-w-none">
+                
+                  <div className="text-foreground text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: capsule.description }} />
+                </motion.div>
+              }
+
+              {/* Content (for text capsules) */}
+              {capsule.content &&
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="p-6 rounded-2xl bg-muted/50 border-l-4 border-secondary">
+                
+                  <div className="text-foreground leading-relaxed prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-bold prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground" dangerouslySetInnerHTML={{ __html: capsule.content }} />
+                </motion.div>
+              }
+
+              {/* Media Gallery - After text */}
               {medias.length > 0 &&
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.08 }}
+                transition={{ duration: 0.4, delay: 0.15 }}
                 className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 
                   <div className="mb-5 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -866,30 +890,6 @@ const CapsuleDetail = () => {
                   isOwner={isOwner}
                   onThumbnailChange={(url) => setCapsule((prev) => prev ? { ...prev, thumbnail_url: url } : null)} />
                 
-                </motion.div>
-              }
-
-              {/* Description */}
-              {capsule.description &&
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="prose prose-lg max-w-none">
-                
-                  <div className="text-foreground text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: capsule.description }} />
-                </motion.div>
-              }
-
-              {/* Content (for text capsules) */}
-              {capsule.content &&
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.15 }}
-                className="p-6 rounded-2xl bg-muted/50 border-l-4 border-secondary">
-                
-                  <div className="text-foreground leading-relaxed prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-bold prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground" dangerouslySetInnerHTML={{ __html: capsule.content }} />
                 </motion.div>
               }
 
