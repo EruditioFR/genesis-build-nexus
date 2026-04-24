@@ -176,11 +176,11 @@ const HeroSectionV3 = () => {
                   <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
 
                   {/* Title + description */}
-                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 pb-12 sm:pb-14 text-left">
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg">
+                  <div className="absolute inset-x-0 bottom-0 px-12 sm:px-8 md:px-10 pt-5 pb-10 sm:pb-14 text-left">
+                    <h3 className="text-base sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
                       {SLIDES[currentSlide].title}
                     </h3>
-                    <p className="mt-2 text-sm sm:text-base text-white/85 max-w-2xl drop-shadow">
+                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-base text-white/85 max-w-2xl drop-shadow line-clamp-2 sm:line-clamp-none">
                       {SLIDES[currentSlide].description}
                     </p>
                   </div>
