@@ -99,13 +99,13 @@ const CardActions = ({ capsule, onDelete, t, navigate }: {
 // --- Status badge ---
 
 const StatusBadge = ({ status, t }: { status: CapsuleStatus; t: (key: string) => string }) => {
-  const statusConfig: Record<CapsuleStatus, { label: string; color: string }> = {
+  if (status === 'published') return null;
+  const statusConfig: Record<Exclude<CapsuleStatus, 'published'>, { label: string; color: string }> = {
     draft: { label: t('status.draft'), color: 'bg-muted text-muted-foreground' },
-    published: { label: t('status.published'), color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
     scheduled: { label: t('status.scheduled'), color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
     archived: { label: t('status.archived'), color: 'bg-muted text-muted-foreground' },
   };
-  const info = statusConfig[status];
+  const info = statusConfig[status as Exclude<CapsuleStatus, 'published'>];
   return <Badge variant="outline" className={info.color}>{info.label}</Badge>;
 };
 
