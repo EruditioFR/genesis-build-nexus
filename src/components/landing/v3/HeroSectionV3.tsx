@@ -118,7 +118,7 @@ const HeroSectionV3 = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-white/55 text-xs sm:text-sm"
+            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-white text-xs sm:text-sm"
           >
             <span className="inline-flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
