@@ -13,6 +13,8 @@ interface DecadePlanetProps {
   onSatelliteClick: (capsuleId: string) => void;
   /** When true, omit the "'s" suffix and the decade label below the number (use for individual years) */
   isYear?: boolean;
+  /** When true, applies a slow heartbeat animation to highlight the active selection */
+  isSelected?: boolean;
 }
 
 const decadeColors: Record<string, string> = {
