@@ -106,6 +106,24 @@ const HeroSectionV3 = () => {
               {t('v3.hero.trust3')}
             </span>
           </motion.div>
+
+          {/* Timeline preview mockup */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="mt-12 sm:mt-16 max-w-5xl mx-auto relative"
+          >
+            <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
+            <img
+              src={timelinePreview}
+              alt="Aperçu de votre chronologie familiale dans Family Garden"
+              className="relative w-full rounded-2xl shadow-2xl border border-white/10"
+              loading="lazy"
+              width={1264}
+              height={848}
+            />
+          </motion.div>
         </div>
       </div>
     </section>
