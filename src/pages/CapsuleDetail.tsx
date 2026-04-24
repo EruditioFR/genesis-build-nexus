@@ -634,7 +634,7 @@ const CapsuleDetail = () => {
                       {capsule.memory_date &&
                     <p className="text-lg text-white/90 font-medium flex items-center gap-2">
                           <CalendarHeart className="w-5 h-5" />
-                          {capsule.memory_date_precision === 'year' ?
+                          {t('detail.wasOn')}{capsule.memory_date_precision === 'year' ?
                       format(new Date(capsule.memory_date), 'yyyy', { locale: dateLocale }) :
                       capsule.memory_date_precision === 'month' ?
                       format(new Date(capsule.memory_date), 'MMMM yyyy', { locale: dateLocale }) :
