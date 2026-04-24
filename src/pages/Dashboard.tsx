@@ -139,7 +139,7 @@ const Dashboard = () => {
         // Fetch recent capsules (last 5) with content and metadata
         const { data: capsulesData } = await supabase
           .from('capsules')
-          .select('id, title, capsule_type, created_at, thumbnail_url, content, metadata')
+          .select('id, title, capsule_type, created_at, memory_date, thumbnail_url, content, metadata')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(5);
