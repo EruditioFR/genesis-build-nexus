@@ -567,6 +567,16 @@ const CapsuleDetail = () => {
                         <TooltipContent>Partager</TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
+                    <Button
+                      asChild
+                      variant="secondary"
+                      size="sm"
+                      className="gap-1.5 shadow-gold font-semibold">
+                      <Link to={`/capsules/${capsule.id}/edit`}>
+                        <Edit className="w-4 h-4" />
+                        {t('detail.edit')}
+                      </Link>
+                    </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -579,13 +589,6 @@ const CapsuleDetail = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild className="gap-2">
-                          <Link to={`/capsules/${capsule.id}/edit`}>
-                            <Edit className="w-4 h-4" />
-                            {t('detail.edit')}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
                           <FileDown className="w-4 h-4" />
                           {t('detail.exportPdf')}
@@ -753,6 +756,15 @@ const CapsuleDetail = () => {
                   {isOwner &&
                 <div className="flex gap-2">
                       <Button
+                    asChild
+                    variant="secondary"
+                    className="gap-2 shadow-gold font-semibold">
+                    <Link to={`/capsules/${capsule.id}/edit`}>
+                      <Edit className="w-4 h-4" />
+                      {t('detail.edit')}
+                    </Link>
+                  </Button>
+                      <Button
                     variant="outline"
                     size="icon"
                     onClick={() => setHeaderSelectorOpen(true)}
@@ -774,13 +786,6 @@ const CapsuleDetail = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild className="gap-2">
-                            <Link to={`/capsules/${capsule.id}/edit`}>
-                              <Edit className="w-4 h-4" />
-                              {t('detail.edit')}
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
                           <DropdownMenuItem className="gap-2" onClick={handleExportPDF} disabled={isExporting}>
                             <FileDown className="w-4 h-4" />
                             {t('detail.exportPdf')}
