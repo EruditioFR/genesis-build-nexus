@@ -1391,25 +1391,15 @@ const SeniorFriendlyEditor = ({
       {/* Fixed bottom: Publish & Draft buttons on review step */}
       {currentStep === 4 && (
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/98 backdrop-blur-sm border-t border-border p-4 shadow-lg">
-          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row gap-3">
+          <div className="max-w-5xl mx-auto">
             <Button
               size="lg"
-              className="flex-1 h-14 text-lg gap-3 bg-gradient-to-r from-secondary to-secondary/80 hover:opacity-90 text-secondary-foreground shadow-lg"
+              className="w-full h-14 text-lg gap-3 bg-gradient-to-r from-secondary to-secondary/80 hover:opacity-90 text-secondary-foreground shadow-lg"
               onClick={onPublish}
               disabled={isSaving}
             >
               <Send className="w-6 h-6" />
               {t('seniorEditor.publish', 'Publier mon souvenir')}
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="flex-1 h-14 text-lg gap-3 border-2"
-              onClick={onSaveDraft}
-              disabled={isSaving}
-            >
-              <Save className="w-6 h-6" />
-              {t('seniorEditor.saveDraft', 'Enregistrer comme brouillon')}
             </Button>
           </div>
         </div>
