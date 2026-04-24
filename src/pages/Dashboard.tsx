@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { MessageSquareHeart, ArrowRight, HelpCircle, X } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format, parseISO } from 'date-fns';
 import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -39,6 +39,7 @@ interface CapsuleRow {
   title: string;
   capsule_type: CapsuleType;
   created_at: string;
+  memory_date: string | null;
   thumbnail_url: string | null;
   content: string | null;
   metadata: { youtube_id?: string; youtube_url?: string; youtube_ids?: string[]; youtube_urls?: string[] } | null;
@@ -138,7 +139,7 @@ const Dashboard = () => {
         // Fetch recent capsules (last 5) with content and metadata
         const { data: capsulesData } = await supabase
           .from('capsules')
-          .select('id, title, capsule_type, created_at, thumbnail_url, content, metadata')
+          .select('id, title, capsule_type, created_at, memory_date, thumbnail_url, content, metadata')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(5);
@@ -168,11 +169,15 @@ const Dashboard = () => {
 
           const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => {
             const metadata = capsule.metadata as { youtube_id?: string } | null;
+            const locale = getDateLocale(i18n.language);
+            const dateLabel = capsule.memory_date
+              ? format(parseISO(capsule.memory_date), 'd MMMM yyyy', { locale })
+              : formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale });
             return {
               id: capsule.id,
               title: capsule.title,
               type: capsule.capsule_type,
-              date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: getDateLocale(i18n.language) }),
+              date: dateLabel,
               thumbnail: capsule.thumbnail_url || undefined,
               content: capsule.content || undefined,
               firstMediaUrl: firstImageMap[capsule.id] || undefined,
