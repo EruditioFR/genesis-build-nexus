@@ -8,6 +8,7 @@ import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
 import organisezSouvenirs from '@/assets/mockups/organisez-souvenirs.png';
 import interfaceClaire from '@/assets/mockups/interface-claire.png';
+import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
 
 const SLIDES = [
   {
@@ -16,7 +17,7 @@ const SLIDES = [
     description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
   },
   {
-    image: timelinePreview,
+    image: arbreGenealogique,
     title: 'Votre Arbre généalogique',
     description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
   },
