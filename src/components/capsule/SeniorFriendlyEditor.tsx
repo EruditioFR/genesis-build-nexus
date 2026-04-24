@@ -834,27 +834,16 @@ const SeniorFriendlyEditor = ({
             onKeyDown={(e) => e.stopPropagation()}
           >
             <div className={cn(
-              "bg-card border-2 rounded-2xl p-6 space-y-4",
+              "bg-card border-2 rounded-2xl p-6",
               content.trim() ? "border-primary/40 bg-primary/5" : "border-border"
             )}>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <PenLine className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground">
-                    {t('seniorEditor.textStepTitle', 'Écrivez votre texte')}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('seniorEditor.textStepDesc', 'Lettre, histoire, anecdote, réflexion...')}
-                  </p>
-                </div>
-                {content.trim() && (
-                  <Badge className="ml-auto bg-primary/10 text-primary border-primary/30">
+              {content.trim() && (
+                <div className="flex justify-end mb-3">
+                  <Badge className="bg-primary/10 text-primary border-primary/30">
                     <Check className="w-3 h-3 mr-1" /> {t('seniorEditor.added', 'Ajouté')}
                   </Badge>
-                )}
-              </div>
+                </div>
+              )}
               <RichTextEditor
                 placeholder={t('seniorEditor.textPlaceholder', 'Écrivez votre texte ici...')}
                 value={content}
