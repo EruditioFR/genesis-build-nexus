@@ -86,6 +86,7 @@
     "updatedAt": "Updated on",
     "memoryOf": "Memory of",
     "wasOn": "It was on ",
+    "wasIn": "It was in ",
     "sharedWith": "Shared with",
     "sharedBy": "Shared by",
     "unknownOwner": "Unknown user",
