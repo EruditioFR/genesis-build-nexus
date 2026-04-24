@@ -39,6 +39,7 @@ interface CapsuleRow {
   title: string;
   capsule_type: CapsuleType;
   created_at: string;
+  memory_date: string | null;
   thumbnail_url: string | null;
   content: string | null;
   metadata: { youtube_id?: string; youtube_url?: string; youtube_ids?: string[]; youtube_urls?: string[] } | null;
