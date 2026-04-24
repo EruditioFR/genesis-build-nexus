@@ -22,11 +22,6 @@ const SLIDES = [
     description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
   },
   {
-    image: timelinePreview,
-    title: 'Vos Souvenirs précieux',
-    description: 'Photos, vidéos, audio et textes : rassemblez et partagez vos moments les plus chers en toute sécurité.',
-  },
-  {
     image: interfaceClaire,
     title: 'Une interface claire et simple',
     description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
