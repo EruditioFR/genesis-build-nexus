@@ -115,15 +115,16 @@ const DecadePlanet = ({
         type="button"
         onClick={() => onDecadeClick(decade)}
         aria-label={`${isYear ? decade : getDecadeLabel()}, ${count} ${t('timeline.memories', { count })}`}
-        className={
+        className={`${
           isYear
             ? `relative z-10 rounded-full bg-card border-2 border-dashed text-foreground shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-secondary/40 group overflow-hidden`
             : `relative z-10 rounded-full bg-gradient-to-br ${gradient} text-white shadow-2xl hover:shadow-[0_0_60px_-10px_hsl(var(--primary)/0.5)] focus:outline-none focus:ring-4 focus:ring-secondary/50 group overflow-hidden`
-        }
+        } ${isSelected ? 'animate-heartbeat ring-4 ring-offset-2 ring-offset-background' : ''}`}
         style={{
           width: planetSize,
           height: planetSize,
           ...(isYear ? { borderColor: 'hsl(var(--gold) / 0.55)' } : {}),
+          ...(isSelected ? { ['--tw-ring-color' as string]: 'hsl(var(--gold))' } : {}),
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
