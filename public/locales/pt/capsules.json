@@ -85,6 +85,7 @@
     "createdAt": "Criado em",
     "updatedAt": "Modificado em",
     "memoryOf": "Memória de",
+    "wasOn": "Foi em ",
     "sharedWith": "Partilhado com",
     "sharedBy": "Partilhado por",
     "unknownOwner": "Utilizador desconhecido",

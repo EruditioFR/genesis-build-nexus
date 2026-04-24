@@ -85,6 +85,7 @@
     "createdAt": "생성일",
     "updatedAt": "수정일",
     "memoryOf": "추억",
+    "wasOn": "그날은 ",
     "sharedWith": "공유 대상",
     "sharedBy": "공유자",
     "unknownOwner": "알 수 없는 사용자",
