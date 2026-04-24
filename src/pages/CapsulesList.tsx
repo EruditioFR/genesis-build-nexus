@@ -163,7 +163,7 @@ const FeaturedListCard = ({ capsule, category, t, navigate, onDelete }: {
             <div className="flex items-center gap-1.5 text-white/70">
               <Clock className="w-4 h-4" />
               <span className="text-sm font-medium">
-                {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
+                {format(new Date(capsule.memory_date || capsule.created_at), 'd MMM yyyy', { locale: getDateLocale('fr') })}
               </span>
             </div>
             {category && <CategoryBadge category={category} size="sm" showIcon />}
