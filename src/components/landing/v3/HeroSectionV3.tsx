@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -156,7 +156,7 @@ const HeroSectionV3 = () => {
           >
             <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
@@ -172,20 +172,67 @@ const HeroSectionV3 = () => {
                     className="block w-full h-auto"
                     loading="lazy"
                   />
-                  {/* Gradient overlay for text readability */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
+                  {/* Gradient overlay for text readability — desktop only */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
 
-                  {/* Title + description */}
-                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 text-left">
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg">
+                  {/* Title + description overlay — desktop only */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-14 text-left">
+                    <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
                       {SLIDES[currentSlide].title}
                     </h3>
-                    <p className="mt-2 text-sm sm:text-base text-white/85 max-w-2xl drop-shadow">
+                    <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
                       {SLIDES[currentSlide].description}
                     </p>
                   </div>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Mobile-only title + description below image */}
+              <div className="sm:hidden px-4 pt-4 pb-10 text-left">
+                <h3 className="text-base font-display font-semibold text-white leading-tight">
+                  {SLIDES[currentSlide].title}
+                </h3>
+                <p className="mt-1.5 text-xs text-white/80">
+                  {SLIDES[currentSlide].description}
+                </p>
+              </div>
+
+              {/* Prev arrow — only over the image area on mobile */}
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)}
+                aria-label="Slide précédent"
+                className="absolute left-2 sm:left-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Next arrow */}
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => (prev + 1) % SLIDES.length)}
+                aria-label="Slide suivant"
+                className="absolute right-2 sm:right-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+              >
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Pagination dots */}
+              <div className="absolute inset-x-0 bottom-3 sm:bottom-4 z-10 flex items-center justify-center gap-2">
+                {SLIDES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentSlide(idx)}
+                    aria-label={`Aller au slide ${idx + 1}`}
+                    className={`h-2 rounded-full transition-all ${
+                      idx === currentSlide
+                        ? 'w-6 bg-[hsl(var(--gold))]'
+                        : 'w-2 bg-white/40 hover:bg-white/60'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
