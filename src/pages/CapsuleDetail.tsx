@@ -6,7 +6,7 @@ import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink } from
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink, Info } from
 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -1013,31 +1013,30 @@ const CapsuleDetail = () => {
 
                   
 
-                  {/* Created date */}
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">{t('detail.createdAt')}</p>
-                      <p className="font-medium text-foreground">
-                        {format(new Date(capsule.created_at), 'd MMM yyyy', { locale: dateLocale })}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Updated date */}
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">{t('detail.updatedAt', 'Modifié le')}</p>
-                      <p className="font-medium text-foreground">
-                        {format(new Date(capsule.updated_at), 'd MMM yyyy', { locale: dateLocale })}
-                      </p>
-                    </div>
-                  </div>
+                  {/* Dates info - compact with tooltip */}
+                  <TooltipProvider delayDuration={150}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className="w-9 h-9 rounded-full bg-muted hover:bg-muted/70 flex items-center justify-center text-muted-foreground transition-colors"
+                          aria-label={t('detail.dateInfo', 'Informations de date')}
+                        >
+                          <Info className="w-4 h-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="left" className="text-xs">
+                        <p>
+                          <span className="text-muted-foreground">{t('detail.createdAt')} :</span>{' '}
+                          <span className="font-medium">{format(new Date(capsule.created_at), 'd MMM yyyy', { locale: dateLocale })}</span>
+                        </p>
+                        <p>
+                          <span className="text-muted-foreground">{t('detail.updatedAt', 'Modifié le')} :</span>{' '}
+                          <span className="font-medium">{format(new Date(capsule.updated_at), 'd MMM yyyy', { locale: dateLocale })}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
 
                   {/* Sub-categories */}
                   {capsuleSubCategories.length > 0 &&
