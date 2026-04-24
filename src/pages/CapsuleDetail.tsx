@@ -609,7 +609,7 @@ const CapsuleDetail = () => {
 
                 {/* Title overlay on hero - desktop/tablet only */}
                 <div className="hidden sm:block absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                  <div className="max-w-4xl mx-auto">
+                  <div className="w-full">
                     <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -693,7 +693,7 @@ const CapsuleDetail = () => {
 
           /* Fallback header without image */
           <div className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 pt-4 pb-8 px-4">
-              <div className="max-w-4xl mx-auto">
+              <div className="w-full">
                 <Button
                 variant="ghost"
                 size="sm"
@@ -811,7 +811,7 @@ const CapsuleDetail = () => {
         </div>
 
         {/* Main Content */}
-        <main className="max-w-4xl mx-auto w-full min-w-0 px-4 sm:px-6 lg:px-8 py-8">
+        <main className="w-full min-w-0 px-4 sm:px-6 lg:px-8 py-8">
           {/* Shared by indicator for non-owner */}
           {!isOwner && ownerProfile &&
           <motion.div
