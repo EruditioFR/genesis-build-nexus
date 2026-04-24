@@ -169,11 +169,15 @@ const Dashboard = () => {
 
           const formattedCapsules: RecentCapsule[] = capsulesData.map((capsule: CapsuleRow) => {
             const metadata = capsule.metadata as { youtube_id?: string } | null;
+            const locale = getDateLocale(i18n.language);
+            const dateLabel = capsule.memory_date
+              ? format(parseISO(capsule.memory_date), 'd MMMM yyyy', { locale })
+              : formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale });
             return {
               id: capsule.id,
               title: capsule.title,
               type: capsule.capsule_type,
-              date: formatDistanceToNow(new Date(capsule.created_at), { addSuffix: true, locale: getDateLocale(i18n.language) }),
+              date: dateLabel,
               thumbnail: capsule.thumbnail_url || undefined,
               content: capsule.content || undefined,
               firstMediaUrl: firstImageMap[capsule.id] || undefined,
