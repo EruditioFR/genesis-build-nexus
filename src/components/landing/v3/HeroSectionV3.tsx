@@ -175,17 +175,6 @@ const HeroSectionV3 = () => {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Progress dots */}
-              <div className="absolute top-4 right-4 sm:top-5 sm:right-5 flex gap-1.5 z-10">
-                {SLIDES.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${
-                      i === currentSlide ? 'w-6 bg-[hsl(var(--gold))]' : 'w-1.5 bg-white/40'
-                    }`}
-                  />
-                ))}
-              </div>
             </div>
           </motion.div>
         </div>
