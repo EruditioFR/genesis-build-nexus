@@ -6,7 +6,7 @@ import { fr, enUS, es, ko, zhCN } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Edit, Share2, Trash2, Clock, Image, Video, Music,
-  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink } from
+  FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink, Info } from
 'lucide-react';
 
 import { Button } from '@/components/ui/button';
