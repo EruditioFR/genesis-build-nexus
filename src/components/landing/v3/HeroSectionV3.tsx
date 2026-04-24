@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
+import heroFamilyMeadow from '@/assets/hero-family-meadow.jpg';
 import organisezSouvenirs from '@/assets/mockups/organisez-souvenirs.png';
 import interfaceClaire from '@/assets/mockups/interface-claire.png';
 import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
