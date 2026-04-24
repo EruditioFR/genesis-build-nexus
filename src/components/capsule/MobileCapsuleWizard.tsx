@@ -395,16 +395,6 @@ const MobileCapsuleWizard = ({
                 <Send className="w-5 h-5" />
                 {t('wizard.publish')}
               </Button>
-              <Button
-                variant="mobileSecondary"
-                size="mobile"
-                className="w-full gap-3"
-                onClick={onSaveDraft}
-                disabled={isSaving}
-              >
-                <Save className="w-5 h-5" />
-                {t('wizard.saveDraft')}
-              </Button>
             </div>
           </div>
         );
