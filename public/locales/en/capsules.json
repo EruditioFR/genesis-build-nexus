@@ -85,6 +85,7 @@
     "createdAt": "Created on",
     "updatedAt": "Updated on",
     "memoryOf": "Memory of",
+    "wasOn": "It was on ",
     "sharedWith": "Shared with",
     "sharedBy": "Shared by",
     "unknownOwner": "Unknown user",
