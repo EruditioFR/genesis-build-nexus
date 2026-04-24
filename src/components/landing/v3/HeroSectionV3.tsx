@@ -12,14 +12,9 @@ import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
 
 const SLIDES = [
   {
-    image: timelinePreview,
-    title: 'Votre Chronologie familiale',
-    description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
-  },
-  {
-    image: arbreGenealogique,
-    title: 'Votre Arbre généalogique',
-    description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
+    image: organisezSouvenirs,
+    title: 'Organisez vos souvenirs facilement',
+    description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
   },
   {
     image: interfaceClaire,
@@ -27,9 +22,14 @@ const SLIDES = [
     description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
   },
   {
-    image: organisezSouvenirs,
-    title: 'Organisez vos souvenirs facilement',
-    description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
+    image: arbreGenealogique,
+    title: 'Votre Arbre généalogique',
+    description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
+  },
+  {
+    image: timelinePreview,
+    title: 'Votre Chronologie familiale',
+    description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
   },
 ];
 
