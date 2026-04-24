@@ -144,35 +144,44 @@ const HeroSectionV3 = () => {
             <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
 
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSlide}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="relative"
-                >
-                  <img
+              {/* Fixed-height image stage to prevent layout shift between slides */}
+              <div className="relative w-full h-[260px] sm:h-[420px] md:h-[520px] lg:h-[600px] overflow-hidden">
+                <AnimatePresence initial={false}>
+                  <motion.img
+                    key={currentSlide}
                     src={SLIDES[currentSlide].image}
                     alt={SLIDES[currentSlide].title}
-                    className="block w-full h-auto"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.9, ease: 'easeInOut' }}
+                    className="absolute inset-0 w-full h-full object-cover object-top"
                     loading="lazy"
                   />
-                  {/* Gradient overlay for text readability — desktop only */}
-                  <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
+                </AnimatePresence>
 
-                  {/* Title + description overlay — desktop only */}
-                  <div className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-14 text-left">
+                {/* Gradient overlay for text readability — desktop only */}
+                <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
+
+                {/* Title + description overlay — desktop only (crossfade) */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`text-${currentSlide}`}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-14 text-left"
+                  >
                     <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
                       {SLIDES[currentSlide].title}
                     </h3>
                     <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
                       {SLIDES[currentSlide].description}
                     </p>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
               {/* Mobile-only title + description below image */}
               <div className="sm:hidden px-4 pt-4 pb-10 text-left">
