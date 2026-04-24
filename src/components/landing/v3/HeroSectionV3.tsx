@@ -2,10 +2,30 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
+
+const SLIDES = [
+  {
+    image: timelinePreview,
+    title: 'Votre Chronologie familiale',
+    description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
+  },
+  {
+    image: timelinePreview,
+    title: 'Votre Arbre généalogique',
+    description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
+  },
+  {
+    image: timelinePreview,
+    title: 'Vos Souvenirs précieux',
+    description: 'Photos, vidéos, audio et textes : rassemblez et partagez vos moments les plus chers en toute sécurité.',
+  },
+];
+
+const SLIDE_INTERVAL = 5000;
 
 const HeroSectionV3 = () => {
   const { t } = useTranslation('landing');
