@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -176,7 +176,7 @@ const HeroSectionV3 = () => {
                   <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
 
                   {/* Title + description */}
-                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 text-left">
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 md:p-10 pb-12 sm:pb-14 text-left">
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg">
                       {SLIDES[currentSlide].title}
                     </h3>
@@ -186,6 +186,43 @@ const HeroSectionV3 = () => {
                   </div>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Prev arrow */}
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)}
+                aria-label="Slide précédent"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Next arrow */}
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => (prev + 1) % SLIDES.length)}
+                aria-label="Slide suivant"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
+              >
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Pagination dots */}
+              <div className="absolute inset-x-0 bottom-3 sm:bottom-4 z-10 flex items-center justify-center gap-2">
+                {SLIDES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentSlide(idx)}
+                    aria-label={`Aller au slide ${idx + 1}`}
+                    className={`h-2 rounded-full transition-all ${
+                      idx === currentSlide
+                        ? 'w-6 bg-[hsl(var(--gold))]'
+                        : 'w-2 bg-white/40 hover:bg-white/60'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
