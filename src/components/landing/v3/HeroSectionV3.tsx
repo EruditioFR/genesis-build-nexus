@@ -62,6 +62,15 @@ const HeroSectionV3 = () => {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
+      {/* Family meadow background image with transparency */}
+      <div
+        className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-25 mix-blend-luminosity"
+        style={{ backgroundImage: `url(${heroFamilyMeadow})` }}
+        aria-hidden="true"
+      />
+      {/* Dark gradient overlay to keep text readable */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[hsl(215_50%_18%)]/70 via-[hsl(215_45%_22%)]/60 to-[hsl(215_40%_28%)]/80" />
+
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage: 'radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
