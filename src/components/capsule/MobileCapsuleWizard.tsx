@@ -1,9 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, 
   ArrowRight, 
-  Check, 
   Type, 
   Image, 
   Video, 
@@ -12,15 +10,13 @@ import {
   Tag,
   Calendar,
   Send,
-  Save,
-  Link as LinkIcon,
+  ArrowLeft,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fr, enUS, es, ko, zhCN, type Locale } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -394,16 +390,6 @@ const MobileCapsuleWizard = ({
               >
                 <Send className="w-5 h-5" />
                 {t('wizard.publish')}
-              </Button>
-              <Button
-                variant="mobileSecondary"
-                size="mobile"
-                className="w-full gap-3"
-                onClick={onSaveDraft}
-                disabled={isSaving}
-              >
-                <Save className="w-5 h-5" />
-                {t('wizard.saveDraft')}
               </Button>
             </div>
           </div>
