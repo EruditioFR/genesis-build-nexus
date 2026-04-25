@@ -431,7 +431,9 @@
           "label": "Vida pessoal",
           "question": "Que momento mudou o rumo da sua vida?"
         }
-      }
+      },
+      "subtitleLead": "O Family Garden reúne fotos, vídeos, vozes e relatos num ",
+      "subtitleHighlight": "diário de família privado, organizado, duradouro e transmissível."
     },
     "howItWorks": {
       "badge": "Como funciona",

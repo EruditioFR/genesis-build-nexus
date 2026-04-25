@@ -87,7 +87,8 @@ const HeroSectionV3 = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
           >
-            {t('v3.hero.subtitle')}
+            {t('v3.hero.subtitleLead')}
+            <span className="text-[hsl(var(--gold))] font-medium">{t('v3.hero.subtitleHighlight')}</span>
           </motion.p>
 
           <motion.div

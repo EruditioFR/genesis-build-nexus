@@ -431,7 +431,9 @@
           "label": "개인의 삶",
           "question": "당신의 인생 행로를 바꾼 순간은 무엇인가요?"
         }
-      }
+      },
+      "subtitleLead": "Family Garden은 사진, 영상, 음성, 이야기를 ",
+      "subtitleHighlight": "비공개·정돈·영구·전승 가능한 가족 일기에 모아드립니다."
     },
     "howItWorks": {
       "badge": "어떻게 동작하나요",

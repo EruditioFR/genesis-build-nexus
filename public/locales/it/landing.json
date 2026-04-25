@@ -431,7 +431,9 @@
           "label": "Vita personale",
           "question": "Quale momento ha cambiato il corso della tua vita?"
         }
-      }
+      },
+      "subtitleLead": "Family Garden raccoglie foto, video, voci e racconti in un ",
+      "subtitleHighlight": "diario di famiglia privato, organizzato, duraturo e trasmissibile."
     },
     "howItWorks": {
       "badge": "Come funziona",
