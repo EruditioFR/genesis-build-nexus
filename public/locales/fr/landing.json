@@ -155,7 +155,7 @@
           "timeline": "Chronologie avancée",
           "familyTree": "Arbre généalogique interactif",
           "podcast": "Création d'un podcast à partir de vos souvenirs",
-          "vipSupport": "Support VIP via WhatsApp",
+          "vipSupport": "Support VIP par messagerie privée",
           "noAds": "Sans publicité"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "Éparpillés dans 10 apps",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... Vos souvenirs sont dispersés et impossibles à retrouver."
+          "description": "Vos souvenirs s'éparpillent entre messageries, clouds et réseaux sociaux : impossible de les retrouver."
         },
         "ephemeral": {
           "title": "Stories éphémères",
@@ -450,8 +450,8 @@
         "s1": {
           "beforeTitle": "Aujourd'hui : vos souvenirs sont partout",
           "beforeItems": [
-            "Conversations WhatsApp qui s'effacent",
-            "iCloud, Google Photos… c'est à qui déjà ?",
+            "Messages qui s'effacent au fil du temps",
+            "Photos perdues entre plusieurs clouds",
             "Vieux disques durs, USB oubliées",
             "Cartons de photos jamais numérisés"
           ],
@@ -527,14 +527,14 @@
         "mariage": {
           "badge": "Mariage",
           "title": "Revivre le plus beau jour, au-delà de l'album du photographe",
-          "problem": "Vous recevez des centaines de photos et vidéos de vos invités, éparpillées sur WhatsApp, Drive, AirDrop. Six mois plus tard, plus personne ne sait où elles sont.",
+          "problem": "Vous recevez des centaines de photos et vidéos de vos invités, éparpillées entre messageries, clouds et partages instantanés. Six mois plus tard, plus personne ne sait où elles sont.",
           "promise": "Centralisez tous les médias du mariage dans un album privé partagé : invités, témoins et famille déposent leurs souvenirs au même endroit, organisés et sauvegardés.",
           "cta": "Créer l'album de mariage"
         },
         "voyage": {
           "badge": "Voyages en famille",
           "title": "Garder vivantes les aventures, pas seulement les photos",
-          "problem": "Au retour d'un voyage, on partage 10 photos sur Instagram, puis tout disparaît dans la pellicule. Les anecdotes, les rencontres, les fous rires : oubliés.",
+          "problem": "Au retour d'un voyage, on partage quelques photos sur les réseaux sociaux, puis tout disparaît dans la pellicule. Les anecdotes, les rencontres, les fous rires : oubliés.",
           "promise": "Racontez chaque étape avec photos, vidéos, audio et texte. Vos enfants pourront un jour rouvrir le carnet de bord de vos voyages — comme s'ils y étaient.",
           "cta": "Créer un carnet de voyage"
         },

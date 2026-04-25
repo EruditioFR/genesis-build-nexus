@@ -155,7 +155,7 @@
           "timeline": "Advanced timeline",
           "familyTree": "Interactive family tree",
           "podcast": "Create a podcast from your memories",
-          "vipSupport": "VIP support via WhatsApp",
+          "vipSupport": "VIP support via private messaging",
           "noAds": "No ads"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "Scattered across 10 apps",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... Your memories are dispersed and impossible to find."
+          "description": "Your memories scatter across messaging apps, clouds and social networks: impossible to find."
         },
         "ephemeral": {
           "title": "Ephemeral stories",
@@ -450,8 +450,8 @@
         "s1": {
           "beforeTitle": "Today: your memories are everywhere",
           "beforeItems": [
-            "WhatsApp conversations that fade away",
-            "iCloud, Google Photos… whose was it again?",
+            "Messages that fade away over time",
+            "Photos lost across several clouds",
             "Old hard drives, forgotten USB sticks",
             "Boxes of photos never digitized"
           ],
@@ -527,14 +527,14 @@
         "mariage": {
           "badge": "Wedding",
           "title": "Relive the most beautiful day, beyond the photographer's album",
-          "problem": "You receive hundreds of photos and videos from your guests, scattered across WhatsApp, Drive, AirDrop. Six months later, no one knows where they are.",
+          "problem": "You receive hundreds of photos and videos from your guests, scattered across messaging apps, clouds and instant-share tools. Six months later, no one knows where they are.",
           "promise": "Centralize all the wedding media in a shared private album: guests, witnesses and family drop their memories in the same place, organized and saved.",
           "cta": "Create the wedding album"
         },
         "voyage": {
           "badge": "Family travels",
           "title": "Keep the adventures alive, not just the photos",
-          "problem": "Coming back from a trip, you share 10 photos on Instagram, then everything disappears into the camera roll. Anecdotes, encounters, laughter: forgotten.",
+          "problem": "Coming back from a trip, you share a few photos on social media, then everything disappears into the camera roll. Anecdotes, encounters, laughter: forgotten.",
           "promise": "Tell every stage with photos, videos, audio and text. One day your children can reopen the logbook of your travels — as if they were there.",
           "cta": "Create a travel logbook"
         },

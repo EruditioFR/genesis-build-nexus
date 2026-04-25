@@ -155,7 +155,7 @@
           "timeline": "Cronologia avançada",
           "familyTree": "Árvore genealógica interativa",
           "podcast": "Criação de podcast a partir das suas memórias",
-          "vipSupport": "Suporte VIP via WhatsApp",
+          "vipSupport": "Suporte VIP por mensagens privadas",
           "noAds": "Sem publicidade"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "Espalhadas em 10 apps",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... As suas memórias estão dispersas e impossíveis de encontrar."
+          "description": "As suas memórias dispersam-se entre apps de mensagens, nuvens e redes sociais: impossíveis de encontrar."
         },
         "ephemeral": {
           "title": "Stories efémeras",
@@ -449,8 +449,8 @@
         "s1": {
           "beforeTitle": "Hoje: as suas memórias estão por todo o lado",
           "beforeItems": [
-            "Conversas no WhatsApp que se apagam",
-            "iCloud, Google Photos… de quem era mesmo?",
+            "Mensagens que se apagam com o tempo",
+            "Fotos perdidas entre várias nuvens",
             "Discos rígidos antigos, pens USB esquecidas",
             "Caixas de fotos nunca digitalizadas"
           ],
@@ -526,14 +526,14 @@
         "mariage": {
           "badge": "Casamento",
           "title": "Reviver o dia mais bonito, para além do álbum do fotógrafo",
-          "problem": "Recebe centenas de fotos e vídeos dos seus convidados, espalhados pelo WhatsApp, Drive, AirDrop. Seis meses depois, ninguém sabe onde estão.",
+          "problem": "Recebe centenas de fotos e vídeos dos seus convidados, espalhados entre apps de mensagens, nuvens e ferramentas de partilha instantânea. Seis meses depois, ninguém sabe onde estão.",
           "promise": "Centralize todos os media do casamento num álbum privado partilhado: convidados, padrinhos e família depositam as suas memórias no mesmo sítio, organizadas e guardadas.",
           "cta": "Criar o álbum de casamento"
         },
         "voyage": {
           "badge": "Viagens em família",
           "title": "Manter vivas as aventuras, não só as fotos",
-          "problem": "Ao regressar de uma viagem, partilha 10 fotos no Instagram e depois tudo desaparece no rolo da câmara. Anedotas, encontros, risadas: esquecidos.",
+          "problem": "Ao regressar de uma viagem, partilha algumas fotos nas redes sociais e depois tudo desaparece no rolo da câmara. Anedotas, encontros, risadas: esquecidos.",
           "promise": "Conte cada etapa com fotos, vídeos, áudio e texto. Os seus filhos poderão um dia reabrir o diário de bordo das suas viagens, como se lá tivessem estado.",
           "cta": "Criar um diário de viagem"
         },

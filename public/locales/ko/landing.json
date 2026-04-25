@@ -155,7 +155,7 @@
           "timeline": "고급 타임라인",
           "familyTree": "인터랙티브 가계도",
           "podcast": "추억으로 팟캐스트 만들기",
-          "vipSupport": "WhatsApp VIP 지원",
+          "vipSupport": "프라이빗 메신저 VIP 지원",
           "noAds": "광고 없음"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "10개 앱에 흩어져",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... 추억이 분산되어 찾을 수 없습니다."
+          "description": "메신저, 클라우드, SNS에 흩어진 추억을 찾을 수 없습니다."
         },
         "ephemeral": {
           "title": "사라지는 스토리",
@@ -449,8 +449,8 @@
         "s1": {
           "beforeTitle": "오늘: 추억이 사방에 흩어져 있습니다",
           "beforeItems": [
-            "사라지는 WhatsApp 대화",
-            "iCloud, Google Photos… 누구의 것이었죠?",
+            "시간이 지나며 사라지는 메시지",
+            "여러 클라우드 사이에서 사라진 사진",
             "오래된 하드디스크, 잊혀진 USB",
             "한 번도 디지털화되지 않은 사진 상자"
           ],
@@ -526,7 +526,7 @@
         "mariage": {
           "badge": "결혼식",
           "title": "사진작가의 앨범을 넘어 가장 아름다운 날을 다시 살기",
-          "problem": "WhatsApp, Drive, AirDrop에 흩어진 수백 장의 사진과 영상을 받습니다. 6개월 뒤에는 어디에 있는지 아무도 모릅니다.",
+          "problem": "메신저, 클라우드, 즉석 공유 도구에 흩어진 수백 장의 사진과 영상을 하객들로부터 받습니다. 6개월 뒤에는 어디에 있는지 아무도 모릅니다.",
           "promise": "결혼식의 모든 미디어를 공유 비공개 앨범에 모으세요. 손님, 증인, 가족이 같은 곳에 정돈되고 저장된 추억을 남깁니다.",
           "cta": "결혼식 앨범 만들기"
         },
