@@ -125,7 +125,7 @@ const About = () => {
                   journal de famille qui donne du sens à vos souvenirs.
                 </p>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  Dans un monde où tout s'éparpille (téléphone, WhatsApp, drive…), FamilyGarden vous aide 
+                  Dans un monde où tout s'éparpille (téléphone, messageries, clouds…), FamilyGarden vous aide 
                   à retrouver vos souvenirs facilement et à les partager avec les bonnes personnes.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
