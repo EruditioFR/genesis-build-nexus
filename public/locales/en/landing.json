@@ -432,7 +432,9 @@
           "label": "Personal life",
           "question": "What moment changed the course of your life?"
         }
-      }
+      },
+      "subtitleLead": "Family Garden brings photos, videos, voices and stories together in a ",
+      "subtitleHighlight": "private, organized, lasting and transmissible family journal."
     },
     "howItWorks": {
       "badge": "How it works",

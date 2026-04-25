@@ -431,7 +431,9 @@
           "label": "个人生活",
           "question": "哪个时刻改变了您的人生轨迹?"
         }
-      }
+      },
+      "subtitleLead": "Family Garden 将照片、视频、声音和故事汇聚于一本",
+      "subtitleHighlight": "私密、有序、持久且可传承的家庭日记中。"
     },
     "howItWorks": {
       "badge": "如何运作",
