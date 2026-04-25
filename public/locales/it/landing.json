@@ -155,7 +155,7 @@
           "timeline": "Timeline avanzata",
           "familyTree": "Albero genealogico interattivo",
           "podcast": "Crea un podcast dai tuoi ricordi",
-          "vipSupport": "Supporto VIP via WhatsApp",
+          "vipSupport": "Supporto VIP via messaggistica privata",
           "noAds": "Nessuna pubblicità"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "Sparsi in 10 app",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... I tuoi ricordi sono dispersi e impossibili da trovare."
+          "description": "I tuoi ricordi si disperdono tra app di messaggistica, cloud e social: impossibili da ritrovare."
         },
         "ephemeral": {
           "title": "Storie effimere",
@@ -449,8 +449,8 @@
         "s1": {
           "beforeTitle": "Oggi: i tuoi ricordi sono ovunque",
           "beforeItems": [
-            "Conversazioni WhatsApp che svaniscono",
-            "iCloud, Google Photos… di chi era già?",
+            "Messaggi che svaniscono col tempo",
+            "Foto perse tra più cloud diversi",
             "Vecchi hard disk, USB dimenticate",
             "Scatole di foto mai digitalizzate"
           ],
@@ -526,14 +526,14 @@
         "mariage": {
           "badge": "Matrimonio",
           "title": "Rivivere il giorno più bello, oltre l'album del fotografo",
-          "problem": "Ricevi centinaia di foto e video dagli invitati, sparpagliati su WhatsApp, Drive, AirDrop. Sei mesi dopo, nessuno sa più dove siano.",
+          "problem": "Ricevi centinaia di foto e video dagli invitati, sparpagliati tra app di messaggistica, cloud e strumenti di condivisione istantanea. Sei mesi dopo, nessuno sa più dove siano.",
           "promise": "Centralizza tutti i media del matrimonio in un album privato condiviso: invitati, testimoni e famiglia depositano i loro ricordi nello stesso posto, organizzati e salvati.",
           "cta": "Creare l'album di matrimonio"
         },
         "voyage": {
           "badge": "Viaggi in famiglia",
           "title": "Tenere vive le avventure, non solo le foto",
-          "problem": "Tornati da un viaggio condividi 10 foto su Instagram, poi tutto sparisce nel rullino. Aneddoti, incontri, risate: dimenticati.",
+          "problem": "Tornati da un viaggio condividi qualche foto sui social, poi tutto sparisce nel rullino. Aneddoti, incontri, risate: dimenticati.",
           "promise": "Racconta ogni tappa con foto, video, audio e testo. I tuoi figli potranno un giorno riaprire il diario di bordo dei tuoi viaggi, come se ci fossero stati.",
           "cta": "Creare un diario di viaggio"
         },

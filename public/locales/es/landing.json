@@ -155,7 +155,7 @@
           "timeline": "Cronología avanzada",
           "familyTree": "Árbol genealógico interactivo",
           "podcast": "Crea un podcast de tus recuerdos",
-          "vipSupport": "Soporte VIP por WhatsApp",
+          "vipSupport": "Soporte VIP por mensajería privada",
           "noAds": "Sin publicidad"
         }
       }
@@ -298,7 +298,7 @@
       "items": {
         "scattered": {
           "title": "Dispersos en 10 apps",
-          "description": "Google Photos, iCloud, WhatsApp, Instagram... Tus recuerdos están dispersos e imposibles de encontrar."
+          "description": "Tus recuerdos se dispersan entre mensajerías, nubes y redes sociales: imposibles de encontrar."
         },
         "ephemeral": {
           "title": "Stories efímeras",
@@ -449,8 +449,8 @@
         "s1": {
           "beforeTitle": "Hoy: tus recuerdos están por todas partes",
           "beforeItems": [
-            "Conversaciones de WhatsApp que se borran",
-            "iCloud, Google Photos… ¿de quién era?",
+            "Mensajes que se borran con el tiempo",
+            "Fotos perdidas entre varias nubes",
             "Viejos discos duros, USB olvidadas",
             "Cajas de fotos nunca digitalizadas"
           ],
@@ -526,14 +526,14 @@
         "mariage": {
           "badge": "Boda",
           "title": "Revivir el día más bello, más allá del álbum del fotógrafo",
-          "problem": "Recibes cientos de fotos y vídeos de tus invitados, dispersos en WhatsApp, Drive, AirDrop. Seis meses después, nadie sabe dónde están.",
+          "problem": "Recibes cientos de fotos y vídeos de tus invitados, dispersos entre mensajerías, nubes y herramientas de compartir al instante. Seis meses después, nadie sabe dónde están.",
           "promise": "Centraliza todos los recuerdos de la boda en un álbum privado compartido: invitados, testigos y familia depositan sus recuerdos en el mismo sitio, organizados y guardados.",
           "cta": "Crear el álbum de boda"
         },
         "voyage": {
           "badge": "Viajes en familia",
           "title": "Mantener vivas las aventuras, no solo las fotos",
-          "problem": "Al volver de un viaje compartes 10 fotos en Instagram y luego todo desaparece en el carrete. Anécdotas, encuentros, risas: olvidados.",
+          "problem": "Al volver de un viaje compartes algunas fotos en redes sociales y luego todo desaparece en el carrete. Anécdotas, encuentros, risas: olvidados.",
           "promise": "Cuenta cada etapa con fotos, vídeos, audio y texto. Tus hijos podrán algún día abrir el cuaderno de bitácora de tus viajes, como si estuvieran allí.",
           "cta": "Crear un cuaderno de viaje"
         },
