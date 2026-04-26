@@ -112,6 +112,8 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
       
       const inviterName = inviterProfile?.display_name || session.user.email || 'Un utilisateur';
 
+      let emailFailures = 0;
+
       for (const member of pendingEmails) {
         // Insert member
         const { data: insertedMember, error } = await supabase
@@ -127,7 +129,7 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
         if (error) throw error;
 
         // Send invitation email
-        await supabase.functions.invoke('send-invitation-email', {
+        const { error: emailError } = await supabase.functions.invoke('send-invitation-email', {
           body: {
             circleId,
             circleName,
@@ -137,9 +139,20 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
             invitationToken: insertedMember.invitation_token,
           },
         });
+
+        if (emailError) {
+          emailFailures += 1;
+          console.error(`[AddMemberDialog] send-invitation-email failed for ${member.email}:`, emailError);
+        }
       }
 
-      toast.success(`${pendingEmails.length} invitation(s) envoyée(s) par email !`);
+      if (emailFailures === 0) {
+        toast.success(`${pendingEmails.length} invitation(s) envoyée(s) par email !`);
+      } else if (emailFailures < pendingEmails.length) {
+        toast.warning(`${pendingEmails.length - emailFailures} invitation(s) envoyée(s). ${emailFailures} email(s) n'a/ont pas pu être envoyé(s).`);
+      } else {
+        toast.error(`Les membres ont été ajoutés, mais l'envoi des emails a échoué. Réessayez ou prévenez-les via un autre canal.`);
+      }
       setPendingEmails([]);
       form.reset();
       onOpenChange(false);
