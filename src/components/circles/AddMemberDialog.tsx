@@ -128,8 +128,11 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
 
         if (error) throw error;
 
-        // Send invitation email
-        const { error: emailError } = await supabase.functions.invoke('send-invitation-email', {
+        // Send invitation email (pass JWT explicitly so the edge function can authenticate)
+        const { data: emailData, error: emailError } = await supabase.functions.invoke('send-invitation-email', {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
           body: {
             circleId,
             circleName,
@@ -139,6 +142,7 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
             invitationToken: insertedMember.invitation_token,
           },
         });
+        console.log('[AddMemberDialog] send-invitation-email result for', member.email, { emailData, emailError });
 
         if (emailError) {
           emailFailures += 1;
