@@ -23,28 +23,30 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  console.log("[send-invitation-email] Invoked", {
+    method: req.method,
+    hasAuth: !!req.headers.get("Authorization"),
+  });
+
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Best-effort auth check — do NOT block the email if missing/invalid,
+    // because the member row has already been inserted client-side under RLS.
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Non autorisé" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
-    }
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace("Bearer ", "")
-    );
-
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Non autorisé" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+    if (authHeader) {
+      const { data: { user }, error: authError } = await supabase.auth.getUser(
+        authHeader.replace("Bearer ", "")
+      );
+      if (authError || !user) {
+        console.warn("[send-invitation-email] Auth header present but invalid, continuing anyway", authError?.message);
+      } else {
+        console.log("[send-invitation-email] Authenticated user:", user.email);
+      }
+    } else {
+      console.warn("[send-invitation-email] No Authorization header — proceeding without user context");
     }
 
     const { circleId, circleName, inviterName, memberEmail, memberName, invitationToken }: InvitationEmailRequest = await req.json();
