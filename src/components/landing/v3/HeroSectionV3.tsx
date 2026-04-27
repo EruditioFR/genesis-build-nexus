@@ -11,35 +11,11 @@ import interfaceClaire from '@/assets/mockups/interface-claire.png';
 import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
 
 const SLIDES = [
-  {
-    image: organisezSouvenirs,
-    title: 'Organisez vos souvenirs facilement',
-    description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
-    icon: FolderHeart,
-    label: 'Organisation',
-  },
-  {
-    image: interfaceClaire,
-    title: 'Une interface claire et simple',
-    description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
-    icon: LayoutGrid,
-    label: 'Tableau de bord',
-  },
-  {
-    image: arbreGenealogique,
-    title: 'Votre Arbre généalogique',
-    description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
-    icon: TreePine,
-    label: 'Arbre généalogique',
-  },
-  {
-    image: timelinePreview,
-    title: 'Votre Chronologie familiale',
-    description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
-    icon: Clock,
-    label: 'Chronologie',
-  },
-];
+  { image: organisezSouvenirs, icon: FolderHeart, key: 'organisation' },
+  { image: interfaceClaire, icon: LayoutGrid, key: 'dashboard' },
+  { image: arbreGenealogique, icon: TreePine, key: 'tree' },
+  { image: timelinePreview, icon: Clock, key: 'timeline' },
+] as const;
 
 const SLIDE_INTERVAL = 5500;
 
