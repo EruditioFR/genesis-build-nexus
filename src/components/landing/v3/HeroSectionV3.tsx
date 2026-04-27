@@ -235,8 +235,7 @@ const HeroSectionV3 = () => {
                     className="sm:hidden absolute bottom-2 right-2 z-20 h-9 w-9 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
                   >
                     <Maximize2 className="h-4 w-4" />
-                    />
-                  </AnimatePresence>
+                  </button>
 
                   {/* Section label badge — desktop only (mobile has dedicated label below) */}
                   <div className="hidden sm:block absolute top-4 left-4 z-10">
