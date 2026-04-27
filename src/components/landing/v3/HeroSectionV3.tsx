@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X, ZoomIn, ZoomOut, Expand } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X, ZoomIn, ZoomOut, Expand, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -174,10 +174,15 @@ const HeroSectionV3 = () => {
               <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
               {t('v3.hero.trust2')}
             </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
+            <motion.span
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6, type: 'spring', stiffness: 200 }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/15 px-3 py-1 text-[hsl(var(--gold))] font-semibold shadow-[0_0_20px_hsl(var(--gold)/0.25)]"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2.5} />
               {t('v3.hero.trust3')}
-            </span>
+            </motion.span>
           </motion.div>
 
           {/* === Premium Preview Slider === */}
