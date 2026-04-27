@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
@@ -15,38 +15,49 @@ const SLIDES = [
     image: organisezSouvenirs,
     title: 'Organisez vos souvenirs facilement',
     description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
+    icon: FolderHeart,
+    label: 'Organisation',
   },
   {
     image: interfaceClaire,
     title: 'Une interface claire et simple',
     description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
+    icon: LayoutGrid,
+    label: 'Tableau de bord',
   },
   {
     image: arbreGenealogique,
     title: 'Votre Arbre généalogique',
     description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
+    icon: TreePine,
+    label: 'Arbre généalogique',
   },
   {
     image: timelinePreview,
     title: 'Votre Chronologie familiale',
     description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
+    icon: Clock,
+    label: 'Chronologie',
   },
 ];
 
-const SLIDE_INTERVAL = 5000;
+const SLIDE_INTERVAL = 5500;
 
 const HeroSectionV3 = () => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
   const { trackEvent } = useGoogleAnalytics();
+  const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
     }, SLIDE_INTERVAL);
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   const handlePrimaryCta = useCallback(() => {
     trackEvent('hero_cta_click', 'conversion', 'signup_from_hero_v3');
@@ -59,17 +70,24 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
+  const goNext = useCallback(() => setCurrentSlide((p) => (p + 1) % SLIDES.length), []);
+  const goPrev = useCallback(() => setCurrentSlide((p) => (p - 1 + SLIDES.length) % SLIDES.length), []);
+
+  const active = SLIDES[currentSlide];
+  const Icon = active.icon;
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
+          backgroundImage:
+            'radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
         }}
       />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -135,100 +153,229 @@ const HeroSectionV3 = () => {
             </span>
           </motion.div>
 
-          {/* Auto-rotating preview slider */}
+          {/* === Premium Preview Slider === */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-12 sm:mt-16 max-w-5xl mx-auto relative"
+            className="mt-14 sm:mt-20 max-w-5xl mx-auto relative"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
-            <div className="absolute -inset-6 bg-gradient-to-br from-[hsl(var(--gold))]/20 to-white/5 rounded-3xl blur-3xl opacity-60" />
+            {/* Dynamic glow halo */}
+            <motion.div
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : { opacity: [0.5, 0.75, 0.5], scale: [1, 1.04, 1] }
+              }
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -inset-8 sm:-inset-12 bg-[radial-gradient(ellipse_at_center,hsl(var(--gold)/0.35),transparent_60%)] blur-3xl pointer-events-none"
+              aria-hidden="true"
+            />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[hsl(215_50%_18%)]">
-              {/* Fixed-height image stage to prevent layout shift between slides */}
-              <div className="relative w-full h-[260px] sm:h-[420px] md:h-[520px] lg:h-[600px] overflow-hidden">
-                <AnimatePresence initial={false}>
-                  <motion.img
-                    key={currentSlide}
-                    src={SLIDES[currentSlide].image}
-                    alt={SLIDES[currentSlide].title}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.9, ease: 'easeInOut' }}
-                    className="absolute inset-0 w-full h-full object-cover object-top"
-                    loading="lazy"
-                  />
-                </AnimatePresence>
+            {/* Animated gradient border wrapper */}
+            <div className="relative rounded-2xl p-[1.5px] bg-gradient-to-br from-[hsl(var(--gold))]/60 via-white/10 to-[hsl(var(--gold))]/30 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+              <div className="relative rounded-[14px] overflow-hidden bg-[hsl(215_50%_14%)]">
 
-                {/* Gradient overlay for text readability — desktop only */}
-                <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/50 to-transparent pointer-events-none" />
+                {/* macOS-style window chrome */}
+                <div className="hidden sm:flex items-center justify-between px-4 py-2.5 bg-[hsl(215_55%_12%)] border-b border-white/5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                  </div>
+                  <div className="flex items-center gap-2 text-[11px] text-white/50 font-mono">
+                    <Sparkles className="h-3 w-3 text-[hsl(var(--gold))]" />
+                    <span>app.familygarden.fr</span>
+                  </div>
+                  <div className="text-[11px] text-white/40 tabular-nums">
+                    {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
+                  </div>
+                </div>
 
-                {/* Title + description overlay — desktop only (crossfade) */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`text-${currentSlide}`}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-14 text-left"
-                  >
-                    <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
-                      {SLIDES[currentSlide].title}
-                    </h3>
-                    <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
-                      {SLIDES[currentSlide].description}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                {/* Image stage */}
+                <div className="relative w-full h-[260px] sm:h-[420px] md:h-[520px] lg:h-[600px] overflow-hidden">
+                  <AnimatePresence initial={false}>
+                    <motion.img
+                      key={currentSlide}
+                      src={active.image}
+                      alt={active.title}
+                      initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.04 }}
+                      animate={{ opacity: 1, scale: prefersReducedMotion ? 1 : 1.08 }}
+                      exit={{ opacity: 0 }}
+                      transition={
+                        prefersReducedMotion
+                          ? { duration: 0.6 }
+                          : {
+                              opacity: { duration: 0.9, ease: 'easeInOut' },
+                              scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
+                            }
+                      }
+                      className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
+                      loading="lazy"
+                    />
+                  </AnimatePresence>
 
-              {/* Mobile-only title + description below image */}
-              <div className="sm:hidden px-4 pt-4 pb-10 text-left">
-                <h3 className="text-base font-display font-semibold text-white leading-tight">
-                  {SLIDES[currentSlide].title}
-                </h3>
-                <p className="mt-1.5 text-xs text-white/80">
-                  {SLIDES[currentSlide].description}
-                </p>
-              </div>
+                  {/* Section label badge — top left */}
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`badge-${currentSlide}`}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ duration: 0.4 }}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-[11px] sm:text-xs font-medium shadow-lg"
+                      >
+                        <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[hsl(var(--gold))]" />
+                        <span className="uppercase tracking-wider">{active.label}</span>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
 
-              {/* Prev arrow — only over the image area on mobile */}
-              <button
-                type="button"
-                onClick={() => setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)}
-                aria-label="Slide précédent"
-                className="absolute left-2 sm:left-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
-              >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-              </button>
+                  {/* Pause indicator */}
+                  <AnimatePresence>
+                    {isPaused && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        className="hidden sm:flex absolute top-4 right-4 z-10 items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white/80 text-[11px] uppercase tracking-wider"
+                      >
+                        <Pause className="w-3 h-3 fill-current" />
+                        Pause
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-              {/* Next arrow */}
-              <button
-                type="button"
-                onClick={() => setCurrentSlide((prev) => (prev + 1) % SLIDES.length)}
-                aria-label="Slide suivant"
-                className="absolute right-2 sm:right-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center transition-colors"
-              >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-              </button>
+                  {/* Gradient overlay for text readability — desktop */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none" />
 
-              {/* Pagination dots */}
-              <div className="absolute inset-x-0 bottom-3 sm:bottom-4 z-10 flex items-center justify-center gap-2">
-                {SLIDES.map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setCurrentSlide(idx)}
-                    aria-label={`Aller au slide ${idx + 1}`}
-                    className={`h-2 rounded-full transition-all ${
-                      idx === currentSlide
-                        ? 'w-6 bg-[hsl(var(--gold))]'
-                        : 'w-2 bg-white/40 hover:bg-white/60'
-                    }`}
-                  />
-                ))}
+                  {/* Title + description overlay — desktop */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`text-${currentSlide}`}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                      className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-16 text-left"
+                    >
+                      <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
+                        {active.title}
+                      </h3>
+                      <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
+                        {active.description}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Mobile-only title + description below image */}
+                <div className="sm:hidden px-4 pt-4 pb-16 text-left bg-[hsl(215_55%_12%)]">
+                  <div className="inline-flex items-center gap-1.5 mb-2 text-[hsl(var(--gold))] text-[11px] font-medium uppercase tracking-wider">
+                    <Icon className="h-3 w-3" />
+                    {active.label}
+                  </div>
+                  <h3 className="text-base font-display font-semibold text-white leading-tight">
+                    {active.title}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-white/80">
+                    {active.description}
+                  </p>
+                </div>
+
+                {/* Prev arrow */}
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  aria-label="Slide précédent"
+                  className="absolute left-2 sm:left-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
+                >
+                  <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                </button>
+
+                {/* Next arrow */}
+                <button
+                  type="button"
+                  onClick={goNext}
+                  aria-label="Slide suivant"
+                  className="absolute right-2 sm:right-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
+                >
+                  <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                </button>
+
+                {/* Bottom controls bar: progress + thumbnails */}
+                <div className="absolute inset-x-0 bottom-0 z-10 px-3 sm:px-5 pb-3 sm:pb-4">
+                  {/* Progress bar */}
+                  <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
+                    <motion.div
+                      key={`progress-${currentSlide}-${isPaused ? 'p' : 'r'}`}
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{
+                        duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
+                        ease: 'linear',
+                      }}
+                      className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
+                    />
+                  </div>
+
+                  {/* Thumbnails (desktop) / dots (mobile) */}
+                  <div className="flex items-center justify-center gap-2">
+                    {/* Mobile dots */}
+                    <div className="flex sm:hidden items-center gap-1.5">
+                      {SLIDES.map((s, idx) => (
+                        <button
+                          key={`dot-${idx}`}
+                          type="button"
+                          onClick={() => setCurrentSlide(idx)}
+                          aria-label={`Aller à : ${s.label}`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === currentSlide
+                              ? 'w-6 bg-[hsl(var(--gold))]'
+                              : 'w-1.5 bg-white/40 hover:bg-white/70'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Desktop thumbnails */}
+                    <div className="hidden sm:flex items-center gap-2">
+                      {SLIDES.map((s, idx) => {
+                        const isActive = idx === currentSlide;
+                        const ThumbIcon = s.icon;
+                        return (
+                          <button
+                            key={`thumb-${idx}`}
+                            type="button"
+                            onClick={() => setCurrentSlide(idx)}
+                            aria-label={`Aperçu : ${s.label}`}
+                            className={`group relative flex items-center gap-2 overflow-hidden rounded-lg border transition-all duration-300 ${
+                              isActive
+                                ? 'h-11 px-3 bg-[hsl(var(--gold))]/15 border-[hsl(var(--gold))] shadow-[0_0_20px_hsl(var(--gold)/0.4)]'
+                                : 'h-9 px-2.5 bg-black/35 border-white/15 hover:border-white/40 hover:bg-black/50 opacity-70 hover:opacity-100'
+                            }`}
+                          >
+                            <ThumbIcon
+                              className={`h-3.5 w-3.5 flex-shrink-0 transition-colors ${
+                                isActive ? 'text-[hsl(var(--gold))]' : 'text-white/70 group-hover:text-white'
+                              }`}
+                            />
+                            <span
+                              className={`text-[11px] font-medium whitespace-nowrap transition-colors ${
+                                isActive ? 'text-white' : 'text-white/70 group-hover:text-white'
+                              }`}
+                            >
+                              {s.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
