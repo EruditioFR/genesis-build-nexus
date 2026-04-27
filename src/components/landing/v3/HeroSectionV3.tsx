@@ -11,35 +11,11 @@ import interfaceClaire from '@/assets/mockups/interface-claire.png';
 import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
 
 const SLIDES = [
-  {
-    image: organisezSouvenirs,
-    title: 'Organisez vos souvenirs facilement',
-    description: 'Un assistant pas à pas vous guide pour catégoriser, dater et préserver chaque souvenir avec soin.',
-    icon: FolderHeart,
-    label: 'Organisation',
-  },
-  {
-    image: interfaceClaire,
-    title: 'Une interface claire et simple',
-    description: 'Un tableau de bord conçu pour tous les âges : retrouvez vos souvenirs, votre famille et vos inspirations en un coup d\'œil.',
-    icon: LayoutGrid,
-    label: 'Tableau de bord',
-  },
-  {
-    image: arbreGenealogique,
-    title: 'Votre Arbre généalogique',
-    description: 'Construisez et explorez votre arbre familial, retrouvez vos ancêtres et préservez votre histoire.',
-    icon: TreePine,
-    label: 'Arbre généalogique',
-  },
-  {
-    image: timelinePreview,
-    title: 'Votre Chronologie familiale',
-    description: 'Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps.',
-    icon: Clock,
-    label: 'Chronologie',
-  },
-];
+  { image: organisezSouvenirs, icon: FolderHeart, key: 'organisation' },
+  { image: interfaceClaire, icon: LayoutGrid, key: 'dashboard' },
+  { image: arbreGenealogique, icon: TreePine, key: 'tree' },
+  { image: timelinePreview, icon: Clock, key: 'timeline' },
+] as const;
 
 const SLIDE_INTERVAL = 5500;
 
@@ -123,6 +99,9 @@ const HeroSectionV3 = () => {
 
   const active = SLIDES[currentSlide];
   const Icon = active.icon;
+  const activeLabel = t(`v3.hero.productSlider.${active.key}.label`);
+  const activeTitle = t(`v3.hero.productSlider.${active.key}.title`);
+  const activeDescription = t(`v3.hero.productSlider.${active.key}.description`);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
@@ -245,7 +224,7 @@ const HeroSectionV3 = () => {
                     <motion.img
                       key={currentSlide}
                       src={active.image}
-                      alt={active.title}
+                      alt={activeTitle}
                       initial={{ opacity: 0, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.5 : 1.04) }}
                       animate={{ opacity: 1, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.58 : 1.08) }}
                       exit={{ opacity: 0 }}
@@ -285,7 +264,7 @@ const HeroSectionV3 = () => {
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-xs font-medium shadow-lg"
                       >
                         <Icon className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-                        <span className="uppercase tracking-wider">{active.label}</span>
+                        <span className="uppercase tracking-wider">{activeLabel}</span>
                       </motion.div>
                     </AnimatePresence>
                   </div>
@@ -319,10 +298,10 @@ const HeroSectionV3 = () => {
                       className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-16 text-left"
                     >
                       <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
-                        {active.title}
+                        {activeTitle}
                       </h3>
                       <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
-                        {active.description}
+                        {activeDescription}
                       </p>
                     </motion.div>
                   </AnimatePresence>
@@ -334,13 +313,13 @@ const HeroSectionV3 = () => {
                   <div className="text-left">
                     <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--gold))] text-[10px] font-semibold uppercase tracking-wider">
                       <Icon className="h-3 w-3" />
-                      {active.label}
+                      {activeLabel}
                     </div>
                     <h3 className="text-base font-display font-semibold text-white leading-snug">
-                      {active.title}
+                      {activeTitle}
                     </h3>
                     <p className="mt-1 text-[13px] text-white/75 leading-relaxed">
-                      {active.description}
+                      {activeDescription}
                     </p>
                   </div>
                 </div>
@@ -371,7 +350,7 @@ const HeroSectionV3 = () => {
             >
               <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm min-w-0">
                 <Icon className="h-4 w-4 text-[hsl(var(--gold))] flex-shrink-0" />
-                <span className="font-medium truncate">{active.label}</span>
+                <span className="font-medium truncate">{activeLabel}</span>
                 <span className="text-white/50 tabular-nums flex-shrink-0">
                   {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
                 </span>
@@ -425,7 +404,7 @@ const HeroSectionV3 = () => {
               <motion.img
                 key={`lb-${currentSlide}`}
                 src={active.image}
-                alt={active.title}
+                alt={activeTitle}
                 initial={{ scale: 0.96, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.96, opacity: 0 }}

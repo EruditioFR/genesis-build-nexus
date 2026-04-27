@@ -433,7 +433,29 @@
         }
       },
       "subtitleLead": "Family Garden 将照片、视频、声音和故事汇聚于一本",
-      "subtitleHighlight": "私密、有序、持久且可传承的家庭日记中。"
+      "subtitleHighlight": "私密、有序、持久且可传承的家庭日记中。",
+      "productSlider": {
+        "organisation": {
+          "label": "整理",
+          "title": "轻松整理您的回忆",
+          "description": "分步助手引导您细致地分类、标注日期并妥善保存每一段回忆。"
+        },
+        "dashboard": {
+          "label": "仪表盘",
+          "title": "清晰简洁的界面",
+          "description": "适合所有年龄段的仪表盘：一目了然地找到您的回忆、家人和灵感。"
+        },
+        "tree": {
+          "label": "家谱",
+          "title": "您的家谱",
+          "description": "构建并探索您的家族树，重新发现祖先,守护家族历史。"
+        },
+        "timeline": {
+          "label": "时间轴",
+          "title": "家族时间轴",
+          "description": "按年代整理所有回忆,如同一场穿越时空的旅程。"
+        }
+      }
     },
     "howItWorks": {
       "badge": "如何运作",
