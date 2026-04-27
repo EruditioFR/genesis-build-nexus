@@ -178,24 +178,24 @@ const HeroSectionV3 = () => {
             <div className="relative rounded-2xl p-[1.5px] bg-gradient-to-br from-[hsl(var(--gold))]/60 via-white/10 to-[hsl(var(--gold))]/30 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
               <div className="relative rounded-[14px] overflow-hidden bg-[hsl(215_50%_14%)]">
 
-                {/* macOS-style window chrome */}
-                <div className="hidden sm:flex items-center justify-between px-4 py-2.5 bg-[hsl(215_55%_12%)] border-b border-white/5">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                {/* Window chrome — compact on mobile, full on desktop */}
+                <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[hsl(215_55%_12%)] border-b border-white/5">
+                  <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff5f57]" />
+                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#febc2e]" />
+                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28c840]" />
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-white/50 font-mono">
-                    <Sparkles className="h-3 w-3 text-[hsl(var(--gold))]" />
-                    <span>app.familygarden.fr</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-white/50 font-mono truncate px-2 min-w-0">
+                    <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[hsl(var(--gold))] flex-shrink-0" />
+                    <span className="truncate">app.familygarden.fr</span>
                   </div>
-                  <div className="text-[11px] text-white/40 tabular-nums">
+                  <div className="text-[10px] sm:text-[11px] text-white/40 tabular-nums flex-shrink-0">
                     {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
                   </div>
                 </div>
 
                 {/* Image stage */}
-                <div className="relative w-full h-[260px] sm:h-[420px] md:h-[520px] lg:h-[600px] overflow-hidden">
+                <div className="relative w-full h-[220px] sm:h-[420px] md:h-[520px] lg:h-[600px] overflow-hidden">
                   <AnimatePresence initial={false}>
                     <motion.img
                       key={currentSlide}
@@ -217,8 +217,8 @@ const HeroSectionV3 = () => {
                     />
                   </AnimatePresence>
 
-                  {/* Section label badge — top left */}
-                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                  {/* Section label badge — desktop only (mobile has dedicated label below) */}
+                  <div className="hidden sm:block absolute top-4 left-4 z-10">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={`badge-${currentSlide}`}
@@ -226,15 +226,15 @@ const HeroSectionV3 = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -10 }}
                         transition={{ duration: 0.4 }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-[11px] sm:text-xs font-medium shadow-lg"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-xs font-medium shadow-lg"
                       >
-                        <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[hsl(var(--gold))]" />
+                        <Icon className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
                         <span className="uppercase tracking-wider">{active.label}</span>
                       </motion.div>
                     </AnimatePresence>
                   </div>
 
-                  {/* Pause indicator */}
+                  {/* Pause indicator — desktop only */}
                   <AnimatePresence>
                     {isPaused && (
                       <motion.div
@@ -270,79 +270,44 @@ const HeroSectionV3 = () => {
                       </p>
                     </motion.div>
                   </AnimatePresence>
-                </div>
 
-                {/* Mobile-only title + description below image */}
-                <div className="sm:hidden px-4 pt-4 pb-16 text-left bg-[hsl(215_55%_12%)]">
-                  <div className="inline-flex items-center gap-1.5 mb-2 text-[hsl(var(--gold))] text-[11px] font-medium uppercase tracking-wider">
-                    <Icon className="h-3 w-3" />
-                    {active.label}
-                  </div>
-                  <h3 className="text-base font-display font-semibold text-white leading-tight">
-                    {active.title}
-                  </h3>
-                  <p className="mt-1.5 text-xs text-white/80">
-                    {active.description}
-                  </p>
-                </div>
+                  {/* Prev arrow — vertically centered on the image */}
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    aria-label="Slide précédent"
+                    className="absolute left-1.5 sm:left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
+                  >
+                    <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
+                  </button>
 
-                {/* Prev arrow */}
-                <button
-                  type="button"
-                  onClick={goPrev}
-                  aria-label="Slide précédent"
-                  className="absolute left-2 sm:left-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
-                >
-                  <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-                </button>
+                  {/* Next arrow */}
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    aria-label="Slide suivant"
+                    className="absolute right-1.5 sm:right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
+                  >
+                    <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+                  </button>
 
-                {/* Next arrow */}
-                <button
-                  type="button"
-                  onClick={goNext}
-                  aria-label="Slide suivant"
-                  className="absolute right-2 sm:right-4 top-[28%] sm:top-1/2 -translate-y-1/2 z-10 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
-                >
-                  <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-                </button>
-
-                {/* Bottom controls bar: progress + thumbnails */}
-                <div className="absolute inset-x-0 bottom-0 z-10 px-3 sm:px-5 pb-3 sm:pb-4">
-                  {/* Progress bar */}
-                  <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
-                    <motion.div
-                      key={`progress-${currentSlide}-${isPaused ? 'p' : 'r'}`}
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
-                      transition={{
-                        duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
-                        ease: 'linear',
-                      }}
-                      className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
-                    />
-                  </div>
-
-                  {/* Thumbnails (desktop) / dots (mobile) */}
-                  <div className="flex items-center justify-center gap-2">
-                    {/* Mobile dots */}
-                    <div className="flex sm:hidden items-center gap-1.5">
-                      {SLIDES.map((s, idx) => (
-                        <button
-                          key={`dot-${idx}`}
-                          type="button"
-                          onClick={() => setCurrentSlide(idx)}
-                          aria-label={`Aller à : ${s.label}`}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            idx === currentSlide
-                              ? 'w-6 bg-[hsl(var(--gold))]'
-                              : 'w-1.5 bg-white/40 hover:bg-white/70'
-                          }`}
-                        />
-                      ))}
+                  {/* Desktop bottom controls (overlay on image) */}
+                  <div className="hidden sm:block absolute inset-x-0 bottom-0 z-10 px-5 pb-4">
+                    {/* Progress bar */}
+                    <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
+                      <motion.div
+                        key={`progress-d-${currentSlide}-${isPaused ? 'p' : 'r'}`}
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{
+                          duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
+                          ease: 'linear',
+                        }}
+                        className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
+                      />
                     </div>
 
-                    {/* Desktop thumbnails */}
-                    <div className="hidden sm:flex items-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
                       {SLIDES.map((s, idx) => {
                         const isActive = idx === currentSlide;
                         const ThumbIcon = s.icon;
@@ -370,6 +335,67 @@ const HeroSectionV3 = () => {
                             >
                               {s.label}
                             </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile: text + controls below image (no overlay) */}
+                <div className="sm:hidden px-4 py-4 bg-[hsl(215_55%_12%)] border-t border-white/5">
+                  {/* Progress bar */}
+                  <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
+                    <motion.div
+                      key={`progress-m-${currentSlide}-${isPaused ? 'p' : 'r'}`}
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{
+                        duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
+                        ease: 'linear',
+                      }}
+                      className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
+                    />
+                  </div>
+
+                  {/* Label + title + description */}
+                  <div className="text-left mb-3">
+                    <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--gold))] text-[10px] font-semibold uppercase tracking-wider">
+                      <Icon className="h-3 w-3" />
+                      {active.label}
+                    </div>
+                    <h3 className="text-base font-display font-semibold text-white leading-snug">
+                      {active.title}
+                    </h3>
+                    <p className="mt-1 text-[13px] text-white/75 leading-relaxed">
+                      {active.description}
+                    </p>
+                  </div>
+
+                  {/* Mobile thumbnails — horizontal scroll, icon + label */}
+                  <div className="-mx-1 overflow-x-auto scrollbar-none">
+                    <div className="flex items-center gap-1.5 px-1 pb-0.5">
+                      {SLIDES.map((s, idx) => {
+                        const isActive = idx === currentSlide;
+                        const ThumbIcon = s.icon;
+                        return (
+                          <button
+                            key={`mthumb-${idx}`}
+                            type="button"
+                            onClick={() => setCurrentSlide(idx)}
+                            aria-label={`Aperçu : ${s.label}`}
+                            className={`flex-shrink-0 inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border text-[11px] font-medium whitespace-nowrap transition-all duration-300 ${
+                              isActive
+                                ? 'bg-[hsl(var(--gold))]/15 border-[hsl(var(--gold))] text-white shadow-[0_0_12px_hsl(var(--gold)/0.4)]'
+                                : 'bg-black/30 border-white/15 text-white/65 active:bg-black/50'
+                            }`}
+                          >
+                            <ThumbIcon
+                              className={`h-3 w-3 flex-shrink-0 ${
+                                isActive ? 'text-[hsl(var(--gold))]' : 'text-white/55'
+                              }`}
+                            />
+                            <span>{s.label}</span>
                           </button>
                         );
                       })}
