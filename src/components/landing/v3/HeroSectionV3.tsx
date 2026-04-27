@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
