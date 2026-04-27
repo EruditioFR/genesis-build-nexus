@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X, ZoomIn, ZoomOut, Expand } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -51,11 +51,37 @@ const HeroSectionV3 = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxZoom, setLightboxZoom] = useState(1);
+  const lightboxRef = useState<{ el: HTMLDivElement | null }>(() => ({ el: null }))[0];
+
+  const openLightbox = useCallback(() => {
+    setLightboxZoom(1);
+    setIsLightboxOpen(true);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setIsLightboxOpen(false);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }, []);
+
+  const toggleNativeFullscreen = useCallback(() => {
+    const el = lightboxRef.el;
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      el.requestFullscreen?.().catch(() => {});
+    }
+  }, [lightboxRef]);
 
   useEffect(() => {
     if (!isLightboxOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsLightboxOpen(false);
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === '+' || e.key === '=') setLightboxZoom((z) => Math.min(z + 0.5, 5));
+      if (e.key === '-') setLightboxZoom((z) => Math.max(z - 0.5, 1));
     };
     document.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
@@ -64,7 +90,7 @@ const HeroSectionV3 = () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [isLightboxOpen]);
+  }, [isLightboxOpen, closeLightbox]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -222,7 +248,7 @@ const HeroSectionV3 = () => {
                               scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
                             }
                       }
-                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top scale-[2] sm:scale-100 origin-top-left sm:origin-center will-change-transform"
+                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top scale-[4] sm:scale-100 origin-top-left sm:origin-center will-change-transform"
                       loading="lazy"
                     />
                   </AnimatePresence>
@@ -230,7 +256,7 @@ const HeroSectionV3 = () => {
                   {/* Mobile: bouton agrandir */}
                   <button
                     type="button"
-                    onClick={() => setIsLightboxOpen(true)}
+                    onClick={openLightbox}
                     aria-label="Agrandir l'image"
                     className="sm:hidden absolute bottom-2 right-2 z-20 h-9 w-9 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
                   >
@@ -313,41 +339,96 @@ const HeroSectionV3 = () => {
           </motion.div>
         </div>
       </div>
-      {/* Lightbox plein écran (mobile en priorité, marche aussi sur desktop) */}
+      {/* Lightbox plein écran avec contrôles de zoom */}
       <AnimatePresence>
         {isLightboxOpen && (
           <motion.div
+            ref={(el) => { lightboxRef.el = el; }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
-            onClick={() => setIsLightboxOpen(false)}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center"
+            onClick={closeLightbox}
             role="dialog"
             aria-modal="true"
             aria-label="Aperçu agrandi"
           >
-            <button
-              type="button"
-              onClick={() => setIsLightboxOpen(false)}
-              aria-label="Fermer"
-              className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <motion.img
-              key={`lb-${currentSlide}`}
-              src={active.image}
-              alt={active.title}
-              initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="max-h-[90vh] max-w-[95vw] w-auto h-auto object-contain rounded-lg shadow-2xl"
+            {/* Top bar : titre + actions */}
+            <div
+              className="absolute top-0 inset-x-0 z-10 flex items-center justify-between gap-2 px-3 sm:px-5 py-3 bg-gradient-to-b from-black/70 to-transparent"
               onClick={(e) => e.stopPropagation()}
-            />
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-black/60 border border-white/15 text-white text-xs sm:text-sm">
-              {active.label} — {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
+            >
+              <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm min-w-0">
+                <Icon className="h-4 w-4 text-[hsl(var(--gold))] flex-shrink-0" />
+                <span className="font-medium truncate">{active.label}</span>
+                <span className="text-white/50 tabular-nums flex-shrink-0">
+                  {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setLightboxZoom((z) => Math.max(z - 0.5, 1))}
+                  aria-label="Zoom arrière"
+                  disabled={lightboxZoom <= 1}
+                  className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed border border-white/20 text-white flex items-center justify-center transition"
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </button>
+                <span className="text-white/80 text-xs tabular-nums w-10 text-center">
+                  {Math.round(lightboxZoom * 100)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setLightboxZoom((z) => Math.min(z + 0.5, 5))}
+                  aria-label="Zoom avant"
+                  disabled={lightboxZoom >= 5}
+                  className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed border border-white/20 text-white flex items-center justify-center transition"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleNativeFullscreen}
+                  aria-label="Mode plein écran"
+                  className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition"
+                >
+                  <Expand className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={closeLightbox}
+                  aria-label="Fermer"
+                  className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Image scrollable quand zoomée */}
+            <div
+              className="absolute inset-0 overflow-auto flex items-center justify-center p-4 pt-16"
+              onClick={closeLightbox}
+            >
+              <motion.img
+                key={`lb-${currentSlide}`}
+                src={active.image}
+                alt={active.title}
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.96, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                style={{
+                  transform: `scale(${lightboxZoom})`,
+                  transformOrigin: 'center center',
+                  transition: 'transform 0.2s ease-out',
+                }}
+                className="max-h-[88vh] max-w-[95vw] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
+                onClick={(e) => e.stopPropagation()}
+                draggable={false}
+              />
             </div>
           </motion.div>
         )}
