@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -50,6 +50,21 @@ const HeroSectionV3 = () => {
   const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsLightboxOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isLightboxOpen]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -207,10 +222,20 @@ const HeroSectionV3 = () => {
                               scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
                             }
                       }
-                      className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
+                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top scale-[2] sm:scale-100 origin-top-left sm:origin-center will-change-transform"
                       loading="lazy"
                     />
                   </AnimatePresence>
+
+                  {/* Mobile: bouton agrandir */}
+                  <button
+                    type="button"
+                    onClick={() => setIsLightboxOpen(true)}
+                    aria-label="Agrandir l'image"
+                    className="sm:hidden absolute bottom-2 right-2 z-20 h-9 w-9 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
+                  >
+                    <Maximize2 className="h-4 w-4" />
+                  </button>
 
                   {/* Section label badge — desktop only (mobile has dedicated label below) */}
                   <div className="hidden sm:block absolute top-4 left-4 z-10">
@@ -288,6 +313,45 @@ const HeroSectionV3 = () => {
           </motion.div>
         </div>
       </div>
+      {/* Lightbox plein écran (mobile en priorité, marche aussi sur desktop) */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setIsLightboxOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Aperçu agrandi"
+          >
+            <button
+              type="button"
+              onClick={() => setIsLightboxOpen(false)}
+              aria-label="Fermer"
+              className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <motion.img
+              key={`lb-${currentSlide}`}
+              src={active.image}
+              alt={active.title}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="max-h-[90vh] max-w-[95vw] w-auto h-auto object-contain rounded-lg shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-black/60 border border-white/15 text-white text-xs sm:text-sm">
+              {active.label} — {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
