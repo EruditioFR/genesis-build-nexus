@@ -1,69 +1,83 @@
+## Diagnostic du slider actuel
 
+Le slider du hero fonctionne mais reste **passif et anonyme** :
+- Les images défilent sans contexte (on ne sait pas ce qu'on regarde : mariage, voyage, école…)
+- Les indicateurs (petits points en bas) sont peu visibles et discrets
+- Pas de lien émotionnel entre l'image affichée et le message de souscription
+- Aucun "preview" de ce qui arrive ensuite → l'œil ne s'accroche pas
+- Pas de respiration visuelle (effet Ken Burns / zoom lent) qui donnerait du cinéma
 
-# Chronologie Ludique — Frise Cosmique par Décennie
+Résultat : l'utilisateur perçoit un fond joli mais générique, pas une **promesse de produit**.
 
 ## Objectif
 
-Remplacer la grille statique actuelle des décennies (`DecadeGrid.tsx`) par une **frise chronologique horizontale immersive** où chaque décennie est représentée par un "monde" autour duquel **gravitent les médias** (photos, vidéos, lieux) extraits des souvenirs de cette époque.
+Transformer le slider en **vitrine narrative** qui montre concrètement *ce que Family Garden permet de préserver*, et donne envie de commencer.
 
-## Concept visuel
+## Améliorations proposées
 
-```text
-        ┌─────────────────── FRISE HORIZONTALE (scroll) ───────────────────┐
-        
-         ✨ photo                    🎥 vidéo            📍 Paris
-              ↘                      ↗                       ↘
-                ╔═══════╗       ╔═══════╗            ╔═══════╗
-                ║ 1970s ║───────║ 1980s ║────────────║ 1990s ║
-                ╚═══════╝       ╚═══════╝            ╚═══════╝
-              ↗     ↑               ↘                     ↗
-        📍 Lyon   12 souvenirs     ✨ photo          🎥 vidéo
-        
-        ←━━━━━━━━━━━━━━━ ligne du temps animée ━━━━━━━━━━━━━━━━→
-```
+### 1. Étiquette thématique animée (en haut à gauche du contenu)
+Ajouter une petite "pill" élégante qui apparaît en fondu à chaque changement de slide :
+- 💍 « Mariage de Claire & Thomas — 2018 »
+- 🎂 « Les 80 ans de Mamie Jeanne »
+- ✈️ « Road trip en Toscane »
+- 🎓 « Remise de diplôme »
+- 🎵 « La playlist de papa »
 
-Chaque "planète décennie" :
-- **Cœur central** : grosse pastille avec le label `1980's`, le compteur de souvenirs et un dégradé propre à la décennie (palette existante conservée).
-- **Satellites en orbite** : 4 à 6 vignettes (photos miniatures, icône vidéo, pin de lieu) qui **flottent en orbite circulaire** autour de la pastille, animées en continu (rotation lente + léger bobbing).
-- **Ligne de temps** : trait horizontal continu reliant toutes les décennies, avec marqueurs et points lumineux animés.
-- **Clic sur la pastille** → ouvre le `DecadeModal` existant (pas de changement de comportement).
-- **Clic sur un satellite** → ouvre directement le souvenir correspondant.
+→ Effet : chaque image devient un **souvenir incarné**, plus une simple photo stock.
 
-## Comportements & ergonomie
+### 2. Effet Ken Burns (zoom + pan lent)
+Remplacer l'apparition statique par un lent zoom-in (scale 1 → 1.08 sur 6s) + léger pan horizontal. Donne une qualité "documentaire / cinéma" et retient l'œil bien plus longtemps.
 
-- **Mobile (≤ 640px)** : frise verticale empilée, orbites plus petites (rayon réduit), 3 satellites max, animations ralenties pour ne pas surcharger.
-- **Desktop** : frise horizontale scrollable avec ancrages, 5–6 satellites, parallax léger au scroll.
-- **Préférence `prefers-reduced-motion`** : les orbites se figent (les satellites restent disposés autour mais sans rotation).
-- **Performance** : satellites limités, vignettes déjà chargées via `capsuleMedias`/`allMedias`. Les "lieux" sont extraits depuis `metadata` ou tags géographiques des souvenirs (fallback : icône lieu générique si aucune donnée).
+### 3. Vignettes preview en bas (remplace les points)
+Remplacer les petits points par une **rangée de mini-vignettes** (40×40px arrondies) :
+- La vignette active est agrandie, bordure dorée, légèrement surélevée
+- Les autres sont en opacité 60%
+- Au survol → preview agrandi
+- Cliquables pour naviguer
 
-## Fichiers à créer
+→ L'utilisateur **voit ce qui vient** = curiosité + sentiment de richesse de contenu.
 
-1. **`src/components/timeline/DecadePlanet.tsx`** — composant unique d'une décennie : noyau central + satellites en orbite (framer-motion `animate` boucle infinie).
-2. **`src/components/timeline/CosmicTimeline.tsx`** — conteneur de toutes les `DecadePlanet`, gère la ligne de temps SVG, le scroll horizontal/vertical responsive.
-3. **`src/components/timeline/OrbitingSatellite.tsx`** — vignette satellite (photo, video, place) avec son animation orbitale propre (angle de départ, rayon, vitesse).
+### 4. Barre de progression fine sous les vignettes
+Une fine barre dorée qui se remplit en 5s et se réinitialise à chaque slide. Crée une attente subtile et un rythme.
 
-## Fichiers à modifier
+### 5. Micro-CTA contextuel (optionnel, discret)
+Sous l'étiquette thématique, une ligne discrète :
+> *« Préservez vos moments comme celui-ci → »*
 
-1. **`src/pages/Timeline.tsx`**
-   - Remplacer `<DecadeGrid />` par `<CosmicTimeline />`.
-   - Étendre l'agrégation `decadeThumbnails` pour produire un objet `decadeSatellites: Record<string, Satellite[]>` contenant `{ type: 'photo'|'video'|'place', url?, label?, capsuleId }` issu des souvenirs filtrés (réutilise `allMedias` + extraction des lieux depuis `capsule.metadata`/`capsule.tags`).
-   - Passer aussi `onSatelliteClick(capsuleId)` qui navigue vers `/capsules/:id`.
+Le lien renvoie vers `/signup`. Renforce le pont visuel entre image émotionnelle et action.
 
-2. **`src/components/timeline/DecadeGrid.tsx`** — conservé temporairement comme fallback, sera supprimé après validation.
+### 6. Indicateur de pause au survol
+Quand l'utilisateur survole le hero, le slider se met en pause (avec une icône ⏸ discrète). Donne du contrôle et empêche la frustration de "rater" un slide.
 
 ## Détails techniques
 
-- **Animation orbitale** : `motion.div` avec `animate={{ rotate: 360 }}` sur le wrapper d'orbite, contre-rotation sur la vignette pour qu'elle reste droite. Durées 20–40s (lente) pour effet "gravitation".
-- **Palette** : on garde les `decadeColors` existantes de `DecadeGrid.tsx` (amber, rose, purple, teal, etc.) pour cohérence.
-- **Satellites - sources de données** :
-  - Photos/vidéos → `allMedias` filtré par décennie.
-  - Lieux → champs `metadata.location`, `metadata.place` ou tags des `capsules` du décennie (extraction simple, premier lieu unique).
-- **i18n** : ajout de clés `timeline.cosmic.satellite.photo`, `.video`, `.place`, `.openMemory` dans les 8 fichiers `dashboard.json`.
-- **Accessibilité** : chaque satellite est un `<button>` avec `aria-label` descriptif ; la pastille décennie conserve son `aria-label` actuel.
+**Fichier modifié** : `src/components/landing/HeroSection.tsx` uniquement.
 
-## Hors périmètre
+**Changements** :
+1. Enrichir `heroSlides` avec `theme` (emoji + label thématique court).
+2. Ajouter état `isPaused` (mouseenter/mouseleave sur la section).
+3. Wrapper l'image active dans un `motion.img` avec `animate={{ scale: [1, 1.08] }}` durée 6s ease-out.
+4. Nouveau composant interne `<SlideThumbnails>` : flex row de boutons 40×40 rounded-xl avec `bg-cover` de chaque slide ; vignette active scale-110, ring-2 ring-secondary.
+5. Ajouter `<motion.div>` barre de progression : key={currentSlide} avec `animate={{ width: '100%' }}` sur 5s, `bg-secondary` h-0.5.
+6. Ajouter `<motion.div>` étiquette thématique : `AnimatePresence mode="wait"`, position au-dessus du titre H1 (centré), pill `bg-white/15 backdrop-blur-md border-white/20`.
+7. Conserver les indicateurs actuels uniquement sur mobile (les vignettes seraient trop chargées sur petit écran) — ou version compacte 28×28 avec scroll horizontal.
 
-- Pas de changement aux modales `DecadeModal` / `YearModal` (déjà bien).
-- Pas de modification des filtres ou de l'en-tête.
-- Pas de nouvelle requête DB — on réutilise les données déjà chargées.
+**Responsive** :
+- Mobile : étiquette thématique conservée + points indicateurs (vignettes masquées)
+- ≥sm : vignettes preview visibles à la place des points
 
+**Performance** :
+- Vignettes utilisent les mêmes `src` déjà préchargés → pas de requêtes additionnelles
+- Ken Burns en CSS transform → GPU, pas de jank
+- Pas de nouvelle dépendance
+
+**Accessibilité** :
+- `aria-label` détaillé sur chaque vignette (« Voir le souvenir : Mariage »)
+- `aria-live="polite"` sur l'étiquette thématique
+- Respect de `prefers-reduced-motion` → désactive Ken Burns
+
+## Hors scope
+
+- Pas de modification du `PricingSection` ni du flow checkout
+- Pas de nouvelles images (on réutilise les 6 slides existantes)
+- Pas de changement i18n majeur (les libellés thématiques peuvent être ajoutés plus tard dans `landing.json` si validé)

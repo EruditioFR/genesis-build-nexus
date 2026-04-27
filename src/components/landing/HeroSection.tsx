@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { motion, useScroll, useTransform, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ArrowRight, Sparkles, Pause } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,31 +12,67 @@ import heroAnniversaire from "@/assets/hero-slides/anniversaire.jpeg";
 import heroMariage from "@/assets/hero-slides/mariage.jpeg";
 import heroPlaylist from "@/assets/hero-slides/playlist.jpeg";
 
-const heroSlides = [{
-  src: heroBackground,
-  mobilePosition: "center 30%",
-  alt: "Famille réunie autour de souvenirs partagés sur Family Garden"
-}, {
-  src: heroMariage,
-  mobilePosition: "center 25%",
-  alt: "Souvenir de mariage préservé dans une capsule mémorielle Family Garden"
-}, {
-  src: heroAnniversaire,
-  mobilePosition: "center 35%",
-  alt: "Anniversaire en famille immortalisé sur Family Garden"
-}, {
-  src: heroVoyages,
-  mobilePosition: "center 40%",
-  alt: "Souvenirs de voyages en famille préservés sur Family Garden"
-}, {
-  src: heroEtudes,
-  mobilePosition: "center 30%",
-  alt: "Moments d'études et de vie scolaire capturés sur Family Garden"
-}, {
-  src: heroPlaylist,
-  mobilePosition: "center 20%",
-  alt: "Playlist musicale familiale partagée via Family Garden"
-}];
+interface HeroSlide {
+  src: string;
+  mobilePosition: string;
+  alt: string;
+  emoji: string;
+  theme: string;
+  caption: string;
+}
+
+const heroSlides: HeroSlide[] = [
+  {
+    src: heroBackground,
+    mobilePosition: "center 30%",
+    alt: "Famille réunie autour de souvenirs partagés sur Family Garden",
+    emoji: "👨‍👩‍👧‍👦",
+    theme: "En famille",
+    caption: "Un dimanche d'été, tous réunis",
+  },
+  {
+    src: heroMariage,
+    mobilePosition: "center 25%",
+    alt: "Souvenir de mariage préservé dans une capsule mémorielle Family Garden",
+    emoji: "💍",
+    theme: "Mariage",
+    caption: "Le « oui » de Claire & Thomas",
+  },
+  {
+    src: heroAnniversaire,
+    mobilePosition: "center 35%",
+    alt: "Anniversaire en famille immortalisé sur Family Garden",
+    emoji: "🎂",
+    theme: "Anniversaire",
+    caption: "Les 80 ans de Mamie Jeanne",
+  },
+  {
+    src: heroVoyages,
+    mobilePosition: "center 40%",
+    alt: "Souvenirs de voyages en famille préservés sur Family Garden",
+    emoji: "✈️",
+    theme: "Voyage",
+    caption: "Road trip en Toscane",
+  },
+  {
+    src: heroEtudes,
+    mobilePosition: "center 30%",
+    alt: "Moments d'études et de vie scolaire capturés sur Family Garden",
+    emoji: "🎓",
+    theme: "Études",
+    caption: "Remise de diplôme",
+  },
+  {
+    src: heroPlaylist,
+    mobilePosition: "center 20%",
+    alt: "Playlist musicale familiale partagée via Family Garden",
+    emoji: "🎵",
+    theme: "Musique",
+    caption: "La playlist de papa",
+  },
+];
+
+const SLIDE_DURATION = 5500;
 
 const INSPIRATION_QUESTIONS = [
   { emoji: '🌱', question: 'À quoi ressemblait la maison de votre enfance ?' },
@@ -59,22 +95,26 @@ const useIsMobile = () => {
 
 const HeroSection = () => {
   const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation('landing');
   const sectionRef = useRef<HTMLElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
 
+  // Auto-advance slides (paused on hover)
   useEffect(() => {
+    if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, SLIDE_DURATION);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -93,43 +133,48 @@ const HeroSection = () => {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const q = INSPIRATION_QUESTIONS[currentQuestion];
+  const activeSlide = heroSlides[currentSlide];
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image Slider */}
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Background Image Slider with Ken Burns effect */}
       <motion.div className="absolute inset-0 h-[130%] -top-[15%]" style={{ y: backgroundY, scale: backgroundScale }}>
         <AnimatePresence mode="wait">
           <motion.img
             key={currentSlide}
-            src={heroSlides[currentSlide].src}
-            alt={heroSlides[currentSlide].alt}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: isMobile ? heroSlides[currentSlide].mobilePosition : "center center" }}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
+            src={activeSlide.src}
+            alt={activeSlide.alt}
+            className="absolute inset-0 w-full h-full object-cover will-change-transform"
+            style={{ objectPosition: isMobile ? activeSlide.mobilePosition : "center center" }}
+            initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.02 }}
+            animate={
+              prefersReducedMotion
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 1, scale: 1.09 }
+            }
             exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0.6 }
+                : {
+                    opacity: { duration: 1, ease: "easeInOut" },
+                    scale: { duration: SLIDE_DURATION / 1000 + 1, ease: "easeOut" },
+                  }
+            }
             loading="eager"
             fetchPriority="high"
             decoding="async"
           />
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/50 to-primary/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-secondary/15" />
       </motion.div>
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
-        {heroSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-secondary w-8' : 'bg-primary-foreground/50 hover:bg-primary-foreground/70'}`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
 
       {/* Floating Elements */}
       <motion.div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block" style={{ y: floatingElementsY }}>
@@ -137,8 +182,31 @@ const HeroSection = () => {
         <motion.div animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-accent/30 blur-2xl" />
       </motion.div>
 
-      <motion.div className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-16 sm:pt-32 sm:pb-20" style={{ opacity: contentOpacity }}>
+      <motion.div className="container mx-auto px-5 sm:px-6 relative z-10 pt-24 pb-32 sm:pt-32 sm:pb-40" style={{ opacity: contentOpacity }}>
         <div className="max-w-4xl mx-auto text-center">
+          {/* Theme pill — incarnates the current slide */}
+          <div className="flex justify-center mb-5 sm:mb-6 h-8" aria-live="polite">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-primary-foreground shadow-lg"
+              >
+                <span className="text-base leading-none" aria-hidden="true">{activeSlide.emoji}</span>
+                <span className="text-xs sm:text-sm font-medium tracking-wide uppercase text-secondary">
+                  {activeSlide.theme}
+                </span>
+                <span className="hidden sm:inline-block w-px h-3.5 bg-white/30" aria-hidden="true" />
+                <span className="hidden sm:inline text-sm italic text-primary-foreground/90">
+                  {activeSlide.caption}
+                </span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
           {/* Main Title */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -211,7 +279,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-6 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80"
+            className="mt-6 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-primary-foreground/80"
           >
             <div className="flex items-center gap-2 sm:gap-3" title={t('hero.trust.encryption')}>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -235,17 +303,90 @@ const HeroSection = () => {
         </div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ duration: 2, delay: 1, repeat: Infinity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
-      >
-        <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/30 flex items-start justify-center p-2">
-          <div className="w-1 h-2 rounded-full bg-primary-foreground/50" />
+      {/* === Slider Controls (bottom) === */}
+      <div className="absolute bottom-6 sm:bottom-10 left-0 right-0 z-20 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto">
+          {/* Progress bar */}
+          <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-4">
+            <motion.div
+              key={`${currentSlide}-${isPaused ? 'p' : 'r'}`}
+              initial={{ width: '0%' }}
+              animate={{ width: isPaused ? '100%' : '100%' }}
+              transition={{
+                duration: isPaused ? 0 : SLIDE_DURATION / 1000,
+                ease: 'linear',
+              }}
+              className="absolute inset-y-0 left-0 bg-secondary shadow-[0_0_8px_hsl(var(--secondary)/0.6)]"
+            />
+          </div>
+
+          {/* Thumbnails (desktop) + dots (mobile) */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3">
+            {/* Mobile: dots */}
+            <div className="flex sm:hidden items-center gap-1.5">
+              {heroSlides.map((slide, index) => (
+                <button
+                  key={`dot-${index}`}
+                  onClick={() => goToSlide(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentSlide
+                      ? 'bg-secondary w-6'
+                      : 'bg-primary-foreground/40 w-1.5 hover:bg-primary-foreground/70'
+                  }`}
+                  aria-label={`Voir le souvenir : ${slide.theme}`}
+                />
+              ))}
+            </div>
+
+            {/* Desktop: thumbnails */}
+            <div className="hidden sm:flex items-center gap-2.5">
+              {heroSlides.map((slide, index) => {
+                const isActive = index === currentSlide;
+                return (
+                  <button
+                    key={`thumb-${index}`}
+                    onClick={() => goToSlide(index)}
+                    aria-label={`Voir le souvenir : ${slide.theme} — ${slide.caption}`}
+                    className={`group relative overflow-hidden rounded-lg transition-all duration-300 ${
+                      isActive
+                        ? 'w-14 h-14 ring-2 ring-secondary ring-offset-2 ring-offset-transparent shadow-lg -translate-y-0.5'
+                        : 'w-11 h-11 opacity-60 hover:opacity-100 hover:scale-105 ring-1 ring-white/30'
+                    }`}
+                  >
+                    <img
+                      src={slide.src}
+                      alt=""
+                      aria-hidden="true"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {!isActive && (
+                      <div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/10 transition-colors" />
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center pb-0.5">
+                      <span className="text-[11px] leading-none drop-shadow" aria-hidden="true">
+                        {slide.emoji}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Pause indicator (desktop) */}
+            <div
+              className={`hidden sm:flex ml-2 items-center gap-1.5 text-[11px] uppercase tracking-wider text-primary-foreground/60 transition-opacity duration-300 ${
+                isPaused ? 'opacity-100' : 'opacity-0'
+              }`}
+              aria-hidden="true"
+            >
+              <Pause className="w-3 h-3 fill-current" />
+              <span>Pause</span>
+            </div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };
