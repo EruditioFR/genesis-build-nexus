@@ -51,11 +51,37 @@ const HeroSectionV3 = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxZoom, setLightboxZoom] = useState(1);
+  const lightboxRef = useState<{ el: HTMLDivElement | null }>(() => ({ el: null }))[0];
+
+  const openLightbox = useCallback(() => {
+    setLightboxZoom(1);
+    setIsLightboxOpen(true);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setIsLightboxOpen(false);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }, []);
+
+  const toggleNativeFullscreen = useCallback(() => {
+    const el = lightboxRef.el;
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      el.requestFullscreen?.().catch(() => {});
+    }
+  }, [lightboxRef]);
 
   useEffect(() => {
     if (!isLightboxOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsLightboxOpen(false);
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === '+' || e.key === '=') setLightboxZoom((z) => Math.min(z + 0.5, 5));
+      if (e.key === '-') setLightboxZoom((z) => Math.max(z - 0.5, 1));
     };
     document.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
@@ -64,7 +90,7 @@ const HeroSectionV3 = () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [isLightboxOpen]);
+  }, [isLightboxOpen, closeLightbox]);
 
   useEffect(() => {
     if (isPaused) return;
