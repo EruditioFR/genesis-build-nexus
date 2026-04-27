@@ -99,6 +99,9 @@ const HeroSectionV3 = () => {
 
   const active = SLIDES[currentSlide];
   const Icon = active.icon;
+  const activeLabel = t(`v3.hero.productSlider.${active.key}.label`);
+  const activeTitle = t(`v3.hero.productSlider.${active.key}.title`);
+  const activeDescription = t(`v3.hero.productSlider.${active.key}.description`);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
