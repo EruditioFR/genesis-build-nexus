@@ -222,8 +222,19 @@ const HeroSectionV3 = () => {
                               scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
                             }
                       }
-                      className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
+                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top scale-[2] sm:scale-100 origin-top-left sm:origin-center will-change-transform"
                       loading="lazy"
+                    />
+                  </AnimatePresence>
+
+                  {/* Mobile: bouton agrandir */}
+                  <button
+                    type="button"
+                    onClick={() => setIsLightboxOpen(true)}
+                    aria-label="Agrandir l'image"
+                    className="sm:hidden absolute bottom-2 right-2 z-20 h-9 w-9 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
+                  >
+                    <Maximize2 className="h-4 w-4" />
                     />
                   </AnimatePresence>
 
