@@ -224,7 +224,7 @@ const HeroSectionV3 = () => {
                     <motion.img
                       key={currentSlide}
                       src={active.image}
-                      alt={active.title}
+                      alt={activeTitle}
                       initial={{ opacity: 0, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.5 : 1.04) }}
                       animate={{ opacity: 1, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.58 : 1.08) }}
                       exit={{ opacity: 0 }}
@@ -264,7 +264,7 @@ const HeroSectionV3 = () => {
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-xs font-medium shadow-lg"
                       >
                         <Icon className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-                        <span className="uppercase tracking-wider">{active.label}</span>
+                        <span className="uppercase tracking-wider">{activeLabel}</span>
                       </motion.div>
                     </AnimatePresence>
                   </div>
@@ -298,10 +298,10 @@ const HeroSectionV3 = () => {
                       className="hidden sm:block absolute inset-x-0 bottom-0 px-8 md:px-10 pt-5 pb-16 text-left"
                     >
                       <h3 className="text-2xl md:text-3xl font-display font-semibold text-white drop-shadow-lg leading-tight">
-                        {active.title}
+                        {activeTitle}
                       </h3>
                       <p className="mt-2 text-base text-white/85 max-w-2xl drop-shadow">
-                        {active.description}
+                        {activeDescription}
                       </p>
                     </motion.div>
                   </AnimatePresence>
@@ -313,13 +313,13 @@ const HeroSectionV3 = () => {
                   <div className="text-left">
                     <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--gold))] text-[10px] font-semibold uppercase tracking-wider">
                       <Icon className="h-3 w-3" />
-                      {active.label}
+                      {activeLabel}
                     </div>
                     <h3 className="text-base font-display font-semibold text-white leading-snug">
-                      {active.title}
+                      {activeTitle}
                     </h3>
                     <p className="mt-1 text-[13px] text-white/75 leading-relaxed">
-                      {active.description}
+                      {activeDescription}
                     </p>
                   </div>
                 </div>
@@ -350,7 +350,7 @@ const HeroSectionV3 = () => {
             >
               <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm min-w-0">
                 <Icon className="h-4 w-4 text-[hsl(var(--gold))] flex-shrink-0" />
-                <span className="font-medium truncate">{active.label}</span>
+                <span className="font-medium truncate">{activeLabel}</span>
                 <span className="text-white/50 tabular-nums flex-shrink-0">
                   {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
                 </span>
@@ -404,7 +404,7 @@ const HeroSectionV3 = () => {
               <motion.img
                 key={`lb-${currentSlide}`}
                 src={active.image}
-                alt={active.title}
+                alt={activeTitle}
                 initial={{ scale: 0.96, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.96, opacity: 0 }}
