@@ -50,6 +50,15 @@ const HeroSectionV3 = () => {
   const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxZoom, setLightboxZoom] = useState(1);
   const lightboxRef = useState<{ el: HTMLDivElement | null }>(() => ({ el: null }))[0];
