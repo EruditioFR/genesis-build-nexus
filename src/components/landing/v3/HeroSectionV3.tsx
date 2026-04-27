@@ -246,8 +246,8 @@ const HeroSectionV3 = () => {
                       key={currentSlide}
                       src={active.image}
                       alt={active.title}
-                      initial={{ opacity: 0, scale: prefersReducedMotion ? (isMobile ? 2 : 1) : (isMobile ? 2 : 1.04) }}
-                      animate={{ opacity: 1, scale: prefersReducedMotion ? (isMobile ? 2 : 1) : (isMobile ? 2.08 : 1.08) }}
+                      initial={{ opacity: 0, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.5 : 1.04) }}
+                      animate={{ opacity: 1, scale: prefersReducedMotion ? (isMobile ? 1.5 : 1) : (isMobile ? 1.58 : 1.08) }}
                       exit={{ opacity: 0 }}
                       transition={
                         prefersReducedMotion
