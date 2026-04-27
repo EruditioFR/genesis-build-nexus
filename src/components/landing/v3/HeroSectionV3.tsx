@@ -256,7 +256,7 @@ const HeroSectionV3 = () => {
                   {/* Mobile: bouton agrandir */}
                   <button
                     type="button"
-                    onClick={() => setIsLightboxOpen(true)}
+                    onClick={openLightbox}
                     aria-label="Agrandir l'image"
                     className="sm:hidden absolute bottom-2 right-2 z-20 h-9 w-9 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
                   >
