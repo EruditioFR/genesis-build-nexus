@@ -70,8 +70,6 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
-  const goNext = useCallback(() => setCurrentSlide((p) => (p + 1) % SLIDES.length), []);
-  const goPrev = useCallback(() => setCurrentSlide((p) => (p - 1 + SLIDES.length) % SLIDES.length), []);
 
   const active = SLIDES[currentSlide];
   const Icon = active.icon;
