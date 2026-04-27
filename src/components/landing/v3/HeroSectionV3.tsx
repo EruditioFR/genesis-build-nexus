@@ -50,6 +50,15 @@ const HeroSectionV3 = () => {
   const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxZoom, setLightboxZoom] = useState(1);
   const lightboxRef = useState<{ el: HTMLDivElement | null }>(() => ({ el: null }))[0];
@@ -237,8 +246,8 @@ const HeroSectionV3 = () => {
                       key={currentSlide}
                       src={active.image}
                       alt={active.title}
-                      initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.04 }}
-                      animate={{ opacity: 1, scale: prefersReducedMotion ? 1 : 1.08 }}
+                      initial={{ opacity: 0, scale: prefersReducedMotion ? (isMobile ? 4 : 1) : (isMobile ? 4 : 1.04) }}
+                      animate={{ opacity: 1, scale: prefersReducedMotion ? (isMobile ? 4 : 1) : (isMobile ? 4.1 : 1.08) }}
                       exit={{ opacity: 0 }}
                       transition={
                         prefersReducedMotion
@@ -248,7 +257,8 @@ const HeroSectionV3 = () => {
                               scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
                             }
                       }
-                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top scale-[4] sm:scale-100 origin-top-left sm:origin-center will-change-transform"
+                      style={{ transformOrigin: isMobile ? 'top left' : 'center' }}
+                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top will-change-transform"
                       loading="lazy"
                     />
                   </AnimatePresence>
