@@ -185,10 +185,7 @@ const HeroSectionV3 = () => {
                     <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#febc2e]" />
                     <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28c840]" />
                   </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-white/50 font-mono truncate px-2 min-w-0">
-                    <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[hsl(var(--gold))] flex-shrink-0" />
-                    <span className="truncate">app.familygarden.fr</span>
-                  </div>
+                  <div className="flex-1" />
                   <div className="text-[10px] sm:text-[11px] text-white/40 tabular-nums flex-shrink-0">
                     {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
                   </div>
