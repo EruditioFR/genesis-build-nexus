@@ -257,8 +257,8 @@ const HeroSectionV3 = () => {
                               scale: { duration: SLIDE_INTERVAL / 1000 + 1.5, ease: 'easeOut' },
                             }
                       }
-                      style={{ transformOrigin: isMobile ? 'top left' : 'center' }}
-                      className="absolute inset-0 w-full h-full object-cover object-left-top sm:object-top will-change-transform"
+                      style={{ transformOrigin: isMobile ? 'top center' : 'center' }}
+                      className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
                       loading="lazy"
                     />
                   </AnimatePresence>
