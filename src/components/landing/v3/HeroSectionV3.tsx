@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -70,8 +70,6 @@ const HeroSectionV3 = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }, [trackEvent]);
 
-  const goNext = useCallback(() => setCurrentSlide((p) => (p + 1) % SLIDES.length), []);
-  const goPrev = useCallback(() => setCurrentSlide((p) => (p - 1 + SLIDES.length) % SLIDES.length), []);
 
   const active = SLIDES[currentSlide];
   const Icon = active.icon;
@@ -268,95 +266,11 @@ const HeroSectionV3 = () => {
                     </motion.div>
                   </AnimatePresence>
 
-                  {/* Prev arrow — vertically centered on the image */}
-                  <button
-                    type="button"
-                    onClick={goPrev}
-                    aria-label="Slide précédent"
-                    className="absolute left-1.5 sm:left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
-                  >
-                    <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
-                  </button>
-
-                  {/* Next arrow */}
-                  <button
-                    type="button"
-                    onClick={goNext}
-                    aria-label="Slide suivant"
-                    className="absolute right-1.5 sm:right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/55 hover:bg-[hsl(var(--gold))] hover:scale-110 backdrop-blur-md border border-white/15 text-white flex items-center justify-center transition-all duration-200 shadow-lg"
-                  >
-                    <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
-                  </button>
-
-                  {/* Desktop bottom controls (overlay on image) */}
-                  <div className="hidden sm:block absolute inset-x-0 bottom-0 z-10 px-5 pb-4">
-                    {/* Progress bar */}
-                    <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
-                      <motion.div
-                        key={`progress-d-${currentSlide}-${isPaused ? 'p' : 'r'}`}
-                        initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
-                        transition={{
-                          duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
-                          ease: 'linear',
-                        }}
-                        className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-center gap-2">
-                      {SLIDES.map((s, idx) => {
-                        const isActive = idx === currentSlide;
-                        const ThumbIcon = s.icon;
-                        return (
-                          <button
-                            key={`thumb-${idx}`}
-                            type="button"
-                            onClick={() => setCurrentSlide(idx)}
-                            aria-label={`Aperçu : ${s.label}`}
-                            className={`group relative flex items-center gap-2 overflow-hidden rounded-lg border transition-all duration-300 ${
-                              isActive
-                                ? 'h-11 px-3 bg-[hsl(var(--gold))]/15 border-[hsl(var(--gold))] shadow-[0_0_20px_hsl(var(--gold)/0.4)]'
-                                : 'h-9 px-2.5 bg-black/35 border-white/15 hover:border-white/40 hover:bg-black/50 opacity-70 hover:opacity-100'
-                            }`}
-                          >
-                            <ThumbIcon
-                              className={`h-3.5 w-3.5 flex-shrink-0 transition-colors ${
-                                isActive ? 'text-[hsl(var(--gold))]' : 'text-white/70 group-hover:text-white'
-                              }`}
-                            />
-                            <span
-                              className={`text-[11px] font-medium whitespace-nowrap transition-colors ${
-                                isActive ? 'text-white' : 'text-white/70 group-hover:text-white'
-                              }`}
-                            >
-                              {s.label}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
                 </div>
 
-                {/* Mobile: text + controls below image (no overlay) */}
+                {/* Mobile: text only below image (no controls) */}
                 <div className="sm:hidden px-4 py-4 bg-[hsl(215_55%_12%)] border-t border-white/5">
-                  {/* Progress bar */}
-                  <div className="relative h-[2px] w-full bg-white/15 rounded-full overflow-hidden mb-3">
-                    <motion.div
-                      key={`progress-m-${currentSlide}-${isPaused ? 'p' : 'r'}`}
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
-                      transition={{
-                        duration: isPaused ? 0 : SLIDE_INTERVAL / 1000,
-                        ease: 'linear',
-                      }}
-                      className="absolute inset-y-0 left-0 bg-[hsl(var(--gold))] shadow-[0_0_10px_hsl(var(--gold)/0.7)]"
-                    />
-                  </div>
-
-                  {/* Label + title + description */}
-                  <div className="text-left mb-3">
+                  <div className="text-left">
                     <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--gold))] text-[10px] font-semibold uppercase tracking-wider">
                       <Icon className="h-3 w-3" />
                       {active.label}
@@ -367,36 +281,6 @@ const HeroSectionV3 = () => {
                     <p className="mt-1 text-[13px] text-white/75 leading-relaxed">
                       {active.description}
                     </p>
-                  </div>
-
-                  {/* Mobile thumbnails — horizontal scroll, icon + label */}
-                  <div className="-mx-1 overflow-x-auto scrollbar-none">
-                    <div className="flex items-center gap-1.5 px-1 pb-0.5">
-                      {SLIDES.map((s, idx) => {
-                        const isActive = idx === currentSlide;
-                        const ThumbIcon = s.icon;
-                        return (
-                          <button
-                            key={`mthumb-${idx}`}
-                            type="button"
-                            onClick={() => setCurrentSlide(idx)}
-                            aria-label={`Aperçu : ${s.label}`}
-                            className={`flex-shrink-0 inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border text-[11px] font-medium whitespace-nowrap transition-all duration-300 ${
-                              isActive
-                                ? 'bg-[hsl(var(--gold))]/15 border-[hsl(var(--gold))] text-white shadow-[0_0_12px_hsl(var(--gold)/0.4)]'
-                                : 'bg-black/30 border-white/15 text-white/65 active:bg-black/50'
-                            }`}
-                          >
-                            <ThumbIcon
-                              className={`h-3 w-3 flex-shrink-0 ${
-                                isActive ? 'text-[hsl(var(--gold))]' : 'text-white/55'
-                              }`}
-                            />
-                            <span>{s.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
                   </div>
                 </div>
               </div>
