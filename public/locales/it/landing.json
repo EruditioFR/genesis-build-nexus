@@ -433,7 +433,29 @@
         }
       },
       "subtitleLead": "Family Garden raccoglie foto, video, voci e racconti in un ",
-      "subtitleHighlight": "diario di famiglia privato, organizzato, duraturo e trasmissibile."
+      "subtitleHighlight": "diario di famiglia privato, organizzato, duraturo e trasmissibile.",
+      "productSlider": {
+        "organisation": {
+          "label": "Organizzazione",
+          "title": "Organizza i tuoi ricordi con facilità",
+          "description": "Un assistente passo dopo passo ti guida per categorizzare, datare e preservare ogni ricordo con cura."
+        },
+        "dashboard": {
+          "label": "Dashboard",
+          "title": "Un'interfaccia chiara e semplice",
+          "description": "Una dashboard pensata per tutte le età: ritrova i tuoi ricordi, la tua famiglia e le tue ispirazioni in un colpo d'occhio."
+        },
+        "tree": {
+          "label": "Albero genealogico",
+          "title": "Il tuo albero genealogico",
+          "description": "Costruisci ed esplora il tuo albero familiare, riscopri i tuoi antenati e preserva la tua storia."
+        },
+        "timeline": {
+          "label": "Cronologia",
+          "title": "La tua cronologia familiare",
+          "description": "Visualizza tutti i tuoi ricordi organizzati per decenni, come un viaggio nel tempo."
+        }
+      }
     },
     "howItWorks": {
       "badge": "Come funziona",

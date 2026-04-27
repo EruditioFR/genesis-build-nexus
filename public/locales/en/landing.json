@@ -434,7 +434,29 @@
         }
       },
       "subtitleLead": "Family Garden brings photos, videos, voices and stories together in a ",
-      "subtitleHighlight": "private, organized, lasting and transmissible family journal."
+      "subtitleHighlight": "private, organized, lasting and transmissible family journal.",
+      "productSlider": {
+        "organisation": {
+          "label": "Organization",
+          "title": "Organize your memories effortlessly",
+          "description": "A step-by-step assistant guides you to categorize, date and preserve each memory with care."
+        },
+        "dashboard": {
+          "label": "Dashboard",
+          "title": "A clear and simple interface",
+          "description": "A dashboard designed for all ages: find your memories, your family and your inspirations at a glance."
+        },
+        "tree": {
+          "label": "Family tree",
+          "title": "Your family tree",
+          "description": "Build and explore your family tree, rediscover your ancestors and preserve your history."
+        },
+        "timeline": {
+          "label": "Timeline",
+          "title": "Your family timeline",
+          "description": "Visualize all your memories organized by decades, like a journey through time."
+        }
+      }
     },
     "howItWorks": {
       "badge": "How it works",
