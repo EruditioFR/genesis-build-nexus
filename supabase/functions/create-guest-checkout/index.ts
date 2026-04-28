@@ -79,7 +79,7 @@ serve(async (req) => {
       discounts = [{ coupon: "btgCwbO1" }];
     }
 
-    const origin = req.headers.get("origin") || "https://www.familygarden.fr";
+    const origin = req.headers.get("origin") || "https://familygarden.fr";
 
     const session = await stripe.checkout.sessions.create({
       customer_email: email,

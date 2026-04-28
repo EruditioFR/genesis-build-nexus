@@ -7,17 +7,17 @@ interface JsonLdSchemaProps {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://www.familygarden.fr/#organization",
+  "@id": "https://familygarden.fr/#organization",
   "name": "Family Garden",
   "alternateName": "FamilyGarden",
-  "url": "https://www.familygarden.fr",
+  "url": "https://familygarden.fr",
   "logo": {
     "@type": "ImageObject",
-    "url": "https://www.familygarden.fr/logo.png",
+    "url": "https://familygarden.fr/logo.png",
     "width": 512,
     "height": 512
   },
-  "image": "https://www.familygarden.fr/og-image.png",
+  "image": "https://familygarden.fr/og-image.png",
   "description": "Plateforme française de journal de famille privé et sécurisé. Créez, organisez et partagez vos souvenirs multimédia (photos, vidéos, audio, textes) avec vos proches. Chiffrement AES-256 et hébergement européen conforme RGPD.",
   "foundingDate": "2024",
   "areaServed": {
@@ -32,14 +32,14 @@ const organizationSchema = {
     "@type": "ContactPoint",
     "contactType": "customer service",
     "availableLanguage": ["French", "English", "Spanish", "Korean", "Chinese", "Italian", "Portuguese"],
-    "url": "https://www.familygarden.fr/#contact"
+    "url": "https://familygarden.fr/#contact"
   }
 };
 
 const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "@id": "https://www.familygarden.fr/#app",
+  "@id": "https://familygarden.fr/#app",
   "name": "Family Garden",
   "alternateName": "FamilyGarden — Journal de famille privé",
   "applicationCategory": "LifestyleApplication",
@@ -96,12 +96,12 @@ const softwareApplicationSchema = {
     "Suggestions et inspirations guidées de souvenirs",
     "Catégories thématiques personnalisables"
   ],
-  "screenshot": "https://www.familygarden.fr/og-image.png",
+  "screenshot": "https://familygarden.fr/og-image.png",
   "availableLanguage": ["fr", "en", "es", "ko", "zh", "it", "pt"],
   "inLanguage": "fr",
   "isAccessibleForFree": true,
   "provider": {
-    "@id": "https://www.familygarden.fr/#organization"
+    "@id": "https://familygarden.fr/#organization"
   },
   "audience": {
     "@type": "PeopleAudience",
@@ -113,7 +113,7 @@ const softwareApplicationSchema = {
 const faqPageSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "@id": "https://www.familygarden.fr/#faq",
+  "@id": "https://familygarden.fr/#faq",
   "mainEntity": [
     {
       "@type": "Question",

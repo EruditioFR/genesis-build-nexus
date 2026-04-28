@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
+import NoIndex from '@/components/seo/NoIndex';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('auth');
@@ -39,6 +40,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gradient-to-br from-muted via-background to-muted">
+      <NoIndex />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

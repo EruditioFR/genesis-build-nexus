@@ -156,7 +156,7 @@ const handler = async (req: Request): Promise<Response> => {
       type: 'signup',
       email,
       options: {
-        redirectTo: redirectTo || 'https://www.familygarden.fr/login?confirmed=true',
+        redirectTo: redirectTo || 'https://familygarden.fr/login?confirmed=true',
       },
     });
 

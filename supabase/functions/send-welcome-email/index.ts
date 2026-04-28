@@ -109,7 +109,7 @@ serve(async (req) => {
       type: "magiclink",
       email,
       options: {
-        redirectTo: "https://www.familygarden.fr/reset-password",
+        redirectTo: "https://familygarden.fr/reset-password",
       },
     });
 

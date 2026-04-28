@@ -208,11 +208,11 @@ Family Garden combine capsules multimédia contextualisées, chronologie interac
 
 ## Liens utiles
 
-- Site web : https://www.familygarden.fr
-- FAQ : https://www.familygarden.fr/faq
-- Tarifs : https://www.familygarden.fr/premium
-- À propos : https://www.familygarden.fr/about
-- Inscription gratuite : https://www.familygarden.fr/signup
-- Politique de confidentialité : https://www.familygarden.fr/privacy
-- Conditions générales : https://www.familygarden.fr/terms
-- Mentions légales : https://www.familygarden.fr/mentions-legales
+- Site web : https://familygarden.fr
+- FAQ : https://familygarden.fr/faq
+- Tarifs : https://familygarden.fr/premium
+- À propos : https://familygarden.fr/about
+- Inscription gratuite : https://familygarden.fr/signup
+- Politique de confidentialité : https://familygarden.fr/privacy
+- Conditions générales : https://familygarden.fr/terms
+- Mentions légales : https://familygarden.fr/mentions-legales

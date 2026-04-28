@@ -178,7 +178,7 @@ serve(async (req: Request) => {
 
           if (ownerEmail) {
             const resend = new Resend(resendApiKey);
-            const logoUrl = "https://www.familygarden.fr/logo.png";
+            const logoUrl = "https://familygarden.fr/logo.png";
 
             await resend.emails.send({
               from: "FamilyGarden <web@familygarden.fr>",
@@ -217,7 +217,7 @@ serve(async (req: Request) => {
                       
                       <!-- CTA Button -->
                       <div style="text-align: center; margin-bottom: 32px;">
-                        <a href="https://www.familygarden.fr/circles" 
+                        <a href="https://familygarden.fr/circles" 
                            style="display: inline-block; background: linear-gradient(135deg, #2D5A3D 0%, #4A7C59 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px;">
                           Voir mon cercle
                         </a>
@@ -230,7 +230,7 @@ serve(async (req: Request) => {
                         FamilyGarden - Préservez vos souvenirs de famille
                       </p>
                       <p style="color: #888; font-size: 12px; margin: 8px 0 0 0;">
-                        <a href="https://www.familygarden.fr" style="color: #2D5A3D; text-decoration: none;">www.familygarden.fr</a>
+                        <a href="https://familygarden.fr" style="color: #2D5A3D; text-decoration: none;">familygarden.fr</a>
                       </p>
                     </div>
                   </div>

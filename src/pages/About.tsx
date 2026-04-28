@@ -20,11 +20,11 @@ const About = () => {
   const aboutSchema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "@id": "https://www.familygarden.fr/about#aboutpage",
+    "@id": "https://familygarden.fr/about#aboutpage",
     "name": "À propos de Family Garden",
     "description": "Découvrez l'histoire, la mission et les valeurs de Family Garden, plateforme française dédiée à la préservation des souvenirs familiaux.",
-    "mainEntity": { "@id": "https://www.familygarden.fr/#organization" },
-    "isPartOf": { "@id": "https://www.familygarden.fr/#website" },
+    "mainEntity": { "@id": "https://familygarden.fr/#organization" },
+    "isPartOf": { "@id": "https://familygarden.fr/#website" },
   };
 
   const values = [

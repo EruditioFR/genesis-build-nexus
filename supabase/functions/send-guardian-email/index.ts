@@ -48,9 +48,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { guardianEmail, guardianName, ownerName, verificationToken }: GuardianEmailRequest = await req.json();
 
-    const appUrl = Deno.env.get("APP_URL") || "https://www.familygarden.fr";
+    const appUrl = Deno.env.get("APP_URL") || "https://familygarden.fr";
     const verifyLink = `${appUrl}/guardian/verify/${verificationToken}`;
-    const logoUrl = "https://www.familygarden.fr/logo.png";
+    const logoUrl = "https://familygarden.fr/logo.png";
 
     const emailResponse = await resend.emails.send({
       from: "FamilyGarden <web@familygarden.fr>",

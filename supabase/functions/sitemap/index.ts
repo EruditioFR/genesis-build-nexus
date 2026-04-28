@@ -3,7 +3,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SITE_URL = "https://www.familygarden.fr";
+const SITE_URL = "https://familygarden.fr";
 
 interface SitemapEntry {
   loc: string;
