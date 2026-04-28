@@ -46,17 +46,17 @@ Family Garden est une application web conçue pour préserver l'héritage famili
 
 ## Liens
 
-- Site web : https://www.familygarden.fr
-- FAQ : https://www.familygarden.fr/faq
-- Tarifs : https://www.familygarden.fr/premium
-- À propos : https://www.familygarden.fr/about
-- Politique de confidentialité : https://www.familygarden.fr/privacy
-- Conditions d'utilisation : https://www.familygarden.fr/terms
+- Site web : https://familygarden.fr
+- FAQ : https://familygarden.fr/faq
+- Tarifs : https://familygarden.fr/premium
+- À propos : https://familygarden.fr/about
+- Politique de confidentialité : https://familygarden.fr/privacy
+- Conditions d'utilisation : https://familygarden.fr/terms
 
 ## Contact
 
-Pour toute question, utilisez le formulaire de contact sur https://www.familygarden.fr (section Contact) ou consultez la FAQ.
+Pour toute question, utilisez le formulaire de contact sur https://familygarden.fr (section Contact) ou consultez la FAQ.
 
 ## Contenu détaillé
 
-Pour plus de détails, consultez : [llms-full.txt](https://www.familygarden.fr/llms-full.txt)
+Pour plus de détails, consultez : [llms-full.txt](https://familygarden.fr/llms-full.txt)

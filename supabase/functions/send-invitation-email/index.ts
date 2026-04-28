@@ -52,8 +52,8 @@ const handler = async (req: Request): Promise<Response> => {
     const { circleId, circleName, inviterName, memberEmail, memberName, invitationToken }: InvitationEmailRequest = await req.json();
 
     // Base URL used in emails (links + images must be absolute URLs)
-    // Prefer configuring APP_URL as an HTTPS URL (e.g. https://www.familygarden.fr)
-    const appUrl = (Deno.env.get("APP_URL") || "https://www.familygarden.fr").replace(/\/$/, "");
+    // Prefer configuring APP_URL as an HTTPS URL (e.g. https://familygarden.fr)
+    const appUrl = (Deno.env.get("APP_URL") || "https://familygarden.fr").replace(/\/$/, "");
     const inviteLink = `${appUrl}/invite/${invitationToken}`;
 
     // Host logo on the same domain to avoid broken/mixed-content links in email clients

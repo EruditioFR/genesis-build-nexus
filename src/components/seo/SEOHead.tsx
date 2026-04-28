@@ -13,7 +13,7 @@ interface SEOHeadProps {
   jsonLd?: object | object[];
 }
 
-const SITE_URL = 'https://www.familygarden.fr';
+const SITE_URL = 'https://familygarden.fr';
 const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ko', 'zh', 'it', 'pt'];
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 

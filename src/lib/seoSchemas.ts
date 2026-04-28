@@ -1,4 +1,4 @@
-const SITE_URL = 'https://www.familygarden.fr';
+const SITE_URL = 'https://familygarden.fr';
 
 export const createBreadcrumbSchema = (items: { name: string; url: string }[]) => ({
   "@context": "https://schema.org",

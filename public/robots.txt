@@ -315,8 +315,8 @@ Disallow: /beta-feedback
 Disallow: /inspirations
 
 # Sitemap (static fallback + dynamic endpoint)
-Sitemap: https://www.familygarden.fr/sitemap.xml
+Sitemap: https://familygarden.fr/sitemap.xml
 
 # LLM-optimized content
-# https://www.familygarden.fr/llms.txt
-# https://www.familygarden.fr/llms-full.txt
+# https://familygarden.fr/llms.txt
+# https://familygarden.fr/llms-full.txt
