@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import SEOHead from "@/components/seo/SEOHead";
+import ImageCropDialog from "@/components/demo/ImageCropDialog";
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
 import ctaImg from "@/assets/cta-family-moment.jpg";
