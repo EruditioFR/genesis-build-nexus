@@ -333,13 +333,23 @@ const DemoExperience = () => {
                   className="mt-6"
                 >
                   <label className="text-sm font-medium text-white/80">Le titre</label>
-                  <Input
-                    autoFocus
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder=""
-                    className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
-                  />
+                  {fromInspiration ? (
+                    <Textarea
+                      autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      rows={3}
+                      className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                    />
+                  ) : (
+                    <Input
+                      autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder=""
+                      className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                    />
+                  )}
                 </motion.div>
               )}
 
