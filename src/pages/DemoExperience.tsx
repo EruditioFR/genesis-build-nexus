@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Image as ImageIcon, Camera, X } from "lucide-react";
+import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import ImageCropDialog from "@/components/demo/ImageCropDialog";
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
-import ctaImg from "@/assets/cta-family-moment.jpg";
+
 import { cn } from "@/lib/utils";
 
 type Persona = "enfants" | "famille" | "parents";
