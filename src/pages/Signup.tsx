@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import i18n from '@/lib/i18n';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Check, AlertCircle, Loader2, BookOpen, Users, Clock, Share2, Sparkles, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,6 +44,50 @@ const Signup = () => {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard?welcome=true';
   const { trackEvent } = useGoogleAnalytics();
+
+  // Pre-fill from /demo experience (persona + souvenir saved in localStorage)
+  const personaParam = searchParams.get('persona');
+  const PERSONA_LABELS: Record<string, string> = {
+    enfants: 'vos enfants',
+    famille: 'votre famille',
+    parents: 'vos parents',
+  };
+  const [demoPreview, setDemoPreview] = useState<{
+    persona?: string;
+    personaLabel?: string;
+    title?: string;
+    text?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('fg_demo_state_v1');
+      if (!raw && !personaParam) return;
+      const s = raw ? JSON.parse(raw) : {};
+      const persona = personaParam || s.persona;
+      if (!persona && !s.title) return;
+      setDemoPreview({
+        persona,
+        personaLabel: persona ? PERSONA_LABELS[persona] : undefined,
+        title: s.title,
+        text: s.text,
+      });
+      // Persist a clean payload that Dashboard / capsule creation can consume after signup
+      localStorage.setItem(
+        'fg_pending_demo_memory',
+        JSON.stringify({
+          persona,
+          title: s.title || '',
+          text: s.text || '',
+          createdAt: new Date().toISOString(),
+        })
+      );
+      trackEvent('signup_prefilled_from_demo', 'conversion', persona || 'unknown');
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Track signup page arrival once
   useEffect(() => {
@@ -321,6 +365,36 @@ const Signup = () => {
               {t('signup.subtitle')}
             </p>
           </div>
+
+          {demoPreview && (demoPreview.title || demoPreview.personaLabel) && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5 rounded-2xl border-2 border-secondary/40 bg-secondary/10 p-4"
+            >
+              <div className="flex items-start gap-3">
+                <span className="w-9 h-9 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                  <Heart className="w-4 h-4 text-secondary" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#1a1a2e]">
+                    Votre souvenir vous attend
+                  </p>
+                  {demoPreview.title && (
+                    <p className="text-sm text-[#1a1a2e]/80 mt-0.5 truncate">
+                      « {demoPreview.title} »
+                      {demoPreview.personaLabel && (
+                        <span className="text-[#1a1a2e]/60"> — pour {demoPreview.personaLabel}</span>
+                      )}
+                    </p>
+                  )}
+                  <p className="text-xs text-[#1a1a2e]/60 mt-1">
+                    Créez votre compte pour le sauvegarder définitivement.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div className="grid grid-cols-2 gap-3">
