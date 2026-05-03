@@ -129,7 +129,7 @@ const DemoExperience = () => {
     <div className="fixed inset-0 overflow-hidden bg-[#1a1a2e] text-white" style={{ height: "100dvh" }}>
       <SEOHead
         title="Découvrez Family Garden en 1 minute — Journal de famille privé"
-        description="En soixante secondes, découvrez comment Family Garden veille sur vos souvenirs de famille : préservés, partagés aux proches, transmis aux générations qui suivent."
+        description="En soixante secondes, découvrez comment Family Garden veille sur vos souvenirs de famille : préservés, offerts à vos proches, transmis aux générations qui suivent."
       />
 
       <AnimatePresence mode="wait">
