@@ -419,7 +419,7 @@ const DemoExperience = () => {
               </div>
 
               <p className="mt-6 text-center text-sm text-white/70">
-                Un souvenir à sa place, prêt à être raconté.
+                Une fois inscrit, ce souvenir rejoindra votre journal pour de bon.
               </p>
             </div>
             <div className="p-5 pb-8">
