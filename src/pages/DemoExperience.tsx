@@ -226,7 +226,7 @@ const DemoExperience = () => {
                       type="button"
                       onClick={() => {
                         setTitle(insp.question);
-                        setTutoStep(2);
+                        setTutoStep(1);
                         setShowInspirations(false);
                         trackEvent("demo_pick_inspiration", "demo", insp.category);
                       }}
