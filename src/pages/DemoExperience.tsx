@@ -205,7 +205,7 @@ const DemoExperience = () => {
 
         {step === 3 && showInspirations && (
           <Container key="s3-insp" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-10 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Pour vous inspirer</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
                 Par quel souvenir commencer ?
@@ -257,7 +257,7 @@ const DemoExperience = () => {
 
         {step === 3 && !showInspirations && (
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
                 Étape {tutoStep} sur 3
               </p>
@@ -401,7 +401,7 @@ const DemoExperience = () => {
 
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Aperçu de votre souvenir</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
                 Voici à quoi il ressemblera.
@@ -540,7 +540,7 @@ const DemoExperience = () => {
 
         {step === 7 && (
           <Container key="s7" className="bg-gradient-warm text-foreground">
-            <div className="flex-1 overflow-y-auto px-6 pt-10 pb-4">
+            <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4">
               <img
                 src={logo}
                 alt="Family Garden"
@@ -605,22 +605,20 @@ const DemoExperience = () => {
         </button>
       )}
 
-      {/* Persistent Family Garden logo */}
-      <div className="absolute top-3 left-3 z-50 flex items-center gap-2 pointer-events-none">
-        <img src={logo} alt="Family Garden" className="h-7 w-auto drop-shadow" />
-      </div>
-
-      {/* Step indicator */}
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
-        {Array.from({ length: 7 }).map((_, i) => (
-          <span
-            key={i}
-            className={cn(
-              "h-1 rounded-full transition-all",
-              i + 1 === step ? "w-6 bg-secondary" : i + 1 < step ? "w-3 bg-white/60" : "w-3 bg-white/20"
-            )}
-          />
-        ))}
+      {/* Persistent header: logo + step dots, on same row, never overlap content */}
+      <div className="absolute top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-3 pointer-events-none">
+        <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
+        <div className="flex gap-1.5 mr-12">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-1 rounded-full transition-all",
+                i + 1 === step ? "w-5 bg-secondary" : i + 1 < step ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
+              )}
+            />
+          ))}
+        </div>
       </div>
 
       <Dialog open={showAbandon} onOpenChange={setShowAbandon}>
