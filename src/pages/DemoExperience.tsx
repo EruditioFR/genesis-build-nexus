@@ -422,33 +422,8 @@ const DemoExperience = () => {
                 <div className="p-5">
                   <h3 className="font-display text-xl font-bold">{title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{text}</p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
-                      <personaCopy.icon className="w-4 h-4 text-secondary" />
-                    </span>
-                    <span className="text-sm font-medium">Pour {personaCopy.possessive}, un jour</span>
-                  </div>
                 </div>
               </motion.div>
-
-              {/* Mini timeline */}
-              <div className="mt-6 pl-4 border-l-2 border-secondary/40 space-y-4">
-                {[
-                  { y: "Aujourd'hui", t: title || "Votre souvenir" },
-                ].map((m, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.15 }}
-                    className="relative"
-                  >
-                    <span className="absolute -left-[22px] top-1.5 w-3 h-3 rounded-full bg-secondary" />
-                    <p className="text-xs text-secondary uppercase tracking-wide">{m.y}</p>
-                    <p className="text-sm text-white/90">{m.t}</p>
-                  </motion.div>
-                ))}
-              </div>
 
               {/* Capabilities once saved */}
               <div className="mt-6 space-y-2">
@@ -474,10 +449,6 @@ const DemoExperience = () => {
                   ))}
                 </ul>
               </div>
-
-              <p className="mt-6 text-center text-sm text-white/70">
-                Une fois inscrit, ce souvenir rejoindra votre journal pour de bon.
-              </p>
             </div>
             <div className="p-5 pb-8">
               <Button
@@ -485,7 +456,7 @@ const DemoExperience = () => {
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                 onClick={() => goTo(5)}
               >
-                L'offrir à {personaCopy.share}
+                Continuer
               </Button>
             </div>
           </Container>
