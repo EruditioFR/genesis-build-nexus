@@ -156,7 +156,7 @@ const DemoExperience = () => {
                 transition={{ delay: 0.15, duration: 0.5 }}
                 className="font-display text-3xl sm:text-4xl font-bold leading-tight"
               >
-                Vos souvenirs se perdent déjà.
+                Vos souvenirs se perdent.
                 <br />
                 <span className="text-secondary">Vous en êtes conscient ?</span>
               </motion.h1>
