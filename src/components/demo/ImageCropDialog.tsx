@@ -58,6 +58,19 @@ export const ImageCropDialog = ({
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressLabel, setProgressLabel] = useState("");
+
+  // Reset state when dialog opens with a new image
+  useEffect(() => {
+    if (open) {
+      setProgress(0);
+      setProgressLabel("");
+      setBusy(false);
+      setZoom(1);
+      setCrop({ x: 0, y: 0 });
+    }
+  }, [open, imageSrc]);
 
   const onCropComplete = useCallback((_: Area, areaPixels: Area) => {
     setCroppedAreaPixels(areaPixels);
@@ -66,8 +79,22 @@ export const ImageCropDialog = ({
   const handleConfirm = async () => {
     if (!imageSrc || !croppedAreaPixels) return;
     setBusy(true);
+    const stages: { label: string; pct: number; delay: number }[] = [
+      { label: "Préparation de la photo…", pct: 20, delay: 0 },
+      { label: "Recadrage en cours…", pct: 55, delay: 250 },
+      { label: "Optimisation du rendu…", pct: 85, delay: 550 },
+    ];
+    stages.forEach((s) => setTimeout(() => {
+      setProgressLabel(s.label);
+      setProgress(s.pct);
+    }, s.delay));
+
     try {
       const url = await getCroppedImg(imageSrc, croppedAreaPixels);
+      setProgress(100);
+      setProgressLabel("Souvenir prêt");
+      // Brief pause so the user perceives completion
+      await new Promise((r) => setTimeout(r, 350));
       onConfirm(url);
     } finally {
       setBusy(false);
