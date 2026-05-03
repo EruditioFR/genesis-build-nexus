@@ -57,6 +57,7 @@ const DemoExperience = () => {
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
+  const [showInspirations, setShowInspirations] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
 
