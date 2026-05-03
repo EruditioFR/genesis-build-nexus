@@ -535,61 +535,66 @@ const DemoExperience = () => {
         )}
 
         {step === 7 && (
-          <Container key="s7" className="bg-gradient-warm text-foreground">
-            <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4">
-              <div className="flex flex-col items-center gap-3 mb-6">
-                <img
-                  src={logo}
-                  alt="Family Garden"
-                  className="h-16 w-auto"
-                />
-                <span className="font-display text-2xl font-semibold text-foreground">
-                  Family<span className="text-secondary">Garden</span>
-                </span>
-              </div>
-              <h2 className="font-display text-3xl font-bold text-center text-foreground">
-                Gardez vos souvenirs en sécurité
-              </h2>
-              <p className="mt-3 text-center text-muted-foreground">
-                Un espace simple pour ne plus les perdre.
-              </p>
+          <Container key="s7" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
+            <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4 flex flex-col items-center justify-center">
+              <div className="w-full max-w-md mx-auto flex flex-col items-center text-center">
+                <div className="flex flex-col items-center gap-3 mb-8">
+                  <img
+                    src={logo}
+                    alt="Family Garden"
+                    className="h-14 w-auto drop-shadow"
+                  />
+                  <span className="font-display text-2xl font-semibold text-white">
+                    Family<span className="text-secondary">Garden</span>
+                  </span>
+                </div>
 
-              <ul className="mt-8 space-y-4">
-                {[
-                  { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
-                  { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
-                  { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
-                ].map(({ Icon, t }, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + i * 0.1 }}
-                    className="flex items-start gap-4 p-4 rounded-2xl bg-white/70 backdrop-blur border border-border"
-                  >
-                    <span className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5 text-secondary" />
-                    </span>
-                    <span className="text-base text-foreground font-medium pt-1.5">{t}</span>
-                  </motion.li>
-                ))}
-              </ul>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                  Gardez vos souvenirs en sécurité
+                </h2>
+                <p className="mt-3 text-sm sm:text-base text-white/70">
+                  Un espace simple pour ne plus les perdre.
+                </p>
+
+                <ul className="mt-8 w-full space-y-3">
+                  {[
+                    { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
+                    { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
+                    { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
+                  ].map(({ Icon, t }, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.1 }}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-left"
+                    >
+                      <span className="w-9 h-9 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-secondary" />
+                      </span>
+                      <span className="text-sm text-white/90">{t}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <div className="p-5 pb-8 space-y-3">
-              <Button
-                size="mobileLg"
-                className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={handleConvert}
-              >
-                Créer mon espace
-                <ArrowRight className="w-5 h-5 ml-1" />
-              </Button>
-              <button
-                onClick={() => navigate("/")}
-                className="w-full text-sm text-muted-foreground hover:text-foreground py-2"
-              >
-                En savoir plus avant de me lancer
-              </button>
+              <div className="w-full max-w-md mx-auto space-y-3">
+                <Button
+                  size="mobileLg"
+                  className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
+                  onClick={handleConvert}
+                >
+                  Créer mon espace
+                  <ArrowRight className="w-5 h-5 ml-1" />
+                </Button>
+                <button
+                  onClick={() => navigate("/")}
+                  className="w-full text-sm text-white/60 hover:text-white py-2"
+                >
+                  En savoir plus avant de me lancer
+                </button>
+              </div>
             </div>
           </Container>
         )}
