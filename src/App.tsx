@@ -41,6 +41,7 @@ const InspirationsPage = lazy(() => import("./pages/InspirationsPage"));
 const SharedWithMePage = lazy(() => import("./pages/SharedWithMePage"));
 const BetaFeedback = lazy(() => import("./pages/BetaFeedback"));
 const Marketing = lazy(() => import("./pages/Marketing"));
+const DemoExperience = lazy(() => import("./pages/DemoExperience"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 
@@ -121,6 +122,7 @@ const App = () => (
                   <Route path="/inspirations" element={<InspirationsPage />} />
                   <Route path="/beta-feedback" element={<BetaFeedback />} />
                   <Route path="/marketing" element={<Marketing />} />
+                  <Route path="/demo" element={<DemoExperience />} />
                   
                   {/* Legal pages */}
                   <Route path="/privacy" element={<PrivacyPolicy />} />
