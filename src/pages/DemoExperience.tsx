@@ -10,6 +10,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import ImageCropDialog from "@/components/demo/ImageCropDialog";
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
+import logo from "@/assets/logo.png";
 
 import { cn } from "@/lib/utils";
 
@@ -508,6 +509,11 @@ const DemoExperience = () => {
         {step === 7 && (
           <Container key="s7" className="bg-gradient-warm text-foreground">
             <div className="flex-1 overflow-y-auto px-6 pt-10 pb-4">
+              <img
+                src={logo}
+                alt="Family Garden"
+                className="mx-auto h-16 w-auto mb-5"
+              />
               <h2 className="font-display text-3xl font-bold text-center text-foreground">
                 Gardez vos souvenirs en sécurité
               </h2>
