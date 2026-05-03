@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
+import { ArrowRight, ArrowLeft, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
