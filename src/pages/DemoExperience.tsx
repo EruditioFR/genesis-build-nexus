@@ -393,28 +393,9 @@ const DemoExperience = () => {
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
-              <p className="text-center text-xs uppercase tracking-widest text-secondary">Aperçu de votre souvenir</p>
-              <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Voici à quoi il ressemblera.
+              <h2 className="font-display text-2xl font-bold text-center text-white">
+                Votre souvenir est à l'abri.
               </h2>
-
-              <motion.div
-                initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="mt-6 rounded-3xl overflow-hidden bg-white text-foreground shadow-gold"
-              >
-                {userImage && (
-                  <div
-                    className="h-44 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${userImage})` }}
-                  />
-                )}
-                <div className="p-5">
-                  <h3 className="font-display text-xl font-bold">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{text}</p>
-                </div>
-              </motion.div>
 
               {/* Capabilities once saved */}
               <div className="mt-6 space-y-2">
