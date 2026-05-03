@@ -21,7 +21,7 @@ const PERSONA_COPY: Record<Persona, { label: string; possessive: string; share: 
   parents: { label: "Mes parents", possessive: "vos parents", share: "vos parents", icon: UserRound },
 };
 
-const STORAGE_KEY = "fg_demo_state_v1";
+const STORAGE_KEY = "fg_demo_state_v2";
 
 const Container = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <motion.div
@@ -73,8 +73,6 @@ const DemoExperience = () => {
       if (raw) {
         const s = JSON.parse(raw);
         if (s.persona) setPersona(s.persona);
-        if (s.title) setTitle(s.title);
-        if (s.text) setText(s.text);
       }
     } catch {}
   }, []);
