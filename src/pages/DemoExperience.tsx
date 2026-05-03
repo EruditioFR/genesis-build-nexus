@@ -368,9 +368,9 @@ const DemoExperience = () => {
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
-              <p className="text-center text-xs uppercase tracking-widest text-secondary">Ce souvenir est maintenant à l'abri</p>
+              <p className="text-center text-xs uppercase tracking-widest text-secondary">Aperçu de votre souvenir</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Voilà. Il ne se perdra plus.
+                Voici à quoi il ressemblera.
               </h2>
 
               <motion.div
