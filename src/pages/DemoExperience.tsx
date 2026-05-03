@@ -262,7 +262,7 @@ const DemoExperience = () => {
                 Étape {tutoStep} sur 3
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                {tutoStep === 1 && "Commencez par une photo"}
+                {tutoStep === 1 && "Une image pour illustrer votre souvenir ?"}
                 {tutoStep === 2 && "Donnez-lui un titre"}
                 {tutoStep === 3 && "Racontez ce moment"}
               </h2>
