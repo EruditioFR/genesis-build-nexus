@@ -178,7 +178,7 @@ const DemoExperience = () => {
               >
                 Vos souvenirs se perdent déjà.
                 <br />
-                <span className="text-secondary">Vous ne vous en rendez pas compte ?</span>
+                <span className="text-secondary">Vous en êtes conscient ?</span>
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
