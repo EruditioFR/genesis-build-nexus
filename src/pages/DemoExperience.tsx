@@ -235,13 +235,45 @@ const DemoExperience = () => {
               </h2>
 
               <div
-                className="mt-5 h-40 rounded-2xl bg-cover bg-center relative overflow-hidden"
-                style={{ backgroundImage: `url(${ctaImg})` }}
+                className="mt-5 h-40 rounded-2xl bg-cover bg-center relative overflow-hidden group"
+                style={{ backgroundImage: `url(${userImage || ctaImg})` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1">
-                  <ImageIcon className="w-3 h-3" /> Photo d'illustration
-                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
+                  aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
+                >
+                  <span className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                    <Camera className="w-5 h-5" />
+                  </span>
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm">
+                    {userImage ? "Changer la photo" : "Confier une photo"}
+                  </span>
+                </button>
+                {userImage && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
+                    aria-label="Retirer la photo"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                {!userImage && (
+                  <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
+                    <ImageIcon className="w-3 h-3" /> Photo d'illustration
+                  </span>
+                )}
               </div>
 
               <div className="mt-5 space-y-4">
