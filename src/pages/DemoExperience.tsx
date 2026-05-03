@@ -450,6 +450,31 @@ const DemoExperience = () => {
                 ))}
               </div>
 
+              {/* Capabilities once saved */}
+              <div className="mt-6 space-y-2">
+                <p className="text-center text-xs uppercase tracking-widest text-secondary/80">Une fois conservé, ce souvenir pourra…</p>
+                <ul className="mt-3 space-y-2">
+                  {[
+                    { Icon: Share2, t: "Être partagé avec vos proches" },
+                    { Icon: TreePine, t: "Être rattaché à votre arbre généalogique" },
+                    { Icon: Clock, t: "Se retrouver dans votre chronologie" },
+                  ].map(({ Icon, t }, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + i * 0.12 }}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
+                    >
+                      <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-secondary" />
+                      </span>
+                      <span className="text-sm text-white/90">{t}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
               <p className="mt-6 text-center text-sm text-white/70">
                 Une fois inscrit, ce souvenir rejoindra votre journal pour de bon.
               </p>
