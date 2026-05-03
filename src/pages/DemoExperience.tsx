@@ -605,22 +605,20 @@ const DemoExperience = () => {
         </button>
       )}
 
-      {/* Persistent Family Garden logo */}
-      <div className="absolute top-3 left-3 z-50 flex items-center gap-2 pointer-events-none">
-        <img src={logo} alt="Family Garden" className="h-7 w-auto drop-shadow" />
-      </div>
-
-      {/* Step indicator */}
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
-        {Array.from({ length: 7 }).map((_, i) => (
-          <span
-            key={i}
-            className={cn(
-              "h-1 rounded-full transition-all",
-              i + 1 === step ? "w-6 bg-secondary" : i + 1 < step ? "w-3 bg-white/60" : "w-3 bg-white/20"
-            )}
-          />
-        ))}
+      {/* Persistent header: logo + step dots, on same row, never overlap content */}
+      <div className="absolute top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-3 pointer-events-none">
+        <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
+        <div className="flex gap-1.5 mr-12">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-1 rounded-full transition-all",
+                i + 1 === step ? "w-5 bg-secondary" : i + 1 < step ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
+              )}
+            />
+          ))}
+        </div>
       </div>
 
       <Dialog open={showAbandon} onOpenChange={setShowAbandon}>
