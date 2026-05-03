@@ -124,6 +124,15 @@ export const ImageCropDialog = ({
               showGrid
             />
           )}
+          {busy && (
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center px-6 gap-4">
+              <Loader2 className="w-8 h-8 text-secondary animate-spin" />
+              <div className="w-full max-w-xs space-y-2">
+                <Progress value={progress} className="h-2 bg-white/15" />
+                <p className="text-center text-sm text-white/85">{progressLabel}</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="px-5 py-4 space-y-3">
