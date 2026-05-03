@@ -104,7 +104,7 @@ const DemoExperience = () => {
   // anti-abandon
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (step >= 3 && step <= 6) {
+      if (step >= 3 && step <= 4) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -112,25 +112,6 @@ const DemoExperience = () => {
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
   }, [step]);
-
-  // step 5 timed CTA
-  useEffect(() => {
-    if (step === 5) {
-      setStep5CtaVisible(false);
-      const t = setTimeout(() => setStep5CtaVisible(true), 1500);
-      return () => clearTimeout(t);
-    }
-  }, [step]);
-
-  // step 6 timed CTA + tracking
-  useEffect(() => {
-    if (step === 6) {
-      setStep6CtaVisible(false);
-      trackEvent("reach_projection", "demo", persona ?? undefined);
-      const t = setTimeout(() => setStep6CtaVisible(true), 1800);
-      return () => clearTimeout(t);
-    }
-  }, [step, trackEvent, persona]);
 
   const goTo = useCallback((n: number) => setStep(n), []);
 
