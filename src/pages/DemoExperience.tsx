@@ -466,7 +466,7 @@ const DemoExperience = () => {
               <Button
                 size="mobileLg"
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={() => goTo(5)}
+                onClick={() => goTo(7)}
               >
                 Continuer
               </Button>
