@@ -401,7 +401,7 @@ const DemoExperience = () => {
 
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Aperçu de votre souvenir</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
                 Voici à quoi il ressemblera.
@@ -540,7 +540,7 @@ const DemoExperience = () => {
 
         {step === 7 && (
           <Container key="s7" className="bg-gradient-warm text-foreground">
-            <div className="flex-1 overflow-y-auto px-6 pt-10 pb-4">
+            <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4">
               <img
                 src={logo}
                 alt="Family Garden"
