@@ -20,7 +20,6 @@ const TrustBandV3 = lazy(() => import("@/components/landing/v3/TrustBandV3"));
 const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
 const CTASectionV3 = lazy(() => import("@/components/landing/v3/CTASectionV3"));
 const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
-const CookieBanner = lazy(() => import("@/components/CookieBanner"));
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -69,7 +68,6 @@ const Index = () => {
       </main>
       <Suspense fallback={null}>
         <Footer />
-        <CookieBanner />
       </Suspense>
     </div>
   );
