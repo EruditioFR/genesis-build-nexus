@@ -22,6 +22,14 @@ const PERSONA_COPY: Record<Persona, { label: string; possessive: string; share: 
   parents: { label: "Mes parents", possessive: "vos parents", share: "vos parents", icon: UserRound },
 };
 
+const INSPIRATIONS: { emoji: string; category: string; question: string }[] = [
+  { emoji: "🌱", category: "Enfance", question: "À quoi ressemblait la maison de votre enfance ?" },
+  { emoji: "🎒", category: "École", question: "Un professeur vous a marqué. Pourquoi ?" },
+  { emoji: "🎵", category: "Musiques", question: "Quelle chanson vous ramène instantanément en arrière ?" },
+  { emoji: "👨‍👩‍👧", category: "Famille", question: "Quelle tradition aimeriez-vous transmettre ?" },
+  { emoji: "✨", category: "Vie", question: "Quel moment a changé le cours de votre vie ?" },
+];
+
 const STORAGE_KEY = "fg_demo_state_v2";
 
 const Container = ({ children, className }: { children: React.ReactNode; className?: string }) => (
