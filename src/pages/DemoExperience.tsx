@@ -42,6 +42,7 @@ const DemoExperience = () => {
   const [title, setTitle] = useState("L'été à La Baule");
   const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
   const [userImage, setUserImage] = useState<string | null>(null);
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
@@ -56,8 +57,7 @@ const DemoExperience = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setUserImage(reader.result);
-        trackEvent("demo_upload_image", "demo");
+        setPendingImage(reader.result);
       }
     };
     reader.readAsDataURL(file);
