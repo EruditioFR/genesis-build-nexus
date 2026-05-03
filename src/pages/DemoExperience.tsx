@@ -513,7 +513,12 @@ const DemoExperience = () => {
 
       {/* Persistent header: logo + step dots, on same row, never overlap content */}
       <div className="absolute top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-3 pointer-events-none">
-        <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
+          <span className="font-display text-sm sm:text-base font-semibold text-white drop-shadow">
+            Family<span className="text-secondary">Garden</span>
+          </span>
+        </div>
         <div className="flex gap-1.5 mr-12">
           {(() => {
             const displayed = step <= 4 ? step : 5;
