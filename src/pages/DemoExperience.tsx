@@ -237,11 +237,6 @@ const DemoExperience = () => {
                 {tutoStep === 2 && "Donnez-lui un titre"}
                 {tutoStep === 3 && "Racontez ce moment"}
               </h2>
-              <p className="mt-2 text-center text-sm text-white/70 px-2">
-                {tutoStep === 1 && "Choisissez une image qui ramène ce souvenir à la surface."}
-                {tutoStep === 2 && "Quelques mots suffisent pour le retrouver plus tard."}
-                {tutoStep === 3 && "Notez ce qui pourrait s'oublier avec le temps."}
-              </p>
 
               {/* Mini progress */}
               <div className="mt-4 flex justify-center gap-1.5">
@@ -314,9 +309,6 @@ const DemoExperience = () => {
                     placeholder=""
                     className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
-                  <p className="mt-2 text-xs text-white/50">
-                    Un titre court, celui qui vous reviendra en tête dans dix ans.
-                  </p>
                 </motion.div>
               )}
 
@@ -335,9 +327,6 @@ const DemoExperience = () => {
                     placeholder=""
                     className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
-                  <p className="mt-2 text-xs text-white/50">
-                    Une phrase, un détail, une émotion. Ce qui s'effacerait sinon.
-                  </p>
                 </motion.div>
               )}
             </div>
