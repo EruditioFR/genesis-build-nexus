@@ -311,7 +311,7 @@ const DemoExperience = () => {
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex. L'été à La Baule"
+                    placeholder="Le titre de votre souvenir"
                     className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
                   <p className="mt-2 text-xs text-white/50">
