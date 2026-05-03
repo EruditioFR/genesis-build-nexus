@@ -485,7 +485,7 @@ const DemoExperience = () => {
                   className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                   onClick={handleConvert}
                 >
-                  Créer mon espace
+                  Créer mon espace gratuitement
                   <ArrowRight className="w-5 h-5 ml-1" />
                 </Button>
                 <button
