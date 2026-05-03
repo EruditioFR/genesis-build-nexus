@@ -24,7 +24,19 @@ export const hasAnalyticsConsent = (): boolean => {
   }
 };
 
-// Initialise Google Analytics
+const getConsentModeState = () => {
+  const granted = hasAnalyticsConsent() ? "granted" : "denied";
+
+  return {
+    analytics_storage: granted,
+    ad_storage: granted,
+    ad_user_data: granted,
+    ad_personalization: granted,
+    security_storage: "granted",
+  } as const;
+};
+
+// Initialise Google Analytics en Consent Mode v2 : refus par défaut avant consentement
 const initializeGA = () => {
   if (!GA_MEASUREMENT_ID) {
     console.warn("Google Analytics: VITE_GA_MEASUREMENT_ID non configuré");
@@ -32,7 +44,24 @@ const initializeGA = () => {
   }
 
   // Évite la double initialisation
-  if (document.getElementById("ga-script")) return;
+  if (document.getElementById("ga-script")) {
+    window.gtag?.("consent", "update", getConsentModeState());
+    return;
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag(...args: unknown[]) {
+    window.dataLayer.push(args);
+  };
+
+  window.gtag("consent", "default", {
+    analytics_storage: "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    security_storage: "granted",
+    wait_for_update: 500,
+  });
 
   // Crée le script gtag
   const script = document.createElement("script");
@@ -41,16 +70,17 @@ const initializeGA = () => {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.appendChild(script);
 
-  // Initialise dataLayer et gtag
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
   window.gtag("js", new Date());
+  window.gtag("consent", "update", getConsentModeState());
   window.gtag("config", GA_MEASUREMENT_ID, {
     anonymize_ip: true, // Conforme RGPD
     cookie_flags: "SameSite=None;Secure",
   });
+};
+
+const updateGAConsent = () => {
+  if (!window.gtag) return;
+  window.gtag("consent", "update", getConsentModeState());
 };
 
 // Supprime Google Analytics
@@ -76,32 +106,38 @@ const removeGA = () => {
 export const useGoogleAnalytics = () => {
   const location = useLocation();
 
-  // Initialise GA selon le consentement
+  // Initialise GA en Consent Mode puis met à jour selon le consentement
   useEffect(() => {
-    if (hasAnalyticsConsent()) {
-      initializeGA();
-    } else {
-      removeGA();
-    }
+    initializeGA();
+    updateGAConsent();
+
+    if (!hasAnalyticsConsent()) removeGA();
 
     // Écoute les changements de consentement
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === COOKIE_CONSENT_KEY) {
-        if (hasAnalyticsConsent()) {
-          initializeGA();
-        } else {
-          removeGA();
-        }
+    const handleConsentChange = () => {
+      initializeGA();
+      updateGAConsent();
+
+      if (!hasAnalyticsConsent()) {
+        removeGA();
       }
     };
 
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === COOKIE_CONSENT_KEY) handleConsentChange();
+    };
+
     window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    window.addEventListener("familygarden-cookie-consent-change", handleConsentChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("familygarden-cookie-consent-change", handleConsentChange);
+    };
   }, []);
 
   // Track les changements de page
   useEffect(() => {
-    if (hasAnalyticsConsent() && window.gtag && GA_MEASUREMENT_ID) {
+    if (window.gtag && GA_MEASUREMENT_ID) {
       window.gtag("config", GA_MEASUREMENT_ID, {
         page_path: location.pathname + location.search,
         anonymize_ip: true,
@@ -111,7 +147,7 @@ export const useGoogleAnalytics = () => {
 
   // Fonction pour tracker des événements personnalisés
   const trackEvent = useCallback((action: string, category: string, label?: string, value?: number) => {
-    if (hasAnalyticsConsent() && window.gtag) {
+    if (window.gtag) {
       window.gtag("event", action, {
         event_category: category,
         event_label: label,
