@@ -366,36 +366,6 @@ const Signup = () => {
             </p>
           </div>
 
-          {demoPreview && (demoPreview.title || demoPreview.personaLabel) && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-5 rounded-2xl border-2 border-secondary/40 bg-secondary/10 p-4"
-            >
-              <div className="flex items-start gap-3">
-                <span className="w-9 h-9 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                  <Heart className="w-4 h-4 text-secondary" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[#1a1a2e]">
-                    Votre souvenir vous attend
-                  </p>
-                  {demoPreview.title && (
-                    <p className="text-sm text-[#1a1a2e]/80 mt-0.5 truncate">
-                      « {demoPreview.title} »
-                      {demoPreview.personaLabel && (
-                        <span className="text-[#1a1a2e]/60"> — pour {demoPreview.personaLabel}</span>
-                      )}
-                    </p>
-                  )}
-                  <p className="text-xs text-[#1a1a2e]/60 mt-1">
-                    Créez votre compte pour le sauvegarder définitivement.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
