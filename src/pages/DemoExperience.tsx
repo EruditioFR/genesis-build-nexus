@@ -58,6 +58,7 @@ const DemoExperience = () => {
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const [showInspirations, setShowInspirations] = useState(true);
+  const [fromInspiration, setFromInspiration] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
 
@@ -226,6 +227,7 @@ const DemoExperience = () => {
                       type="button"
                       onClick={() => {
                         setTitle(insp.question);
+                        setFromInspiration(true);
                         setTutoStep(1);
                         setShowInspirations(false);
                         trackEvent("demo_pick_inspiration", "demo", insp.category);
@@ -246,7 +248,7 @@ const DemoExperience = () => {
               <Button
                 variant="outline"
                 className="w-full border-white/30 text-white text-sm bg-transparent hover:bg-white/10 py-2 h-auto"
-                onClick={() => setShowInspirations(false)}
+                onClick={() => { setFromInspiration(false); setTitle(""); setShowInspirations(false); }}
               >
                 Créer un autre souvenir
                 <ArrowRight className="w-4 h-4 ml-1" />
@@ -262,8 +264,8 @@ const DemoExperience = () => {
                 Étape {tutoStep} sur 3
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                {tutoStep === 1 && "Une image pour illustrer votre souvenir ?"}
-                {tutoStep === 2 && "Donnez-lui un titre"}
+                {tutoStep === 1 && (fromInspiration ? "Votre souvenir" : "Une image pour illustrer votre souvenir ?")}
+                {tutoStep === 2 && (fromInspiration ? "Une image pour illustrer votre souvenir ?" : "Donnez-lui un titre")}
                 {tutoStep === 3 && "Racontez ce moment"}
               </h2>
 
@@ -280,7 +282,7 @@ const DemoExperience = () => {
                 ))}
               </div>
 
-              {tutoStep === 1 && (
+              {((tutoStep === 1 && !fromInspiration) || (tutoStep === 2 && fromInspiration)) && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -324,20 +326,30 @@ const DemoExperience = () => {
                 </motion.div>
               )}
 
-              {tutoStep === 2 && (
+              {((tutoStep === 1 && fromInspiration) || (tutoStep === 2 && !fromInspiration)) && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6"
                 >
                   <label className="text-sm font-medium text-white/80">Le titre</label>
-                  <Input
-                    autoFocus
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder=""
-                    className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
-                  />
+                  {fromInspiration ? (
+                    <Textarea
+                      autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      rows={3}
+                      className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                    />
+                  ) : (
+                    <Input
+                      autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder=""
+                      className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                    />
+                  )}
                 </motion.div>
               )}
 
