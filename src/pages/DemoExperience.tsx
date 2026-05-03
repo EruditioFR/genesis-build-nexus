@@ -47,6 +47,7 @@ const DemoExperience = () => {
   const [showAbandon, setShowAbandon] = useState(false);
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
+  const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
 
@@ -229,85 +230,151 @@ const DemoExperience = () => {
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
-                Un souvenir, avant qu'il ne se perde
+                Étape {tutoStep} sur 3
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Racontez un moment que vous ne voulez pas oublier
+                {tutoStep === 1 && "Commencez par une photo"}
+                {tutoStep === 2 && "Donnez-lui un titre"}
+                {tutoStep === 3 && "Racontez ce moment"}
               </h2>
+              <p className="mt-2 text-center text-sm text-white/70 px-2">
+                {tutoStep === 1 && "Choisissez une image qui ramène ce souvenir à la surface."}
+                {tutoStep === 2 && "Quelques mots suffisent pour le retrouver plus tard."}
+                {tutoStep === 3 && "Notez ce qui pourrait s'oublier avec le temps."}
+              </p>
 
-              <div
-                className="mt-5 h-40 rounded-2xl bg-cover bg-center relative overflow-hidden group"
-                style={{ backgroundImage: `url(${userImage || ctaImg})` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageSelect}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
-                  aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
-                >
-                  <span className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                    <Camera className="w-5 h-5" />
-                  </span>
-                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm">
-                    {userImage ? "Changer la photo" : "Confier une photo"}
-                  </span>
-                </button>
-                {userImage && (
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
-                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
-                    aria-label="Retirer la photo"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-                {!userImage && (
-                  <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
-                    <ImageIcon className="w-3 h-3" /> Photo d'illustration
-                  </span>
-                )}
+              {/* Mini progress */}
+              <div className="mt-4 flex justify-center gap-1.5">
+                {[1, 2, 3].map((n) => (
+                  <span
+                    key={n}
+                    className={cn(
+                      "h-1 rounded-full transition-all",
+                      n === tutoStep ? "w-6 bg-secondary" : n < tutoStep ? "w-3 bg-white/60" : "w-3 bg-white/20"
+                    )}
+                  />
+                ))}
               </div>
 
-              <div className="mt-5 space-y-4">
-                <div>
+              {tutoStep === 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 h-48 rounded-2xl bg-cover bg-center relative overflow-hidden ring-2 ring-secondary/40"
+                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
+                    aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
+                  >
+                    <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                      <Camera className="w-5 h-5" />
+                    </span>
+                    <span className="text-sm font-medium px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm">
+                      {userImage ? "Changer la photo" : "Ajouter une photo"}
+                    </span>
+                  </button>
+                  {userImage && (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
+                      aria-label="Retirer la photo"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                  {!userImage && (
+                    <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
+                      <ImageIcon className="w-3 h-3" /> Exemple
+                    </span>
+                  )}
+                </motion.div>
+              )}
+
+              {tutoStep === 2 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6"
+                >
                   <label className="text-sm font-medium text-white/80">Le titre</label>
                   <Input
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Ex. L'été à La Baule"
                     className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
-                </div>
-                <div>
+                  <p className="mt-2 text-xs text-white/50">
+                    Un titre court, celui qui vous reviendra en tête dans dix ans.
+                  </p>
+                </motion.div>
+              )}
+
+              {tutoStep === 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6"
+                >
                   <label className="text-sm font-medium text-white/80">Le récit</label>
                   <Textarea
+                    autoFocus
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    rows={3}
+                    rows={5}
+                    placeholder="Ce que vous voulez ne pas oublier…"
                     className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
-                </div>
-              </div>
+                  <p className="mt-2 text-xs text-white/50">
+                    Une phrase, un détail, une émotion. Ce qui s'effacerait sinon.
+                  </p>
+                </motion.div>
+              )}
             </div>
-            <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80">
-              <Button
-                size="mobileLg"
-                className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={handleCreate}
-                disabled={!title.trim()}
-              >
-                Continuer
-                <ArrowRight className="w-5 h-5 ml-1" />
-              </Button>
+            <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80 flex gap-3">
+              {tutoStep > 1 && (
+                <Button
+                  size="mobileLg"
+                  variant="outline"
+                  className="border-white/30 text-white bg-transparent hover:bg-white/10"
+                  onClick={() => setTutoStep((s) => (s - 1) as 1 | 2 | 3)}
+                >
+                  Retour
+                </Button>
+              )}
+              {tutoStep < 3 ? (
+                <Button
+                  size="mobileLg"
+                  className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
+                  onClick={() => setTutoStep((s) => (s + 1) as 1 | 2 | 3)}
+                  disabled={tutoStep === 2 && !title.trim()}
+                >
+                  Continuer
+                  <ArrowRight className="w-5 h-5 ml-1" />
+                </Button>
+              ) : (
+                <Button
+                  size="mobileLg"
+                  className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
+                  onClick={handleCreate}
+                  disabled={!title.trim()}
+                >
+                  Mettre à l'abri
+                  <ArrowRight className="w-5 h-5 ml-1" />
+                </Button>
+              )}
             </div>
           </Container>
         )}
