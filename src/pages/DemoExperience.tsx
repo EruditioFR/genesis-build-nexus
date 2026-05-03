@@ -534,15 +534,18 @@ const DemoExperience = () => {
       <div className="absolute top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-3 pointer-events-none">
         <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
         <div className="flex gap-1.5 mr-12">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1 rounded-full transition-all",
-                i + 1 === step ? "w-5 bg-secondary" : i + 1 < step ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
-              )}
-            />
-          ))}
+          {(() => {
+            const displayed = step <= 4 ? step : 5;
+            return Array.from({ length: 5 }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "h-1 rounded-full transition-all",
+                  i + 1 === displayed ? "w-5 bg-secondary" : i + 1 < displayed ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
+                )}
+              />
+            ));
+          })()}
         </div>
       </div>
 
