@@ -41,10 +41,28 @@ const DemoExperience = () => {
   const [persona, setPersona] = useState<Persona | null>(null);
   const [title, setTitle] = useState("L'été à La Baule");
   const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
+  const [userImage, setUserImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return;
+    if (file.size > 8 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setUserImage(reader.result);
+        trackEvent("demo_upload_image", "demo");
+      }
+    };
+    reader.readAsDataURL(file);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   // restore state
   useEffect(() => {
