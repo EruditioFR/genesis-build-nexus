@@ -391,16 +391,20 @@ const DemoExperience = () => {
               )}
             </div>
             <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80 flex gap-3">
-              {tutoStep > 1 && (
-                <Button
-                  size="mobileLg"
-                  variant="outline"
-                  className="border-white/30 text-white bg-transparent hover:bg-white/10"
-                  onClick={() => setTutoStep((s) => (s - 1) as 1 | 2 | 3)}
-                >
-                  Retour
-                </Button>
-              )}
+              <Button
+                size="mobileLg"
+                variant="outline"
+                className="border-white/30 text-white bg-transparent hover:bg-white/10"
+                onClick={() => {
+                  if (tutoStep === 1) {
+                    setShowInspirations(true);
+                  } else {
+                    setTutoStep((s) => (s - 1) as 1 | 2 | 3);
+                  }
+                }}
+              >
+                Retour
+              </Button>
               {tutoStep < 3 ? (
                 <Button
                   size="mobileLg"
