@@ -54,8 +54,6 @@ const DemoExperience = () => {
   const [userImage, setUserImage] = useState<string | null>(null);
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
-  const [step6CtaVisible, setStep6CtaVisible] = useState(false);
-  const [step5CtaVisible, setStep5CtaVisible] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const [showInspirations, setShowInspirations] = useState(true);
   const [fromInspiration, setFromInspiration] = useState(false);
