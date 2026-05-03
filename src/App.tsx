@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/hooks/useAuth";
 import GoogleAnalyticsProvider from "@/components/GoogleAnalyticsProvider";
 import ScrollToTop from "@/components/ScrollToTop";
+import CookieBanner from "@/components/CookieBanner";
 
 // Eager load critical pages
 import Index from "./pages/Index";
@@ -156,6 +157,7 @@ const App = () => (
                 </Routes>
               </Suspense>
             </GoogleAnalyticsProvider>
+            <CookieBanner />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
