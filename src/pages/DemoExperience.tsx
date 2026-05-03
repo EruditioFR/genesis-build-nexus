@@ -537,11 +537,16 @@ const DemoExperience = () => {
         {step === 7 && (
           <Container key="s7" className="bg-gradient-warm text-foreground">
             <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4">
-              <img
-                src={logo}
-                alt="Family Garden"
-                className="mx-auto h-16 w-auto mb-5"
-              />
+              <div className="flex flex-col items-center gap-3 mb-6">
+                <img
+                  src={logo}
+                  alt="Family Garden"
+                  className="h-16 w-auto"
+                />
+                <span className="font-display text-2xl font-semibold text-foreground">
+                  Family<span className="text-secondary">Garden</span>
+                </span>
+              </div>
               <h2 className="font-display text-3xl font-bold text-center text-foreground">
                 Gardez vos souvenirs en sécurité
               </h2>
