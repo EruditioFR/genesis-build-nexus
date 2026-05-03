@@ -412,7 +412,7 @@ const DemoExperience = () => {
               {/* Mini timeline */}
               <div className="mt-6 pl-4 border-l-2 border-secondary/40 space-y-4">
                 {[
-                  { y: "Aujourd'hui", t: title || "L'été à La Baule" },
+                  { y: "Aujourd'hui", t: title || "Votre souvenir" },
                   { y: "L'an prochain", t: "La rentrée des classes" },
                   { y: "Dans dix ans", t: "Un anniversaire en famille" },
                 ].map((m, i) => (
