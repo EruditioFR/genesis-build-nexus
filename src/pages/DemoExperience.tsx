@@ -193,7 +193,7 @@ const DemoExperience = () => {
               <Button
                 size="mobileLg"
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={() => goTo(2)}
+                onClick={() => goTo(3)}
               >
                 Créer un souvenir
                 <ArrowRight className="w-5 h-5 ml-1" />
@@ -202,37 +202,6 @@ const DemoExperience = () => {
           </Container>
         )}
 
-        {step === 2 && (
-          <Container key="s2" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
-            <div className="flex-1 flex flex-col justify-center px-6">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-center leading-snug">
-                Pour qui voulez-vous éviter de perdre ces souvenirs ?
-              </h2>
-              <div className="mt-10 space-y-4">
-                {(Object.keys(PERSONA_COPY) as Persona[]).map((p) => {
-                  const Icon = PERSONA_COPY[p].icon;
-                  return (
-                    <motion.button
-                      key={p}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() => handlePersona(p)}
-                      className={cn(
-                        "w-full min-h-[64px] rounded-2xl border border-white/15 bg-white/5 backdrop-blur-sm",
-                        "px-6 flex items-center gap-4 text-left transition-all hover:bg-white/10 hover:border-secondary/60",
-                        persona === p && "border-secondary bg-secondary/15"
-                      )}
-                    >
-                      <span className="w-11 h-11 rounded-full bg-secondary/20 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-secondary" />
-                      </span>
-                      <span className="text-lg font-medium">{PERSONA_COPY[p].label}</span>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </div>
-          </Container>
-        )}
 
         {step === 3 && showInspirations && (
           <Container key="s3-insp" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
