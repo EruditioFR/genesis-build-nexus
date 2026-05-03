@@ -396,7 +396,7 @@ const DemoExperience = () => {
                   style={{ backgroundImage: `url(${userImage || ctaImg})` }}
                 />
                 <div className="p-5">
-                  <h3 className="font-display text-xl font-bold">{title || "L'été à La Baule"}</h3>
+                  <h3 className="font-display text-xl font-bold">{title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{text}</p>
                   <div className="mt-4 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
