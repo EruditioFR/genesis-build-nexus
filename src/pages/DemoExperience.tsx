@@ -327,7 +327,7 @@ const DemoExperience = () => {
               >
                 <div
                   className="h-44 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${ctaImg})` }}
+                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
                 />
                 <div className="p-5">
                   <h3 className="font-display text-xl font-bold">{title || "L'été à La Baule"}</h3>
