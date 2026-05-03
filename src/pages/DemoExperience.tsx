@@ -248,7 +248,7 @@ const DemoExperience = () => {
               <Button
                 variant="outline"
                 className="w-full border-white/30 text-white text-sm bg-transparent hover:bg-white/10 py-2 h-auto"
-                onClick={() => setShowInspirations(false)}
+                onClick={() => { setFromInspiration(false); setTitle(""); setShowInspirations(false); }}
               >
                 Créer un autre souvenir
                 <ArrowRight className="w-4 h-4 ml-1" />
