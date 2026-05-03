@@ -573,8 +573,13 @@ const DemoExperience = () => {
         </button>
       )}
 
+      {/* Persistent Family Garden logo */}
+      <div className="absolute top-3 left-3 z-50 flex items-center gap-2 pointer-events-none">
+        <img src={logo} alt="Family Garden" className="h-7 w-auto drop-shadow" />
+      </div>
+
       {/* Step indicator */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
         {Array.from({ length: 7 }).map((_, i) => (
           <span
             key={i}
