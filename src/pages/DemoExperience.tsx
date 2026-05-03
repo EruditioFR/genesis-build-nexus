@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Image as ImageIcon, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,10 +41,28 @@ const DemoExperience = () => {
   const [persona, setPersona] = useState<Persona | null>(null);
   const [title, setTitle] = useState("L'été à La Baule");
   const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
+  const [userImage, setUserImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return;
+    if (file.size > 8 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setUserImage(reader.result);
+        trackEvent("demo_upload_image", "demo");
+      }
+    };
+    reader.readAsDataURL(file);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   // restore state
   useEffect(() => {
@@ -217,13 +235,45 @@ const DemoExperience = () => {
               </h2>
 
               <div
-                className="mt-5 h-40 rounded-2xl bg-cover bg-center relative overflow-hidden"
-                style={{ backgroundImage: `url(${ctaImg})` }}
+                className="mt-5 h-40 rounded-2xl bg-cover bg-center relative overflow-hidden group"
+                style={{ backgroundImage: `url(${userImage || ctaImg})` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1">
-                  <ImageIcon className="w-3 h-3" /> Photo d'illustration
-                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
+                  aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
+                >
+                  <span className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                    <Camera className="w-5 h-5" />
+                  </span>
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm">
+                    {userImage ? "Changer la photo" : "Confier une photo"}
+                  </span>
+                </button>
+                {userImage && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
+                    aria-label="Retirer la photo"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                {!userImage && (
+                  <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
+                    <ImageIcon className="w-3 h-3" /> Photo d'illustration
+                  </span>
+                )}
               </div>
 
               <div className="mt-5 space-y-4">
@@ -277,7 +327,7 @@ const DemoExperience = () => {
               >
                 <div
                   className="h-44 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${ctaImg})` }}
+                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
                 />
                 <div className="p-5">
                   <h3 className="font-display text-xl font-bold">{title || "L'été à La Baule"}</h3>
