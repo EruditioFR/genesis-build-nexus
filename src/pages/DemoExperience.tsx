@@ -551,6 +551,18 @@ J'en veux autant pour les miens
           </div>
         </DialogContent>
       </Dialog>
+
+      <ImageCropDialog
+        open={!!pendingImage}
+        imageSrc={pendingImage}
+        aspect={16 / 10}
+        onCancel={() => setPendingImage(null)}
+        onConfirm={(url) => {
+          setUserImage(url);
+          setPendingImage(null);
+          trackEvent("demo_upload_image", "demo");
+        }}
+      />
     </div>
   );
 };
