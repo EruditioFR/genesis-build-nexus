@@ -147,8 +147,8 @@ const DemoExperience = () => {
   return (
     <div className="fixed inset-0 overflow-hidden bg-[#1a1a2e] text-white" style={{ height: "100dvh" }}>
       <SEOHead
-        title="Découvrez Family Garden en 1 minute — Journal de famille privé"
-        description="En soixante secondes, découvrez comment Family Garden veille sur vos souvenirs de famille : préservés, offerts à vos proches, transmis aux générations qui suivent."
+        title="Découvrez Family Garden en 1 minute — Gardez vos souvenirs en sécurité"
+        description="Vos souvenirs se perdent déjà, sans que vous vous en rendiez compte. Découvrez en une minute comment Family Garden vous aide à les conserver simplement."
       />
 
       <AnimatePresence mode="wait">
@@ -167,9 +167,9 @@ const DemoExperience = () => {
                 transition={{ delay: 0.15, duration: 0.5 }}
                 className="font-display text-3xl sm:text-4xl font-bold leading-tight"
               >
-                Vos plus beaux souvenirs
+                Vos souvenirs se perdent déjà.
                 <br />
-                <span className="text-secondary">s'effacent en silence.</span>
+                <span className="text-secondary">Vous ne vous en rendez pas compte.</span>
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -177,7 +177,7 @@ const DemoExperience = () => {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="mt-6 text-lg text-white/80 max-w-sm"
               >
-                Disséminés sur vos téléphones, oubliés au fond d'un disque dur.
+                Photos, vidéos, messages… éparpillés entre vos téléphones, vos applis, vos anciens appareils.
               </motion.p>
             </div>
             <div className="relative p-6 pb-10">
@@ -186,7 +186,7 @@ const DemoExperience = () => {
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                 onClick={() => goTo(2)}
               >
-                Confier un souvenir
+                Créer un souvenir
                 <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
             </div>
@@ -197,7 +197,7 @@ const DemoExperience = () => {
           <Container key="s2" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 flex flex-col justify-center px-6">
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-center leading-snug">
-                À qui destinez-vous ces souvenirs ?
+                Pour qui voulez-vous éviter de perdre ces souvenirs ?
               </h2>
               <div className="mt-10 space-y-4">
                 {(Object.keys(PERSONA_COPY) as Persona[]).map((p) => {
@@ -229,10 +229,10 @@ const DemoExperience = () => {
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
-                Le temps d'un café
+                Un souvenir, avant qu'il ne se perde
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Couchez un souvenir, qu'il vous survive
+                Racontez un moment que vous ne voulez pas oublier
               </h2>
 
               <div
@@ -315,9 +315,9 @@ const DemoExperience = () => {
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
-              <p className="text-center text-xs uppercase tracking-widest text-secondary">Votre souvenir</p>
+              <p className="text-center text-xs uppercase tracking-widest text-secondary">Ce souvenir est maintenant à l'abri</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Voilà. Soigneusement gardé.
+                Voilà. Il ne se perdra plus.
               </h2>
 
               <motion.div
@@ -388,11 +388,11 @@ const DemoExperience = () => {
               className="flex-1 flex flex-col justify-center items-center px-8 text-center"
             >
               <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
-                Sans un écrin pour l'accueillir,
+                Sans endroit pour le garder,
                 <br />
-                <span className="text-white/70">ce souvenir se serait éteint.</span>
+                <span className="text-white/70">ce souvenir aurait fini par disparaître.</span>
               </h2>
-              <p className="mt-6 text-base text-white/60">Comme tant d'autres avant lui.</p>
+              <p className="mt-6 text-base text-white/60">Comme beaucoup d'autres, déjà oubliés.</p>
             </motion.div>
             <div className="p-5 pb-8 min-h-[88px]">
               <AnimatePresence>
@@ -422,7 +422,7 @@ const DemoExperience = () => {
                 transition={{ duration: 0.6 }}
                 className="font-display text-2xl sm:text-3xl font-bold"
               >
-                Dans vingt ans, il sera toujours là.
+                Dans quelques années, vous pourriez ne plus vous souvenir de ce moment.
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -430,7 +430,7 @@ const DemoExperience = () => {
                 transition={{ delay: 1, duration: 0.6 }}
                 className="mt-6 text-xl font-display text-secondary"
               >
-                Et les vôtres pourront le lire.
+                Sauf si vous le conservez.
               </motion.p>
             </div>
             <div className="p-5 pb-8 min-h-[88px]">
@@ -442,7 +442,7 @@ const DemoExperience = () => {
                       className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                       onClick={() => goTo(7)}
                     >
-J'en veux autant pour les miens
+                      Garder mes souvenirs
                     </Button>
                   </motion.div>
                 )}
@@ -455,10 +455,10 @@ J'en veux autant pour les miens
           <Container key="s7" className="bg-gradient-warm text-foreground">
             <div className="flex-1 overflow-y-auto px-6 pt-10 pb-4">
               <h2 className="font-display text-3xl font-bold text-center text-foreground">
-                Votre journal de famille vous attend
+                Gardez vos souvenirs en sécurité
               </h2>
               <p className="mt-3 text-center text-muted-foreground">
-                Un écrin discret pour les vôtres. Pour toute une vie.
+                Un espace simple pour ne plus les perdre.
               </p>
 
               <ul className="mt-8 space-y-4">
@@ -488,7 +488,7 @@ J'en veux autant pour les miens
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                 onClick={handleConvert}
               >
-                Ouvrir mon journal de famille
+                Créer mon espace
                 <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
               <button
