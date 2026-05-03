@@ -83,13 +83,8 @@ const updateGAConsent = () => {
   window.gtag("consent", "update", getConsentModeState());
 };
 
-// Supprime Google Analytics
+// Supprime uniquement les cookies GA : le script reste chargé en Consent Mode sans stockage analytics
 const removeGA = () => {
-  const script = document.getElementById("ga-script");
-  if (script) {
-    script.remove();
-  }
-  
   // Supprime les cookies GA
   const cookies = document.cookie.split(";");
   for (const cookie of cookies) {
