@@ -40,8 +40,8 @@ const DemoExperience = () => {
   const { trackEvent } = useGoogleAnalytics();
   const [step, setStep] = useState(1);
   const [persona, setPersona] = useState<Persona | null>(null);
-  const [title, setTitle] = useState("L'été à La Baule");
-  const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
   const [userImage, setUserImage] = useState<string | null>(null);
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
@@ -260,10 +260,13 @@ const DemoExperience = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 h-48 rounded-2xl bg-cover bg-center relative overflow-hidden ring-2 ring-secondary/40"
-                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
+                  className={cn(
+                    "mt-6 h-48 rounded-2xl relative overflow-hidden ring-2 ring-secondary/40",
+                    userImage ? "bg-cover bg-center" : "bg-white/5 border border-dashed border-white/20"
+                  )}
+                  style={userImage ? { backgroundImage: `url(${userImage})` } : undefined}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {userImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -274,7 +277,7 @@ const DemoExperience = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/20 transition-colors"
                     aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
                   >
                     <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
@@ -293,11 +296,6 @@ const DemoExperience = () => {
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
-                  )}
-                  {!userImage && (
-                    <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
-                      <ImageIcon className="w-3 h-3" /> Exemple
-                    </span>
                   )}
                 </motion.div>
               )}
