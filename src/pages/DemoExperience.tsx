@@ -311,7 +311,7 @@ const DemoExperience = () => {
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Le titre de votre souvenir"
+                    placeholder=""
                     className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
                   <p className="mt-2 text-xs text-white/50">
@@ -332,7 +332,7 @@ const DemoExperience = () => {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     rows={5}
-                    placeholder="Ce que vous voulez ne pas oublier…"
+                    placeholder=""
                     className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
                   <p className="mt-2 text-xs text-white/50">
