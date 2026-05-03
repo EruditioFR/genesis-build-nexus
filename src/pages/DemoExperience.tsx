@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import SEOHead from "@/components/seo/SEOHead";
+import ImageCropDialog from "@/components/demo/ImageCropDialog";
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
 import ctaImg from "@/assets/cta-family-moment.jpg";
@@ -42,6 +43,7 @@ const DemoExperience = () => {
   const [title, setTitle] = useState("L'été à La Baule");
   const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
   const [userImage, setUserImage] = useState<string | null>(null);
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
@@ -56,8 +58,7 @@ const DemoExperience = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setUserImage(reader.result);
-        trackEvent("demo_upload_image", "demo");
+        setPendingImage(reader.result);
       }
     };
     reader.readAsDataURL(file);
@@ -550,6 +551,18 @@ J'en veux autant pour les miens
           </div>
         </DialogContent>
       </Dialog>
+
+      <ImageCropDialog
+        open={!!pendingImage}
+        imageSrc={pendingImage}
+        aspect={16 / 10}
+        onCancel={() => setPendingImage(null)}
+        onConfirm={(url) => {
+          setUserImage(url);
+          setPendingImage(null);
+          trackEvent("demo_upload_image", "demo");
+        }}
+      />
     </div>
   );
 };
