@@ -391,10 +391,12 @@ const DemoExperience = () => {
                 transition={{ duration: 0.5 }}
                 className="mt-6 rounded-3xl overflow-hidden bg-white text-foreground shadow-gold"
               >
-                <div
-                  className="h-44 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
-                />
+                {userImage && (
+                  <div
+                    className="h-44 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${userImage})` }}
+                  />
+                )}
                 <div className="p-5">
                   <h3 className="font-display text-xl font-bold">{title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{text}</p>
