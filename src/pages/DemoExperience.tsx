@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Image as ImageIcon, Camera, X } from "lucide-react";
+import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import ImageCropDialog from "@/components/demo/ImageCropDialog";
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
-import ctaImg from "@/assets/cta-family-moment.jpg";
+
 import { cn } from "@/lib/utils";
 
 type Persona = "enfants" | "famille" | "parents";
@@ -40,8 +40,8 @@ const DemoExperience = () => {
   const { trackEvent } = useGoogleAnalytics();
   const [step, setStep] = useState(1);
   const [persona, setPersona] = useState<Persona | null>(null);
-  const [title, setTitle] = useState("L'été à La Baule");
-  const [text, setText] = useState("Le matin où ils ont découvert la mer, pieds nus dans le sable.");
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
   const [userImage, setUserImage] = useState<string | null>(null);
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
@@ -260,10 +260,13 @@ const DemoExperience = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 h-48 rounded-2xl bg-cover bg-center relative overflow-hidden ring-2 ring-secondary/40"
-                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
+                  className={cn(
+                    "mt-6 h-48 rounded-2xl relative overflow-hidden ring-2 ring-secondary/40",
+                    userImage ? "bg-cover bg-center" : "bg-white/5 border border-dashed border-white/20"
+                  )}
+                  style={userImage ? { backgroundImage: `url(${userImage})` } : undefined}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {userImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -274,7 +277,7 @@ const DemoExperience = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/30 transition-colors"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/20 transition-colors"
                     aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
                   >
                     <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
@@ -294,11 +297,6 @@ const DemoExperience = () => {
                       <X className="w-3.5 h-3.5" />
                     </button>
                   )}
-                  {!userImage && (
-                    <span className="absolute bottom-2 right-3 text-xs text-white/80 flex items-center gap-1 pointer-events-none">
-                      <ImageIcon className="w-3 h-3" /> Exemple
-                    </span>
-                  )}
                 </motion.div>
               )}
 
@@ -313,7 +311,7 @@ const DemoExperience = () => {
                     autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex. L'été à La Baule"
+                    placeholder="Le titre de votre souvenir"
                     className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
                   <p className="mt-2 text-xs text-white/50">
@@ -393,12 +391,14 @@ const DemoExperience = () => {
                 transition={{ duration: 0.5 }}
                 className="mt-6 rounded-3xl overflow-hidden bg-white text-foreground shadow-gold"
               >
-                <div
-                  className="h-44 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${userImage || ctaImg})` }}
-                />
+                {userImage && (
+                  <div
+                    className="h-44 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${userImage})` }}
+                  />
+                )}
                 <div className="p-5">
-                  <h3 className="font-display text-xl font-bold">{title || "L'été à La Baule"}</h3>
+                  <h3 className="font-display text-xl font-bold">{title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{text}</p>
                   <div className="mt-4 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
@@ -412,7 +412,7 @@ const DemoExperience = () => {
               {/* Mini timeline */}
               <div className="mt-6 pl-4 border-l-2 border-secondary/40 space-y-4">
                 {[
-                  { y: "Aujourd'hui", t: title || "L'été à La Baule" },
+                  { y: "Aujourd'hui", t: title || "Votre souvenir" },
                   { y: "L'an prochain", t: "La rentrée des classes" },
                   { y: "Dans dix ans", t: "Un anniversaire en famille" },
                 ].map((m, i) => (
