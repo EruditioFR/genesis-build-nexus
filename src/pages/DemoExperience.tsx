@@ -394,7 +394,7 @@ const DemoExperience = () => {
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <h2 className="font-display text-2xl font-bold text-center text-white">
-                Votre souvenir est à l'abri.
+                Encore une étape pour mettre votre souvenir à l'abri.
               </h2>
 
               {/* Capabilities once saved */}
