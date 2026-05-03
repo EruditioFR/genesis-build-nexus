@@ -205,7 +205,7 @@ const DemoExperience = () => {
 
         {step === 3 && showInspirations && (
           <Container key="s3-insp" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-10 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Pour vous inspirer</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
                 Par quel souvenir commencer ?
@@ -257,7 +257,7 @@ const DemoExperience = () => {
 
         {step === 3 && !showInspirations && (
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
+            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
                 Étape {tutoStep} sur 3
               </p>
