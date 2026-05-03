@@ -368,9 +368,9 @@ const DemoExperience = () => {
         {step === 4 && personaCopy && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
-              <p className="text-center text-xs uppercase tracking-widest text-secondary">Ce souvenir est maintenant à l'abri</p>
+              <p className="text-center text-xs uppercase tracking-widest text-secondary">Aperçu de votre souvenir</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Voilà. Il ne se perdra plus.
+                Voici à quoi il ressemblera.
               </h2>
 
               <motion.div
@@ -419,7 +419,7 @@ const DemoExperience = () => {
               </div>
 
               <p className="mt-6 text-center text-sm text-white/70">
-                Un souvenir à sa place, prêt à être raconté.
+                Une fois inscrit, ce souvenir rejoindra votre journal pour de bon.
               </p>
             </div>
             <div className="p-5 pb-8">
@@ -573,8 +573,13 @@ const DemoExperience = () => {
         </button>
       )}
 
+      {/* Persistent Family Garden logo */}
+      <div className="absolute top-3 left-3 z-50 flex items-center gap-2 pointer-events-none">
+        <img src={logo} alt="Family Garden" className="h-7 w-auto drop-shadow" />
+      </div>
+
       {/* Step indicator */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
         {Array.from({ length: 7 }).map((_, i) => (
           <span
             key={i}
