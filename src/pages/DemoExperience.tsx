@@ -275,13 +275,12 @@ const DemoExperience = () => {
             </div>
             <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80">
               <Button
-                size="mobileLg"
                 variant="outline"
-                className="w-full border-white/30 text-white bg-transparent hover:bg-white/10"
+                className="w-full border-white/30 text-white text-sm bg-transparent hover:bg-white/10 py-2 h-auto"
                 onClick={() => setShowInspirations(false)}
               >
-                Continuer avec mon propre souvenir
-                <ArrowRight className="w-5 h-5 ml-1" />
+                Créer un autre souvenir
+                <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
           </Container>
