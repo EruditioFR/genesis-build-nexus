@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
+import { ArrowRight, Heart, Lock, Shield, Users, Baby, UserRound, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -638,28 +638,6 @@ const DemoExperience = () => {
       <div className="absolute top-3 left-3 z-50 flex items-center gap-2 pointer-events-none">
         <img src={logo} alt="Family Garden" className="h-7 w-auto drop-shadow" />
       </div>
-
-      {/* Back button */}
-      {step > 1 && step < 7 && (
-        <button
-          onClick={() => {
-            if (step === 3 && !showInspirations) {
-              if (tutoStep > 1) {
-                setTutoStep((s) => (s - 1) as 1 | 2 | 3);
-              } else {
-                setShowInspirations(true);
-              }
-              return;
-            }
-            goTo(step - 1);
-          }}
-          className="absolute top-3 right-14 z-50 h-9 px-3 rounded-full bg-white/10 backdrop-blur text-white/80 hover:text-white hover:bg-white/20 text-xs flex items-center gap-1"
-          aria-label="Revenir à l'étape précédente"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Retour
-        </button>
-      )}
 
       {/* Step indicator */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 flex gap-1.5">
