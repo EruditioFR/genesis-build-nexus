@@ -22,6 +22,14 @@ const PERSONA_COPY: Record<Persona, { label: string; possessive: string; share: 
   parents: { label: "Mes parents", possessive: "vos parents", share: "vos parents", icon: UserRound },
 };
 
+const INSPIRATIONS: { emoji: string; category: string; question: string }[] = [
+  { emoji: "🌱", category: "Enfance", question: "À quoi ressemblait la maison de votre enfance ?" },
+  { emoji: "🎒", category: "École", question: "Un professeur vous a marqué. Pourquoi ?" },
+  { emoji: "🎵", category: "Musiques", question: "Quelle chanson vous ramène instantanément en arrière ?" },
+  { emoji: "👨‍👩‍👧", category: "Famille", question: "Quelle tradition aimeriez-vous transmettre ?" },
+  { emoji: "✨", category: "Vie", question: "Quel moment a changé le cours de votre vie ?" },
+];
+
 const STORAGE_KEY = "fg_demo_state_v2";
 
 const Container = ({ children, className }: { children: React.ReactNode; className?: string }) => (
@@ -49,6 +57,7 @@ const DemoExperience = () => {
   const [step6CtaVisible, setStep6CtaVisible] = useState(false);
   const [step5CtaVisible, setStep5CtaVisible] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
+  const [showInspirations, setShowInspirations] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startedRef = useRef(false);
 
@@ -225,7 +234,60 @@ const DemoExperience = () => {
           </Container>
         )}
 
-        {step === 3 && (
+        {step === 3 && showInspirations && (
+          <Container key="s3-insp" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
+            <div className="flex-1 overflow-y-auto px-5 pt-10 pb-4">
+              <p className="text-center text-xs uppercase tracking-widest text-secondary">Pour vous inspirer</p>
+              <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
+                Par quel souvenir commencer ?
+              </h2>
+              <p className="mt-3 text-center text-sm text-white/70 max-w-sm mx-auto">
+                Choisissez une question ou continuez avec votre propre idée.
+              </p>
+
+              <ul className="mt-6 space-y-3">
+                {INSPIRATIONS.map((insp, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 * i }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTitle(insp.question);
+                        setTutoStep(2);
+                        setShowInspirations(false);
+                        trackEvent("demo_pick_inspiration", "demo", insp.category);
+                      }}
+                      className="w-full text-left rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 hover:border-secondary/60 p-4 transition-all flex items-start gap-3"
+                    >
+                      <span className="text-2xl leading-none mt-0.5">{insp.emoji}</span>
+                      <span className="flex-1">
+                        <span className="block text-xs uppercase tracking-wide text-secondary/90 mb-1">{insp.category}</span>
+                        <span className="block text-sm text-white/90 leading-snug">« {insp.question} »</span>
+                      </span>
+                    </button>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+            <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80">
+              <Button
+                size="mobileLg"
+                variant="outline"
+                className="w-full border-white/30 text-white bg-transparent hover:bg-white/10"
+                onClick={() => setShowInspirations(false)}
+              >
+                Continuer avec mon propre souvenir
+                <ArrowRight className="w-5 h-5 ml-1" />
+              </Button>
+            </div>
+          </Container>
+        )}
+
+        {step === 3 && !showInspirations && (
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
