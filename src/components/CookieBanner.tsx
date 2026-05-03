@@ -25,6 +25,7 @@ const CookieBanner = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ type, date: new Date().toISOString() }));
     // Dispatch un événement pour notifier les autres composants (notamment Google Analytics)
     window.dispatchEvent(new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }));
+    window.dispatchEvent(new Event("familygarden-cookie-consent-change"));
     setShowBanner(false);
   };
 
