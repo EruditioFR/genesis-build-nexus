@@ -54,8 +54,6 @@ const DemoExperience = () => {
   const [userImage, setUserImage] = useState<string | null>(null);
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const [showAbandon, setShowAbandon] = useState(false);
-  const [step6CtaVisible, setStep6CtaVisible] = useState(false);
-  const [step5CtaVisible, setStep5CtaVisible] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const [showInspirations, setShowInspirations] = useState(true);
   const [fromInspiration, setFromInspiration] = useState(false);
@@ -106,7 +104,7 @@ const DemoExperience = () => {
   // anti-abandon
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (step >= 3 && step <= 6) {
+      if (step >= 3 && step <= 4) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -114,25 +112,6 @@ const DemoExperience = () => {
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
   }, [step]);
-
-  // step 5 timed CTA
-  useEffect(() => {
-    if (step === 5) {
-      setStep5CtaVisible(false);
-      const t = setTimeout(() => setStep5CtaVisible(true), 1500);
-      return () => clearTimeout(t);
-    }
-  }, [step]);
-
-  // step 6 timed CTA + tracking
-  useEffect(() => {
-    if (step === 6) {
-      setStep6CtaVisible(false);
-      trackEvent("reach_projection", "demo", persona ?? undefined);
-      const t = setTimeout(() => setStep6CtaVisible(true), 1800);
-      return () => clearTimeout(t);
-    }
-  }, [step, trackEvent, persona]);
 
   const goTo = useCallback((n: number) => setStep(n), []);
 
@@ -466,82 +445,10 @@ const DemoExperience = () => {
               <Button
                 size="mobileLg"
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={() => goTo(5)}
+                onClick={() => goTo(7)}
               >
                 Continuer
               </Button>
-            </div>
-          </Container>
-        )}
-
-        {step === 5 && (
-          <Container key="s5" className="bg-black">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="flex-1 flex flex-col justify-center items-center px-8 text-center"
-            >
-              <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
-                Sans endroit pour le garder,
-                <br />
-                <span className="text-white/70">ce souvenir aurait fini par disparaître.</span>
-              </h2>
-              <p className="mt-6 text-base text-white/60">Comme beaucoup d'autres, déjà oubliés.</p>
-            </motion.div>
-            <div className="p-5 pb-8 min-h-[88px]">
-              <AnimatePresence>
-                {step5CtaVisible && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <Button
-                      size="mobileLg"
-                      variant="outline"
-                      className="w-full border-white/30 text-white bg-transparent hover:bg-white/10"
-                      onClick={() => goTo(6)}
-                    >
-                      Continuer
-                    </Button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </Container>
-        )}
-
-        {step === 6 && (
-          <Container key="s6" className="bg-gradient-to-b from-[#1a1a2e] to-black">
-            <div className="flex-1 flex flex-col justify-center items-center px-8 text-center">
-              <motion.h2
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="font-display text-2xl sm:text-3xl font-bold"
-              >
-                Dans quelques années, vous pourriez ne plus vous souvenir de ce moment.
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 0.6 }}
-                className="mt-6 text-xl font-display text-secondary"
-              >
-                Sauf si vous le conservez.
-              </motion.p>
-            </div>
-            <div className="p-5 pb-8 min-h-[88px]">
-              <AnimatePresence>
-                {step6CtaVisible && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <Button
-                      size="mobileLg"
-                      className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                      onClick={() => goTo(7)}
-                    >
-                      Garder mes souvenirs
-                    </Button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
           </Container>
         )}
@@ -613,7 +520,7 @@ const DemoExperience = () => {
       </AnimatePresence>
 
       {/* Discreet exit handle (top-right) — opens abandon dialog instead of leaving silently */}
-      {step >= 3 && step <= 6 && (
+      {step >= 3 && step <= 4 && (
         <button
           onClick={() => setShowAbandon(true)}
           className="absolute top-3 right-3 z-50 w-9 h-9 rounded-full bg-white/10 backdrop-blur text-white/70 hover:text-white text-xs"
@@ -627,15 +534,18 @@ const DemoExperience = () => {
       <div className="absolute top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-3 pointer-events-none">
         <img src={logo} alt="Family Garden" className="h-6 sm:h-7 w-auto drop-shadow" />
         <div className="flex gap-1.5 mr-12">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1 rounded-full transition-all",
-                i + 1 === step ? "w-5 bg-secondary" : i + 1 < step ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
-              )}
-            />
-          ))}
+          {(() => {
+            const displayed = step <= 4 ? step : 5;
+            return Array.from({ length: 5 }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "h-1 rounded-full transition-all",
+                  i + 1 === displayed ? "w-5 bg-secondary" : i + 1 < displayed ? "w-2.5 bg-white/60" : "w-2.5 bg-white/20"
+                )}
+              />
+            ));
+          })()}
         </div>
       </div>
 
