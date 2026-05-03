@@ -382,7 +382,7 @@ const DemoExperience = () => {
                   onClick={handleCreate}
                   disabled={!title.trim()}
                 >
-                  Mettre à l'abri
+                  Continuer
                   <ArrowRight className="w-5 h-5 ml-1" />
                 </Button>
               )}
