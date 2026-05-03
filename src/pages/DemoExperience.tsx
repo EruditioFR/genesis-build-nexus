@@ -129,7 +129,7 @@ const DemoExperience = () => {
     <div className="fixed inset-0 overflow-hidden bg-[#1a1a2e] text-white" style={{ height: "100dvh" }}>
       <SEOHead
         title="Découvrez Family Garden en 1 minute — Journal de famille privé"
-        description="Vivez en 60 secondes ce que Family Garden change pour vos souvenirs de famille. Créez, protégez et transmettez ce qui compte vraiment."
+        description="En soixante secondes, découvrez comment Family Garden veille sur vos souvenirs de famille : préservés, partagés aux proches, transmis aux générations qui suivent."
       />
 
       <AnimatePresence mode="wait">
@@ -158,7 +158,7 @@ const DemoExperience = () => {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="mt-6 text-lg text-white/80 max-w-sm"
               >
-                Éparpillés sur dix téléphones, perdus dans le nuage.
+                Disséminés sur vos téléphones, oubliés au fond d'un disque dur.
               </motion.p>
             </div>
             <div className="relative p-6 pb-10">
@@ -167,7 +167,7 @@ const DemoExperience = () => {
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                 onClick={() => goTo(2)}
               >
-                Préserver un souvenir
+                Confier un souvenir
                 <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
             </div>
@@ -178,7 +178,7 @@ const DemoExperience = () => {
           <Container key="s2" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 flex flex-col justify-center px-6">
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-center leading-snug">
-                À qui souhaitez-vous transmettre ces souvenirs ?
+                À qui destinez-vous ces souvenirs ?
               </h2>
               <div className="mt-10 space-y-4">
                 {(Object.keys(PERSONA_COPY) as Persona[]).map((p) => {
@@ -210,10 +210,10 @@ const DemoExperience = () => {
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
-                En moins d'une minute
+                Le temps d'un café
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Confiez-nous un souvenir, pour toujours
+                Couchez un souvenir, qu'il vous survive
               </h2>
 
               <div
@@ -228,7 +228,7 @@ const DemoExperience = () => {
 
               <div className="mt-5 space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-white/80">Titre</label>
+                  <label className="text-sm font-medium text-white/80">Le titre</label>
                   <Input
                     autoFocus
                     value={title}
@@ -266,7 +266,7 @@ const DemoExperience = () => {
             <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Votre souvenir</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                Précieusement gardé. À jamais.
+                Voilà. Soigneusement gardé.
               </h2>
 
               <motion.div
@@ -280,13 +280,13 @@ const DemoExperience = () => {
                   style={{ backgroundImage: `url(${ctaImg})` }}
                 />
                 <div className="p-5">
-                  <h3 className="font-display text-xl font-bold">{title || "Vacances à la mer"}</h3>
+                  <h3 className="font-display text-xl font-bold">{title || "L'été à La Baule"}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{text}</p>
                   <div className="mt-4 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
                       <personaCopy.icon className="w-4 h-4 text-secondary" />
                     </span>
-                    <span className="text-sm font-medium">À destination de {personaCopy.possessive}</span>
+                    <span className="text-sm font-medium">Pour {personaCopy.possessive}, un jour</span>
                   </div>
                 </div>
               </motion.div>
@@ -313,7 +313,7 @@ const DemoExperience = () => {
               </div>
 
               <p className="mt-6 text-center text-sm text-white/70">
-                Un souvenir bien rangé, qui se transmet et se raconte.
+                Un souvenir à sa place, prêt à être raconté.
               </p>
             </div>
             <div className="p-5 pb-8">
@@ -322,7 +322,7 @@ const DemoExperience = () => {
                 className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                 onClick={() => goTo(5)}
               >
-                Le partager avec {personaCopy.share}
+                L'offrir à {personaCopy.share}
               </Button>
             </div>
           </Container>
@@ -337,11 +337,11 @@ const DemoExperience = () => {
               className="flex-1 flex flex-col justify-center items-center px-8 text-center"
             >
               <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
-                Sans un endroit pour le garder,
+                Sans un écrin pour l'accueillir,
                 <br />
-                <span className="text-white/70">ce souvenir se serait évanoui.</span>
+                <span className="text-white/70">ce souvenir se serait éteint.</span>
               </h2>
-              <p className="mt-6 text-base text-white/60">Comme tant d'autres, avant lui.</p>
+              <p className="mt-6 text-base text-white/60">Comme tant d'autres avant lui.</p>
             </motion.div>
             <div className="p-5 pb-8 min-h-[88px]">
               <AnimatePresence>
@@ -371,7 +371,7 @@ const DemoExperience = () => {
                 transition={{ duration: 0.6 }}
                 className="font-display text-2xl sm:text-3xl font-bold"
               >
-                Dans dix ans, vous le retrouverez intact.
+                Dans vingt ans, il sera toujours là.
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -379,7 +379,7 @@ const DemoExperience = () => {
                 transition={{ delay: 1, duration: 0.6 }}
                 className="mt-6 text-xl font-display text-secondary"
               >
-                Et vos enfants aussi.
+                Et les vôtres pourront le lire.
               </motion.p>
             </div>
             <div className="p-5 pb-8 min-h-[88px]">
@@ -391,7 +391,7 @@ const DemoExperience = () => {
                       className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                       onClick={() => goTo(7)}
                     >
-                      J'en veux autant pour les miens
+J'en veux autant pour les miens
                     </Button>
                   </motion.div>
                 )}
@@ -404,17 +404,17 @@ const DemoExperience = () => {
           <Container key="s7" className="bg-gradient-warm text-foreground">
             <div className="flex-1 overflow-y-auto px-6 pt-10 pb-4">
               <h2 className="font-display text-3xl font-bold text-center text-foreground">
-                Ouvrez votre journal de famille
+                Votre journal de famille vous attend
               </h2>
               <p className="mt-3 text-center text-muted-foreground">
-                Un écrin discret pour ce qui vous est cher. Pour la vie.
+                Un écrin discret pour les vôtres. Pour toute une vie.
               </p>
 
               <ul className="mt-8 space-y-4">
                 {[
                   { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
-                  { Icon: Lock, t: "Strictement privé, partagé à vos seuls proches" },
-                  { Icon: Heart, t: "Une mémoire familiale qui se transmet" },
+                  { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
+                  { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
                 ].map(({ Icon, t }, i) => (
                   <motion.li
                     key={i}
@@ -444,7 +444,7 @@ const DemoExperience = () => {
                 onClick={() => navigate("/")}
                 className="w-full text-sm text-muted-foreground hover:text-foreground py-2"
               >
-                En découvrir davantage
+                En savoir plus avant de me lancer
               </button>
             </div>
           </Container>
@@ -477,16 +477,16 @@ const DemoExperience = () => {
 
       <Dialog open={showAbandon} onOpenChange={setShowAbandon}>
         <DialogContent className="max-w-sm">
-          <DialogTitle>Votre souvenir n'est pas encore conservé.</DialogTitle>
+          <DialogTitle>Votre souvenir n'est pas encore à l'abri.</DialogTitle>
           <DialogDescription>
-            Quelques secondes suffisent pour le préserver et l'offrir à vos proches.
+            Encore un instant, et il rejoindra votre journal pour de bon.
           </DialogDescription>
           <div className="mt-4 flex flex-col gap-2">
             <Button
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
               onClick={() => setShowAbandon(false)}
             >
-              Poursuivre
+              Reprendre où j'en étais
             </Button>
             <button
               onClick={() => {
@@ -495,7 +495,7 @@ const DemoExperience = () => {
               }}
               className="text-sm text-muted-foreground hover:text-foreground py-1"
             >
-              Quitter quand même
+              Quitter tout de même
             </button>
           </div>
         </DialogContent>
