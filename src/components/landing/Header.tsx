@@ -326,6 +326,16 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Mobile contact dialog mounted outside AnimatePresence so it survives menu close */}
+      <ContactDialog
+        trigger={<span className="hidden" aria-hidden="true" />}
+        open={isMobileContactOpen}
+        onOpenChange={(v) => {
+          setIsMobileContactOpen(v);
+          if (v) setIsMobileMenuOpen(false);
+        }}
+      />
     </motion.header>
   );
 };
