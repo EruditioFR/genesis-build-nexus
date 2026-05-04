@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import SEOHead from "@/components/seo/SEOHead";
 
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
+import { toast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-background.webp";
 import logo from "@/assets/logo.png";
 
@@ -148,9 +149,26 @@ const DemoExperience = () => {
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (fileInputRef.current) fileInputRef.current.value = "";
     if (!file) return;
-    if (!file.type.startsWith("image/")) return;
-    if (file.size > 8 * 1024 * 1024) return;
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Format non pris en charge",
+        description: "Veuillez choisir un fichier image (JPG, PNG, WebP…).",
+        variant: "destructive",
+      });
+      return;
+    }
+    const MAX_SIZE = 5 * 1024 * 1024; // 5 Mo
+    if (file.size > MAX_SIZE) {
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+      toast({
+        title: "Photo trop volumineuse",
+        description: `Votre photo fait ${sizeMb} Mo. La taille maximale autorisée est de 5 Mo. Veuillez choisir une photo plus légère.`,
+        variant: "destructive",
+      });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
@@ -158,8 +176,14 @@ const DemoExperience = () => {
         trackEvent("demo_upload_image", "demo");
       }
     };
+    reader.onerror = () => {
+      toast({
+        title: "Lecture impossible",
+        description: "Impossible de lire cette image. Veuillez réessayer avec un autre fichier.",
+        variant: "destructive",
+      });
+    };
     reader.readAsDataURL(file);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // restore state
