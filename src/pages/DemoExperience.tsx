@@ -543,8 +543,8 @@ const DemoExperience = () => {
         </div>
         <div className="flex gap-1.5 mr-12">
           {(() => {
-            const displayed = step === 1 ? 1 : step === 3 ? 2 : 3;
-            return Array.from({ length: 3 }).map((_, i) => (
+            const displayed = step === 1 ? 1 : 2;
+            return Array.from({ length: 2 }).map((_, i) => (
               <span
                 key={i}
                 className={cn(
