@@ -387,17 +387,17 @@ const DemoExperience = () => {
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
-                Étape {tutoStep} sur 3
+                Étape {tutoStep} sur 2
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
                 {tutoStep === 1 && (fromInspiration ? "Votre souvenir" : "Une image pour illustrer votre souvenir ?")}
-                {tutoStep === 2 && (fromInspiration ? "Une image pour illustrer votre souvenir ?" : "Donnez-lui un titre")}
+                {tutoStep === 2 && (fromInspiration ? "Une image pour illustrer votre souvenir ?" : "Racontez ce moment")}
                 {tutoStep === 3 && "Racontez ce moment"}
               </h2>
 
               {/* Mini progress */}
               <div className="mt-4 flex justify-center gap-1.5">
-                {[1, 2, 3].map((n) => (
+                {[1, 2].map((n) => (
                   <span
                     key={n}
                     className={cn(
@@ -452,34 +452,24 @@ const DemoExperience = () => {
                 </motion.div>
               )}
 
-              {((tutoStep === 1 && fromInspiration) || (tutoStep === 2 && !fromInspiration)) && (
+              {tutoStep === 1 && fromInspiration && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6"
                 >
                   <label className="text-sm font-medium text-white/80">Le titre</label>
-                  {fromInspiration ? (
-                    <Textarea
-                      autoFocus
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      rows={3}
-                      className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
-                    />
-                  ) : (
-                    <Input
-                      autoFocus
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder=""
-                      className="mt-1 h-12 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
-                    />
-                  )}
+                  <Textarea
+                    autoFocus
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    rows={3}
+                    className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                  />
                 </motion.div>
               )}
 
-              {tutoStep === 3 && (
+              {((tutoStep === 2 && !fromInspiration) || (tutoStep === 3)) && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -489,7 +479,14 @@ const DemoExperience = () => {
                   <Textarea
                     autoFocus
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setText(v);
+                      if (!fromInspiration) {
+                        const firstLine = v.split("\n")[0].trim().slice(0, 80);
+                        setTitle(firstLine || "Mon souvenir");
+                      }
+                    }}
                     rows={5}
                     placeholder=""
                     className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
@@ -512,12 +509,12 @@ const DemoExperience = () => {
               >
                 Retour
               </Button>
-              {tutoStep < 3 ? (
+              {tutoStep < 2 ? (
                 <Button
                   size="mobileLg"
                   className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                   onClick={() => setTutoStep((s) => (s + 1) as 1 | 2 | 3)}
-                  disabled={tutoStep === 2 && !title.trim()}
+                  disabled={tutoStep === 1 && fromInspiration && !title.trim()}
                 >
                   Continuer
                   <ArrowRight className="w-5 h-5 ml-1" />
@@ -527,7 +524,7 @@ const DemoExperience = () => {
                   size="mobileLg"
                   className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
                   onClick={handleCreate}
-                  disabled={!title.trim()}
+                  disabled={fromInspiration ? !title.trim() : !text.trim()}
                 >
                   Continuer
                   <ArrowRight className="w-5 h-5 ml-1" />
@@ -537,7 +534,6 @@ const DemoExperience = () => {
           </Container>
         )}
 
-        {step === 4 && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <div className="w-full max-w-md mx-auto">
