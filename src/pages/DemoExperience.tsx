@@ -542,7 +542,7 @@ const DemoExperience = () => {
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <div className="w-full max-w-md mx-auto">
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-center text-white">
-                  Encore une étape pour mettre votre souvenir à l'abri.
+                  Encore une étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
                 </h2>
                 <p className="mt-3 text-center text-sm text-white/70">
                   Un espace simple pour ne plus les perdre.
@@ -619,6 +619,9 @@ const DemoExperience = () => {
                 >
                   En savoir plus avant de me lancer
                 </button>
+                <p className="text-[11px] text-white/45 text-center leading-snug pt-1">
+                  <span className="text-secondary">*</span> Votre souvenir sera effacé automatiquement si vous ne poursuivez pas la visite.
+                </p>
               </div>
             </div>
           </Container>
