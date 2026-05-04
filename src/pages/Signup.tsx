@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { lovable } from '@/integrations/lovable';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
-import { CountrySelector } from '@/components/signup/CountrySelector';
+
 
 import SEOHead from '@/components/seo/SEOHead';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
@@ -176,7 +176,7 @@ const Signup = () => {
           password,
           displayName: fullName,
           locale: i18n.language,
-          country,
+          country: '',
           city: '',
           redirectTo: `${window.location.origin}/login?confirmed=true`,
         },
