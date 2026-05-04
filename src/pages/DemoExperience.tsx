@@ -52,7 +52,7 @@ const DemoExperience = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [userImage, setUserImage] = useState<string | null>(null);
-  const [pendingImage, setPendingImage] = useState<string | null>(null);
+  
   const [showAbandon, setShowAbandon] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const [showInspirations, setShowInspirations] = useState(true);
