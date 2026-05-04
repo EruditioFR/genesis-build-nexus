@@ -575,28 +575,28 @@ const DemoExperience = () => {
                   </ul>
                 </div>
 
-                {/* Trust */}
-                <div className="mt-6">
-                  <p className="text-center text-xs uppercase tracking-widest text-secondary/80">
+                {/* Trust — visually distinct: compact 3-col grid with top icons */}
+                <div className="mt-8 pt-6 border-t border-white/10">
+                  <p className="text-center text-[11px] uppercase tracking-[0.2em] text-white/50">
                     Avec Family Garden
                   </p>
-                  <ul className="mt-3 space-y-2">
+                  <ul className="mt-4 grid grid-cols-3 gap-2">
                     {[
-                      { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
-                      { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
-                      { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
+                      { Icon: Shield, t: "Hébergé en France" },
+                      { Icon: Lock, t: "Strictement privé" },
+                      { Icon: Heart, t: "Transmissible" },
                     ].map(({ Icon, t }, i) => (
                       <motion.li
                         key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 + i * 0.1 }}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
+                        className="flex flex-col items-center text-center gap-2 px-2 py-3 rounded-xl bg-transparent"
                       >
-                        <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                        <span className="w-9 h-9 rounded-full border border-secondary/40 flex items-center justify-center shrink-0">
                           <Icon className="w-4 h-4 text-secondary" />
                         </span>
-                        <span className="text-sm text-white/90">{t}</span>
+                        <span className="text-[11px] font-medium text-white/75 leading-tight">{t}</span>
                       </motion.li>
                     ))}
                   </ul>
