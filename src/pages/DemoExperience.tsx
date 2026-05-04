@@ -270,21 +270,21 @@ const DemoExperience = () => {
         )}
 
 
-        {step === 3 && showInspirations && (
-          <Container key="s3-insp" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
+        {step === 3 && showInspirations && !selectedTheme && (
+          <Container key="s3-themes" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <p className="text-center text-xs uppercase tracking-widest text-secondary">Pour vous inspirer</p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
-                Par quel souvenir commencer ?
+                Par quelle thématique commencer ?
               </h2>
               <p className="mt-3 text-center text-sm text-white/70 max-w-sm mx-auto">
-                Choisissez une question ou continuez avec votre propre idée.
+                Choisissez un univers, puis une question pour démarrer votre souvenir.
               </p>
 
               <ul className="mt-6 space-y-3">
-                {INSPIRATIONS.map((insp, i) => (
+                {INSPIRATION_THEMES.map((theme, i) => (
                   <motion.li
-                    key={i}
+                    key={theme.key}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 * i }}
@@ -292,19 +292,17 @@ const DemoExperience = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setTitle(insp.question);
-                        setFromInspiration(true);
-                        setTutoStep(1);
-                        setShowInspirations(false);
-                        trackEvent("demo_pick_inspiration", "demo", insp.category);
+                        setSelectedTheme(theme.key);
+                        trackEvent("demo_pick_theme", "demo", theme.key);
                       }}
                       className="w-full text-left rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 hover:border-secondary/60 p-4 transition-all flex items-start gap-3"
                     >
-                      <span className="text-2xl leading-none mt-0.5">{insp.emoji}</span>
+                      <span className="text-2xl leading-none mt-0.5">{theme.emoji}</span>
                       <span className="flex-1">
-                        <span className="block text-xs uppercase tracking-wide text-secondary/90 mb-1">{insp.category}</span>
-                        <span className="block text-sm text-white/90 leading-snug">« {insp.question} »</span>
+                        <span className="block text-sm font-semibold text-white/95 leading-snug">{theme.label}</span>
+                        <span className="block text-xs text-white/60 mt-0.5">{theme.description}</span>
                       </span>
+                      <ArrowRight className="w-4 h-4 text-white/40 mt-1 shrink-0" />
                     </button>
                   </motion.li>
                 ))}
@@ -314,14 +312,76 @@ const DemoExperience = () => {
               <Button
                 variant="outline"
                 className="w-full border-white/30 text-white text-sm bg-transparent hover:bg-white/10 py-2 h-auto"
-                onClick={() => { setFromInspiration(false); setTitle(""); setShowInspirations(false); }}
+                onClick={() => { setFromInspiration(false); setTitle(""); setShowInspirations(false); setSelectedTheme(null); }}
               >
-                Créer un autre souvenir
+                Créer avec ma propre idée
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
           </Container>
         )}
+
+        {step === 3 && showInspirations && selectedTheme && (() => {
+          const theme = INSPIRATION_THEMES.find((t) => t.key === selectedTheme);
+          if (!theme) return null;
+          return (
+            <Container key="s3-questions" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
+              <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
+                <button
+                  type="button"
+                  onClick={() => setSelectedTheme(null)}
+                  className="text-xs text-white/60 hover:text-white flex items-center gap-1 mb-2"
+                >
+                  ← Changer de thématique
+                </button>
+                <p className="text-center text-xs uppercase tracking-widest text-secondary flex items-center justify-center gap-2">
+                  <span>{theme.emoji}</span> {theme.label}
+                </p>
+                <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
+                  Quelle question vous parle ?
+                </h2>
+                <p className="mt-3 text-center text-sm text-white/70 max-w-sm mx-auto">
+                  Une question, un souvenir. Vous pouvez aussi écrire le vôtre.
+                </p>
+
+                <ul className="mt-6 space-y-2.5">
+                  {theme.questions.map((question, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.03 * i }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTitle(question);
+                          setFromInspiration(true);
+                          setTutoStep(1);
+                          setShowInspirations(false);
+                          trackEvent("demo_pick_inspiration", "demo", `${theme.key}:${i}`);
+                        }}
+                        className="w-full text-left rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 hover:border-secondary/60 px-4 py-3 transition-all"
+                      >
+                        <span className="block text-sm text-white/90 leading-snug">« {question} »</span>
+                      </button>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80">
+                <Button
+                  variant="outline"
+                  className="w-full border-white/30 text-white text-sm bg-transparent hover:bg-white/10 py-2 h-auto"
+                  onClick={() => { setFromInspiration(false); setTitle(""); setShowInspirations(false); setSelectedTheme(null); }}
+                >
+                  Créer avec ma propre idée
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </Container>
+          );
+        })()}
 
         {step === 3 && !showInspirations && (
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
