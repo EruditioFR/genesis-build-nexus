@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import SEOHead from "@/components/seo/SEOHead";
 
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
+import { toast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-background.webp";
 import logo from "@/assets/logo.png";
 
