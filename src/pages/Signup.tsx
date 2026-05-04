@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { lovable } from '@/integrations/lovable';
 import logo from '@/assets/logo.png';
 import heroBackground from '@/assets/hero-background.webp';
-import { CountrySelector } from '@/components/signup/CountrySelector';
+
 
 import SEOHead from '@/components/seo/SEOHead';
 import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
@@ -24,10 +24,7 @@ const Signup = () => {
   } = useTranslation('auth');
   const [firstName, setFirstName] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [country, setCountry] = useState('');
-  
   const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -150,22 +147,6 @@ const Signup = () => {
       });
       return;
     }
-    if (!country) {
-      toast({
-        variant: 'destructive',
-        title: t('signup.errors.title'),
-        description: t('signup.errors.countryRequired')
-      });
-      return;
-    }
-    if (email !== confirmEmail) {
-      toast({
-        variant: 'destructive',
-        title: t('signup.errors.title'),
-        description: t('signup.errors.emailMismatch')
-      });
-      return;
-    }
     if (password !== confirmPassword) {
       toast({
         variant: 'destructive',
@@ -195,7 +176,7 @@ const Signup = () => {
           password,
           displayName: fullName,
           locale: i18n.language,
-          country,
+          country: '',
           city: '',
           redirectTo: `${window.location.origin}/login?confirmed=true`,
         },
@@ -385,11 +366,6 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-base font-semibold text-[#1a1a2e]">{t('signup.country')}</Label>
-              <CountrySelector value={country} onChange={setCountry} />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="email" className="text-base font-semibold text-[#1a1a2e]">{t('signup.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
@@ -404,17 +380,6 @@ const Signup = () => {
                   <Link to="/login" className="underline hover:no-underline">
                     {t('signup.errors.loginInstead')}
                   </Link>
-                </p>}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmEmail" className="text-base font-semibold text-[#1a1a2e]">{t('signup.confirmEmail')}</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/50" />
-                <Input id="confirmEmail" type="email" placeholder={t('signup.emailPlaceholder')} value={confirmEmail} onChange={e => setConfirmEmail(e.target.value)} className="pl-10 h-12 bg-white border-2 border-[#1a1a2e]/20 focus:border-primary text-[#1a1a2e] placeholder:text-[#1a1a2e]/40" required />
-              </div>
-              {confirmEmail && email !== confirmEmail && <p className="text-sm text-destructive font-medium mt-1">
-                  {t('signup.errors.emailMismatch')}
                 </p>}
             </div>
 
