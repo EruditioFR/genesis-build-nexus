@@ -24,10 +24,7 @@ const Signup = () => {
   } = useTranslation('auth');
   const [firstName, setFirstName] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [country, setCountry] = useState('');
-  
   const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
