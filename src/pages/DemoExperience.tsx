@@ -619,6 +619,9 @@ const DemoExperience = () => {
                 >
                   En savoir plus avant de me lancer
                 </button>
+                <p className="text-[11px] text-white/45 text-center leading-snug pt-1">
+                  <span className="text-secondary">*</span> Votre souvenir sera effacé automatiquement si vous ne poursuivez pas la visite.
+                </p>
               </div>
             </div>
           </Container>
