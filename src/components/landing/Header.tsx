@@ -238,18 +238,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
 
                 if (link.isContact) {
                   return (
-                    <ContactDialog
+                    <button
                       key={link.label}
-                      trigger={
-                        <button
-                          type="button"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-left text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
-                        >
-                          {link.label}
-                        </button>
-                      }
-                    />
+                      type="button"
+                      onClick={() => setIsMobileContactOpen(true)}
+                      className="text-left text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
+                    >
+                      {link.label}
+                    </button>
                   );
                 }
 
