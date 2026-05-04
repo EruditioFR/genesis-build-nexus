@@ -338,7 +338,7 @@ const DemoExperience = () => {
                   <span>{theme.emoji}</span> {theme.label}
                 </p>
                 <h2 className="mt-2 font-display text-2xl font-bold text-center leading-snug">
-                  Quelle question vous parle ?
+                  Quelle question vous inspire ?
                 </h2>
                 <p className="mt-3 text-center text-sm text-white/70 max-w-sm mx-auto">
                   Une question, un souvenir. Vous pouvez aussi écrire le vôtre.
