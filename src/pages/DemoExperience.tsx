@@ -236,8 +236,7 @@ const DemoExperience = () => {
 
   const handleCreate = () => {
     trackEvent("complete_creation", "demo", persona ?? undefined);
-    trackEvent("click_conversion", "demo", persona ?? undefined);
-    navigate(`/signup?source=demo${persona ? `&persona=${persona}` : ""}`);
+    goTo(4);
   };
 
   const handleConvert = () => {
