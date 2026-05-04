@@ -24,6 +24,7 @@ interface HeaderProps {
 const Header = ({ forceSolid = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileContactOpen, setIsMobileContactOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -237,18 +238,14 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
 
                 if (link.isContact) {
                   return (
-                    <ContactDialog
+                    <button
                       key={link.label}
-                      trigger={
-                        <button
-                          type="button"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-left text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
-                        >
-                          {link.label}
-                        </button>
-                      }
-                    />
+                      type="button"
+                      onClick={() => setIsMobileContactOpen(true)}
+                      className="text-left text-foreground font-semibold py-4 px-4 hover:bg-muted rounded-xl transition-colors text-lg flex items-center gap-3 active:bg-muted"
+                    >
+                      {link.label}
+                    </button>
                   );
                 }
 
@@ -329,6 +326,16 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Mobile contact dialog mounted outside AnimatePresence so it survives menu close */}
+      <ContactDialog
+        trigger={<span className="hidden" aria-hidden="true" />}
+        open={isMobileContactOpen}
+        onOpenChange={(v) => {
+          setIsMobileContactOpen(v);
+          if (v) setIsMobileMenuOpen(false);
+        }}
+      />
     </motion.header>
   );
 };
