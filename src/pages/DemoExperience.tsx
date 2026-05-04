@@ -215,7 +215,7 @@ const DemoExperience = () => {
   // anti-abandon
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (step >= 3 && step <= 4) {
+      if (step === 3) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -236,7 +236,8 @@ const DemoExperience = () => {
 
   const handleCreate = () => {
     trackEvent("complete_creation", "demo", persona ?? undefined);
-    goTo(4);
+    trackEvent("click_conversion", "demo", persona ?? undefined);
+    navigate(`/signup?source=demo${persona ? `&persona=${persona}` : ""}`);
   };
 
   const handleConvert = () => {
@@ -519,131 +520,10 @@ const DemoExperience = () => {
           </Container>
         )}
 
-        {step === 4 && (
-          <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
-              <div className="w-full max-w-md mx-auto">
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-center text-white">
-                  Dernière étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
-                </h2>
-
-                {/* Souvenir preview */}
-                <motion.div
-                  initial={{ opacity: 0, y: 12, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="mt-6 rounded-2xl overflow-hidden bg-white/5 border border-white/15 shadow-2xl"
-                >
-                  {userImage ? (
-                    <div
-                      className="h-40 w-full bg-cover bg-center relative"
-                      style={{ backgroundImage: `url(${userImage})` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h3 className="font-display text-lg font-bold text-white line-clamp-2">
-                          {title || "Mon souvenir"}
-                        </h3>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="px-4 pt-4">
-                      <h3 className="font-display text-lg font-bold text-white line-clamp-2">
-                        {title || "Mon souvenir"}
-                      </h3>
-                    </div>
-                  )}
-                  {text && (
-                    <div className="px-4 py-3">
-                      <p className="text-sm text-white/85 leading-relaxed line-clamp-5 whitespace-pre-wrap">
-                        {text}
-                      </p>
-                    </div>
-                  )}
-                </motion.div>
-
-                {/* Capabilities once saved */}
-                <div className="mt-6">
-                  <p className="text-center text-xs uppercase tracking-widest text-secondary/80">
-                    Une fois conservé, ce souvenir pourra…
-                  </p>
-                  <ul className="mt-3 space-y-2">
-                    {[
-                      { Icon: Share2, t: "Être partagé avec vos proches" },
-                      { Icon: TreePine, t: "Être rattaché à votre arbre généalogique" },
-                      { Icon: Clock, t: "Se retrouver dans votre chronologie" },
-                    ].map(({ Icon, t }, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 + i * 0.1 }}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
-                      >
-                        <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                          <Icon className="w-4 h-4 text-secondary" />
-                        </span>
-                        <span className="text-sm text-white/90">{t}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Trust — visually distinct: compact 3-col grid with top icons */}
-                <div className="mt-8 pt-6 border-t border-white/10">
-                  <p className="text-center text-[11px] uppercase tracking-[0.2em] text-white/50">
-                    Avec Family Garden
-                  </p>
-                  <ul className="mt-4 grid grid-cols-3 gap-2">
-                    {[
-                      { Icon: Shield, t: "Hébergé en France" },
-                      { Icon: Lock, t: "Strictement privé" },
-                      { Icon: Heart, t: "Transmissible" },
-                    ].map(({ Icon, t }, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 + i * 0.1 }}
-                        className="flex flex-col items-center text-center gap-2 px-2 py-3 rounded-xl bg-transparent"
-                      >
-                        <span className="w-9 h-9 rounded-full border border-secondary/40 flex items-center justify-center shrink-0">
-                          <Icon className="w-4 h-4 text-secondary" />
-                        </span>
-                        <span className="text-[11px] font-medium text-white/75 leading-tight">{t}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="p-5 pb-8">
-              <div className="w-full max-w-md mx-auto space-y-3">
-                <Button
-                  size="mobileLg"
-                  className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90 text-sm sm:text-base whitespace-normal leading-tight px-4 py-3 h-auto min-h-[3.25rem]"
-                  onClick={handleConvert}
-                >
-                  <span className="truncate">Créer mon espace gratuitement</span>
-                  <ArrowRight className="w-5 h-5 ml-1 shrink-0" />
-                </Button>
-                <button
-                  onClick={() => navigate("/")}
-                  className="w-full text-sm text-white/60 hover:text-white py-2"
-                >
-                  En savoir plus avant de me lancer
-                </button>
-                <p className="text-sm text-white/70 text-center leading-snug pt-2">
-                  <span className="text-secondary font-semibold">*</span> Votre souvenir sera effacé automatiquement si vous ne poursuivez pas la visite.
-                </p>
-              </div>
-            </div>
-          </Container>
-        )}
       </AnimatePresence>
 
       {/* Discreet exit handle (top-right) — opens abandon dialog instead of leaving silently */}
-      {step >= 3 && step <= 4 && (
+      {step === 3 && (
         <button
           onClick={() => setShowAbandon(true)}
           className="absolute top-3 right-3 z-50 w-9 h-9 rounded-full bg-white/10 backdrop-blur text-white/70 hover:text-white text-xs"
@@ -663,8 +543,8 @@ const DemoExperience = () => {
         </div>
         <div className="flex gap-1.5 mr-12">
           {(() => {
-            const displayed = step === 1 ? 1 : step === 3 ? 2 : 3;
-            return Array.from({ length: 3 }).map((_, i) => (
+            const displayed = step === 1 ? 1 : 2;
+            return Array.from({ length: 2 }).map((_, i) => (
               <span
                 key={i}
                 className={cn(
