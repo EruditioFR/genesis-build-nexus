@@ -215,7 +215,7 @@ const DemoExperience = () => {
   // anti-abandon
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (step >= 3 && step <= 4) {
+      if (step === 3) {
         e.preventDefault();
         e.returnValue = "";
       }
