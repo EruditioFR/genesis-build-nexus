@@ -394,92 +394,70 @@ const DemoExperience = () => {
         {step === 4 && (
           <Container key="s4" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
-              <h2 className="font-display text-2xl font-bold text-center text-white">
-                Encore une étape pour mettre votre souvenir à l'abri.
-              </h2>
-
-              {/* Capabilities once saved */}
-              <div className="mt-6 space-y-2">
-                <p className="text-center text-xs uppercase tracking-widest text-secondary/80">Une fois conservé, ce souvenir pourra…</p>
-                <ul className="mt-3 space-y-2">
-                  {[
-                    { Icon: Share2, t: "Être partagé avec vos proches" },
-                    { Icon: TreePine, t: "Être rattaché à votre arbre généalogique" },
-                    { Icon: Clock, t: "Se retrouver dans votre chronologie" },
-                  ].map(({ Icon, t }, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 + i * 0.12 }}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
-                    >
-                      <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                        <Icon className="w-4 h-4 text-secondary" />
-                      </span>
-                      <span className="text-sm text-white/90">{t}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="p-5 pb-8">
-              <Button
-                size="mobileLg"
-                className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                onClick={() => goTo(7)}
-              >
-                Continuer
-              </Button>
-            </div>
-          </Container>
-        )}
-
-        {step === 7 && (
-          <Container key="s7" className="bg-gradient-to-b from-[#1a1a2e] via-[#1f1a3e] to-[#0f0f1e]">
-            <div className="flex-1 overflow-y-auto px-6 pt-16 pb-4 flex flex-col items-center justify-center">
-              <div className="w-full max-w-md mx-auto flex flex-col items-center text-center">
-                <div className="flex flex-col items-center gap-3 mb-8">
-                  <img
-                    src={logo}
-                    alt="Family Garden"
-                    className="h-14 w-auto drop-shadow"
-                  />
-                  <span className="font-display text-2xl font-semibold text-white">
-                    Family<span className="text-secondary">Garden</span>
-                  </span>
-                </div>
-
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                  Gardez vos souvenirs en sécurité
+              <div className="w-full max-w-md mx-auto">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-center text-white">
+                  Encore une étape pour mettre votre souvenir à l'abri.
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-white/70">
+                <p className="mt-3 text-center text-sm text-white/70">
                   Un espace simple pour ne plus les perdre.
                 </p>
 
-                <ul className="mt-8 w-full space-y-3">
-                  {[
-                    { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
-                    { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
-                    { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
-                  ].map(({ Icon, t }, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + i * 0.1 }}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-left"
-                    >
-                      <span className="w-9 h-9 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                        <Icon className="w-4 h-4 text-secondary" />
-                      </span>
-                      <span className="text-sm text-white/90">{t}</span>
-                    </motion.li>
-                  ))}
-                </ul>
+                {/* Capabilities once saved */}
+                <div className="mt-6">
+                  <p className="text-center text-xs uppercase tracking-widest text-secondary/80">
+                    Une fois conservé, ce souvenir pourra…
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {[
+                      { Icon: Share2, t: "Être partagé avec vos proches" },
+                      { Icon: TreePine, t: "Être rattaché à votre arbre généalogique" },
+                      { Icon: Clock, t: "Se retrouver dans votre chronologie" },
+                    ].map(({ Icon, t }, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + i * 0.1 }}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
+                      >
+                        <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4 text-secondary" />
+                        </span>
+                        <span className="text-sm text-white/90">{t}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Trust */}
+                <div className="mt-6">
+                  <p className="text-center text-xs uppercase tracking-widest text-secondary/80">
+                    Avec Family Garden
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {[
+                      { Icon: Shield, t: "Conservés à l'abri, hébergés en France" },
+                      { Icon: Lock, t: "Privé par nature, ouvert à vos seuls proches" },
+                      { Icon: Heart, t: "Une mémoire de famille qui se transmet" },
+                    ].map(({ Icon, t }, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.6 + i * 0.1 }}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10"
+                      >
+                        <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4 text-secondary" />
+                        </span>
+                        <span className="text-sm text-white/90">{t}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-            <div className="p-5 pb-8 space-y-3">
+            <div className="p-5 pb-8">
               <div className="w-full max-w-md mx-auto space-y-3">
                 <Button
                   size="mobileLg"
@@ -522,8 +500,8 @@ const DemoExperience = () => {
         </div>
         <div className="flex gap-1.5 mr-12">
           {(() => {
-            const displayed = step <= 4 ? step : 5;
-            return Array.from({ length: 5 }).map((_, i) => (
+            const displayed = step === 1 ? 1 : step === 3 ? 2 : 3;
+            return Array.from({ length: 3 }).map((_, i) => (
               <span
                 key={i}
                 className={cn(
