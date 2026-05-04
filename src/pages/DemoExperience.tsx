@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import SEOHead from "@/components/seo/SEOHead";
-import ImageCropDialog from "@/components/demo/ImageCropDialog";
+
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
 import heroBg from "@/assets/hero-background.webp";
 import logo from "@/assets/logo.png";
@@ -52,7 +52,7 @@ const DemoExperience = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [userImage, setUserImage] = useState<string | null>(null);
-  const [pendingImage, setPendingImage] = useState<string | null>(null);
+  
   const [showAbandon, setShowAbandon] = useState(false);
   const [tutoStep, setTutoStep] = useState<1 | 2 | 3>(1);
   const [showInspirations, setShowInspirations] = useState(true);
@@ -68,7 +68,8 @@ const DemoExperience = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setPendingImage(reader.result);
+        setUserImage(reader.result);
+        trackEvent("demo_upload_image", "demo");
       }
     };
     reader.readAsDataURL(file);
@@ -560,18 +561,6 @@ const DemoExperience = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      <ImageCropDialog
-        open={!!pendingImage}
-        imageSrc={pendingImage}
-        aspect={16 / 10}
-        onCancel={() => setPendingImage(null)}
-        onConfirm={(url) => {
-          setUserImage(url);
-          setPendingImage(null);
-          trackEvent("demo_upload_image", "demo");
-        }}
-      />
     </div>
   );
 };
