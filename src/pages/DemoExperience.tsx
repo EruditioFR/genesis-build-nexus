@@ -539,7 +539,7 @@ const DemoExperience = () => {
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
               <div className="w-full max-w-md mx-auto">
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-center text-white">
-                  Encore une étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
+                  Dernière étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
                 </h2>
 
                 {/* Capabilities once saved */}
