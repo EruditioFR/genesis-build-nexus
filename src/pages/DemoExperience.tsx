@@ -544,9 +544,6 @@ const DemoExperience = () => {
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-center text-white">
                   Encore une étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
                 </h2>
-                <p className="mt-3 text-center text-sm text-white/70">
-                  Un espace simple pour ne plus les perdre.
-                </p>
 
                 {/* Capabilities once saved */}
                 <div className="mt-6">
