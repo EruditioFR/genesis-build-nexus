@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import { refreshStaleAppShell } from "./lib/buildVersion";
 import "./index.css";
 
 // One-time migration: remove legacy auto-cached language so navigator language
@@ -13,6 +14,8 @@ if (typeof window !== 'undefined') {
 }
 
 import "./lib/i18n";
+
+refreshStaleAppShell();
 
 // Defer font loading to not block initial render
 const loadFonts = () => {

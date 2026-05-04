@@ -320,7 +320,7 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                       <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>{t('auth.signIn')}</Link>
                     </Button>
                     <Button asChild variant="mobilePrimary" size="mobileLg" className="w-full">
-                      <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>{t('auth.startFree')}</Link>
+                      <a href="/signup" onClick={() => setIsMobileMenuOpen(false)}>{t('auth.startFree')}</a>
                     </Button>
                   </>
                 )}
