@@ -523,7 +523,7 @@ const DemoExperience = () => {
       </AnimatePresence>
 
       {/* Discreet exit handle (top-right) — opens abandon dialog instead of leaving silently */}
-      {step >= 3 && step <= 4 && (
+      {step === 3 && (
         <button
           onClick={() => setShowAbandon(true)}
           className="absolute top-3 right-3 z-50 w-9 h-9 rounded-full bg-white/10 backdrop-blur text-white/70 hover:text-white text-xs"
