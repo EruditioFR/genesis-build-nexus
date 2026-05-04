@@ -386,73 +386,55 @@ const DemoExperience = () => {
         {step === 3 && !showInspirations && (
           <Container key="s3" className="bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e]">
             <div className="flex-1 overflow-y-auto px-5 pt-16 pb-4">
-              <p className="text-center text-sm text-secondary/90 font-medium uppercase tracking-wide">
-                Étape {tutoStep} sur 2
-              </p>
               <h2 className="mt-2 font-display text-2xl font-bold text-center">
-                {tutoStep === 1 && (fromInspiration ? "Votre souvenir" : "Une image pour illustrer votre souvenir ?")}
-                {tutoStep === 2 && (fromInspiration ? "Une image pour illustrer votre souvenir ?" : "Racontez ce moment")}
-                {tutoStep === 3 && "Racontez ce moment"}
+                {fromInspiration ? "Votre souvenir" : "Racontez ce moment"}
               </h2>
 
-              {/* Mini progress */}
-              <div className="mt-4 flex justify-center gap-1.5">
-                {[1, 2].map((n) => (
-                  <span
-                    key={n}
-                    className={cn(
-                      "h-1 rounded-full transition-all",
-                      n === tutoStep ? "w-6 bg-secondary" : n < tutoStep ? "w-3 bg-white/60" : "w-3 bg-white/20"
-                    )}
-                  />
-                ))}
-              </div>
-
-              {((tutoStep === 1 && !fromInspiration) || (tutoStep === 2 && fromInspiration)) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={cn(
-                    "mt-6 h-48 rounded-2xl relative overflow-hidden ring-2 ring-secondary/40",
-                    userImage ? "bg-cover bg-center" : "bg-white/5 border border-dashed border-white/20"
-                  )}
-                  style={userImage ? { backgroundImage: `url(${userImage})` } : undefined}
+              {/* Image picker (always visible, optional) */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={cn(
+                  "mt-6 h-48 rounded-2xl relative overflow-hidden ring-2 ring-secondary/40",
+                  userImage ? "bg-cover bg-center" : "bg-white/5 border border-dashed border-white/20"
+                )}
+                style={userImage ? { backgroundImage: `url(${userImage})` } : undefined}
+              >
+                {userImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/20 transition-colors"
+                  aria-label={userImage ? "Changer la photo" : "Ajouter une photo (optionnel)"}
                 >
-                  {userImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />}
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageSelect}
-                    className="hidden"
-                  />
+                  <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                    <Camera className="w-5 h-5" />
+                  </span>
+                  <span className="text-sm font-medium px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm">
+                    {userImage ? "Changer la photo" : "Ajouter une photo (optionnel)"}
+                  </span>
+                </button>
+                {userImage && (
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/95 hover:bg-black/20 transition-colors"
-                    aria-label={userImage ? "Changer la photo" : "Ajouter une photo"}
+                    onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
+                    aria-label="Retirer la photo"
                   >
-                    <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                      <Camera className="w-5 h-5" />
-                    </span>
-                    <span className="text-sm font-medium px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm">
-                      {userImage ? "Changer la photo" : "Ajouter une photo"}
-                    </span>
+                    <X className="w-3.5 h-3.5" />
                   </button>
-                  {userImage && (
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); setUserImage(null); }}
-                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white"
-                      aria-label="Retirer la photo"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </motion.div>
-              )}
+                )}
+              </motion.div>
 
-              {tutoStep === 1 && fromInspiration && (
+              {/* Title (only for inspiration flow — auto-generated otherwise) */}
+              {fromInspiration && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -460,76 +442,55 @@ const DemoExperience = () => {
                 >
                   <label className="text-sm font-medium text-white/80">Le titre</label>
                   <Textarea
-                    autoFocus
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    rows={3}
+                    rows={2}
                     className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
                   />
                 </motion.div>
               )}
 
-              {((tutoStep === 2 && !fromInspiration) || (tutoStep === 3)) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6"
-                >
-                  <label className="text-sm font-medium text-white/80">Le récit</label>
-                  <Textarea
-                    autoFocus
-                    value={text}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setText(v);
-                      if (!fromInspiration) {
-                        const firstLine = v.split("\n")[0].trim().slice(0, 80);
-                        setTitle(firstLine || "Mon souvenir");
-                      }
-                    }}
-                    rows={5}
-                    placeholder=""
-                    className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
-                  />
-                </motion.div>
-              )}
+              {/* Story */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6"
+              >
+                <label className="text-sm font-medium text-white/80">Le récit</label>
+                <Textarea
+                  value={text}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setText(v);
+                    if (!fromInspiration) {
+                      const firstLine = v.split("\n")[0].trim().slice(0, 80);
+                      setTitle(firstLine || "Mon souvenir");
+                    }
+                  }}
+                  rows={5}
+                  placeholder=""
+                  className="mt-1 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+                />
+              </motion.div>
             </div>
             <div className="p-5 pb-8 border-t border-white/10 bg-[#0f0f1e]/80 flex gap-3">
               <Button
                 size="mobileLg"
                 variant="outline"
                 className="border-white/30 text-white bg-transparent hover:bg-white/10"
-                onClick={() => {
-                  if (tutoStep === 1) {
-                    setShowInspirations(true);
-                  } else {
-                    setTutoStep((s) => (s - 1) as 1 | 2 | 3);
-                  }
-                }}
+                onClick={() => setShowInspirations(true)}
               >
                 Retour
               </Button>
-              {tutoStep < 2 ? (
-                <Button
-                  size="mobileLg"
-                  className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                  onClick={() => setTutoStep((s) => (s + 1) as 1 | 2 | 3)}
-                  disabled={tutoStep === 1 && fromInspiration && !title.trim()}
-                >
-                  Continuer
-                  <ArrowRight className="w-5 h-5 ml-1" />
-                </Button>
-              ) : (
-                <Button
-                  size="mobileLg"
-                  className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
-                  onClick={handleCreate}
-                  disabled={fromInspiration ? !title.trim() : !text.trim()}
-                >
-                  Continuer
-                  <ArrowRight className="w-5 h-5 ml-1" />
-                </Button>
-              )}
+              <Button
+                size="mobileLg"
+                className="flex-1 bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90"
+                onClick={handleCreate}
+                disabled={fromInspiration ? !title.trim() : !text.trim()}
+              >
+                Continuer
+                <ArrowRight className="w-5 h-5 ml-1" />
+              </Button>
             </div>
           </Container>
         )}
