@@ -24,6 +24,7 @@ interface HeaderProps {
 const Header = ({ forceSolid = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileContactOpen, setIsMobileContactOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
