@@ -503,6 +503,41 @@ const DemoExperience = () => {
                   Dernière étape pour mettre votre souvenir à l'abri<span className="text-secondary">*</span>.
                 </h2>
 
+                {/* Souvenir preview */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="mt-6 rounded-2xl overflow-hidden bg-white/5 border border-white/15 shadow-2xl"
+                >
+                  {userImage ? (
+                    <div
+                      className="h-40 w-full bg-cover bg-center relative"
+                      style={{ backgroundImage: `url(${userImage})` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="font-display text-lg font-bold text-white line-clamp-2">
+                          {title || "Mon souvenir"}
+                        </h3>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="px-4 pt-4">
+                      <h3 className="font-display text-lg font-bold text-white line-clamp-2">
+                        {title || "Mon souvenir"}
+                      </h3>
+                    </div>
+                  )}
+                  {text && (
+                    <div className="px-4 py-3">
+                      <p className="text-sm text-white/85 leading-relaxed line-clamp-5 whitespace-pre-wrap">
+                        {text}
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+
                 {/* Capabilities once saved */}
                 <div className="mt-6">
                   <p className="text-center text-xs uppercase tracking-widest text-secondary/80">
