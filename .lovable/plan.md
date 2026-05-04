@@ -1,60 +1,53 @@
-# Démo immersive mobile — /demo
+## Diagnostic
 
-Page autonome, full-screen, 7 étapes, sans header/footer, optimisée conversion publicitaire (≤ 45 s).
+J'ai testé le parcours complet sur le site en production (`https://familygarden.fr`) en viewport mobile (390×844) :
 
-## Route et structure fichiers
+1. Ouverture du menu hamburger
+2. Clic sur "Commencer gratuitement" / "S'inscrire"
+3. **Résultat** : la page `/signup` s'affiche correctement, formulaire visible (prénom, nom, email, mot de passe, confirmation), aucune redirection vers l'accueil.
 
-- Nouvelle route publique `/demo` ajoutée dans `src/App.tsx` (lazy-loaded, indexable mais avec canonical sur `https://familygarden.fr/demo`).
-- Dossier `src/components/demo/` regroupant un composant par étape :
-  - `DemoLayout.tsx` (gestion fond plein écran, transitions, anti-abandon)
-  - `Step1Hook.tsx`
-  - `Step2Persona.tsx`
-  - `Step3Create.tsx`
-  - `Step4Wow.tsx`
-  - `Step5Loss.tsx`
-  - `Step6Projection.tsx`
-  - `Step7Conversion.tsx`
-  - `AbandonDialog.tsx`
-- Page conteneur : `src/pages/DemoExperience.tsx` (state machine simple : `step`, `persona`, `title`, `text`).
+Vérifications dans le code :
+- `src/components/landing/Header.tsx` : le bouton mobile pointe bien vers `<Link to="/signup">`.
+- `src/App.tsx` : route `/signup` correctement déclarée avant le catch-all `*`.
+- `src/pages/Signup.tsx` : aucune redirection automatique, pas de `useEffect` qui renvoie ailleurs.
+- Aucun service worker enregistré dans le projet.
 
-## Comportement par étape
+**Conclusion** : le code est correct. Le bug que vous voyez vient du **cache navigateur de votre téléphone** qui sert encore l'ancienne version JavaScript (celle d'avant la suppression des champs pays/email). L'ancien bundle contenait probablement une logique qui redirigeait après suppression de ces champs.
 
-1. **Hook** — image émotionnelle floutée (réutiliser visuel landing existant, pas de nouvel asset lourd), overlay sombre, titre + sous-texte, CTA bas écran "Créer un souvenir". Tracking `start_demo` au mount.
-2. **Persona** — 3 boutons pleine largeur (Mes enfants / Ma famille / Mes parents). Sélection → animation scale + auto-advance après 250 ms. Tracking `select_persona` avec valeur. Stockage localStorage `demo_persona`.
-3. **Création** — image pré-chargée (placeholder doux), champ titre auto-focus pré-rempli "Vacances à la mer", textarea pré-remplie. CTA "Continuer". Sauvegarde dans localStorage. Tracking `complete_creation`.
-4. **Wow moment** — carte souvenir premium (ombre `shadow-gold`, gradient warm), mini timeline verticale fictive (3 jalons), avatar correspondant au persona. Bouton "Partager avec {persona}" → étape 5.
-5. **Effet perte** — fond qui s'assombrit (fade 600 ms), texte centré, bouton caché 1500 ms via `setTimeout` puis apparition fade-in pour continuer.
-6. **Projection** — texte en deux temps (apparition séquencée à 0 s puis 1 s), CTA "Je veux ça pour ma famille" apparaît à 1800 ms. Tracking `reach_projection`.
-7. **Conversion** — fond clair (contraste), 3 bénéfices avec icônes lucide (Shield, Lock, Heart), CTA principal "Créer mon espace" → `/signup?source=demo&persona={persona}`, CTA secondaire texte "Voir un exemple" → `/`. Tracking `click_conversion`.
+## Solution proposée
 
-## Personnalisation dynamique
+Pour aider tous les utilisateurs (pas seulement vous) à recevoir la nouvelle version sans avoir à vider manuellement leur cache, je vais :
 
-Helper `getPersonaCopy(persona)` retournant : label affiché, possessif ("vos enfants", "votre famille", "vos parents"), ton (chaleureux pour enfants, respectueux pour parents). Utilisé dans étapes 4, 6, 7.
+### 1. Ajouter des en-têtes anti-cache pour `index.html`
 
-## Anti-abandon
+Modifier `index.html` pour inclure des balises meta empêchant la mise en cache du HTML d'entrée (les bundles JS gardent leur cache long via le hash Vite, mais le HTML doit toujours être frais pour pointer vers les nouveaux hash).
 
-Hook `useAbandonGuard` : sur `beforeunload` ou clic bouton retour navigateur entre étapes 3 et 6, afficher `AbandonDialog` ("Votre souvenir n'a pas été enregistré." + bouton "Reprendre"). État conservé dans localStorage pour reprise.
+```html
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+```
 
-## Tracking
+### 2. Ajouter une détection de version + reload automatique
 
-Utiliser le hook existant `useGoogleAnalytics` (déjà en place via `GoogleAnalyticsProvider`). Évènements : `start_demo`, `select_persona`, `complete_creation`, `reach_projection`, `click_conversion`. Paramètre commun `persona`.
+Créer un petit utilitaire qui :
+- Stocke un identifiant de build (timestamp Vite) dans `localStorage`.
+- Au démarrage de l'app, compare avec la version courante.
+- Si différent → vide les caches navigateur (`caches.delete()`) et fait un reload propre une seule fois.
 
-## Style et contraintes
+### 3. Pour vous, immédiatement
 
-- Mobile-first strict, viewport `100dvh`, overflow hidden, pas de scroll.
-- Transitions framer-motion (déjà installé) : fade + slide ≤ 300 ms.
-- Boutons : variantes existantes `mobilePrimary` / `mobileLg` (zone pouce, min 52 px).
-- Typographie : `font-display` pour titres, lisibilité ≥ 18 px.
-- Aucun nouvel asset > 200 ko ; réutiliser images landing déjà optimisées.
-- Pas de header / footer / menu / lien externe pendant la démo.
+En attendant le déploiement du correctif, sur votre téléphone :
+- **iOS Safari** : Réglages → Safari → Effacer historique et données du site
+- **Chrome Android** : ⋮ → Paramètres → Confidentialité → Effacer données navigation → cocher "Images et fichiers en cache" → Effacer
+- **Ou simplement** : ouvrir https://familygarden.fr/signup en navigation privée pour confirmer immédiatement que ça fonctionne
 
-## SEO
+## Fichiers modifiés
 
-- `SEOHead` minimal : title "Découvrez Family Garden en 1 minute", description orientée acquisition, canonical `https://familygarden.fr/demo`, `noindex` non appliqué (page marketing publique).
-- Ajout de `/demo` dans `public/sitemap.xml`.
+- `index.html` — ajout des meta cache-control
+- `src/main.tsx` — appel d'un nouveau hook de version
+- `src/lib/buildVersion.ts` (nouveau) — détection + reset cache
 
-## Hors scope
+## Note
 
-- Pas d'API ni table Supabase.
-- Pas d'upload réel ni création de souvenir en base.
-- Pas de modification du parcours signup existant (juste lecture du query param `source` côté Signup ultérieurement si besoin — non inclus ici).
+Si après ce correctif vous voyez encore le bug **sur un autre appareil** (jamais visité auparavant), il faudra creuser plus loin. Mais le test live confirme que le code en ligne fonctionne.
