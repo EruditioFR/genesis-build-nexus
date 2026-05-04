@@ -281,13 +281,14 @@ const DemoExperience = () => {
                 Choisissez un univers, puis une question pour démarrer votre souvenir.
               </p>
 
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 grid grid-cols-2 gap-3">
                 {INSPIRATION_THEMES.map((theme, i) => (
                   <motion.li
                     key={theme.key}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 * i }}
+                    className={cn(i === INSPIRATION_THEMES.length - 1 && INSPIRATION_THEMES.length % 2 === 1 && "col-span-2")}
                   >
                     <button
                       type="button"
@@ -295,14 +296,13 @@ const DemoExperience = () => {
                         setSelectedTheme(theme.key);
                         trackEvent("demo_pick_theme", "demo", theme.key);
                       }}
-                      className="w-full text-left rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 hover:border-secondary/60 p-4 transition-all flex items-start gap-3"
+                      className="w-full h-full text-left rounded-2xl border border-white/15 bg-gradient-to-br from-white/[0.07] to-white/[0.02] hover:from-secondary/15 hover:to-white/[0.04] hover:border-secondary/60 p-4 transition-all flex flex-col items-start gap-2 min-h-[120px]"
                     >
-                      <span className="text-2xl leading-none mt-0.5">{theme.emoji}</span>
-                      <span className="flex-1">
-                        <span className="block text-sm font-semibold text-white/95 leading-snug">{theme.label}</span>
-                        <span className="block text-xs text-white/60 mt-0.5">{theme.description}</span>
+                      <span className="w-10 h-10 rounded-xl bg-secondary/15 flex items-center justify-center text-2xl leading-none">
+                        {theme.emoji}
                       </span>
-                      <ArrowRight className="w-4 h-4 text-white/40 mt-1 shrink-0" />
+                      <span className="block text-sm font-semibold text-white/95 leading-snug">{theme.label}</span>
+                      <span className="block text-xs text-white/55 leading-snug">{theme.description}</span>
                     </button>
                   </motion.li>
                 ))}
