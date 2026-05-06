@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, HelpCircle, Shield, Clock, Users, CreditCard, Lock, Share2, Download } from "lucide-react";
+import { ArrowLeft, HelpCircle, Shield, Clock, Users, CreditCard, Lock, Sparkles, GitCompare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
