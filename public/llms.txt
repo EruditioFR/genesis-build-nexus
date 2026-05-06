@@ -30,6 +30,26 @@ Family Garden est une application web conçue pour préserver l'héritage famili
 - **Premium** (4,99 €/mois) : 10 Go, tous formats (vidéo, audio), partage avancé, sans publicité.
 - **Héritage** (9,99 €/mois) : 20 Go, partage illimité, arbre généalogique interactif, legs posthume, support VIP WhatsApp, sans publicité.
 
+## Questions fréquentes (FAQ)
+
+**Qu'est-ce qu'un souvenir sur Family Garden ?**
+Un souvenir est un conteneur numérique sécurisé qui préserve vos moments sous forme de textes, photos, vidéos et audio. C'est votre histoire personnelle, organisée chronologiquement et prête à être transmise aux générations futures. Chaque souvenir est privé et accessible uniquement aux personnes que vous autorisez.
+
+**Mes données sont-elles sécurisées ?**
+Vos données sont chiffrées avec les standards les plus élevés (AES-256), sauvegardées quotidiennement sur des serveurs européens, et vous gardez un contrôle total sur qui peut y accéder. Vos souvenirs restent privés.
+
+**Comment fonctionne le partage familial ?**
+Vous pouvez créer des cercles de confiance (famille, amis) et inviter des membres par email. Pour chaque cercle, vous définissez les permissions : lecture seule, commentaires, ou contribution. Les membres peuvent ajouter leurs propres perspectives sur vos souvenirs partagés.
+
+**Que se passe-t-il avec mes données si je ne renouvelle pas ?**
+Vos données ne sont jamais supprimées automatiquement. Si vous passez de Premium à Gratuit, vous conservez l'accès en lecture à tout votre contenu. Seules les fonctionnalités avancées sont désactivées. Vous pouvez toujours exporter vos données à tout moment.
+
+**Comment fonctionne le legs posthume ?**
+Avec l'offre Héritage, vous désignez des contacts de confiance qui seront notifiés et recevront accès à certains souvenirs selon vos souhaits. Vous pouvez programmer des révélations différées, définir des conditions d'accès, et laisser des messages personnels.
+
+**Y a-t-il une application mobile ?**
+La plateforme web est entièrement responsive et fonctionne parfaitement sur mobile. Une application native iOS et Android est prévue dans la roadmap pour permettre l'enregistrement direct et le mode hors-ligne.
+
 ## Cas d'usage
 
 - Parents souhaitant documenter la croissance de leurs enfants
