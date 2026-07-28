@@ -124,7 +124,7 @@ const CapsuleTypeSelector = ({ value, onChange }: CapsuleTypeSelectorProps) => {
                     })}
                   </p>
                   <Link 
-                    to={`/premium${upgradePath === 'heritage' ? '?tier=heritage' : ''}`}
+                    to="/premium"
                     className="text-secondary text-sm font-medium hover:underline block mt-1"
                   >
                     {t('typeSelector.viewPlans')}
