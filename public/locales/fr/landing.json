@@ -403,7 +403,7 @@
       "badge": "Espace privé pour votre famille",
       "title": "Protégez les souvenirs",
       "titleHighlight": "de votre famille",
-      "subtitle": "Family Garden réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable, transmissible.",
+      "subtitle": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable et transmissible.",
       "ctaPrimary": "Créer mon espace gratuit",
       "ctaSecondary": "Voir comment ça marche",
       "trust1": "Gratuit, sans carte bancaire",
@@ -433,8 +433,8 @@
           "question": "Quel moment a changé le cours de votre vie ?"
         }
       },
-      "subtitleLead": "Family Garden réunit photos, vidéos, voix et récits dans un ",
-      "subtitleHighlight": "journal de famille privé, organisé, durable, transmissible.",
+      "subtitleLead": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un ",
+      "subtitleHighlight": "journal de famille privé, organisé, durable et transmissible.",
       "productSlider": {
         "organisation": {
           "label": "Organisation",
