@@ -4,7 +4,7 @@
     "title": "Tous vos souvenirs enfin réunis",
     "subtitle": "Photos, vidéos, textes et audios : rassemblez vos souvenirs dans un espace privé, sécurisé et plein d'émotion, pour les partager simplement avec vos proches.",
     "cta": {
-      "primary": "Commencer gratuitement",
+      "primary": "Essai gratuit 14 jours",
       "secondary": "Voir la démo"
     },
     "trust": {
@@ -241,9 +241,9 @@
   "cta": {
     "title": "Vos souvenirs méritent",
     "titleHighlight": "d'être préservés",
-    "subtitle": "Commencez aujourd'hui : créez votre premier souvenir en 1 minute. Gratuit, sans engagement.",
+    "subtitle": "Commencez aujourd'hui : créez votre premier souvenir en 1 minute. 14 jours d'essai gratuit, sans engagement.",
     "button": "Créer mon premier souvenir",
-    "trust": "Inscription gratuite • Aucune carte bancaire requise • Vos données restent privées"
+    "trust": "14 jours d'essai gratuit • Aucune carte bancaire requise • Vos données restent privées"
   },
   "footer": {
     "description": "Un espace privé pour raconter ses souvenirs, et partager les moments qui comptent.",
@@ -282,8 +282,8 @@
       "titleHighlight": "Un jour, ils disparaîtront.",
       "subtitle": "Sauvegardez vos souvenirs de famille,<br></br> <gold>pour toujours</gold>",
       "subtitle2": "Photos, vidéos, voix, textes, réunis et protégés.",
-      "subtitle3": "Gratuit pour commencer. Sans publicité.",
-      "cta": "Créer mon journal gratuitement",
+      "subtitle3": "14 jours d'essai gratuit. Sans publicité.",
+      "cta": "Commencer mon essai gratuit",
       "trust": {
         "private": "100% privé",
         "durable": "Stockage durable",
@@ -393,9 +393,9 @@
       "title": "Commencez",
       "titleMiddle": "avant que",
       "titleHighlight": "le prochain souvenir ne se perde",
-      "subtitle": "Créez votre premier souvenir\nen 1 minute.\nGratuit, sans engagement.",
+      "subtitle": "Créez votre premier souvenir\nen 1 minute.\n14 jours d'essai gratuit, sans engagement.",
       "button": "Créer mon premier souvenir",
-      "trust": "Inscription gratuite • Sans carte bancaire • Données privées"
+      "trust": "14 jours d'essai gratuit • Sans engagement • Données privées"
     }
   },
   "v3": {
@@ -404,9 +404,9 @@
       "title": "Protégez les souvenirs",
       "titleHighlight": "de votre famille",
       "subtitle": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable et transmissible.",
-      "ctaPrimary": "Créer mon espace gratuit",
+      "ctaPrimary": "Commencer l'essai gratuit",
       "ctaSecondary": "Voir comment ça marche",
-      "trust1": "Gratuit, sans carte bancaire",
+      "trust1": "14 jours d'essai gratuit, sans engagement",
       "trust2": "Hébergement européen RGPD",
       "trust3": "Sans publicité",
       "slidePrev": "Précédent",
@@ -487,8 +487,8 @@
       "before": "Avant",
       "after": "Avec Family Garden",
       "ctaText": "Commencez aujourd'hui : créer votre première capsule prend moins de 3 minutes.",
-      "cta": "Créer mon espace gratuit",
-      "ctaTrust": "Gratuit, sans carte bancaire · Hébergement européen RGPD",
+      "cta": "Commencer l'essai gratuit",
+      "ctaTrust": "14 jours d'essai gratuit · Hébergement européen RGPD",
       "steps": {
         "s1": {
           "beforeTitle": "Aujourd'hui : vos souvenirs sont partout",

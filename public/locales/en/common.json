@@ -6,7 +6,7 @@
     "about": "About",
     "contact": "Contact",
     "login": "Sign in",
-    "signup": "Get started free",
+    "signup": "Start 14-day free trial",
     "dashboard": "Home",
     "profile": "My profile",
     "logout": "Sign out"
@@ -14,7 +14,7 @@
   "auth": {
     "signIn": "Sign in",
     "signOut": "Sign out",
-    "startFree": "Get started free"
+    "startFree": "Start 14-day free trial"
   },
   "footer": {
     "tagline": "Preserve your family memories for future generations.",

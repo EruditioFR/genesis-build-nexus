@@ -25,9 +25,9 @@ const FAQSectionV3 = () => {
     { source: 'i18n', key: 'q2', question: t('faq.items.q2.question'), answer: t('faq.items.q2.answer') },
     { source: 'i18n', key: 'q3', question: t('faq.items.q3.question'), answer: t('faq.items.q3.answer') },
     {
-      question: "Puis-je essayer Premium gratuitement ?",
+      question: "Puis-je essayer Family Garden gratuitement ?",
       answer:
-        "Vous pouvez démarrer immédiatement avec le forfait gratuit (250 Mo, photos et textes) sans aucune carte bancaire. L'offre de lancement Premium à 5€/mois pendant 3 mois vous permet aussi de tester l'expérience complète à tarif réduit, résiliable à tout moment.",
+        "Oui. Tout nouveau compte bénéficie de 14 jours d'essai gratuit avec l'ensemble des fonctionnalités : souvenirs illimités, 20 Go de stockage, cercles de partage, chronologie et podcast IA. À l'issue de la période d'essai, l'abonnement Essentiel est de 2,99 €/mois (ou 29,90 €/an), avec l'arbre généalogique en option à 5 €/mois. Vous pouvez résilier à tout moment.",
     },
     {
       question: "Comment résilier ou changer de forfait ?",
