@@ -457,6 +457,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "这项在线服务",
+      "titleHighlight": "如何运作？",
+      "steps": {
+        "s1": {
+          "label": "第1步",
+          "title": "上传您的回忆",
+          "description": "照片、视频、音频、文字：只需点击几下，即可从手机或电脑导入所有内容。"
+        },
+        "s2": {
+          "label": "第2步",
+          "title": "自动整理归类",
+          "description": "每段回忆都会标注日期、放入时间轴，并与相关人物关联。"
+        },
+        "s3": {
+          "label": "第3步",
+          "title": "私密分享",
+          "description": "邀请家人加入安全圈子。您的回忆只留在家人之间，没有广告。"
+        }
+      }
+    },
     "howItWorks": {
       "badge": "如何运作",
       "title": "简单,只需",

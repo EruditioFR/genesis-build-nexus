@@ -458,6 +458,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "How does this",
+      "titleHighlight": "online service work?",
+      "steps": {
+        "s1": {
+          "label": "Step 1",
+          "title": "Upload your memories",
+          "description": "Photos, videos, audio, text: import everything from your phone or computer in just a few clicks."
+        },
+        "s2": {
+          "label": "Step 2",
+          "title": "They organize themselves",
+          "description": "Each memory is dated, placed on a timeline and linked to the people involved."
+        },
+        "s3": {
+          "label": "Step 3",
+          "title": "Share them privately",
+          "description": "Invite your family into a secure circle. Your memories stay between you, with no ads."
+        }
+      }
+    },
     "howItWorks": {
       "badge": "How it works",
       "title": "Simple, in",
