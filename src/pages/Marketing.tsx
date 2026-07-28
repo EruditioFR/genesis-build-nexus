@@ -357,7 +357,7 @@ const Marketing = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {[
-              { icon: Sprout, num: "🌱", title: "Préparez le terrain", desc: "Inscription gratuite en 30 secondes. Votre parcelle vous attend.", color: "from-emerald-500 to-emerald-700", season: "Printemps" },
+              { icon: Sprout, num: "🌱", title: "Préparez le terrain", desc: "14 jours d'essai gratuit, inscription en 30 secondes.", color: "from-emerald-500 to-emerald-700", season: "Printemps" },
               { icon: Flower2, num: "🌸", title: "Plantez vos graines", desc: "Uploadez photos, vidéos, enregistrez votre voix, racontez l'histoire.", color: "from-rose-400 to-rose-600", season: "Été" },
               { icon: Leaf, num: "🍂", title: "Cultivez & partagez", desc: "Organisez par catégories, invitez votre famille à jardiner ensemble.", color: "from-amber-500 to-amber-700", season: "Automne" },
               { icon: TreePine, num: "🌳", title: "Récoltez les fruits", desc: "Timeline, mode story, podcast audio : savourez votre récolte à tout instant.", color: "from-emerald-600 to-emerald-800", season: "Hiver" },
