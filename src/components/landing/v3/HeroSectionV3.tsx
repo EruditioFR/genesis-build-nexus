@@ -145,9 +145,9 @@ const HeroSectionV3 = () => {
             <Button
               size="lg"
               onClick={handlePrimaryCta}
-              className="w-full sm:w-auto bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-white text-base sm:text-lg px-8 py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group h-auto min-h-11"
+              className="w-full sm:w-auto max-w-full bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-white text-sm sm:text-lg px-4 sm:px-8 py-4 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group h-auto min-h-11"
             >
-              <span className="whitespace-pre-line text-center">{t('v3.hero.ctaPrimary')}</span>
+              <span className="whitespace-pre-line text-center break-words">{t('v3.hero.ctaPrimary')}</span>
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Button>
             <Button
