@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-pre-line text-center leading-tight break-words rounded-lg text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -30,17 +30,18 @@ const buttonVariants = cva(
         mobileGhost: "min-h-[48px] text-base font-medium hover:bg-muted/50 rounded-xl px-4",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-lg px-8",
-        xl: "h-14 rounded-xl px-10 text-base",
+        default: "min-h-10 px-4 py-2",
+        sm: "min-h-9 rounded-md px-3 py-1.5",
+        lg: "min-h-11 rounded-lg px-8 py-2",
+        xl: "min-h-14 rounded-xl px-10 py-2.5 text-base",
         // Mobile sizes
-        mobile: "h-12 rounded-xl px-6 text-base",
-        mobileLg: "h-14 rounded-xl px-8 text-lg",
+        mobile: "min-h-12 rounded-xl px-6 py-2 text-base",
+        mobileLg: "min-h-14 rounded-xl px-8 py-2.5 text-lg",
         icon: "h-10 w-10",
         iconLg: "h-12 w-12",
       },
     },
+
     defaultVariants: {
       variant: "default",
       size: "default",
