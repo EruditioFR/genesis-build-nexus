@@ -28,7 +28,7 @@ type CapsuleType = Database['public']['Enums']['capsule_type'];
 interface Profile {
   display_name: string | null;
   avatar_url: string | null;
-  subscription_level: 'free' | 'premium' | 'legacy';
+  subscription_level: 'free' | 'essential' | 'premium' | 'legacy';
   storage_used_mb: number;
   storage_limit_mb: number;
   admin_override?: boolean;
