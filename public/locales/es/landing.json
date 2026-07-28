@@ -457,6 +457,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "¿Cómo funciona este",
+      "titleHighlight": "servicio en línea?",
+      "steps": {
+        "s1": {
+          "label": "Paso 1",
+          "title": "Sube tus recuerdos",
+          "description": "Fotos, vídeos, audio, texto: importa todo desde tu móvil u ordenador en unos pocos clics."
+        },
+        "s2": {
+          "label": "Paso 2",
+          "title": "Se organizan solos",
+          "description": "Cada recuerdo se fecha, se coloca en una cronología y se vincula a las personas implicadas."
+        },
+        "s3": {
+          "label": "Paso 3",
+          "title": "Compártelos en privado",
+          "description": "Invita a tu familia a un círculo seguro. Tus recuerdos quedan entre vosotros, sin publicidad."
+        }
+      }
+    },
     "howItWorks": {
       "badge": "Cómo funciona",
       "title": "Simple, en",

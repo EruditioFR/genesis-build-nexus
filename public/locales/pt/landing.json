@@ -457,6 +457,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "Como funciona este",
+      "titleHighlight": "serviço online?",
+      "steps": {
+        "s1": {
+          "label": "Etapa 1",
+          "title": "Carrega as suas memórias",
+          "description": "Fotos, vídeos, áudio, texto: importe tudo do seu telemóvel ou computador em poucos cliques."
+        },
+        "s2": {
+          "label": "Etapa 2",
+          "title": "Elas organizam-se sozinhas",
+          "description": "Cada memória é datada, colocada numa cronologia e ligada às pessoas envolvidas."
+        },
+        "s3": {
+          "label": "Etapa 3",
+          "title": "Partilha-as em privado",
+          "description": "Convide a sua família para um círculo seguro. As suas memórias ficam entre vocês, sem publicidade."
+        }
+      }
+    },
     "howItWorks": {
       "badge": "Como funciona",
       "title": "Simples, em",

@@ -458,6 +458,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "Comment fonctionne ce",
+      "titleHighlight": "service en ligne ?",
+      "steps": {
+        "s1": {
+          "label": "Étape 1",
+          "title": "Vous déposez vos souvenirs",
+          "description": "Photos, vidéos, audio, textes : importez tout depuis votre téléphone ou ordinateur en quelques clics."
+        },
+        "s2": {
+          "label": "Étape 2",
+          "title": "Ils se classent automatiquement",
+          "description": "Chaque souvenir est daté, rangé sur une chronologie et relié aux personnes concernées."
+        },
+        "s3": {
+          "label": "Étape 3",
+          "title": "Vous les partagez en privé",
+          "description": "Invitez votre famille dans un cercle sécurisé. Vos souvenirs restent entre vous, sans publicité."
+        }
+      }
+    },
     "howItWorks": {
       "badge": "Comment ça marche",
       "title": "Simple, en",

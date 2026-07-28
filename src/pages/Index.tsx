@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/landing/Header";
 import HeroSectionV3 from "@/components/landing/v3/HeroSectionV3";
+import HowItWorksShort from "@/components/landing/v3/HowItWorksShort";
 import SEOHead from "@/components/seo/SEOHead";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
@@ -54,6 +55,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSectionV3 />
+        <HowItWorksShort />
         <Suspense fallback={<div className="min-h-[50vh]" />}>
           <SocialProofBand />
           <HowItWorksV3 />

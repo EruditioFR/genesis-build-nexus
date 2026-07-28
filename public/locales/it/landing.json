@@ -457,6 +457,27 @@
         }
       }
     },
+    "howItWorksShort": {
+      "title": "Come funziona questo",
+      "titleHighlight": "servizio online?",
+      "steps": {
+        "s1": {
+          "label": "Passo 1",
+          "title": "Carichi i tuoi ricordi",
+          "description": "Foto, video, audio, testo: importa tutto dal telefono o dal computer in pochi clic."
+        },
+        "s2": {
+          "label": "Passo 2",
+          "title": "Si organizzano automaticamente",
+          "description": "Ogni ricordo viene datato, collocato su una cronologia e collegato alle persone coinvolte."
+        },
+        "s3": {
+          "label": "Passo 3",
+          "title": "Li condividi in privato",
+          "description": "Invita la tua famiglia in un cerchio sicuro. I tuoi ricordi restano tra voi, senza pubblicità."
+        }
+      }
+    },
     "howItWorks": {
       "badge": "Come funziona",
       "title": "Semplice, in",
