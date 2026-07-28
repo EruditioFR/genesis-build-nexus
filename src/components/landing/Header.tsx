@@ -199,8 +199,10 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
               >
                 <Link to="/login">{t('auth.signIn')}</Link>
               </Button>
-              <Button asChild variant="hero" size="lg">
-                <Link to="/signup">{t('auth.startFree')}</Link>
+              <Button asChild variant="hero" size="lg" className="h-auto min-h-11">
+                <Link to="/signup">
+                  <span className="whitespace-pre-line text-center">{t('auth.startFree')}</span>
+                </Link>
               </Button>
             </>
           )}
@@ -316,8 +318,10 @@ const Header = ({ forceSolid = false }: HeaderProps) => {
                     <Button asChild variant="mobileSecondary" size="mobileLg" className="w-full">
                       <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>{t('auth.signIn')}</Link>
                     </Button>
-                    <Button asChild variant="mobilePrimary" size="mobileLg" className="w-full">
-                      <a href="/signup" onClick={() => setIsMobileMenuOpen(false)}>{t('auth.startFree')}</a>
+                    <Button asChild variant="mobilePrimary" size="mobileLg" className="w-full h-auto">
+                      <a href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                        <span className="whitespace-pre-line text-center">{t('auth.startFree')}</span>
+                      </a>
                     </Button>
                   </>
                 )}

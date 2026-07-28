@@ -121,11 +121,11 @@ const HeroSectionV2 = () => {
             <Button
               size="lg"
               onClick={handleCtaClick}
-              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold h-auto min-h-11"
             >
-              <Sparkles className="h-4 w-4 mr-2" />
-              {t('v2.hero.cta')}
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <Sparkles className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="whitespace-pre-line text-center">{t('v2.hero.cta')}</span>
+              <ArrowRight className="ml-2 h-5 w-5 flex-shrink-0" />
             </Button>
           </motion.div>
 

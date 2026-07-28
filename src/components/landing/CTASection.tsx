@@ -56,10 +56,10 @@ const CTASection = () => {
           </p>
 
           {/* CTA */}
-          <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto">
+          <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto h-auto min-h-11">
             <Link to="/signup">
-              {t('cta.button')}
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="whitespace-pre-line text-center">{t('cta.button')}</span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-shrink-0" />
             </Link>
           </Button>
 

@@ -46,10 +46,10 @@ const CTASectionV2 = () => {
           <Button
             size="lg"
             onClick={() => navigate('/signup')}
-            className="w-[80vw] sm:w-auto bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--terracotta))] hover:opacity-90 text-white text-sm sm:text-lg px-8 py-6 rounded-xl shadow-2xl shadow-[hsl(var(--accent))]/30 hover:shadow-[hsl(var(--accent))]/50 transition-all"
+            className="w-[80vw] sm:w-auto bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--terracotta))] hover:opacity-90 text-white text-sm sm:text-lg px-8 py-6 rounded-xl shadow-2xl shadow-[hsl(var(--accent))]/30 hover:shadow-[hsl(var(--accent))]/50 transition-all h-auto min-h-11"
           >
-            {t('v2.ctaFinal.button')}
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <span className="whitespace-pre-line text-center">{t('v2.ctaFinal.button')}</span>
+            <ArrowRight className="ml-2 h-5 w-5 flex-shrink-0" />
           </Button>
           <p className="text-white/50 text-sm mt-6">{t('v2.ctaFinal.trust')}</p>
         </motion.div>
