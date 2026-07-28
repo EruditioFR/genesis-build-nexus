@@ -129,7 +129,7 @@ serve(async (req) => {
             email,
             displayName,
             locale,
-            tier: metadata.tier || "premium",
+            tier: metadata.tier || "essential",
           }),
         }
       );
