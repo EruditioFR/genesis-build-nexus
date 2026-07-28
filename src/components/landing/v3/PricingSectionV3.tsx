@@ -237,7 +237,7 @@ const PricingSectionV3 = () => {
                 Chargement...
               </>
             ) : (
-              <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours d'essai gratuit"}</span>
+              <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours\nd'essai gratuit"}</span>
             )}
           </Button>
 
