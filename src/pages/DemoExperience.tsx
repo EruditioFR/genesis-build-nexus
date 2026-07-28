@@ -586,10 +586,10 @@ const DemoExperience = () => {
               <div className="w-full max-w-md mx-auto space-y-3">
                 <Button
                   size="mobileLg"
-                  className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90 text-sm sm:text-base whitespace-normal leading-tight px-4 py-3 h-auto min-h-[3.25rem]"
+                  className="w-full bg-secondary text-secondary-foreground shadow-gold hover:bg-secondary/90 text-sm sm:text-base leading-tight px-4 py-3 h-auto min-h-[3.25rem]"
                   onClick={handleConvert}
                 >
-                  <span className="truncate">Commencer mon essai gratuit de 14 jours</span>
+                  <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours\nd'essai gratuit"}</span>
                   <ArrowRight className="w-5 h-5 ml-1 shrink-0" />
                 </Button>
                 <button

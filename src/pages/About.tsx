@@ -304,10 +304,10 @@ const About = () => {
               Commencez en 1 minute : créez votre premier souvenir, ajoutez une photo ou un audio, et invitez vos proches.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg">
+              <Button asChild size="lg" className="gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg h-auto min-h-11">
                 <Link to="/signup">
-                  Commencer mon essai gratuit de 14 jours
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours\nd'essai gratuit"}</span>
+                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-primary/30 hover:bg-primary/5">
