@@ -1,122 +1,80 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Crown, Building2, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Check, Sparkles, TreePine, Loader2, Gift } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
+
+const ESSENTIAL_MONTHLY = 2.99;
+const ESSENTIAL_YEARLY = 29.90;
+const ADDON_MONTHLY = 5;
+const ADDON_YEARLY = 50;
+
+const includedFeatures = [
+  "20 Go de stockage sécurisé",
+  "Souvenirs illimités (texte, photo, vidéo, audio)",
+  "Cercles de partage illimités",
+  "Chronologie interactive avancée",
+  "Souvenirs testament (legs posthume)",
+  "Podcast IA de vos souvenirs",
+  "Sans publicité",
+];
 
 const PricingSection = () => {
-  const { t } = useTranslation('landing');
   const [isYearly, setIsYearly] = useState(false);
-  const [loadingTier, setLoadingTier] = useState<string | null>(null);
+  const [withTree, setWithTree] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { createCheckout } = useSubscription();
   const navigate = useNavigate();
 
-  const plans = [
-    {
-      nameKey: "pricing.plans.free.name",
-      icon: Sparkles,
-      price: { monthly: 0, yearly: 0 },
-      descriptionKey: "pricing.plans.free.description",
-      featuresKeys: [
-        "pricing.plans.free.features.storage",
-        "pricing.plans.free.features.formats",
-        "pricing.plans.free.features.sharing",
-        "pricing.plans.free.features.timeline",
-        "pricing.plans.free.features.ads",
-      ],
-      ctaKey: "pricing.cta.free",
-      variant: "outline" as const,
-      popular: false,
-    },
-    {
-      nameKey: "pricing.plans.premium.name",
-      icon: Crown,
-      price: { monthly: 9, yearly: 50 },
-      descriptionKey: "pricing.plans.premium.description",
-      featuresKeys: [
-        "pricing.plans.premium.features.storage",
-        "pricing.plans.premium.features.formats",
-        "pricing.plans.premium.features.sharing",
-        "pricing.plans.premium.features.timeline",
-        "pricing.plans.premium.features.noAds",
-      ],
-      ctaKey: "pricing.cta.premium",
-      variant: "hero" as const,
-      popular: true,
-      tier: "premium" as const,
-    },
-    {
-      nameKey: "pricing.plans.heritage.name",
-      icon: Building2,
-      price: { monthly: 15, yearly: 99 },
-      descriptionKey: "pricing.plans.heritage.description",
-      featuresKeys: [
-        "pricing.plans.heritage.features.storage",
-        "pricing.plans.heritage.features.formats",
-        "pricing.plans.heritage.features.sharing",
-        "pricing.plans.heritage.features.timeline",
-        "pricing.plans.heritage.features.familyTree",
-        "pricing.plans.heritage.features.podcast",
-        "pricing.plans.heritage.features.vipSupport",
-        "pricing.plans.heritage.features.noAds",
-      ],
-      ctaKey: "pricing.cta.heritage",
-      variant: "gold" as const,
-      popular: false,
-      tier: "heritage" as const,
-    },
-  ];
+  const base = isYearly ? ESSENTIAL_YEARLY : ESSENTIAL_MONTHLY;
+  const addon = withTree ? (isYearly ? ADDON_YEARLY : ADDON_MONTHLY) : 0;
+  const total = base + addon;
+  const period = isYearly ? 'an' : 'mois';
 
-  const handleSubscribe = async (plan: typeof plans[0]) => {
-    // Free plan → signup
-    if (!plan.tier) {
-      navigate('/signup');
-      return;
-    }
-    // Paid plans, guest → direct checkout (no account required)
+  const handleSubscribe = async () => {
     if (!user) {
       const billing = isYearly ? 'yearly' : 'monthly';
-      navigate(`/checkout?plan=${plan.tier}&billing=${billing}`);
+      navigate(`/checkout?billing=${billing}&tree=${withTree ? '1' : '0'}`);
       return;
     }
-    // Paid plans, logged-in → Stripe checkout via subscription hook
-    setLoadingTier(plan.tier);
+    setLoading(true);
     try {
-      await createCheckout(plan.tier);
+      await createCheckout({ billing: isYearly ? 'yearly' : 'monthly', withFamilyTree: withTree });
     } catch (error: any) {
-      toast.error(error.message || t('pricing.error'));
+      toast.error(error.message || 'Une erreur est survenue');
     } finally {
-      setLoadingTier(null);
+      setLoading(false);
     }
   };
 
   return (
     <section id="pricing" className="py-16 sm:py-24 bg-background relative overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 -left-20 w-48 sm:w-80 h-48 sm:h-80 rounded-full bg-secondary/5 blur-3xl" />
         <div className="absolute bottom-1/4 -right-20 w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-accent/5 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-10"
         >
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-3 sm:mb-4">
-            {t('pricing.badge')}
+            Tarifs
           </span>
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-3">
+            Un tarif unique et transparent
+          </h2>
           <p className="text-base sm:text-lg text-muted-foreground px-2">
-            {t('pricing.subtitle')}
+            2,99 €/mois pour tout Family Garden. 14 jours d'essai gratuit, sans engagement.
           </p>
         </motion.div>
 
@@ -126,182 +84,135 @@ const PricingSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center justify-center mb-6 sm:mb-[50px]"
+          className="flex items-center justify-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 sm:gap-3 bg-muted/50 rounded-full px-3 sm:px-5 py-1.5 sm:py-2 border border-border/50">
-            <span className={`text-xs sm:text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
-              {t('pricing.monthly')}
+          <div className="inline-flex items-center gap-3 bg-muted/50 rounded-full px-5 py-2 border border-border/50">
+            <span className={`text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
+              Mensuel
             </span>
             <button
               onClick={() => setIsYearly(!isYearly)}
-              className={`relative w-10 sm:w-12 h-5 sm:h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
-                isYearly ? "bg-secondary" : "bg-border"
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isYearly ? "bg-secondary" : "bg-border"}`}
+              aria-label="Basculer mensuel/annuel"
             >
               <span
-                className={`absolute top-0.5 left-0.5 w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
-                  isYearly ? "translate-x-5 sm:translate-x-6" : "translate-x-0"
-                }`}
+                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${isYearly ? "translate-x-6" : "translate-x-0"}`}
               />
             </button>
-            <span className={`text-xs sm:text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
-              {t('pricing.yearly')}
+            <span className={`text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground/60"}`}>
+              Annuel <span className="text-secondary">(-17%)</span>
             </span>
           </div>
         </motion.div>
 
-        {/* Pricing Cards */}
-        <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.nameKey}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex-1 flex flex-col overflow-visible ${
-                plan.popular
-                  ? "bg-primary text-primary-foreground shadow-elevated lg:scale-105 z-10 pt-8 sm:pt-8"
-                  : plan.tier === "heritage"
-                  ? "bg-gradient-to-br from-[hsl(var(--secondary)/0.08)] via-card to-[hsl(var(--secondary)/0.15)] shadow-lg border border-secondary/30 ring-1 ring-secondary/10 mb-5 sm:mb-0"
-                  : "bg-card shadow-card border border-border mb-5 sm:mb-0"
-              }`}
-            >
-              {/* Popular Badge */}
-              {plan.popular && (
-                <div className="absolute top-0 sm:-top-4 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
-                    {t('pricing.popular')}
-                  </span>
-                </div>
-              )}
+        {/* Single plan card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mx-auto relative rounded-3xl p-6 sm:p-10 bg-card shadow-elevated border-2 border-primary/20"
+        >
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+            <span className="px-4 py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
+              Tout inclus
+            </span>
+          </div>
 
-              {/* Plan Header */}
-              <div className="text-center mb-6 sm:mb-8 mt-2 sm:mt-0">
-                <div className={`inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 ${
-                  plan.popular ? "bg-primary-foreground/10" : "bg-muted"
-                }`}>
-                  <plan.icon className={`w-5 h-5 sm:w-7 sm:h-7 ${plan.popular ? "text-secondary" : "text-primary"}`} />
-                </div>
-                <h3 className={`text-xl sm:text-2xl font-display font-bold mb-1 sm:mb-2 ${
-                  plan.popular ? "text-primary-foreground" : "text-foreground"
-                }`}>
-                  {t(plan.nameKey)}
-                </h3>
-                <p className={`text-sm ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                  {t(plan.descriptionKey)}
-                </p>
-              </div>
+          <div className="text-center mb-6 mt-2">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-primary/10">
+              <Sparkles className="w-7 h-7 text-primary" />
+            </div>
+            <h3 className="text-2xl font-display font-bold text-foreground mb-2">
+              Family Garden Essentiel
+            </h3>
+            <p className="text-muted-foreground">
+              Tout ce qu'il vous faut pour préserver l'histoire de votre famille.
+            </p>
+          </div>
 
-              {/* Price */}
-              <div className="text-center mb-6 sm:mb-8">
-                {/* Promo badge for premium monthly */}
-                {plan.tier === "premium" && !isYearly && (
-                  <div className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 ${
-                    plan.popular ? "bg-secondary text-secondary-foreground" : "bg-accent/10 text-white"
-                  }`}>
-                    🔥 {t('pricing.plans.premium.promo')}
-                  </div>
-                )}
-                {/* Promo badge for heritage monthly */}
-                {plan.tier === "heritage" && !isYearly && (
-                  <div className="inline-block px-3 py-1.5 rounded-full text-sm font-semibold mb-4 bg-secondary text-secondary-foreground">
-                    🔥 {t('pricing.plans.heritage.promo')}
-                  </div>
-                )}
-                <div className="flex flex-col items-center gap-1">
-                  {plan.tier === "premium" && !isYearly ? (
-                    <>
-                      <span className={`text-4xl sm:text-5xl font-display font-bold ${
-                        plan.popular ? "text-primary-foreground" : "text-foreground"
-                      }`}>
-                        5<span className="text-[0.5em]">€</span>
-                      </span>
-                    </>
-                  ) : plan.tier === "heritage" && !isYearly ? (
-                    <>
-                      <span className="text-4xl sm:text-5xl font-display font-bold text-foreground">
-                        9<span className="text-[0.5em]">€</span>
-                      </span>
-                    </>
-                  ) : plan.price.monthly === 0 ? (
-                    <span className={`text-4xl sm:text-5xl font-display font-bold ${
-                      plan.popular ? "text-primary-foreground" : "text-foreground"
-                    }`}>
-                      {t('pricing.plans.free.name')}
-                    </span>
-                  ) : (
-                    <span className={`text-4xl sm:text-5xl font-display font-bold ${
-                      plan.popular ? "text-primary-foreground" : "text-foreground"
-                    }`}>
-                      {isYearly ? plan.price.yearly : plan.price.monthly}<span className="text-[0.5em]">€</span>
-                    </span>
-                  )}
-                  {plan.price.monthly > 0 && (
-                    <span className={`text-sm mt-1 ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                      TTC /{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
-                    </span>
-                  )}
+          <div className="text-center mb-8">
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="text-5xl font-display font-bold text-foreground">
+                {base.toFixed(2).replace('.', ',')}
+              </span>
+              <span className="text-2xl font-display font-bold text-foreground">€</span>
+              <span className="text-muted-foreground ml-1">TTC /{period}</span>
+            </div>
+            {isYearly && (
+              <p className="text-sm text-muted-foreground mt-1">soit 2,49 €/mois — 2 mois offerts</p>
+            )}
+            <p className="inline-flex items-center gap-1.5 text-xs font-medium text-secondary mt-3 px-3 py-1 rounded-full bg-secondary/10">
+              <Gift className="w-3.5 h-3.5" />
+              14 jours d'essai gratuit
+            </p>
+          </div>
+
+          <ul className="space-y-3 mb-8 max-w-md mx-auto">
+            {includedFeatures.map((feature) => (
+              <li key={feature} className="flex items-start gap-3">
+                <Check className="w-5 h-5 flex-shrink-0 mt-0.5 text-secondary" />
+                <span className="text-sm text-foreground">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Family tree add-on */}
+          <div className="rounded-2xl border border-border bg-muted/30 p-5 mb-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                  <TreePine className="w-5 h-5 text-primary" />
                 </div>
-                {plan.tier === "premium" && !isYearly && (
-                  <p className={`text-sm mt-2 ${plan.popular ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
-                    {t('pricing.plans.premium.promoAfter', { price: '9' })}
+                <div>
+                  <h4 className="font-display font-semibold text-foreground">
+                    Arbre généalogique interactif
+                  </h4>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Option facultative à{' '}
+                    <strong>{(withTree ? addon : (isYearly ? ADDON_YEARLY : ADDON_MONTHLY)).toFixed(2).replace('.', ',')} €/{period}</strong>.
                   </p>
-                )}
-                {plan.tier === "heritage" && !isYearly && (
-                  <p className="text-sm mt-2 text-muted-foreground">
-                    {t('pricing.plans.heritage.promoAfter', { price: '15' })}
-                  </p>
-                )}
+                </div>
               </div>
+              <Switch
+                checked={withTree}
+                onCheckedChange={setWithTree}
+                aria-label="Ajouter l'arbre généalogique"
+              />
+            </div>
+          </div>
 
-              {/* Features */}
-              <ul className="space-y-2 sm:space-y-4 mb-6 sm:mb-8 flex-1">
-                {plan.featuresKeys.map((featureKey) => (
-                  <li key={featureKey} className="flex items-start gap-2 sm:gap-3">
-                    <Check className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${
-                      plan.popular ? "text-secondary" : "text-secondary"
-                    }`} />
-                    <span className={`text-sm ${
-                      plan.popular ? "text-primary-foreground/90" : "text-muted-foreground"
-                    }`}>
-                      {t(featureKey)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+          <div className="flex items-baseline justify-between mb-6 pb-6 border-b border-border">
+            <span className="text-sm text-muted-foreground">Total</span>
+            <div className="text-right">
+              <span className="text-3xl font-display font-bold text-foreground">
+                {total.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-sm text-muted-foreground">/{period}</span>
+            </div>
+          </div>
 
-              {/* CTA Button */}
-              {plan.tier ? (
-                <Button
-                  onClick={() => handleSubscribe(plan)}
-                  variant={plan.popular ? "hero" : plan.variant}
-                  size="default"
-                  className="w-full"
-                  disabled={loadingTier === plan.tier}
-                >
-                  {loadingTier === plan.tier ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      {t('pricing.loading')}
-                    </>
-                  ) : (
-                    t(plan.ctaKey)
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  asChild
-                  variant={plan.variant}
-                  size="default"
-                  className="w-full"
-                >
-                  <Link to="/signup">{t(plan.ctaKey)}</Link>
-                </Button>
-              )}
-            </motion.div>
-          ))}
-        </div>
+          <Button
+            onClick={handleSubscribe}
+            variant="hero"
+            size="lg"
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Chargement...
+              </>
+            ) : (
+              'Commencer mes 14 jours d\'essai gratuit'
+            )}
+          </Button>
+
+          <p className="text-xs text-center text-muted-foreground mt-4">
+            🛡️ Annulation à tout moment · Paiement sécurisé Stripe
+          </p>
+        </motion.div>
       </div>
     </section>
   );
