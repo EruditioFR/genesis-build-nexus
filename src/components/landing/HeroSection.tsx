@@ -263,11 +263,11 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           >
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 17 }} className="w-full sm:w-auto">
-              <Button asChild variant="hero" size="xl" className="group w-full min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
+              <Button asChild variant="hero" size="xl" className="group w-full h-auto min-h-[48px] sm:min-h-[56px] text-base sm:text-lg">
                 <Link to="/signup">
-                  {t('hero.cta.primary')}
-                  <motion.span className="inline-flex" whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 400 }}>
-                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <span className="whitespace-pre-line text-center">{t('hero.cta.primary')}</span>
+                  <motion.span className="inline-flex flex-shrink-0" whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 400 }}>
+                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                   </motion.span>
                 </Link>
               </Button>

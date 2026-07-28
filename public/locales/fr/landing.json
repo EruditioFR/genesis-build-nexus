@@ -111,7 +111,7 @@
     "loading": "Chargement...",
     "error": "Erreur lors de la création du paiement",
     "cta": {
-      "free": "Commencer gratuitement",
+      "free": "Commencer mes 14 jours\nd'essai gratuit",
       "premium": "Essayer Premium",
       "heritage": "Choisir Héritage"
     },
@@ -219,7 +219,7 @@
     "landingBadge": "Trouvez l'inspiration",
     "landingTitle": "50 questions pour réveiller vos souvenirs",
     "landingSubtitle": "Pas besoin d'être écrivain. Nos questions guidées vous aident à raconter vos plus beaux moments, simplement.",
-    "landingCta": "Commencer gratuitement"
+    "landingCta": "Commencer mes 14 jours\nd'essai gratuit"
   },
   "productPreview": {
     "badge": "Découvrez l'expérience",
@@ -242,7 +242,7 @@
     "title": "Vos souvenirs méritent",
     "titleHighlight": "d'être préservés",
     "subtitle": "Commencez aujourd'hui : créez votre premier souvenir en 1 minute. 14 jours d'essai gratuit, sans engagement.",
-    "button": "Créer mon premier souvenir",
+    "button": "Commencer mes 14 jours\nd'essai gratuit",
     "trust": "14 jours d'essai gratuit • Aucune carte bancaire requise • Vos données restent privées"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "subtitle": "Sauvegardez vos souvenirs de famille,<br></br> <gold>pour toujours</gold>",
       "subtitle2": "Photos, vidéos, voix, textes, réunis et protégés.",
       "subtitle3": "14 jours d'essai gratuit. Sans publicité.",
-      "cta": "Commencer mon essai gratuit",
+      "cta": "Commencer mes 14 jours\nd'essai gratuit",
       "trust": {
         "private": "100% privé",
         "durable": "Stockage durable",
@@ -394,7 +394,7 @@
       "titleMiddle": "avant que",
       "titleHighlight": "le prochain souvenir ne se perde",
       "subtitle": "Créez votre premier souvenir\nen 1 minute.\n14 jours d'essai gratuit, sans engagement.",
-      "button": "Créer mon premier souvenir",
+      "button": "Commencer mes 14 jours\nd'essai gratuit",
       "trust": "14 jours d'essai gratuit • Sans engagement • Données privées"
     }
   },
@@ -404,7 +404,7 @@
       "title": "Protégez les souvenirs",
       "titleHighlight": "de votre famille",
       "subtitle": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable et transmissible.",
-      "ctaPrimary": "Commencer l'essai gratuit",
+      "ctaPrimary": "Commencer mes 14 jours\nd'essai gratuit",
       "ctaSecondary": "Voir comment ça marche",
       "trust1": "14 jours d'essai gratuit, sans engagement",
       "trust2": "Hébergement européen RGPD",
@@ -487,7 +487,7 @@
       "before": "Avant",
       "after": "Avec Family Garden",
       "ctaText": "Commencez aujourd'hui : créer votre première capsule prend moins de 3 minutes.",
-      "cta": "Commencer l'essai gratuit",
+      "cta": "Commencer mes 14 jours\nd'essai gratuit",
       "ctaTrust": "14 jours d'essai gratuit · Hébergement européen RGPD",
       "steps": {
         "s1": {

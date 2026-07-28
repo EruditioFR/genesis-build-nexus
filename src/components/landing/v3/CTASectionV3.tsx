@@ -89,10 +89,10 @@ const CTASectionV3 = () => {
             <Button
               size="lg"
               onClick={() => navigate('/signup')}
-              className="group relative bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--terracotta))] hover:from-[hsl(var(--gold-light))] hover:to-[hsl(var(--terracotta-light))] text-[hsl(var(--navy))] font-semibold text-base sm:text-lg px-8 py-7 rounded-xl shadow-[0_20px_60px_-15px_hsl(var(--gold)/0.6)] hover:shadow-[0_25px_70px_-15px_hsl(var(--gold)/0.8)] transition-all duration-300 hover:-translate-y-0.5"
+              className="group relative bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--terracotta))] hover:from-[hsl(var(--gold-light))] hover:to-[hsl(var(--terracotta-light))] text-[hsl(var(--navy))] font-semibold text-base sm:text-lg px-8 py-7 rounded-xl shadow-[0_20px_60px_-15px_hsl(var(--gold)/0.6)] hover:shadow-[0_25px_70px_-15px_hsl(var(--gold)/0.8)] transition-all duration-300 hover:-translate-y-0.5 h-auto min-h-11"
             >
-              {t('v2.ctaFinal.button')}
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <span className="whitespace-pre-line text-center">{t('v2.ctaFinal.button')}</span>
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 flex-shrink-0" />
             </Button>
 
             {/* Trust line inline */}

@@ -14,7 +14,7 @@
   "auth": {
     "signIn": "登录",
     "signOut": "退出",
-    "startFree": "免费开始"
+    "startFree": "开始我的14天\n免费试用"
   },
   "footer": {
     "tagline": "为后代保存您的家庭记忆。",
@@ -114,7 +114,7 @@
       },
       "quickActions": {
         "title": "🚀 创建第一个回忆",
-        "description": "点击"新回忆"添加照片、视频或文字。",
+        "description": "点击\"新回忆\"添加照片、视频或文字。",
         "descriptionCompact": "添加照片、视频或文字。"
       },
       "stats": {

@@ -111,7 +111,7 @@
     "loading": "A carregar...",
     "error": "Erro ao criar o pagamento",
     "cta": {
-      "free": "Começar gratuitamente",
+      "free": "Começar meu teste\ngratuito de 14 dias",
       "premium": "Experimentar Premium",
       "heritage": "Escolher Legado"
     },
@@ -219,7 +219,7 @@
     "landingBadge": "Encontre inspiração",
     "landingTitle": "50 perguntas para despertar as suas memórias",
     "landingSubtitle": "Não precisa de ser escritor. As nossas perguntas guiadas ajudam-no a contar os seus melhores momentos, de forma simples.",
-    "landingCta": "Começar gratuitamente"
+    "landingCta": "Começar meu teste\ngratuito de 14 dias"
   },
   "productPreview": {
     "badge": "Descubra a experiência",
@@ -242,7 +242,7 @@
     "title": "As suas memórias merecem",
     "titleHighlight": "ser preservadas",
     "subtitle": "Comece hoje: crie a sua primeira memória em 1 minuto. Gratuito, sem compromisso.",
-    "button": "Criar a minha primeira memória",
+    "button": "Começar meu teste\ngratuito de 14 dias",
     "trust": "Registo gratuito • Sem cartão de crédito necessário • Os seus dados permanecem privados"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "subtitle": "<gold>Conte as suas memórias</gold><br></br> a quem você ama",
       "subtitle2": "Histórias, fotos, vídeos, voz.",
       "subtitle3": "Tudo o que importa, num só lugar.",
-      "cta": "Proteger as minhas memórias",
+      "cta": "Começar meu teste\ngratuito de 14 dias",
       "trust": {
         "private": "100% privado",
         "durable": "Armazenamento duradouro",
@@ -393,7 +393,7 @@
       "title": "Comece antes que",
       "titleHighlight": "a próxima memória se perca",
       "subtitle": "Crie a sua primeira memória em 1 minuto. Grátis, sem compromisso.",
-      "button": "Criar a minha primeira memória",
+      "button": "Começar meu teste\ngratuito de 14 dias",
       "trust": "Registo gratuito • Sem cartão de crédito • Os seus dados ficam privados"
     }
   },
@@ -403,7 +403,7 @@
       "title": "Proteja as memórias",
       "titleHighlight": "da sua família",
       "subtitle": "O Family Garden é um serviço online que reúne fotos, vídeos, vozes e relatos num diário de família privado, organizado, duradouro e transmissível.",
-      "ctaPrimary": "Começar teste grátis",
+      "ctaPrimary": "Começar meu teste\ngratuito de 14 dias",
       "ctaSecondary": "Ver como funciona",
       "trust1": "14 dias de teste grátis, sem compromisso",
       "trust2": "Hospedagem UE RGPD",
@@ -486,7 +486,7 @@
       "before": "Antes",
       "after": "Com o Family Garden",
       "ctaText": "Comece hoje: criar a sua primeira memória demora menos de 3 minutos.",
-      "cta": "Começar teste grátis",
+      "cta": "Começar meu teste\ngratuito de 14 dias",
       "ctaTrust": "14 dias de teste grátis · Hospedagem UE RGPD",
       "steps": {
         "s1": {

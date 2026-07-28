@@ -196,16 +196,16 @@ const PricingSection = () => {
             onClick={handleSubscribe}
             variant="hero"
             size="lg"
-            className="w-full"
+            className="w-full h-auto min-h-11"
             disabled={loading}
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="w-4 h-4 mr-2 animate-spin flex-shrink-0" />
                 Chargement...
               </>
             ) : (
-              'Commencer mes 14 jours d\'essai gratuit'
+              <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours\nd'essai gratuit"}</span>
             )}
           </Button>
 

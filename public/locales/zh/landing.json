@@ -111,7 +111,7 @@
     "loading": "加载中...",
     "error": "创建支付时出错",
     "cta": {
-      "free": "免费开始",
+      "free": "开始我的14天\n免费试用",
       "premium": "试用高级版",
       "heritage": "选择传承版"
     },
@@ -219,7 +219,7 @@
     "landingBadge": "寻找灵感",
     "landingTitle": "50个问题唤醒您的回忆",
     "landingSubtitle": "无需成为作家。我们的引导问题帮助您轻松讲述最美好的时刻。",
-    "landingCta": "免费开始"
+    "landingCta": "开始我的14天\n免费试用"
   },
   "productPreview": {
     "badge": "探索体验",
@@ -242,7 +242,7 @@
     "title": "您的回忆值得",
     "titleHighlight": "被保存",
     "subtitle": "今天开始：1分钟创建您的第一个回忆。免费，无承诺。",
-    "button": "创建我的第一个回忆",
+    "button": "开始我的14天\n免费试用",
     "trust": "免费注册 • 无需信用卡 • 数据保持私密"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "subtitle": "<gold>讲述您的回忆</gold><br></br>给您所爱的人",
       "subtitle2": "故事、照片、视频、声音。",
       "subtitle3": "所有珍贵的一切，汇于一处。",
-      "cta": "保护我的回忆",
+      "cta": "开始我的14天\n免费试用",
       "trust": {
         "private": "100%私密",
         "durable": "持久存储",
@@ -393,7 +393,7 @@
       "title": "在下一段回忆",
       "titleHighlight": "消逝之前开始",
       "subtitle": "1分钟创建您的第一个回忆。免费，无承诺。",
-      "button": "创建我的第一个回忆",
+      "button": "开始我的14天\n免费试用",
       "trust": "免费注册 • 无需信用卡 • 数据保持私密"
     }
   },
@@ -403,7 +403,7 @@
       "title": "守护回忆",
       "titleHighlight": "守护您家人的回忆",
       "subtitle": "Family Garden 是一项在线服务，将照片、视频、声音和故事汇聚于一本私密、有序、持久且可传承的家庭日记中。",
-      "ctaPrimary": "开始免费试用",
+      "ctaPrimary": "开始我的14天\n免费试用",
       "ctaSecondary": "了解运作方式",
       "trust1": "14天免费试用,无需承诺",
       "trust2": "欧盟 GDPR 托管",
@@ -486,7 +486,7 @@
       "before": "之前",
       "after": "使用 Family Garden",
       "ctaText": "今天开始:创建您的第一段回忆只需不到 3 分钟。",
-      "cta": "开始免费试用",
+      "cta": "开始我的14天\n免费试用",
       "ctaTrust": "14天免费试用 · 欧盟 GDPR 托管",
       "steps": {
         "s1": {

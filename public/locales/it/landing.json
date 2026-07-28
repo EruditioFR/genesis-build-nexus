@@ -111,7 +111,7 @@
     "loading": "Caricamento...",
     "error": "Errore nella creazione del pagamento",
     "cta": {
-      "free": "Inizia gratis",
+      "free": "Inizia la mia prova\ngratuita di 14 giorni",
       "premium": "Prova Premium",
       "heritage": "Scegli Heritage"
     },
@@ -219,7 +219,7 @@
     "landingBadge": "Trova ispirazione",
     "landingTitle": "50 domande per risvegliare i tuoi ricordi",
     "landingSubtitle": "Non serve essere scrittori. Le nostre domande guidate ti aiutano a raccontare i tuoi momenti più belli, semplicemente.",
-    "landingCta": "Inizia gratis"
+    "landingCta": "Inizia la mia prova\ngratuita di 14 giorni"
   },
   "productPreview": {
     "badge": "Scopri l'esperienza",
@@ -242,7 +242,7 @@
     "title": "I tuoi ricordi meritano",
     "titleHighlight": "di essere conservati",
     "subtitle": "Inizia oggi: crea il tuo primo ricordo in 1 minuto. Gratis, senza impegno.",
-    "button": "Crea il mio primo ricordo",
+    "button": "Inizia la mia prova\ngratuita di 14 giorni",
     "trust": "Registrazione gratuita • Nessuna carta di credito richiesta • I tuoi dati restano privati"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "subtitle": "<gold>Racconta i tuoi ricordi</gold><br></br> a chi ami",
       "subtitle2": "Storie, foto, video, voce.",
       "subtitle3": "Tutto ciò che conta, in un unico posto.",
-      "cta": "Proteggere i miei ricordi",
+      "cta": "Inizia la mia prova\ngratuita di 14 giorni",
       "trust": {
         "private": "100% privato",
         "durable": "Archiviazione duratura",
@@ -393,7 +393,7 @@
       "title": "Inizia prima che",
       "titleHighlight": "il prossimo ricordo si perda",
       "subtitle": "Crea il tuo primo ricordo in 1 minuto. Gratuito, senza impegno.",
-      "button": "Creare il mio primo ricordo",
+      "button": "Inizia la mia prova\ngratuita di 14 giorni",
       "trust": "Iscrizione gratuita • Nessuna carta di credito • I tuoi dati restano privati"
     }
   },
@@ -403,7 +403,7 @@
       "title": "Proteggi i ricordi",
       "titleHighlight": "della tua famiglia",
       "subtitle": "Family Garden è un servizio online che raccoglie foto, video, voci e racconti in un diario di famiglia privato, organizzato, duraturo e trasmissibile.",
-      "ctaPrimary": "Inizia la prova gratuita",
+      "ctaPrimary": "Inizia la mia prova\ngratuita di 14 giorni",
       "ctaSecondary": "Scopri come funziona",
       "trust1": "14 giorni di prova gratuita, nessun impegno",
       "trust2": "Hosting UE GDPR",
@@ -486,7 +486,7 @@
       "before": "Prima",
       "after": "Con Family Garden",
       "ctaText": "Inizia oggi: creare il tuo primo ricordo richiede meno di 3 minuti.",
-      "cta": "Inizia la prova gratuita",
+      "cta": "Inizia la mia prova\ngratuita di 14 giorni",
       "ctaTrust": "14 giorni di prova gratuita · Hosting UE GDPR",
       "steps": {
         "s1": {
