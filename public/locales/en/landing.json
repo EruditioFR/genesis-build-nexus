@@ -111,7 +111,7 @@
     "loading": "Loading...",
     "error": "Error creating payment",
     "cta": {
-      "free": "Get started free",
+      "free": "Start my 14-day\nfree trial",
       "premium": "Try Premium",
       "heritage": "Choose Heritage"
     },
@@ -219,7 +219,7 @@
     "landingBadge": "Find inspiration",
     "landingTitle": "50 questions to awaken your memories",
     "landingSubtitle": "No need to be a writer. Our guided questions help you tell your most beautiful moments, simply.",
-    "landingCta": "Get started free"
+    "landingCta": "Start my 14-day\nfree trial"
   },
   "productPreview": {
     "badge": "Discover the experience",
@@ -242,7 +242,7 @@
     "title": "Your memories deserve",
     "titleHighlight": "to be preserved",
     "subtitle": "Start today: create your first memory in 1 minute. Free, no commitment.",
-    "button": "Create my first memory",
+    "button": "Start my 14-day\nfree trial",
     "trust": "Free signup • No credit card required • Your data stays private"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "subtitle": "<gold>Share your memories</gold><br></br> with those you love",
       "subtitle2": "Stories, photos, videos, voice.",
       "subtitle3": "Everything that matters, in one place.",
-      "cta": "Protect my memories",
+      "cta": "Start my 14-day\nfree trial",
       "trust": {
         "private": "100% private",
         "durable": "Lasting storage",
@@ -394,7 +394,7 @@
       "titleMiddle": "before",
       "titleHighlight": "the next memory is lost",
       "subtitle": "Create your first memory\nin 1 minute.\nFree, no commitment.",
-      "button": "Create my first memory",
+      "button": "Start my 14-day\nfree trial",
       "trust": "Free signup • No credit card • Your data stays private"
     }
   },
@@ -404,7 +404,7 @@
       "title": "Protect the memories",
       "titleHighlight": "of your family",
       "subtitle": "Family Garden is an online service that brings photos, videos, voices and stories together in a private, organized, lasting and transmissible family journal.",
-      "ctaPrimary": "Start free trial",
+      "ctaPrimary": "Start my 14-day\nfree trial",
       "ctaSecondary": "See how it works",
       "trust1": "14-day free trial, no commitment",
       "trust2": "EU GDPR hosting",
@@ -487,7 +487,7 @@
       "before": "Before",
       "after": "With Family Garden",
       "ctaText": "Start today: creating your first memory takes less than 3 minutes.",
-      "cta": "Start free trial",
+      "cta": "Start my 14-day\nfree trial",
       "ctaTrust": "14-day free trial · EU GDPR hosting",
       "steps": {
         "s1": {
