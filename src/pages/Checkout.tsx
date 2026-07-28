@@ -70,8 +70,9 @@ const Checkout = () => {
     try {
       const { data, error } = await supabase.functions.invoke('create-guest-checkout', {
         body: {
-          tier: plan,
+          tier: 'essential',
           billing,
+          withFamilyTree: withTree,
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim().toLowerCase(),
