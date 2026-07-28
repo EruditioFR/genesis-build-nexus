@@ -403,9 +403,9 @@
       "title": "守护回忆",
       "titleHighlight": "守护您家人的回忆",
       "subtitle": "Family Garden 是一项在线服务，将照片、视频、声音和故事汇聚于一本私密、有序、持久且可传承的家庭日记中。",
-      "ctaPrimary": "创建我的免费空间",
+      "ctaPrimary": "开始免费试用",
       "ctaSecondary": "了解运作方式",
-      "trust1": "免费,无需信用卡",
+      "trust1": "14天免费试用,无需承诺",
       "trust2": "欧盟 GDPR 托管",
       "trust3": "无广告",
       "slidePrev": "上一个",
@@ -486,8 +486,8 @@
       "before": "之前",
       "after": "使用 Family Garden",
       "ctaText": "今天开始:创建您的第一段回忆只需不到 3 分钟。",
-      "cta": "创建我的免费空间",
-      "ctaTrust": "免费,无需信用卡 · 欧盟 GDPR 托管",
+      "cta": "开始免费试用",
+      "ctaTrust": "14天免费试用 · 欧盟 GDPR 托管",
       "steps": {
         "s1": {
           "beforeTitle": "今天:您的回忆散落各处",
