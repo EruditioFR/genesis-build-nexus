@@ -306,7 +306,7 @@ const About = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg">
                 <Link to="/signup">
-                  Créer mon compte gratuit
+                  Commencer mon essai gratuit de 14 jours
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
