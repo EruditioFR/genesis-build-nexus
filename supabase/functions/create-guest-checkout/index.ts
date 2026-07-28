@@ -6,15 +6,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SUBSCRIPTION_TIERS = {
-  premium: {
-    monthly: { price_id: "price_1TJui8Rc375UxOm00OZ6fLi5" },
-    yearly: { price_id: "price_1TNEO3Rc375UxOm0yGVRPGrd" },
-  },
-  heritage: {
-    monthly: { price_id: "price_1TJuimRc375UxOm0TUYpMlJa" },
-    yearly: { price_id: "price_1TNEORRc375UxOm07mgOMq3E" },
-  },
+const ESSENTIAL_PRICES = {
+  monthly: "price_1Ty7YvRc375UxOm0EkATcv4T",
+  yearly:  "price_1Ty7ZZRc375UxOm0ccwcYgF4",
+};
+const TREE_ADDON_PRICES = {
+  monthly: "price_1Ty7a5Rc375UxOm0ZXsmC8cQ",
+  yearly:  "price_1Ty7aURc375UxOm08FqBmOqg",
 };
 
 const logStep = (step: string, details?: any) => {
@@ -31,8 +29,8 @@ serve(async (req) => {
     logStep("Function started");
 
     const {
-      tier,
       billing = "monthly",
+      withFamilyTree = false,
       promoCode,
       firstName,
       lastName,
@@ -42,10 +40,6 @@ serve(async (req) => {
       locale,
     } = await req.json();
 
-    // Validation
-    if (!tier || !SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS]) {
-      throw new Error("Invalid subscription tier");
-    }
     if (!firstName || !lastName || !email) {
       throw new Error("Missing required fields: firstName, lastName, email");
     }
@@ -53,11 +47,9 @@ serve(async (req) => {
       throw new Error("Invalid email format");
     }
 
-    const tierConfig = SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS];
-    const billingPeriod = billing === "yearly" ? "yearly" : "monthly";
-    const selectedPrice = tierConfig[billingPeriod as keyof typeof tierConfig];
+    const billingPeriod: "monthly" | "yearly" = billing === "yearly" ? "yearly" : "monthly";
 
-    logStep("Selected tier", { tier, billing: billingPeriod, email });
+    logStep("Selected plan", { billing: billingPeriod, withFamilyTree, email });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
@@ -65,29 +57,38 @@ serve(async (req) => {
 
     const displayName = `${firstName} ${lastName}`.trim();
 
-    // Promo code "Mamie" -> 50% off
+    // Only "mamie" is preserved (50% off). Launch promos removed.
     let discounts: Array<{ coupon: string }> | undefined;
     if (promoCode && promoCode.toLowerCase() === "mamie") {
       discounts = [{ coupon: "TjuFD7gh" }];
       logStep("Promo code applied", { code: promoCode });
     }
-    // Auto-apply launch promos for monthly
-    if (tier === "premium" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "Brb2OIqJ" }];
-    }
-    if (tier === "heritage" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "btgCwbO1" }];
+
+    const line_items: Array<{ price: string; quantity: number }> = [
+      { price: ESSENTIAL_PRICES[billingPeriod], quantity: 1 },
+    ];
+    if (withFamilyTree) {
+      line_items.push({ price: TREE_ADDON_PRICES[billingPeriod], quantity: 1 });
     }
 
     const origin = req.headers.get("origin") || "https://familygarden.fr";
 
     const session = await stripe.checkout.sessions.create({
       customer_email: email,
-      line_items: [{ price: selectedPrice.price_id, quantity: 1 }],
+      line_items,
       mode: "subscription",
       ...(discounts ? { discounts } : { allow_promotion_codes: true }),
+      subscription_data: {
+        trial_period_days: 14,
+        metadata: {
+          guest_signup: "true",
+          tier: "essential",
+          billing: billingPeriod,
+          has_family_tree_addon: withFamilyTree ? "true" : "false",
+        },
+      },
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/checkout?plan=${tier}&canceled=true`,
+      cancel_url: `${origin}/checkout?canceled=true`,
       metadata: {
         guest_signup: "true",
         first_name: firstName,
@@ -96,15 +97,9 @@ serve(async (req) => {
         country: country || "",
         city: city || "",
         locale: locale || "fr",
-        tier,
+        tier: "essential",
         billing: billingPeriod,
-      },
-      subscription_data: {
-        metadata: {
-          guest_signup: "true",
-          tier,
-          billing: billingPeriod,
-        },
+        has_family_tree_addon: withFamilyTree ? "true" : "false",
       },
     });
 
