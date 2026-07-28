@@ -54,8 +54,31 @@ const FREE_LIMITS: FeatureLimits = {
   planNameFr: 'Gratuit',
 };
 
+// New default paid plan (2,99€/mo)
+const ESSENTIAL_LIMITS: FeatureLimits = {
+  storageLimit: 20480, // 20 Go
+  canCreateTextCapsule: true,
+  canCreatePhotoCapsule: true,
+  canCreateVideoCapsule: true,
+  canCreateAudioCapsule: true,
+  canCreateMixedCapsule: true,
+  canAccessFamilyTree: false, // add-on required
+  maxFamilyTreePersons: 0,
+  maxCircles: -1,
+  maxMembersPerCircle: -1,
+  canShareUnlimited: true,
+  canAccessTimeline: true,
+  canAccessLegacyCapsules: true,
+  canAccessPodcast: true,
+  hasVIPSupport: false,
+  hasAds: false,
+  planName: 'essential',
+  planNameFr: 'Essentiel',
+};
+
+// Grandfathered Premium (4,99€) — kept unchanged
 const PREMIUM_LIMITS: FeatureLimits = {
-  storageLimit: 10240, // 10 GB
+  storageLimit: 10240,
   canCreateTextCapsule: true,
   canCreatePhotoCapsule: true,
   canCreateVideoCapsule: true,
@@ -75,17 +98,18 @@ const PREMIUM_LIMITS: FeatureLimits = {
   planNameFr: 'Premium',
 };
 
+// Grandfathered Heritage (9,99€) — kept unchanged, includes family tree
 const HERITAGE_LIMITS: FeatureLimits = {
-  storageLimit: 20480, // 20 GB
+  storageLimit: 20480,
   canCreateTextCapsule: true,
   canCreatePhotoCapsule: true,
   canCreateVideoCapsule: true,
   canCreateAudioCapsule: true,
   canCreateMixedCapsule: true,
   canAccessFamilyTree: true,
-  maxFamilyTreePersons: -1, // unlimited
-  maxCircles: -1, // unlimited
-  maxMembersPerCircle: -1, // unlimited
+  maxFamilyTreePersons: -1,
+  maxCircles: -1,
+  maxMembersPerCircle: -1,
   canShareUnlimited: true,
   canAccessTimeline: true,
   canAccessLegacyCapsules: true,
@@ -99,18 +123,31 @@ const HERITAGE_LIMITS: FeatureLimits = {
 export type CapsuleTypeKey = 'text' | 'photo' | 'video' | 'audio' | 'mixed';
 
 export const useFeatureAccess = () => {
-  const { tier, subscribed, loading } = useSubscription();
+  const { tier, subscribed, loading, hasFamilyTreeAddon, trialing } = useSubscription();
 
   const limits = useMemo((): FeatureLimits => {
+    let base: FeatureLimits;
     switch (tier) {
       case 'heritage':
-        return HERITAGE_LIMITS;
+        base = HERITAGE_LIMITS;
+        break;
       case 'premium':
-        return PREMIUM_LIMITS;
+        base = PREMIUM_LIMITS;
+        break;
+      case 'essential':
+        base = ESSENTIAL_LIMITS;
+        break;
       default:
-        return FREE_LIMITS;
+        base = FREE_LIMITS;
     }
-  }, [tier]);
+    // Derived: family tree access when add-on is active or grandfathered heritage
+    const treeAccess = base.canAccessFamilyTree || Boolean(hasFamilyTreeAddon);
+    return {
+      ...base,
+      canAccessFamilyTree: treeAccess,
+      maxFamilyTreePersons: treeAccess ? -1 : 0,
+    };
+  }, [tier, hasFamilyTreeAddon]);
 
   const canCreateCapsuleType = (type: CapsuleTypeKey): boolean => {
     switch (type) {
@@ -129,31 +166,23 @@ export const useFeatureAccess = () => {
     }
   };
 
-  const getUpgradePathForFeature = (feature: keyof FeatureLimits): 'premium' | 'heritage' | null => {
-    // If user already has heritage, no upgrade needed
-    if (tier === 'heritage') return null;
-
-    // Features requiring heritage
-    const heritageOnlyFeatures: (keyof FeatureLimits)[] = [
-      'canAccessFamilyTree',
-      'canAccessPodcast',
-      'hasVIPSupport',
-    ];
-
-    if (heritageOnlyFeatures.includes(feature)) {
-      return 'heritage';
+  const getUpgradePathForFeature = (feature: keyof FeatureLimits): 'essential' | 'family_tree_addon' | null => {
+    // Family tree: always needs the add-on (unless grandfathered heritage)
+    if (feature === 'canAccessFamilyTree') {
+      return limits.canAccessFamilyTree ? null : 'family_tree_addon';
     }
 
-    // Features available in premium
-    const premiumFeatures: (keyof FeatureLimits)[] = [
+    // Everything else is included in Essentiel
+    const essentialFeatures: (keyof FeatureLimits)[] = [
       'canCreateVideoCapsule',
       'canCreateAudioCapsule',
       'canCreateMixedCapsule',
       'canAccessLegacyCapsules',
+      'canAccessPodcast',
     ];
 
-    if (premiumFeatures.includes(feature) && tier === 'free') {
-      return 'premium';
+    if (essentialFeatures.includes(feature) && tier === 'free') {
+      return 'essential';
     }
 
     return null;
@@ -161,34 +190,38 @@ export const useFeatureAccess = () => {
 
   const getFeatureBlockedMessage = (feature: keyof FeatureLimits): string => {
     const upgradePath = getUpgradePathForFeature(feature);
-    
     if (!upgradePath) return '';
 
+    if (upgradePath === 'family_tree_addon') {
+      return "L'arbre généalogique est disponible en option à 5 €/mois.";
+    }
+
     const featureMessages: Record<string, string> = {
-      canCreateVideoCapsule: 'Les capsules vidéo sont disponibles avec le forfait Premium.',
-      canCreateAudioCapsule: 'Les capsules audio sont disponibles avec le forfait Premium.',
-      canCreateMixedCapsule: 'Les capsules mixtes sont disponibles avec le forfait Premium.',
-      canAccessFamilyTree: 'L\'arbre généalogique est disponible avec le forfait Héritage.',
-      canAccessPodcast: 'Le podcast de vos souvenirs est disponible avec le forfait Héritage.',
-      hasVIPSupport: 'Le support VIP WhatsApp est disponible avec le forfait Héritage.',
-      
-      canAccessLegacyCapsules: 'Les capsules testament sont disponibles avec le forfait Premium.',
+      canCreateVideoCapsule: 'Les souvenirs vidéo sont disponibles avec l\'abonnement Essentiel (2,99 €/mois).',
+      canCreateAudioCapsule: 'Les souvenirs audio sont disponibles avec l\'abonnement Essentiel (2,99 €/mois).',
+      canCreateMixedCapsule: 'Les souvenirs mixtes sont disponibles avec l\'abonnement Essentiel (2,99 €/mois).',
+      canAccessLegacyCapsules: 'Les souvenirs testament sont disponibles avec l\'abonnement Essentiel (2,99 €/mois).',
+      canAccessPodcast: 'Le podcast de vos souvenirs est disponible avec l\'abonnement Essentiel (2,99 €/mois).',
     };
 
-    return featureMessages[feature] || `Cette fonctionnalité nécessite le forfait ${upgradePath === 'heritage' ? 'Héritage' : 'Premium'}.`;
+    return featureMessages[feature] || 'Cette fonctionnalité nécessite l\'abonnement Essentiel (2,99 €/mois).';
   };
 
   return {
     tier,
     subscribed,
     loading,
+    hasFamilyTreeAddon,
+    trialing,
     limits,
     canCreateCapsuleType,
     getUpgradePathForFeature,
     getFeatureBlockedMessage,
-    isPremiumOrHigher: tier === 'premium' || tier === 'heritage',
+    isPremiumOrHigher: tier === 'essential' || tier === 'premium' || tier === 'heritage',
+    isEssential: tier === 'essential',
     isHeritage: tier === 'heritage',
     isFree: tier === 'free',
+    isGrandfathered: tier === 'premium' || tier === 'heritage',
   };
 };
 
