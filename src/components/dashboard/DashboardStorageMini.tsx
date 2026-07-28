@@ -7,7 +7,7 @@ import storageCover from '@/assets/dashboard/storage-cover.jpg';
 interface DashboardStorageMiniProps {
   usedMb: number;
   limitMb: number;
-  subscriptionLevel: 'free' | 'premium' | 'legacy';
+  subscriptionLevel: 'free' | 'essential' | 'premium' | 'legacy';
 }
 
 const DashboardStorageMini = ({

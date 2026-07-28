@@ -10,11 +10,11 @@ import { cn } from '@/lib/utils';
 interface StorageProgressProps {
   usedMb: number;
   limitMb: number;
-  subscriptionLevel: 'free' | 'premium' | 'legacy';
+  subscriptionLevel: 'free' | 'essential' | 'premium' | 'legacy';
 }
 
 interface PlanInfo {
-  id: 'free' | 'premium' | 'legacy';
+  id: 'free' | 'essential' | 'premium' | 'legacy';
   name: string;
   storageMb: number;
   storageLabel: string;

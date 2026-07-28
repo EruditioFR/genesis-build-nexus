@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Check, X, Crown, Sparkles, Loader2, Shield, Zap, Users, HardDrive, Building2, TreePine, Mic, Tag } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Check, Crown, Sparkles, Loader2, Shield, Zap, Users, HardDrive, TreePine, Mic, Tag, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { toast } from 'sonner';
@@ -12,97 +13,95 @@ import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import SEOHead from '@/components/seo/SEOHead';
 import { createBreadcrumbSchema } from '@/lib/seoSchemas';
 
+const ESSENTIAL_MONTHLY = 2.99;
+const ESSENTIAL_YEARLY = 29.90;
+const ADDON_MONTHLY = 5;
+const ADDON_YEARLY = 50;
+
 const Premium = () => {
   const { user } = useAuth();
-  const { createCheckout, tier: currentTier, checkSubscription } = useSubscription();
+  const {
+    createCheckout,
+    tier: currentTier,
+    hasFamilyTreeAddon,
+    trialing,
+    trialEndsAt,
+    checkSubscription,
+  } = useSubscription();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState<'premium' | 'heritage' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isYearly, setIsYearly] = useState(false);
+  const [withTree, setWithTree] = useState(hasFamilyTreeAddon);
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
-  
-  // Determine which plan to highlight based on URL parameter
-  const requestedTier = searchParams.get('tier');
-  const highlightHeritage = requestedTier === 'heritage';
 
   useEffect(() => {
-    if (user) {
-      void checkSubscription(true);
-    }
+    if (user) void checkSubscription(true);
   }, [user, checkSubscription]);
 
-  const handleSubscribe = async (selectedTier: 'premium' | 'heritage') => {
-    // Guest (not logged in) → simplified checkout flow
+  useEffect(() => {
+    setWithTree(hasFamilyTreeAddon);
+  }, [hasFamilyTreeAddon]);
+
+  const isGrandfathered = currentTier === 'premium' || currentTier === 'heritage';
+  const isEssential = currentTier === 'essential';
+
+  const basePrice = isYearly ? ESSENTIAL_YEARLY : ESSENTIAL_MONTHLY;
+  const addonPrice = isYearly ? ADDON_YEARLY : ADDON_MONTHLY;
+  const total = basePrice + (withTree ? addonPrice : 0);
+  const period = isYearly ? 'an' : 'mois';
+
+  const handleSubscribe = async () => {
     if (!user) {
       const billing = isYearly ? 'yearly' : 'monthly';
-      navigate(`/checkout?plan=${selectedTier}&billing=${billing}`);
+      navigate(`/checkout?plan=essential&billing=${billing}&tree=${withTree ? '1' : '0'}`);
       return;
     }
-
-    const isUpgradeToHeritage = currentTier === 'premium' && selectedTier === 'heritage';
-    if (isUpgradeToHeritage) {
-      const confirmed = window.confirm(
-        'Le passage à Héritage active le nouveau forfait immédiatement. Un ajustement au prorata peut être facturé pour la période en cours. Voulez-vous continuer ?'
-      );
-      if (!confirmed) return;
-    }
-
-    setIsLoading(selectedTier);
+    setIsLoading(true);
     try {
       const billing = isYearly ? 'yearly' : 'monthly';
-      await createCheckout(selectedTier, billing, promoApplied ? promoCode : undefined);
+      await createCheckout({
+        billing,
+        withFamilyTree: withTree,
+        promoCode: promoApplied ? promoCode : undefined,
+      });
     } catch (error: any) {
       toast.error(error.message || 'Erreur lors de la création du paiement');
     } finally {
-      setIsLoading(null);
+      setIsLoading(false);
     }
   };
 
-  const premiumFeatures = [
-    { feature: '10 Go de stockage', value: true, icon: HardDrive },
-    { feature: 'Souvenirs au format texte, photo, vidéo et audio', value: true, icon: Sparkles },
-    { feature: 'Partages illimités', value: true, icon: Users },
-    { feature: 'Chronologie avancée', value: true, icon: Zap },
-    { feature: 'Sans publicité', value: true, icon: Shield },
+  const features = [
+    { feature: '20 Go de stockage sécurisé', icon: HardDrive },
+    { feature: 'Souvenirs illimités (texte, photo, vidéo, audio)', icon: Sparkles },
+    { feature: 'Cercles de partage illimités', icon: Users },
+    { feature: 'Chronologie interactive avancée', icon: Zap },
+    { feature: 'Souvenirs testament (legs posthume)', icon: Shield },
+    { feature: 'Podcast IA de vos souvenirs', icon: Mic },
+    { feature: 'Sans publicité', icon: Shield },
   ];
-
-  const heritageFeatures = [
-    { feature: '20 Go de stockage', value: true, icon: HardDrive },
-    { feature: 'Souvenirs au format texte, photo, vidéo et audio', value: true, icon: Sparkles },
-    { feature: 'Partages illimités', value: true, icon: Users },
-    { feature: 'Chronologie avancée', value: true, icon: Zap },
-    { feature: 'Arbre généalogique interactif', value: true, icon: TreePine },
-    { feature: 'Création d\'un podcast à partir de vos souvenirs', value: true, icon: Mic },
-    { feature: 'Support VIP via WhatsApp', value: true, icon: Crown },
-    { feature: 'Sans publicité', value: true, icon: Shield },
-  ];
-
-  const isPremium = currentTier === 'premium';
-  const isHeritage = currentTier === 'heritage';
 
   return (
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <SEOHead
-        title="Tarifs : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
-        description="Choisissez votre forfait Family Garden pour préserver vos souvenirs et votre arbre généalogique : Gratuit, Premium (9€/mois) ou Héritage (15€/mois). Hébergement français RGPD."
+        title="Tarifs Family Garden : 2,99 €/mois pour préserver vos souvenirs"
+        description="Un tarif unique et transparent : 2,99 €/mois pour tous vos souvenirs et 20 Go de stockage. Option Arbre généalogique à 5 €/mois. 14 jours d'essai gratuit."
         jsonLd={createBreadcrumbSchema([
-          { name: "Accueil", url: "/" },
-          { name: "Tarifs", url: "/premium" },
+          { name: 'Accueil', url: '/' },
+          { name: 'Tarifs', url: '/premium' },
         ])}
       />
-      {/* Header */}
+
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to={user ? '/dashboard' : '/'}>
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Retour
-                </Link>
-              </Button>
-            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to={user ? '/dashboard' : '/'}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Retour
+              </Link>
+            </Button>
             {!user && (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" asChild>
@@ -117,45 +116,71 @@ const Premium = () => {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-gold shadow-gold mb-6">
             <Crown className="w-10 h-10 text-primary-foreground" />
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-            Choisissez votre <span className="text-secondary">forfait</span>
+            Un tarif unique et <span className="text-secondary">transparent</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Débloquez tout le potentiel de FamilyGarden et préservez vos souvenirs sans limite.
+            Toutes les fonctionnalités de Family Garden pour 2,99 €/mois. 14 jours d'essai gratuit, sans engagement.
           </p>
         </motion.div>
 
-        {/* Billing Toggle */}
+        {/* Trial banner */}
+        {trialing && trialEndsAt && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 rounded-xl border border-secondary/40 bg-secondary/5 p-4 flex items-center gap-3"
+          >
+            <Gift className="w-5 h-5 text-secondary shrink-0" />
+            <p className="text-sm text-foreground">
+              Votre essai gratuit se termine le{' '}
+              <strong>{new Date(trialEndsAt).toLocaleDateString('fr-FR')}</strong>. Abonnez-vous pour continuer à profiter de Family Garden.
+            </p>
+          </motion.div>
+        )}
+
+        {/* Grandfathered banner */}
+        {isGrandfathered && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 rounded-xl border border-primary/30 bg-primary/5 p-4 flex items-center gap-3"
+          >
+            <Crown className="w-5 h-5 text-primary shrink-0" />
+            <p className="text-sm text-foreground">
+              Vous bénéficiez de votre ancien forfait <strong>{currentTier === 'heritage' ? 'Héritage' : 'Premium'}</strong> à son tarif d'origine. Aucun changement n'est nécessaire.
+            </p>
+          </motion.div>
+        )}
+
+        {/* Billing toggle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center justify-center gap-4 mb-10"
+          className="flex items-center justify-center gap-4 mb-8"
         >
           <span className={`text-sm font-medium ${!isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
             Mensuel
           </span>
           <button
             onClick={() => setIsYearly(!isYearly)}
-            className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${
-              isYearly ? 'bg-secondary' : 'bg-muted'
-            }`}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isYearly ? 'bg-secondary' : 'bg-muted'}`}
+            aria-label="Basculer entre mensuel et annuel"
           >
             <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${
-                isYearly ? 'translate-x-6' : 'translate-x-0'
-              }`}
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform duration-300 ${isYearly ? 'translate-x-6' : 'translate-x-0'}`}
             />
           </button>
           <span className={`text-sm font-medium ${isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -163,17 +188,17 @@ const Premium = () => {
           </span>
           {isYearly && (
             <Badge variant="outline" className="border-secondary text-secondary">
-              2 mois gratuits
+              2 mois offerts
             </Badge>
           )}
         </motion.div>
 
-        {/* Promo Code */}
+        {/* Promo code */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex items-center justify-center gap-3 mb-10"
+          className="flex items-center justify-center gap-3 mb-8"
         >
           <div className="relative flex items-center gap-2">
             <Tag className="w-4 h-4 text-muted-foreground" />
@@ -190,9 +215,9 @@ const Premium = () => {
               variant="outline"
               size="sm"
               onClick={() => {
-                if (promoCode.toLowerCase() === 'mamie') {
+                if (promoCode.trim().toLowerCase() === 'mamie') {
                   setPromoApplied(true);
-                  toast.success('Code promo "Mamie" appliqué : -50% !');
+                  toast.success('Code promo "Mamie" appliqué');
                 } else {
                   setPromoApplied(false);
                   toast.error('Code promo invalide');
@@ -205,243 +230,141 @@ const Premium = () => {
           </div>
           {promoApplied && (
             <Badge variant="outline" className="border-secondary text-secondary">
-              -50%
+              Code appliqué
             </Badge>
           )}
         </motion.div>
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 mb-12">
-          {/* Premium Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className={`relative rounded-3xl p-8 shadow-elevated ${
-              highlightHeritage 
-                ? 'bg-card border border-border' 
-                : 'bg-primary text-primary-foreground'
-            }`}
-          >
-            {!highlightHeritage && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-secondary text-secondary-foreground">
-                  Le plus populaire
-                </Badge>
-              </div>
+
+        {/* Main plan card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative rounded-3xl p-8 shadow-elevated bg-card border-2 border-primary/20"
+        >
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+            <Badge className="bg-secondary text-secondary-foreground">
+              Essentiel — Tout inclus
+            </Badge>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 bg-primary/10">
+              <Sparkles className="w-7 h-7 text-primary" />
+            </div>
+            <h2 className="text-2xl font-display font-bold text-foreground mb-2">
+              Family Garden Essentiel
+            </h2>
+            <p className="text-muted-foreground">
+              Tout ce qu'il vous faut pour préserver l'histoire de votre famille.
+            </p>
+          </div>
+
+          <div className="text-center mb-8">
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="text-5xl font-display font-bold text-foreground">
+                {basePrice.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-muted-foreground">/{period}</span>
+            </div>
+            {isYearly && (
+              <p className="text-sm text-muted-foreground mt-1">
+                soit 2,49 €/mois — 2 mois offerts
+              </p>
             )}
-            
-            <div className="text-center mb-6">
-              <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
-                highlightHeritage ? 'bg-secondary/15' : 'bg-primary-foreground/10'
-              }`}>
-                <Sparkles className={`w-7 h-7 ${highlightHeritage ? 'text-secondary' : 'text-secondary'}`} />
+            <p className="text-xs text-muted-foreground mt-2">
+              14 jours d'essai gratuit — sans engagement
+            </p>
+          </div>
+
+          <ul className="space-y-3 mb-8 max-w-md mx-auto">
+            {features.map((item) => (
+              <li key={item.feature} className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-secondary flex-shrink-0" />
+                <span className="text-sm text-foreground">{item.feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Family tree add-on */}
+          <div className="rounded-2xl border border-border bg-muted/30 p-5 mb-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                  <TreePine className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-display font-semibold text-foreground">
+                    Arbre généalogique interactif
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Reliez vos souvenirs à vos ancêtres. Option facultative à{' '}
+                    <strong>{addonPrice.toFixed(2).replace('.', ',')} €/{period}</strong>.
+                  </p>
+                </div>
               </div>
-              <h2 className={`text-2xl font-display font-bold mb-2 ${
-                highlightHeritage ? 'text-foreground' : 'text-primary-foreground'
-              }`}>
-                Premium
-              </h2>
-              <p className={highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/70'}>
-                Pour les créateurs réguliers
+              <Switch
+                checked={withTree}
+                onCheckedChange={setWithTree}
+                aria-label="Activer l'option arbre généalogique"
+              />
+            </div>
+          </div>
+
+          {/* Total */}
+          <div className="flex items-baseline justify-between mb-6 pb-6 border-b border-border">
+            <span className="text-sm text-muted-foreground">Total</span>
+            <div className="text-right">
+              <span className="text-3xl font-display font-bold text-foreground">
+                {total.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-sm text-muted-foreground">/{period}</span>
+            </div>
+          </div>
+
+          {isEssential && withTree === hasFamilyTreeAddon ? (
+            <div className="text-center p-4 rounded-xl bg-muted">
+              <Check className="w-8 h-8 text-secondary mx-auto mb-2" />
+              <p className="font-medium text-foreground">Votre forfait actuel</p>
+            </div>
+          ) : isGrandfathered ? (
+            <div className="text-center p-4 rounded-xl bg-muted">
+              <p className="text-sm text-muted-foreground">
+                Vous êtes déjà abonné à un forfait historique.
               </p>
             </div>
-
-            <div className="text-center mb-6">
-              {/* Launch promo badge for monthly */}
-              {!isYearly && (
-                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
-                  highlightHeritage ? 'bg-accent/10 text-accent' : 'bg-secondary/20 text-secondary'
-                }`}>
-                  🔥 Offre de lancement : -50% pendant 3 mois
-                </div>
-              )}
-              <div className="flex items-baseline justify-center gap-1">
-                <span className={`text-5xl font-display font-bold ${
-                  highlightHeritage ? 'text-foreground' : 'text-primary-foreground'
-                }`}>
-                  {promoApplied ? (
-                    <>{isYearly ? <><s className="text-3xl opacity-50">50€</s> 25</> : <><s className="text-3xl opacity-50">9€</s> 4,50</>}€</>
-                  ) : (
-                    <>
-                      {isYearly ? '50' : (
-                        <><s className="text-3xl opacity-50">9€</s> 5</>
-                      )}€
-                    </>
-                  )}
-                </span>
-                <span className={highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/70'}>
-                  /{isYearly ? 'an' : 'mois'}
-                </span>
-              </div>
-              {isYearly ? (
-                <p className={`text-sm mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
-                  soit 4,17€/mois
-                </p>
+          ) : (
+            <Button
+              onClick={handleSubscribe}
+              variant="hero"
+              size="lg"
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Chargement...
+                </>
               ) : (
-                <p className={`text-xs mt-1 ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/60'}`}>
-                  puis 9€/mois après 3 mois
-                </p>
+                <>
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  {isEssential ? (withTree ? 'Activer l\'arbre généalogique' : 'Désactiver l\'arbre généalogique') : 'Commencer l\'essai gratuit de 14 jours'}
+                </>
               )}
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {premiumFeatures.map((item) => (
-                <li key={item.feature} className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
-                  <span className={`text-sm ${highlightHeritage ? 'text-muted-foreground' : 'text-primary-foreground/90'}`}>
-                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            {isPremium || isHeritage ? (
-              <div className={`text-center p-4 rounded-xl ${highlightHeritage ? 'bg-muted' : 'bg-primary-foreground/10'}`}>
-                <Check className="w-8 h-8 text-secondary mx-auto mb-2" />
-                <p className="font-medium">
-                  {isHeritage ? 'Vous avez Héritage' : 'Votre forfait actuel'}
-                </p>
-              </div>
-            ) : (
-              <Button
-                onClick={() => handleSubscribe('premium')}
-                variant={highlightHeritage ? 'secondary' : 'hero'}
-                size="lg"
-                className="w-full"
-                disabled={isLoading !== null}
-              >
-                {isLoading === 'premium' ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Chargement...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Choisir Premium
-                  </>
-                )}
-              </Button>
-            )}
-          </motion.div>
-
-          {/* Heritage Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className={`relative rounded-3xl p-8 shadow-elevated ${
-              highlightHeritage 
-                ? 'bg-primary text-primary-foreground' 
-                : 'bg-card border border-border'
-            }`}
-          >
-            {highlightHeritage && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-secondary text-secondary-foreground">
-                  Recommandé pour vous
-                </Badge>
-              </div>
-            )}
-            
-            <div className="text-center mb-6">
-              <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
-                highlightHeritage ? 'bg-primary-foreground/10' : 'bg-primary/15'
-              }`}>
-                <Building2 className={`w-7 h-7 ${highlightHeritage ? 'text-secondary' : 'text-primary'}`} />
-              </div>
-              <h2 className={`text-2xl font-display font-bold mb-2 ${
-                highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
-              }`}>
-                Héritage
-              </h2>
-              <p className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
-                Pour les familles multigénérationnelles
-              </p>
-            </div>
-
-            <div className="text-center mb-6">
-              {!isYearly && (
-                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
-                  highlightHeritage ? 'bg-secondary/20 text-secondary' : 'bg-accent/10 text-accent'
-                }`}>
-                  🔥 Offre de lancement : 9€/mois pendant 3 mois
-                </div>
-              )}
-              <div className="flex items-baseline justify-center gap-1">
-                <span className={`text-5xl font-display font-bold ${
-                  highlightHeritage ? 'text-primary-foreground' : 'text-foreground'
-                }`}>
-                  {promoApplied ? (
-                    <>{isYearly ? <><s className="text-3xl opacity-50">99€</s> 49,50</> : <><s className="text-3xl opacity-50">15€</s> 7,50</>}€</>
-                  ) : (
-                    <>{isYearly ? '99' : '9'}€</>
-                  )}
-                </span>
-                <span className={highlightHeritage ? 'text-primary-foreground/70' : 'text-muted-foreground'}>
-                  /{isYearly ? 'an' : 'mois'}
-                </span>
-              </div>
-              {isYearly ? (
-                <p className={`text-sm mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                  soit 8,25€/mois
-                </p>
-              ) : (
-                <p className={`text-xs mt-1 ${highlightHeritage ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                  puis 15€/mois après 3 mois
-                </p>
-              )}
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {heritageFeatures.map((item) => (
-                <li key={item.feature} className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-secondary flex-shrink-0" />
-                  <span className={`text-sm ${highlightHeritage ? 'text-primary-foreground/90' : 'text-muted-foreground'}`}>
-                    {item.feature}{typeof item.value === 'boolean' ? '' : `: ${item.value}`}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            {isHeritage ? (
-              <div className={`text-center p-4 rounded-xl ${highlightHeritage ? 'bg-primary-foreground/10' : 'bg-muted'}`}>
-                <Check className="w-8 h-8 text-secondary mx-auto mb-2" />
-                <p className="font-medium">Votre forfait actuel</p>
-              </div>
-            ) : (
-              <Button
-                onClick={() => handleSubscribe('heritage')}
-                variant={highlightHeritage ? 'hero' : 'default'}
-                size="lg"
-                className="w-full"
-                disabled={isLoading !== null}
-              >
-                {isLoading === 'heritage' ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Chargement...
-                  </>
-                ) : (
-                  <>
-                    <Building2 className="w-4 h-4 mr-2" />
-                    Choisir Héritage
-                  </>
-                )}
-              </Button>
-            )}
-          </motion.div>
-        </div>
+            </Button>
+          )}
+        </motion.div>
 
         {/* Guarantee */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-center"
+          className="text-center mt-8"
         >
           <p className="text-sm text-muted-foreground">
-            🛡️ Garantie satisfait ou remboursé pendant 14 jours • Annulation à tout moment
+            🛡️ 14 jours d'essai gratuit • Annulation à tout moment • Paiement sécurisé Stripe
           </p>
         </motion.div>
       </main>

@@ -13,32 +13,27 @@ import SEOHead from '@/components/seo/SEOHead';
 import NoIndex from '@/components/seo/NoIndex';
 import { useTranslation } from 'react-i18next';
 
-type Plan = 'premium' | 'heritage';
-
-const planMeta: Record<Plan, { label: string; price: string; sublabel: string; icon: any }> = {
-  premium: {
-    label: 'Premium',
-    price: '5€/mois',
-    sublabel: 'puis 9€/mois après 3 mois',
-    icon: Sparkles,
-  },
-  heritage: {
-    label: 'Héritage',
-    price: '9€/mois',
-    sublabel: 'puis 15€/mois après 3 mois',
-    icon: Building2,
-  },
-};
-
 const Checkout = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
-  const planParam = (searchParams.get('plan') || 'premium') as Plan;
-  const plan: Plan = planParam === 'heritage' ? 'heritage' : 'premium';
   const billing = (searchParams.get('billing') || 'monthly') === 'yearly' ? 'yearly' : 'monthly';
+  const withTree = searchParams.get('tree') === '1';
   const canceled = searchParams.get('canceled') === 'true';
+
+  const base = billing === 'yearly' ? 29.90 : 2.99;
+  const addon = withTree ? (billing === 'yearly' ? 50 : 5) : 0;
+  const total = base + addon;
+  const period = billing === 'yearly' ? 'an' : 'mois';
+
+  const meta = {
+    label: withTree ? 'Essentiel + Arbre généalogique' : 'Essentiel',
+    price: `${total.toFixed(2).replace('.', ',')} €/${period}`,
+    sublabel: '14 jours d\'essai gratuit, sans engagement',
+    icon: withTree ? Building2 : Sparkles,
+  };
+  const Icon = meta.icon;
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -48,8 +43,7 @@ const Checkout = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const meta = planMeta[plan];
-  const Icon = meta.icon;
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,8 +70,9 @@ const Checkout = () => {
     try {
       const { data, error } = await supabase.functions.invoke('create-guest-checkout', {
         body: {
-          tier: plan,
+          tier: 'essential',
           billing,
+          withFamilyTree: withTree,
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim().toLowerCase(),

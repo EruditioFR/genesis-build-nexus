@@ -15,11 +15,16 @@ export interface Invoice {
   hosted_invoice_url: string | null;
 }
 
+export type SubscriptionTier = 'free' | 'essential' | 'premium' | 'heritage';
+
 interface SubscriptionState {
   subscribed: boolean;
-  tier: 'free' | 'premium' | 'heritage';
+  tier: SubscriptionTier;
   subscriptionEnd: string | null;
   subscriptionStart: string | null;
+  hasFamilyTreeAddon: boolean;
+  trialing: boolean;
+  trialEndsAt: string | null;
   promoActive: boolean;
   promoEnd: string | null;
   loading: boolean;
@@ -29,9 +34,12 @@ interface SubscriptionState {
 
 interface CachedSubscription {
   subscribed: boolean;
-  tier: 'free' | 'premium' | 'heritage';
+  tier: SubscriptionTier;
   subscriptionEnd: string | null;
   subscriptionStart: string | null;
+  hasFamilyTreeAddon: boolean;
+  trialing: boolean;
+  trialEndsAt: string | null;
   promoActive: boolean;
   promoEnd: string | null;
   timestamp: number;
@@ -62,34 +70,26 @@ export const invalidateSubscriptionCache = () => {
   localStorage.removeItem(CACHE_KEY);
 };
 
+const DEFAULT_STATE: Omit<SubscriptionState, 'loading' | 'error' | 'adminOverride'> = {
+  subscribed: false,
+  tier: 'free',
+  subscriptionEnd: null,
+  subscriptionStart: null,
+  hasFamilyTreeAddon: false,
+  trialing: false,
+  trialEndsAt: null,
+  promoActive: false,
+  promoEnd: null,
+};
+
 export const useSubscription = () => {
   const { user } = useAuth();
   const [state, setState] = useState<SubscriptionState>(() => {
     const cached = getCache();
     if (cached) {
-      return {
-        subscribed: cached.subscribed,
-        tier: cached.tier,
-        subscriptionEnd: cached.subscriptionEnd,
-        subscriptionStart: cached.subscriptionStart ?? null,
-        promoActive: cached.promoActive ?? false,
-        promoEnd: cached.promoEnd ?? null,
-        loading: false,
-        error: null,
-        adminOverride: false,
-      };
+      return { ...cached, loading: false, error: null, adminOverride: false };
     }
-    return {
-      subscribed: false,
-      tier: 'free',
-      subscriptionEnd: null,
-      subscriptionStart: null,
-      promoActive: false,
-      promoEnd: null,
-      loading: true,
-      error: null,
-      adminOverride: false,
-    };
+    return { ...DEFAULT_STATE, loading: true, error: null, adminOverride: false };
   });
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoicesLoading, setInvoicesLoading] = useState(false);
@@ -97,16 +97,15 @@ export const useSubscription = () => {
 
   const checkSubscription = useCallback(async (force = false) => {
     if (!user) {
-      setState(prev => ({ ...prev, loading: false, subscribed: false, tier: 'free', adminOverride: false }));
+      setState(prev => ({ ...prev, ...DEFAULT_STATE, loading: false, adminOverride: false }));
       initialCheckDone.current = true;
       return;
     }
 
-    // Use cache unless forced
     if (!force) {
       const cached = getCache();
       if (cached) {
-        setState(prev => ({ ...prev, subscribed: cached.subscribed, tier: cached.tier, subscriptionEnd: cached.subscriptionEnd, loading: false, error: null }));
+        setState(prev => ({ ...prev, ...cached, loading: false, error: null }));
         initialCheckDone.current = true;
         return;
       }
@@ -120,39 +119,24 @@ export const useSubscription = () => {
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (error) throw error;
 
-      if (data.subscribed && data.tier) {
-        const result = {
-          subscribed: data.subscribed,
-          tier: data.tier || 'free',
-          subscriptionEnd: data.subscription_end,
-          subscriptionStart: data.subscription_start ?? null,
-          promoActive: Boolean(data.promo_active),
-          promoEnd: data.promo_end ?? null,
-        };
-        setCache(result);
-        setState(prev => ({ ...prev, ...result, loading: false, error: null }));
-        initialCheckDone.current = true;
-        return;
-      }
-
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('subscription_level, admin_override')
+        .select('admin_override')
         .eq('user_id', user.id)
         .single();
-
       const isAdminOverride = profileData?.admin_override ?? false;
 
-      if (profileData?.subscription_level && profileData.subscription_level !== 'free') {
-        const tier = profileData.subscription_level === 'legacy' ? 'heritage' : profileData.subscription_level as 'free' | 'premium' | 'heritage';
-        const result = { subscribed: true, tier, subscriptionEnd: null, subscriptionStart: null, promoActive: false, promoEnd: null };
-        setCache(result);
-        setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
-        initialCheckDone.current = true;
-        return;
-      }
-
-      const result = { subscribed: false, tier: 'free' as const, subscriptionEnd: null, subscriptionStart: null, promoActive: false, promoEnd: null };
+      const result = {
+        subscribed: Boolean(data?.subscribed),
+        tier: (data?.tier || 'free') as SubscriptionTier,
+        subscriptionEnd: data?.subscription_end ?? null,
+        subscriptionStart: data?.subscription_start ?? null,
+        hasFamilyTreeAddon: Boolean(data?.has_family_tree_addon),
+        trialing: Boolean(data?.trialing),
+        trialEndsAt: data?.trial_ends_at ?? null,
+        promoActive: Boolean(data?.promo_active),
+        promoEnd: data?.promo_end ?? null,
+      };
       setCache(result);
       setState({ ...result, loading: false, error: null, adminOverride: isAdminOverride });
       initialCheckDone.current = true;
@@ -178,14 +162,12 @@ export const useSubscription = () => {
   }, [user]);
 
   useEffect(() => {
-    // Detect checkout success → force refresh
     const params = new URLSearchParams(window.location.search);
     const isPostCheckout = params.get('subscription') === 'success';
 
     if (isPostCheckout) {
       invalidateSubscriptionCache();
       checkSubscription(true);
-      // Clean URL param
       params.delete('subscription');
       const newUrl = params.toString()
         ? `${window.location.pathname}?${params.toString()}`
@@ -195,7 +177,6 @@ export const useSubscription = () => {
       checkSubscription();
     }
 
-    // Re-check on tab focus only if cache expired
     const onVisibility = () => {
       if (document.visibilityState === 'visible' && !getCache()) {
         checkSubscription(true);
@@ -205,11 +186,42 @@ export const useSubscription = () => {
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, [checkSubscription]);
 
-  const createCheckout = async (tier: 'premium' | 'heritage', billing: 'monthly' | 'yearly' = 'monthly', promoCode?: string) => {
+  /**
+   * Create checkout / update subscription.
+   * @param billing 'monthly' or 'yearly'
+   * @param withFamilyTree include the €5/mo family tree add-on
+   * @param promoCode optional promo code
+   *
+   * Legacy signature is preserved: passing a legacy tier ('premium'|'heritage') is
+   * transparently routed to the new Essentiel plan. Passing tier='heritage' implies
+   * withFamilyTree=true (since heritage grandfathered users had the tree).
+   */
+  const createCheckout = async (
+    tierOrOptions: 'premium' | 'heritage' | 'essential' | {
+      billing?: 'monthly' | 'yearly';
+      withFamilyTree?: boolean;
+      promoCode?: string;
+    } = 'essential',
+    billing: 'monthly' | 'yearly' = 'monthly',
+    promoCode?: string,
+  ) => {
+    let payload: { billing: 'monthly' | 'yearly'; withFamilyTree: boolean; promoCode?: string };
+    if (typeof tierOrOptions === 'object') {
+      payload = {
+        billing: tierOrOptions.billing ?? 'monthly',
+        withFamilyTree: Boolean(tierOrOptions.withFamilyTree),
+        promoCode: tierOrOptions.promoCode,
+      };
+    } else {
+      payload = {
+        billing,
+        withFamilyTree: tierOrOptions === 'heritage',
+        promoCode,
+      };
+    }
+
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier, billing, promoCode },
-      });
+      const { data, error } = await supabase.functions.invoke('create-checkout', { body: payload });
       if (error) throw error;
 
       const isImmediatePlanUpdate = Boolean(data?.updated) || data?.url?.includes('subscription=already-active');
@@ -229,6 +241,13 @@ export const useSubscription = () => {
     }
   };
 
+  /**
+   * Toggle the €5/mo Family Tree add-on on the current subscription.
+   */
+  const toggleFamilyTreeAddon = async (enable: boolean, billing: 'monthly' | 'yearly' = 'monthly') => {
+    return createCheckout({ billing, withFamilyTree: enable });
+  };
+
   const openCustomerPortal = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('customer-portal');
@@ -246,6 +265,7 @@ export const useSubscription = () => {
     invoicesLoading,
     checkSubscription,
     createCheckout,
+    toggleFamilyTreeAddon,
     openCustomerPortal,
     fetchInvoices,
   };

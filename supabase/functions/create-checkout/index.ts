@@ -7,29 +7,31 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Subscription tiers with their Stripe price IDs (PRODUCTION)
-const SUBSCRIPTION_TIERS = {
-  premium: {
-    monthly: {
-      price_id: "price_1TJui8Rc375UxOm00OZ6fLi5",
-      product_id: "prod_TpfCfW2XoivaMo",
-    },
-    yearly: {
-      price_id: "price_1TNEO3Rc375UxOm0yGVRPGrd",
-      product_id: "prod_TpfDVWEiQyAskK",
-    },
-  },
-  heritage: {
-    monthly: {
-      price_id: "price_1TJuimRc375UxOm0TUYpMlJa",
-      product_id: "prod_TpfDHDc4suNNpU",
-    },
-    yearly: {
-      price_id: "price_1TNEORRc375UxOm07mgOMq3E",
-      product_id: "prod_TpfEpqH8Z3zaDh",
-    },
-  },
+// ============ NEW PLAN (Essentiel 2,99€ + Arbre en option 5€) ============
+const ESSENTIAL_PRICES = {
+  monthly: { price_id: "price_1Ty7YvRc375UxOm0EkATcv4T", product_id: "prod_Uy3gMPjD8g09eU" },
+  yearly:  { price_id: "price_1Ty7ZZRc375UxOm0ccwcYgF4", product_id: "prod_Uy3gdBAHhKwsXV" },
 };
+
+const FAMILY_TREE_ADDON_PRICES = {
+  monthly: { price_id: "price_1Ty7a5Rc375UxOm0ZXsmC8cQ", product_id: "prod_Uy3hrzwyHtLP2p" },
+  yearly:  { price_id: "price_1Ty7aURc375UxOm08FqBmOqg", product_id: "prod_Uy3h8uHPZt7JhB" },
+};
+
+// ============ LEGACY (grandfathered) — kept to detect existing customers ============
+const LEGACY_PRICES = {
+  premium_monthly: "price_1TJui8Rc375UxOm00OZ6fLi5",
+  premium_yearly:  "price_1TNEO3Rc375UxOm0yGVRPGrd",
+  heritage_monthly: "price_1TJuimRc375UxOm0TUYpMlJa",
+  heritage_yearly:  "price_1TNEORRc375UxOm07mgOMq3E",
+};
+const ALL_MANAGED_PRICE_IDS = new Set<string>([
+  ESSENTIAL_PRICES.monthly.price_id,
+  ESSENTIAL_PRICES.yearly.price_id,
+  FAMILY_TREE_ADDON_PRICES.monthly.price_id,
+  FAMILY_TREE_ADDON_PRICES.yearly.price_id,
+  ...Object.values(LEGACY_PRICES),
+]);
 
 const logStep = (step: string, details?: any) => {
   const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
@@ -49,16 +51,18 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { tier, billing = "monthly", promoCode } = await req.json();
-    if (!tier || !SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS]) {
-      throw new Error("Invalid subscription tier");
-    }
+    const body = await req.json();
+    const billing: "monthly" | "yearly" = body.billing === "yearly" ? "yearly" : "monthly";
+    const withFamilyTree: boolean = Boolean(body.withFamilyTree);
+    const promoCode: string | undefined = body.promoCode;
 
-    const tierConfig = SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS];
-    const billingPeriod = billing === "yearly" && "yearly" in tierConfig ? "yearly" : "monthly";
-    const selectedPrice = tierConfig[billingPeriod as keyof typeof tierConfig];
-    
-    logStep("Selected tier", { tier, billing: billingPeriod, priceId: selectedPrice.price_id });
+    // Backwards compat: only 'essential' is a new tier. Legacy 'premium'/'heritage' redirected to essential.
+    const tier = "essential";
+
+    const essentialPrice = ESSENTIAL_PRICES[billing];
+    const treePrice = FAMILY_TREE_ADDON_PRICES[billing];
+
+    logStep("Selected plan", { tier, billing, withFamilyTree });
 
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
@@ -67,11 +71,11 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { email: user.email });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { 
-      apiVersion: "2025-08-27.basil" 
+    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+      apiVersion: "2025-08-27.basil",
     });
 
-    // Check if customer exists
+    // Find or create customer
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     let customerId: string | undefined;
     if (customers.data.length > 0) {
@@ -79,10 +83,9 @@ serve(async (req) => {
       logStep("Existing customer found", { customerId });
     }
 
-    const origin = req.headers.get("origin") || "https://fngbrxoblmbukqzzdwxp.lovable.app";
+    const origin = req.headers.get("origin") || "https://familygarden.fr";
 
-    // ========== PLAN CHANGE FLOW ==========
-    // If customer already has an active subscription, update it instead of creating a new one
+    // ========== EXISTING SUBSCRIPTION — update items (add/remove tree add-on, switch billing) ==========
     if (customerId) {
       const existingSubs = await stripe.subscriptions.list({
         customer: customerId,
@@ -90,96 +93,66 @@ serve(async (req) => {
         limit: 10,
       });
 
-      if (existingSubs.data.length > 0) {
-        // Find the subscription matching one of our managed prices
-        const managedPriceIds = Object.values(SUBSCRIPTION_TIERS).flatMap(t =>
-          Object.values(t).map(p => p.price_id)
+      const managedSub = existingSubs.data.find((s) =>
+        s.items.data.some((it) => ALL_MANAGED_PRICE_IDS.has(it.price.id))
+      );
+
+      if (managedSub) {
+        logStep("Managing existing subscription", { subscriptionId: managedSub.id });
+
+        // Determine current base price (essentiel or grandfathered premium/heritage)
+        const baseItem = managedSub.items.data.find(
+          (it) => it.price.id !== FAMILY_TREE_ADDON_PRICES.monthly.price_id
+                && it.price.id !== FAMILY_TREE_ADDON_PRICES.yearly.price_id
         );
-        const currentSub = existingSubs.data.find(s =>
-          s.items.data.some(item => managedPriceIds.includes(item.price.id))
-        ) || existingSubs.data[0];
+        const treeItem = managedSub.items.data.find(
+          (it) => it.price.id === FAMILY_TREE_ADDON_PRICES.monthly.price_id
+               || it.price.id === FAMILY_TREE_ADDON_PRICES.yearly.price_id
+        );
 
-        const currentItem = currentSub.items.data[0];
-        const currentPriceId = currentItem.price.id;
+        const isGrandfatheredHeritage =
+          baseItem?.price.id === LEGACY_PRICES.heritage_monthly ||
+          baseItem?.price.id === LEGACY_PRICES.heritage_yearly;
 
-        // Already on the requested plan
-        if (currentPriceId === selectedPrice.price_id) {
-          logStep("User already on requested plan", { priceId: currentPriceId });
+        // Build items patch
+        const items: Stripe.SubscriptionUpdateParams.Item[] = [];
+
+        // Base: switch to essentiel price if not already, unless grandfathered
+        if (baseItem) {
+          const isLegacy = Object.values(LEGACY_PRICES).includes(baseItem.price.id);
+          if (isLegacy) {
+            // Do NOT touch grandfathered base price (respect original tariff)
+            logStep("Keeping grandfathered base price", { priceId: baseItem.price.id });
+          } else if (baseItem.price.id !== essentialPrice.price_id) {
+            items.push({ id: baseItem.id, price: essentialPrice.price_id });
+          }
+        }
+
+        // Tree add-on toggle
+        if (withFamilyTree && !treeItem && !isGrandfatheredHeritage) {
+          items.push({ price: treePrice.price_id, quantity: 1 });
+        } else if (!withFamilyTree && treeItem) {
+          items.push({ id: treeItem.id, deleted: true });
+        } else if (withFamilyTree && treeItem && treeItem.price.id !== treePrice.price_id) {
+          items.push({ id: treeItem.id, price: treePrice.price_id });
+        }
+
+        if (items.length === 0) {
+          logStep("No change needed");
           return new Response(
-            JSON.stringify({ url: `${origin}/profile?subscription=already-active` }),
+            JSON.stringify({ url: `${origin}/profile?subscription=already-active`, updated: true }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
           );
         }
 
-        // Determine current tier to decide upgrade vs downgrade
-        const tierOrder: Record<string, number> = { premium: 1, heritage: 2 };
-        let currentTierKey: 'premium' | 'heritage' | null = null;
-        for (const [tKey, tCfg] of Object.entries(SUBSCRIPTION_TIERS)) {
-          for (const period of Object.values(tCfg)) {
-            if (period.price_id === currentPriceId) {
-              currentTierKey = tKey as 'premium' | 'heritage';
-              break;
-            }
-          }
-          if (currentTierKey) break;
-        }
-
-        const isUpgrade = currentTierKey
-          ? tierOrder[tier] > tierOrder[currentTierKey]
-          : true;
-
-        logStep("Plan change detected", {
-          from: currentTierKey,
-          to: tier,
-          isUpgrade,
-          subscriptionId: currentSub.id,
-        });
-
-        // Check if current subscription has launch promo coupon still active
-        // (Premium launch coupon = "Brb2OIqJ", 3 months repeating)
-        // If yes, the user is within the launch promo window → carry over remaining months to Heritage
-        let carryOverDiscounts: Array<{ coupon: string }> | undefined;
-        if (isUpgrade && tier === "heritage" && billingPeriod === "monthly") {
-          const activeDiscount = currentSub.discount;
-          const isLaunchPromoActive = activeDiscount?.coupon?.id === "Brb2OIqJ";
-          
-          if (isLaunchPromoActive) {
-            // Compute remaining months on the launch promo
-            // Coupon is 3 months repeating; check how many invoices were already discounted.
-            // Stripe exposes `end` on the discount when the coupon is repeating.
-            const discountEnd = activeDiscount.end; // unix timestamp or null
-            const now = Math.floor(Date.now() / 1000);
-            const monthsRemaining = discountEnd && discountEnd > now
-              ? Math.max(1, Math.ceil((discountEnd - now) / (30 * 24 * 3600)))
-              : 0;
-
-            if (monthsRemaining > 0) {
-              // Apply Heritage launch coupon (also 3 months repeating, -5€)
-              carryOverDiscounts = [{ coupon: "btgCwbO1" }];
-              logStep("Carrying over launch promo to Heritage", { monthsRemaining });
-            }
-          }
-        }
-
-        // Update the existing subscription
-        const updated = await stripe.subscriptions.update(currentSub.id, {
-          items: [
-            {
-              id: currentItem.id,
-              price: selectedPrice.price_id,
-            },
-          ],
-          // Upgrade: prorate immediately and bill the difference now
-          // Downgrade: switch at end of current period, no proration
-          proration_behavior: isUpgrade ? "create_prorations" : "none",
-          billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
-          ...(carryOverDiscounts ? { discounts: carryOverDiscounts } : {}),
+        const updated = await stripe.subscriptions.update(managedSub.id, {
+          items,
+          proration_behavior: "create_prorations",
           metadata: {
             user_id: user.id,
-            tier: tier,
-            billing: billingPeriod,
-            plan_change: isUpgrade ? "upgrade" : "downgrade",
-            previous_tier: currentTierKey || "unknown",
+            tier: isGrandfatheredHeritage ? "legacy" : "essential",
+            billing,
+            has_family_tree_addon: withFamilyTree ? "true" : "false",
           },
         });
 
@@ -187,7 +160,7 @@ serve(async (req) => {
 
         return new Response(
           JSON.stringify({
-            url: `${origin}/profile?subscription=success&change=${isUpgrade ? "upgrade" : "downgrade"}`,
+            url: `${origin}/profile?subscription=success`,
             updated: true,
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
@@ -195,43 +168,41 @@ serve(async (req) => {
       }
     }
 
-    // ========== NEW SUBSCRIPTION FLOW (Checkout) ==========
-    // Handle promo code "Mamie" (case-insensitive) -> 50% off
+    // ========== NEW SUBSCRIPTION FLOW ==========
+    // Promo "mamie" -> -50%
     let discounts: Array<{ coupon: string }> | undefined;
     if (promoCode && promoCode.toLowerCase() === "mamie") {
       discounts = [{ coupon: "TjuFD7gh" }];
       logStep("Promo code applied", { code: promoCode });
     }
 
-    // Auto-apply launch promo for premium monthly: -4€ for 3 months (9€ -> 5€)
-    if (tier === "premium" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "Brb2OIqJ" }];
-      logStep("Auto-applied premium launch promo coupon (-4€ for 3 months)");
+    // Build line items
+    const line_items: Array<{ price: string; quantity: number }> = [
+      { price: essentialPrice.price_id, quantity: 1 },
+    ];
+    if (withFamilyTree) {
+      line_items.push({ price: treePrice.price_id, quantity: 1 });
     }
 
-    // Auto-apply launch promo for heritage monthly: -5€ for 3 months (14.99 -> 9.99)
-    if (tier === "heritage" && billingPeriod === "monthly" && !discounts) {
-      discounts = [{ coupon: "btgCwbO1" }];
-      logStep("Auto-applied heritage launch promo coupon (9€ for 3 months)");
-    }
+    // 14-day trial for new customers only
+    const shouldTrial = !customerId;
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price: selectedPrice.price_id,
-          quantity: 1,
-        },
-      ],
+      line_items,
       mode: "subscription",
       ...(discounts ? { discounts } : { allow_promotion_codes: true }),
+      ...(shouldTrial
+        ? { subscription_data: { trial_period_days: 14 } }
+        : {}),
       success_url: `${origin}/profile?subscription=success`,
       cancel_url: `${origin}/profile?subscription=canceled`,
       metadata: {
         user_id: user.id,
-        tier: tier,
-        billing: billingPeriod,
+        tier,
+        billing,
+        has_family_tree_addon: withFamilyTree ? "true" : "false",
       },
     });
 
