@@ -494,7 +494,7 @@ const Marketing = () => {
               </Link>
             </Button>
             <p className="mt-6 text-sm text-white/50">
-              🌱 Inscription gratuite • 🔒 Aucune carte bancaire • 🇪🇺 Données hébergées en Europe
+              🌱 14 jours d'essai gratuit • 💳 2,99 €/mois ensuite • 🇪🇺 Données hébergées en Europe
             </p>
           </motion.div>
         </div>
