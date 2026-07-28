@@ -419,7 +419,7 @@ const UnifiedMediaSection = ({
             {t(`typeSelector.upgradeBadge.${upgradePath}`)}
           </Badge>
           <Link 
-            to={`/premium${upgradePath === 'heritage' ? '?tier=heritage' : ''}`}
+            to="/premium"
             className="block mt-3 text-secondary text-sm font-medium hover:underline"
           >
             {t('typeSelector.viewPlans')}
