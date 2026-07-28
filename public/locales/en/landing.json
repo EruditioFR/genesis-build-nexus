@@ -404,9 +404,9 @@
       "title": "Protect the memories",
       "titleHighlight": "of your family",
       "subtitle": "Family Garden is an online service that brings photos, videos, voices and stories together in a private, organized, lasting and transmissible family journal.",
-      "ctaPrimary": "Create my free space",
+      "ctaPrimary": "Start free trial",
       "ctaSecondary": "See how it works",
-      "trust1": "Free, no credit card",
+      "trust1": "14-day free trial, no commitment",
       "trust2": "EU GDPR hosting",
       "trust3": "No ads",
       "slidePrev": "Previous",
@@ -487,8 +487,8 @@
       "before": "Before",
       "after": "With Family Garden",
       "ctaText": "Start today: creating your first memory takes less than 3 minutes.",
-      "cta": "Create my free space",
-      "ctaTrust": "Free, no credit card · EU GDPR hosting",
+      "cta": "Start free trial",
+      "ctaTrust": "14-day free trial · EU GDPR hosting",
       "steps": {
         "s1": {
           "beforeTitle": "Today: your memories are everywhere",

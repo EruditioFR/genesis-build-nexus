@@ -6,7 +6,7 @@
     "about": "소개",
     "contact": "문의하기",
     "login": "로그인",
-    "signup": "무료로 시작하기",
+    "signup": "14일 무료 체험 시작",
     "dashboard": "홈",
     "profile": "내 프로필",
     "logout": "로그아웃"
@@ -14,7 +14,7 @@
   "auth": {
     "signIn": "로그인",
     "signOut": "로그아웃",
-    "startFree": "무료로 시작하기"
+    "startFree": "14일 무료 체험 시작"
   },
   "footer": {
     "tagline": "가족의 추억을 미래 세대를 위해 보존하세요.",

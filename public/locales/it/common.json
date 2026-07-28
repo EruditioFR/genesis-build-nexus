@@ -6,7 +6,7 @@
     "about": "Chi siamo",
     "contact": "Contatti",
     "login": "Accedi",
-    "signup": "Inizia gratis",
+    "signup": "Prova gratuita 14 giorni",
     "dashboard": "Home",
     "profile": "Il mio profilo",
     "logout": "Esci"
@@ -14,7 +14,7 @@
   "auth": {
     "signIn": "Accedi",
     "signOut": "Esci",
-    "startFree": "Inizia gratis"
+    "startFree": "Prova gratuita 14 giorni"
   },
   "footer": {
     "tagline": "Conserva i ricordi di famiglia per le generazioni future.",

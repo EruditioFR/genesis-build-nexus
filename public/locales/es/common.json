@@ -6,7 +6,7 @@
     "about": "Acerca de",
     "contact": "Contacto",
     "login": "Iniciar sesión",
-    "signup": "Comenzar gratis",
+    "signup": "Prueba gratis 14 días",
     "dashboard": "Inicio",
     "profile": "Mi perfil",
     "logout": "Cerrar sesión"
@@ -14,7 +14,7 @@
   "auth": {
     "signIn": "Iniciar sesión",
     "signOut": "Cerrar sesión",
-    "startFree": "Comenzar gratis"
+    "startFree": "Prueba gratis 14 días"
   },
   "footer": {
     "tagline": "Preserva tus recuerdos familiares para las futuras generaciones.",
