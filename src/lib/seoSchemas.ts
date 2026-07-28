@@ -38,7 +38,7 @@ export const howToSchema = {
       "@type": "HowToStep",
       "position": 1,
       "name": "Créez votre compte",
-      "text": "Inscrivez-vous gratuitement sur Family Garden et commencez à documenter votre histoire en quelques minutes. Aucune carte bancaire requise.",
+      "text": "Créez votre compte Family Garden et profitez de 14 jours d'essai gratuit, sans carte bancaire, puis 2,99 €/mois pour tout Family Garden.",
       "url": `${SITE_URL}/signup`
     },
     {
