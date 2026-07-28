@@ -1106,6 +1106,7 @@ export type Database = {
           country: string | null
           created_at: string
           display_name: string | null
+          has_family_tree_addon: boolean
           id: string
           storage_limit_mb: number
           storage_used_mb: number
@@ -1113,6 +1114,7 @@ export type Database = {
           suspended: boolean | null
           suspended_at: string | null
           suspended_reason: string | null
+          trial_ends_at: string | null
           updated_at: string
           user_id: string
         }
@@ -1125,6 +1127,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           display_name?: string | null
+          has_family_tree_addon?: boolean
           id?: string
           storage_limit_mb?: number
           storage_used_mb?: number
@@ -1132,6 +1135,7 @@ export type Database = {
           suspended?: boolean | null
           suspended_at?: string | null
           suspended_reason?: string | null
+          trial_ends_at?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1144,6 +1148,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           display_name?: string | null
+          has_family_tree_addon?: boolean
           id?: string
           storage_limit_mb?: number
           storage_used_mb?: number
@@ -1151,6 +1156,7 @@ export type Database = {
           suspended?: boolean | null
           suspended_at?: string | null
           suspended_reason?: string | null
+          trial_ends_at?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1385,7 +1391,7 @@ export type Database = {
       app_role: "admin" | "moderator" | "user"
       capsule_status: "draft" | "published" | "scheduled" | "archived"
       capsule_type: "text" | "photo" | "video" | "audio" | "mixed"
-      subscription_level: "free" | "premium" | "legacy"
+      subscription_level: "free" | "premium" | "legacy" | "essential"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1516,7 +1522,7 @@ export const Constants = {
       app_role: ["admin", "moderator", "user"],
       capsule_status: ["draft", "published", "scheduled", "archived"],
       capsule_type: ["text", "photo", "video", "audio", "mixed"],
-      subscription_level: ["free", "premium", "legacy"],
+      subscription_level: ["free", "premium", "legacy", "essential"],
     },
   },
 } as const
