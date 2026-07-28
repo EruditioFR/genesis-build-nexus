@@ -193,10 +193,10 @@ const HowItWorksV3 = () => {
           <Button
             size="lg"
             onClick={handleCta}
-            className="bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-[hsl(215_50%_18%)] text-base sm:text-lg px-8 py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group"
+            className="bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-[hsl(215_50%_18%)] text-base sm:text-lg px-8 py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group h-auto min-h-11"
           >
-            {t('v3.howItWorks.cta')}
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <span className="whitespace-pre-line text-center">{t('v3.howItWorks.cta')}</span>
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
           </Button>
           <p className="mt-3 text-xs text-muted-foreground/80">
             {t('v3.howItWorks.ctaTrust')}

@@ -153,7 +153,7 @@ const LandingInspirationSlider = () => {
                     className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white/90 hover:bg-white text-foreground text-sm sm:text-base font-semibold transition-all shadow-md hover:shadow-lg"
                   >
                     <Sparkles className="h-4 w-4 text-amber-500 flex-shrink-0" />
-                    {t('inspiration.landingCta')}
+                    <span className="whitespace-pre-line text-center">{t('inspiration.landingCta')}</span>
                     <ChevronRight className="h-4 w-4 flex-shrink-0" />
                   </Link>
                 </motion.div>
