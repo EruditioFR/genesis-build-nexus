@@ -242,12 +242,6 @@ const Premium = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="relative rounded-3xl p-8 shadow-elevated bg-card border-2 border-primary/20"
         >
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-            <Badge className="bg-secondary text-secondary-foreground">
-              Essentiel — Tout inclus
-            </Badge>
-          </div>
-
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 bg-primary/10">
               <Sparkles className="w-7 h-7 text-primary" />
