@@ -113,12 +113,6 @@ const PricingSection = () => {
           transition={{ duration: 0.5 }}
           className="max-w-2xl mx-auto relative rounded-3xl p-6 sm:p-10 bg-card shadow-elevated border-2 border-primary/20"
         >
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-            <span className="px-4 py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-semibold shadow-gold whitespace-nowrap">
-              Tout inclus
-            </span>
-          </div>
-
           <div className="text-center mb-6 mt-2">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-primary/10">
               <Sparkles className="w-7 h-7 text-primary" />

@@ -141,13 +141,7 @@ const PricingSectionV3 = () => {
           transition={{ duration: 0.5 }}
           className="max-w-2xl mx-auto relative rounded-3xl p-6 sm:p-10 bg-[hsl(215_50%_18%)] text-white shadow-2xl border border-[hsl(var(--gold))]/30 ring-2 ring-[hsl(var(--gold))]/40"
         >
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-            <span className="px-4 py-1.5 rounded-full bg-[hsl(var(--gold))] text-[hsl(215_50%_18%)] text-xs font-bold uppercase tracking-wider whitespace-nowrap shadow-lg">
-              ⭐ Tout inclus
-            </span>
-          </div>
-
-          <div className="text-center mb-6 mt-2">
+          <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-[hsl(var(--gold))]/15">
               <Sparkles className="w-7 h-7 text-[hsl(var(--gold))]" />
             </div>
