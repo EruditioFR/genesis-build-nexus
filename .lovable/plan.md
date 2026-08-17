@@ -1,47 +1,58 @@
-## Problème
+# Audit SEO Family Garden — diagnostic et plan de contenu
 
-Sur mobile (screenshot fourni), le CTA principal de la hero « Commencer mes 14 jours d'essai gratuit » déborde du bouton (le "C" initial est coupé). Le `\n` inséré précédemment n'est pas respecté visuellement sur ce bouton, et d'autres boutons du site risquent le même problème sur petits écrans.
+## 1. Où en est le site aujourd'hui (données Semrush, base France)
 
-## Objectif
+- Le domaine ne ressort que sur **2 mots-clés** : « gardens family » (position 1, 1 000 rech./mois) et « garden family » (position 4, 880 rech./mois).
+- Trafic organique estimé : ~260 visites/mois, quasi uniquement sur des requêtes de marque anglophones sans intention d'achat.
+- Aucune requête métier (journal de famille, souvenirs, arbre généalogique) ne remonte : le site n'existe pas encore aux yeux de Google sur son marché.
 
-Auditer **tous les boutons du site** et garantir que :
-1. Aucun texte ne déborde horizontalement.
-2. Les libellés longs passent proprement sur deux lignes (avec hauteur auto).
-3. Le rendu reste cohérent en 7 langues (certaines traductions sont plus longues, ex. allemand-like en portugais/italien).
+Cause principale : une seule page réellement indexable et riche (l'accueil), aucun contenu éditorial de fond, et un nom de domaine qui capte du trafic hors sujet.
 
-## Périmètre à auditer
+## 2. Sur quels termes peut-on être trouvé (potentiel réel)
 
-- **Header** (desktop + mobile) : Sign In / Sign Up / Contact
-- **Hero sections** v1/v2/v3 (CTA primaire + secondaire)
-- **How It Works** (v3 + short)
-- **CTA sections** v1/v2/v3
-- **Pricing sections** v1/v3 (bouton principal + toggle)
-- **FAQ / About / Marketing / Demo** (CTAs finaux)
-- **Footer** (liens/boutons éventuels)
-- **Dashboard authentifié** : QuickActions, PremiumPromoCard, MobileBottomNav
-- **Formulaires** : Signup, Login, Checkout, Contact (boutons submit)
-- **Wizard démo** (`DemoExperience`) : boutons Suivant / Précédent / Créer
-- **Composants récurrents** : `Button` shadcn (vérifier les variants utilisés avec textes longs)
+| Mot-clé | Volume/mois | Difficulté | Verdict |
+|---|---|---|---|
+| capsule temporelle | 2 900 | 21 — facile | Cible prioritaire, gros volume et accessible |
+| arbre généalogique en ligne | 880 | 44 — possible | Cible moyen terme, adossée à l'option arbre |
+| logiciel généalogie | 170 | 35 | Comparatif possible |
+| biographie familiale | 110 | 13 | Très accessible |
+| raconter sa vie | 90 | 3 | Très accessible |
+| souvenirs de famille | 50 | 0 | Facile, à intégrer partout |
+| journal de famille en ligne | 20 | 0 | Terme cœur de marque, à verrouiller |
+| album photo famille en ligne | 20 | 0 | Facile |
 
-## Approche technique
+Le marché généalogie pur (Geneanet 673 k, MyHeritage 110 k) est hors d'atteinte frontalement : on s'y positionne par des angles longue traîne, pas sur « arbre généalogique ».
 
-1. **Recensement** : rechercher tous les `<Button>` et `<a role="button">` du site via `rg`, lister les libellés potentiellement longs (multilingues).
-2. **Règle CSS unifiée** pour les boutons à texte long :
-   - `whitespace-normal` (ou `whitespace-pre-line` si `\n` explicite) au lieu du `whitespace-nowrap` par défaut de shadcn.
-   - `h-auto min-h-11` pour permettre l'expansion verticale tout en gardant la cible tactile ≥ 44px.
-   - `text-center leading-tight` pour un rendu propre sur 2 lignes.
-   - `px-4` (au lieu de `px-8`) sur mobile pour laisser plus de place au texte via `sm:px-8`.
-3. **Cas du CTA Hero mobile qui déborde** : investiguer pourquoi le `\n` n'agit pas — probablement un parent qui force `flex-nowrap` ou un `text-lg`/`text-xl` trop grand pour la largeur. Réduire la taille de police en mobile (`text-base sm:text-lg`) et confirmer `whitespace-pre-line` bien appliqué au span interne.
-4. **Vérification multilingue** : tester visuellement en français + une langue longue (portugais ou italien) via Playwright sur viewport mobile (375px) et desktop (1280px), sur les pages `/`, `/faq`, `/about`, `/tarifs`, `/demo`.
-5. **Pas de changement de copie** — uniquement CSS/structure.
+## 3. Mots-clés à ajouter dans le site
 
-## Livrable
+Vocabulaire à intégrer dans les titres, sous-titres et textes des pages existantes (accueil, à propos, premium, démo) :
+capsule temporelle numérique, journal de famille privé, souvenirs de famille en ligne, transmettre son histoire familiale, biographie familiale, raconter sa vie à ses enfants, album photo familial sécurisé, mémoire familiale, héritage numérique, arbre généalogique avec photos et souvenirs.
 
-- Composants ajustés (headers, heros, CTAs, pricing, wizard, dashboard) avec classes uniformes pour texte long.
-- Screenshots avant/après sur mobile 375px et desktop 1280px, FR + PT.
-- Aucun impact fonctionnel, aucun changement backend.
+## 4. FAQ : étoffer ou créer ?
 
-## Ce qui ne sera PAS fait
+La page FAQ existe déjà avec 18 questions en prose sur 7 catégories, avec balisage FAQPage dans le HTML initial — la base est bonne. Il ne faut pas la refaire, mais l'orienter recherche :
 
-- Pas de refonte de la copie ni des traductions.
-- Pas de modification des variants du composant `Button` de base (impact trop large) — les overrides seront appliqués localement sur chaque bouton concerné.
+- Ajouter 6 à 8 questions calquées sur des requêtes réelles (« Qu'est-ce qu'une capsule temporelle numérique ? », « Comment raconter sa vie à ses enfants ? », « Comment conserver ses souvenirs de famille en ligne ? », « Quelle différence avec un site de généalogie ? », « Comment créer un arbre généalogique avec photos ? »).
+- Synchroniser le balisage FAQPage de `index.html` avec ces nouvelles questions.
+
+## 5. Ce que je propose de faire
+
+1. **Optimiser les pages existantes** — titres, méta-descriptions et intertitres de l'accueil, /about, /premium, /demo et /faq réécrits autour du vocabulaire ci-dessus. Aucun changement de design.
+2. **Enrichir la FAQ** de 6 à 8 questions orientées recherche + mise à jour du balisage structuré.
+3. **Créer 4 pages/articles de fond** (800–1 200 mots, en prose, chacune ciblant un mot-clé validé) :
+   - Capsule temporelle numérique : comment en créer une (cible principale)
+   - Comment conserver et transmettre ses souvenirs de famille
+   - Raconter sa vie à ses enfants : méthode en 7 étapes
+   - Arbre généalogique en ligne : relier photos, récits et personnes
+4. **Maillage interne et sitemap** — liens depuis l'accueil et la FAQ vers ces pages, ajout dans `public/sitemap.xml`, la fonction sitemap dynamique, `llms.txt` et le bloc `<noscript>`.
+5. **Lancer une analyse SEO technique** de la plateforme pour vérifier balises, canoniques et indexation après ces changements.
+
+## Détails techniques
+
+- Contenu rédigé en français, ton « vous », lexique patrimonial existant (souvenirs, chronologie, journal de famille privé).
+- Les nouveaux articles passent par le système de blog Supabase déjà en place (auteur « Family Garden »), pas de nouvelles routes React sauf si vous préférez des pages dédiées.
+- Métadonnées gérées via le composant `SEOHead` existant (canonique dynamique, hreflang, JSON-LD) — aucune modification de son fonctionnement.
+- Balisage `Article` ajouté sur les nouveaux contenus, `FAQPage` mis à jour dans `index.html`.
+- Aucune modification des tarifs, de l'authentification ou des fonctions backend.
+
+Source des données de recherche : Semrush, base France.
