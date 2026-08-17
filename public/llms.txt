@@ -68,6 +68,11 @@ La plateforme web est entièrement responsive et fonctionne parfaitement sur mob
 
 - Site web : https://familygarden.fr
 - FAQ : https://familygarden.fr/faq
+- Blog : https://familygarden.fr/blog
+- Capsule temporelle numérique : https://familygarden.fr/blog/capsule-temporelle-numerique-comment-en-creer-une
+- Conserver et transmettre ses souvenirs de famille : https://familygarden.fr/blog/conserver-transmettre-souvenirs-de-famille
+- Raconter sa vie à ses enfants : https://familygarden.fr/blog/raconter-sa-vie-a-ses-enfants-methode
+- Arbre généalogique en ligne : https://familygarden.fr/blog/arbre-genealogique-en-ligne-photos-et-souvenirs
 - Tarifs : https://familygarden.fr/premium
 - À propos : https://familygarden.fr/about
 - Politique de confidentialité : https://familygarden.fr/privacy
