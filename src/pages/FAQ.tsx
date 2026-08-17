@@ -79,7 +79,7 @@ const FAQ = () => {
         },
         {
           question: "Comment fonctionne concrètement le legs posthume sur Family Garden ?",
-          answer: "Avec l'offre Héritage, vous désignez un ou plusieurs gardiens de confiance, généralement des proches susceptibles d'être joignables sur le long terme. Pour chaque souvenir, vous indiquez s'il doit faire partie du legs, à quel destinataire il s'adresse, et selon quelles conditions de délivrance (immédiate après décès, différée à une date précise, ou conditionnée à un événement comme une majorité). À votre décès, vos gardiens confirment l'événement via une procédure sécurisée. Le système notifie alors automatiquement chaque destinataire, qui reçoit un accès personnel à son lot de souvenirs accompagnés de vos messages. Les gardiens ne voient jamais le contenu : ils n'ont qu'un rôle d'autorisation, jamais de consultation."
+          answer: "Avec le legs posthume, inclus dans l'abonnement à 2,99 € par mois, vous désignez un ou plusieurs gardiens de confiance, généralement des proches susceptibles d'être joignables sur le long terme. Pour chaque souvenir, vous indiquez s'il doit faire partie du legs, à quel destinataire il s'adresse, et selon quelles conditions de délivrance (immédiate après décès, différée à une date précise, ou conditionnée à un événement comme une majorité). À votre décès, vos gardiens confirment l'événement via une procédure sécurisée. Le système notifie alors automatiquement chaque destinataire, qui reçoit un accès personnel à son lot de souvenirs accompagnés de vos messages. Les gardiens ne voient jamais le contenu : ils n'ont qu'un rôle d'autorisation, jamais de consultation."
         },
         {
           question: "Comment choisir un bon gardien pour mon legs numérique ?",
@@ -97,11 +97,11 @@ const FAQ = () => {
         },
         {
           question: "Puis-je construire un arbre généalogique complet sur Family Garden ?",
-          answer: "Oui, l'offre Héritage inclut un arbre généalogique interactif qui supporte plusieurs centaines de membres. Vous pouvez le construire manuellement personne par personne, ou importer un fichier GEDCOM existant si vous travaillez déjà sur un autre logiciel de généalogie. L'arbre s'affiche en mode sablier centré sur une personne, avec ses ascendants et ses descendants sur deux générations visibles à la fois. Chaque membre dispose d'une fiche détaillée : biographie, photos, événements de vie, souvenirs partagés où il apparaît. Vous pouvez exporter l'arbre au format GEDCOM standard pour le partager avec d'autres généalogistes, ou en PDF pour l'imprimer et l'offrir lors d'une réunion de famille."
+          answer: "Oui, l'arbre généalogique interactif, proposé en option à 5 € par mois, supporte plusieurs centaines de membres. Vous pouvez le construire manuellement personne par personne, ou importer un fichier GEDCOM existant si vous travaillez déjà sur un autre logiciel de généalogie. L'arbre s'affiche en mode sablier centré sur une personne, avec ses ascendants et ses descendants sur deux générations visibles à la fois. Chaque membre dispose d'une fiche détaillée : biographie, photos, événements de vie, souvenirs partagés où il apparaît. Vous pouvez exporter l'arbre au format GEDCOM standard pour le partager avec d'autres généalogistes, ou en PDF pour l'imprimer et l'offrir lors d'une réunion de famille."
         },
         {
           question: "Les destinataires de mes souvenirs doivent-ils payer un abonnement ?",
-          answer: "Non. Toute personne invitée à consulter vos souvenirs accède à la plateforme gratuitement, sans aucune obligation d'abonnement. Elle peut visionner les contenus que vous lui partagez, laisser des commentaires et des réactions émotionnelles, sans avoir à payer. Seuls les utilisateurs qui souhaitent eux-mêmes créer activement leur propre journal de famille, dépasser le quota gratuit de stockage ou accéder à des fonctions avancées comme l'arbre généalogique et le legs posthume choisissent de souscrire un abonnement Premium ou Héritage. Cette logique garantit que vos souvenirs sont accessibles à tous vos proches sans qu'aucun frein financier ne pèse sur la transmission familiale."
+          answer: "Non. Toute personne invitée à consulter vos souvenirs accède à la plateforme gratuitement, sans aucune obligation d'abonnement. Elle peut visionner les contenus que vous lui partagez, laisser des commentaires et des réactions émotionnelles, sans avoir à payer. Seuls les utilisateurs qui souhaitent eux-mêmes créer activement leur propre journal de famille, poursuivre au-delà des 14 jours d'essai gratuit souscrivent l'abonnement à 2,99 € par mois. Cette logique garantit que vos souvenirs sont accessibles à tous vos proches sans qu'aucun frein financier ne pèse sur la transmission familiale."
         }
       ]
     },
@@ -125,15 +125,50 @@ const FAQ = () => {
       questions: [
         {
           question: "Quels sont les abonnements proposés et que comprennent-ils ?",
-          answer: "Family Garden propose trois formules adaptées à différents usages. La formule Gratuite offre 250 Mo de stockage, des souvenirs en texte et photo, et le partage illimité avec vos cercles : c'est suffisant pour démarrer et tester la plateforme sans engagement. La formule Premium, à 4,99 € par mois en offre de lancement, étend le stockage à 10 Go, débloque tous les formats (vidéo, audio) et supprime la publicité. La formule Héritage, à 19,99 € par mois, inclut 20 Go de stockage, l'arbre généalogique interactif, le legs posthume avec gardiens, la génération de podcast à partir de vos souvenirs et un support prioritaire. Vous pouvez changer de formule à tout moment depuis votre espace personnel."
+          answer: "Family Garden fonctionne avec un tarif unique et lisible : 2,99 € par mois TTC donnent accès à l'ensemble du service en ligne, avec 20 Go de stockage, tous les formats de médias (texte, photo, vidéo, audio), la chronologie interactive, les cercles de partage illimités, l'export PDF et le legs posthume avec gardiens. Seul l'arbre généalogique interactif, plus gourmand en ressources, est proposé en option à 5 € par mois, activable et désactivable quand vous le souhaitez. Chaque nouveau compte démarre par 14 jours d'essai gratuit, sans carte bancaire, pour créer ses premiers souvenirs et juger sur pièces. Vous pouvez changer de formule ou résilier à tout moment depuis votre espace personnel, sans engagement de durée."
         },
         {
-          question: "Que deviennent mes souvenirs si j'arrête mon abonnement Premium ou Héritage ?",
-          answer: "Vos souvenirs ne sont jamais supprimés automatiquement parce que vous arrêtez de payer. Si vous repassez en formule Gratuite après avoir été en Premium ou Héritage, vous conservez l'accès en lecture à l'intégralité de vos contenus existants : tous les souvenirs, photos, vidéos et audios restent visibles et consultables, et vous pouvez continuer à les partager avec vos cercles. Vous ne pouvez simplement plus créer de nouveaux souvenirs au-delà du quota gratuit, ni utiliser les fonctions avancées comme l'arbre généalogique ou le legs posthume tant que vous ne reprenez pas un abonnement. À tout moment, vous pouvez exporter l'ensemble de vos données en PDF et en fichiers bruts pour en garder une copie personnelle."
+          question: "Que deviennent mes souvenirs si j'arrête mon abonnement ?",
+          answer: "Vos souvenirs ne sont jamais supprimés automatiquement parce que vous arrêtez de payer. À la fin de votre abonnement, vous conservez l'accès en lecture à l'intégralité de vos contenus existants : tous les souvenirs, photos, vidéos et enregistrements audio restent consultables. Vous ne pouvez simplement plus créer de nouveaux souvenirs ni utiliser les fonctions avancées tant que vous ne reprenez pas l'abonnement. À tout moment, y compris pendant l'essai gratuit, vous pouvez exporter l'ensemble de vos données en PDF et en fichiers bruts pour en garder une copie personnelle sur votre ordinateur ou un disque externe. Votre patrimoine familial reste votre propriété exclusive, sans aucun enfermement dans la plateforme."
+        }
+      ]
+    },
+    {
+      icon: Sparkles,
+      title: "Souvenirs, capsules temporelles et transmission",
+      questions: [
+        {
+          question: "Qu'est-ce qu'une capsule temporelle numérique ?",
+          answer: "Une capsule temporelle numérique est un ensemble de souvenirs — textes, photos, vidéos, enregistrements vocaux — rassemblés aujourd'hui pour être ouverts plus tard, à une date choisie ou par une personne précise. Là où la capsule temporelle traditionnelle se limitait à une boîte enterrée dans un jardin, la version numérique conserve les couleurs, les voix et le mouvement, sans risque d'humidité ni de perte matérielle. Sur Family Garden, chaque souvenir peut être programmé pour être révélé à une date future : les dix-huit ans d'un enfant, un anniversaire de mariage, ou après votre disparition dans le cadre du legs. Vous rédigez le message, vous joignez les médias, vous choisissez le destinataire, et la plateforme se charge de la délivrance au bon moment."
+        },
+        {
+          question: "Comment créer une capsule temporelle numérique pour ses enfants ?",
+          answer: "Commencez par définir le destinataire et l'occasion : un enfant qui aura dix-huit ans, un petit-enfant qui n'est pas encore né, ou toute la fratrie à une date anniversaire. Rassemblez ensuite les matériaux : quelques photos marquantes, un enregistrement vocal où vous racontez la journée de sa naissance, une lettre écrite à la première personne. Sur Family Garden, vous créez un souvenir par thème plutôt qu'un bloc unique : cela reste plus lisible à l'ouverture et vous pouvez enrichir la capsule au fil des années. Vous programmez enfin la date de révélation et désignez le destinataire. Le jour venu, il reçoit une notification et accède à un espace personnel contenant l'intégralité de ce que vous lui avez laissé, dans l'ordre que vous avez choisi."
+        },
+        {
+          question: "Comment conserver ses souvenirs de famille en ligne sans les perdre ?",
+          answer: "La première cause de perte des souvenirs familiaux n'est pas l'accident, c'est la dispersion : des photos sur un téléphone, d'autres sur un disque dur, des vidéos dans une messagerie, et personne qui sache où tout se trouve. Conserver durablement suppose trois conditions : un lieu unique, un contexte associé à chaque document, et un accès partagé avec au moins un proche. Family Garden réunit ces trois conditions en un service en ligne : vous déposez vos médias dans un espace unique hébergé sur des serveurs européens chiffrés et sauvegardés quotidiennement, vous documentez chaque souvenir avec sa date, son lieu et les personnes concernées, et vous ouvrez l'accès à vos cercles familiaux. L'export complet reste possible à tout moment pour conserver une copie hors ligne."
+        },
+        {
+          question: "Comment raconter sa vie à ses enfants quand on ne sait pas par où commencer ?",
+          answer: "La difficulté n'est presque jamais le manque de matière, mais l'absence de point de départ. La méthode la plus efficace consiste à renoncer à la chronologie : au lieu de reprendre votre vie depuis la naissance, répondez à une question précise à la fois. Family Garden propose pour cela une bibliothèque de plus de cinquante questions guidées — le premier métier, la rencontre avec votre conjoint, la maison de l'enfance, une odeur qui vous ramène en arrière — et vous répondez par écrit ou en enregistrant simplement votre voix, ce qui est souvent plus naturel. Comptez dix minutes par question. Au bout de quelques semaines, la chronologie interactive reconstitue automatiquement le récit dans l'ordre, et vos enfants héritent d'un ensemble cohérent plutôt que d'une intention jamais concrétisée."
+        },
+        {
+          question: "Comment écrire une biographie familiale sans être écrivain ?",
+          answer: "Une biographie familiale réussie n'a rien à voir avec un exercice littéraire : elle vaut par la précision des détails, pas par le style. Écrivez comme vous parleriez à un proche, à la première personne, en préférant les scènes concrètes aux généralités — la table de la cuisine, le nom du chien, le prix du pain à l'époque — car ce sont ces détails que la mémoire familiale perd en premier. Procédez par petits blocs indépendants d'une demi-page plutôt que par chapitres. Sur Family Garden, chaque bloc devient un souvenir daté que la plateforme replace ensuite sur la chronologie ; vous pouvez l'illustrer d'une photo, y adjoindre un enregistrement de votre voix, et l'exporter en PDF pour l'imprimer et l'offrir à votre famille lorsque l'ensemble vous semble abouti."
+        },
+        {
+          question: "Quelle différence entre Family Garden et un site de généalogie comme Geneanet ou MyHeritage ?",
+          answer: "Les sites de généalogie servent à remonter le temps : ils vous aident à retrouver des ancêtres, à consulter des archives d'état civil et à établir des filiations parfois sur plusieurs siècles. Family Garden fait l'inverse : la plateforme part du présent et des générations vivantes pour conserver ce qu'aucune archive ne contiendra jamais — les voix, les récits, les photos de famille, les anecdotes du quotidien. L'arbre généalogique y est un outil de mise en relation des souvenirs, pas une fin en soi : chaque personne de l'arbre est reliée aux moments où elle apparaît. Les deux usages sont complémentaires, et l'import de fichiers GEDCOM permet justement de récupérer un arbre déjà construit ailleurs pour y accrocher vos souvenirs."
+        },
+        {
+          question: "Comment créer un arbre généalogique en ligne avec photos et souvenirs ?",
+          answer: "Sur Family Garden, l'arbre généalogique se construit de deux façons : en saisissant les personnes une à une à partir de vous-même, ou en important un fichier GEDCOM issu d'un logiciel de généalogie existant, ce qui reprend en une seule opération les noms, dates et filiations déjà collectés. Chaque membre dispose ensuite d'une fiche enrichie : photo de portrait, biographie, lieux de vie affichés sur une carte, et surtout la liste des souvenirs où il apparaît. Vous pouvez identifier une personne directement sur une photo de famille, comme sur un réseau social mais dans un cadre strictement privé. L'arbre s'affiche en mode sablier autour d'une personne choisie et s'exporte en PDF ou en GEDCOM. Cette fonction est disponible en option à 5 € par mois."
         }
       ]
     }
   ];
+
 
   // Build FAQ items for JSON-LD
   const allFaqItems = faqCategories.flatMap((cat) =>
