@@ -94,8 +94,8 @@
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "Web",
       "description": "Application web de création de capsules mémorielles numériques. Rassemblez photos, vidéos, audio et textes, organisez-les sur une chronologie interactive et partagez-les en cercles privés.",
-      "isAccessibleForFree": true,
-      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Version gratuite avec 250 Mo de stockage"},
+      "isAccessibleForFree": false,
+      "offers": {"@type": "Offer", "price": "2.99", "priceCurrency": "EUR", "description": "Abonnement unique 2,99 €/mois TTC, 20 Go de stockage, 14 jours d'essai gratuit. Arbre généalogique en option à 5 €/mois."},
       "featureList": ["Capsules mémorielles multimédia", "Chronologie interactive par décennies", "Cercles de partage sécurisés", "Arbre généalogique interactif", "Export PDF", "Legs posthume", "Chiffrement AES-256", "RGPD"],
       "availableLanguage": ["fr", "en", "es", "it", "pt", "ko", "zh"],
       "provider": {"@id": "https://familygarden.fr/#organization"}
@@ -165,6 +165,46 @@
         },
         {
           "@type": "Question",
+          "name": "Qu'est-ce qu'une capsule temporelle numérique ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une capsule temporelle numérique est un ensemble de souvenirs — textes, photos, vidéos, enregistrements vocaux — rassemblés aujourd'hui pour être ouverts plus tard, à une date choisie ou par une personne précise. Sur Family Garden, chaque souvenir peut être programmé pour être révélé à une date future : les dix-huit ans d'un enfant, un anniversaire, ou après votre disparition dans le cadre du legs posthume."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment conserver ses souvenirs de famille en ligne sans les perdre ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La première cause de perte des souvenirs familiaux est la dispersion entre téléphones, disques durs et messageries. Conserver durablement suppose un lieu unique, un contexte associé à chaque document et un accès partagé avec ses proches. Family Garden réunit ces trois conditions dans un service en ligne hébergé en Europe, chiffré et sauvegardé quotidiennement, avec export complet possible à tout moment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment raconter sa vie à ses enfants ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La méthode la plus efficace consiste à renoncer à la chronologie et à répondre à une question précise à la fois. Family Garden propose plus de cinquante questions guidées auxquelles vous répondez par écrit ou en enregistrant votre voix, en dix minutes environ. La chronologie interactive reconstitue ensuite le récit dans l'ordre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre Family Garden et un site de généalogie ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les sites de généalogie servent à remonter le temps grâce aux archives et aux filiations. Family Garden part du présent et des générations vivantes pour conserver ce qu'aucune archive ne contiendra : les voix, les récits et les photos de famille. L'import GEDCOM permet de récupérer un arbre construit ailleurs pour y accrocher ses souvenirs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien coûte Family Garden ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Family Garden fonctionne avec un tarif unique de 2,99 € par mois TTC donnant accès à tout le service en ligne avec 20 Go de stockage. L'arbre généalogique interactif est proposé en option à 5 € par mois. Chaque compte démarre par 14 jours d'essai gratuit sans carte bancaire, sans engagement de durée."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Family Garden est-il conforme au RGPD ?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -197,20 +237,31 @@
 
         <h2>Tarifs</h2>
         <ul>
-          <li>Gratuit : 250 Mo de stockage, capsules texte et photo</li>
-          <li>Premium (4,99 €/mois) : 10 Go, tous formats, sans publicité</li>
-          <li>Héritage (9,99 €/mois) : 20 Go, partage illimité, arbre généalogique, legs posthume</li>
+          <li>14 jours d'essai gratuit, sans carte bancaire</li>
+          <li>Abonnement unique : 2,99 €/mois TTC — 20 Go de stockage, tous formats (texte, photo, vidéo, audio), chronologie, cercles de partage, export PDF, legs posthume</li>
+          <li>Option arbre généalogique interactif : 5 €/mois</li>
         </ul>
+
+        <h2>Questions fréquentes</h2>
+        <h3>Qu'est-ce qu'une capsule temporelle numérique ?</h3>
+        <p>Une capsule temporelle numérique rassemble textes, photos, vidéos et enregistrements vocaux pour une ouverture différée, à une date choisie ou par un destinataire précis. Family Garden permet de programmer la révélation de chaque souvenir.</p>
+        <h3>Comment conserver ses souvenirs de famille en ligne ?</h3>
+        <p>En réunissant vos médias dans un lieu unique, en documentant chaque souvenir (date, lieu, personnes) et en ouvrant l'accès à vos proches. Hébergement européen chiffré, sauvegarde quotidienne, export complet à tout moment.</p>
+        <h3>Comment raconter sa vie à ses enfants ?</h3>
+        <p>En répondant à une question guidée à la fois, à l'écrit ou à la voix. Family Garden propose plus de cinquante questions et reconstitue automatiquement le récit sur une chronologie.</p>
+        <h3>Quelle différence avec un site de généalogie ?</h3>
+        <p>Les sites de généalogie remontent le temps via les archives. Family Garden conserve la mémoire vivante — voix, récits, photos — et relie chaque souvenir aux personnes de l'arbre généalogique (import GEDCOM possible).</p>
 
         <h2>Navigation</h2>
         <ul>
           <li><a href="https://familygarden.fr/">Accueil</a></li>
-          <li><a href="https://familygarden.fr/signup">Inscription gratuite</a></li>
+          <li><a href="https://familygarden.fr/signup">Inscription — 14 jours d'essai gratuit</a></li>
           <li><a href="https://familygarden.fr/login">Connexion</a></li>
           <li><a href="https://familygarden.fr/premium">Tarifs</a></li>
           <li><a href="https://familygarden.fr/faq">FAQ</a></li>
           <li><a href="https://familygarden.fr/about">À propos</a></li>
-          <li><a href="https://familygarden.fr/inspirations">Inspirations</a></li>
+          <li><a href="https://familygarden.fr/blog">Blog : conseils pour préserver ses souvenirs</a></li>
+          <li><a href="https://familygarden.fr/demo">Démonstration guidée</a></li>
           <li><a href="https://familygarden.fr/privacy">Confidentialité</a></li>
           <li><a href="https://familygarden.fr/terms">Conditions d'utilisation</a></li>
           <li><a href="https://familygarden.fr/mentions-legales">Mentions légales</a></li>
