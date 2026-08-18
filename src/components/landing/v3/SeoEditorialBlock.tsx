@@ -10,7 +10,8 @@ const ARTICLES = [
 ] as const;
 
 const SeoEditorialBlock = () => {
-  const { t } = useTranslation('landing');
+  const { t, i18n } = useTranslation('landing');
+  const showArticles = i18n.language?.startsWith('fr');
 
   return (
     <section className="bg-[hsl(35_30%_97%)] border-y border-[hsl(220_15%_90%)] py-12 sm:py-16">
@@ -26,6 +27,8 @@ const SeoEditorialBlock = () => {
             {t('v3.editorial.p2')}
           </p>
 
+          {showArticles && (
+            <>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
             {t('v3.editorial.linksTitle')}
           </h3>
@@ -42,6 +45,8 @@ const SeoEditorialBlock = () => {
               </li>
             ))}
           </ul>
+            </>
+          )}
         </div>
       </div>
     </section>
