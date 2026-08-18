@@ -1,17 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-
-const ARTICLES = [
-  { key: 'l1', slug: 'capsule-temporelle-numerique-comment-en-creer-une' },
-  { key: 'l2', slug: 'conserver-transmettre-souvenirs-de-famille' },
-  { key: 'l3', slug: 'raconter-sa-vie-a-ses-enfants-methode' },
-  { key: 'l4', slug: 'arbre-genealogique-en-ligne-photos-et-souvenirs' },
-] as const;
+import { EDITORIAL_ORDER, getArticleSlug } from '@/lib/blogArticles';
 
 const SeoEditorialBlock = () => {
   const { t, i18n } = useTranslation('landing');
-  const showArticles = i18n.language?.startsWith('fr');
 
   return (
     <section className="bg-[hsl(35_30%_97%)] border-y border-[hsl(220_15%_90%)] py-12 sm:py-16">
@@ -27,26 +20,22 @@ const SeoEditorialBlock = () => {
             {t('v3.editorial.p2')}
           </p>
 
-          {showArticles && (
-            <>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
             {t('v3.editorial.linksTitle')}
           </h3>
           <ul className="grid sm:grid-cols-2 gap-3">
-            {ARTICLES.map(({ key, slug }) => (
-              <li key={key}>
+            {EDITORIAL_ORDER.map((group, index) => (
+              <li key={group}>
                 <Link
-                  to={`/blog/${slug}`}
+                  to={`/blog/${getArticleSlug(group, i18n.language)}`}
                   className="group flex items-start gap-2 rounded-xl bg-white border border-[hsl(220_15%_90%)] p-4 text-sm font-medium text-[hsl(215_50%_18%)] shadow-sm transition-colors hover:border-[hsl(var(--gold))]"
                 >
-                  <span className="flex-1 leading-snug">{t(`v3.editorial.links.${key}`)}</span>
+                  <span className="flex-1 leading-snug">{t(`v3.editorial.links.l${index + 1}`)}</span>
                   <ArrowRight className="h-4 w-4 mt-0.5 flex-shrink-0 text-[hsl(var(--gold))] transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </li>
             ))}
           </ul>
-            </>
-          )}
         </div>
       </div>
     </section>

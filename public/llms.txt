@@ -85,3 +85,29 @@ Pour toute question, utilisez le formulaire de contact sur https://familygarden.
 ## Contenu détaillé
 
 Pour plus de détails, consultez : [llms-full.txt](https://familygarden.fr/llms-full.txt)
+
+## Articles traduits (EN, ES, IT, PT, KO, ZH)
+- https://familygarden.fr/blog/digital-time-capsule-family-guide-en
+- https://familygarden.fr/blog/capsula-tiempo-digital-familiar-crear-es
+- https://familygarden.fr/blog/capsula-del-tempo-digitale-guida-completa-it
+- https://familygarden.fr/blog/capsula-tempo-digital-criar-familia-pt
+- https://familygarden.fr/blog/digital-time-capsule-family-garden-korea-ko
+- https://familygarden.fr/blog/digital-time-capsule-family-garden-zh
+- https://familygarden.fr/blog/preserve-pass-down-family-memories-en
+- https://familygarden.fr/blog/como-conservar-transmitir-recuerdos-familiares-es
+- https://familygarden.fr/blog/conservare-tramandare-ricordi-famiglia-guida-it
+- https://familygarden.fr/blog/preservar-transmitir-memorias-familia-pt
+- https://familygarden.fr/blog/family-memory-preservation-guide-ko
+- https://familygarden.fr/blog/how-to-preserve-and-pass-on-family-memories-zh
+- https://familygarden.fr/blog/telling-your-life-story-7-steps-en
+- https://familygarden.fr/blog/contar-vida-hijos-metodo-7-pasos-es
+- https://familygarden.fr/blog/raccontare-vita-figli-metodo-7-passaggi-it
+- https://familygarden.fr/blog/contar-a-sua-vida-aos-seus-filhos-metodo-pt
+- https://familygarden.fr/blog/7-steps-to-share-your-life-story-ko
+- https://familygarden.fr/blog/how-to-tell-your-life-story-to-children-7-steps-zh
+- https://familygarden.fr/blog/online-family-tree-photos-stories-en
+- https://familygarden.fr/blog/arbol-genealogico-online-fotos-relatos-personas-es
+- https://familygarden.fr/blog/albero-genealogico-online-foto-storie-it
+- https://familygarden.fr/blog/arvore-genealogica-online-fotos-historias-pessoas-pt
+- https://familygarden.fr/blog/online-family-tree-memories-photos-ko
+- https://familygarden.fr/blog/online-family-tree-photos-stories-people-zh

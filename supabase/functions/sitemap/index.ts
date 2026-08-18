@@ -1,3 +1,5 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -24,10 +26,6 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { loc: "/about", changefreq: "monthly", priority: 0.7 },
   { loc: "/marketing", changefreq: "monthly", priority: 0.8 },
   { loc: "/blog", changefreq: "weekly", priority: 0.7 },
-  { loc: "/blog/capsule-temporelle-numerique-comment-en-creer-une", changefreq: "monthly", priority: 0.8 },
-  { loc: "/blog/conserver-transmettre-souvenirs-de-famille", changefreq: "monthly", priority: 0.8 },
-  { loc: "/blog/raconter-sa-vie-a-ses-enfants-methode", changefreq: "monthly", priority: 0.8 },
-  { loc: "/blog/arbre-genealogique-en-ligne-photos-et-souvenirs", changefreq: "monthly", priority: 0.8 },
   { loc: "/privacy", changefreq: "yearly", priority: 0.5 },
   { loc: "/terms", changefreq: "yearly", priority: 0.5 },
   { loc: "/cgv", changefreq: "yearly", priority: 0.5 },
@@ -59,7 +57,32 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const xml = buildSitemap(PUBLIC_ROUTES);
+    const entries: SitemapEntry[] = [...PUBLIC_ROUTES];
+
+    // Articles de blog (toutes langues) ajoutés dynamiquement
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      );
+      const { data: posts } = await supabase
+        .from("blog_posts")
+        .select("slug, updated_at, published_at")
+        .eq("status", "published");
+
+      for (const post of posts ?? []) {
+        entries.push({
+          loc: `/blog/${post.slug}`,
+          changefreq: "monthly",
+          priority: 0.8,
+          lastmod: (post.updated_at ?? post.published_at ?? today).toString().split("T")[0],
+        });
+      }
+    } catch (e) {
+      console.error("Blog posts fetch failed", e);
+    }
+
+    const xml = buildSitemap(entries);
 
     return new Response(xml, {
       status: 200,

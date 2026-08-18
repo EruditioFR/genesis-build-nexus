@@ -91,12 +91,14 @@ export type Database = {
           created_at: string
           excerpt: string | null
           id: string
+          lang: string
           meta_description: string | null
           meta_title: string | null
           published_at: string | null
           slug: string
           status: string
           title: string
+          translation_group: string | null
           updated_at: string
           video_url: string | null
         }
@@ -107,12 +109,14 @@ export type Database = {
           created_at?: string
           excerpt?: string | null
           id?: string
+          lang?: string
           meta_description?: string | null
           meta_title?: string | null
           published_at?: string | null
           slug: string
           status?: string
           title: string
+          translation_group?: string | null
           updated_at?: string
           video_url?: string | null
         }
@@ -123,12 +127,14 @@ export type Database = {
           created_at?: string
           excerpt?: string | null
           id?: string
+          lang?: string
           meta_description?: string | null
           meta_title?: string | null
           published_at?: string | null
           slug?: string
           status?: string
           title?: string
+          translation_group?: string | null
           updated_at?: string
           video_url?: string | null
         }

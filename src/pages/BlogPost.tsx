@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowLeft, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
@@ -22,6 +22,15 @@ interface Post {
   created_at: string;
   meta_title: string | null;
   meta_description: string | null;
+  lang?: string | null;
+  translation_group?: string | null;
+}
+
+interface RelatedPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
 }
 
 interface BlogCategory {
@@ -36,7 +45,7 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-function SocialShareButtons({ title, url }: { title: string; url: string }) {
+function SocialShareButtons({ title, url, shareLabel, copyLabel }: { title: string; url: string; shareLabel: string; copyLabel: string }) {
   const encoded = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -48,7 +57,7 @@ function SocialShareButtons({ title, url }: { title: string; url: string }) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <span className="text-sm text-muted-foreground flex items-center gap-1">
-        <Share2 className="h-4 w-4" /> Partager :
+        <Share2 className="h-4 w-4" /> {shareLabel}
       </span>
       <Button variant="outline" size="sm" asChild>
         <a href={`https://www.facebook.com/sharer/sharer.php?u=${encoded}`} target="_blank" rel="noopener noreferrer">
@@ -66,7 +75,7 @@ function SocialShareButtons({ title, url }: { title: string; url: string }) {
         </a>
       </Button>
       <Button variant="outline" size="sm" onClick={copyLink}>
-        <Link2 className="h-4 w-4 mr-1" /> Copier
+        <Link2 className="h-4 w-4 mr-1" /> {copyLabel}
       </Button>
     </div>
   );
@@ -76,6 +85,7 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [category, setCategory] = useState<BlogCategory | null>(null);
+  const [related, setRelated] = useState<RelatedPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -94,6 +104,17 @@ export default function BlogPostPage() {
           const { data: cat } = await supabase.from("blog_categories").select("*").eq("id", typedData.category_id).maybeSingle();
           if (cat) setCategory(cat as unknown as BlogCategory);
         }
+
+        // Maillage interne : autres articles de la même langue
+        const { data: others } = await supabase
+          .from("blog_posts")
+          .select("id, title, slug, excerpt")
+          .eq("status", "published")
+          .eq("lang", (typedData as { lang?: string }).lang ?? "fr")
+          .neq("id", typedData.id)
+          .order("published_at", { ascending: false })
+          .limit(3);
+        if (others) setRelated(others as unknown as RelatedPost[]);
       }
       setLoading(false);
     };
@@ -124,6 +145,33 @@ export default function BlogPostPage() {
     );
   }
 
+  const lang = (post.lang ?? "fr").split("-")[0];
+  const RELATED_LABELS: Record<string, string> = {
+    fr: "À lire aussi", en: "Related reading", es: "Lecturas relacionadas",
+    it: "Da leggere anche", pt: "Leituras relacionadas", ko: "함께 읽기", zh: "延伸阅读",
+  };
+  const CTA_LABELS: Record<string, string> = {
+    fr: "Commencer mes 14 jours d'essai gratuit", en: "Start my 14-day free trial",
+    es: "Comenzar mi prueba gratuita de 14 días", it: "Inizia la prova gratuita di 14 giorni",
+    pt: "Começar o teste gratuito de 14 dias", ko: "14일 무료 체험 시작하기", zh: "开始 14 天免费试用",
+  };
+  const BACK_LABELS: Record<string, string> = {
+    fr: "Retour au blog", en: "Back to blog", es: "Volver al blog", it: "Torna al blog",
+    pt: "Voltar ao blog", ko: "블로그로 돌아가기", zh: "返回博客",
+  };
+  const SHARE_LOCALES: Record<string, string> = {
+    fr: "fr-FR", en: "en-GB", es: "es-ES", it: "it-IT", pt: "pt-PT", ko: "ko-KR", zh: "zh-CN",
+  };
+  const backLabel = BACK_LABELS[lang] ?? BACK_LABELS.fr;
+  const dateLocale = SHARE_LOCALES[lang] ?? "fr-FR";
+  const SHARE_LABELS: Record<string, [string, string]> = {
+    fr: ["Partager :", "Copier"], en: ["Share:", "Copy"], es: ["Compartir:", "Copiar"],
+    it: ["Condividi:", "Copia"], pt: ["Partilhar:", "Copiar"], ko: ["공유:", "복사"], zh: ["分享：", "复制"],
+  };
+  const [shareLabel, copyLabel] = SHARE_LABELS[lang] ?? SHARE_LABELS.fr;
+  const relatedTitle = RELATED_LABELS[lang] ?? RELATED_LABELS.fr;
+  const ctaLabel = CTA_LABELS[lang] ?? CTA_LABELS.fr;
+
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
   const pageUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -145,7 +193,7 @@ export default function BlogPostPage() {
 
         <article className="max-w-3xl mx-auto px-4 py-8">
           <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-6">
-            <ArrowLeft className="h-4 w-4" /> Retour au blog
+            <ArrowLeft className="h-4 w-4" /> {backLabel}
           </Link>
 
           <div className="flex items-center gap-3 mb-4 flex-wrap">
@@ -156,7 +204,7 @@ export default function BlogPostPage() {
             )}
             <span className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              {new Date(post.published_at || post.created_at).toLocaleDateString("fr-FR", {
+              {new Date(post.published_at || post.created_at).toLocaleDateString(dateLocale, {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -191,8 +239,34 @@ export default function BlogPostPage() {
           )}
 
           <div className="border-t pt-6 mt-8">
-            <SocialShareButtons title={post.title} url={pageUrl} />
+            <SocialShareButtons title={post.title} url={pageUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
           </div>
+
+          {related.length > 0 && (
+            <section className="border-t pt-8 mt-10">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+                {relatedTitle}
+              </h2>
+              <ul className="grid sm:grid-cols-2 gap-3">
+                {related.map((r) => (
+                  <li key={r.id}>
+                    <Link
+                      to={`/blog/${r.slug}`}
+                      className="group flex items-start gap-2 rounded-xl border bg-card p-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary"
+                    >
+                      <span className="flex-1 leading-snug">{r.title}</span>
+                      <ArrowRight className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Button asChild>
+                  <Link to="/signup">{ctaLabel}</Link>
+                </Button>
+              </div>
+            </section>
+          )}
         </article>
       </main>
       <Footer />
