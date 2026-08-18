@@ -155,6 +155,15 @@ export default function BlogPostPage() {
     es: "Comenzar mi prueba gratuita de 14 días", it: "Inizia la prova gratuita di 14 giorni",
     pt: "Começar o teste gratuito de 14 dias", ko: "14일 무료 체험 시작하기", zh: "开始 14 天免费试用",
   };
+  const BACK_LABELS: Record<string, string> = {
+    fr: "Retour au blog", en: "Back to blog", es: "Volver al blog", it: "Torna al blog",
+    pt: "Voltar ao blog", ko: "블로그로 돌아가기", zh: "返回博客",
+  };
+  const SHARE_LOCALES: Record<string, string> = {
+    fr: "fr-FR", en: "en-GB", es: "es-ES", it: "it-IT", pt: "pt-PT", ko: "ko-KR", zh: "zh-CN",
+  };
+  const backLabel = BACK_LABELS[lang] ?? BACK_LABELS.fr;
+  const dateLocale = SHARE_LOCALES[lang] ?? "fr-FR";
   const relatedTitle = RELATED_LABELS[lang] ?? RELATED_LABELS.fr;
   const ctaLabel = CTA_LABELS[lang] ?? CTA_LABELS.fr;
 
@@ -179,7 +188,7 @@ export default function BlogPostPage() {
 
         <article className="max-w-3xl mx-auto px-4 py-8">
           <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-6">
-            <ArrowLeft className="h-4 w-4" /> Retour au blog
+            <ArrowLeft className="h-4 w-4" /> {backLabel}
           </Link>
 
           <div className="flex items-center gap-3 mb-4 flex-wrap">
@@ -190,7 +199,7 @@ export default function BlogPostPage() {
             )}
             <span className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              {new Date(post.published_at || post.created_at).toLocaleDateString("fr-FR", {
+              {new Date(post.published_at || post.created_at).toLocaleDateString(dateLocale, {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
