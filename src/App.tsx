@@ -114,6 +114,8 @@ const App = () => (
                   <Route path="/statistics" element={<Statistics />} />
                   
                   <Route path="/premium" element={<Premium />} />
+                  <Route path="/tarifs" element={<PricingPage />} />
+                  <Route path="/pricing" element={<PricingPage />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/checkout/success" element={<CheckoutSuccess />} />
                   <Route path="/family-tree" element={<FamilyTreePage />} />
