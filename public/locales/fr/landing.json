@@ -99,8 +99,8 @@
   },
   "pricing": {
     "badge": "Tarifs",
-    "title": "Un accompagnement pour chaque",
-    "titleHighlight": "histoire de vie",
+    "title": "Tarif du journal de famille en ligne :",
+    "titleHighlight": "simple et sans surprise",
     "subtitle": "Commencez gratuitement et évoluez selon vos besoins. Pas de frais cachés.",
     "monthly": "Mensuel",
     "yearly": "Annuel",
@@ -163,8 +163,8 @@
   },
   "faq": {
     "badge": "FAQ",
-    "title": "Questions",
-    "titleHighlight": "fréquentes",
+    "title": "Questions fréquentes sur les",
+    "titleHighlight": "souvenirs de famille en ligne",
     "items": {
       "q1": {
         "question": "Qu'est-ce qu'un souvenir sur FamilyGarden ?",
@@ -401,8 +401,8 @@
   "v3": {
     "hero": {
       "badge": "Espace privé pour votre famille",
-      "title": "Protégez les souvenirs",
-      "titleHighlight": "de votre famille",
+      "title": "Votre journal de famille privé :",
+      "titleHighlight": "tous vos souvenirs réunis",
       "subtitle": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un journal de famille privé, organisé, durable et transmissible.",
       "ctaPrimary": "Commencer mes 14 jours\nd'essai gratuit",
       "ctaSecondary": "Voir comment ça marche",
@@ -433,8 +433,8 @@
           "question": "Quel moment a changé le cours de votre vie ?"
         }
       },
-      "subtitleLead": "Family Garden est un service en ligne qui réunit photos, vidéos, voix et récits dans un ",
-      "subtitleHighlight": "journal de famille privé, organisé, durable et transmissible.",
+      "subtitleLead": "Family Garden est un service en ligne pour conserver et transmettre vos souvenirs de famille : photos, vidéos, voix et récits réunis dans un ",
+      "subtitleHighlight": "journal de famille privé, une véritable capsule temporelle numérique.",
       "productSlider": {
         "organisation": {
           "label": "Organisation",
@@ -459,8 +459,8 @@
       }
     },
     "howItWorksShort": {
-      "title": "Comment fonctionne ce",
-      "titleHighlight": "service en ligne ?",
+      "title": "Comment conserver vos souvenirs de famille",
+      "titleHighlight": "en ligne, en 3 étapes ?",
       "steps": {
         "s1": {
           "label": "Étape 1",
@@ -540,8 +540,8 @@
     },
     "audience": {
       "badge": "Pour qui ?",
-      "title": "Une réponse différente pour chaque",
-      "titleHighlight": "moment de famille",
+      "title": "Album photo familial, biographie, arbre :",
+      "titleHighlight": "à chaque histoire son usage",
       "subtitle": "Family Garden s'adapte à votre histoire — qu'il s'agisse de bâtir un héritage, de garder trace d'une enfance ou de rassembler un mariage.",
       "today": "Aujourd'hui",
       "withFG": "Avec Family Garden",
@@ -625,8 +625,8 @@
     },
     "testimonialsV3": {
       "badge": "Témoignages",
-      "title": "Des familles qui ont retrouvé",
-      "titleHighlight": "leur mémoire",
+      "title": "Ils préservent",
+      "titleHighlight": "la mémoire de leur famille",
       "subtitle": "Plus de mille familles utilisent Family Garden pour préserver et transmettre leurs souvenirs.",
       "starsLabel": "5 étoiles sur 5",
       "hero": {
@@ -676,6 +676,18 @@
           "title": "Résiliation 1 clic",
           "description": "Sans engagement"
         }
+      }
+    },
+    "editorial": {
+      "title": "Conserver, raconter et transmettre l'histoire de votre famille",
+      "p1": "Les souvenirs de famille se dispersent vite : photos noyées dans plusieurs clouds, vidéos oubliées sur un vieux disque dur, récits jamais écrits. Family Garden réunit tout dans un journal de famille privé, hébergé en Europe, où chaque souvenir porte une date, un lieu et les personnes concernées.",
+      "p2": "Vous pouvez y créer une capsule temporelle numérique à ouvrir plus tard, écrire une biographie familiale au fil de l'eau, raconter votre vie à vos enfants avec votre propre voix, constituer un album photo familial sécurisé et relier le tout à votre arbre généalogique en ligne.",
+      "linksTitle": "À lire pour aller plus loin",
+      "links": {
+        "l1": "Capsule temporelle numérique : comment en créer une",
+        "l2": "Comment conserver et transmettre ses souvenirs de famille",
+        "l3": "Raconter sa vie à ses enfants : une méthode en 7 étapes",
+        "l4": "Arbre généalogique en ligne : relier photos, récits et personnes"
       }
     }
   }
