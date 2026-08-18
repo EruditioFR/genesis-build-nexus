@@ -254,7 +254,8 @@
       "product": "Produit",
       "company": "Entreprise",
       "resources": "Ressources",
-      "legal": "Légal"
+      "legal": "Légal",
+      "explore": "Explorer"
     },
     "links": {
       "features": "Fonctionnalités",
@@ -272,7 +273,9 @@
       "privacy": "Confidentialité",
       "terms": "CGV",
       "legalNotice": "Mentions légales",
-      "gdpr": "RGPD"
+      "gdpr": "RGPD",
+      "inspirations": "Inspirations",
+      "categories": "Catégories"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "Comment conserver et transmettre ses souvenirs de famille",
         "l3": "Raconter sa vie à ses enfants : une méthode en 7 étapes",
         "l4": "Arbre généalogique en ligne : relier photos, récits et personnes"
+      }
+    },
+    "hub": {
+      "title": "Explorer Family Garden",
+      "subtitle": "Toutes les ressources pour bien démarrer votre journal de famille privé.",
+      "items": {
+        "pricing": {
+          "title": "Tarifs : 2,99 €/mois",
+          "desc": "Un tarif unique, 20 Go de souvenirs, 14 jours d'essai."
+        },
+        "faq": {
+          "title": "Questions fréquentes",
+          "desc": "Sécurité, hébergement, partage, transmission : toutes les réponses."
+        },
+        "blog": {
+          "title": "Le blog",
+          "desc": "Guides pratiques pour conserver et transmettre vos souvenirs."
+        },
+        "about": {
+          "title": "À propos",
+          "desc": "Pourquoi nous avons créé un journal de famille privé, hébergé en Europe."
+        },
+        "inspirations": {
+          "title": "Inspirations",
+          "desc": "Des questions guidées pour ne jamais manquer d'idées de souvenirs."
+        },
+        "categories": {
+          "title": "Catégories de souvenirs",
+          "desc": "Enfance, voyages, recettes, traditions : classez vos souvenirs."
+        }
       }
     }
   }

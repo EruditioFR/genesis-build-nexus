@@ -254,7 +254,8 @@
       "product": "产品",
       "company": "公司",
       "resources": "资源",
-      "legal": "法律"
+      "legal": "法律",
+      "explore": "探索"
     },
     "links": {
       "features": "功能",
@@ -272,7 +273,9 @@
       "privacy": "隐私",
       "terms": "销售条款",
       "legalNotice": "法律声明",
-      "gdpr": "GDPR"
+      "gdpr": "GDPR",
+      "inspirations": "灵感",
+      "categories": "分类"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "如何保存并传承家庭回忆",
         "l3": "向孩子讲述人生：七步方法",
         "l4": "在线家谱：连接照片、故事与人物"
+      }
+    },
+    "hub": {
+      "title": "探索 Family Garden",
+      "subtitle": "开始您的私密家庭日记所需的一切资源。",
+      "items": {
+        "pricing": {
+          "title": "价格：每月 2.99 欧元",
+          "desc": "单一套餐，20 GB 回忆空间，14 天免费试用。"
+        },
+        "faq": {
+          "title": "常见问题",
+          "desc": "安全、托管、分享与传承：所有答案。"
+        },
+        "blog": {
+          "title": "博客",
+          "desc": "保存并传承回忆的实用指南。"
+        },
+        "about": {
+          "title": "关于我们",
+          "desc": "我们为何打造这一托管于欧洲的私密家庭日记。"
+        },
+        "inspirations": {
+          "title": "灵感",
+          "desc": "引导式问题，让您永远不缺回忆素材。"
+        },
+        "categories": {
+          "title": "回忆分类",
+          "desc": "童年、旅行、食谱、传统：整理您的回忆。"
+        }
       }
     }
   }

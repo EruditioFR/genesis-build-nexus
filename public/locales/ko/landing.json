@@ -254,11 +254,12 @@
       "product": "제품",
       "company": "회사",
       "resources": "리소스",
-      "legal": "법적"
+      "legal": "법적",
+      "explore": "둘러보기"
     },
     "links": {
       "features": "기능",
-      "pricing": "가격",
+      "pricing": "요금",
       "roadmap": "로드맵",
       "changelog": "변경 로그",
       "about": "소개",
@@ -272,7 +273,9 @@
       "privacy": "개인정보",
       "terms": "이용약관",
       "legalNotice": "법적 고지",
-      "gdpr": "GDPR"
+      "gdpr": "GDPR",
+      "inspirations": "영감",
+      "categories": "카테고리"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "가족의 추억을 보관하고 물려주는 방법",
         "l3": "아이들에게 내 삶을 들려주는 7단계 방법",
         "l4": "온라인 가족 나무: 사진·이야기·사람을 연결하기"
+      }
+    },
+    "hub": {
+      "title": "Family Garden 둘러보기",
+      "subtitle": "비공개 가족 일기를 시작하는 데 필요한 모든 자료입니다.",
+      "items": {
+        "pricing": {
+          "title": "요금: 월 2.99유로",
+          "desc": "단일 요금제, 20GB 저장 공간, 14일 무료 체험."
+        },
+        "faq": {
+          "title": "자주 묻는 질문",
+          "desc": "보안, 호스팅, 공유, 상속에 대한 모든 답변."
+        },
+        "blog": {
+          "title": "블로그",
+          "desc": "추억을 보존하고 전하는 실용 가이드."
+        },
+        "about": {
+          "title": "소개",
+          "desc": "유럽에서 호스팅되는 비공개 가족 일기를 만든 이유."
+        },
+        "inspirations": {
+          "title": "영감",
+          "desc": "추억의 아이디어가 떨어지지 않도록 돕는 안내 질문."
+        },
+        "categories": {
+          "title": "추억 카테고리",
+          "desc": "어린 시절, 여행, 요리, 전통으로 추억을 정리하세요."
+        }
       }
     }
   }

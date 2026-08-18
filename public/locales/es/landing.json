@@ -254,7 +254,8 @@
       "product": "Producto",
       "company": "Empresa",
       "resources": "Recursos",
-      "legal": "Legal"
+      "legal": "Legal",
+      "explore": "Explorar"
     },
     "links": {
       "features": "Funcionalidades",
@@ -272,7 +273,9 @@
       "privacy": "Privacidad",
       "terms": "Términos",
       "legalNotice": "Aviso legal",
-      "gdpr": "RGPD"
+      "gdpr": "RGPD",
+      "inspirations": "Inspiraciones",
+      "categories": "Categorías"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "Cómo conservar y transmitir tus recuerdos de familia",
         "l3": "Contar tu vida a tus hijos: un método en 7 pasos",
         "l4": "Árbol genealógico en línea: unir fotos, relatos y personas"
+      }
+    },
+    "hub": {
+      "title": "Explorar Family Garden",
+      "subtitle": "Todos los recursos para empezar su diario familiar privado.",
+      "items": {
+        "pricing": {
+          "title": "Precio: 2,99 €/mes",
+          "desc": "Una única tarifa, 20 GB de recuerdos, 14 días de prueba."
+        },
+        "faq": {
+          "title": "Preguntas frecuentes",
+          "desc": "Seguridad, alojamiento, compartir y transmitir: todas las respuestas."
+        },
+        "blog": {
+          "title": "El blog",
+          "desc": "Guías prácticas para conservar y transmitir sus recuerdos."
+        },
+        "about": {
+          "title": "Quiénes somos",
+          "desc": "Por qué creamos un diario familiar privado alojado en Europa."
+        },
+        "inspirations": {
+          "title": "Inspiraciones",
+          "desc": "Preguntas guiadas para no quedarse sin ideas de recuerdos."
+        },
+        "categories": {
+          "title": "Categorías de recuerdos",
+          "desc": "Infancia, viajes, recetas, tradiciones: organice sus recuerdos."
+        }
       }
     }
   }
