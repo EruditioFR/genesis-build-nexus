@@ -25,6 +25,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://familygarden.fr/tarifs</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://familygarden.fr/faq</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
