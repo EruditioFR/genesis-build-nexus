@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { normalizeBlogLang } from "@/lib/blogArticles";
 import SEOHead from "@/components/seo/SEOHead";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
@@ -31,6 +33,8 @@ export default function BlogList() {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { i18n } = useTranslation();
+  const lang = normalizeBlogLang(i18n.language);
 
   useEffect(() => {
     const fetch = async () => {
@@ -39,6 +43,7 @@ export default function BlogList() {
           .from("blog_posts")
           .select("id, title, slug, excerpt, cover_image_url, category_id, published_at, created_at")
           .eq("status", "published")
+          .eq("lang", lang)
           .order("published_at", { ascending: false }),
         supabase.from("blog_categories").select("*").order("order_index"),
       ]);
@@ -47,7 +52,7 @@ export default function BlogList() {
       setLoading(false);
     };
     fetch();
-  }, []);
+  }, [lang]);
 
   const filtered = selectedCat ? posts.filter((p) => p.category_id === selectedCat) : posts;
   const getCat = (id: string | null) => categories.find((c) => c.id === id);
