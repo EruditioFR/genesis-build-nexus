@@ -459,6 +459,10 @@
           "title": "家族时间轴",
           "description": "按年代整理所有回忆,如同一场穿越时空的旅程。"
         }
+      },
+      "mobileVisual": {
+        "caption": "家庭回忆，集中珍藏与守护",
+        "alt": "一家人共享回忆的时刻"
       }
     },
     "howItWorksShort": {
