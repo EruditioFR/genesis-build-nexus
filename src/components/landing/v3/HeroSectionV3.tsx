@@ -145,7 +145,13 @@ const HeroSectionV3 = () => {
               decoding="async"
               className="w-full h-[160px] sm:h-[260px] object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[hsl(215_50%_14%)]/90 via-[hsl(215_50%_14%)]/25 to-transparent pointer-events-none" />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, hsl(215 50% 14% / 0.9) 0%, hsl(215 50% 14% / 0.25) 45%, transparent 75%)',
+              }}
+            />
             <p className="absolute inset-x-0 bottom-0 px-4 pb-3 sm:pb-4 text-left text-[13px] sm:text-base font-medium text-white leading-snug">
               {t('v3.hero.mobileVisual.caption')}
             </p>
