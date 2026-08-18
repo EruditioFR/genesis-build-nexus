@@ -459,6 +459,10 @@
           "title": "Votre Chronologie familiale",
           "description": "Visualisez tous vos souvenirs organisés par décennies, comme un voyage dans le temps."
         }
+      },
+      "mobileVisual": {
+        "caption": "Vos souvenirs de famille, réunis et protégés",
+        "alt": "Une famille réunie autour d'un moment de souvenir"
       }
     },
     "howItWorksShort": {

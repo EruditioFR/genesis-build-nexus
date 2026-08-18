@@ -459,6 +459,10 @@
           "title": "A sua cronologia familiar",
           "description": "Visualize todas as suas memórias organizadas por décadas, como uma viagem no tempo."
         }
+      },
+      "mobileVisual": {
+        "caption": "As suas memórias de família, reunidas e protegidas",
+        "alt": "Uma família reunida em torno de uma memória"
       }
     },
     "howItWorksShort": {

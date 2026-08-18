@@ -459,6 +459,10 @@
           "title": "Your family timeline",
           "description": "Visualize all your memories organized by decades, like a journey through time."
         }
+      },
+      "mobileVisual": {
+        "caption": "Your family memories, gathered and protected",
+        "alt": "A family gathered around a shared memory"
       }
     },
     "howItWorksShort": {

@@ -459,6 +459,10 @@
           "title": "가족 타임라인",
           "description": "시대별로 정리된 모든 추억을 시간 여행처럼 한눈에 살펴보세요."
         }
+      },
+      "mobileVisual": {
+        "caption": "가족의 소중한 추억을 한곳에 안전하게",
+        "alt": "추억을 함께 나누는 가족"
       }
     },
     "howItWorksShort": {
