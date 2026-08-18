@@ -8,7 +8,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import { useTranslation } from "react-i18next";
 import { getHomeSeoMeta } from "@/lib/homeSeoMeta";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
+import { websiteSchema, howToSchema, siteNavigationSchema } from "@/lib/seoSchemas";
 
 const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
 const SocialProofBand = lazy(() => import("@/components/landing/v3/SocialProofBand"));
@@ -23,6 +23,7 @@ const TrustBandV3 = lazy(() => import("@/components/landing/v3/TrustBandV3"));
 const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
 const CTASectionV3 = lazy(() => import("@/components/landing/v3/CTASectionV3"));
 const SeoEditorialBlock = lazy(() => import("@/components/landing/v3/SeoEditorialBlock"));
+const InternalLinksHub = lazy(() => import("@/components/landing/v3/InternalLinksHub"));
 const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
 
 const Index = () => {
@@ -54,7 +55,7 @@ const Index = () => {
       <SEOHead
         title={homeSeo.title}
         description={homeSeo.description}
-        jsonLd={[websiteSchema, howToSchema]}
+        jsonLd={[websiteSchema, howToSchema, siteNavigationSchema]}
       />
       <JsonLdSchema type="all" />
       <Header />
@@ -71,6 +72,7 @@ const Index = () => {
           <PricingSectionV3 />
           <FAQSectionV3 />
           <SeoEditorialBlock />
+          <InternalLinksHub />
           <CTASectionV3 />
 
         </Suspense>

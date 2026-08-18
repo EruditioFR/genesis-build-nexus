@@ -254,7 +254,8 @@
       "product": "Product",
       "company": "Company",
       "resources": "Resources",
-      "legal": "Legal"
+      "legal": "Legal",
+      "explore": "Explore"
     },
     "links": {
       "features": "Features",
@@ -272,7 +273,9 @@
       "privacy": "Privacy",
       "terms": "Terms of Sale",
       "legalNotice": "Legal Notice",
-      "gdpr": "GDPR"
+      "gdpr": "GDPR",
+      "inspirations": "Inspirations",
+      "categories": "Categories"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "How to keep and pass on your family memories",
         "l3": "Telling your life story to your children: a 7-step method",
         "l4": "Online family tree: connecting photos, stories and people"
+      }
+    },
+    "hub": {
+      "title": "Explore Family Garden",
+      "subtitle": "Everything you need to start your private family journal.",
+      "items": {
+        "pricing": {
+          "title": "Pricing: €2.99/month",
+          "desc": "One single plan, 20 GB of memories, 14-day trial."
+        },
+        "faq": {
+          "title": "Frequently asked questions",
+          "desc": "Security, hosting, sharing, legacy: all the answers."
+        },
+        "blog": {
+          "title": "The blog",
+          "desc": "Practical guides to preserve and pass on your memories."
+        },
+        "about": {
+          "title": "About us",
+          "desc": "Why we built a private family journal hosted in Europe."
+        },
+        "inspirations": {
+          "title": "Inspirations",
+          "desc": "Guided questions so you never run out of memory ideas."
+        },
+        "categories": {
+          "title": "Memory categories",
+          "desc": "Childhood, travels, recipes, traditions: organise your memories."
+        }
       }
     }
   }

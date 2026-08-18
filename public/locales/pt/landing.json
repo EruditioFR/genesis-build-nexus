@@ -254,7 +254,8 @@
       "product": "Produto",
       "company": "Empresa",
       "resources": "Recursos",
-      "legal": "Legal"
+      "legal": "Legal",
+      "explore": "Explorar"
     },
     "links": {
       "features": "Funcionalidades",
@@ -262,7 +263,7 @@
       "roadmap": "Roteiro",
       "changelog": "Novidades",
       "about": "Sobre",
-      "blog": "Blog",
+      "blog": "Blogue",
       "careers": "Carreiras",
       "partners": "Parceiros",
       "helpCenter": "Centro de ajuda",
@@ -272,7 +273,9 @@
       "privacy": "Privacidade",
       "terms": "Condições de venda",
       "legalNotice": "Aviso legal",
-      "gdpr": "RGPD"
+      "gdpr": "RGPD",
+      "inspirations": "Inspirações",
+      "categories": "Categorias"
     }
   },
   "v2": {
@@ -688,6 +691,36 @@
         "l2": "Como conservar e transmitir as memórias de família",
         "l3": "Contar a sua vida aos filhos: um método em 7 etapas",
         "l4": "Árvore genealógica online: ligar fotos, relatos e pessoas"
+      }
+    },
+    "hub": {
+      "title": "Explorar o Family Garden",
+      "subtitle": "Todos os recursos para começar o seu diário de família privado.",
+      "items": {
+        "pricing": {
+          "title": "Preço: 2,99 €/mês",
+          "desc": "Uma tarifa única, 20 GB de memórias, 14 dias de teste."
+        },
+        "faq": {
+          "title": "Perguntas frequentes",
+          "desc": "Segurança, alojamento, partilha e transmissão: todas as respostas."
+        },
+        "blog": {
+          "title": "O blogue",
+          "desc": "Guias práticos para conservar e transmitir as suas memórias."
+        },
+        "about": {
+          "title": "Sobre nós",
+          "desc": "Porque criámos um diário de família privado alojado na Europa."
+        },
+        "inspirations": {
+          "title": "Inspirações",
+          "desc": "Perguntas guiadas para nunca ficar sem ideias de memórias."
+        },
+        "categories": {
+          "title": "Categorias de memórias",
+          "desc": "Infância, viagens, receitas, tradições: organize as suas memórias."
+        }
       }
     }
   }
