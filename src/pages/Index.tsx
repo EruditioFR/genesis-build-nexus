@@ -28,6 +28,8 @@ const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const homeSeo = getHomeSeoMeta(i18n.language);
 
   useEffect(() => {
     if (!loading && user) {
