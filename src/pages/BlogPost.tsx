@@ -45,7 +45,7 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-function SocialShareButtons({ title, url }: { title: string; url: string }) {
+function SocialShareButtons({ title, url, shareLabel, copyLabel }: { title: string; url: string; shareLabel: string; copyLabel: string }) {
   const encoded = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -57,7 +57,7 @@ function SocialShareButtons({ title, url }: { title: string; url: string }) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <span className="text-sm text-muted-foreground flex items-center gap-1">
-        <Share2 className="h-4 w-4" /> Partager :
+        <Share2 className="h-4 w-4" /> {shareLabel}
       </span>
       <Button variant="outline" size="sm" asChild>
         <a href={`https://www.facebook.com/sharer/sharer.php?u=${encoded}`} target="_blank" rel="noopener noreferrer">
@@ -75,7 +75,7 @@ function SocialShareButtons({ title, url }: { title: string; url: string }) {
         </a>
       </Button>
       <Button variant="outline" size="sm" onClick={copyLink}>
-        <Link2 className="h-4 w-4 mr-1" /> Copier
+        <Link2 className="h-4 w-4 mr-1" /> {copyLabel}
       </Button>
     </div>
   );
@@ -164,6 +164,11 @@ export default function BlogPostPage() {
   };
   const backLabel = BACK_LABELS[lang] ?? BACK_LABELS.fr;
   const dateLocale = SHARE_LOCALES[lang] ?? "fr-FR";
+  const SHARE_LABELS: Record<string, [string, string]> = {
+    fr: ["Partager :", "Copier"], en: ["Share:", "Copy"], es: ["Compartir:", "Copiar"],
+    it: ["Condividi:", "Copia"], pt: ["Partilhar:", "Copiar"], ko: ["공유:", "복사"], zh: ["分享：", "复制"],
+  };
+  const [shareLabel, copyLabel] = SHARE_LABELS[lang] ?? SHARE_LABELS.fr;
   const relatedTitle = RELATED_LABELS[lang] ?? RELATED_LABELS.fr;
   const ctaLabel = CTA_LABELS[lang] ?? CTA_LABELS.fr;
 
@@ -234,7 +239,7 @@ export default function BlogPostPage() {
           )}
 
           <div className="border-t pt-6 mt-8">
-            <SocialShareButtons title={post.title} url={pageUrl} />
+            <SocialShareButtons title={post.title} url={pageUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
           </div>
 
           {related.length > 0 && (
