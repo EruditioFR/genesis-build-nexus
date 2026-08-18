@@ -55,7 +55,7 @@ const Index = () => {
       <SEOHead
         title={homeSeo.title}
         description={homeSeo.description}
-        jsonLd={[websiteSchema, howToSchema]}
+        jsonLd={[websiteSchema, howToSchema, siteNavigationSchema]}
       />
       <JsonLdSchema type="all" />
       <Header />
