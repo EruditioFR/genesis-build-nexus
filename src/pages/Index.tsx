@@ -8,7 +8,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import { useTranslation } from "react-i18next";
 import { getHomeSeoMeta } from "@/lib/homeSeoMeta";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
+import { websiteSchema, howToSchema, siteNavigationSchema } from "@/lib/seoSchemas";
 
 const LandingProductPreview = lazy(() => import("@/components/landing/LandingProductPreview"));
 const SocialProofBand = lazy(() => import("@/components/landing/v3/SocialProofBand"));
