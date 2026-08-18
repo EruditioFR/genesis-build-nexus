@@ -40,6 +40,7 @@ interface SeoData {
     errors?: string;
     warnings?: string;
     isPending?: boolean;
+    lastDownloaded?: string;
     contents?: Array<{ type: string; submitted: string; indexed?: string }>;
   }>;
   refreshedAt?: string;
@@ -129,18 +130,15 @@ function buildRecommendations(data: SeoData | null): Reco[] {
         detail: `Sitemap(s) concerné(s) : ${withErrors.map((s) => s.path).join(", ")}. Search Console indique un nombre d'erreurs sans en préciser la cause ; ouvrez le rapport Sitemaps pour le détail exact.`,
       });
     }
-    const indexRatio = sitemaps.reduce((acc, s) => {
-      const c = s.contents?.[0];
-      if (!c) return acc;
-      const sub = Number(c.submitted ?? 0);
-      const idx = Number(c.indexed ?? 0);
-      return sub > 0 ? Math.min(acc, idx / sub) : acc;
-    }, 1);
-    if (indexRatio < 0.6) {
+    const stale = sitemaps.filter((s) => {
+      if (!s.lastDownloaded) return false;
+      return Date.now() - new Date(s.lastDownloaded).getTime() > 30 * 86400000;
+    });
+    if (stale.length) {
       recos.push({
         level: "important",
-        title: "Une partie des URL soumises n'est pas indexée",
-        detail: "Les pages sans contenu propre (routes protégées, doublons de langue) peuvent être ignorées. Vérifiez que chaque URL du sitemap renvoie un contenu unique et une balise canonical correcte.",
+        title: "Google n'a pas relu le sitemap depuis plus de 30 jours",
+        detail: `Dernière lecture : ${stale.map((s) => s.lastDownloaded?.slice(0, 10)).join(", ")}. Resoumettez le sitemap à son adresse directe (sans redirection www → domaine principal) et vérifiez qu'il renvoie bien un XML en HTTP 200.`,
       });
     }
   }
@@ -467,9 +465,10 @@ export default function AdminSEO() {
                   <Badge variant="outline">{Number(s.errors ?? 0)} erreur(s)</Badge>
                   <Badge variant="outline">{Number(s.warnings ?? 0)} avertissement(s)</Badge>
                   {s.contents?.[0] && (
-                    <Badge variant="outline">
-                      {num(Number(s.contents[0].indexed ?? 0))}/{num(Number(s.contents[0].submitted ?? 0))} indexées
-                    </Badge>
+                    <Badge variant="outline">{num(Number(s.contents[0].submitted ?? 0))} URL découvertes</Badge>
+                  )}
+                  {s.lastDownloaded && (
+                    <Badge variant="outline">Lu le {s.lastDownloaded.slice(0, 10)}</Badge>
                   )}
                 </div>
               </div>
