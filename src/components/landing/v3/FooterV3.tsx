@@ -71,24 +71,44 @@ const FooterV3 = () => {
             </div>
           </div>
 
-          {/* Essential Links */}
-          <div className="md:justify-self-end">
-            <h4 className="font-display text-sm uppercase tracking-widest text-[hsl(var(--gold-light))] mb-5">
-              {t('footer.categories.legal', 'Liens')}
-            </h4>
-            <ul className="grid grid-cols-2 gap-x-8 gap-y-3">
-              {essentialLinks.map((link) => (
-                <li key={link.labelKey}>
-                  <Link
-                    to={link.href}
-                    className="text-white/70 hover:text-[hsl(var(--gold-light))] transition-colors text-sm"
-                  >
-                    {t(link.labelKey)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Explore + Essential Links */}
+          <div className="md:justify-self-end grid grid-cols-2 gap-x-8 gap-y-6">
+            <div>
+              <h4 className="font-display text-sm uppercase tracking-widest text-[hsl(var(--gold-light))] mb-5">
+                {t('footer.categories.explore', 'Explorer')}
+              </h4>
+              <ul className="space-y-3">
+                {exploreLinks.map((link) => (
+                  <li key={link.labelKey}>
+                    <Link
+                      to={link.href}
+                      className="text-white/70 hover:text-[hsl(var(--gold-light))] transition-colors text-sm"
+                    >
+                      {t(link.labelKey)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-display text-sm uppercase tracking-widest text-[hsl(var(--gold-light))] mb-5">
+                {t('footer.categories.legal', 'Liens')}
+              </h4>
+              <ul className="space-y-3">
+                {essentialLinks.map((link) => (
+                  <li key={link.labelKey}>
+                    <Link
+                      to={link.href}
+                      className="text-white/70 hover:text-[hsl(var(--gold-light))] transition-colors text-sm"
+                    >
+                      {t(link.labelKey)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
         </div>
       </div>
 
