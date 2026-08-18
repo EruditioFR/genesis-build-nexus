@@ -5,6 +5,8 @@ import Header from "@/components/landing/Header";
 import HeroSectionV3 from "@/components/landing/v3/HeroSectionV3";
 import HowItWorksShort from "@/components/landing/v3/HowItWorksShort";
 import SEOHead from "@/components/seo/SEOHead";
+import { useTranslation } from "react-i18next";
+import { getHomeSeoMeta } from "@/lib/homeSeoMeta";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { websiteSchema, howToSchema } from "@/lib/seoSchemas";
 
@@ -26,6 +28,8 @@ const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const homeSeo = getHomeSeoMeta(i18n.language);
 
   useEffect(() => {
     if (!loading && user) {
@@ -48,8 +52,8 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <SEOHead
-        title="Family Garden : journal de famille privé, souvenirs et arbre généalogique"
-        description="Créez votre journal de famille privé avec Family Garden. Rassemblez photos, vidéos, audio et textes, construisez votre arbre généalogique et partagez vos souvenirs en toute sécurité avec vos proches. Hébergement français RGPD."
+        title={homeSeo.title}
+        description={homeSeo.description}
         jsonLd={[websiteSchema, howToSchema]}
       />
       <JsonLdSchema type="all" />
