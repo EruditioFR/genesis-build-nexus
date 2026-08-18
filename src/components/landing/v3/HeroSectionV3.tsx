@@ -136,6 +136,30 @@ const HeroSectionV3 = () => {
             <span className="text-[hsl(var(--gold))] font-medium">{t('v3.hero.subtitleHighlight')}</span>
           </motion.p>
 
+          {/* Visuel immédiat — mobile uniquement (chargé en priorité) */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+            className="sm:hidden mt-6 relative rounded-2xl overflow-hidden border border-[hsl(var(--gold))]/40 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)]"
+          >
+            <img
+              src={heroMobileVisual}
+              alt={t('v3.hero.mobileVisual.alt')}
+              width={600}
+              height={334}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-[170px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[hsl(215_50%_14%)]/90 via-[hsl(215_50%_14%)]/25 to-transparent pointer-events-none" />
+            <p className="absolute inset-x-0 bottom-0 px-4 pb-3 text-left text-[13px] font-medium text-white leading-snug">
+              {t('v3.hero.mobileVisual.caption')}
+            </p>
+          </motion.div>
+
+
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
