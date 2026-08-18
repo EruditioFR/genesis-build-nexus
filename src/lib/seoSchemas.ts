@@ -74,3 +74,23 @@ export const createFaqSchema = (items: { question: string; answer: string }[]) =
     },
   })),
 });
+
+export const siteNavigationSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${SITE_URL}/#sitenav`,
+  "name": "Navigation principale Family Garden",
+  "itemListElement": [
+    { name: "Tarifs — 2,99 €/mois", url: "/tarifs" },
+    { name: "Questions fréquentes", url: "/faq" },
+    { name: "Blog", url: "/blog" },
+    { name: "Inspirations", url: "/inspirations" },
+    { name: "Catégories de souvenirs", url: "/categories" },
+    { name: "À propos", url: "/about" },
+  ].map((item, i) => ({
+    "@type": "SiteNavigationElement",
+    "position": i + 1,
+    "name": item.name,
+    "url": `${SITE_URL}${item.url}`,
+  })),
+};
