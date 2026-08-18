@@ -23,6 +23,7 @@ const TrustBandV3 = lazy(() => import("@/components/landing/v3/TrustBandV3"));
 const FAQSectionV3 = lazy(() => import("@/components/landing/v3/FAQSectionV3"));
 const CTASectionV3 = lazy(() => import("@/components/landing/v3/CTASectionV3"));
 const SeoEditorialBlock = lazy(() => import("@/components/landing/v3/SeoEditorialBlock"));
+const InternalLinksHub = lazy(() => import("@/components/landing/v3/InternalLinksHub"));
 const Footer = lazy(() => import("@/components/landing/v3/FooterV3"));
 
 const Index = () => {
