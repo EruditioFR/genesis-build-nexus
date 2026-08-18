@@ -9,6 +9,8 @@ import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
 import organisezSouvenirs from '@/assets/mockups/organisez-souvenirs.png';
 import interfaceClaire from '@/assets/mockups/interface-claire.png';
 import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
+import heroMobileVisual from '@/assets/hero-mobile-visual.webp';
+
 
 const SLIDES = [
   { image: organisezSouvenirs, icon: FolderHeart, key: 'organisation' },
