@@ -20,6 +20,10 @@ const FAQ = () => {
       title: "Comprendre Family Garden",
       questions: [
         {
+          question: "Qu'est-ce que Family Garden ?",
+          answer: "Family Garden est un service en ligne français qui vous permet de créer un journal de famille privé. Concrètement, Family Garden réunit en un seul endroit vos souvenirs sous toutes leurs formes : photos, vidéos, enregistrements audio et récits écrits. Chaque souvenir est daté, situé et relié aux personnes concernées, puis organisé sur une chronologie interactive et sur un arbre généalogique. Vous choisissez précisément avec qui partager, grâce à des cercles privés, et vous pouvez programmer la transmission de certains souvenirs à vos proches. Family Garden est accessible depuis un ordinateur, une tablette ou un smartphone, sans publicité, avec un hébergement européen conforme au RGPD, à partir de 2,99 € par mois après 14 jours d'essai gratuit."
+        },
+        {
           question: "Comment préserver les souvenirs de famille numériquement et durablement ?",
           answer: "Préserver ses souvenirs de famille numériquement demande plus qu'un simple stockage de photos. Il faut contextualiser chaque moment : qui était présent, où cela se passait, ce qui rendait ce souvenir précieux. Family Garden a été pensé spécifiquement pour cela. Vous créez des souvenirs qui combinent textes, photos, vidéos et enregistrements audio dans un même contenant, enrichis d'une date, d'un lieu et des personnes liées. Ces souvenirs s'organisent ensuite sur une chronologie interactive par décennies, ce qui permet à vos proches de naviguer facilement dans votre histoire familiale, aujourd'hui comme dans cinquante ans. Tout est hébergé sur des serveurs européens chiffrés, avec sauvegarde quotidienne, pour garantir la pérennité du patrimoine familial."
         },
