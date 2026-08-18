@@ -72,6 +72,7 @@ const Index = () => {
           <PricingSectionV3 />
           <FAQSectionV3 />
           <SeoEditorialBlock />
+          <InternalLinksHub />
           <CTASectionV3 />
 
         </Suspense>
