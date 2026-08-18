@@ -68,6 +68,7 @@ const AdminCloudUsage = lazy(() => import("./pages/admin/AdminCloudUsage"));
 const AdminFeedback = lazy(() => import("./pages/admin/AdminFeedback"));
 const AdminCircles = lazy(() => import("./pages/admin/AdminCircles"));
 const AdminBlog = lazy(() => import("./pages/admin/AdminBlog"));
+const AdminSEO = lazy(() => import("./pages/admin/AdminSEO"));
 
 // Blog pages
 const BlogList = lazy(() => import("./pages/BlogList"));
@@ -149,6 +150,7 @@ const App = () => (
                     <Route path="feedback" element={<AdminFeedback />} />
                     <Route path="circles" element={<AdminCircles />} />
                     <Route path="blog" element={<AdminBlog />} />
+                    <Route path="seo" element={<AdminSEO />} />
                     <Route path="contact" element={<AdminContactMessages />} />
                   </Route>
                   
