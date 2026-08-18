@@ -8,6 +8,13 @@ const FooterV3 = () => {
   const { t } = useTranslation('landing');
   const currentYear = new Date().getFullYear();
 
+  const exploreLinks = [
+    { labelKey: "footer.links.pricing", href: "/tarifs" },
+    { labelKey: "footer.links.blog", href: "/blog" },
+    { labelKey: "footer.links.inspirations", href: "/inspirations" },
+    { labelKey: "footer.links.categories", href: "/categories" },
+  ];
+
   const essentialLinks = [
     { labelKey: "footer.links.about", href: "/about", isRoute: true },
     { labelKey: "footer.links.faq", href: "/faq", isRoute: true },
