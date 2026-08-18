@@ -1,22 +1,23 @@
-# Vignettes de souvenirs flottantes dans le hero
+# Visuel immédiat dans le hero sur smartphone
 
-Ajouter une couche visuelle discrète et élégante autour du titre du hero : de petites cartes évoquant des souvenirs (photo, voix, récit, date) qui flottent lentement. Le slider de captures d'écran actuel reste inchangé, en dessous.
+Sur mobile, le premier écran ne contient aujourd'hui que du texte et les boutons : le slider produit n'apparaît qu'après un long défilement, et ses images sont chargées en différé. On ajoute une image visible dès le chargement, sans attendre le slider.
 
-## Ce que verra le visiteur
+## Ce que verra le visiteur (mobile uniquement)
 
-- Sur desktop : 4 vignettes positionnées de part et d'autre du titre et du sous-titre, légèrement inclinées, avec une animation de flottement très lente (quelques pixels, en boucle) et une apparition en fondu au chargement.
-  - Vignette photo : miniature façon polaroïd avec une légende courte ("Été 1998, la maison de Mamie").
-  - Vignette voix : forme d'onde stylisée avec une durée ("La voix de Papy — 2:14").
-  - Vignette récit : quelques lignes de texte tronquées avec un titre ("Notre premier voyage").
-  - Vignette date : puce de chronologie ("12 juin 1975").
-- Sur mobile : vignettes masquées (l'espace est déjà dense) — le hero reste identique à aujourd'hui.
-- Accessibilité : couche purement décorative (`aria-hidden`), non cliquable, et animations désactivées si l'utilisateur préfère les mouvements réduits.
+- Une bande visuelle compacte (environ 170 px de haut, coins arrondis, fine bordure dorée) insérée entre le sous-titre et les boutons d'action, donc visible dès l'ouverture de la page.
+- Photo chaleureuse déjà présente dans le projet (`src/assets/hero-slides/famille`/`anniversaire`), avec un léger voile dégradé bleu nuit pour garder la lisibilité et l'harmonie du hero.
+- Une courte légende en surimpression rappelant la promesse (« Vos souvenirs de famille, réunis et protégés »), traduite dans les 7 langues.
+- Aucun changement sur desktop, et le slider de captures d'écran reste identique en dessous.
+
+## Performance
+
+- Image chargée en priorité (`loading="eager"`, `fetchpriority="high"`, `decoding="async"`) avec largeur/hauteur fixées pour éviter tout décalage de mise en page.
+- Déclinaison légère de la photo générée en WebP redimensionné (~600 px de large) pour ne pas dégrader le LCP mobile.
+- Les images du slider restent en `loading="lazy"` : elles ne concurrencent pas le nouveau visuel.
 
 ## Détails techniques
 
-- Nouveau composant `src/components/landing/v3/HeroFloatingCards.tsx`, rendu en position absolue dans `HeroSectionV3.tsx` juste après le fond dégradé, avec `pointer-events-none` et un z-index sous le contenu texte.
-- Framer Motion (déjà utilisé dans le hero) : `initial/animate` pour le fondu, boucle `y`/`rotate` infinie, court-circuitée via `useReducedMotion`.
-- Couleurs uniquement via les tokens existants du hero (`hsl(var(--gold))`, blanc translucide, `hsl(215 50% 14%)`), verre dépoli `backdrop-blur` et bordures dorées comme le reste du hero.
-- Textes des vignettes ajoutés sous `v3.hero.floatingCards.*` dans les 7 fichiers `public/locales/*/landing.json` (fr, en, es, it, pt, ko, zh), en respectant le vouvoiement et la terminologie « souvenirs ».
-- Aucune image externe : la vignette photo utilise un dégradé/placeholder stylisé pour ne pas alourdir le LCP.
-- Vérification visuelle par capture d'écran du hero en desktop et mobile après implémentation.
+- Modification de `src/components/landing/v3/HeroSectionV3.tsx` : nouveau bloc `sm:hidden` placé après le paragraphe de sous-titre, avant le bloc des CTA, avec une apparition en fondu courte (Framer Motion, désactivée si mouvements réduits).
+- Couleurs et bordures via les tokens du hero existants (`hsl(var(--gold))`, blanc translucide) — pas de couleur en dur.
+- Nouvelle clé `v3.hero.mobileVisual.caption` (et `alt`) ajoutée dans les 7 fichiers `public/locales/*/landing.json`, vouvoiement et terminologie « souvenirs » respectés.
+- Vérification par capture d'écran en viewport mobile après implémentation.
