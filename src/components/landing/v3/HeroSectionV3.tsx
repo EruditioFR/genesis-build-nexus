@@ -9,7 +9,7 @@ import timelinePreview from '@/assets/mockups/timeline-preview.jpg';
 import organisezSouvenirs from '@/assets/mockups/organisez-souvenirs.png';
 import interfaceClaire from '@/assets/mockups/interface-claire.png';
 import arbreGenealogique from '@/assets/mockups/arbre-genealogique.jpg';
-import heroMobileVisual from '@/assets/hero-mobile-visual.webp';
+import heroMobileVisual from '@/assets/hero-mobile-visual.png';
 
 
 const SLIDES = [
@@ -106,7 +106,7 @@ const HeroSectionV3 = () => {
   const activeDescription = t(`v3.hero.productSlider.${active.key}.description`);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-20 pb-16 sm:pt-32 sm:pb-24">
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
@@ -121,29 +121,19 @@ const HeroSectionV3 = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-6 sm:mt-0 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.1] sm:leading-[1.05] tracking-tight"
+            className="mt-2 sm:mt-0 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.1] sm:leading-[1.05] tracking-tight"
           >
             {t('v3.hero.title')}
             <br />
             <span className="text-[hsl(var(--gold))]">{t('v3.hero.titleHighlight')}</span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
-          >
-            {t('v3.hero.subtitleLead')}
-            <span className="text-[hsl(var(--gold))] font-medium">{t('v3.hero.subtitleHighlight')}</span>
-          </motion.p>
-
           {/* Visuel immédiat (chargé en priorité) */}
           <motion.div
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.2 }}
-            className="mt-6 sm:mt-8 max-w-2xl mx-auto relative rounded-2xl overflow-hidden border border-[hsl(var(--gold))]/40 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)]"
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="mt-4 sm:mt-8 max-w-2xl mx-auto relative rounded-2xl overflow-hidden border border-[hsl(var(--gold))]/40 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)]"
           >
             <img
               src={heroMobileVisual}
@@ -153,13 +143,30 @@ const HeroSectionV3 = () => {
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="w-full h-[170px] sm:h-[260px] object-cover"
+              className="w-full h-[160px] sm:h-[260px] object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[hsl(215_50%_14%)]/90 via-[hsl(215_50%_14%)]/25 to-transparent pointer-events-none" />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, hsl(215 50% 14% / 0.9) 0%, hsl(215 50% 14% / 0.25) 45%, transparent 75%)',
+              }}
+            />
             <p className="absolute inset-x-0 bottom-0 px-4 pb-3 sm:pb-4 text-left text-[13px] sm:text-base font-medium text-white leading-snug">
               {t('v3.hero.mobileVisual.caption')}
             </p>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="mt-5 sm:mt-8 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
+          >
+            {t('v3.hero.subtitleLead')}
+            <span className="text-[hsl(var(--gold))] font-medium">{t('v3.hero.subtitleHighlight')}</span>
+          </motion.p>
+
 
 
 
