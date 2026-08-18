@@ -393,17 +393,17 @@
       "title": "Start",
       "titleMiddle": "before",
       "titleHighlight": "the next memory is lost",
-      "subtitle": "Create your first memory\nin 1 minute.\nFree, no commitment.",
+      "subtitle": "Create your first memory\nin 1 minute.\n14-day free trial, no commitment.",
       "button": "Start my 14-day\nfree trial",
-      "trust": "Free signup • No credit card • Your data stays private"
+      "trust": "14-day free trial • No commitment • Your data stays private"
     }
   },
   "v3": {
     "hero": {
       "badge": "Private space for your family",
-      "title": "Protect the memories",
-      "titleHighlight": "of your family",
-      "subtitle": "Family Garden is an online service that brings photos, videos, voices and stories together in a private, organized, lasting and transmissible family journal.",
+      "title": "Your private family journal:",
+      "titleHighlight": "all your memories in one place",
+      "subtitle": "Family Garden is an online service to store and pass on your family memories: photos, videos, voices and stories in a private family journal and a digital time capsule.",
       "ctaPrimary": "Start my 14-day\nfree trial",
       "ctaSecondary": "See how it works",
       "trust1": "14-day free trial, no commitment",
@@ -676,6 +676,18 @@
           "title": "1-click cancel",
           "description": "No commitment"
         }
+      }
+    },
+    "editorial": {
+      "title": "Keep, tell and pass on your family history",
+      "p1": "Family memories scatter fast: photos buried across several clouds, videos forgotten on an old hard drive, stories never written down. Family Garden brings everything together in a private family journal, hosted in Europe, where every memory carries a date, a place and the people involved.",
+      "p2": "You can create a digital time capsule to open later, write a family biography over time, tell your life story to your children in your own voice, build a secure family photo album and connect it all to your online family tree.",
+      "linksTitle": "Further reading",
+      "links": {
+        "l1": "Digital time capsule: how to create one",
+        "l2": "How to keep and pass on your family memories",
+        "l3": "Telling your life story to your children: a 7-step method",
+        "l4": "Online family tree: connecting photos, stories and people"
       }
     }
   }
