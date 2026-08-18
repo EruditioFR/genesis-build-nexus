@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Search, MousePointerClick, Eye, Percent, TrendingUp, RefreshCw,
-  AlertTriangle, Lightbulb, FileText, Globe, Smartphone,
+  AlertTriangle, Lightbulb, FileText, Globe, Smartphone, Wand2, Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -171,6 +171,22 @@ function buildRecommendations(data: SeoData | null): Reco[] {
   return recos;
 }
 
+function buildPrompt(r: Reco, data: SeoData | null): string {
+  const ctx = data?.range
+    ? `Contexte Search Console (${data.range.startDate} → ${data.range.endDate}, propriété ${data.siteUrl}) : ${num(data.totals?.clicks)} clics, ${num(data.totals?.impressions)} impressions, CTR ${pct(data.totals?.ctr)}, position moyenne ${pos(data.totals?.position)}.`
+    : "";
+  return [
+    "Applique cette correction SEO sur le site Family Garden :",
+    "",
+    `Problème : ${r.title}`,
+    `Action attendue : ${r.detail}`,
+    "",
+    ctx,
+    "",
+    "Modifie directement le code (contenus, balises title/meta, JSON-LD, maillage interne, sitemap, articles de blog) et respecte les 7 langues du site ainsi que la charte éditoriale existante (vouvoiement, terminologie « souvenirs », « journal de famille privé »).",
+  ].filter(Boolean).join("\n");
+}
+
 const levelStyles: Record<Reco["level"], string> = {
   critique: "bg-destructive/10 text-destructive border-destructive/30",
   important: "bg-amber-500/10 text-amber-700 border-amber-500/30",
@@ -219,6 +235,21 @@ export default function AdminSEO() {
   );
 
   const recos = useMemo(() => buildRecommendations(data), [data]);
+  const [appliedTitle, setAppliedTitle] = useState<string | null>(null);
+
+  const applyReco = async (r: Reco) => {
+    const prompt = buildPrompt(r, data);
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setAppliedTitle(r.title);
+      setTimeout(() => setAppliedTitle((t) => (t === r.title ? null : t)), 4000);
+      toast.success("Instruction copiée", {
+        description: "Collez-la dans le chat Lovable pour lancer la correction.",
+      });
+    } catch {
+      toast.error("Copie impossible", { description: prompt.slice(0, 120) + "…" });
+    }
+  };
 
   const kpis = [
     { label: "Clics", value: num(data?.totals?.clicks), icon: MousePointerClick },
@@ -472,6 +503,17 @@ export default function AdminSEO() {
                 <Badge variant="outline" className="shrink-0 capitalize">{r.level}</Badge>
               </div>
               <p className="text-sm text-foreground/80 mt-1">{r.detail}</p>
+              <div className="mt-3">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => applyReco(r)}
+                  className="gap-2"
+                >
+                  {appliedTitle === r.title ? <Check className="h-4 w-4" /> : <Wand2 className="h-4 w-4" />}
+                  {appliedTitle === r.title ? "Instruction copiée" : "Appliquer"}
+                </Button>
+              </div>
             </div>
           ))}
         </CardContent>
