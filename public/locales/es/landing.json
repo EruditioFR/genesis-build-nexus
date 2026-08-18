@@ -390,19 +390,20 @@
       }
     },
     "ctaFinal": {
-      "title": "Empieza antes de que",
+      "title": "Empieza",
       "titleHighlight": "el próximo recuerdo se pierda",
-      "subtitle": "Crea tu primer recuerdo en 1 minuto. Gratis, sin compromiso.",
+      "subtitle": "Crea tu primer recuerdo en 1 minuto.\n14 días de prueba gratis, sin compromiso.",
       "button": "Comenzar mi prueba\ngratuita de 14 días",
-      "trust": "Registro gratuito • Sin tarjeta de crédito • Tus datos son privados"
+      "trust": "14 días de prueba gratis • Sin compromiso • Tus datos son privados",
+      "titleMiddle": "antes de que"
     }
   },
   "v3": {
     "hero": {
       "badge": "Espacio privado para tu familia",
-      "title": "Protege los recuerdos",
-      "titleHighlight": "de tu familia",
-      "subtitle": "Family Garden es un servicio en línea que reúne fotos, vídeos, voces y relatos en un diario familiar privado, organizado, duradero y transmisible.",
+      "title": "Tu diario familiar privado:",
+      "titleHighlight": "todos tus recuerdos reunidos",
+      "subtitle": "Family Garden es un servicio en línea para conservar y transmitir tus recuerdos de familia: fotos, vídeos, voces y relatos en un diario familiar privado y una cápsula del tiempo digital.",
       "ctaPrimary": "Comenzar mi prueba\ngratuita de 14 días",
       "ctaSecondary": "Ver cómo funciona",
       "trust1": "14 días de prueba gratis, sin compromiso",
@@ -675,6 +676,18 @@
           "title": "Cancelar en 1 clic",
           "description": "Sin compromiso"
         }
+      }
+    },
+    "editorial": {
+      "title": "Conservar, contar y transmitir la historia de tu familia",
+      "p1": "Los recuerdos de familia se dispersan rápido: fotos perdidas en varias nubes, vídeos olvidados en un disco duro antiguo, relatos que nunca se escribieron. Family Garden lo reúne todo en un diario familiar privado, alojado en Europa, donde cada recuerdo lleva una fecha, un lugar y las personas implicadas.",
+      "p2": "Puedes crear una cápsula del tiempo digital para abrir más adelante, escribir una biografía familiar poco a poco, contar tu vida a tus hijos con tu propia voz, formar un álbum de fotos familiar seguro y enlazarlo todo con tu árbol genealógico en línea.",
+      "linksTitle": "Para saber más",
+      "links": {
+        "l1": "Cápsula del tiempo digital: cómo crear una",
+        "l2": "Cómo conservar y transmitir tus recuerdos de familia",
+        "l3": "Contar tu vida a tus hijos: un método en 7 pasos",
+        "l4": "Árbol genealógico en línea: unir fotos, relatos y personas"
       }
     }
   }
