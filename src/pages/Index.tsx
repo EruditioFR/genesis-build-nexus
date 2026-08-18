@@ -66,7 +66,9 @@ const Index = () => {
           <TrustBandV3 />
           <PricingSectionV3 />
           <FAQSectionV3 />
+          <SeoEditorialBlock />
           <CTASectionV3 />
+
         </Suspense>
       </main>
       <Suspense fallback={null}>
