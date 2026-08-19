@@ -33,7 +33,10 @@ interface RelatedPost {
   title: string;
   slug: string;
   excerpt: string | null;
+  cover_image_url?: string | null;
+  translation_group?: string | null;
 }
+
 
 interface BlogCategory {
   id: string;
