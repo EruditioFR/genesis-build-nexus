@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/hooks/useAuth";
 import GoogleAnalyticsProvider from "@/components/GoogleAnalyticsProvider";
@@ -29,7 +29,6 @@ const CirclesPage = lazy(() => import("./pages/CirclesPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 
-const Premium = lazy(() => import("./pages/Premium"));
 const FamilyTreePage = lazy(() => import("./pages/FamilyTreePage"));
 const InviteAccept = lazy(() => import("./pages/InviteAccept"));
 const GuardianVerify = lazy(() => import("./pages/GuardianVerify"));
@@ -113,7 +112,8 @@ const App = () => (
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/statistics" element={<Statistics />} />
                   
-                  <Route path="/premium" element={<Premium />} />
+                  {/* Consolidé sur /tarifs (SEO : une seule page tarifaire). */}
+                  <Route path="/premium" element={<Navigate to="/tarifs" replace />} />
                   <Route path="/tarifs" element={<PricingPage />} />
                   <Route path="/pricing" element={<PricingPage />} />
                   <Route path="/checkout" element={<Checkout />} />
