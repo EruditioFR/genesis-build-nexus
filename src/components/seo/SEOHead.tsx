@@ -8,6 +8,7 @@ interface SEOHeadProps {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
   noIndex?: boolean;
   jsonLd?: object | object[];
@@ -33,6 +34,7 @@ const SEOHead = ({
   ogTitle,
   ogDescription,
   ogImage,
+  ogImageAlt,
   ogType = 'website',
   noIndex = false,
   jsonLd,
@@ -88,7 +90,19 @@ const SEOHead = ({
       alternateLocaleEls.push(el);
     });
 
-    setMeta('property', 'og:image', ogImage || DEFAULT_OG_IMAGE);
+    const resolvedImage = ogImage || DEFAULT_OG_IMAGE;
+    setMeta('property', 'og:image', resolvedImage);
+    setMeta('property', 'og:image:secure_url', resolvedImage);
+    setMeta('property', 'og:image:width', '1200');
+    setMeta('property', 'og:image:height', '675');
+    setMeta('property', 'og:image:alt', ogImageAlt || ogTitle || title);
+
+    // Twitter Cards
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', ogTitle || title);
+    setMeta('name', 'twitter:description', ogDescription || description);
+    setMeta('name', 'twitter:image', resolvedImage);
+    setMeta('name', 'twitter:image:alt', ogImageAlt || ogTitle || title);
 
     // Hreflang tags
     const hreflangLinks: HTMLLinkElement[] = [];
@@ -137,7 +151,7 @@ const SEOHead = ({
       if (robotsMeta) robotsMeta.parentNode?.removeChild(robotsMeta);
       jsonLdScripts.forEach((s) => s.parentNode?.removeChild(s));
     };
-  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogType, noIndex, jsonLd]);
+  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogImageAlt, ogType, noIndex, jsonLd]);
 
   return null;
 };
