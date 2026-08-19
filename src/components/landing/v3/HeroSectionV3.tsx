@@ -133,7 +133,7 @@ const HeroSectionV3 = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-4 sm:mt-7 text-[32px] leading-[1.12] sm:text-5xl md:text-6xl lg:text-[68px] sm:leading-[1.08] font-display font-bold text-white tracking-tight text-balance"
+            className="mt-4 sm:mt-7 text-[34px] leading-[1.14] sm:text-5xl md:text-6xl lg:text-[66px] sm:leading-[1.06] font-sans font-bold text-white tracking-[-0.02em] text-balance"
           >
             {t('v3.hero.title')}{' '}
             <span className="text-[hsl(var(--hero-accent))]">{t('v3.hero.titleHighlight')}</span>
