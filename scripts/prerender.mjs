@@ -127,8 +127,16 @@ ${mime ? `    <meta property="og:image:type" content="${mime}" />\n` : ""}${dims
 `;
 }
 
-function injectHead(template, headHtml, lang, noscriptHtml) {
+function injectHead(template, headHtml, lang, noscriptHtml, stripJsonLd = false) {
   let html = template;
+  if (stripJsonLd) {
+    // The route emits its own JSON-LD; drop the template's sitewide blocks so
+    // Organization/WebSite are not declared twice on the same page.
+    html = html.replace(
+      /[ \t]*<script type="application\/ld\+json">[\s\S]*?<\/script>\s*/gi,
+      "",
+    );
+  }
   // Remove the static tags that must be overridden per page.
   html = html.replace(/<title>[\s\S]*?<\/title>\s*/i, "");
   html = html.replace(
@@ -375,7 +383,7 @@ async function prerenderStaticRoutes({ outDir, template, posts, log }) {
     const head = await buildStaticHead(routePath, meta, extras);
     const noscript = buildNoscript(routePath, meta, extras);
     const lang = routePath === "/pricing" ? "en" : "fr";
-    const html = injectHead(template, head, lang, noscript);
+    const html = injectHead(template, head, lang, noscript, true);
     const dir = routePath === "/" ? outDir : path.join(outDir, routePath.replace(/^\//, ""));
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, "index.html"), html, "utf8");
