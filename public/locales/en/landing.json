@@ -463,7 +463,11 @@
       "mobileVisual": {
         "caption": "Your family memories, gathered and protected",
         "alt": "A family gathered around a shared memory"
-      }
+      },
+      "badgePrice": "€2.99 / month",
+      "badgeTrial": "14-day free trial",
+      "pitch": "Photos, videos, voices and stories gathered in a private family journal, organized and passed on.",
+      "trustPrivacy": "Total privacy"
     },
     "howItWorksShort": {
       "title": "How does this",
