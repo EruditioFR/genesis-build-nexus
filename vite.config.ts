@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+// @ts-expect-error - plain JS build script
+import { blogPrerenderPlugin } from "./scripts/prerender-blog.mjs";
 
 const buildVersion = process.env.VITE_APP_BUILD_VERSION || new Date().toISOString();
 
