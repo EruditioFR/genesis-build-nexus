@@ -170,14 +170,45 @@ const FAQ = () => {
           answer: "Sur Family Garden, l'arbre généalogique se construit de deux façons : en saisissant les personnes une à une à partir de vous-même, ou en important un fichier GEDCOM issu d'un logiciel de généalogie existant, ce qui reprend en une seule opération les noms, dates et filiations déjà collectés. Chaque membre dispose ensuite d'une fiche enrichie : photo de portrait, biographie, lieux de vie affichés sur une carte, et surtout la liste des souvenirs où il apparaît. Vous pouvez identifier une personne directement sur une photo de famille, comme sur un réseau social mais dans un cadre strictement privé. L'arbre s'affiche en mode sablier autour d'une personne choisie et s'exporte en PDF ou en GEDCOM. Cette fonction est disponible en option à 5 € par mois."
         }
       ]
+    },
+    {
+      icon: Lock,
+      title: "Démarrer, essayer et s'inspirer",
+      questions: [
+        {
+          question: "Combien coûte Family Garden et que comprend l'essai de 14 jours ?",
+          answer: "Family Garden coûte 2,99 € par mois TTC, sans engagement, avec 20 Go de stockage et toutes les fonctions du journal de famille ; seul l'arbre généalogique est une option à 5 € par mois. L'essai de 14 jours est complet et sans carte bancaire : vous créez de vrais souvenirs, vous invitez vos proches dans un cercle, vous testez la chronologie et l'export PDF, et vous décidez ensuite. Le détail des inclusions, la comparaison avec les autres solutions et le calcul du coût annuel figurent sur la [page tarifs](/tarifs), et le fonctionnement général est décrit sur la page [à propos de Family Garden](/about)."
+        },
+        {
+          question: "Puis-je essayer Family Garden sans créer de compte ?",
+          answer: "Oui. Une [démonstration interactive](/demo) vous permet de créer un premier souvenir en deux minutes, avec un texte, une photo et une date, sans inscription ni carte bancaire. Vous voyez immédiatement à quoi ressemble un souvenir une fois enregistré dans un journal de famille privé. Ce souvenir de démonstration est temporaire : il est effacé si vous ne poursuivez pas, mais vous pouvez le conserver en ouvrant un compte à la fin du parcours, puis profiter des 14 jours d'essai décrits sur la [page tarifs](/tarifs)."
+        },
+        {
+          question: "Comment créer un arbre généalogique avec photos et souvenirs ?",
+          answer: "Vous partez de vous-même et vous ajoutez vos parents, grands-parents et descendants, ou vous importez un fichier GEDCOM existant. Chaque personne reçoit ensuite une fiche avec portrait, biographie, lieux de vie et souvenirs associés, et vous pouvez identifier les visages directement sur les photos de famille. Le guide complet, étape par étape, est détaillé dans notre article [arbre généalogique en ligne : photos et souvenirs](/blog/arbre-genealogique-en-ligne-photos-et-souvenirs). L'arbre est une option à 5 € par mois, présentée sur la [page tarifs](/tarifs)."
+        },
+        {
+          question: "Par quels thèmes commencer mon journal de famille ?",
+          answer: "Commencez par ce dont vous vous souvenez le mieux plutôt que par le début de votre vie : l'enfance, la maison familiale, les vacances, le premier métier, les rencontres. Family Garden organise les souvenirs par thèmes : la page [catégories de souvenirs](/categories) montre les grandes familles disponibles et ce qu'on y range habituellement. Si vous manquez d'idées, la page [inspirations](/inspirations) propose une cinquantaine de questions guidées auxquelles répondre en dix minutes, à l'écrit ou à la voix. La méthode complète est décrite dans l'article [raconter sa vie à ses enfants](/blog/raconter-sa-vie-a-ses-enfants-methode)."
+        },
+        {
+          question: "Family Garden est-il disponible en plusieurs langues ?",
+          answer: "Oui, l'interface existe en sept langues : français, anglais, espagnol, italien, portugais, coréen et chinois. Le changement de langue s'effectue à tout moment depuis le sélecteur du menu, et vos souvenirs restent bien sûr rédigés dans la langue de votre choix, ce qui est précieux pour les familles réparties sur plusieurs pays. Nos guides éditoriaux sont eux aussi traduits : vous les retrouvez dans la langue affichée depuis le [blog Family Garden](/blog)."
+        },
+        {
+          question: "Où trouver des conseils pour écrire et conserver mes souvenirs ?",
+          answer: "Le [blog Family Garden](/blog) réunit nos guides pratiques sur la mémoire familiale : créer une [capsule temporelle numérique](/blog/capsule-temporelle-numerique-comment-en-creer-une), [conserver et transmettre ses souvenirs de famille](/blog/conserver-transmettre-souvenirs-de-famille), raconter sa vie à ses enfants en sept étapes, ou construire un arbre généalogique enrichi de photos. Chaque article donne une méthode concrète, applicable en quelques séances courtes. Pour les questions pratiques sur le service lui-même, la présente FAQ et la [page tarifs](/tarifs) répondent à l'essentiel."
+        }
+      ]
     }
   ];
 
 
-  // Build FAQ items for JSON-LD
+  // Build FAQ items for JSON-LD (texte pur, sans balisage de liens)
   const allFaqItems = faqCategories.flatMap((cat) =>
-    cat.questions.map((q) => ({ question: q.question, answer: q.answer }))
+    cat.questions.map((q) => ({ question: q.question, answer: stripInlineLinks(q.answer) }))
   );
+
 
   return (
     <div className="min-h-screen bg-background">
