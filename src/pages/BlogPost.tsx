@@ -278,7 +278,23 @@ export default function BlogPostPage() {
               </div>
             </section>
           )}
+
+          <nav aria-label={usefulLinks.title} className="border-t pt-6 mt-10">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+              {usefulLinks.title}
+            </h2>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              {usefulLinks.items.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className="text-primary underline underline-offset-4 hover:text-secondary transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </article>
+
       </main>
       <Footer />
     </>
