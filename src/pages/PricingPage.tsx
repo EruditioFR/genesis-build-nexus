@@ -85,8 +85,11 @@ const trialSchema = z.object({
 
 const PricingPage = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const routeSeo = getRouteSeo(pathname) ?? getRouteSeo("/tarifs")!;
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
+
 
   const handleTrial = (e: React.FormEvent) => {
     e.preventDefault();
