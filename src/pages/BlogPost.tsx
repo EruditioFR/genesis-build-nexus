@@ -255,7 +255,6 @@ export default function BlogPostPage() {
 
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
   const coverAlt = getCoverAlt(post.translation_group, post.title, lang);
 
   const SITE_URL = "https://familygarden.fr";
