@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowLeft, ArrowRight, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, ArrowUp, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
 import { formatBlogContent } from "@/lib/blogContent";
@@ -88,11 +88,24 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<Post | null>(null);
   const [category, setCategory] = useState<BlogCategory | null>(null);
   const [related, setRelated] = useState<RelatedPost[]>([]);
+  const [prevPost, setPrevPost] = useState<RelatedPost | null>(null);
+  const [nextPost, setNextPost] = useState<RelatedPost | null>(null);
+  const [showTopButton, setShowTopButton] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setShowTopButton(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
       if (!slug) return;
+      setLoading(true);
+      setPrevPost(null);
+      setNextPost(null);
       const { data } = await supabase
         .from("blog_posts")
         .select("*")
@@ -107,21 +120,47 @@ export default function BlogPostPage() {
           if (cat) setCategory(cat as unknown as BlogCategory);
         }
 
+        const postLang = (typedData as { lang?: string }).lang ?? "fr";
+        const pivot = typedData.published_at || typedData.created_at;
+
         // Maillage interne : autres articles de la même langue
         const { data: others } = await supabase
           .from("blog_posts")
           .select("id, title, slug, excerpt")
           .eq("status", "published")
-          .eq("lang", (typedData as { lang?: string }).lang ?? "fr")
+          .eq("lang", postLang)
           .neq("id", typedData.id)
           .order("published_at", { ascending: false })
           .limit(3);
         if (others) setRelated(others as unknown as RelatedPost[]);
+
+        // Article précédent (plus ancien) et suivant (plus récent)
+        const [{ data: older }, { data: newer }] = await Promise.all([
+          supabase
+            .from("blog_posts")
+            .select("id, title, slug, excerpt")
+            .eq("status", "published")
+            .eq("lang", postLang)
+            .lt("published_at", pivot)
+            .order("published_at", { ascending: false })
+            .limit(1),
+          supabase
+            .from("blog_posts")
+            .select("id, title, slug, excerpt")
+            .eq("status", "published")
+            .eq("lang", postLang)
+            .gt("published_at", pivot)
+            .order("published_at", { ascending: true })
+            .limit(1),
+        ]);
+        if (older?.[0]) setPrevPost(older[0] as unknown as RelatedPost);
+        if (newer?.[0]) setNextPost(newer[0] as unknown as RelatedPost);
       }
       setLoading(false);
     };
     fetch();
   }, [slug]);
+
 
   if (loading) {
     return (
@@ -183,6 +222,17 @@ export default function BlogPostPage() {
     zh: { title: "实用页面", items: [{ label: "价格：每月 2.99 欧元", to: "/tarifs" }, { label: "常见问题", to: "/faq" }, { label: "体验演示", to: "/demo" }, { label: "全部文章", to: "/blog" }] },
   };
   const usefulLinks = USEFUL_LINKS[lang] ?? USEFUL_LINKS.fr;
+  const NAV_LABELS: Record<string, [string, string, string]> = {
+    fr: ["Article précédent", "Article suivant", "Remonter en haut"],
+    en: ["Previous article", "Next article", "Back to top"],
+    es: ["Artículo anterior", "Artículo siguiente", "Volver arriba"],
+    it: ["Articolo precedente", "Articolo successivo", "Torna su"],
+    pt: ["Artigo anterior", "Próximo artigo", "Voltar ao topo"],
+    ko: ["이전 글", "다음 글", "맨 위로"],
+    zh: ["上一篇", "下一篇", "回到顶部"],
+  };
+  const [prevLabel, nextLabel, topLabel] = NAV_LABELS[lang] ?? NAV_LABELS.fr;
+
 
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
@@ -343,6 +393,39 @@ export default function BlogPostPage() {
             </section>
           )}
 
+          {(prevPost || nextPost) && (
+            <nav aria-label={`${prevLabel} / ${nextLabel}`} className="border-t pt-6 mt-10 grid gap-3 sm:grid-cols-2">
+              {prevPost ? (
+                <Link
+                  to={`/blog/${prevPost.slug}`}
+                  rel="prev"
+                  className="group rounded-xl border bg-card p-4 shadow-sm transition-colors hover:border-primary"
+                >
+                  <span className="flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground">
+                    <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" /> {prevLabel}
+                  </span>
+                  <span className="mt-1 block text-sm font-medium leading-snug text-foreground">{prevPost.title}</span>
+                </Link>
+              ) : (
+                <span className="hidden sm:block" />
+              )}
+              {nextPost && (
+                <Link
+                  to={`/blog/${nextPost.slug}`}
+                  rel="next"
+                  className="group rounded-xl border bg-card p-4 shadow-sm transition-colors hover:border-primary sm:text-right"
+                >
+                  <span className="flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground sm:justify-end">
+                    {nextLabel} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                  <span className="mt-1 block text-sm font-medium leading-snug text-foreground">{nextPost.title}</span>
+                </Link>
+              )}
+            </nav>
+          )}
+
+
+
           <nav aria-label={usefulLinks.title} className="border-t pt-6 mt-10">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               {usefulLinks.title}
@@ -360,7 +443,20 @@ export default function BlogPostPage() {
         </article>
 
       </main>
+      {showTopButton && (
+        <Button
+          type="button"
+          size="icon"
+          aria-label={topLabel}
+          title={topLabel}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-40 h-12 w-12 rounded-full shadow-lg"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </Button>
+      )}
       <Footer />
+
     </>
   );
 }
