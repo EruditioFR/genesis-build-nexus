@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, ArrowRight, ArrowUp, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
-import { formatBlogContent } from "@/lib/blogContent";
+import { formatBlogContent, buildArticleToc } from "@/lib/blogContent";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import { toast } from "@/hooks/use-toast";
@@ -241,6 +241,15 @@ export default function BlogPostPage() {
     pt: "Ler o artigo", ko: "글 읽기", zh: "阅读文章",
   };
   const readLabel = READ_LABELS[lang] ?? READ_LABELS.fr;
+  const TOC_LABELS: Record<string, string> = {
+    fr: "Sommaire", en: "Table of contents", es: "Índice", it: "Indice",
+    pt: "Índice", ko: "목차", zh: "目录",
+  };
+  const tocLabel = TOC_LABELS[lang] ?? TOC_LABELS.fr;
+  const { html: tocHtml, headings: tocHeadings } = buildArticleToc(
+    formatBlogContent(post.content),
+  );
+
 
 
 
@@ -367,11 +376,44 @@ export default function BlogPostPage() {
           )}
 
           {post.content && (
-            <div
-              className="prose prose-lg max-w-none text-foreground prose-headings:text-foreground prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:scroll-mt-24 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-[1.85] prose-p:mb-6 prose-li:leading-relaxed prose-li:my-1.5 prose-ul:my-6 prose-ol:my-6 prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-a:text-primary prose-a:underline mb-10"
-              dangerouslySetInnerHTML={{ __html: formatBlogContent(post.content) }}
-            />
+            <>
+              {tocHeadings.length > 2 && (
+                <nav
+                  aria-label={tocLabel}
+                  className="mb-10 rounded-xl border border-border bg-muted/40 p-5"
+                >
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                    {tocLabel}
+                  </h2>
+                  <ol className="space-y-1.5">
+                    {tocHeadings.map((h, i) => (
+                      <li key={h.id} className={h.level === 3 ? "ml-5" : ""}>
+                        <a
+                          href={`#${h.id}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById(h.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            history.replaceState(null, "", `#${h.id}`);
+                          }}
+                          className="text-sm text-foreground hover:text-primary hover:underline inline-flex gap-2"
+                        >
+                          {h.level === 2 && (
+                            <span className="text-muted-foreground tabular-nums">{i + 1}.</span>
+                          )}
+                          <span>{h.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+              <div
+                className="prose prose-lg max-w-none text-foreground prose-headings:text-foreground prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:scroll-mt-24 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:scroll-mt-24 prose-p:leading-[1.85] prose-p:mb-6 prose-li:leading-relaxed prose-li:my-1.5 prose-ul:my-6 prose-ol:my-6 prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-a:text-primary prose-a:underline mb-10"
+                dangerouslySetInnerHTML={{ __html: tocHtml }}
+              />
+            </>
           )}
+
 
           <div className="border-t pt-6 mt-8">
             <SocialShareButtons title={post.title} url={pageUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
