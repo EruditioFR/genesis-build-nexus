@@ -10,4 +10,5 @@ export declare const SITE_URL: string;
 export declare const BRAND: string;
 export declare const ROUTE_SEO: Record<string, RouteSeoMeta>;
 export declare const ROUTE_BREADCRUMB_LABEL: Record<string, string>;
+export declare const ROUTE_REDIRECTS: Record<string, string>;
 export declare function getRouteSeo(path: string): RouteSeoMeta | undefined;

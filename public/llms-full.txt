@@ -210,7 +210,7 @@ Family Garden combine capsules multimédia contextualisées, chronologie interac
 
 - Site web : https://familygarden.fr
 - FAQ : https://familygarden.fr/faq
-- Tarifs : https://familygarden.fr/premium
+- Tarifs : https://familygarden.fr/tarifs
 - À propos : https://familygarden.fr/about
 - Inscription gratuite : https://familygarden.fr/signup
 - Politique de confidentialité : https://familygarden.fr/privacy

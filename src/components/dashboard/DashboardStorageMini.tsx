@@ -89,7 +89,7 @@ const DashboardStorageMini = ({
 
       {subscriptionLevel !== 'legacy' && (
         <Link
-          to="/premium"
+          to="/tarifs"
           className="group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors"
           style={{
             background: 'hsl(var(--gold) / 0.1)',

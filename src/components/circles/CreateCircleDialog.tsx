@@ -105,13 +105,13 @@ const CreateCircleDialog = ({ open, onOpenChange, userId, onCircleCreated, curre
     if (tier === 'free') {
       return {
         message: 'Passez au forfait Premium pour créer jusqu\'à 3 cercles, ou Héritage pour un nombre illimité.',
-        link: '/premium',
+        link: '/tarifs',
       };
     }
     if (tier === 'premium') {
       return {
         message: 'Passez au forfait Héritage pour créer un nombre illimité de cercles.',
-        link: '/premium?tier=heritage',
+        link: '/tarifs?tier=heritage',
       };
     }
     return null;

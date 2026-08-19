@@ -360,7 +360,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                       ) : (
                         <div className="relative">
                           <FeatureCard
-                            to="/premium?tier=heritage"
+                            to="/tarifs?tier=heritage"
                             icon={GitBranch}
                             title={t('nav.familyTree')}
                             description={t('nav.upgradeDescHeritage')}
@@ -369,7 +369,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                           />
                           <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
                             <Link
-                              to="/premium?tier=heritage"
+                              to="/tarifs?tier=heritage"
                               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors shadow-lg"
                             >
                               <Crown className="w-4 h-4" />
@@ -398,7 +398,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                             </p>
                           </div>
                           <Link
-                            to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
+                            to={tier === 'premium' ? '/tarifs?tier=heritage' : '/tarifs'}
                               className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/90 transition-colors"
                             >
                               {t('nav.discover')}
@@ -494,7 +494,7 @@ const DashboardHeader = ({ user, onSignOut }: DashboardHeaderProps) => {
                 {!hideUpgrade && (
                   <DropdownMenuItem asChild>
                     <Link
-                      to={tier === 'premium' ? '/premium?tier=heritage' : '/premium'}
+                      to={tier === 'premium' ? '/tarifs?tier=heritage' : '/tarifs'}
                       className="flex items-center gap-3 cursor-pointer text-secondary"
                     >
                       <Crown className="h-4 w-4" />

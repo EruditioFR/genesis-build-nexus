@@ -172,13 +172,13 @@ const AddMemberDialog = ({ open, onOpenChange, circleId, circleName, onMemberAdd
     if (tier === 'free') {
       return {
         message: 'Passez au forfait Premium pour inviter jusqu\'à 5 membres par cercle, ou Héritage pour un nombre illimité.',
-        link: '/premium',
+        link: '/tarifs',
       };
     }
     if (tier === 'premium') {
       return {
         message: 'Passez au forfait Héritage pour inviter un nombre illimité de membres par cercle.',
-        link: '/premium?tier=heritage',
+        link: '/tarifs?tier=heritage',
       };
     }
     return null;

@@ -213,7 +213,7 @@ const MediaCard = ({ icon: Icon, title, description, count, locked, onClick, ico
       {/* Premium upgrade link */}
       {locked && (
         <Link 
-          to="/premium" 
+          to="/tarifs" 
           className="text-sm text-primary hover:underline font-medium"
           onClick={(e) => e.stopPropagation()}
         >

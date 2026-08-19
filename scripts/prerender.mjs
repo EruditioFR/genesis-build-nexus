@@ -11,7 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ROUTE_SEO, ROUTE_BREADCRUMB_LABEL } from "../src/lib/routeSeoMeta.mjs";
+import { ROUTE_SEO, ROUTE_BREADCRUMB_LABEL, ROUTE_REDIRECTS } from "../src/lib/routeSeoMeta.mjs";
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -392,6 +392,40 @@ async function prerenderStaticRoutes({ outDir, template, posts, log }) {
   log(`[prerender] Wrote ${written} static pages (FAQ schema: ${faqItems.length} Q/A).`);
 }
 
+/**
+ * Legacy URLs kept alive only to funnel their equity to the canonical page:
+ * canonical + meta refresh + a visible link, so crawlers treat them as a
+ * permanent redirect instead of a duplicate page.
+ */
+function prerenderRedirects({ outDir, log }) {
+  const e = escapeHtml;
+  let written = 0;
+  for (const [from, to] of Object.entries(ROUTE_REDIRECTS)) {
+    const target = `${SITE_URL}${to}`;
+    const html = `<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${e(ROUTE_SEO[to]?.title || BRAND)}</title>
+    <link rel="canonical" href="${e(target)}" />
+    <meta http-equiv="refresh" content="0; url=${e(target)}" />
+    <meta name="description" content="${e(ROUTE_SEO[to]?.description || "")}" />
+    <script>window.location.replace(${JSON.stringify(to)});</script>
+  </head>
+  <body>
+    <p>Cette page a déménagé : <a href="${e(target)}">${e(target)}</a></p>
+  </body>
+</html>
+`;
+    const dir = path.join(outDir, from.replace(/^\//, ""));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "index.html"), html, "utf8");
+    written++;
+  }
+  log(`[prerender] Wrote ${written} redirect pages.`);
+}
+
 
 
 export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = console.log }) {
@@ -423,6 +457,7 @@ export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = co
   }
 
   await prerenderStaticRoutes({ outDir, template, posts, log });
+  prerenderRedirects({ outDir, log });
 
   let written = 0;
   for (const post of posts) {
