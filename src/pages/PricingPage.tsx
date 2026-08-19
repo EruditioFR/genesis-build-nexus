@@ -380,8 +380,17 @@ const PricingPage = () => {
                 <Link to="/premium" className="text-primary underline underline-offset-4">
                   voyez le détail de l'abonnement
                 </Link>
+                . Pour aller plus loin :{" "}
+                <Link to="/blog/arbre-genealogique-en-ligne-photos-et-souvenirs" className="text-primary underline underline-offset-4">
+                  l'arbre généalogique en option
+                </Link>{" "}
+                et{" "}
+                <Link to="/blog/conserver-transmettre-souvenirs-de-famille" className="text-primary underline underline-offset-4">
+                  conserver ses souvenirs de famille
+                </Link>
                 .
               </div>
+
             </motion.div>
           </div>
         </section>
