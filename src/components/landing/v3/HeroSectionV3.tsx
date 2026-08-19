@@ -180,7 +180,7 @@ const HeroSectionV3 = () => {
             {t('v3.hero.badgeTrial')}
           </p>
 
-          </motion.div>
+
 
           {/* Visuel émotionnel */}
           <motion.div
