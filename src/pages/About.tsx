@@ -104,8 +104,11 @@ const About = () => {
             <p className="text-xl text-muted-foreground leading-relaxed">
               FamilyGarden est un journal de famille privé : un endroit simple pour rassembler 
               vos souvenirs (photos, vidéos, audios, textes), les organiser, et les partager 
-              en cercle avec vos proches.
+              en cercle avec vos proches, à partir de{" "}
+              <Link to="/tarifs" className="text-primary underline underline-offset-4">2,99 € par mois</Link>{" "}
+              après 14 jours d'essai gratuit.
             </p>
+
           </div>
         </div>
       </section>
