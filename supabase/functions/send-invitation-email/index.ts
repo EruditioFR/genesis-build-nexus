@@ -33,23 +33,72 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Best-effort auth check — do NOT block the email if missing/invalid,
-    // because the member row has already been inserted client-side under RLS.
+    // Require a valid authenticated caller — this endpoint sends emails from
+    // our verified domain and must never be callable anonymously.
     const authHeader = req.headers.get("Authorization");
-    if (authHeader) {
-      const { data: { user }, error: authError } = await supabase.auth.getUser(
-        authHeader.replace("Bearer ", "")
-      );
-      if (authError || !user) {
-        console.warn("[send-invitation-email] Auth header present but invalid, continuing anyway", authError?.message);
-      } else {
-        console.log("[send-invitation-email] Authenticated user:", user.email);
-      }
-    } else {
-      console.warn("[send-invitation-email] No Authorization header — proceeding without user context");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const { data: { user }, error: authError } = await supabase.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+    if (authError || !user) {
+      console.warn("[send-invitation-email] Invalid auth token");
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     const { circleId, circleName, inviterName, memberEmail, memberName, invitationToken }: InvitationEmailRequest = await req.json();
+
+    // Authorization: only the circle owner may send invitations for that circle.
+    const { data: circle, error: circleError } = await supabase
+      .from("circles")
+      .select("id, name, owner_id")
+      .eq("id", circleId)
+      .maybeSingle();
+
+    if (circleError || !circle || circle.owner_id !== user.id) {
+      console.warn("[send-invitation-email] Caller is not the circle owner");
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // Basic input validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (typeof memberEmail !== "string" || !emailRegex.test(memberEmail) || memberEmail.length > 254) {
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    if (typeof invitationToken !== "string" || !/^[A-Za-z0-9-]{8,64}$/.test(invitationToken)) {
+      return new Response(JSON.stringify({ error: "Invalid invitation token" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // HTML-escape every user-controlled value injected in the template
+    const escapeHtml = (value: unknown) =>
+      String(value ?? "")
+        .slice(0, 200)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    // Trust the stored circle name rather than the client-supplied one
+    const safeCircleName = escapeHtml(circle.name || circleName);
+    const safeInviterName = escapeHtml(inviterName);
+    const safeMemberName = memberName ? escapeHtml(memberName) : "";
 
     // Base URL used in emails (links + images must be absolute URLs)
     // Prefer configuring APP_URL as an HTTPS URL (e.g. https://familygarden.fr)
@@ -62,7 +111,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "FamilyGarden <web@familygarden.fr>",
       to: [memberEmail],
-      subject: `${inviterName} vous invite à rejoindre le cercle "${circleName}"`,
+      subject: `${String(inviterName ?? "").slice(0, 100)} vous invite à rejoindre le cercle "${String(circle.name || circleName || "").slice(0, 100)}"`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -86,12 +135,12 @@ const handler = async (req: Request): Promise<Response> => {
             <!-- Contenu principal -->
             <div style="padding: 36px 32px;">
               <p style="font-size: 17px; color: #2D3748; line-height: 1.6; margin: 0 0 20px;">
-                Bonjour${memberName ? ` <strong>${memberName}</strong>` : ''} !
+                Bonjour${safeMemberName ? ` <strong>${safeMemberName}</strong>` : ''} !
               </p>
               
               <p style="font-size: 16px; color: #2D3748; line-height: 1.7; margin: 0 0 20px;">
-                <strong>${inviterName}</strong> vous invite à rejoindre le cercle 
-                <span style="color: #C9A86C; font-weight: 600;">"${circleName}"</span> sur FamilyGarden.
+                <strong>${safeInviterName}</strong> vous invite à rejoindre le cercle 
+                <span style="color: #C9A86C; font-weight: 600;">"${safeCircleName}"</span> sur FamilyGarden.
               </p>
               
               <div style="background-color: #faf8f5; border-left: 4px solid #C9A86C; padding: 16px 20px; margin: 24px 0; border-radius: 0 8px 8px 0;">
