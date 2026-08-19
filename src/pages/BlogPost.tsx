@@ -88,11 +88,24 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<Post | null>(null);
   const [category, setCategory] = useState<BlogCategory | null>(null);
   const [related, setRelated] = useState<RelatedPost[]>([]);
+  const [prevPost, setPrevPost] = useState<RelatedPost | null>(null);
+  const [nextPost, setNextPost] = useState<RelatedPost | null>(null);
+  const [showTopButton, setShowTopButton] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setShowTopButton(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
       if (!slug) return;
+      setLoading(true);
+      setPrevPost(null);
+      setNextPost(null);
       const { data } = await supabase
         .from("blog_posts")
         .select("*")
@@ -107,21 +120,47 @@ export default function BlogPostPage() {
           if (cat) setCategory(cat as unknown as BlogCategory);
         }
 
+        const postLang = (typedData as { lang?: string }).lang ?? "fr";
+        const pivot = typedData.published_at || typedData.created_at;
+
         // Maillage interne : autres articles de la même langue
         const { data: others } = await supabase
           .from("blog_posts")
           .select("id, title, slug, excerpt")
           .eq("status", "published")
-          .eq("lang", (typedData as { lang?: string }).lang ?? "fr")
+          .eq("lang", postLang)
           .neq("id", typedData.id)
           .order("published_at", { ascending: false })
           .limit(3);
         if (others) setRelated(others as unknown as RelatedPost[]);
+
+        // Article précédent (plus ancien) et suivant (plus récent)
+        const [{ data: older }, { data: newer }] = await Promise.all([
+          supabase
+            .from("blog_posts")
+            .select("id, title, slug, excerpt")
+            .eq("status", "published")
+            .eq("lang", postLang)
+            .lt("published_at", pivot)
+            .order("published_at", { ascending: false })
+            .limit(1),
+          supabase
+            .from("blog_posts")
+            .select("id, title, slug, excerpt")
+            .eq("status", "published")
+            .eq("lang", postLang)
+            .gt("published_at", pivot)
+            .order("published_at", { ascending: true })
+            .limit(1),
+        ]);
+        if (older?.[0]) setPrevPost(older[0] as unknown as RelatedPost);
+        if (newer?.[0]) setNextPost(newer[0] as unknown as RelatedPost);
       }
       setLoading(false);
     };
     fetch();
   }, [slug]);
+
 
   if (loading) {
     return (
