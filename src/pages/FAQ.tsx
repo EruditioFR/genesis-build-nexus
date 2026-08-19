@@ -12,6 +12,8 @@ import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import SEOHead from "@/components/seo/SEOHead";
 import { createFaqSchema, createBreadcrumbSchema } from "@/lib/seoSchemas";
+import { renderInlineLinks, stripInlineLinks } from "@/components/seo/InlineLinkText";
+
 
 const FAQ = () => {
   const faqCategories = [
