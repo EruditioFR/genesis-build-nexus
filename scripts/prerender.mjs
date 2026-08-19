@@ -386,34 +386,35 @@ async function prerenderStaticRoutes({ outDir, template, posts, log }) {
 
 
 
-export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = console.log }) {
-  if (!supabaseUrl || !supabaseKey) {
-    log("[prerender-blog] Missing Supabase env vars — skipped.");
-    return;
-  }
+export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = console.log }) {
   const templatePath = path.join(outDir, "index.html");
   if (!fs.existsSync(templatePath)) {
-    log("[prerender-blog] dist/index.html not found — skipped.");
+    log("[prerender] dist/index.html not found — skipped.");
     return;
   }
+  // Read once: the homepage output overwrites this same file.
   const template = fs.readFileSync(templatePath, "utf8");
 
-  const endpoint =
-    `${supabaseUrl}/rest/v1/blog_posts` +
-    `?select=slug,lang,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
-    `&status=eq.published&order=published_at.desc&limit=${MAX_PRERENDER_PAGES}`;
-
   let posts = [];
-  try {
-    const res = await fetch(endpoint, {
-      headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-    });
-    if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
-    posts = await res.json();
-  } catch (err) {
-    log(`[prerender-blog] Fetch failed, skipping prerender: ${err.message}`);
-    return;
+  if (supabaseUrl && supabaseKey) {
+    const endpoint =
+      `${supabaseUrl}/rest/v1/blog_posts` +
+      `?select=slug,lang,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
+      `&status=eq.published&order=published_at.desc&limit=${MAX_PRERENDER_PAGES}`;
+    try {
+      const res = await fetch(endpoint, {
+        headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
+      });
+      if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+      posts = await res.json();
+    } catch (err) {
+      log(`[prerender] Blog fetch failed, static routes only: ${err.message}`);
+    }
+  } else {
+    log("[prerender] Missing Supabase env vars — static routes only.");
   }
+
+  await prerenderStaticRoutes({ outDir, template, posts, log });
 
   let written = 0;
   for (const post of posts) {
@@ -426,24 +427,23 @@ export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = co
       injectHead(template, head, (post.lang || "fr").split("-")[0]),
       "utf8",
     );
-
     written++;
   }
-  log(`[prerender-blog] Wrote ${written} article pages with share metadata.`);
+  log(`[prerender] Wrote ${written} article pages with share metadata.`);
 }
 
-export function blogPrerenderPlugin() {
+export function sitePrerenderPlugin() {
   let resolvedOutDir = "dist";
   let env = {};
   return {
-    name: "family-garden-blog-prerender",
+    name: "family-garden-prerender",
     apply: "build",
     configResolved(config) {
       resolvedOutDir = path.resolve(config.root, config.build.outDir);
       env = config.env || {};
     },
     async closeBundle() {
-      await prerenderBlog({
+      await prerenderSite({
         outDir: resolvedOutDir,
         supabaseUrl: env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL,
         supabaseKey:
@@ -455,3 +455,4 @@ export function blogPrerenderPlugin() {
     },
   };
 }
+
