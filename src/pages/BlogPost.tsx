@@ -407,7 +407,7 @@ export default function BlogPostPage() {
                           <span className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{r.excerpt}</span>
                         )}
                         <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-medium text-primary">
-                          {relatedTitle}
+                          {readLabel}
                           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                         </span>
                       </div>
