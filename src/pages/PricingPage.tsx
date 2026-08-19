@@ -196,10 +196,14 @@ const PricingPage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button size="lg" asChild>
+                <Button
+                  size="lg"
+                  asChild
+                  className="bg-[hsl(var(--hero-accent))] hover:bg-[hsl(var(--hero-accent))]/90 text-white text-[17px] sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-xl shadow-[0_14px_40px_-14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-14 flex items-center justify-center gap-2"
+                >
                   <a href="#essai">
-                    Commencer mes 14 jours d'essai
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <span className="text-center leading-snug text-balance">Commencer mes 14 jours d'essai gratuit</span>
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
