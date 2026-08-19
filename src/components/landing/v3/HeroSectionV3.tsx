@@ -111,7 +111,7 @@ const HeroSectionV3 = () => {
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage:
-            'radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
+            'radial-gradient(circle at 20% 30%, hsl(var(--hero-accent)) 0%, transparent 50%), radial-gradient(circle at 80% 70%, hsl(var(--primary)) 0%, transparent 50%)',
         }}
       />
 
@@ -124,7 +124,7 @@ const HeroSectionV3 = () => {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[13px] sm:text-sm font-light tracking-wide backdrop-blur-sm"
           >
-            <span className="font-semibold text-[hsl(var(--gold))]">{t('v3.hero.badgePrice')}</span>
+            <span className="font-semibold text-[hsl(var(--hero-accent-soft))]">{t('v3.hero.badgePrice')}</span>
             <span className="mx-3 h-3 w-px bg-white/20" />
             <span className="text-white/75">{t('v3.hero.badgeTrial')}</span>
           </motion.div>
@@ -136,7 +136,7 @@ const HeroSectionV3 = () => {
             className="mt-4 sm:mt-7 text-[32px] leading-[1.12] sm:text-5xl md:text-6xl lg:text-[68px] sm:leading-[1.08] font-display font-bold text-white tracking-tight text-balance"
           >
             {t('v3.hero.title')}{' '}
-            <span className="text-[hsl(var(--gold))]">{t('v3.hero.titleHighlight')}</span>
+            <span className="text-[hsl(var(--hero-accent))]">{t('v3.hero.titleHighlight')}</span>
           </motion.h1>
 
           {/* Pitch court */}
@@ -159,7 +159,7 @@ const HeroSectionV3 = () => {
             <Button
               size="lg"
               onClick={handlePrimaryCta}
-              className="w-full sm:w-auto bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-white text-base sm:text-lg px-8 py-6 rounded-lg shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-12"
+              className="w-full sm:w-auto bg-[hsl(var(--hero-accent))] hover:bg-[hsl(var(--hero-accent))]/90 text-white text-base sm:text-lg px-8 py-6 rounded-lg shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-12"
             >
               <span className="text-center">{t('v3.hero.ctaPrimary').replace('\n', ' ')}</span>
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
@@ -211,15 +211,15 @@ const HeroSectionV3 = () => {
             className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[11px] sm:text-xs uppercase tracking-[0.14em] text-white/60"
           >
             <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
+              <ShieldCheck className="h-4 w-4 text-[hsl(var(--hero-accent-soft))]" strokeWidth={1.75} />
               {t('v3.hero.trust2')}
             </span>
             <span className="inline-flex items-center gap-2">
-              <EyeOff className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
+              <EyeOff className="h-4 w-4 text-[hsl(var(--hero-accent-soft))]" strokeWidth={1.75} />
               {t('v3.hero.trust3')}
             </span>
             <span className="inline-flex items-center gap-2">
-              <LockIcon className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
+              <LockIcon className="h-4 w-4 text-[hsl(var(--hero-accent-soft))]" strokeWidth={1.75} />
               {t('v3.hero.trustPrivacy')}
             </span>
           </motion.div>
@@ -252,12 +252,12 @@ const HeroSectionV3 = () => {
                   : { opacity: [0.5, 0.75, 0.5], scale: [1, 1.04, 1] }
               }
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -inset-8 sm:-inset-12 bg-[radial-gradient(ellipse_at_center,hsl(var(--gold)/0.35),transparent_60%)] blur-3xl pointer-events-none"
+              className="absolute -inset-8 sm:-inset-12 bg-[radial-gradient(ellipse_at_center,hsl(var(--hero-accent)/0.35),transparent_60%)] blur-3xl pointer-events-none"
               aria-hidden="true"
             />
 
             {/* Animated gradient border wrapper */}
-            <div className="relative rounded-2xl p-[1.5px] bg-gradient-to-br from-[hsl(var(--gold))]/60 via-white/10 to-[hsl(var(--gold))]/30 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+            <div className="relative rounded-2xl p-[1.5px] bg-gradient-to-br from-[hsl(var(--hero-accent))]/60 via-white/10 to-[hsl(var(--hero-accent))]/30 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
               <div className="relative rounded-[14px] overflow-hidden bg-[hsl(215_50%_14%)]">
 
                 {/* Window chrome — compact on mobile, full on desktop */}
@@ -316,9 +316,9 @@ const HeroSectionV3 = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -10 }}
                         transition={{ duration: 0.4 }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white text-xs font-medium shadow-lg"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-[hsl(var(--hero-accent))]/30 text-white text-xs font-medium shadow-lg"
                       >
-                        <Icon className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
+                        <Icon className="h-3.5 w-3.5 text-[hsl(var(--hero-accent))]" />
                         <span className="uppercase tracking-wider">{activeLabel}</span>
                       </motion.div>
                     </AnimatePresence>
@@ -366,7 +366,7 @@ const HeroSectionV3 = () => {
                 {/* Mobile: text only below image (no controls) */}
                 <div className="sm:hidden px-4 py-4 bg-[hsl(215_55%_12%)] border-t border-white/5">
                   <div className="text-left">
-                    <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--gold))] text-[10px] font-semibold uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-1.5 mb-1.5 text-[hsl(var(--hero-accent))] text-[10px] font-semibold uppercase tracking-wider">
                       <Icon className="h-3 w-3" />
                       {activeLabel}
                     </div>
@@ -404,7 +404,7 @@ const HeroSectionV3 = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm min-w-0">
-                <Icon className="h-4 w-4 text-[hsl(var(--gold))] flex-shrink-0" />
+                <Icon className="h-4 w-4 text-[hsl(var(--hero-accent))] flex-shrink-0" />
                 <span className="font-medium truncate">{activeLabel}</span>
                 <span className="text-white/50 tabular-nums flex-shrink-0">
                   {String(currentSlide + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
