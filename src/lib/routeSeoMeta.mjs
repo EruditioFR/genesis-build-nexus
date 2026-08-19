@@ -45,15 +45,6 @@ export const ROUTE_SEO = {
       "One subscription at €2.99 per month unlocks every Family Garden feature and 20 GB of storage. The family tree is a €5/month add-on. Every account starts with a 14-day free trial, no credit card required.",
     schemas: ["offer", "breadcrumb"],
   },
-  "/premium": {
-    title: "Tarifs Family Garden : 2,99 €/mois pour préserver vos souvenirs",
-    description:
-      "Un tarif unique et transparent : 2,99 €/mois, tous vos souvenirs et 20 Go. Option arbre généalogique à 5 €/mois. 14 jours d'essai gratuit sans carte.",
-    h1: "Un abonnement unique, sans surprise",
-    summary:
-      "Family Garden propose un abonnement unique à 2,99 € par mois : souvenirs illimités, 20 Go de stockage, cercles de partage privés, chronologie et export de vos données. L'arbre généalogique s'ajoute pour 5 € par mois.",
-    schemas: ["offer", "breadcrumb"],
-  },
   "/faq": {
     title: "FAQ : journal de famille privé et arbre généalogique | Family Garden",
     description:

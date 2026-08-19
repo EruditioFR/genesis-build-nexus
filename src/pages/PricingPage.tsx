@@ -379,10 +379,6 @@ const PricingPage = () => {
                 Vous avez une question sur le tarif ?{" "}
                 <Link to="/faq" className="text-primary underline underline-offset-4">
                   Consultez la FAQ
-                </Link>{" "}
-                ou{" "}
-                <Link to="/premium" className="text-primary underline underline-offset-4">
-                  voyez le détail de l'abonnement
                 </Link>
                 . Pour aller plus loin :{" "}
                 <Link to="/blog/arbre-genealogique-en-ligne-photos-et-souvenirs" className="text-primary underline underline-offset-4">
