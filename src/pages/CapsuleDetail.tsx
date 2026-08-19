@@ -9,6 +9,7 @@ import {
   FileText, Layers, Tag, Calendar, MoreHorizontal, Users, Download, FileDown, FolderArchive, Play, Folder, CalendarHeart, ImagePlus, ExternalLink, Info } from
 'lucide-react';
 
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
@@ -842,7 +843,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.05 }}
                 className="prose prose-lg max-w-none">
                 
-                  <div className="text-foreground text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: capsule.description }} />
+                  <div className="text-foreground text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(capsule.description) }} />
                 </motion.div>
               }
 
@@ -854,7 +855,7 @@ const CapsuleDetail = () => {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="p-6 rounded-2xl bg-muted/50 border-l-4 border-secondary">
                 
-                  <div className="text-foreground leading-relaxed prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-bold prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground" dangerouslySetInnerHTML={{ __html: capsule.content }} />
+                  <div className="text-foreground leading-relaxed prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-bold prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground" dangerouslySetInnerHTML={{ __html: sanitizeHtml(capsule.content) }} />
                 </motion.div>
               }
 

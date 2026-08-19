@@ -92,6 +92,19 @@ serve(async (req) => {
   }
 
   try {
+    // This function is internal-only: it is invoked by stripe-webhook with the
+    // service role key. Reject any other caller so nobody can generate magic
+    // links or send emails from our domain anonymously.
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const token = (req.headers.get("Authorization") || "").replace("Bearer ", "").trim();
+    if (!token || token !== serviceKey) {
+      console.warn("[send-welcome-email] Rejected unauthorized caller");
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { email, displayName, locale, tier } = await req.json();
     if (!email) {
       return new Response(JSON.stringify({ error: "Missing email" }), {
@@ -101,8 +114,7 @@ serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(supabaseUrl, serviceKey);
 
     // Generate a magic link (longer-lived than recovery) → user lands logged-in on /reset-password
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -123,7 +135,15 @@ serve(async (req) => {
 
     const actionUrl = linkData.properties.action_link;
     const t = getT(locale || "fr");
-    const name = displayName || email.split("@")[0];
+    const escapeHtml = (value: unknown) =>
+      String(value ?? "")
+        .slice(0, 200)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    const name = escapeHtml(displayName || email.split("@")[0]);
     const tierLabel = tierLabels[tier] || tier || "Premium";
     const html = buildHtml(t, actionUrl, name, tierLabel);
 
@@ -151,8 +171,8 @@ serve(async (req) => {
         html: `<div style="font-family:Arial,sans-serif;padding:20px;">
           <h2 style="color:#2D5A3D;">Nouvel abonnement payé</h2>
           <p><strong>Nom :</strong> ${name}</p>
-          <p><strong>Email :</strong> ${email}</p>
-          <p><strong>Forfait :</strong> ${tierLabel}</p>
+          <p><strong>Email :</strong> ${escapeHtml(email)}</p>
+          <p><strong>Forfait :</strong> ${escapeHtml(tierLabel)}</p>
           <p style="color:#888;font-size:12px;margin-top:20px;">Email automatique — Backoffice Family Garden</p>
         </div>`,
       });
