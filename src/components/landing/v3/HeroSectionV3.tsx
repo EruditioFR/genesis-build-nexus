@@ -219,7 +219,7 @@ const HeroSectionV3 = () => {
               {t('v3.hero.trust3')}
             </span>
             <span className="inline-flex items-center gap-2">
-              <Lock className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
+              <LockIcon className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
               {t('v3.hero.trustPrivacy')}
             </span>
           </motion.div>
