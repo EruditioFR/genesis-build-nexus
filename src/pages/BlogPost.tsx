@@ -222,6 +222,17 @@ export default function BlogPostPage() {
     zh: { title: "实用页面", items: [{ label: "价格：每月 2.99 欧元", to: "/tarifs" }, { label: "常见问题", to: "/faq" }, { label: "体验演示", to: "/demo" }, { label: "全部文章", to: "/blog" }] },
   };
   const usefulLinks = USEFUL_LINKS[lang] ?? USEFUL_LINKS.fr;
+  const NAV_LABELS: Record<string, [string, string, string]> = {
+    fr: ["Article précédent", "Article suivant", "Remonter en haut"],
+    en: ["Previous article", "Next article", "Back to top"],
+    es: ["Artículo anterior", "Artículo siguiente", "Volver arriba"],
+    it: ["Articolo precedente", "Articolo successivo", "Torna su"],
+    pt: ["Artigo anterior", "Próximo artigo", "Voltar ao topo"],
+    ko: ["이전 글", "다음 글", "맨 위로"],
+    zh: ["上一篇", "下一篇", "回到顶部"],
+  };
+  const [prevLabel, nextLabel, topLabel] = NAV_LABELS[lang] ?? NAV_LABELS.fr;
+
 
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
