@@ -300,7 +300,33 @@ const FAQ = () => {
               ))}
             </div>
 
+            {/* Maillage interne : pages et guides utiles */}
+            <nav aria-label="Pages et guides utiles" className="mt-14 rounded-2xl border border-border bg-card p-6 sm:p-8">
+              <h2 className="text-lg font-display font-semibold text-foreground mb-4">
+                Pour aller plus loin
+              </h2>
+              <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                {[
+                  { to: "/tarifs", label: "Tarif Family Garden : 2,99 €/mois" },
+                  { to: "/demo", label: "Essayer la démo en deux minutes" },
+                  { to: "/about", label: "À propos de Family Garden" },
+                  { to: "/blog", label: "Blog : conseils sur la mémoire familiale" },
+                  { to: "/blog/capsule-temporelle-numerique-comment-en-creer-une", label: "Créer une capsule temporelle numérique" },
+                  { to: "/blog/conserver-transmettre-souvenirs-de-famille", label: "Conserver et transmettre ses souvenirs de famille" },
+                  { to: "/blog/raconter-sa-vie-a-ses-enfants-methode", label: "Raconter sa vie à ses enfants : méthode en 7 étapes" },
+                  { to: "/blog/arbre-genealogique-en-ligne-photos-et-souvenirs", label: "Arbre généalogique en ligne avec photos et souvenirs" },
+                ].map((l) => (
+                  <li key={l.to}>
+                    <Link to={l.to} className="text-primary underline underline-offset-4 hover:text-secondary transition-colors">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
             {/* Contact CTA */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
