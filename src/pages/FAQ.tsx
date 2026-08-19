@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from "@/components/seo/SEOHead";
 import { createFaqSchema, createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { renderInlineLinks, stripInlineLinks } from "@/components/seo/InlineLinkText";
@@ -215,8 +216,8 @@ const FAQ = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="FAQ : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
-        description="Trouvez les réponses à vos questions sur Family Garden : sécurité, partage familial, abonnements, gardiens, arbre généalogique, export et sauvegarde de vos souvenirs."
+        title={getRouteSeo("/faq")!.title}
+        description={getRouteSeo("/faq")!.description}
         jsonLd={[
           createFaqSchema(allFaqItems),
           createBreadcrumbSchema([

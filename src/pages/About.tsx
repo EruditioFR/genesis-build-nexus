@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from "@/components/seo/SEOHead";
 import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { 
@@ -72,8 +73,8 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="À propos : journal de famille privé, souvenirs et arbre généalogique | Family Garden"
-        description="Découvrez Family Garden, le journal de famille privé pour rassembler photos, vidéos, audio et textes, construire votre arbre généalogique et partager vos souvenirs en toute sécurité avec vos proches."
+        title={getRouteSeo("/about")!.title}
+        description={getRouteSeo("/about")!.description}
         jsonLd={[
           aboutSchema,
           createBreadcrumbSchema([

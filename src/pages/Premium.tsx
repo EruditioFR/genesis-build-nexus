@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { toast } from 'sonner';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from '@/components/seo/SEOHead';
 import { createBreadcrumbSchema } from '@/lib/seoSchemas';
 
@@ -85,8 +86,8 @@ const Premium = () => {
   return (
     <div className="min-h-screen bg-gradient-warm pb-24 md:pb-0">
       <SEOHead
-        title="Tarifs Family Garden : 2,99 €/mois pour préserver vos souvenirs"
-        description="Un tarif unique et transparent : 2,99 €/mois pour tous vos souvenirs et 20 Go de stockage. Option Arbre généalogique à 5 €/mois. 14 jours d'essai gratuit."
+        title={getRouteSeo("/premium")!.title}
+        description={getRouteSeo("/premium")!.description}
         jsonLd={createBreadcrumbSchema([
           { name: 'Accueil', url: '/' },
           { name: 'Tarifs', url: '/premium' },
