@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowLeft, ArrowRight, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, ArrowUp, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
 import { formatBlogContent } from "@/lib/blogContent";
