@@ -106,7 +106,7 @@ const HeroSectionV3 = () => {
   const activeDescription = t(`v3.hero.productSlider.${active.key}.description`);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-20 pb-16 sm:pt-32 sm:pb-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[hsl(215_50%_18%)] via-[hsl(215_45%_22%)] to-[hsl(215_40%_28%)] pt-28 pb-16 sm:pt-32 sm:pb-24">
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
@@ -133,7 +133,7 @@ const HeroSectionV3 = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-5 sm:mt-7 text-[32px] leading-[1.12] sm:text-5xl md:text-6xl lg:text-[68px] sm:leading-[1.08] font-display font-bold text-white tracking-tight text-balance"
+            className="mt-4 sm:mt-7 text-[32px] leading-[1.12] sm:text-5xl md:text-6xl lg:text-[68px] sm:leading-[1.08] font-display font-bold text-white tracking-tight text-balance"
           >
             {t('v3.hero.title')}{' '}
             <span className="text-[hsl(var(--gold))]">{t('v3.hero.titleHighlight')}</span>
