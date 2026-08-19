@@ -416,7 +416,7 @@ export default function BlogPostPage() {
 
 
           <div className="border-t pt-6 mt-8">
-            <SocialShareButtons title={post.title} url={pageUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
+            <SocialShareButtons title={post.title} url={articleUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
           </div>
 
           {related.length > 0 && (
