@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, TreePine, Loader2, Sparkle, ShieldCheck, Lock, RefreshCw, Server, Gift } from "lucide-react";
+import { Check, Sparkles, TreePine, Loader2, Sparkle, ShieldCheck, Lock, RefreshCw, Server, Gift, ArrowRight } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -220,9 +220,8 @@ const PricingSectionV3 = () => {
 
           <Button
             onClick={handleSubscribe}
-            variant="gold"
             size="lg"
-            className="w-full h-auto min-h-11"
+            className="w-full bg-[hsl(var(--hero-accent))] hover:bg-[hsl(var(--hero-accent))]/90 text-white text-[17px] sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-xl shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-14 flex items-center justify-center gap-2"
             disabled={loading}
           >
             {loading ? (
@@ -231,7 +230,10 @@ const PricingSectionV3 = () => {
                 Chargement...
               </>
             ) : (
-              <span className="whitespace-pre-line text-center">{"Commencer mes 14 jours\nd'essai gratuit"}</span>
+              <>
+                <span className="text-center leading-snug text-balance">Commencer mes 14 jours d'essai gratuit</span>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+              </>
             )}
           </Button>
 
