@@ -12,6 +12,8 @@ import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import SEOHead from "@/components/seo/SEOHead";
 import { createFaqSchema, createBreadcrumbSchema } from "@/lib/seoSchemas";
+import { renderInlineLinks, stripInlineLinks } from "@/components/seo/InlineLinkText";
+
 
 const FAQ = () => {
   const faqCategories = [
@@ -21,19 +23,19 @@ const FAQ = () => {
       questions: [
         {
           question: "Qu'est-ce que Family Garden ?",
-          answer: "Family Garden est un service en ligne français qui vous permet de créer un journal de famille privé. Concrètement, Family Garden réunit en un seul endroit vos souvenirs sous toutes leurs formes : photos, vidéos, enregistrements audio et récits écrits. Chaque souvenir est daté, situé et relié aux personnes concernées, puis organisé sur une chronologie interactive et sur un arbre généalogique. Vous choisissez précisément avec qui partager, grâce à des cercles privés, et vous pouvez programmer la transmission de certains souvenirs à vos proches. Family Garden est accessible depuis un ordinateur, une tablette ou un smartphone, sans publicité, avec un hébergement européen conforme au RGPD, à partir de 2,99 € par mois après 14 jours d'essai gratuit."
+          answer: "Family Garden est un service en ligne français qui vous permet de créer un journal de famille privé. Concrètement, Family Garden réunit en un seul endroit vos souvenirs sous toutes leurs formes : photos, vidéos, enregistrements audio et récits écrits. Chaque souvenir est daté, situé et relié aux personnes concernées, puis organisé sur une chronologie interactive et sur un arbre généalogique. Vous choisissez précisément avec qui partager, grâce à des cercles privés, et vous pouvez programmer la transmission de certains souvenirs à vos proches. Family Garden est accessible depuis un ordinateur, une tablette ou un smartphone, sans publicité, avec un hébergement européen conforme au RGPD, à partir de [2,99 € par mois](/tarifs) après 14 jours d'essai gratuit."
         },
         {
           question: "Comment préserver les souvenirs de famille numériquement et durablement ?",
-          answer: "Préserver ses souvenirs de famille numériquement demande plus qu'un simple stockage de photos. Il faut contextualiser chaque moment : qui était présent, où cela se passait, ce qui rendait ce souvenir précieux. Family Garden a été pensé spécifiquement pour cela. Vous créez des souvenirs qui combinent textes, photos, vidéos et enregistrements audio dans un même contenant, enrichis d'une date, d'un lieu et des personnes liées. Ces souvenirs s'organisent ensuite sur une chronologie interactive par décennies, ce qui permet à vos proches de naviguer facilement dans votre histoire familiale, aujourd'hui comme dans cinquante ans. Tout est hébergé sur des serveurs européens chiffrés, avec sauvegarde quotidienne, pour garantir la pérennité du patrimoine familial."
+          answer: "Préserver ses souvenirs de famille numériquement demande plus qu'un simple stockage de photos. Il faut contextualiser chaque moment : qui était présent, où cela se passait, ce qui rendait ce souvenir précieux. Family Garden a été pensé spécifiquement pour cela. Vous créez des souvenirs qui combinent textes, photos, vidéos et enregistrements audio dans un même contenant, enrichis d'une date, d'un lieu et des personnes liées. Nos guides détaillent la méthode pour [conserver et transmettre ses souvenirs de famille](/blog/conserver-transmettre-souvenirs-de-famille). Ces souvenirs s'organisent ensuite sur une chronologie interactive par décennies, ce qui permet à vos proches de naviguer facilement dans votre histoire familiale, aujourd'hui comme dans cinquante ans. Tout est hébergé sur des serveurs européens chiffrés, avec sauvegarde quotidienne, pour garantir la pérennité du patrimoine familial."
         },
         {
           question: "Qu'est-ce qu'un journal de famille privé et à quoi cela sert-il ?",
-          answer: "Un journal de famille privé est un espace numérique sécurisé où vous consignez l'histoire de votre famille au fil du temps : événements marquants, anecdotes, traditions, voyages, naissances, transmissions. Contrairement à un blog public ou à un réseau social, ce journal n'est jamais indexé, jamais monétisé et jamais visible par des inconnus. Chez Family Garden, vous décidez précisément qui voit quoi, en créant des cercles de partage (famille proche, famille élargie, amis intimes). L'objectif est double : structurer la mémoire familiale dans un lieu unique pour ne rien oublier, et préparer une transmission ordonnée aux générations suivantes, qui hériteront ainsi non seulement de photos, mais aussi du contexte et du sens qui les accompagnent."
+          answer: "Un journal de famille privé est un espace numérique sécurisé où vous consignez l'histoire de votre famille au fil du temps : événements marquants, anecdotes, traditions, voyages, naissances, transmissions. Contrairement à un blog public ou à un réseau social, ce journal n'est jamais indexé, jamais monétisé et jamais visible par des inconnus. Chez Family Garden, vous décidez précisément qui voit quoi, en créant des cercles de partage (famille proche, famille élargie, amis intimes). La [démonstration en deux minutes](/demo) permet d'en juger sans créer de compte. L'objectif est double : structurer la mémoire familiale dans un lieu unique pour ne rien oublier, et préparer une transmission ordonnée aux générations suivantes, qui hériteront ainsi non seulement de photos, mais aussi du contexte et du sens qui les accompagnent."
         },
         {
           question: "Qu'est-ce qu'un souvenir Family Garden, concrètement ?",
-          answer: "Un souvenir Family Garden est une fiche multimédia autonome qui raconte un moment précis de votre vie ou de celle de votre famille. Chaque souvenir peut combiner un texte rédigé librement, plusieurs photos, une ou plusieurs vidéos, des enregistrements audio (témoignage vocal, chanson, rire d'enfant) et des liens vers du contenu externe. Vous lui associez une date (précise ou approximative), un lieu, une catégorie thématique, et les membres de la famille concernés. Le souvenir s'inscrit ensuite automatiquement sur la chronologie de votre journal et, si vous le souhaitez, sur la fiche des personnes qu'il mentionne dans l'arbre généalogique. C'est l'unité de base de tout votre patrimoine numérique sur la plateforme."
+          answer: "Un souvenir Family Garden est une fiche multimédia autonome qui raconte un moment précis de votre vie ou de celle de votre famille. Chaque souvenir peut combiner un texte rédigé librement, plusieurs photos, une ou plusieurs vidéos, des enregistrements audio (témoignage vocal, chanson, rire d'enfant) et des liens vers du contenu externe. Vous lui associez une date (précise ou approximative), un lieu, une [catégorie thématique](/categories), et les membres de la famille concernés. Le souvenir s'inscrit ensuite automatiquement sur la chronologie de votre journal et, si vous le souhaitez, sur la fiche des personnes qu'il mentionne dans l'arbre généalogique. C'est l'unité de base de tout votre patrimoine numérique sur la plateforme."
         }
       ]
     },
@@ -43,15 +45,15 @@ const FAQ = () => {
       questions: [
         {
           question: "Quelle est la différence entre Family Garden et Google Photos ?",
-          answer: "Google Photos est un service de stockage et de classement automatique de photos, conçu pour la commodité quotidienne. Family Garden est une plateforme de mémoire familiale conçue pour la transmission. La différence essentielle tient à la finalité : Google Photos cherche à organiser des images, Family Garden cherche à raconter une histoire. Sur Family Garden, vos médias sont contextualisés par un récit, reliés à des personnes identifiées dans un arbre généalogique, et regroupés en souvenirs cohérents plutôt qu'en simple flux chronologique. Vous gardez la main sur ce que voient vos proches grâce aux cercles de partage, vos données ne sont jamais utilisées pour entraîner des modèles publicitaires ou d'IA, et vous pouvez programmer un legs posthume pour transmettre certains souvenirs après votre décès."
+          answer: "Google Photos est un service de stockage et de classement automatique de photos, conçu pour la commodité quotidienne. Family Garden est une plateforme de mémoire familiale conçue pour la transmission. La différence essentielle tient à la finalité : Google Photos cherche à organiser des images, Family Garden cherche à raconter une histoire. Sur Family Garden, vos médias sont contextualisés par un récit, reliés à des personnes identifiées dans un arbre généalogique, et regroupés en souvenirs cohérents plutôt qu'en simple flux chronologique. Vous gardez la main sur ce que voient vos proches grâce aux cercles de partage, vos données ne sont jamais utilisées pour entraîner des modèles publicitaires ou d'IA, et vous pouvez programmer un legs posthume pour transmettre certains souvenirs après votre décès. Le détail des fonctions incluses figure sur la [page tarifs](/tarifs)."
         },
         {
           question: "En quoi Family Garden est-il différent d'un site de généalogie classique ?",
-          answer: "Les sites de généalogie classiques se concentrent sur la reconstitution d'arbres : noms, dates, lieux, parfois actes officiels. Family Garden inclut un arbre généalogique interactif avec import et export GEDCOM, mais il va au-delà. Chaque membre de l'arbre devient un point d'ancrage pour des souvenirs vivants : témoignages audio d'un grand-père, vidéos d'un mariage, photos d'une maison disparue, lettres numérisées. La généalogie cesse d'être une suite de cases et devient une mémoire incarnée. Vous pouvez taguer des personnes directement sur les photos, suivre leur présence à travers les décennies, et créer une vue chronologique mêlant événements biographiques et souvenirs partagés. C'est une généalogie augmentée, pensée pour les familles, pas seulement pour les chercheurs."
+          answer: "Les sites de généalogie classiques se concentrent sur la reconstitution d'arbres : noms, dates, lieux, parfois actes officiels. Family Garden inclut un arbre généalogique interactif avec import et export GEDCOM, mais il va au-delà. Chaque membre de l'arbre devient un point d'ancrage pour des souvenirs vivants : témoignages audio d'un grand-père, vidéos d'un mariage, photos d'une maison disparue, lettres numérisées. La généalogie cesse d'être une suite de cases et devient une mémoire incarnée. Vous pouvez taguer des personnes directement sur les photos, suivre leur présence à travers les décennies, et créer une vue chronologique mêlant événements biographiques et souvenirs partagés. C'est une généalogie augmentée, pensée pour les familles, pas seulement pour les chercheurs : voir notre guide [arbre généalogique en ligne avec photos et souvenirs](/blog/arbre-genealogique-en-ligne-photos-et-souvenirs)."
         },
         {
           question: "Pourquoi ne pas simplement utiliser un dossier partagé ou un disque dur familial ?",
-          answer: "Un dossier partagé ou un disque dur stocke des fichiers, mais ne préserve ni le contexte, ni la mémoire collective, ni l'organisation chronologique. Au bout de quelques années, on retrouve des milliers d'images sans légendes, sans dates fiables, sans lien clair entre les personnes. Le disque dur, lui, finit toujours par tomber en panne ou par se perdre lors d'un déménagement. Family Garden résout ces deux problèmes : chaque souvenir porte son histoire avec lui (qui, quand, où, pourquoi), et les données sont sauvegardées quotidiennement sur des serveurs européens redondés. À la disparition d'un proche, la famille n'hérite pas d'un disque illisible, mais d'un journal structuré, navigable et compréhensible par tous, y compris les plus jeunes."
+          answer: "Un dossier partagé ou un disque dur stocke des fichiers, mais ne préserve ni le contexte, ni la mémoire collective, ni l'organisation chronologique. Au bout de quelques années, on retrouve des milliers d'images sans légendes, sans dates fiables, sans lien clair entre les personnes. Le disque dur, lui, finit toujours par tomber en panne ou par se perdre lors d'un déménagement. Family Garden résout ces deux problèmes : chaque souvenir porte son histoire avec lui (qui, quand, où, pourquoi), et les données sont sauvegardées quotidiennement sur des serveurs européens redondés. À la disparition d'un proche, la famille n'hérite pas d'un disque illisible, mais d'un journal structuré, navigable et compréhensible par tous, y compris les plus jeunes. Notre article explique comment [conserver et transmettre ses souvenirs de famille](/blog/conserver-transmettre-souvenirs-de-famille) durablement."
         }
       ]
     },
@@ -65,7 +67,7 @@ const FAQ = () => {
         },
         {
           question: "Family Garden est-il conforme au RGPD européen ?",
-          answer: "Oui, Family Garden respecte intégralement le Règlement Général sur la Protection des Données. Vos contenus sont hébergés exclusivement sur des serveurs situés dans l'Union Européenne, ce qui garantit que vos données ne quittent jamais le territoire européen. Vous disposez de l'ensemble des droits RGPD : droit d'accès à vos données, droit de rectification, droit à la portabilité (export complet de vos souvenirs au format PDF et fichiers bruts), et droit à l'effacement définitif si vous décidez de fermer votre compte. Aucune donnée personnelle n'est cédée à des partenaires commerciaux. Notre politique de confidentialité détaille précisément les traitements effectués, les durées de conservation et les sous-traitants techniques mobilisés."
+          answer: "Oui, Family Garden respecte intégralement le Règlement Général sur la Protection des Données. Vos contenus sont hébergés exclusivement sur des serveurs situés dans l'Union Européenne, ce qui garantit que vos données ne quittent jamais le territoire européen. Vous disposez de l'ensemble des droits RGPD : droit d'accès à vos données, droit de rectification, droit à la portabilité (export complet de vos souvenirs au format PDF et fichiers bruts), et droit à l'effacement définitif si vous décidez de fermer votre compte. Aucune donnée personnelle n'est cédée à des partenaires commerciaux. Notre [politique de confidentialité](/privacy) détaille précisément les traitements effectués, les durées de conservation et les sous-traitants techniques mobilisés."
         },
         {
           question: "Qui peut voir mes souvenirs et comment fonctionne le contrôle d'accès ?",
@@ -83,7 +85,7 @@ const FAQ = () => {
         },
         {
           question: "Comment fonctionne concrètement le legs posthume sur Family Garden ?",
-          answer: "Avec le legs posthume, inclus dans l'abonnement à 2,99 € par mois, vous désignez un ou plusieurs gardiens de confiance, généralement des proches susceptibles d'être joignables sur le long terme. Pour chaque souvenir, vous indiquez s'il doit faire partie du legs, à quel destinataire il s'adresse, et selon quelles conditions de délivrance (immédiate après décès, différée à une date précise, ou conditionnée à un événement comme une majorité). À votre décès, vos gardiens confirment l'événement via une procédure sécurisée. Le système notifie alors automatiquement chaque destinataire, qui reçoit un accès personnel à son lot de souvenirs accompagnés de vos messages. Les gardiens ne voient jamais le contenu : ils n'ont qu'un rôle d'autorisation, jamais de consultation."
+          answer: "Avec le legs posthume, inclus dans l'[abonnement à 2,99 € par mois](/tarifs), vous désignez un ou plusieurs gardiens de confiance, généralement des proches susceptibles d'être joignables sur le long terme. Pour chaque souvenir, vous indiquez s'il doit faire partie du legs, à quel destinataire il s'adresse, et selon quelles conditions de délivrance (immédiate après décès, différée à une date précise, ou conditionnée à un événement comme une majorité). À votre décès, vos gardiens confirment l'événement via une procédure sécurisée. Le système notifie alors automatiquement chaque destinataire, qui reçoit un accès personnel à son lot de souvenirs accompagnés de vos messages. Les gardiens ne voient jamais le contenu : ils n'ont qu'un rôle d'autorisation, jamais de consultation."
         },
         {
           question: "Comment choisir un bon gardien pour mon legs numérique ?",
@@ -101,11 +103,11 @@ const FAQ = () => {
         },
         {
           question: "Puis-je construire un arbre généalogique complet sur Family Garden ?",
-          answer: "Oui, l'arbre généalogique interactif, proposé en option à 5 € par mois, supporte plusieurs centaines de membres. Vous pouvez le construire manuellement personne par personne, ou importer un fichier GEDCOM existant si vous travaillez déjà sur un autre logiciel de généalogie. L'arbre s'affiche en mode sablier centré sur une personne, avec ses ascendants et ses descendants sur deux générations visibles à la fois. Chaque membre dispose d'une fiche détaillée : biographie, photos, événements de vie, souvenirs partagés où il apparaît. Vous pouvez exporter l'arbre au format GEDCOM standard pour le partager avec d'autres généalogistes, ou en PDF pour l'imprimer et l'offrir lors d'une réunion de famille."
+          answer: "Oui, l'[arbre généalogique interactif](/blog/arbre-genealogique-en-ligne-photos-et-souvenirs), proposé en [option à 5 € par mois](/tarifs), supporte plusieurs centaines de membres. Vous pouvez le construire manuellement personne par personne, ou importer un fichier GEDCOM existant si vous travaillez déjà sur un autre logiciel de généalogie. L'arbre s'affiche en mode sablier centré sur une personne, avec ses ascendants et ses descendants sur deux générations visibles à la fois. Chaque membre dispose d'une fiche détaillée : biographie, photos, événements de vie, souvenirs partagés où il apparaît. Vous pouvez exporter l'arbre au format GEDCOM standard pour le partager avec d'autres généalogistes, ou en PDF pour l'imprimer et l'offrir lors d'une réunion de famille."
         },
         {
           question: "Les destinataires de mes souvenirs doivent-ils payer un abonnement ?",
-          answer: "Non. Toute personne invitée à consulter vos souvenirs accède à la plateforme gratuitement, sans aucune obligation d'abonnement. Elle peut visionner les contenus que vous lui partagez, laisser des commentaires et des réactions émotionnelles, sans avoir à payer. Seuls les utilisateurs qui souhaitent eux-mêmes créer activement leur propre journal de famille, poursuivre au-delà des 14 jours d'essai gratuit souscrivent l'abonnement à 2,99 € par mois. Cette logique garantit que vos souvenirs sont accessibles à tous vos proches sans qu'aucun frein financier ne pèse sur la transmission familiale."
+          answer: "Non. Toute personne invitée à consulter vos souvenirs accède à la plateforme gratuitement, sans aucune obligation d'abonnement. Elle peut visionner les contenus que vous lui partagez, laisser des commentaires et des réactions émotionnelles, sans avoir à payer. Seuls les utilisateurs qui souhaitent eux-mêmes créer activement leur propre journal de famille, poursuivre au-delà des 14 jours d'essai gratuit souscrivent l'abonnement à [2,99 € par mois](/tarifs). Cette logique garantit que vos souvenirs sont accessibles à tous vos proches sans qu'aucun frein financier ne pèse sur la transmission familiale."
         }
       ]
     },
@@ -129,7 +131,7 @@ const FAQ = () => {
       questions: [
         {
           question: "Quels sont les abonnements proposés et que comprennent-ils ?",
-          answer: "Family Garden fonctionne avec un tarif unique et lisible : 2,99 € par mois TTC donnent accès à l'ensemble du service en ligne, avec 20 Go de stockage, tous les formats de médias (texte, photo, vidéo, audio), la chronologie interactive, les cercles de partage illimités, l'export PDF et le legs posthume avec gardiens. Seul l'arbre généalogique interactif, plus gourmand en ressources, est proposé en option à 5 € par mois, activable et désactivable quand vous le souhaitez. Chaque nouveau compte démarre par 14 jours d'essai gratuit, sans carte bancaire, pour créer ses premiers souvenirs et juger sur pièces. Vous pouvez changer de formule ou résilier à tout moment depuis votre espace personnel, sans engagement de durée."
+          answer: "Family Garden fonctionne avec un [tarif unique et lisible](/tarifs) : 2,99 € par mois TTC donnent accès à l'ensemble du service en ligne, avec 20 Go de stockage, tous les formats de médias (texte, photo, vidéo, audio), la chronologie interactive, les cercles de partage illimités, l'export PDF et le legs posthume avec gardiens. Seul l'arbre généalogique interactif, plus gourmand en ressources, est proposé en option à 5 € par mois, activable et désactivable quand vous le souhaitez. Chaque nouveau compte démarre par 14 jours d'essai gratuit, sans carte bancaire, pour créer ses premiers souvenirs et juger sur pièces. Vous pouvez changer de formule ou résilier à tout moment depuis votre espace personnel, sans engagement de durée."
         },
         {
           question: "Que deviennent mes souvenirs si j'arrête mon abonnement ?",
@@ -143,41 +145,72 @@ const FAQ = () => {
       questions: [
         {
           question: "Qu'est-ce qu'une capsule temporelle numérique ?",
-          answer: "Une capsule temporelle numérique est un ensemble de souvenirs — textes, photos, vidéos, enregistrements vocaux — rassemblés aujourd'hui pour être ouverts plus tard, à une date choisie ou par une personne précise. Là où la capsule temporelle traditionnelle se limitait à une boîte enterrée dans un jardin, la version numérique conserve les couleurs, les voix et le mouvement, sans risque d'humidité ni de perte matérielle. Sur Family Garden, chaque souvenir peut être programmé pour être révélé à une date future : les dix-huit ans d'un enfant, un anniversaire de mariage, ou après votre disparition dans le cadre du legs. Vous rédigez le message, vous joignez les médias, vous choisissez le destinataire, et la plateforme se charge de la délivrance au bon moment."
+          answer: "Une [capsule temporelle numérique](/blog/capsule-temporelle-numerique-comment-en-creer-une) est un ensemble de souvenirs — textes, photos, vidéos, enregistrements vocaux — rassemblés aujourd'hui pour être ouverts plus tard, à une date choisie ou par une personne précise. Là où la capsule temporelle traditionnelle se limitait à une boîte enterrée dans un jardin, la version numérique conserve les couleurs, les voix et le mouvement, sans risque d'humidité ni de perte matérielle. Sur Family Garden, chaque souvenir peut être programmé pour être révélé à une date future : les dix-huit ans d'un enfant, un anniversaire de mariage, ou après votre disparition dans le cadre du legs. Vous rédigez le message, vous joignez les médias, vous choisissez le destinataire, et la plateforme se charge de la délivrance au bon moment."
         },
         {
           question: "Comment créer une capsule temporelle numérique pour ses enfants ?",
-          answer: "Commencez par définir le destinataire et l'occasion : un enfant qui aura dix-huit ans, un petit-enfant qui n'est pas encore né, ou toute la fratrie à une date anniversaire. Rassemblez ensuite les matériaux : quelques photos marquantes, un enregistrement vocal où vous racontez la journée de sa naissance, une lettre écrite à la première personne. Sur Family Garden, vous créez un souvenir par thème plutôt qu'un bloc unique : cela reste plus lisible à l'ouverture et vous pouvez enrichir la capsule au fil des années. Vous programmez enfin la date de révélation et désignez le destinataire. Le jour venu, il reçoit une notification et accède à un espace personnel contenant l'intégralité de ce que vous lui avez laissé, dans l'ordre que vous avez choisi."
+          answer: "Commencez par définir le destinataire et l'occasion : un enfant qui aura dix-huit ans, un petit-enfant qui n'est pas encore né, ou toute la fratrie à une date anniversaire. Rassemblez ensuite les matériaux : quelques photos marquantes, un enregistrement vocal où vous racontez la journée de sa naissance, une lettre écrite à la première personne. Sur Family Garden, vous créez un souvenir par thème plutôt qu'un bloc unique : cela reste plus lisible à l'ouverture et vous pouvez enrichir la capsule au fil des années. Vous programmez enfin la date de révélation et désignez le destinataire. Notre guide complet détaille [comment créer une capsule temporelle numérique](/blog/capsule-temporelle-numerique-comment-en-creer-une) pas à pas. Le jour venu, il reçoit une notification et accède à un espace personnel contenant l'intégralité de ce que vous lui avez laissé, dans l'ordre que vous avez choisi."
         },
         {
           question: "Comment conserver ses souvenirs de famille en ligne sans les perdre ?",
-          answer: "La première cause de perte des souvenirs familiaux n'est pas l'accident, c'est la dispersion : des photos sur un téléphone, d'autres sur un disque dur, des vidéos dans une messagerie, et personne qui sache où tout se trouve. Conserver durablement suppose trois conditions : un lieu unique, un contexte associé à chaque document, et un accès partagé avec au moins un proche. Family Garden réunit ces trois conditions en un service en ligne : vous déposez vos médias dans un espace unique hébergé sur des serveurs européens chiffrés et sauvegardés quotidiennement, vous documentez chaque souvenir avec sa date, son lieu et les personnes concernées, et vous ouvrez l'accès à vos cercles familiaux. L'export complet reste possible à tout moment pour conserver une copie hors ligne."
+          answer: "La première cause de perte des souvenirs familiaux n'est pas l'accident, c'est la dispersion : des photos sur un téléphone, d'autres sur un disque dur, des vidéos dans une messagerie, et personne qui sache où tout se trouve. Conserver durablement suppose trois conditions : un lieu unique, un contexte associé à chaque document, et un accès partagé avec au moins un proche. Family Garden réunit ces trois conditions en un service en ligne : vous déposez vos médias dans un espace unique hébergé sur des serveurs européens chiffrés et sauvegardés quotidiennement, vous documentez chaque souvenir avec sa date, son lieu et les personnes concernées, et vous ouvrez l'accès à vos cercles familiaux. L'export complet reste possible à tout moment pour conserver une copie hors ligne. Voir aussi : [conserver et transmettre ses souvenirs de famille](/blog/conserver-transmettre-souvenirs-de-famille)."
         },
         {
           question: "Comment raconter sa vie à ses enfants quand on ne sait pas par où commencer ?",
-          answer: "La difficulté n'est presque jamais le manque de matière, mais l'absence de point de départ. La méthode la plus efficace consiste à renoncer à la chronologie : au lieu de reprendre votre vie depuis la naissance, répondez à une question précise à la fois. Family Garden propose pour cela une bibliothèque de plus de cinquante questions guidées — le premier métier, la rencontre avec votre conjoint, la maison de l'enfance, une odeur qui vous ramène en arrière — et vous répondez par écrit ou en enregistrant simplement votre voix, ce qui est souvent plus naturel. Comptez dix minutes par question. Au bout de quelques semaines, la chronologie interactive reconstitue automatiquement le récit dans l'ordre, et vos enfants héritent d'un ensemble cohérent plutôt que d'une intention jamais concrétisée."
+          answer: "La difficulté n'est presque jamais le manque de matière, mais l'absence de point de départ. La méthode la plus efficace consiste à renoncer à la chronologie : au lieu de reprendre votre vie depuis la naissance, répondez à une question précise à la fois. Family Garden propose pour cela une [bibliothèque de plus de cinquante questions guidées](/inspirations) — le premier métier, la rencontre avec votre conjoint, la maison de l'enfance, une odeur qui vous ramène en arrière — et vous répondez par écrit ou en enregistrant simplement votre voix, ce qui est souvent plus naturel. Comptez dix minutes par question. Au bout de quelques semaines, la chronologie interactive reconstitue automatiquement le récit dans l'ordre, et vos enfants héritent d'un ensemble cohérent plutôt que d'une intention jamais concrétisée. La méthode en sept étapes est détaillée dans l'article [raconter sa vie à ses enfants](/blog/raconter-sa-vie-a-ses-enfants-methode)."
         },
         {
           question: "Comment écrire une biographie familiale sans être écrivain ?",
-          answer: "Une biographie familiale réussie n'a rien à voir avec un exercice littéraire : elle vaut par la précision des détails, pas par le style. Écrivez comme vous parleriez à un proche, à la première personne, en préférant les scènes concrètes aux généralités — la table de la cuisine, le nom du chien, le prix du pain à l'époque — car ce sont ces détails que la mémoire familiale perd en premier. Procédez par petits blocs indépendants d'une demi-page plutôt que par chapitres. Sur Family Garden, chaque bloc devient un souvenir daté que la plateforme replace ensuite sur la chronologie ; vous pouvez l'illustrer d'une photo, y adjoindre un enregistrement de votre voix, et l'exporter en PDF pour l'imprimer et l'offrir à votre famille lorsque l'ensemble vous semble abouti."
+          answer: "Une biographie familiale réussie n'a rien à voir avec un exercice littéraire : elle vaut par la précision des détails, pas par le style. Écrivez comme vous parleriez à un proche, à la première personne, en préférant les scènes concrètes aux généralités — la table de la cuisine, le nom du chien, le prix du pain à l'époque — car ce sont ces détails que la mémoire familiale perd en premier. Procédez par petits blocs indépendants d'une demi-page plutôt que par chapitres. Sur Family Garden, chaque bloc devient un souvenir daté que la plateforme replace ensuite sur la chronologie ; vous pouvez l'illustrer d'une photo, y adjoindre un enregistrement de votre voix, et l'exporter en PDF pour l'imprimer et l'offrir à votre famille — voir la méthode dans [raconter sa vie à ses enfants](/blog/raconter-sa-vie-a-ses-enfants-methode) lorsque l'ensemble vous semble abouti."
         },
         {
           question: "Quelle différence entre Family Garden et un site de généalogie comme Geneanet ou MyHeritage ?",
-          answer: "Les sites de généalogie servent à remonter le temps : ils vous aident à retrouver des ancêtres, à consulter des archives d'état civil et à établir des filiations parfois sur plusieurs siècles. Family Garden fait l'inverse : la plateforme part du présent et des générations vivantes pour conserver ce qu'aucune archive ne contiendra jamais — les voix, les récits, les photos de famille, les anecdotes du quotidien. L'arbre généalogique y est un outil de mise en relation des souvenirs, pas une fin en soi : chaque personne de l'arbre est reliée aux moments où elle apparaît. Les deux usages sont complémentaires, et l'import de fichiers GEDCOM permet justement de récupérer un arbre déjà construit ailleurs pour y accrocher vos souvenirs."
+          answer: "Les sites de généalogie servent à remonter le temps : ils vous aident à retrouver des ancêtres, à consulter des archives d'état civil et à établir des filiations parfois sur plusieurs siècles. Family Garden fait l'inverse : la plateforme part du présent et des générations vivantes pour conserver ce qu'aucune archive ne contiendra jamais — les voix, les récits, les photos de famille, les anecdotes du quotidien. L'arbre généalogique y est un outil de mise en relation des souvenirs, pas une fin en soi : chaque personne de l'arbre est reliée aux moments où elle apparaît. Les deux usages sont complémentaires, et l'[import de fichiers GEDCOM](/blog/arbre-genealogique-en-ligne-photos-et-souvenirs) permet justement de récupérer un arbre déjà construit ailleurs pour y accrocher vos souvenirs."
         },
         {
           question: "Comment créer un arbre généalogique en ligne avec photos et souvenirs ?",
-          answer: "Sur Family Garden, l'arbre généalogique se construit de deux façons : en saisissant les personnes une à une à partir de vous-même, ou en important un fichier GEDCOM issu d'un logiciel de généalogie existant, ce qui reprend en une seule opération les noms, dates et filiations déjà collectés. Chaque membre dispose ensuite d'une fiche enrichie : photo de portrait, biographie, lieux de vie affichés sur une carte, et surtout la liste des souvenirs où il apparaît. Vous pouvez identifier une personne directement sur une photo de famille, comme sur un réseau social mais dans un cadre strictement privé. L'arbre s'affiche en mode sablier autour d'une personne choisie et s'exporte en PDF ou en GEDCOM. Cette fonction est disponible en option à 5 € par mois."
+          answer: "Sur Family Garden, l'arbre généalogique se construit de deux façons : en saisissant les personnes une à une à partir de vous-même, ou en important un fichier GEDCOM issu d'un logiciel de généalogie existant, ce qui reprend en une seule opération les noms, dates et filiations déjà collectés. Chaque membre dispose ensuite d'une fiche enrichie : photo de portrait, biographie, lieux de vie affichés sur une carte, et surtout la liste des souvenirs où il apparaît. Vous pouvez identifier une personne directement sur une photo de famille, comme sur un réseau social mais dans un cadre strictement privé. L'arbre s'affiche en mode sablier autour d'une personne choisie et s'exporte en PDF ou en GEDCOM. Cette fonction est disponible [en option à 5 € par mois](/tarifs)."
+        }
+      ]
+    },
+    {
+      icon: Lock,
+      title: "Démarrer, essayer et s'inspirer",
+      questions: [
+        {
+          question: "Combien coûte Family Garden et que comprend l'essai de 14 jours ?",
+          answer: "Family Garden coûte 2,99 € par mois TTC, sans engagement, avec 20 Go de stockage et toutes les fonctions du journal de famille ; seul l'arbre généalogique est une option à 5 € par mois. L'essai de 14 jours est complet et sans carte bancaire : vous créez de vrais souvenirs, vous invitez vos proches dans un cercle, vous testez la chronologie et l'export PDF, et vous décidez ensuite. Le détail des inclusions, la comparaison avec les autres solutions et le calcul du coût annuel figurent sur la [page tarifs](/tarifs), et le fonctionnement général est décrit sur la page [à propos de Family Garden](/about)."
+        },
+        {
+          question: "Puis-je essayer Family Garden sans créer de compte ?",
+          answer: "Oui. Une [démonstration interactive](/demo) vous permet de créer un premier souvenir en deux minutes, avec un texte, une photo et une date, sans inscription ni carte bancaire. Vous voyez immédiatement à quoi ressemble un souvenir une fois enregistré dans un journal de famille privé. Ce souvenir de démonstration est temporaire : il est effacé si vous ne poursuivez pas, mais vous pouvez le conserver en ouvrant un compte à la fin du parcours, puis profiter des 14 jours d'essai décrits sur la [page tarifs](/tarifs)."
+        },
+        {
+          question: "Comment créer un arbre généalogique avec photos et souvenirs ?",
+          answer: "Vous partez de vous-même et vous ajoutez vos parents, grands-parents et descendants, ou vous importez un fichier GEDCOM existant. Chaque personne reçoit ensuite une fiche avec portrait, biographie, lieux de vie et souvenirs associés, et vous pouvez identifier les visages directement sur les photos de famille. Le guide complet, étape par étape, est détaillé dans notre article [arbre généalogique en ligne : photos et souvenirs](/blog/arbre-genealogique-en-ligne-photos-et-souvenirs). L'arbre est une option à 5 € par mois, présentée sur la [page tarifs](/tarifs)."
+        },
+        {
+          question: "Par quels thèmes commencer mon journal de famille ?",
+          answer: "Commencez par ce dont vous vous souvenez le mieux plutôt que par le début de votre vie : l'enfance, la maison familiale, les vacances, le premier métier, les rencontres. Family Garden organise les souvenirs par thèmes : la page [catégories de souvenirs](/categories) montre les grandes familles disponibles et ce qu'on y range habituellement. Si vous manquez d'idées, la page [inspirations](/inspirations) propose une cinquantaine de questions guidées auxquelles répondre en dix minutes, à l'écrit ou à la voix. La méthode complète est décrite dans l'article [raconter sa vie à ses enfants](/blog/raconter-sa-vie-a-ses-enfants-methode)."
+        },
+        {
+          question: "Family Garden est-il disponible en plusieurs langues ?",
+          answer: "Oui, l'interface existe en sept langues : français, anglais, espagnol, italien, portugais, coréen et chinois. Le changement de langue s'effectue à tout moment depuis le sélecteur du menu, et vos souvenirs restent bien sûr rédigés dans la langue de votre choix, ce qui est précieux pour les familles réparties sur plusieurs pays. Nos guides éditoriaux sont eux aussi traduits : vous les retrouvez dans la langue affichée depuis le [blog Family Garden](/blog)."
+        },
+        {
+          question: "Où trouver des conseils pour écrire et conserver mes souvenirs ?",
+          answer: "Le [blog Family Garden](/blog) réunit nos guides pratiques sur la mémoire familiale : créer une [capsule temporelle numérique](/blog/capsule-temporelle-numerique-comment-en-creer-une), [conserver et transmettre ses souvenirs de famille](/blog/conserver-transmettre-souvenirs-de-famille), raconter sa vie à ses enfants en sept étapes, ou construire un arbre généalogique enrichi de photos. Chaque article donne une méthode concrète, applicable en quelques séances courtes. Pour les questions pratiques sur le service lui-même, la présente FAQ et la [page tarifs](/tarifs) répondent à l'essentiel."
         }
       ]
     }
   ];
 
 
-  // Build FAQ items for JSON-LD
+  // Build FAQ items for JSON-LD (texte pur, sans balisage de liens)
   const allFaqItems = faqCategories.flatMap((cat) =>
-    cat.questions.map((q) => ({ question: q.question, answer: q.answer }))
+    cat.questions.map((q) => ({ question: q.question, answer: stripInlineLinks(q.answer) }))
   );
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -258,7 +291,7 @@ const FAQ = () => {
                           {item.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
-                          {item.answer}
+                          {renderInlineLinks(item.answer)}
                         </AccordionContent>
                       </AccordionItem>
                     ))}
@@ -267,7 +300,33 @@ const FAQ = () => {
               ))}
             </div>
 
+            {/* Maillage interne : pages et guides utiles */}
+            <nav aria-label="Pages et guides utiles" className="mt-14 rounded-2xl border border-border bg-card p-6 sm:p-8">
+              <h2 className="text-lg font-display font-semibold text-foreground mb-4">
+                Pour aller plus loin
+              </h2>
+              <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                {[
+                  { to: "/tarifs", label: "Tarif Family Garden : 2,99 €/mois" },
+                  { to: "/demo", label: "Essayer la démo en deux minutes" },
+                  { to: "/about", label: "À propos de Family Garden" },
+                  { to: "/blog", label: "Blog : conseils sur la mémoire familiale" },
+                  { to: "/blog/capsule-temporelle-numerique-comment-en-creer-une", label: "Créer une capsule temporelle numérique" },
+                  { to: "/blog/conserver-transmettre-souvenirs-de-famille", label: "Conserver et transmettre ses souvenirs de famille" },
+                  { to: "/blog/raconter-sa-vie-a-ses-enfants-methode", label: "Raconter sa vie à ses enfants : méthode en 7 étapes" },
+                  { to: "/blog/arbre-genealogique-en-ligne-photos-et-souvenirs", label: "Arbre généalogique en ligne avec photos et souvenirs" },
+                ].map((l) => (
+                  <li key={l.to}>
+                    <Link to={l.to} className="text-primary underline underline-offset-4 hover:text-secondary transition-colors">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
             {/* Contact CTA */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

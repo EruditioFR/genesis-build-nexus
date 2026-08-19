@@ -171,6 +171,17 @@ export default function BlogPostPage() {
   const [shareLabel, copyLabel] = SHARE_LABELS[lang] ?? SHARE_LABELS.fr;
   const relatedTitle = RELATED_LABELS[lang] ?? RELATED_LABELS.fr;
   const ctaLabel = CTA_LABELS[lang] ?? CTA_LABELS.fr;
+  const USEFUL_LINKS: Record<string, { title: string; items: { label: string; to: string }[] }> = {
+    fr: { title: "Pages utiles", items: [{ label: "Tarifs : 2,99 €/mois", to: "/tarifs" }, { label: "Questions fréquentes", to: "/faq" }, { label: "Essayer la démo", to: "/demo" }, { label: "Tous les articles", to: "/blog" }] },
+    en: { title: "Useful pages", items: [{ label: "Pricing: €2.99/month", to: "/tarifs" }, { label: "FAQ", to: "/faq" }, { label: "Try the demo", to: "/demo" }, { label: "All articles", to: "/blog" }] },
+    es: { title: "Páginas útiles", items: [{ label: "Precio: 2,99 €/mes", to: "/tarifs" }, { label: "Preguntas frecuentes", to: "/faq" }, { label: "Probar la demo", to: "/demo" }, { label: "Todos los artículos", to: "/blog" }] },
+    it: { title: "Pagine utili", items: [{ label: "Prezzo: 2,99 €/mese", to: "/tarifs" }, { label: "Domande frequenti", to: "/faq" }, { label: "Prova la demo", to: "/demo" }, { label: "Tutti gli articoli", to: "/blog" }] },
+    pt: { title: "Páginas úteis", items: [{ label: "Preço: 2,99 €/mês", to: "/tarifs" }, { label: "Perguntas frequentes", to: "/faq" }, { label: "Experimentar a demo", to: "/demo" }, { label: "Todos os artigos", to: "/blog" }] },
+    ko: { title: "유용한 페이지", items: [{ label: "요금: 월 2,99유로", to: "/tarifs" }, { label: "자주 묻는 질문", to: "/faq" }, { label: "데모 체험", to: "/demo" }, { label: "모든 글 보기", to: "/blog" }] },
+    zh: { title: "实用页面", items: [{ label: "价格：每月 2.99 欧元", to: "/tarifs" }, { label: "常见问题", to: "/faq" }, { label: "体验演示", to: "/demo" }, { label: "全部文章", to: "/blog" }] },
+  };
+  const usefulLinks = USEFUL_LINKS[lang] ?? USEFUL_LINKS.fr;
+
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
   const pageUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -267,7 +278,23 @@ export default function BlogPostPage() {
               </div>
             </section>
           )}
+
+          <nav aria-label={usefulLinks.title} className="border-t pt-6 mt-10">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+              {usefulLinks.title}
+            </h2>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              {usefulLinks.items.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className="text-primary underline underline-offset-4 hover:text-secondary transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </article>
+
       </main>
       <Footer />
     </>

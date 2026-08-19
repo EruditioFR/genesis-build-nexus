@@ -177,8 +177,14 @@ const PricingPage = () => {
               <p className="text-lg text-muted-foreground mb-8">
                 Un seul tarif, toutes les fonctionnalités et 20 Go de stockage sécurisé pour réunir
                 vos souvenirs de famille — photos, vidéos, voix et récits. Vous commencez par
-                14 jours d'essai gratuit, sans engagement.
+                14 jours d'essai gratuit, sans engagement. Découvrez{" "}
+                <Link to="/about" className="text-primary underline underline-offset-4">notre démarche</Link>{" "}
+                et notre guide pour créer une{" "}
+                <Link to="/blog/capsule-temporelle-numerique-comment-en-creer-une" className="text-primary underline underline-offset-4">
+                  capsule temporelle numérique
+                </Link>.
               </p>
+
 
               <div className="flex flex-wrap items-baseline justify-center gap-2 mb-6">
                 <span className="text-5xl sm:text-6xl font-bold text-foreground">{PRICE.toFixed(2).replace(".", ",")} €</span>
@@ -374,8 +380,17 @@ const PricingPage = () => {
                 <Link to="/premium" className="text-primary underline underline-offset-4">
                   voyez le détail de l'abonnement
                 </Link>
+                . Pour aller plus loin :{" "}
+                <Link to="/blog/arbre-genealogique-en-ligne-photos-et-souvenirs" className="text-primary underline underline-offset-4">
+                  l'arbre généalogique en option
+                </Link>{" "}
+                et{" "}
+                <Link to="/blog/conserver-transmettre-souvenirs-de-famille" className="text-primary underline underline-offset-4">
+                  conserver ses souvenirs de famille
+                </Link>
                 .
               </div>
+
             </motion.div>
           </div>
         </section>

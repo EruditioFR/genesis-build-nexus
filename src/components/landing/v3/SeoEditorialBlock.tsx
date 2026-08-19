@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { EDITORIAL_ORDER, getArticleSlug } from '@/lib/blogArticles';
+import { renderInlineLinks } from '@/components/seo/InlineLinkText';
+
 
 const SeoEditorialBlock = () => {
   const { t, i18n } = useTranslation('landing');
@@ -14,11 +16,12 @@ const SeoEditorialBlock = () => {
             {t('v3.editorial.title')}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-4">
-            {t('v3.editorial.p1')}
+            {renderInlineLinks(t('v3.editorial.p1'))}
           </p>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-8">
-            {t('v3.editorial.p2')}
+            {renderInlineLinks(t('v3.editorial.p2'))}
           </p>
+
 
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
             {t('v3.editorial.linksTitle')}

@@ -360,6 +360,17 @@ const Premium = () => {
           <p className="text-sm text-muted-foreground">
             🛡️ 14 jours d'essai gratuit • Annulation à tout moment • Paiement sécurisé Stripe
           </p>
+          <p className="text-sm text-muted-foreground mt-3">
+            Voir le{" "}
+            <Link to="/tarifs" className="text-primary underline underline-offset-4">détail du tarif à 2,99 €/mois</Link>,
+            les{" "}
+            <Link to="/faq" className="text-primary underline underline-offset-4">questions fréquentes</Link>{" "}
+            ou le guide{" "}
+            <Link to="/blog/arbre-genealogique-en-ligne-photos-et-souvenirs" className="text-primary underline underline-offset-4">
+              arbre généalogique en ligne
+            </Link>.
+          </p>
+
         </motion.div>
       </main>
 

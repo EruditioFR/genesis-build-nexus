@@ -104,8 +104,11 @@ const About = () => {
             <p className="text-xl text-muted-foreground leading-relaxed">
               FamilyGarden est un journal de famille privé : un endroit simple pour rassembler 
               vos souvenirs (photos, vidéos, audios, textes), les organiser, et les partager 
-              en cercle avec vos proches.
+              en cercle avec vos proches, à partir de{" "}
+              <Link to="/tarifs" className="text-primary underline underline-offset-4">2,99 € par mois</Link>{" "}
+              après 14 jours d'essai gratuit.
             </p>
+
           </div>
         </div>
       </section>
@@ -126,13 +129,23 @@ const About = () => {
                 </p>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
                   Dans un monde où tout s'éparpille (téléphone, messageries, clouds…), FamilyGarden vous aide 
-                  à retrouver vos souvenirs facilement et à les partager avec les bonnes personnes.
+                  à retrouver vos souvenirs facilement et à les partager avec les bonnes personnes. Nous expliquons
+                  la méthode dans notre guide{" "}
+                  <Link to="/blog/conserver-transmettre-souvenirs-de-famille" className="text-primary underline underline-offset-4">
+                    conserver et transmettre ses souvenirs de famille
+                  </Link>.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Concrètement : vous créez un souvenir, vous ajoutez vos contenus (photos/vidéo/texte/audio), 
-                  et vous le partagez (ou non) dans des <strong>cercles privés</strong>.
+                  et vous le partagez (ou non) dans des <strong>cercles privés</strong>. Vous pouvez{" "}
+                  <Link to="/demo" className="text-primary underline underline-offset-4">tester la démo en deux minutes</Link>,
+                  parcourir nos{" "}
+                  <Link to="/blog" className="text-primary underline underline-offset-4">articles sur la mémoire familiale</Link>{" "}
+                  ou consulter la{" "}
+                  <Link to="/faq" className="text-primary underline underline-offset-4">FAQ</Link>.
                 </p>
               </div>
+
               <Card className="bg-gradient-to-br from-primary/10 via-gold/5 to-terracotta/5 border-primary/20 shadow-lg">
                 <CardContent className="p-8">
                   <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
