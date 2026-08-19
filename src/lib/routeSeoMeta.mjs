@@ -123,7 +123,7 @@ export const ROUTE_SEO = {
 export const ROUTE_BREADCRUMB_LABEL = {
   "/tarifs": "Tarifs",
   "/pricing": "Pricing",
-  "/premium": "Abonnement",
+  
   "/faq": "FAQ",
   "/about": "À propos",
   "/blog": "Blog",
@@ -132,6 +132,15 @@ export const ROUTE_BREADCRUMB_LABEL = {
   "/cgv": "CGV",
   "/terms": "CGU",
   "/mentions-legales": "Mentions légales",
+};
+
+/**
+ * Legacy URLs consolidated onto a canonical route. The prerender writes a
+ * redirect page (canonical + meta refresh) for each entry, and the SPA router
+ * navigates them with `replace`, so no duplicate page stays indexable.
+ */
+export const ROUTE_REDIRECTS = {
+  "/premium": "/tarifs",
 };
 
 /** Returns the metadata for a route, or undefined when it is not prerendered. */
