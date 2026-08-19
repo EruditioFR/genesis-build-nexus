@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, ArrowRight, ArrowUp, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
-import { formatBlogContent } from "@/lib/blogContent";
+import { formatBlogContent, buildArticleToc } from "@/lib/blogContent";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import { toast } from "@/hooks/use-toast";
