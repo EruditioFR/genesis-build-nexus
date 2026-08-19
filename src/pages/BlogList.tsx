@@ -153,7 +153,7 @@ export default function BlogList() {
                             })}
                           </span>
                         </div>
-                        <h2 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                        <h2 className="text-lg font-semibold text-foreground mb-2 leading-snug break-words line-clamp-none sm:line-clamp-2 group-hover:text-primary transition-colors">
                           {post.title}
                         </h2>
                         {post.excerpt && (

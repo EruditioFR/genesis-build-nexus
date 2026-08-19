@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, ArrowRight, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
+import { formatBlogContent } from "@/lib/blogContent";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import { toast } from "@/hooks/use-toast";
@@ -307,8 +308,8 @@ export default function BlogPostPage() {
 
           {post.content && (
             <div
-              className="prose prose-lg max-w-none text-foreground prose-headings:text-foreground prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-a:text-primary prose-a:underline mb-10"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              className="prose prose-lg max-w-none text-foreground prose-headings:text-foreground prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:scroll-mt-24 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-[1.85] prose-p:mb-6 prose-li:leading-relaxed prose-li:my-1.5 prose-ul:my-6 prose-ol:my-6 prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-secondary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-a:text-primary prose-a:underline mb-10"
+              dangerouslySetInnerHTML={{ __html: formatBlogContent(post.content) }}
             />
           )}
 
