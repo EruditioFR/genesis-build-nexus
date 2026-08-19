@@ -291,7 +291,7 @@ const FAQ = () => {
                           {item.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
-                          {item.answer}
+                          {renderInlineLinks(item.answer)}
                         </AccordionContent>
                       </AccordionItem>
                     ))}
