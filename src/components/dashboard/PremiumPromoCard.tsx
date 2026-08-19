@@ -67,7 +67,7 @@ const PremiumPromoCard = () => {
               </div>
               
               <Button asChild className="w-full sm:w-auto mt-2" variant="default">
-                <Link to="/premium" className="inline-flex items-center gap-2">
+                <Link to="/tarifs" className="inline-flex items-center gap-2">
                   Découvrir Premium
                   <ArrowRight className="h-4 w-4" />
                 </Link>
