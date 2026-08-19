@@ -90,7 +90,10 @@ const SEOHead = ({
       alternateLocaleEls.push(el);
     });
 
-    const resolvedImage = ogImage || DEFAULT_OG_IMAGE;
+    const rawImage = ogImage || DEFAULT_OG_IMAGE;
+    const resolvedImage = /^https?:\/\//i.test(rawImage)
+      ? rawImage
+      : `${SITE_URL}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
     setMeta('property', 'og:image', resolvedImage);
     setMeta('property', 'og:image:secure_url', resolvedImage);
     setMeta('property', 'og:image:width', '1200');
