@@ -635,7 +635,7 @@ export default function FamilyTreePage() {
               </p>
             )}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button size="lg" onClick={() => navigate('/premium?tier=heritage')} className="gap-2">
+              <Button size="lg" onClick={() => navigate('/tarifs?tier=heritage')} className="gap-2">
                 <TreeDeciduous className="w-5 h-5" />
                 {isPremiumUser ? t('locked.upgradeHeritage') : t('locked.discoverHeritage')}
               </Button>

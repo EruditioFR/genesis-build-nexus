@@ -105,7 +105,7 @@ const Checkout = () => {
       <header className="border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/premium">
+            <Link to="/tarifs">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Retour aux forfaits
             </Link>

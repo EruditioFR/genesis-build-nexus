@@ -119,7 +119,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
         </div>
         {subscriptionLevel !== 'legacy' && (
           <Button variant="outline" size="sm" className="gap-2" asChild>
-            <Link to={subscriptionLevel === 'free' ? '/premium' : '/premium?tier=heritage'}>
+            <Link to={subscriptionLevel === 'free' ? '/tarifs' : '/tarifs?tier=heritage'}>
               <TrendingUp className="w-4 h-4" />
               {subscriptionLevel === 'free' ? t('storage.upgradePremium') : t('storage.upgradeHeritage')}
             </Link>
@@ -152,7 +152,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
         )}
         {!isNearLimit && subscriptionLevel === 'free' && (
           <p className="text-sm text-muted-foreground">
-            {t('storage.needSpace')} <Link to="/premium" className="text-secondary hover:underline font-medium">{t('storage.upgradeNow')}</Link>
+            {t('storage.needSpace')} <Link to="/tarifs" className="text-secondary hover:underline font-medium">{t('storage.upgradeNow')}</Link>
           </p>
         )}
       </div>
@@ -298,7 +298,7 @@ const StorageProgress = ({ usedMb, limitMb, subscriptionLevel }: StorageProgress
                         </div>
                       ) : isUpgrade ? (
                         <Button size="sm" className="w-full" variant={plan.id === 'legacy' ? 'default' : 'secondary'} asChild>
-                          <Link to={plan.id === 'legacy' ? '/premium?tier=heritage' : '/premium'}>
+                          <Link to={plan.id === 'legacy' ? '/tarifs?tier=heritage' : '/tarifs'}>
                             {t('storage.choose')}
                           </Link>
                         </Button>

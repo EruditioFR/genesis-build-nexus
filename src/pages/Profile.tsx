@@ -620,7 +620,7 @@ const Profile = () => {
                       size="sm"
                       asChild
                     >
-                      <Link to="/premium">
+                      <Link to="/tarifs">
                         {t('profile.upgrade')}
                       </Link>
                     </Button>
