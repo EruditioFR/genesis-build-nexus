@@ -169,7 +169,13 @@ export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = co
     if (!post.slug || written >= MAX_PRERENDER_PAGES) continue;
     const dir = path.join(outDir, "blog", post.slug);
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, "index.html"), injectHead(template, buildHead(post)), "utf8");
+    const head = await buildHead(post);
+    fs.writeFileSync(
+      path.join(dir, "index.html"),
+      injectHead(template, head, (post.lang || "fr").split("-")[0]),
+      "utf8",
+    );
+
     written++;
   }
   log(`[prerender-blog] Wrote ${written} article pages with share metadata.`);
