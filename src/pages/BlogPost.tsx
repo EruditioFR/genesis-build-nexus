@@ -129,7 +129,8 @@ export default function BlogPostPage() {
         // Maillage interne : autres articles de la même langue
         const { data: others } = await supabase
           .from("blog_posts")
-          .select("id, title, slug, excerpt")
+          .select("id, title, slug, excerpt, cover_image_url, translation_group")
+
           .eq("status", "published")
           .eq("lang", postLang)
           .neq("id", typedData.id)
