@@ -36,13 +36,66 @@ const absolute = (url) => {
   return `${SITE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
-function buildHead(post) {
+/** Read real pixel dimensions of a remote JPEG/PNG/WebP (crawlers reject mismatched sizes). */
+const dimCache = new Map();
+async function imageSize(url) {
+  if (dimCache.has(url)) return dimCache.get(url);
+  let size = null;
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const buf = Buffer.from(await res.arrayBuffer());
+      size = parsePng(buf) || parseJpeg(buf) || parseWebp(buf);
+    }
+  } catch {
+    /* ignore — omit dimensions */
+  }
+  dimCache.set(url, size);
+  return size;
+}
+
+function parsePng(b) {
+  if (b.length < 24 || b.readUInt32BE(0) !== 0x89504e47) return null;
+  return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+}
+function parseJpeg(b) {
+  if (b.length < 4 || b[0] !== 0xff || b[1] !== 0xd8) return null;
+  let i = 2;
+  while (i < b.length - 9) {
+    if (b[i] !== 0xff) { i++; continue; }
+    const marker = b[i + 1];
+    const len = b.readUInt16BE(i + 2);
+    if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+      return { h: b.readUInt16BE(i + 5), w: b.readUInt16BE(i + 7) };
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+function parseWebp(b) {
+  if (b.length < 30 || b.toString("ascii", 0, 4) !== "RIFF" || b.toString("ascii", 8, 12) !== "WEBP") return null;
+  const fmt = b.toString("ascii", 12, 16);
+  if (fmt === "VP8X") return { w: (b.readUIntLE(24, 3) & 0xffffff) + 1, h: (b.readUIntLE(27, 3) & 0xffffff) + 1 };
+  if (fmt === "VP8L") {
+    const bits = b.readUInt32LE(21);
+    return { w: (bits & 0x3fff) + 1, h: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  if (fmt === "VP8 ") return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+  return null;
+}
+
+const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
+
+async function buildHead(post) {
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = withBrand(post.meta_title || post.title);
   const description = post.meta_description || post.excerpt || "";
   const image = absolute(post.cover_image_url);
   const locale = LOCALES[post.lang] || "fr_FR";
   const e = escapeHtml;
+  const dims = await imageSize(image);
+  const ext = (image.split("?")[0].split(".").pop() || "").toLowerCase();
+  const mime = IMAGE_TYPES[ext];
 
   return `    <title>${e(title)}</title>
     <meta name="description" content="${e(description)}" />
@@ -55,9 +108,7 @@ function buildHead(post) {
     <meta property="og:description" content="${e(description)}" />
     <meta property="og:image" content="${e(image)}" />
     <meta property="og:image:secure_url" content="${e(image)}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="675" />
-    <meta property="og:image:alt" content="${e(post.title)} — ${BRAND}" />
+${mime ? `    <meta property="og:image:type" content="${mime}" />\n` : ""}${dims ? `    <meta property="og:image:width" content="${dims.w}" />\n    <meta property="og:image:height" content="${dims.h}" />\n` : ""}    <meta property="og:image:alt" content="${e(post.title)} — ${BRAND}" />
     <meta property="article:published_time" content="${e(post.published_at || "")}" />
     <meta property="article:publisher" content="${SITE_URL}" />
     <meta name="author" content="${BRAND}" />
@@ -70,7 +121,7 @@ function buildHead(post) {
 `;
 }
 
-function injectHead(template, headHtml) {
+function injectHead(template, headHtml, lang) {
   let html = template;
   // Remove the static tags that must be overridden per article.
   html = html.replace(/<title>[\s\S]*?<\/title>\s*/i, "");
@@ -79,8 +130,10 @@ function injectHead(template, headHtml) {
     ""
   );
   html = html.replace(/[ \t]*<link\s+rel="canonical"[^>]*>\s*/gi, "");
+  if (lang) html = html.replace(/<html([^>]*)\slang="[^"]*"/i, `<html$1 lang="${lang}"`);
   return html.replace(/<\/head>/i, `${headHtml}  </head>`);
 }
+
 
 export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = console.log }) {
   if (!supabaseUrl || !supabaseKey) {
@@ -116,7 +169,13 @@ export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = co
     if (!post.slug || written >= MAX_PRERENDER_PAGES) continue;
     const dir = path.join(outDir, "blog", post.slug);
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, "index.html"), injectHead(template, buildHead(post)), "utf8");
+    const head = await buildHead(post);
+    fs.writeFileSync(
+      path.join(dir, "index.html"),
+      injectHead(template, head, (post.lang || "fr").split("-")[0]),
+      "utf8",
+    );
+
     written++;
   }
   log(`[prerender-blog] Wrote ${written} article pages with share metadata.`);

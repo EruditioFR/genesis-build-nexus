@@ -255,7 +255,6 @@ export default function BlogPostPage() {
 
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
   const coverAlt = getCoverAlt(post.translation_group, post.title, lang);
 
   const SITE_URL = "https://familygarden.fr";
@@ -416,7 +415,7 @@ export default function BlogPostPage() {
 
 
           <div className="border-t pt-6 mt-8">
-            <SocialShareButtons title={post.title} url={pageUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
+            <SocialShareButtons title={post.title} url={articleUrl} shareLabel={shareLabel} copyLabel={copyLabel} />
           </div>
 
           {related.length > 0 && (
