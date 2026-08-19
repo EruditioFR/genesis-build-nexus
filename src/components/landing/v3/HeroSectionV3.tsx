@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X, ZoomIn, ZoomOut, Expand, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutGrid, TreePine, Clock, FolderHeart, Pause, Maximize2, X, ZoomIn, ZoomOut, Expand, ShieldCheck, EyeOff, Lock as LockIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
@@ -116,108 +116,124 @@ const HeroSectionV3 = () => {
       />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Badge prix + essai */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[13px] sm:text-sm font-light tracking-wide backdrop-blur-sm"
+          >
+            <span className="font-semibold text-[hsl(var(--gold))]">{t('v3.hero.badgePrice')}</span>
+            <span className="mx-3 h-3 w-px bg-white/20" />
+            <span className="text-white/75">{t('v3.hero.badgeTrial')}</span>
+          </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-2 sm:mt-0 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.1] sm:leading-[1.05] tracking-tight"
+            className="mt-5 sm:mt-7 text-[32px] leading-[1.12] sm:text-5xl md:text-6xl lg:text-[68px] sm:leading-[1.08] font-display font-bold text-white tracking-tight text-balance"
           >
-            {t('v3.hero.title')}
-            <br />
+            {t('v3.hero.title')}{' '}
             <span className="text-[hsl(var(--gold))]">{t('v3.hero.titleHighlight')}</span>
           </motion.h1>
 
-          {/* Visuel immédiat (chargé en priorité) */}
-          <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.12 }}
-            className="mt-4 sm:mt-8 max-w-2xl mx-auto relative rounded-2xl overflow-hidden border border-[hsl(var(--gold))]/40 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)]"
-          >
-            <img
-              src={heroMobileVisual}
-              alt={t('v3.hero.mobileVisual.alt')}
-              width={600}
-              height={334}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              className="w-full h-[160px] sm:h-[260px] object-cover"
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage:
-                  'linear-gradient(to top, hsl(215 50% 14% / 0.9) 0%, hsl(215 50% 14% / 0.25) 45%, transparent 75%)',
-              }}
-            />
-            <p className="absolute inset-x-0 bottom-0 px-4 pb-3 sm:pb-4 text-left text-[13px] sm:text-base font-medium text-white leading-snug">
-              {t('v3.hero.mobileVisual.caption')}
-            </p>
-          </motion.div>
-
+          {/* Pitch court */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-5 sm:mt-8 text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl mx-auto"
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="mt-4 sm:mt-6 max-w-2xl mx-auto text-base sm:text-lg text-white/70 leading-relaxed font-light"
           >
-            {t('v3.hero.subtitleLead')}
-            <span className="text-[hsl(var(--gold))] font-medium">{t('v3.hero.subtitleHighlight')}</span>
+            {t('v3.hero.pitch')}
           </motion.p>
 
-
-
-
+          {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3"
+            transition={{ duration: 0.5, delay: 0.18 }}
+            className="mt-7 sm:mt-9 flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Button
               size="lg"
               onClick={handlePrimaryCta}
-              className="w-full sm:w-auto max-w-full bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-white text-sm sm:text-lg px-4 sm:px-8 py-4 sm:py-6 rounded-xl shadow-xl hover:shadow-2xl transition-all font-semibold group h-auto min-h-11"
+              className="w-full sm:w-auto bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/90 text-white text-base sm:text-lg px-8 py-6 rounded-lg shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-12"
             >
-              <span className="whitespace-pre-line text-center break-words">{t('v3.hero.ctaPrimary')}</span>
+              <span className="text-center">{t('v3.hero.ctaPrimary').replace('\n', ' ')}</span>
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Button>
             <Button
               size="lg"
               variant="ghost"
               onClick={handleSecondaryCta}
-              className="w-full sm:w-auto text-white hover:bg-white/10 hover:text-white text-base sm:text-lg px-6 py-6 rounded-xl font-medium"
+              className="w-full sm:w-auto border border-white/20 text-white hover:bg-white/10 hover:text-white text-base sm:text-lg px-8 py-6 rounded-lg font-medium h-auto min-h-12"
             >
               {t('v3.hero.ctaSecondary')}
             </Button>
           </motion.div>
 
+          {/* Visuel émotionnel */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.24 }}
+            className="mt-8 sm:mt-12 max-w-3xl mx-auto relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_28px_70px_-28px_rgba(0,0,0,0.85)]"
+          >
+            <img
+              src={heroMobileVisual}
+              alt={t('v3.hero.mobileVisual.alt')}
+              width={900}
+              height={501}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-[190px] sm:h-[340px] object-cover"
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, hsl(215 50% 14% / 0.92) 0%, hsl(215 50% 14% / 0.2) 45%, transparent 75%)',
+              }}
+            />
+            <p className="absolute inset-x-0 bottom-0 px-4 sm:px-6 pb-3 sm:pb-5 text-left text-[13px] sm:text-base font-medium text-white leading-snug">
+              {t('v3.hero.mobileVisual.caption')}
+            </p>
+          </motion.div>
+
+          {/* Signaux de confiance */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-white text-xs sm:text-sm"
+            transition={{ duration: 0.6, delay: 0.32 }}
+            className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[11px] sm:text-xs uppercase tracking-[0.14em] text-white/60"
           >
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
-              {t('v3.hero.trust1')}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
+            <span className="inline-flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
               {t('v3.hero.trust2')}
             </span>
-            <motion.span
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/15 px-3 py-1 text-[hsl(var(--gold))] font-semibold shadow-[0_0_20px_hsl(var(--gold)/0.25)]"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2.5} />
+            <span className="inline-flex items-center gap-2">
+              <EyeOff className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
               {t('v3.hero.trust3')}
-            </motion.span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <LockIcon className="h-4 w-4 text-[hsl(var(--gold))]" strokeWidth={1.75} />
+              {t('v3.hero.trustPrivacy')}
+            </span>
           </motion.div>
+
+          {/* Phrase SEO secondaire (discrète) */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-6 max-w-3xl mx-auto text-[13px] sm:text-sm text-white/45 leading-relaxed"
+          >
+            {t('v3.hero.subtitleLead')}
+            <span className="text-white/60">{t('v3.hero.subtitleHighlight')}</span>
+          </motion.p>
 
           {/* === Premium Preview Slider === */}
           <motion.div

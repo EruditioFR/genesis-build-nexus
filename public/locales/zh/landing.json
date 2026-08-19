@@ -463,7 +463,11 @@
       "mobileVisual": {
         "caption": "家庭回忆，集中珍藏与守护",
         "alt": "一家人共享回忆的时刻"
-      }
+      },
+      "badgePrice": "2,99 € / 月",
+      "badgeTrial": "14 天免费试用",
+      "pitch": "照片、视频、声音与故事，汇聚于有序、可传承的私密家庭日记。",
+      "trustPrivacy": "完全私密"
     },
     "howItWorksShort": {
       "title": "这项在线服务",

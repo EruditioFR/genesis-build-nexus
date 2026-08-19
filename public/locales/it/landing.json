@@ -463,7 +463,11 @@
       "mobileVisual": {
         "caption": "I vostri ricordi di famiglia, riuniti e protetti",
         "alt": "Una famiglia riunita attorno a un ricordo"
-      }
+      },
+      "badgePrice": "2,99 € / mese",
+      "badgeTrial": "Prova gratuita di 14 giorni",
+      "pitch": "Foto, video, voci e racconti riuniti in un diario di famiglia privato, organizzato e trasmissibile.",
+      "trustPrivacy": "Riservatezza totale"
     },
     "howItWorksShort": {
       "title": "Come funziona questo",

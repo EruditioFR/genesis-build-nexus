@@ -463,7 +463,11 @@
       "mobileVisual": {
         "caption": "Vos souvenirs de famille, réunis et protégés",
         "alt": "Une famille réunie autour d'un moment de souvenir"
-      }
+      },
+      "badgePrice": "2,99 € / mois",
+      "badgeTrial": "Essai gratuit 14 jours",
+      "pitch": "Photos, vidéos, voix et récits réunis dans un journal de famille privé, organisé et transmissible.",
+      "trustPrivacy": "Confidentialité totale"
     },
     "howItWorksShort": {
       "title": "Comment conserver vos souvenirs de famille",
