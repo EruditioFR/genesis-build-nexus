@@ -154,24 +154,32 @@ const HeroSectionV3 = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.18 }}
-            className="mt-7 sm:mt-9 flex flex-col sm:flex-row items-center justify-center gap-3"
+            className="mt-7 sm:mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
           >
             <Button
               size="lg"
               onClick={handlePrimaryCta}
-              className="w-full sm:w-auto bg-[hsl(var(--hero-accent))] hover:bg-[hsl(var(--hero-accent))]/90 text-white text-base sm:text-lg px-8 py-6 rounded-lg shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-12"
+              className="w-full sm:w-auto bg-[hsl(var(--hero-accent))] hover:bg-[hsl(var(--hero-accent))]/90 text-white text-[17px] sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-xl shadow-[0_14px_40px_-14px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 transition-all font-semibold group h-auto min-h-14 sm:min-h-12 flex items-center justify-center gap-2"
             >
-              <span className="text-center">{t('v3.hero.ctaPrimary').replace('\n', ' ')}</span>
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+              <span className="text-center leading-snug text-balance">
+                {t('v3.hero.ctaPrimary').replace('\n', ' ')}
+              </span>
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Button>
             <Button
               size="lg"
               variant="ghost"
               onClick={handleSecondaryCta}
-              className="w-full sm:w-auto border border-white/20 text-white hover:bg-white/10 hover:text-white text-base sm:text-lg px-8 py-6 rounded-lg font-medium h-auto min-h-12"
+              className="w-full sm:w-auto border border-white/20 text-white hover:bg-white/10 hover:text-white text-[15px] sm:text-lg px-6 sm:px-8 py-3 sm:py-6 rounded-xl font-medium h-auto min-h-11 sm:min-h-12"
             >
               {t('v3.hero.ctaSecondary')}
             </Button>
+          </motion.div>
+
+          <p className="mt-3 sm:hidden text-[13px] text-white/60 font-light">
+            {t('v3.hero.badgeTrial')}
+          </p>
+
           </motion.div>
 
           {/* Visuel émotionnel */}
