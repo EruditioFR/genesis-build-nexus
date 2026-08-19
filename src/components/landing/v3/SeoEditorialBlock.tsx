@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { EDITORIAL_ORDER, getArticleSlug } from '@/lib/blogArticles';
+import { renderInlineLinks } from '@/components/seo/InlineLinkText';
+
 
 const SeoEditorialBlock = () => {
   const { t, i18n } = useTranslation('landing');
