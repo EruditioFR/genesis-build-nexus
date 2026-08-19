@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from "@/components/seo/SEOHead";
 
 import useGoogleAnalytics from "@/hooks/useGoogleAnalytics";
@@ -247,8 +248,8 @@ const DemoExperience = () => {
   return (
     <div className="fixed inset-0 overflow-hidden bg-[#1a1a2e] text-white" style={{ height: "100dvh" }}>
       <SEOHead
-        title="Découvrez Family Garden en 1 minute — Gardez vos souvenirs en sécurité"
-        description="Vos souvenirs se perdent déjà, sans que vous vous en rendiez compte. Découvrez en une minute comment Family Garden vous aide à les conserver simplement."
+        title={getRouteSeo("/demo")!.title}
+        description={getRouteSeo("/demo")!.description}
       />
 
       <AnimatePresence mode="wait">

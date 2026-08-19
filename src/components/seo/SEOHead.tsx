@@ -9,6 +9,8 @@ interface SEOHeadProps {
   ogDescription?: string;
   ogImage?: string;
   ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   ogType?: 'website' | 'article';
   noIndex?: boolean;
   jsonLd?: object | object[];
@@ -35,6 +37,8 @@ const SEOHead = ({
   ogDescription,
   ogImage,
   ogImageAlt,
+  ogImageWidth,
+  ogImageHeight,
   ogType = 'website',
   noIndex = false,
   jsonLd,
@@ -96,8 +100,14 @@ const SEOHead = ({
       : `${SITE_URL}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
     setMeta('property', 'og:image', resolvedImage);
     setMeta('property', 'og:image:secure_url', resolvedImage);
-    setMeta('property', 'og:image:width', '1200');
-    setMeta('property', 'og:image:height', '675');
+    if (ogImageWidth && ogImageHeight) {
+      setMeta('property', 'og:image:width', String(ogImageWidth));
+      setMeta('property', 'og:image:height', String(ogImageHeight));
+    } else if (!ogImage) {
+      // Known dimensions of the default social card.
+      setMeta('property', 'og:image:width', '1200');
+      setMeta('property', 'og:image:height', '630');
+    }
     setMeta('property', 'og:image:alt', ogImageAlt || ogTitle || title);
 
     // Twitter Cards
@@ -107,17 +117,11 @@ const SEOHead = ({
     setMeta('name', 'twitter:image', resolvedImage);
     setMeta('name', 'twitter:image:alt', ogImageAlt || ogTitle || title);
 
-    // Hreflang tags
+    // Hreflang: the site serves one URL per page for all languages (the UI
+    // language follows the user's preference), so only x-default is valid.
+    // Emitting fr/en/es/... alternates that all point at the same URL is a
+    // duplicate-content signal, not a translation signal.
     const hreflangLinks: HTMLLinkElement[] = [];
-    SUPPORTED_LANGS.forEach((lang) => {
-      const link = document.createElement('link');
-      link.rel = 'alternate';
-      link.hreflang = lang;
-      link.href = `${SITE_URL}${canonicalPath}`;
-      document.head.appendChild(link);
-      hreflangLinks.push(link);
-    });
-    // x-default
     const xDefault = document.createElement('link');
     xDefault.rel = 'alternate';
     xDefault.hreflang = 'x-default';
@@ -154,7 +158,7 @@ const SEOHead = ({
       if (robotsMeta) robotsMeta.parentNode?.removeChild(robotsMeta);
       jsonLdScripts.forEach((s) => s.parentNode?.removeChild(s));
     };
-  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogImageAlt, ogType, noIndex, jsonLd]);
+  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogImageAlt, ogImageWidth, ogImageHeight, ogType, noIndex, jsonLd]);
 
   return null;
 };

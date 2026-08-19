@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { z } from "zod";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from "@/components/seo/SEOHead";
 import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { Button } from "@/components/ui/button";
@@ -84,8 +85,11 @@ const trialSchema = z.object({
 
 const PricingPage = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const routeSeo = getRouteSeo(pathname) ?? getRouteSeo("/tarifs")!;
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
+
 
   const handleTrial = (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,8 +163,8 @@ const PricingPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Tarif Family Garden : 2,99 €/mois — 14 jours d'essai gratuit"
-        description="Family Garden coûte 2,99 €/mois : 20 Go, souvenirs illimités, partage privé. Comparez avec le cloud, les réseaux sociaux et les sites de généalogie. Essai 14 jours."
+        title={routeSeo.title}
+        description={routeSeo.description}
         jsonLd={jsonLd}
       />
       <Header />

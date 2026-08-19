@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { normalizeBlogLang } from "@/lib/blogArticles";
+import { getRouteSeo } from "@/lib/routeSeoMeta.mjs";
 import SEOHead from "@/components/seo/SEOHead";
 import { getCoverAlt } from "@/lib/blogCoverAlt";
 import Header from "@/components/landing/Header";
@@ -74,7 +75,7 @@ export default function BlogList() {
   return (
     <>
       <SEOHead
-        title="Blog - Family Garden"
+        title={getRouteSeo("/blog")!.title}
         description={L.desc}
       />
       <Header />
