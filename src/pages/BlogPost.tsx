@@ -241,6 +241,15 @@ export default function BlogPostPage() {
     pt: "Ler o artigo", ko: "글 읽기", zh: "阅读文章",
   };
   const readLabel = READ_LABELS[lang] ?? READ_LABELS.fr;
+  const TOC_LABELS: Record<string, string> = {
+    fr: "Sommaire", en: "Table of contents", es: "Índice", it: "Indice",
+    pt: "Índice", ko: "목차", zh: "目录",
+  };
+  const tocLabel = TOC_LABELS[lang] ?? TOC_LABELS.fr;
+  const { html: tocHtml, headings: tocHeadings } = buildArticleToc(
+    formatBlogContent(post.content),
+  );
+
 
 
 
