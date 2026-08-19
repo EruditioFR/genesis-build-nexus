@@ -236,6 +236,12 @@ export default function BlogPostPage() {
     zh: ["上一篇", "下一篇", "回到顶部"],
   };
   const [prevLabel, nextLabel, topLabel] = NAV_LABELS[lang] ?? NAV_LABELS.fr;
+  const READ_LABELS: Record<string, string> = {
+    fr: "Lire l'article", en: "Read the article", es: "Leer el artículo", it: "Leggi l'articolo",
+    pt: "Ler o artigo", ko: "글 읽기", zh: "阅读文章",
+  };
+  const readLabel = READ_LABELS[lang] ?? READ_LABELS.fr;
+
 
 
 
