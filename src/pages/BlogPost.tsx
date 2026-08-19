@@ -188,6 +188,62 @@ export default function BlogPostPage() {
   const pageUrl = typeof window !== "undefined" ? window.location.href : "";
   const coverAlt = getCoverAlt(post.translation_group, post.title, lang);
 
+  const SITE_URL = "https://familygarden.fr";
+  const articleUrl = `${SITE_URL}/blog/${post.slug}`;
+  const publishedIso = post.published_at || post.created_at;
+  const plainText = (post.content || post.excerpt || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const BLOG_LABELS: Record<string, string> = {
+    fr: "Blog", en: "Blog", es: "Blog", it: "Blog", pt: "Blog", ko: "블로그", zh: "博客",
+  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": `${articleUrl}#article`,
+      mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
+      headline: post.title.slice(0, 110),
+      name: post.title,
+      description: post.meta_description || post.excerpt || plainText.slice(0, 200),
+      inLanguage: lang,
+      url: articleUrl,
+      datePublished: publishedIso,
+      dateModified: publishedIso,
+      wordCount: plainText ? plainText.split(" ").length : undefined,
+      articleSection: category?.name || undefined,
+      keywords: post.translation_group || undefined,
+      image: post.cover_image_url
+        ? {
+            "@type": "ImageObject",
+            url: post.cover_image_url,
+            width: 1200,
+            height: 675,
+            caption: coverAlt,
+          }
+        : undefined,
+      author: {
+        "@type": "Organization",
+        name: "Family Garden",
+        url: SITE_URL,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Family Garden",
+        url: SITE_URL,
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
+      },
+      isAccessibleForFree: true,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Family Garden", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: BLOG_LABELS[lang] ?? "Blog", item: `${SITE_URL}/blog` },
+        { "@type": "ListItem", position: 3, name: post.title, item: articleUrl },
+      ],
+    },
+  ];
+
   return (
     <>
       <SEOHead
@@ -196,7 +252,9 @@ export default function BlogPostPage() {
         ogType="article"
         ogImage={post.cover_image_url || undefined}
         ogImageAlt={coverAlt}
+        jsonLd={jsonLd}
       />
+
       <Header />
       <main className="min-h-screen bg-background pt-20">
         {/* Cover */}
