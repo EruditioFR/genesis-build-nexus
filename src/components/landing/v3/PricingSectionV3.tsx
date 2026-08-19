@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, TreePine, Loader2, Sparkle, ShieldCheck, Lock, RefreshCw, Server, Gift } from "lucide-react";
+import { Check, Sparkles, TreePine, Loader2, Sparkle, ShieldCheck, Lock, RefreshCw, Server, Gift, ArrowRight } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
