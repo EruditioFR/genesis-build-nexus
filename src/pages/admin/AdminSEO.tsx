@@ -119,7 +119,7 @@ function buildRecommendations(data: SeoData | null): Reco[] {
     recos.push({
       level: "critique",
       title: "Aucun sitemap détecté dans Search Console",
-      detail: "Soumettez https://www.familygarden.fr/sitemap.xml dans Search Console pour accélérer la découverte des articles traduits.",
+      detail: "Soumettez https://familygarden.fr/sitemap.xml dans Search Console pour accélérer la découverte des articles traduits.",
     });
   } else {
     const withErrors = sitemaps.filter((s) => Number(s.errors ?? 0) > 0);
