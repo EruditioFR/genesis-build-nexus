@@ -7,6 +7,7 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { normalizeBlogLang } from "@/lib/blogArticles";
 import SEOHead from "@/components/seo/SEOHead";
+import { getCoverAlt } from "@/lib/blogCoverAlt";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 
@@ -16,6 +17,7 @@ interface BlogPost {
   slug: string;
   excerpt: string | null;
   cover_image_url: string | null;
+  translation_group?: string | null;
   category_id: string | null;
   published_at: string | null;
   created_at: string;
@@ -53,7 +55,7 @@ export default function BlogList() {
       const [postsRes, catsRes] = await Promise.all([
         supabase
           .from("blog_posts")
-          .select("id, title, slug, excerpt, cover_image_url, category_id, published_at, created_at")
+          .select("id, title, slug, excerpt, cover_image_url, category_id, published_at, created_at, translation_group")
           .eq("status", "published")
           .eq("lang", lang)
           .order("published_at", { ascending: false }),
@@ -124,7 +126,10 @@ export default function BlogList() {
                       {post.cover_image_url ? (
                         <img
                           src={post.cover_image_url}
-                          alt={post.title}
+                          alt={getCoverAlt(post.translation_group, post.title, lang)}
+                          loading="lazy"
+                          width={1200}
+                          height={675}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (

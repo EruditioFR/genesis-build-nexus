@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, ArrowRight, Facebook, Twitter, Linkedin, Link2, Share2 } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
+import { getCoverAlt } from "@/lib/blogCoverAlt";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import { toast } from "@/hooks/use-toast";
@@ -185,19 +186,23 @@ export default function BlogPostPage() {
 
   const videoId = post.video_url ? extractYouTubeId(post.video_url) : null;
   const pageUrl = typeof window !== "undefined" ? window.location.href : "";
+  const coverAlt = getCoverAlt(post.translation_group, post.title, lang);
 
   return (
     <>
       <SEOHead
         title={post.meta_title || `${post.title} - Family Garden`}
         description={post.meta_description || post.excerpt || ""}
+        ogType="article"
+        ogImage={post.cover_image_url || undefined}
+        ogImageAlt={coverAlt}
       />
       <Header />
       <main className="min-h-screen bg-background pt-20">
         {/* Cover */}
         {post.cover_image_url && (
           <div className="w-full h-64 md:h-96 relative">
-            <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover" />
+            <img src={post.cover_image_url} alt={coverAlt} className="w-full h-full object-cover" loading="eager" width={1200} height={675} />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
           </div>
         )}
