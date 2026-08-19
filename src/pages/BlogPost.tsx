@@ -376,21 +376,42 @@ export default function BlogPostPage() {
               <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
                 {relatedTitle}
               </h2>
-              <ul className="grid sm:grid-cols-2 gap-3">
+              <ul className="grid gap-4 sm:grid-cols-3">
                 {related.map((r) => (
                   <li key={r.id}>
                     <Link
                       to={`/blog/${r.slug}`}
-                      className="group flex items-start gap-2 rounded-xl border bg-card p-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary"
+                      className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-colors hover:border-primary"
                     >
-                      <span className="flex-1 leading-snug">{r.title}</span>
-                      <ArrowRight className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
+                      <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
+                        {r.cover_image_url ? (
+                          <img
+                            src={r.cover_image_url}
+                            alt={getCoverAlt(r.translation_group, r.title, lang)}
+                            loading="lazy"
+                            width={400}
+                            height={225}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                          />
+                        ) : null}
+                      </div>
+                      <div className="flex flex-1 flex-col gap-2 p-4">
+                        <span className="text-sm font-medium leading-snug text-foreground">{r.title}</span>
+                        {r.excerpt && (
+                          <span className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{r.excerpt}</span>
+                        )}
+                        <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-medium text-primary">
+                          {relatedTitle}
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                      </div>
                     </Link>
                   </li>
                 ))}
               </ul>
               <div className="mt-6">
                 <Button asChild>
+
                   <Link to="/signup">{ctaLabel}</Link>
                 </Button>
               </div>
