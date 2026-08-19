@@ -127,9 +127,9 @@ ${mime ? `    <meta property="og:image:type" content="${mime}" />\n` : ""}${dims
 `;
 }
 
-function injectHead(template, headHtml, lang) {
+function injectHead(template, headHtml, lang, noscriptHtml) {
   let html = template;
-  // Remove the static tags that must be overridden per article.
+  // Remove the static tags that must be overridden per page.
   html = html.replace(/<title>[\s\S]*?<\/title>\s*/i, "");
   html = html.replace(
     /[ \t]*<meta\s+(?:name|property)="(?:description|og:[^"]*|twitter:[^"]*|author)"[^>]*>\s*/gi,
@@ -137,8 +137,253 @@ function injectHead(template, headHtml, lang) {
   );
   html = html.replace(/[ \t]*<link\s+rel="canonical"[^>]*>\s*/gi, "");
   if (lang) html = html.replace(/<html([^>]*)\slang="[^"]*"/i, `<html$1 lang="${lang}"`);
-  return html.replace(/<\/head>/i, `${headHtml}  </head>`);
+  html = html.replace(/<\/head>/i, `${headHtml}  </head>`);
+  if (noscriptHtml) {
+    html = html.replace(/<noscript>[\s\S]*?<\/noscript>/i, noscriptHtml);
+  }
+  return html;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Static public routes                                               */
+/* ------------------------------------------------------------------ */
+
+const NAV_LINKS = [
+  ["/", "Accueil"],
+  ["/tarifs", "Tarifs : 2,99 €/mois"],
+  ["/faq", "Questions fréquentes"],
+  ["/about", "À propos de Family Garden"],
+  ["/blog", "Blog : conserver et transmettre ses souvenirs"],
+  ["/demo", "Démonstration guidée"],
+  ["/signup", "Inscription — 14 jours d'essai gratuit"],
+  ["/privacy", "Confidentialité"],
+  ["/terms", "Conditions d'utilisation"],
+  ["/mentions-legales", "Mentions légales"],
+];
+
+const stripMarkdownLinks = (s = "") => s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+
+/**
+ * Extracts the FAQ question/answer pairs straight from the page component so
+ * the prerendered FAQPage schema can never drift from the visible content.
+ */
+function readFaqItems() {
+  try {
+    const src = fs.readFileSync(path.join(PROJECT_ROOT, "src/pages/FAQ.tsx"), "utf8");
+    const re = /question:\s*"((?:[^"\\]|\\.)*)"\s*,\s*answer:\s*"((?:[^"\\]|\\.)*)"/g;
+    const items = [];
+    let m;
+    while ((m = re.exec(src))) {
+      items.push({
+        question: stripMarkdownLinks(JSON.parse(`"${m[1]}"`)),
+        answer: stripMarkdownLinks(JSON.parse(`"${m[2]}"`)),
+      });
+    }
+    return items;
+  } catch {
+    return [];
+  }
+}
+
+function buildSchemas(routePath, meta, { faqItems = [], posts = [] } = {}) {
+  const url = `${SITE_URL}${routePath === "/" ? "/" : routePath}`;
+  const schemas = [];
+  const wanted = meta.schemas || [];
+
+  if (wanted.includes("organization")) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: BRAND,
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
+      description: meta.summary,
+    });
+  }
+  if (wanted.includes("website")) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: BRAND,
+      url: SITE_URL,
+      inLanguage: ["fr", "en", "es", "it", "pt", "ko", "zh"],
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    });
+  }
+  if (wanted.includes("softwareApplication")) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: BRAND,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      url: SITE_URL,
+      offers: {
+        "@type": "Offer",
+        price: "2.99",
+        priceCurrency: "EUR",
+        url: `${SITE_URL}/tarifs`,
+      },
+    });
+  }
+  if (wanted.includes("offer")) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: `${BRAND} — abonnement`,
+      description: meta.summary,
+      brand: { "@type": "Brand", name: BRAND },
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Abonnement Family Garden",
+          price: "2.99",
+          priceCurrency: "EUR",
+          url: `${SITE_URL}/tarifs`,
+          availability: "https://schema.org/InStock",
+        },
+        {
+          "@type": "Offer",
+          name: "Option arbre généalogique",
+          price: "5.00",
+          priceCurrency: "EUR",
+          url: `${SITE_URL}/tarifs`,
+          availability: "https://schema.org/InStock",
+        },
+      ],
+    });
+  }
+  if (wanted.includes("faq") && faqItems.length) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((i) => ({
+        "@type": "Question",
+        name: i.question,
+        acceptedAnswer: { "@type": "Answer", text: i.answer },
+      })),
+    });
+  }
+  if (wanted.includes("blog")) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "@id": `${SITE_URL}/blog#blog`,
+      name: meta.h1,
+      url: `${SITE_URL}/blog`,
+      description: meta.description,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      blogPost: posts.slice(0, 20).map((p) => ({
+        "@type": "BlogPosting",
+        headline: (p.meta_title || p.title || "").slice(0, 110),
+        url: `${SITE_URL}/blog/${p.slug}`,
+        datePublished: p.published_at || undefined,
+      })),
+    });
+  }
+  if (wanted.includes("breadcrumb") && routePath !== "/") {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: BRAND, item: SITE_URL },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: ROUTE_BREADCRUMB_LABEL[routePath] || meta.h1,
+          item: url,
+        },
+      ],
+    });
+  }
+  return schemas;
+}
+
+async function buildStaticHead(routePath, meta, extras) {
+  const e = escapeHtml;
+  const url = `${SITE_URL}${routePath === "/" ? "/" : routePath}`;
+  const image = `${SITE_URL}/og-image.png`;
+  const dims = await imageSize(image);
+  const schemas = buildSchemas(routePath, meta, extras);
+
+  return `    <title>${e(meta.title)}</title>
+    <meta name="description" content="${e(meta.description)}" />
+    <link rel="canonical" href="${e(url)}" />
+    <meta name="author" content="${BRAND}" />
+    <meta property="og:site_name" content="${BRAND}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="${routePath === "/pricing" ? "en_US" : "fr_FR"}" />
+    <meta property="og:url" content="${e(url)}" />
+    <meta property="og:title" content="${e(meta.title)}" />
+    <meta property="og:description" content="${e(meta.description)}" />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:image:secure_url" content="${image}" />
+${dims ? `    <meta property="og:image:width" content="${dims.w}" />\n    <meta property="og:image:height" content="${dims.h}" />\n` : ""}    <meta property="og:image:alt" content="${e(meta.h1)} — ${BRAND}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@familygarden" />
+    <meta name="twitter:title" content="${e(meta.title)}" />
+    <meta name="twitter:description" content="${e(meta.description)}" />
+    <meta name="twitter:image" content="${image}" />
+    <meta name="twitter:image:alt" content="${e(meta.h1)} — ${BRAND}" />
+${schemas
+  .map((s) => `    <script type="application/ld+json">${JSON.stringify(s)}</script>`)
+  .join("\n")}
+`;
+}
+
+function buildNoscript(routePath, meta, { faqItems = [], posts = [] } = {}) {
+  const e = escapeHtml;
+  const blocks = [`      <h1>${e(meta.h1)}</h1>`, `      <p>${e(meta.summary)}</p>`];
+
+  if (routePath === "/faq" && faqItems.length) {
+    blocks.push("      <h2>Questions fréquentes</h2>");
+    for (const item of faqItems.slice(0, 25)) {
+      blocks.push(`      <h3>${e(item.question)}</h3>`, `      <p>${e(item.answer)}</p>`);
+    }
+  }
+
+  if (routePath === "/blog" && posts.length) {
+    blocks.push("      <h2>Articles publiés</h2>", "      <ul>");
+    for (const p of posts.slice(0, 60)) {
+      blocks.push(
+        `        <li><a href="${SITE_URL}/blog/${e(p.slug)}">${e(p.title || p.slug)}</a>${
+          p.excerpt ? ` — ${e(p.excerpt)}` : ""
+        }</li>`,
+      );
+    }
+    blocks.push("      </ul>");
+  }
+
+  blocks.push("      <h2>Navigation</h2>", "      <ul>");
+  for (const [href, label] of NAV_LINKS) {
+    if (href === routePath) continue;
+    blocks.push(`        <li><a href="${SITE_URL}${href === "/" ? "/" : href}">${e(label)}</a></li>`);
+  }
+  blocks.push("      </ul>");
+
+  return `<noscript>\n    <div>\n${blocks.join("\n")}\n    </div>\n    </noscript>`;
+}
+
+async function prerenderStaticRoutes({ outDir, template, posts, log }) {
+  const faqItems = readFaqItems();
+  const extras = { faqItems, posts };
+  let written = 0;
+
+  for (const [routePath, meta] of Object.entries(ROUTE_SEO)) {
+    const head = await buildStaticHead(routePath, meta, extras);
+    const noscript = buildNoscript(routePath, meta, extras);
+    const lang = routePath === "/pricing" ? "en" : "fr";
+    const html = injectHead(template, head, lang, noscript);
+    const dir = routePath === "/" ? outDir : path.join(outDir, routePath.replace(/^\//, ""));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "index.html"), html, "utf8");
+    written++;
+  }
+  log(`[prerender] Wrote ${written} static pages (FAQ schema: ${faqItems.length} Q/A).`);
+}
+
 
 
 export async function prerenderBlog({ outDir, supabaseUrl, supabaseKey, log = console.log }) {
