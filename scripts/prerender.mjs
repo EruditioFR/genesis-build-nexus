@@ -1,14 +1,20 @@
 /**
- * Build-time prerender of blog article <head> metadata.
+ * Build-time prerender of the public pages' <head> (and a <noscript> summary).
  *
- * Social crawlers (Facebook, LinkedIn, WhatsApp, X, Slack…) do not execute JS,
- * so the client-side <SEOHead> tags are invisible to them. This script writes a
- * static dist/blog/<slug>/index.html per published article, with the article's
- * title, description and cover image baked into the head — plus the
- * "Family Garden" brand reminder.
+ * The app is a client-rendered SPA: without this step every route is served the
+ * exact same index.html, so crawlers see one page with one title, one
+ * description and a canonical pointing at the homepage. This script writes a
+ * dedicated static HTML file per public route and per published blog article,
+ * with its own title, description, canonical, Open Graph/Twitter tags and
+ * JSON-LD baked in.
  */
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { ROUTE_SEO, ROUTE_BREADCRUMB_LABEL } from "../src/lib/routeSeoMeta.mjs";
+
+const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
 
 const SITE_URL = "https://familygarden.fr";
 const BRAND = "Family Garden";
