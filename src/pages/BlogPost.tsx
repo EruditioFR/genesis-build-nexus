@@ -393,6 +393,39 @@ export default function BlogPostPage() {
             </section>
           )}
 
+          {(prevPost || nextPost) && (
+            <nav aria-label={`${prevLabel} / ${nextLabel}`} className="border-t pt-6 mt-10 grid gap-3 sm:grid-cols-2">
+              {prevPost ? (
+                <Link
+                  to={`/blog/${prevPost.slug}`}
+                  rel="prev"
+                  className="group rounded-xl border bg-card p-4 shadow-sm transition-colors hover:border-primary"
+                >
+                  <span className="flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground">
+                    <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" /> {prevLabel}
+                  </span>
+                  <span className="mt-1 block text-sm font-medium leading-snug text-foreground">{prevPost.title}</span>
+                </Link>
+              ) : (
+                <span className="hidden sm:block" />
+              )}
+              {nextPost && (
+                <Link
+                  to={`/blog/${nextPost.slug}`}
+                  rel="next"
+                  className="group rounded-xl border bg-card p-4 shadow-sm transition-colors hover:border-primary sm:text-right"
+                >
+                  <span className="flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground sm:justify-end">
+                    {nextLabel} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                  <span className="mt-1 block text-sm font-medium leading-snug text-foreground">{nextPost.title}</span>
+                </Link>
+              )}
+            </nav>
+          )}
+
+
+
           <nav aria-label={usefulLinks.title} className="border-t pt-6 mt-10">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               {usefulLinks.title}
