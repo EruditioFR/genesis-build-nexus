@@ -238,6 +238,11 @@ const CapsuleCreate = () => {
         setIsSaving(false);
         setMediaError(true);
         const firstError = uploadResult.files.find((f) => f.error)?.error;
+        trackUploadFailed({
+          event_label: firstError || 'unknown',
+          files_count: pendingMediaFiles.length,
+          context: 'capsule_create',
+        });
         toast.error(firstError || t('create.uploadError'));
         return;
       }
