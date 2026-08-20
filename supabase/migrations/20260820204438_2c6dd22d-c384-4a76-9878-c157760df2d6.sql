@@ -1,0 +1,1 @@
+update public.profiles set onboarding_email_sent_at = null where user_id = '4125529f-4c15-4b0e-ab6f-4164d223eb3b';
