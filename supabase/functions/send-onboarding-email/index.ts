@@ -186,7 +186,7 @@ serve(async (req) => {
       profile?.display_name || user.user_metadata?.display_name || user.email.split("@")[0]
     );
     const t = getT(locale || user.user_metadata?.locale || "fr");
-    const html = buildHtml(t, name, "https://familygarden.fr/create");
+    const html = buildHtml(t, name, "https://familygarden.fr/capsules/new");
 
     const { error: resendError } = await resend.emails.send({
       from: "Family Garden <web@familygarden.fr>",
