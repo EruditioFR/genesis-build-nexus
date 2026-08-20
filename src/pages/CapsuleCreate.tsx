@@ -47,6 +47,12 @@ import NoIndex from '@/components/seo/NoIndex';
 import YouTubeEmbed, { extractYouTubeId } from '@/components/capsule/YouTubeEmbed';
 import SocialLinksEmbed, { type SocialLink } from '@/components/capsule/SocialLinksEmbed';
 import SeniorFriendlyEditor from '@/components/capsule/SeniorFriendlyEditor';
+import {
+  trackFirstMemoryCreated,
+  trackMemoryCreated,
+  trackUploadFailed,
+  trackMemorySaveFailed,
+} from '@/lib/analyticsEvents';
 
 import type { Database } from '@/integrations/supabase/types';
 
@@ -232,6 +238,11 @@ const CapsuleCreate = () => {
         setIsSaving(false);
         setMediaError(true);
         const firstError = uploadResult.files.find((f) => f.error)?.error;
+        trackUploadFailed({
+          event_label: firstError || 'unknown',
+          files_count: pendingMediaFiles.length,
+          context: 'capsule_create',
+        });
         toast.error(firstError || t('create.uploadError'));
         return;
       }
@@ -383,6 +394,30 @@ const CapsuleCreate = () => {
         }
       }
 
+      // Suivi produit : souvenir créé / activation (premier souvenir)
+      try {
+        const { count } = await supabase
+          .from('capsules')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user!.id);
+
+        trackMemoryCreated({
+          event_label: capsuleType,
+          status: finalStatus,
+          medias_count: uploadedMediaFiles.length,
+        });
+
+        if (count === 1) {
+          trackFirstMemoryCreated({
+            event_label: capsuleType,
+            status: finalStatus,
+            medias_count: uploadedMediaFiles.length,
+          });
+        }
+      } catch (err) {
+        console.error('Analytics tracking error:', err);
+      }
+
       if (finalStatus === 'scheduled') {
         toast.success(t('create.successScheduled'));
       } else if (status === 'published') {
@@ -392,6 +427,7 @@ const CapsuleCreate = () => {
       }
       navigate('/dashboard');
     } catch (error: any) {
+      trackMemorySaveFailed({ event_label: error?.message || 'unknown' });
       toast.error(error.message || t('create.saveError'));
     } finally {
       setIsSaving(false);
