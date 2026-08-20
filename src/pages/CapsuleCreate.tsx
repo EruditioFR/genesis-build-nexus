@@ -394,6 +394,30 @@ const CapsuleCreate = () => {
         }
       }
 
+      // Suivi produit : souvenir créé / activation (premier souvenir)
+      try {
+        const { count } = await supabase
+          .from('capsules')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user!.id);
+
+        trackMemoryCreated({
+          event_label: capsuleType,
+          status: finalStatus,
+          medias_count: uploadedMediaFiles.length,
+        });
+
+        if (count === 1) {
+          trackFirstMemoryCreated({
+            event_label: capsuleType,
+            status: finalStatus,
+            medias_count: uploadedMediaFiles.length,
+          });
+        }
+      } catch (err) {
+        console.error('Analytics tracking error:', err);
+      }
+
       if (finalStatus === 'scheduled') {
         toast.success(t('create.successScheduled'));
       } else if (status === 'published') {
@@ -403,6 +427,7 @@ const CapsuleCreate = () => {
       }
       navigate('/dashboard');
     } catch (error: any) {
+      trackMemorySaveFailed({ event_label: error?.message || 'unknown' });
       toast.error(error.message || t('create.saveError'));
     } finally {
       setIsSaving(false);
