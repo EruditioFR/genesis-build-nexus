@@ -24,6 +24,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Thank-you / first-steps email, sent once per account right after the first
+ * successful sign-in (i.e. once the email address is confirmed).
+ * The edge function is idempotent (it checks profiles.onboarding_email_sent_at),
+ * the sessionStorage guard just avoids useless calls in the same tab.
+ */
+const sendOnboardingEmail = async () => {
+  try {
+    if (sessionStorage.getItem('fg_onboarding_email_checked')) return;
+    sessionStorage.setItem('fg_onboarding_email_checked', '1');
+    const locale = localStorage.getItem('i18nextLng') || 'fr';
+    await supabase.functions.invoke('send-onboarding-email', { body: { locale } });
+  } catch (err) {
+    console.warn('Onboarding email skipped:', err);
+  }
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -79,6 +96,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setTimeout(() => {
             if (mounted) fetchProfile(session.user.id);
           }, 0);
+
+          if (event === 'SIGNED_IN') {
+            setTimeout(() => {
+              if (mounted) sendOnboardingEmail();
+            }, 1500);
+          }
         } else {
           setProfile(null);
         }

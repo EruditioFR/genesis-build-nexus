@@ -1114,6 +1114,7 @@ export type Database = {
           display_name: string | null
           has_family_tree_addon: boolean
           id: string
+          onboarding_email_sent_at: string | null
           storage_limit_mb: number
           storage_used_mb: number
           subscription_level: Database["public"]["Enums"]["subscription_level"]
@@ -1135,6 +1136,7 @@ export type Database = {
           display_name?: string | null
           has_family_tree_addon?: boolean
           id?: string
+          onboarding_email_sent_at?: string | null
           storage_limit_mb?: number
           storage_used_mb?: number
           subscription_level?: Database["public"]["Enums"]["subscription_level"]
@@ -1156,6 +1158,7 @@ export type Database = {
           display_name?: string | null
           has_family_tree_addon?: boolean
           id?: string
+          onboarding_email_sent_at?: string | null
           storage_limit_mb?: number
           storage_used_mb?: number
           subscription_level?: Database["public"]["Enums"]["subscription_level"]
