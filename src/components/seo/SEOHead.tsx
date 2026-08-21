@@ -127,17 +127,39 @@ const SEOHead = ({
     setMeta('name', 'twitter:image', resolvedImage);
     setMeta('name', 'twitter:image:alt', ogImageAlt || ogTitle || title);
 
-    // Hreflang: the site serves one URL per page for all languages (the UI
-    // language follows the user's preference), so only x-default is valid.
-    // Emitting fr/en/es/... alternates that all point at the same URL is a
-    // duplicate-content signal, not a translation signal.
+    // Hreflang.
+    // - Pages that exist in several languages (blog articles) declare the full
+    //   cluster: one URL per language, including a self-reference, plus a
+    //   single x-default. Every page of the cluster emits the same set, which
+    //   is what makes the return tags reciprocal.
+    // - Pages served at a single URL for all languages only declare
+    //   x-default pointing at themselves.
     const hreflangLinks: HTMLLinkElement[] = [];
-    const xDefault = document.createElement('link');
-    xDefault.rel = 'alternate';
-    xDefault.hreflang = 'x-default';
-    xDefault.href = `${SITE_URL}${canonicalPath}`;
-    document.head.appendChild(xDefault);
-    hreflangLinks.push(xDefault);
+    const parsedAlternates: { hreflang: string; href: string }[] = JSON.parse(alternatesKey);
+    const addAlternate = (hreflang: string, href: string) => {
+      const link = document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = hreflang;
+      link.href = href;
+      document.head.appendChild(link);
+      hreflangLinks.push(link);
+    };
+
+    if (parsedAlternates.length > 0) {
+      const seen = new Set<string>();
+      parsedAlternates.forEach(({ hreflang, href }) => {
+        if (!hreflang || !href || seen.has(hreflang)) return;
+        seen.add(hreflang);
+        addAlternate(hreflang, href);
+      });
+      const fallback =
+        parsedAlternates.find((a) => a.hreflang === 'fr')?.href ||
+        parsedAlternates[0].href;
+      addAlternate('x-default', fallback);
+    } else {
+      addAlternate('x-default', `${SITE_URL}${canonicalPath}`);
+    }
+
 
     // NoIndex
     let robotsMeta: HTMLMetaElement | null = null;
