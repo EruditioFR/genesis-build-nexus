@@ -49,9 +49,12 @@ const SEOHead = ({
   ogType = 'website',
   noIndex = false,
   jsonLd,
+  alternates,
 }: SEOHeadProps) => {
   const location = useLocation();
   const canonicalPath = location.pathname;
+  const alternatesKey = JSON.stringify(alternates ?? []);
+
 
   useEffect(() => {
     // Title
