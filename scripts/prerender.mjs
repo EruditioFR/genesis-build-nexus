@@ -470,7 +470,7 @@ export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = co
   if (supabaseUrl && supabaseKey) {
     const endpoint =
       `${supabaseUrl}/rest/v1/blog_posts` +
-      `?select=slug,lang,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
+      `?select=slug,lang,translation_group,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
       `&status=eq.published&order=published_at.desc&limit=${MAX_PRERENDER_PAGES}`;
     try {
       const res = await fetch(endpoint, {
@@ -493,7 +493,7 @@ export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = co
     if (!post.slug || written >= MAX_PRERENDER_PAGES) continue;
     const dir = path.join(outDir, "blog", post.slug);
     fs.mkdirSync(dir, { recursive: true });
-    const head = await buildHead(post);
+    const head = await buildHead(post, posts);
     fs.writeFileSync(
       path.join(dir, "index.html"),
       injectHead(template, head, (post.lang || "fr").split("-")[0]),
