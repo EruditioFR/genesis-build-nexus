@@ -53,9 +53,12 @@ const initializeGA = () => {
   }
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer.push(args);
+  // IMPORTANT : gtag.js exige l'objet `arguments`, pas un tableau (sinon aucune donnée n'est envoyée)
+  window.gtag = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
   };
+
 
   window.gtag("consent", "default", {
     analytics_storage: "denied",
