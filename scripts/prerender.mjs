@@ -171,6 +171,8 @@ function injectHead(template, headHtml, lang, noscriptHtml, stripJsonLd = false)
     ""
   );
   html = html.replace(/[ \t]*<link\s+rel="canonical"[^>]*>\s*/gi, "");
+  html = html.replace(/[ \t]*<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>\s*/gi, "");
+
   if (lang) html = html.replace(/<html([^>]*)\slang="[^"]*"/i, `<html$1 lang="${lang}"`);
   html = html.replace(/<\/head>/i, `${headHtml}  </head>`);
   if (noscriptHtml) {
