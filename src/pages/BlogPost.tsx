@@ -347,6 +347,8 @@ export default function BlogPostPage() {
         ogImage={post.cover_image_url || undefined}
         ogImageAlt={coverAlt}
         jsonLd={jsonLd}
+        alternates={alternates}
+
       />
 
       <Header />
