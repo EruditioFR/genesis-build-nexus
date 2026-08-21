@@ -190,7 +190,7 @@ const SEOHead = ({
       if (robotsMeta) robotsMeta.parentNode?.removeChild(robotsMeta);
       jsonLdScripts.forEach((s) => s.parentNode?.removeChild(s));
     };
-  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogImageAlt, ogImageWidth, ogImageHeight, ogType, noIndex, jsonLd]);
+  }, [title, description, canonicalPath, ogTitle, ogDescription, ogImage, ogImageAlt, ogImageWidth, ogImageHeight, ogType, noIndex, jsonLd, alternatesKey]);
 
   return null;
 };
