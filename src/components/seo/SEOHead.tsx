@@ -135,6 +135,13 @@ const SEOHead = ({
     // - Pages served at a single URL for all languages only declare
     //   x-default pointing at themselves.
     const hreflangLinks: HTMLLinkElement[] = [];
+    // Drop any hreflang baked into the prerendered HTML: this effect is the
+    // single owner of the cluster, otherwise each language would be declared
+    // twice on the same page.
+    document
+      .querySelectorAll('link[rel="alternate"][hreflang]')
+      .forEach((el) => el.parentNode?.removeChild(el));
+
     const parsedAlternates: { hreflang: string; href: string }[] = JSON.parse(alternatesKey);
     const addAlternate = (hreflang: string, href: string) => {
       const link = document.createElement('link');
