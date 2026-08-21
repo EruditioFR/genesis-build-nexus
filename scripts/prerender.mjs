@@ -92,7 +92,33 @@ function parseWebp(b) {
 
 const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
 
-async function buildHead(post) {
+/**
+ * Reciprocal hreflang cluster for an article: one <link> per language of the
+ * translation group (including a self-reference) plus a single x-default.
+ * Every page of the group emits the identical set, which is what makes the
+ * return tags valid. Articles published in a single language get no cluster.
+ */
+function buildHreflang(post, posts) {
+  if (!post.translation_group) return "";
+  const seen = new Map();
+  for (const p of posts) {
+    if (p.translation_group !== post.translation_group || !p.slug) continue;
+    const lang = (p.lang || "fr").split("-")[0];
+    if (!seen.has(lang)) seen.set(lang, `${SITE_URL}/blog/${p.slug}`);
+  }
+  if (seen.size < 2) return "";
+  const langs = [...seen.keys()].sort();
+  const lines = langs.map(
+    (l) => `    <link rel="alternate" hreflang="${l}" href="${escapeHtml(seen.get(l))}" />`,
+  );
+  lines.push(
+    `    <link rel="alternate" hreflang="x-default" href="${escapeHtml(seen.get("fr") || seen.get(langs[0]))}" />`,
+  );
+  return lines.join("\n") + "\n";
+}
+
+async function buildHead(post, posts = []) {
+
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = withBrand(post.meta_title || post.title);
   const description = post.meta_description || post.excerpt || "";
@@ -106,6 +132,7 @@ async function buildHead(post) {
   return `    <title>${e(title)}</title>
     <meta name="description" content="${e(description)}" />
     <link rel="canonical" href="${e(url)}" />
+${buildHreflang(post, posts)}
     <meta property="og:site_name" content="${BRAND}" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="${locale}" />
@@ -144,6 +171,8 @@ function injectHead(template, headHtml, lang, noscriptHtml, stripJsonLd = false)
     ""
   );
   html = html.replace(/[ \t]*<link\s+rel="canonical"[^>]*>\s*/gi, "");
+  html = html.replace(/[ \t]*<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>\s*/gi, "");
+
   if (lang) html = html.replace(/<html([^>]*)\slang="[^"]*"/i, `<html$1 lang="${lang}"`);
   html = html.replace(/<\/head>/i, `${headHtml}  </head>`);
   if (noscriptHtml) {
@@ -441,7 +470,7 @@ export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = co
   if (supabaseUrl && supabaseKey) {
     const endpoint =
       `${supabaseUrl}/rest/v1/blog_posts` +
-      `?select=slug,lang,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
+      `?select=slug,lang,translation_group,title,excerpt,meta_title,meta_description,cover_image_url,published_at` +
       `&status=eq.published&order=published_at.desc&limit=${MAX_PRERENDER_PAGES}`;
     try {
       const res = await fetch(endpoint, {
@@ -464,7 +493,7 @@ export async function prerenderSite({ outDir, supabaseUrl, supabaseKey, log = co
     if (!post.slug || written >= MAX_PRERENDER_PAGES) continue;
     const dir = path.join(outDir, "blog", post.slug);
     fs.mkdirSync(dir, { recursive: true });
-    const head = await buildHead(post);
+    const head = await buildHead(post, posts);
     fs.writeFileSync(
       path.join(dir, "index.html"),
       injectHead(template, head, (post.lang || "fr").split("-")[0]),

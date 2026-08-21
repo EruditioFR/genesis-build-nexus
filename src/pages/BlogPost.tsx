@@ -95,6 +95,8 @@ export default function BlogPostPage() {
   const [nextPost, setNextPost] = useState<RelatedPost | null>(null);
   const [showTopButton, setShowTopButton] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [alternates, setAlternates] = useState<{ hreflang: string; href: string }[]>([]);
+
 
   useEffect(() => {
     const onScroll = () => setShowTopButton(window.scrollY > 600);
@@ -109,6 +111,8 @@ export default function BlogPostPage() {
       setLoading(true);
       setPrevPost(null);
       setNextPost(null);
+      setAlternates([]);
+
       const { data } = await supabase
         .from("blog_posts")
         .select("*")
@@ -125,6 +129,27 @@ export default function BlogPostPage() {
 
         const postLang = (typedData as { lang?: string }).lang ?? "fr";
         const pivot = typedData.published_at || typedData.created_at;
+
+        // Cluster hreflang : toutes les traductions du même article, y compris
+        // celle-ci, pour que chaque page renvoie vers les autres (return tags).
+        if (typedData.translation_group) {
+          const { data: siblings } = await supabase
+            .from("blog_posts")
+            .select("slug, lang")
+            .eq("status", "published")
+            .eq("translation_group", typedData.translation_group);
+          if (siblings?.length) {
+            const seen = new Set<string>();
+            setAlternates(
+              (siblings as { slug: string; lang: string | null }[])
+                .map((s) => ({ hreflang: (s.lang || "fr").split("-")[0], href: `https://familygarden.fr/blog/${s.slug}` }))
+                .filter((a) => (seen.has(a.hreflang) ? false : (seen.add(a.hreflang), true)))
+                .sort((a, b) => a.hreflang.localeCompare(b.hreflang)),
+            );
+          }
+        }
+
+
 
         // Maillage interne : autres articles de la même langue
         const { data: others } = await supabase
@@ -322,6 +347,8 @@ export default function BlogPostPage() {
         ogImage={post.cover_image_url || undefined}
         ogImageAlt={coverAlt}
         jsonLd={jsonLd}
+        alternates={alternates}
+
       />
 
       <Header />
