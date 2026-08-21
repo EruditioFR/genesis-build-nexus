@@ -92,7 +92,33 @@ function parseWebp(b) {
 
 const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
 
-async function buildHead(post) {
+/**
+ * Reciprocal hreflang cluster for an article: one <link> per language of the
+ * translation group (including a self-reference) plus a single x-default.
+ * Every page of the group emits the identical set, which is what makes the
+ * return tags valid. Articles published in a single language get no cluster.
+ */
+function buildHreflang(post, posts) {
+  if (!post.translation_group) return "";
+  const seen = new Map();
+  for (const p of posts) {
+    if (p.translation_group !== post.translation_group || !p.slug) continue;
+    const lang = (p.lang || "fr").split("-")[0];
+    if (!seen.has(lang)) seen.set(lang, `${SITE_URL}/blog/${p.slug}`);
+  }
+  if (seen.size < 2) return "";
+  const langs = [...seen.keys()].sort();
+  const lines = langs.map(
+    (l) => `    <link rel="alternate" hreflang="${l}" href="${escapeHtml(seen.get(l))}" />`,
+  );
+  lines.push(
+    `    <link rel="alternate" hreflang="x-default" href="${escapeHtml(seen.get("fr") || seen.get(langs[0]))}" />`,
+  );
+  return lines.join("\n") + "\n";
+}
+
+async function buildHead(post, posts = []) {
+
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = withBrand(post.meta_title || post.title);
   const description = post.meta_description || post.excerpt || "";
