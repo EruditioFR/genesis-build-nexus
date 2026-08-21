@@ -14,7 +14,14 @@ interface SEOHeadProps {
   ogType?: 'website' | 'article';
   noIndex?: boolean;
   jsonLd?: object | object[];
+  /**
+   * Translated versions of THIS page (one URL per language, including the
+   * current one). When provided, a full reciprocal hreflang cluster is
+   * emitted; otherwise only x-default self-referencing.
+   */
+  alternates?: { hreflang: string; href: string }[];
 }
+
 
 const SITE_URL = 'https://familygarden.fr';
 const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ko', 'zh', 'it', 'pt'];
