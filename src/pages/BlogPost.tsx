@@ -95,6 +95,8 @@ export default function BlogPostPage() {
   const [nextPost, setNextPost] = useState<RelatedPost | null>(null);
   const [showTopButton, setShowTopButton] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [alternates, setAlternates] = useState<{ hreflang: string; href: string }[]>([]);
+
 
   useEffect(() => {
     const onScroll = () => setShowTopButton(window.scrollY > 600);
