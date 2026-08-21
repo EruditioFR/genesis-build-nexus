@@ -132,6 +132,7 @@ async function buildHead(post, posts = []) {
   return `    <title>${e(title)}</title>
     <meta name="description" content="${e(description)}" />
     <link rel="canonical" href="${e(url)}" />
+${buildHreflang(post, posts)}
     <meta property="og:site_name" content="${BRAND}" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="${locale}" />
