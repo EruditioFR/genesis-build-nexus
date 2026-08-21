@@ -111,6 +111,8 @@ export default function BlogPostPage() {
       setLoading(true);
       setPrevPost(null);
       setNextPost(null);
+      setAlternates([]);
+
       const { data } = await supabase
         .from("blog_posts")
         .select("*")
